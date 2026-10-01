@@ -95,3 +95,26 @@ test('serve.py refuses requests from other websites and never writes', { skip: !
     assert.equal(post.status, 501, 'only GET is implemented');
   } finally { s.stop(); fs.rmSync(root, { recursive: true, force: true }); }
 });
+
+test('serve.py starts again on the same port right after it stopped', { skip: !python && 'python3 not installed' }, async () => {
+  const net = require('node:net');
+  const port = await new Promise(resolve => {
+    const probe = net.createServer().listen(0, '127.0.0.1', () => { const p = probe.address().port; probe.close(() => resolve(p)); });
+  });
+  const run = async () => {
+    const proc = spawn(python, [SERVE, '--port', String(port), '--idle-exit', '30'], { stdio: ['ignore', 'pipe', 'pipe'] });
+    let out = '';
+    proc.stdout.on('data', c => { out += c; });
+    proc.stderr.on('data', c => { out += c; });
+    for (let i = 0; i < 50; i++) {
+      try { const r = await fetch('http://127.0.0.1:' + port + '/api/ping'); if (r.ok) return proc; } catch (e) { /* not up yet */ }
+      await new Promise(r => setTimeout(r, 100));
+    }
+    proc.kill();
+    throw new Error('serve.py did not come up on port ' + port + ': ' + out);
+  };
+  const first = await run();
+  await new Promise(resolve => { first.on('exit', resolve); first.kill(); });
+  const second = await run(); // macOS refuses to bind while the old connections sit in TIME_WAIT unless SO_REUSEADDR is set
+  second.kill();
+});
