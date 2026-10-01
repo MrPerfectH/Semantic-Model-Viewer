@@ -168,7 +168,7 @@
     "check-viewer": "node scripts/sync-viewer.js --check",
     "vscode:prepublish": "npm run sync-viewer",
     "package": "vsce package",
-    "test": "npm run sync-viewer && npm run check-viewer && node --test ../tests/*.test.cjs ../tests/extension.test.js ../tests/usage-adapter.test.js ../Models/tools/viewer/tests/*.test.js"
+    "test": "npm run sync-viewer && npm run check-viewer && node --test --test-concurrency=1 ../tests/*.test.cjs ../tests/extension.test.js ../tests/usage-adapter.test.js ../Models/tools/viewer/tests/*.test.js"
   },
   "devDependencies": {
     "@types/vscode": "^1.85.0",
