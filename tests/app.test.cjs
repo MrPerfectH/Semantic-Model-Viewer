@@ -476,3 +476,101 @@ test('refresh is unavailable for the built-in model, hosts, and browsers without
   app.modelKey = 'm1'; app.host = {}; assert.equal(app.canRefreshSource(), false);
   app.host = null; delete context.showDirectoryPicker; assert.equal(app.canRefreshSource(), false);
 });
+
+/* ---------- local app server (scripts/serve.py) ---------- */
+function serverFixture() {
+  const h = harness(); const { app, context } = h;
+  app.server = { ok: true, home: '/home/u', sep: '/' };
+  app._idbGet = async () => null; app._idbSet = async () => {}; app._idbDel = async () => {};
+  context.showDirectoryPicker = async () => assert.fail('the browser folder picker must not open in local-app mode');
+  const model = path => (path === '/repo/Sub/Demo.SemanticModel' || path === '/repo') ? h.files : [];
+  h.files = [{ name: 'Sales.tmdl', path: 'definition/tables/Sales.tmdl', text: 'table Sales\n\tcolumn A\n' }];
+  h.calls = [];
+  app.api = async (route, params) => {
+    h.calls.push([route, params.path]);
+    if (route === 'browse') return { path: params.path || '/home/u', name: 'u', parent: '/home', model: false, roots: [{ name: 'Home', path: '/home/u' }], dirs: [{ name: 'repo', path: '/home/u/repo', model: false }] };
+    if (route === 'find') return { models: params.path === '/repo' || params.path === '/home/u/repo' ? [{ name: 'Demo', path: 'Sub/Demo.SemanticModel', dir: '/repo/Sub/Demo.SemanticModel' }] : [] };
+    if (route === 'model') return { files: model(params.path) };
+    throw new Error('unexpected ' + route);
+  };
+  app.state.loaded = true;
+  app.loadModel = async key => { app.modelKey = key; };
+  return h;
+}
+
+test('local app: the folder chooser resolves to the chosen folder and remembers it', async () => {
+  const { app, storage } = serverFixture();
+  const picked = app.pickFolder({ title: 'Choose' });
+  await new Promise(r => setImmediate(r));
+  assert.equal(app.state.folderPick.loading, false);
+  assert.deepEqual(app.state.folderPick.dirs.map(d => d.name), ['repo']);
+  app.finishFolderPick('/home/u/repo/');
+  assert.deepEqual(plain(await picked), { dir: '/home/u/repo/', name: 'repo' });
+  assert.equal(app.state.folderPick, null);
+  assert.equal(storage.get('smv_last_dir'), '/home/u/repo/');
+  const cancelled = app.pickFolder({});
+  await new Promise(r => setImmediate(r));
+  app.finishFolderPick(null);
+  assert.equal(await cancelled, null);
+});
+
+test('local app: connecting a repo scans through the server and opens its single model, no browser picker', async () => {
+  const h = serverFixture(); const { app, storage } = h;
+  app.pickFolder = async () => ({ dir: '/repo', name: 'repo' });
+  await app.connectRepo();
+  assert.equal(app._repoLive, true);
+  assert.equal(storage.get('smv_repo_path'), '/repo');
+  assert.equal(storage.get('smv_repo_name'), 'repo');
+  assert.deepEqual(app.repoModels.map(m => m.path), ['Sub/Demo.SemanticModel']);
+  await new Promise(r => setImmediate(r));
+  assert.equal(app.modelKey, 'repo:Sub/Demo.SemanticModel');
+  assert.equal(app.getStore()[0].model.tables[0].name, 'Sales');
+  assert.equal(app.repoRows()[0].meta, 'in repo · cached');
+  // a later session reconnects from the stored path without asking anything
+  const again = serverFixture(); again.storage.set('smv_repo_path', '/repo');
+  await again.app.reconnectRepo();
+  assert.equal(again.app._repoLive, true);
+  assert.deepEqual(again.app.repoModels.map(m => m.name), ['Demo']);
+  again.app.forgetRepo();
+  assert.equal(again.storage.has('smv_repo_path'), false);
+});
+
+test('local app: Refresh re-reads a repo model and an imported model without any prompt', async () => {
+  const h = serverFixture(); const { app, storage, context } = h;
+  app.repoPath = '/repo'; app._repoLive = true;
+  app.repoModels = [{ name: 'Demo', path: 'Sub/Demo.SemanticModel', dir: '/repo/Sub/Demo.SemanticModel' }];
+  app.setStore([{ id: 'repo:Sub/Demo.SemanticModel', name: 'Demo', at: 1, repo: true, model: context.TMDLParser.parseAny(h.files) }]);
+  app.modelKey = 'repo:Sub/Demo.SemanticModel';
+  h.files = h.files.concat([{ name: 'Brand.tmdl', path: 'definition/tables/Brand.tmdl', text: 'table Brand\n\tcolumn B\n' }]);
+  await app.refreshSource();
+  assert.match(app.state.snapshotMessage, /Refreshed from source · 2 tables · 1 new \(Brand\)/);
+
+  // imported through "Browse folder": the path is remembered with the model
+  app.pickFolder = async () => ({ dir: '/repo/Sub/Demo.SemanticModel', name: 'Demo.SemanticModel' });
+  await app.importFromFolder();
+  assert.equal(app.state.importReady, true);
+  assert.equal(app.state.importName, 'Demo');
+  app.state.importName = 'Imported'; app.confirmImport();
+  const id = app.modelKey;
+  assert.match(id, /^m/);
+  assert.equal(storage.get('smv_src_' + id), '/repo/Sub/Demo.SemanticModel');
+  app.pickFolder = async () => assert.fail('a remembered folder must not be asked for again');
+  h.files = h.files.slice(0, 1);
+  await app.refreshSource();
+  assert.match(app.state.snapshotMessage, /1 removed \(Brand\)/);
+  app.deleteModel(id);
+  assert.equal(storage.has('smv_src_' + id), false);
+});
+
+test('local app: the hosted page is the demo and opens the sample; the local app does not', () => {
+  const { app, context } = harness();
+  context.location = { protocol: 'https:', hostname: 'mrperfecth.github.io' };
+  assert.equal(app.isDemoSite(), true);
+  context.location = { protocol: 'http:', hostname: 'localhost' };
+  assert.equal(app.isDemoSite(), false);
+  context.location = { protocol: 'https:', hostname: 'mrperfecth.github.io' };
+  app.server = { ok: true };
+  assert.equal(app.isDemoSite(), false);
+  app.server = null; context.location = { protocol: 'file:', hostname: '' };
+  assert.equal(app.isDemoSite(), false);
+});

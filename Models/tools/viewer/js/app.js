@@ -127,7 +127,8 @@
     this.model = null;
     this._usage = null; this._usageMeta = null; this._usageStatus = null; this._usageCols = null;
     this._importModel = null; this._importHandle = null;
-    this.repoHandle = null; this.repoModels = null; this._repoLive = false;
+    this.repoHandle = null; this.repoPath = null; this.repoModels = null; this._repoLive = false;
+    this.server = null;   // local app server (scripts/serve.py), detected at boot
     this._cbs = [];
 
     /* One row per connector the parser can spot — label and glyph; the legend colour comes from
@@ -321,7 +322,7 @@
         } finally { this._roleSaving = false; }
         return;
       }
-      if ((key || '').indexOf('repo:') === 0) {
+      if ((key || '').indexOf('repo:') === 0 && !this.server) {
         this.setState({roleSave:{name:name, text:'Not saved. Connect or reconnect this repo folder to edit its TMDL files.'}});
         return;
       }
@@ -537,7 +538,7 @@
       if (!this.setStore(this.getStore().filter(function (m) { return m.id !== id; }))) {
         this.setState({ repoError: 'Could not update browser storage. The model was not removed.' }); return;
       }
-      store.del('smv_layout_' + id); store.del('smv_presets_' + id); this._idbDel('src:' + id);
+      store.del('smv_layout_' + id); store.del('smv_presets_' + id); store.del('smv_src_' + id); this._idbDel('src:' + id);
       if (id === this.modelKey) this.loadModel('builtin'); else this.render(true);
     },
 
@@ -794,10 +795,21 @@
       var files = await this.readModelDir(h);
       this.handleFiles(files.map(function (f) { return { name: f.name, p: h.name + '/' + f.path, text: f.text }; }), h);
     },
-    handleFiles: async function (list, srcHandle) {
+    /* "Browse folder" in the import window (local app): the server reads the folder and the
+       path is remembered, so Refresh re-reads it without any prompt. */
+    importFromFolder: async function () {
+      var pick = await this.pickFolder({ title: 'Choose a model folder', hint: 'A *.SemanticModel folder, a repo folder (every model inside is found) or a folder holding model.bim.' });
+      if (!pick) return;
+      this.setState({ importError: '', importReady: false });
+      try {
+        var files = await this.readModelDir(pick);
+        this.handleFiles(files.map(function (f) { return { name: f.name, p: pick.name + '/' + f.path, text: f.text }; }), null, pick.dir);
+      } catch (e) { this.setState({ importError: 'Could not read the folder: ' + (e.message || e), importReady: false }); }
+    },
+    handleFiles: async function (list, srcHandle, srcPath) {
       var self = this;
       var files = [];
-      this._importHandle = srcHandle || null;
+      this._importHandle = srcHandle || null; this._importPath = srcPath || null;
       for (var i = 0; i < list.length; i++) {
         if (list[i].text != null) { files.push({ name: list[i].name, path: list[i].p, text: list[i].text }); continue; }
         var f = list[i].f, p = list[i].p || list[i].f.name;
@@ -822,6 +834,7 @@
             var idx = st.findIndex(function (m) { return m.id === id; }); if (idx >= 0) st.splice(idx, 1);
             st.push({ id: id, name: nm, at: Date.now(), repo: true, model: mod });
             if (srcHandle) self._idbSet('src:' + id, srcHandle).catch(function () { });
+            if (srcPath) store.set('smv_src_' + id, srcPath);
             ok++; if (!opened) opened = id;
           } catch (err) { bad.push(nm); }
         });
@@ -872,7 +885,8 @@
         return;
       }
       if (this._importHandle) this._idbSet('src:' + id, this._importHandle).catch(function () { });
-      this._importModel = null; this._importHandle = null;
+      if (this._importPath) store.set('smv_src_' + id, this._importPath);
+      this._importModel = null; this._importHandle = null; this._importPath = null;
       this.setState({ showImport: false, importReady: false });
       this.loadModel(id);
     },
@@ -890,7 +904,76 @@
     _idbGet: async function (k) { var db = await this._idb(); return new Promise(function (res, rej) { var q = db.transaction('handles', 'readonly').objectStore('handles').get(k); q.onsuccess = function () { res(q.result); }; q.onerror = function () { rej(q.error); }; }); },
     _idbDel: async function (k) { var db = await this._idb(); return new Promise(function (res) { var tx = db.transaction('handles', 'readwrite'); tx.objectStore('handles').delete(k); tx.oncomplete = res; tx.onerror = res; }); },
     canFS: function () { return typeof window.showDirectoryPicker === 'function'; },
+
+    /* ---------- local app server (scripts/serve.py) ----------
+       When the page is served by serve.py, folders are read by that program instead of the
+       browser, so no browser permission prompt ever appears. Everything below falls back to
+       the File System Access API when there is no server. */
+    detectServer: async function () {
+      if (this.host || this.snapshotMode || typeof location === 'undefined' || !/^https?:$/.test(location.protocol)) return null;
+      try {
+        var r = await fetch('api/ping', { cache: 'no-store' });
+        if (!r.ok) return null;
+        var j = await r.json();
+        if (!j || !j.ok) return null;
+        this.server = j;
+      } catch (e) { return null; }
+      // keeps serve.py --idle-exit alive while the window is open
+      if (!this._heartbeat) this._heartbeat = setInterval(function () { fetch('api/ping', { cache: 'no-store' }).catch(function () { }); }, 30000);
+      return this.server;
+    },
+    api: async function (path, params) {
+      var q = Object.keys(params || {}).map(function (k) { return k + '=' + encodeURIComponent(params[k]); }).join('&');
+      var r = await fetch('api/' + path + (q ? '?' + q : ''), { cache: 'no-store' });
+      var j = null; try { j = await r.json(); } catch (e) { }
+      if (!r.ok) throw new Error((j && j.error) || ('The local app returned ' + r.status + '.'));
+      return j;
+    },
+    /* In-page folder chooser backed by the server. Resolves to {dir, name} or null. */
+    pickFolder: function (opts) {
+      var self = this; opts = opts || {};
+      return new Promise(function (resolve) {
+        var start = opts.start || store.get('smv_last_dir', '') || (self.server && self.server.home) || '';
+        self.setState({ folderPick: { title: opts.title || 'Choose a folder', hint: opts.hint || '', loading: true, resolve: resolve } });
+        self.browseTo(start);
+      });
+    },
+    browseTo: async function (path) {
+      var fp = this.state.folderPick; if (!fp) return;
+      try {
+        var d = await this.api('browse', { path: path || '' });
+        if (this.state.folderPick !== fp) return;
+        this.setState({ folderPick: Object.assign({}, fp, d, { loading: false, error: '' }) });
+      } catch (e) {
+        if (this.state.folderPick !== fp) return;
+        this.setState({ folderPick: Object.assign({}, fp, { loading: false, error: e.message || String(e) }) });
+      }
+    },
+    finishFolderPick: function (path) {
+      var fp = this.state.folderPick; if (!fp) return;
+      this.setState({ folderPick: null });
+      if (path) store.set('smv_last_dir', path);
+      fp.resolve(path ? { dir: path, name: this.baseName(path) } : null);
+    },
+    baseName: function (path) { return String(path).replace(/[\\\/]+$/, '').split(/[\\\/]/).pop() || String(path); },
+    /* the connected repo as something readModelDir / _findModelDirs accept: a handle or {dir} */
+    repoSource: function () {
+      if (this.repoHandle) return this.repoHandle;
+      if (this.repoPath) return { dir: this.repoPath, name: this.baseName(this.repoPath) };
+      return null;
+    },
+    isLive: function (rm) { return !!(rm && (rm.handle || rm.dir)); },
+
     connectRepo: async function () {
+      if (this.server) {
+        var pick = await this.pickFolder({ title: 'Choose the repo folder', hint: 'Every *.SemanticModel folder inside is found.' });
+        if (!pick) return;
+        this.repoHandle = null; this.repoPath = pick.dir; this._repoLive = true;
+        this._idbDel('repo').catch(function () { }); store.set('smv_repo_path', pick.dir); store.set('smv_repo_name', pick.name);
+        await this.scanRepo();
+        if (this.repoModels && this.repoModels.length === 1) this.openRepoModel(this.repoModels[0]);
+        return;
+      }
       if (!this.canFS()) { this.setState({ repoError: 'This browser cannot open folders directly — use Chrome or Edge, or drag the repo folder onto the window.' }); return; }
       var handle = null;
       try { handle = await window.showDirectoryPicker({ mode: 'read' }); } catch (e) { return; }
@@ -901,6 +984,14 @@
       if (this.repoModels && this.repoModels.length === 1) this.openRepoModel(this.repoModels[0]);
     },
     reconnectRepo: async function () {
+      if (this.server) {
+        var path = this.repoPath || store.get('smv_repo_path', '');
+        if (!path) { this.connectRepo(); return; }
+        this.repoPath = path; this._repoLive = true;
+        await this.scanRepo();
+        this.refreshCurrentRepoModel();
+        return;
+      }
       var handle = this.repoHandle || await this._idbGet('repo').catch(function () { return null; });
       if (!handle) { this.connectRepo(); return; }
       try {
@@ -920,13 +1011,17 @@
       } catch (e) { this.render(true); }
     },
     forgetRepo: function () {
-      this.repoHandle = null; this.repoModels = null; this._repoLive = false;
+      this.repoHandle = null; this.repoPath = null; this.repoModels = null; this._repoLive = false;
       this._idbDel('repo');
-      store.del('smv_repo_name'); store.del('smv_repo_cache');
+      store.del('smv_repo_name'); store.del('smv_repo_cache'); store.del('smv_repo_path');
       this.render(true);
     },
     /* Every *.SemanticModel folder under a picked folder (or the folder itself). */
     _findModelDirs: async function (handle) {
+      if (handle.dir) {
+        var r = await this.api('find', { path: handle.dir });
+        return (r.models || []).map(function (m) { return { name: m.name, path: m.path, dir: m.dir }; });
+      }
       var found = [];
       var walk = async function (dir, path, depth) {
         if (depth > 6) return;
@@ -942,7 +1037,7 @@
       return found;
     },
     scanRepo: async function () {
-      var handle = this.repoHandle; if (!handle) return;
+      var handle = this.repoSource(); if (!handle) return;
       this.setState({ repoScanning: true, repoError: '' });
       var found;
       try { found = await this._findModelDirs(handle); }
@@ -953,6 +1048,7 @@
       this.setState({ repoScanning: false, repoError: found.length ? '' : ('No *.SemanticModel folders found in “' + handle.name + '”.') });
     },
     readModelDir: async function (h) {
+      if (h.dir) { var r = await this.api('model', { path: h.dir }); return r.files || []; }
       var files = [];
       var walk = async function (dir, path) {
         for await (var ent of dir.entries()) {
@@ -967,7 +1063,7 @@
     },
     /* ---------- refresh the open model from its source folder ---------- */
     canRefreshSource: function () {
-      return !this.host && !this.snapshotMode && !!this.state.loaded && !!this.modelKey && this.modelKey !== 'builtin' && this.canFS();
+      return !this.host && !this.snapshotMode && !!this.state.loaded && !!this.modelKey && this.modelKey !== 'builtin' && (this.canFS() || !!this.server);
     },
     /* Folder imports remember their handle (IndexedDB), so refresh only re-confirms access.
        Models imported as loose files have no folder link: the first refresh asks for it once. */
@@ -984,30 +1080,40 @@
       this._idbSet('src:' + key, h).catch(function () { });
       return h;
     },
+    /* Local app: the remembered path of an imported model, or the folder chooser once. */
+    _sourceDir: async function (key, name) {
+      var p = store.get('smv_src_' + key, '');
+      if (p) return { dir: p, name: this.baseName(p) };
+      var pick = await this.pickFolder({ title: 'Where is “' + name + '”?', hint: 'Choose its *.SemanticModel folder or the repo folder that contains it. The choice is remembered.' });
+      if (pick) store.set('smv_src_' + key, pick.dir);
+      return pick;
+    },
     _findModelDir: async function (handle, name) {
       var found = await this._findModelDirs(handle);
       if (!found.length) return handle;
       var exact = found.filter(function (f) { return f.name.toLowerCase() === String(name).toLowerCase(); });
-      if (exact.length === 1) return exact[0].handle;
-      if (found.length === 1) return found[0].handle;
+      if (exact.length === 1) return exact[0].handle || exact[0];
+      if (found.length === 1) return found[0].handle || found[0];
       throw new Error('Several *.SemanticModel folders found in “' + handle.name + '”. Choose the single folder for this model.');
     },
     refreshSource: async function () {
       var self = this, key = this.modelKey;
       if (!this.canRefreshSource() || this.state.refreshing) return;
       var isRepo = key.indexOf('repo:') === 0;
-      var rm = isRepo && (this.repoModels || []).find(function (r) { return r.handle && 'repo:' + r.path === key; });
-      if (isRepo && !rm && !(await this._idbGet('src:' + key).catch(function () { return null; }))) { this.reconnectRepo(); return; }
+      var self2 = this;
+      var rm = isRepo && (this.repoModels || []).find(function (r) { return self2.isLive(r) && 'repo:' + r.path === key; });
+      var remembered = this.server ? !!store.get('smv_src_' + key, '') : !!(await this._idbGet('src:' + key).catch(function () { return null; }));
+      if (isRepo && !rm && !remembered) { this.reconnectRepo(); return; }
       var rec = this.getStore().find(function (m) { return m.id === key; });
       var name = rec ? rec.name : this.state.modelName;
       this.setState({ refreshing: true, repoError: '', snapshotMessage: '', snapshotError: '' });
       var done = function (patch) { self.setState(Object.assign({ refreshing: false }, patch)); };
       try {
-        var handle = rm ? rm.handle : await this._sourceHandle(key);
+        var handle = rm ? (rm.handle || rm) : (this.server ? await this._sourceDir(key, name) : await this._sourceHandle(key));
         if (!handle) { done({}); return; }
         var files;
         try { files = await this.readModelDir(rm ? handle : await this._findModelDir(handle, name)); }
-        catch (e) { if (!rm) this._idbDel('src:' + key); throw e; }
+        catch (e) { if (!rm) { store.del('smv_src_' + key); this._idbDel('src:' + key); } throw e; }
         if (key !== this.modelKey) { done({}); return; }
         var model = window.TMDLParser.parseAny(files);
         var st = this.getStore(), i = st.findIndex(function (m) { return m.id === key; });
@@ -1035,9 +1141,9 @@
       var id = 'repo:' + rm.path;
       var request = this._modelLoadRequest = (this._modelLoadRequest || 0) + 1;
       this.setState({ showModelMenu: false, repoError: '' });
-      if (rm.handle) {
+      if (this.isLive(rm)) {
         try {
-          var files = await this.readModelDir(rm.handle);
+          var files = await this.readModelDir(rm.handle || rm);
           if (request !== this._modelLoadRequest) return;
           var model = window.TMDLParser.parseAny(files);
           var st = this.getStore().filter(function (m) { return m.id !== id; });
@@ -1060,10 +1166,11 @@
       var key = this.modelKey || '';
       var request = this._modelLoadRequest;
       if (key.indexOf('repo:') !== 0 || !this.repoModels) return;
-      var rm = this.repoModels.find(function (r) { return r.handle && 'repo:' + r.path === key; });
+      var self = this;
+      var rm = this.repoModels.find(function (r) { return self.isLive(r) && 'repo:' + r.path === key; });
       if (!rm) return;
       try {
-        var files = await this.readModelDir(rm.handle);
+        var files = await this.readModelDir(rm.handle || rm);
         if (key !== this.modelKey || request !== this._modelLoadRequest) return;
         var model = window.TMDLParser.parseAny(files);
         var st = this.getStore();
@@ -1081,7 +1188,7 @@
     repoRows: function () {
       var self = this;
       var rows = {};
-      (this.repoModels || []).forEach(function (rm) { rows['repo:' + rm.path] = { id: 'repo:' + rm.path, name: rm.name, live: !!rm.handle, rm: rm }; });
+      (this.repoModels || []).forEach(function (rm) { rows['repo:' + rm.path] = { id: 'repo:' + rm.path, name: rm.name, live: self.isLive(rm), rm: rm }; });
       this.getStore().forEach(function (m) {
         if (String(m.id).indexOf('repo:') !== 0) return;
         var r = rows[m.id]; if (r) r.cached = true; else rows[m.id] = { id: m.id, name: m.name, cached: true };
@@ -1091,7 +1198,7 @@
           id: r.id, name: r.name,
           meta: [r.live ? 'in repo' : null, r.cached ? 'cached' : null].filter(Boolean).join(' · ') || 'found',
           canDelete: !!r.cached,
-          pick: function () { if (r.rm && r.rm.handle) self.openRepoModel(r.rm); else self.switchModel(r.id); },
+          pick: function () { if (self.isLive(r.rm)) self.openRepoModel(r.rm); else self.switchModel(r.id); },
           del: function () { self.deleteModel(r.id); }
         };
       });
@@ -1231,6 +1338,11 @@
     },
 
     /* ---------- boot ---------- */
+    /* served from a real web host (not the local app, not a file): the GitHub Pages demo */
+    isDemoSite: function () {
+      if (this.server || this.host || typeof location === 'undefined') return false;
+      return /^https?:$/.test(location.protocol) && !/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+    },
     init: async function () {
       if (g.Snapshots && (g.Snapshots.embedded || g.Snapshots.error)) {
         if (g.Snapshots.error) this.failSnapshot(g.Snapshots.error);
@@ -1256,15 +1368,25 @@
          easy-to-drift-from copy of it. Once the user picks anything -
          including the bundled sample itself - `smv_current_v1` is set and
          every later open goes straight back to that choice, same as before. */
+      await this.detectServer();
       var cur = store.get('smv_current_v1', null);
       if (cur) {
         await this.loadModel(cur);
         if (!this.model.tables.length) this.setState({ showModelMenu: true });
+      } else if (this.isDemoSite()) {
+        /* The hosted page is the online demo: open the bundled sample so there is
+           something to look at, instead of an empty canvas and a picker. */
+        await this.loadModel('builtin');
       } else {
         this.loadEmptyModel();
       }
       var cached = store.getJSON('smv_repo_cache', null);
       if (cached && cached.length) this.repoModels = cached;
+      if (this.server) {
+        if (store.get('smv_repo_path', '')) this.reconnectRepo();
+        else this.render(true);
+        return;
+      }
       this._idbGet('repo').then(function (h) { if (h) { self.repoHandle = h; self.autoReconnect(); } }).catch(function () { });
     }
   };

@@ -1,17 +1,77 @@
-# Opens the viewer as its own app window, straight from this folder's
-# index.html - no server, no Python. Used by the Desktop and Start menu icons
-# that install-shortcuts.ps1 creates.
+# Starts the local app (scripts\serve.py) if it is not already running, then opens the
+# viewer as its own window. The Desktop and Start menu icons that install-shortcuts.ps1
+# creates run this script.
 #
-# The app window uses its OWN, separate browser profile (never your regular
-# browsing profile) so it never picks up - or leaves behind - unrelated
-# browsing data, and running this while that profile's window is already open
-# does not pile up a second one. Your saved models and layouts live in that profile.
+# The window uses its OWN, separate browser profile (never your regular browsing
+# profile), and running this while that window is already open brings it forward
+# instead of piling up a second one. The server listens on this computer only and
+# stops by itself a few minutes after the window is closed.
+
+param([ValidateRange(1, 65535)][int]$Port = 8931)
 
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ViewerDir = (Resolve-Path (Join-Path $Here "..\..")).Path
+$ServePy = Join-Path $ViewerDir "scripts\serve.py"
 $LocalAppData = if ($env:LOCALAPPDATA) { $env:LOCALAPPDATA } else { Join-Path $Here "..\..\..\.smv-profile-fallback" }
 $ProfileDir = Join-Path $LocalAppData "Semantic Model Viewer\chrome-profile"
-$url = ([System.Uri](Join-Path $ViewerDir "index.html")).AbsoluteUri
+$Log = Join-Path $LocalAppData "Semantic Model Viewer\viewer.log"
+$url = "http://localhost:$Port"
+
+function Show-Problem {
+    param([string]$Message)
+    try { (New-Object -ComObject WScript.Shell).Popup($Message, 0, "Semantic Model Viewer", 48) | Out-Null } catch { Write-Warning $Message }
+}
+
+function Test-ViewerReady {
+    try {
+        $response = Invoke-WebRequest -Uri "http://127.0.0.1:$Port/api/ping" -UseBasicParsing -TimeoutSec 2 -ErrorAction Stop
+        return ($response.StatusCode -eq 200 -and [string]$response.Content -match '"ok":\s*true')
+    } catch {
+        return $false
+    }
+}
+
+function Test-PortOpen {
+    try {
+        $client = New-Object System.Net.Sockets.TcpClient
+        $result = $client.BeginConnect("127.0.0.1", $Port, $null, $null)
+        $ok = $result.AsyncWaitHandle.WaitOne(300)
+        $open = $ok -and $client.Connected
+        $client.Close()
+        return $open
+    } catch {
+        return $false
+    }
+}
+
+if (-not (Test-ViewerReady)) {
+    if (Test-PortOpen) {
+        Show-Problem "Port $Port is used by another program. Stop it, or run start-viewer.ps1 -Port with a free port."
+        exit 1
+    }
+    $py = Get-Command py -ErrorAction SilentlyContinue
+    if ($py) {
+        $exe = "py"; $args = @("-3", "`"$ServePy`"", "--port", "$Port", "--idle-exit", "180")
+    } else {
+        $exe = "python"; $args = @("`"$ServePy`"", "--port", "$Port", "--idle-exit", "180")
+    }
+    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $Log) | Out-Null
+    try {
+        Start-Process -FilePath $exe -ArgumentList $args -WindowStyle Hidden -RedirectStandardOutput $Log -RedirectStandardError "$Log.err"
+    } catch {
+        Show-Problem "Python 3 is needed to run the viewer. Install it from https://python.org (tick 'Add python.exe to PATH'), then open the app again."
+        exit 1
+    }
+    $tries = 0
+    while ($tries -lt 50 -and -not (Test-ViewerReady)) {
+        Start-Sleep -Milliseconds 200
+        $tries++
+    }
+    if (-not (Test-ViewerReady)) {
+        Show-Problem "The viewer could not start. Check that Python 3 is installed (https://python.org, tick 'Add python.exe to PATH'). Details: $Log.err"
+        exit 1
+    }
+}
 
 function Find-Browser {
     # Environment variables like ProgramFiles(x86) can be unset (32-bit
@@ -54,7 +114,7 @@ if ($browser -and (Get-RunningProfileWindow)) {
 }
 
 if ($browser) {
-    Start-Process -FilePath $browser -ArgumentList "--user-data-dir=`"$ProfileDir`"", "--no-first-run", "--no-default-browser-check", "--app=`"$url`"", "--new-window"
+    Start-Process -FilePath $browser -ArgumentList "--user-data-dir=`"$ProfileDir`"", "--no-first-run", "--no-default-browser-check", "--app=$url", "--new-window"
 } else {
     Start-Process $url
 }

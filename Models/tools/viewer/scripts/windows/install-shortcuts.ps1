@@ -1,7 +1,9 @@
 # Installs Semantic Model Viewer as a Windows app:
-#   - a Desktop icon and a Start menu entry that open the app window
-#   - it opens this viewer folder's index.html directly from disk, so there is
-#     no server, no Python and nothing running in the background
+#   - a Desktop icon and a Start menu entry that start the local app and open its window
+#   - the local app (scripts\serve.py) reads model folders for the viewer, so the
+#     browser never asks for folder permission; it stops itself when the window closes
+#
+# Needs Python 3 (python.org, tick "Add python.exe to PATH" during install).
 #
 # Run once: double-click "Install on Windows.cmd" in the repo root, or
 #   powershell -ExecutionPolicy Bypass -File install-shortcuts.ps1
@@ -15,7 +17,11 @@ if (-not (Test-Path $powershellExe)) {
     $powershellExe = "powershell.exe"
 }
 
-# Earlier versions started a Python server at every sign-in; it is no longer needed.
+if (-not (Get-Command py -ErrorAction SilentlyContinue) -and -not (Get-Command python -ErrorAction SilentlyContinue)) {
+    Write-Warning "Python was not found on PATH. Install it from https://python.org (tick 'Add python.exe to PATH'), then open the app."
+}
+
+# Earlier versions started a server at every sign-in; the app now starts on demand.
 $startupFolder = [Environment]::GetFolderPath("Startup")
 if ($startupFolder) { Remove-Item -ErrorAction SilentlyContinue (Join-Path $startupFolder "Semantic Model Viewer.lnk") }
 

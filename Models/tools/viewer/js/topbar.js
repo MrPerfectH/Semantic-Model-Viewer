@@ -139,7 +139,7 @@
       menu.appendChild(el('button', {
         cls: 'hv-warn', onClick: function () { app.reconnectRepo(); },
         style: "display:flex;align-items:center;gap:8px;width:calc(100% - 8px);margin:0 4px 4px;border:1px solid #f0dfb4;background:#fdf8ec;cursor:pointer;padding:8px 9px;border-radius:7px;font:600 11.5px/1.35 'IBM Plex Sans',sans-serif;color:#92600a;text-align:left;",
-        html: U.icon('refresh', 12) + '<span style="flex:1;min-width:0;">Reconnect &amp; rescan — the browser asks once per session</span>'
+        html: U.icon('refresh', 12) + '<span style="flex:1;min-width:0;">' + (app.server ? 'Reconnect &amp; rescan' : 'Reconnect &amp; rescan — the browser asks once per session') + '</span>'
       }));
     }
     if (st.repoScanning) menu.appendChild(el('div', { style: 'padding:5px 9px 7px;font-size:11px;color:#9aa1ad;', text: 'Scanning for *.SemanticModel folders…' }));
@@ -305,7 +305,11 @@
   ImportModal.prototype.update = function () {
     var self = this, app = this.app, st = app.state;
     U.clear(this.host);
-    if (!st.showImport) return;
+    if (st.showImport) this.renderImport();
+    if (st.folderPick) this.host.appendChild(folderChooser(app, st.folderPick));
+  };
+  ImportModal.prototype.renderImport = function () {
+    var self = this, app = this.app, st = app.state;
     var mono = "font-family:'IBM Plex Mono',monospace;";
     var fileInput = el('input', { type: 'file', multiple: '', accept: '.tmdl,.bim,.json', style: 'display:none;', onChange: function (e) { app.handleFiles(Array.from(e.target.files || []).map(function (f) { return { f: f, p: f.webkitRelativePath || f.name }; })); e.target.value = ''; } });
     var folderInput = el('input', { type: 'file', style: 'display:none;', onChange: function (e) { app.handleFiles(Array.from(e.target.files || []).map(function (f) { return { f: f, p: f.webkitRelativePath || f.name }; })); e.target.value = ''; } });
@@ -317,10 +321,14 @@
     }, [
       el('div', { style: 'font-size:12.5px;color:#4b5563;font-weight:500;', html: 'Drop a repo folder — every <span style="' + mono + '">*.SemanticModel</span> inside is found —<br>or a TMDL folder / <span style="' + mono + '">model.bim</span> file' }),
       el('div', { style: 'display:flex;gap:8px;justify-content:center;margin-top:13px;' }, [
-        el('button', { text: 'Choose files', onClick: function () { fileInput.click(); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" }),
-        el('button', { text: 'Choose folder', onClick: function () { app.chooseImportFolder(function () { folderInput.click(); }); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" })
+        app.server
+          ? el('button', { text: 'Browse folder…', onClick: function () { app.importFromFolder(); }, style: "height:29px;padding:0 13px;border:1px solid #2563eb;background:#2563eb;color:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';" })
+          : el('button', { text: 'Choose folder', onClick: function () { app.chooseImportFolder(function () { folderInput.click(); }); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" }),
+        el('button', { text: 'Choose files', onClick: function () { fileInput.click(); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" })
       ]),
-      app.canFS() ? el('div', { style: 'font-size:11px;line-height:1.45;color:#6b7280;margin-top:11px;', text: 'Choose folder: your browser asks for permission to view the folder — click Allow so Refresh can re-read it later.' }) : null,
+      app.server
+        ? el('div', { style: 'font-size:11px;line-height:1.45;color:#6b7280;margin-top:11px;', text: 'Browse folder: the local app reads the folder for you — no browser permission prompt — and Refresh re-reads it later.' })
+        : (app.canFS() ? el('div', { style: 'font-size:11px;line-height:1.45;color:#6b7280;margin-top:11px;', text: 'Choose folder: your browser asks for permission to view the folder — click Allow so Refresh can re-read it later.' }) : null),
       fileInput, folderInput
     ]);
 
@@ -369,6 +377,65 @@
       style: 'position:fixed;inset:0;z-index:100;background:rgba(22,27,38,.46);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);'
     }, panel));
   };
+
+  /* ================= folder chooser (local app) ================= */
+  /* Lists folders through scripts/serve.py so the browser's own picker - and its permission
+     prompt - is never involved. Driven by app.state.folderPick (see app.pickFolder). */
+  function folderChooser(app, fp) {
+    var mono = "font-family:'IBM Plex Mono',monospace;";
+    var btn = function (text, onClick, primary) {
+      return el('button', { text: text, onClick: onClick, style: "height:29px;padding:0 13px;border:1px solid " + (primary ? '#2563eb;background:#2563eb;color:#fff' : '#dce0e6;background:#fff;color:#2b3140') + ";border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';flex:none;" });
+    };
+    var cancel = function () { app.finishFolderPick(null); };
+    var row = function (label, meta, onClick, strong) {
+      return el('div', {
+        role: 'button', tabindex: '0', onClick: onClick,
+        onKeyDown: function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } },
+        style: 'display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;border-bottom:1px solid #eef0f3;font-size:12.5px;color:#1f2430;' + (strong ? 'font-weight:600;background:#f3f7ff;' : '')
+      }, [
+        el('span', { style: 'color:' + (strong ? '#2563eb' : '#9aa1ad') + ';flex:none;display:flex;', html: U.ICON.folder }),
+        el('span', { style: 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', text: label }),
+        meta ? el('span', { style: 'font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#2563eb;font-weight:700;flex:none;', text: meta }) : null
+      ]);
+    };
+    var pathInput = el('input', {
+      value: fp.path || '', spellcheck: 'false', placeholder: 'Folder path',
+      style: "flex:1;min-width:0;height:31px;padding:0 10px;border:1px solid #cbd5cd;border-radius:7px;font-size:12px;" + mono + "outline:none;background:#fff;color:#1f2430;",
+      onKeyDown: function (e) { if (e.key === 'Enter') { e.preventDefault(); app.browseTo(e.target.value); } }
+    });
+    var list = el('div', { style: 'margin-top:10px;max-height:320px;overflow:auto;border:1px solid #e6e9ee;border-radius:9px;background:#fff;' });
+    if (fp.loading) list.appendChild(el('div', { style: 'padding:14px;font-size:12px;color:#9aa1ad;', text: 'Loading…' }));
+    else {
+      if (fp.parent) list.appendChild(row('..', '', function () { app.browseTo(fp.parent); }));
+      (fp.dirs || []).forEach(function (d) { list.appendChild(row(d.name, d.model ? 'Semantic model' : '', function () { app.browseTo(d.path); }, d.model)); });
+      if (!(fp.dirs || []).length) list.appendChild(el('div', { style: 'padding:12px 14px;font-size:12px;color:#9aa1ad;', text: 'No subfolders here.' }));
+    }
+    var roots = el('div', { style: 'display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;' }, (fp.roots || []).map(function (r) {
+      return el('button', { text: r.name, title: r.path, onClick: function () { app.browseTo(r.path); }, style: "height:24px;padding:0 9px;border:1px solid #dce0e6;background:#fff;border-radius:6px;cursor:pointer;font:500 11px/1 'IBM Plex Sans';color:#4b5563;" });
+    }));
+    var panel = el('div', {
+      onClick: function (e) { e.stopPropagation(); },
+      style: 'width:560px;max-width:calc(100vw - 40px);background:#fff;border-radius:14px;box-shadow:0 30px 70px rgba(10,16,30,.35);padding:20px 22px;'
+    }, [
+      el('div', { style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;' }, [
+        el('div', { style: 'flex:1;min-width:0;font-size:16px;font-weight:600;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', text: fp.title }),
+        el('button', { text: '×', onClick: cancel, style: 'width:26px;height:26px;border:none;background:#eef0f3;border-radius:7px;cursor:pointer;color:#6b7280;font-size:16px;line-height:1;' })
+      ]),
+      fp.hint ? el('div', { style: 'font-size:12px;color:#7a828f;line-height:1.5;margin-bottom:12px;', text: fp.hint }) : null,
+      el('div', { style: 'display:flex;gap:8px;' }, [pathInput, btn('Go', function () { app.browseTo(pathInput.value); })]),
+      roots,
+      list,
+      fp.error ? el('div', { style: 'margin-top:9px;padding:8px 11px;background:#fdecec;border:1px solid #f6c9c9;border-radius:8px;font-size:12px;color:#b91c1c;line-height:1.45;', text: fp.error }) : null,
+      el('div', { style: 'display:flex;justify-content:flex-end;gap:8px;margin-top:13px;' }, [
+        btn('Cancel', cancel),
+        btn(fp.model ? 'Use this model folder' : 'Use this folder', function () { app.finishFolderPick(fp.path); }, true)
+      ])
+    ]);
+    return el('div', {
+      onClick: cancel,
+      style: 'position:fixed;inset:0;z-index:101;background:rgba(22,27,38,.46);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);'
+    }, panel);
+  }
 
   g.TopBar = TopBar; g.Legend = Legend; g.Hint = Hint; g.ImportModal = ImportModal;
 })(window);

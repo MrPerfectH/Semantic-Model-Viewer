@@ -6,28 +6,37 @@ dependency flow** — pick a measure and see everything that feeds it (upstream,
 everything built on it (downstream, blue), with side-by-side DAX, hidden-measure flags and
 per-measure report usage.
 
-## Install (2 minutes, no Python)
+## Install (2 minutes)
 
-The viewer runs on your own computer, straight from a copy of this repo. Your models are
-read on your machine and never leave it. No Python, Node, server or admin rights needed.
-Use **Chrome** or **Edge**: they can open a model folder directly and re-read it with
-**Refresh**.
+The viewer runs on your own computer from a copy of this repo. A small local app
+(`Models/tools/viewer/scripts/serve.py`, Python, no extra packages) serves the page and
+reads your model folders for it, so **the browser never asks for permission to view a
+folder**: you pick folders in the viewer itself, and **Refresh** re-reads them silently.
+Your models never leave your machine.
+
+Needs **Python 3** and **Chrome or Edge** (other browsers work, in a normal tab).
 
 1. Get the repo: `git clone https://github.com/MrPerfectH/Semantic-Model-Viewer.git`
    (or **Code → Download ZIP** on GitHub and unzip it).
-2. Double-click the installer in the repo folder:
+2. Install Python 3 if you do not have it: [python.org](https://www.python.org/downloads/)
+   (Windows: tick **Add python.exe to PATH**; Mac: python.org, or `xcode-select --install`).
+3. Double-click the installer in the repo folder:
    - **Mac:** `Install on Mac.command`. It adds **Semantic Model Viewer** to
      `~/Applications`; drag it to the Dock.
    - **Windows:** `Install on Windows.cmd`. It adds a Desktop icon and a Start menu entry.
-3. The app opens in its own window. Drag a `.pbip` repo folder, a `*.SemanticModel`
-   folder or a `model.bim` onto it, or use **Open model** / **Connect repo folder…**.
-
-When you choose a folder, the browser asks for permission to view it. That is the browser
-granting this local page read access to that one folder; nothing is uploaded.
+4. The app opens in its own window. Use **Open model → Import model → Browse folder…**
+   or **Connect repo folder…** and pick a `*.SemanticModel` folder, a `.pbip` repo folder
+   (every model inside is found) or a folder holding `model.bim`. Dragging a folder onto the
+   window still works too.
 
 If you downloaded the ZIP, macOS or Windows may warn about the installer the first time
 because it came from the internet. On Mac, right-click `Install on Mac.command` → **Open**;
 on Windows, choose **More info → Run anyway**. Cloning with git avoids the warning.
+
+**What the local app does:** it listens on `http://localhost:8931` on this computer only,
+only ever reads files (`.tmdl`, `.bim`, `.json`), refuses requests from other websites
+open in your browser, and stops itself a few minutes after you close the window.
+Nothing runs at login.
 
 **Updating:** run `git pull` in the repo folder (or download the ZIP again into the same
 place) and reopen the app. Your saved models and layouts are kept.
@@ -49,8 +58,11 @@ To update, install the newer `.vsix`.
 
 ### Online demo
 
-<https://MrPerfectH.github.io/Semantic-Model-Viewer/> opens the same viewer with a
-built-in synthetic demo model, so you can look around before installing.
+<https://MrPerfectH.github.io/Semantic-Model-Viewer/> opens the same viewer with the
+built-in synthetic "Contoso Retail" model already loaded, so you can look around before
+installing. You can import your own model there as well; it is parsed in your browser and
+not uploaded, but because the page itself reads the folder, the browser shows a one-time
+"allow this site to view files" prompt that the installed app never does.
 
 ## About the app
 
@@ -73,20 +85,22 @@ Models/demo/              TMDL source of the demo model
 
 ## Run it from source
 
-Open `Models/tools/viewer/index.html` in Chrome or Edge; that is all the installers do.
-The built-in demo model is the one thing that needs a web server (browsers block loading
-`model-data.json` from a file), so to see it locally:
-
 ```bash
-cd Models/tools/viewer
-python3 -m http.server 8931 --bind 127.0.0.1
-# open http://localhost:8931
+python3 Models/tools/viewer/scripts/serve.py --open
+# Semantic Model Viewer: http://localhost:8931
 ```
 
-Any static host works too: the app is plain files.
+That is all the installers do (plus opening it as an app window). `--idle-exit 180` makes
+it stop after the window has been closed for three minutes; `--port` picks another port.
 
-A fresh browser profile starts with **No model selected**. Import your model or connect a
-repository. Once chosen, the model is restored on reload.
+Without the local app, `Models/tools/viewer/index.html` also opens straight from disk or
+from any static host (`python3 -m http.server` in that folder works). Folders are then read
+by the browser itself, which asks for permission once per folder, and the built-in demo
+model needs a web server to load.
+
+A fresh browser profile starts with **No model selected** (the hosted demo opens the sample
+instead). Import your model or connect a repository; once chosen, the model is restored on
+reload.
 
 ## VS Code extension
 

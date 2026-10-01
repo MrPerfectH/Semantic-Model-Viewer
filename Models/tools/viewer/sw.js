@@ -38,6 +38,7 @@ self.addEventListener('fetch', event => {
     return;
   }
   if (url.origin !== self.location.origin) return;
+  if (url.pathname.indexOf('/api/') !== -1) return;   // local app server: never cached
   event.respondWith((async () => {
     const cache = await caches.open(CACHE);
     try {
