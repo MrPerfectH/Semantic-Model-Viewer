@@ -165,6 +165,8 @@ class Handler(SimpleHTTPRequestHandler):
     def end_headers(self):
         if self.path.startswith("/api/"):
             self.send_header("Cache-Control", "no-store")
+        else:
+            self.send_header("Cache-Control", "no-cache")
         super().end_headers()
 
     # Only the viewer page itself may call the API. A page from another site that tries to

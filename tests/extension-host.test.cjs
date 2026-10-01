@@ -123,8 +123,13 @@ test('malformed messages, unsupported requests and storage keys cannot call priv
 test('openFile accepts model source paths and blocks traversal, absolute paths, and outside symlinks', async (t) => {
   const dir = fixtureModels(t), model = path.join(dir, 'Alpha.SemanticModel');
   fs.writeFileSync(path.join(dir, 'private.json'), '{"secret":true}');
-  fs.symlinkSync(path.join(dir, 'private.json'), path.join(model, 'linked.json'));
-  fs.symlinkSync(path.join(dir, 'Beta.SemanticModel'), path.join(model, 'linked-folder'));
+  try {
+    fs.symlinkSync(path.join(dir, 'private.json'), path.join(model, 'linked.json'));
+    fs.symlinkSync(path.join(dir, 'Beta.SemanticModel'), path.join(model, 'linked-folder'), 'junction');
+  } catch (error) {
+    if (error.code === 'EPERM' && process.platform === 'win32') return t.skip('creating file symlinks needs Developer Mode or an elevated shell on Windows');
+    throw error;
+  }
   const h = harness(t, { folders: [dir] }); const { webview, models } = await open(h);
   await webview.receive({ type: 'openFile', path: 'definition/model.tmdl' });
   assert.equal(h.vscode._shown.length, 1);

@@ -111,7 +111,7 @@ function makeVscode(opts) {
           viewType, title, options, disposed: false,
           webview: {
             html: '', cspSource: 'vscode-resource:', posted: [],
-            asWebviewUri: (u) => 'https://file+.vscode-resource.vscode-cdn.net' + u.fsPath,
+            asWebviewUri: (u) => 'https://file+.vscode-resource.vscode-cdn.net' + u.fsPath.replace(/\\/g, '/'),
             postMessage: async (m) => { panel.webview.posted.push(m); return true; },
             onDidReceiveMessage: (h) => { panel.webview.receive = h; }
           },
