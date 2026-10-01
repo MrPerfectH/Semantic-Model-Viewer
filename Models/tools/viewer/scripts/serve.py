@@ -210,7 +210,9 @@ class Handler(SimpleHTTPRequestHandler):
 
 class Server(ThreadingHTTPServer):
     daemon_threads = True
-    allow_reuse_address = False
+    # Windows lets a second process share a port with SO_REUSEADDR, so only enable it elsewhere.
+    # Without it macOS refuses to bind for ~1 minute after the app closes (TIME_WAIT).
+    allow_reuse_address = os.name != "nt"
 
     def __init__(self, address, idle_exit):
         super().__init__(address, Handler)
