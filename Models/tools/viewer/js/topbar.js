@@ -31,7 +31,7 @@
 
   TopBar.prototype.update = function () {
     var self=this,app=this.app,st=app.state,cv=app.canvas,offline=!!app.snapshotMode,info=app.snapshotInfo||{};
-    var key=[app.modelKey,st.modelName,st.loaded,st.viewMode,st.showModelMenu,st.pngLabel,st.repoScanning,st.repoError,app._repoLive,offline,st.snapshotSaving,st.refreshing,st.snapshotMessage,st.snapshotError,app.canInstall&&app.canInstall()].join('|');
+    var key=[app.modelKey,st.modelName,st.loaded,st.viewMode,st.showModelMenu,st.pngLabel,st.repoScanning,st.repoError,app._repoLive,offline,st.snapshotSaving,st.refreshing,st.snapshotMessage,st.snapshotError,!!app.server].join('|');
     if(key===this._key)return;this._key=key;U.clear(this.host);
     var count=(app.model?app.model.tables.length:0)+' tables · '+(app.model?app.model.relationships.length:0)+' relationships';
     var created=Number.isFinite(Date.parse(info.createdAt))?new Date(info.createdAt).toLocaleString():'';
@@ -56,8 +56,8 @@
       if(app.canRefreshSource())actions.appendChild(el('button',{cls:'ex-button',text:st.refreshing?'Refreshing…':'Refresh',disabled:!!st.refreshing,
         title:'Re-read this model from its source folder. Your layout and saved views are kept.',onClick:function(){app.refreshSource();}}));
       actions.appendChild(el('button',{cls:'ex-button',text:st.pngLabel,title:'Export current view as PNG',onClick:function(){app.exportPNG();}}));
-      if(app.canInstall&&app.canInstall())actions.appendChild(el('button',{cls:'ex-button',text:'Install app',
-        title:'Install Semantic Model Viewer as an app with its own icon and window; it also works offline',onClick:function(){app.installApp();}}));
+      if(!app.server)actions.appendChild(el('a',{cls:'ex-button',text:'Get the app',href:'https://github.com/MrPerfectH/Semantic-Model-Viewer#install-2-minutes',target:'_blank',rel:'noopener',
+        title:'Download the desktop app: it opens your model folders directly, with no browser permission prompt',style:'text-decoration:none;display:inline-flex;align-items:center;'}));
       actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Open model',onClick:function(){app.setState({showImport:true,importError:'',importReady:false});}}));
     }
     this.host.appendChild(actions);
