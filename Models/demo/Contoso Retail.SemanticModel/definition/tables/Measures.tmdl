@@ -1,0 +1,457 @@
+table Measures
+	lineageTag: 54562ed1-1a93-56b4-9fa7-19d22f06635a
+
+	measure 'Total Sales' = SUM(Sales[Net Amount])
+		formatString: #,0
+		displayFolder: Sales\Base
+		lineageTag: e51f0554-fedc-5035-8b88-452359ffe166
+
+	measure 'Units Sold' = SUM(Sales[Quantity])
+		formatString: #,0
+		displayFolder: Sales\Base
+		lineageTag: 76130095-6103-5ae7-b1fb-ae86579bed08
+
+	measure 'Total Discounts' = SUM(Sales[Discount Amount])
+		formatString: #,0
+		displayFolder: Sales\Base
+		lineageTag: 11d06e52-9244-540b-839e-441d5f058cf3
+
+	measure 'Total Cost' = SUMX(Sales, Sales[Quantity] * Sales[Unit Cost])
+		formatString: #,0
+		displayFolder: Sales\Base
+		lineageTag: 380945b8-eba6-54c0-a7d1-04dd97e432b1
+
+	measure 'Gross Profit' = [Total Sales] - [Total Cost]
+		formatString: #,0
+		displayFolder: Sales\Profitability
+		lineageTag: 372f5593-800e-5010-acbd-dfac7ff187d6
+
+	measure 'Gross Margin %' = DIVIDE([Gross Profit], [Total Sales])
+		formatString: 0.0%
+		displayFolder: Sales\Profitability
+		lineageTag: 6b1df797-af86-5f95-ace3-c16e22a63bae
+
+	measure 'Average Selling Price' = DIVIDE([Total Sales], [Units Sold])
+		formatString: #,0.00
+		displayFolder: Sales\Profitability
+		lineageTag: 6ed4f7d0-4d7a-5b75-b6da-adda9dcd54a6
+
+	measure 'Discount Rate' = DIVIDE([Total Discounts], [Total Sales] + [Total Discounts])
+		formatString: 0.0%
+		displayFolder: Sales\Profitability
+		lineageTag: 14a15bbc-4ee5-541e-9386-43f625007768
+
+	measure 'Sales LY' = CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Date[Date]))
+		formatString: #,0
+		displayFolder: Sales\Time
+		lineageTag: 90327f67-ec6a-57f7-8d0f-982003583283
+
+	measure 'Sales YoY' = [Total Sales] - [Sales LY]
+		formatString: #,0
+		displayFolder: Sales\Time
+		lineageTag: 2385d5e3-a29e-5c81-8ee5-0433d98bc1a2
+
+	measure 'Sales YoY %' = DIVIDE([Sales YoY], [Sales LY])
+		formatString: 0.0%
+		displayFolder: Sales\Time
+		lineageTag: 3b937561-fdf2-5437-91de-a25f07e038dc
+
+	measure 'Sales YTD' = CALCULATE([Total Sales], DATESYTD(Date[Date]))
+		formatString: #,0
+		displayFolder: Sales\Time
+		lineageTag: 0fbd6a48-611f-5454-9e09-d9b4b0f8e5d7
+
+	measure 'Sales MTD' = CALCULATE([Total Sales], DATESMTD(Date[Date]))
+		formatString: #,0
+		displayFolder: Sales\Time
+		lineageTag: 4ca2743d-efd6-5e6b-826c-c67eacfb7e90
+
+	measure 'Sales Rolling 12M' = CALCULATE([Total Sales], DATESINPERIOD(Date[Date], MAX(Date[Date]), -12, MONTH))
+		formatString: #,0
+		displayFolder: Sales\Time
+		lineageTag: 72bd757b-35a1-550e-8fc4-a82fea0c001b
+
+	measure 'Sales Ship Date' = CALCULATE([Total Sales], USERELATIONSHIP(Sales[Ship Date], Date[Date]))
+		formatString: #,0
+		displayFolder: Sales\Time
+		lineageTag: 394d0690-d788-59e9-8ca2-8cb2157ed061
+
+	measure 'Sales Rank by Product' = RANKX(ALL(Product[Product Name]), [Total Sales])
+		formatString: 0
+		displayFolder: Sales\Ranking
+		lineageTag: 889710d0-5430-5115-8dd6-56070c91ac52
+
+	measure 'Sales Share of Category' = DIVIDE([Total Sales], CALCULATE([Total Sales], ALL(Product), VALUES('Product Category'[Category])))
+		formatString: 0.0%
+		displayFolder: Sales\Ranking
+		lineageTag: 9db483cf-51de-54f6-9dd8-32463e25b1c7
+
+	measure 'Customer Count' = DISTINCTCOUNT(Sales[Customer Key])
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 733139bc-49e0-5a17-a490-609f174ddde7
+
+	measure 'Sales per Customer' = DIVIDE([Total Sales], [Customer Count])
+		formatString: #,0.00
+		displayFolder: Customers
+		lineageTag: e6058ec7-4b29-5e9d-83c1-9770736578d6
+
+	measure 'New Customers' = CALCULATE(DISTINCTCOUNT(Customer[CustomerKey]), FILTER(Customer, Customer[Signup Date] >= MIN(Date[Date]) && Customer[Signup Date] <= MAX(Date[Date])))
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: c7e70ee3-51b6-55eb-bcd7-d22e3f5b05b0
+
+	measure 'Order Count' = DISTINCTCOUNT('Sales Orders'[Order Number])
+		formatString: #,0
+		displayFolder: Orders
+		lineageTag: a0d6469a-ccdd-5641-9a77-312e3d95ef01
+
+	measure 'Order Value' = SUM('Sales Orders'[Order Total])
+		formatString: #,0
+		displayFolder: Orders
+		isHidden
+		lineageTag: 860fb234-aaf5-5f27-9c13-d7271c91301f
+
+	measure 'Average Order Value' = DIVIDE([Order Value], [Order Count])
+		formatString: #,0.00
+		displayFolder: Orders
+		lineageTag: ac9d6ae0-d007-512c-ad7e-0a3288a26887
+
+	measure 'Lines per Order' = DIVIDE(SUM('Sales Orders'[Line Count]), [Order Count])
+		formatString: 0.0
+		displayFolder: Orders
+		lineageTag: b023b976-3068-5eff-b41b-7a9e86d2172d
+
+	measure 'Tax Collected' = SUM('Sales Orders'[Tax Amount])
+		formatString: #,0
+		displayFolder: Orders
+		lineageTag: c7a8307e-457a-5fce-92d1-0dc875b42a5c
+
+	measure 'Returned Units' = SUM(Returns[Return Quantity])
+		formatString: #,0
+		displayFolder: Returns
+		lineageTag: cca7fdf8-7b27-5fc0-9b41-4f9b6267e8e5
+
+	measure 'Refund Amount' = SUM(Returns[Refund Amount])
+		formatString: #,0
+		displayFolder: Returns
+		lineageTag: 8077e747-b53b-5eb2-b5cd-d3aaad4a68d1
+
+	measure 'Return Rate' = DIVIDE([Returned Units], [Units Sold])
+		formatString: 0.0%
+		displayFolder: Returns
+		lineageTag: c1adcd1e-9592-5ffb-8b31-f7c87371f30a
+
+	measure 'Net Sales After Returns' = [Total Sales] - [Refund Amount]
+		formatString: #,0
+		displayFolder: Returns
+		lineageTag: 9f7cf4c9-0dc3-573d-9ad6-fde8426e3af7
+
+	measure 'Defect Returns' = CALCULATE([Returned Units], 'Return Reason'[Is Defect] = "Yes")
+		formatString: #,0
+		displayFolder: Returns
+		lineageTag: fa1c53c7-54a1-5c5b-aefa-8bb2c2610e17
+
+	measure 'Units On Hand' = SUM(Inventory[Units On Hand])
+		formatString: #,0
+		displayFolder: Inventory
+		lineageTag: 9d6fd79e-105d-5599-bd12-056e575bfb76
+
+	measure 'Units On Order' = SUM(Inventory[Units On Order])
+		formatString: #,0
+		displayFolder: Inventory
+		lineageTag: b7f17524-ccfe-5f37-8342-681ebb487614
+
+	measure 'Stock Value' = SUM(Inventory[Stock Value])
+		formatString: #,0
+		displayFolder: Inventory
+		lineageTag: 02eb1cb1-355b-54e2-9fc1-6f9ac26f8f13
+
+	measure 'Stock Cover Days' = DIVIDE([Units On Hand], DIVIDE([Units Sold], COUNTROWS(VALUES(Date[Date]))))
+		formatString: 0.0
+		displayFolder: Inventory
+		lineageTag: ae50a7b2-2c19-5ce0-88b2-9f0deb5d1ac9
+
+	measure 'Stock Turnover' = DIVIDE([Total Cost], [Stock Value])
+		formatString: 0.00
+		displayFolder: Inventory
+		lineageTag: 6de2c7da-d64e-5a74-b5c2-6928b65884a9
+
+	measure 'Out of Stock Products' = COUNTROWS(FILTER(VALUES(Product[ProductKey]), CALCULATE(SUM(Inventory[Units On Hand])) <= 0))
+		formatString: #,0
+		displayFolder: Inventory
+		lineageTag: 2a6813d9-8cf7-5e63-b3de-a7a507126a3b
+
+	measure 'Purchase Cost' = SUM(Purchases[Purchase Cost])
+		formatString: #,0
+		displayFolder: Supply
+		lineageTag: d9755bb5-c7f7-563c-821b-d406b221cac9
+
+	measure 'Freight Cost' = SUM(Purchases[Freight Cost])
+		formatString: #,0
+		displayFolder: Supply
+		lineageTag: 8dd324f4-d0b5-5e7b-870d-07908c964de2
+
+	measure 'Landed Cost' = [Purchase Cost] + [Freight Cost]
+		formatString: #,0
+		displayFolder: Supply
+		lineageTag: f88b9959-dcd7-5848-89f3-71cd7d498267
+
+	measure 'Purchased Units' = SUM(Purchases[Purchase Quantity])
+		formatString: #,0
+		displayFolder: Supply
+		lineageTag: a3bb14c6-39a4-5540-bda1-58061720101c
+
+	measure 'Landed Cost per Unit' = DIVIDE([Landed Cost], [Purchased Units])
+		formatString: #,0.00
+		displayFolder: Supply
+		lineageTag: dd683275-dfe8-5514-a7bb-06c2bcc4d34e
+
+	measure 'Supplier Lead Time' = AVERAGE(Supplier[Lead Time Days])
+		formatString: 0.0
+		displayFolder: Supply
+		lineageTag: 50ad4658-c501-5c7f-917a-69a268f8990a
+
+	measure 'Shipping Cost' = SUM(Shipments[Shipping Cost])
+		formatString: #,0
+		displayFolder: Supply
+		lineageTag: e99ce5dd-3663-57c6-8617-47f95e1e786f
+
+	measure 'Packages Shipped' = SUM(Shipments[Package Count])
+		formatString: #,0
+		displayFolder: Supply
+		lineageTag: d9df4cfb-e734-57ff-a4be-2482dd5e2e68
+
+	measure 'Cost per Package' = DIVIDE([Shipping Cost], [Packages Shipped])
+		formatString: #,0.00
+		displayFolder: Supply
+		lineageTag: 75471b6b-58f9-5cd3-b9f9-8bbfb2ed498f
+
+	measure 'Average Transit Days' = AVERAGE(Shipments[Transit Days])
+		formatString: 0.0
+		displayFolder: Supply
+		lineageTag: 7b41cfe0-7dc1-5b20-b893-d1526230fd08
+
+	measure Sessions = SUM('Web Traffic'[Sessions])
+		formatString: #,0
+		displayFolder: Marketing
+		lineageTag: 411fb96b-39af-582a-b961-a37f8ce3a489
+
+	measure 'Page Views' = SUM('Web Traffic'[Page Views])
+		formatString: #,0
+		displayFolder: Marketing
+		lineageTag: 1b93b992-08f0-5cf4-beea-a57d026d897e
+
+	measure Conversions = SUM('Web Traffic'[Conversions])
+		formatString: #,0
+		displayFolder: Marketing
+		lineageTag: f46b7c29-55ac-5a10-9c76-b7d66118cf21
+
+	measure 'Conversion Rate' = DIVIDE([Conversions], [Sessions])
+		formatString: 0.00%
+		displayFolder: Marketing
+		lineageTag: c3eeefef-2866-5a96-8fcf-715b034ef5c3
+
+	measure 'Marketing Spend' = SUM('Marketing Spend'[Spend Amount])
+		formatString: #,0
+		displayFolder: Marketing
+		lineageTag: 8d1a495b-81ba-54b3-9a7d-04a39684979b
+
+	measure Impressions = SUM('Marketing Spend'[Impressions])
+		formatString: #,0
+		displayFolder: Marketing
+		lineageTag: a346a85d-87aa-55fc-b722-b9b4ed1c391a
+
+	measure Clicks = SUM('Marketing Spend'[Clicks])
+		formatString: #,0
+		displayFolder: Marketing
+		lineageTag: 401cc922-cad9-51d3-8845-97b3ad6f7c58
+
+	measure 'Click Through Rate' = DIVIDE([Clicks], [Impressions])
+		formatString: 0.00%
+		displayFolder: Marketing
+		lineageTag: f1e30ac1-6cec-5a0b-8f3d-1043dc67d21d
+
+	measure 'Cost per Click' = DIVIDE([Marketing Spend], [Clicks])
+		formatString: #,0.00
+		displayFolder: Marketing
+		lineageTag: 6ffa0ba9-be70-59d0-a5e4-b847e84db131
+
+	measure 'Cost per Conversion' = DIVIDE([Marketing Spend], [Conversions])
+		formatString: #,0.00
+		displayFolder: Marketing
+		lineageTag: 393cc0fa-b637-5fe2-85d6-81476fd32b0b
+
+	measure 'Return on Ad Spend' = DIVIDE([Total Sales], [Marketing Spend])
+		formatString: 0.00
+		displayFolder: Marketing
+		lineageTag: 64d3d04c-e31c-53cd-926b-8a70ed4f5d18
+
+	measure 'Budget Amount' = SUM(Budget[Budget Amount])
+		formatString: #,0
+		displayFolder: Finance
+		lineageTag: bf693661-627e-5eda-9a61-da5169fd96cc
+
+	measure 'Forecast Revenue' = SUM(Forecast[Forecast Revenue])
+		formatString: #,0
+		displayFolder: Finance
+		lineageTag: 354eb839-cc0a-545a-b31b-d4845eabe9d2
+
+	measure 'Forecast Units' = SUM(Forecast[Forecast Units])
+		formatString: #,0
+		displayFolder: Finance
+		lineageTag: fe4b59e4-98a5-582c-94fd-7d70c7ac39da
+
+	measure 'Forecast Variance' = [Total Sales] - [Forecast Revenue]
+		formatString: #,0
+		displayFolder: Finance
+		lineageTag: 93bb368f-18b3-5ce1-a704-94f5af58fc43
+
+	measure 'Forecast Accuracy' = 1 - ABS(DIVIDE([Forecast Variance], [Total Sales]))
+		formatString: 0.0%
+		displayFolder: Finance
+		lineageTag: 6b92b81f-d88e-5115-a606-fa653076a2ce
+
+	measure 'Budget Variance' = [Total Sales] - [Budget Amount]
+		formatString: #,0
+		displayFolder: Finance
+		lineageTag: 8e12f612-c5c3-5d5d-885c-5af31e2fe5a7
+
+	measure 'Budget Attainment' = DIVIDE([Total Sales], [Budget Amount])
+		formatString: 0.0%
+		displayFolder: Finance
+		lineageTag: c1d9430e-7404-5468-b7e3-ef725d470087
+
+	measure Debits = SUM('GL Entries'[Debit Amount])
+		formatString: #,0
+		displayFolder: Finance
+		lineageTag: d3a7b3b7-2558-557d-9928-a3e75a3591d8
+
+	measure Credits = SUM('GL Entries'[Credit Amount])
+		formatString: #,0
+		displayFolder: Finance
+		lineageTag: 848722a1-1ae3-5959-b2b7-a4c49f66c062
+
+	measure 'GL Balance' = [Debits] - [Credits]
+		formatString: #,0
+		displayFolder: Finance
+		lineageTag: f774261a-57be-5b23-9344-f25d5f5e2b6b
+
+	measure 'Operating Expenses' = CALCULATE([GL Balance], 'Account'[Is Revenue] = "No")
+		formatString: #,0
+		displayFolder: Finance
+		lineageTag: 7c79fdd6-b559-5ea8-ba54-191d5727e2ec
+
+	measure 'Operating Profit' = [Gross Profit] - [Operating Expenses] - [Marketing Spend]
+		formatString: #,0
+		displayFolder: Finance
+		lineageTag: d7baa1fd-53c2-52be-8db7-22405f40ec4a
+
+	measure 'Operating Margin %' = DIVIDE([Operating Profit], [Total Sales])
+		formatString: 0.0%
+		displayFolder: Finance
+		lineageTag: fd74f5dc-d7cd-54cd-bfdd-203262e83152
+
+	measure 'Gross Pay' = SUM(Payroll[Gross Pay])
+		formatString: #,0
+		displayFolder: People
+		lineageTag: f0902b15-6361-57a9-adce-284038fbc58f
+
+	measure 'Net Pay' = SUM(Payroll[Net Pay])
+		formatString: #,0
+		displayFolder: People
+		lineageTag: 4bd16d29-8538-5717-aad2-004b8b728571
+
+	measure 'Hours Worked' = SUM(Payroll[Hours Worked])
+		formatString: #,0
+		displayFolder: People
+		lineageTag: 869542a9-eb75-5f2d-8f75-8cc9ff1e250b
+
+	measure 'Cost per Hour' = DIVIDE([Gross Pay], [Hours Worked])
+		formatString: #,0.00
+		displayFolder: People
+		lineageTag: b8984c65-335f-5bc7-b45a-456e2728589d
+
+	measure Headcount = DISTINCTCOUNT(Payroll[Employee Key])
+		formatString: #,0
+		displayFolder: People
+		lineageTag: 6069f2a8-5692-5c19-bb51-768bc6b8b88a
+
+	measure 'Sales per Employee' = DIVIDE([Total Sales], [Headcount])
+		formatString: #,0
+		displayFolder: People
+		lineageTag: 9990a68d-ac05-517d-a5f6-4ee3dcf0990b
+
+	measure Tickets = SUM('Support Tickets'[Ticket Count])
+		formatString: #,0
+		displayFolder: Service
+		lineageTag: d04bed77-4638-585e-b51f-5ecdee1e717c
+
+	measure 'Average Resolution Hours' = AVERAGE('Support Tickets'[Resolution Hours])
+		formatString: 0.0
+		displayFolder: Service
+		lineageTag: a4812d66-9a86-5cb6-af10-a261bee9c494
+
+	measure 'Satisfaction Score' = AVERAGE('Support Tickets'[Satisfaction Score])
+		formatString: 0.00
+		displayFolder: Service
+		lineageTag: 9d860a7a-d0ef-5bc7-8739-71d4a726614e
+
+	measure 'Tickets per 1000 Units' = DIVIDE([Tickets], [Units Sold]) * 1000
+		formatString: 0.0
+		displayFolder: Service
+		lineageTag: 279e7d56-091b-538b-b3b0-d8b6431fcf9a
+
+	measure 'Points Earned' = SUM('Loyalty Points'[Points Earned])
+		formatString: #,0
+		displayFolder: Loyalty
+		lineageTag: ea27423c-3169-51f5-9e99-a4f02447832f
+
+	measure 'Points Redeemed' = SUM('Loyalty Points'[Points Redeemed])
+		formatString: #,0
+		displayFolder: Loyalty
+		lineageTag: e185f3da-6377-5293-adc9-4fe629c64c0a
+
+	measure 'Points Redemption Rate' = DIVIDE([Points Redeemed], [Points Earned])
+		formatString: 0.0%
+		displayFolder: Loyalty
+		lineageTag: ea83081d-42ce-52d6-8d66-e8291de6532b
+
+	measure 'Average List Price' = AVERAGE('Price History'[List Price])
+		formatString: #,0.00
+		displayFolder: Pricing
+		lineageTag: 7ca62900-056f-5f7a-b5c5-f939653483c6
+
+	measure 'Average Promo Price' = AVERAGE('Price History'[Promo Price])
+		formatString: #,0.00
+		displayFolder: Pricing
+		lineageTag: 258cc3b4-6189-5e87-bafa-167d5f2c8b60
+
+	measure 'Promo Depth' = 1 - DIVIDE([Average Promo Price], [Average List Price])
+		formatString: 0.0%
+		displayFolder: Pricing
+		lineageTag: 560a2876-3f86-5230-9381-b8d2360af57d
+
+	measure 'Price Realisation' = DIVIDE([Average Selling Price], [Average List Price])
+		formatString: 0.0%
+		displayFolder: Pricing
+		lineageTag: e7e144f8-2e1b-53a8-bcb4-16f0f05d61bb
+
+	measure 'Debug Margin Check' = IF([Gross Margin %] < 0, "Review", "OK")
+		displayFolder: Sales\Profitability
+		isHidden
+		lineageTag: a43a8dc8-ada2-5fcd-91b7-f8223df500a4
+
+	column Value
+		dataType: int64
+		isHidden
+		lineageTag: 7545f217-4231-5a26-9bac-1e3b20009e7e
+		sourceColumn: Value
+
+	partition Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows({{1}}, {"Value"})
+				in
+				    Source

@@ -1,0 +1,46 @@
+table Store
+	lineageTag: 9bce41fc-f19c-549d-b467-0060a2b811de
+
+	column StoreKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: ab40c845-eca4-5b2f-a855-3ceb74d1f08d
+		sourceColumn: storekey
+
+	column 'Store Name'
+		dataType: string
+		lineageTag: fdf86f5c-643f-5fb3-be7c-e74005887ba8
+		sourceColumn: store_name
+
+	column 'Store Type'
+		dataType: string
+		lineageTag: d2539f11-44de-57dc-8ed7-09538a9de0b4
+		sourceColumn: store_type
+
+	column 'Open Date'
+		dataType: dateTime
+		lineageTag: 529ea19c-33f4-5539-ab30-a4dadfb30a0b
+		sourceColumn: open_date
+
+	column 'Square Feet'
+		dataType: int64
+		summarizeBy: sum
+		lineageTag: 1376e197-9206-550c-bccf-fa515277a34b
+		sourceColumn: square_feet
+
+	column 'Geography Key'
+		dataType: int64
+		isHidden
+		lineageTag: bea4cad9-80fc-50f6-90a3-ca44bfd2c567
+		sourceColumn: geography_key
+
+	partition Store = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="retail",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_store",Kind="Table"]}[Data]
+				in
+				    tbl

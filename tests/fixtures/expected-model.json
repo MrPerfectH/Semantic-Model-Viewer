@@ -1,0 +1,357 @@
+{
+ "name": "Fixture Model",
+ "tables": [
+  {
+   "name": "Dim Date",
+   "columns": [
+    {
+     "name": "Date",
+     "dataType": "dateTime",
+     "hidden": false,
+     "isCalc": false,
+     "isKey": true,
+     "rel": true
+    },
+    {
+     "name": "Year",
+     "dataType": "int64",
+     "hidden": false,
+     "isCalc": false,
+     "isKey": false,
+     "rel": false
+    },
+    {
+     "name": "Month Name",
+     "dataType": "string",
+     "hidden": false,
+     "isCalc": false,
+     "isKey": false,
+     "rel": false
+    },
+    {
+     "name": "Month",
+     "dataType": "int64",
+     "hidden": true,
+     "isCalc": false,
+     "isKey": false,
+     "rel": false
+    }
+   ],
+   "measures": [],
+   "source": {
+    "kind": "databricks",
+    "schema": "dimensions",
+    "table": "dim_date"
+   },
+   "role": "dim",
+   "domain": "Dimensions",
+   "colCount": 4,
+   "measureCount": 0,
+   "relCount": 2
+  },
+  {
+   "name": "Fact Sales",
+   "columns": [
+    {
+     "name": "Amount",
+     "dataType": "decimal",
+     "hidden": false,
+     "isCalc": false,
+     "isKey": false,
+     "rel": false
+    },
+    {
+     "name": "Cost",
+     "dataType": "decimal",
+     "hidden": true,
+     "isCalc": false,
+     "isKey": false,
+     "rel": false
+    },
+    {
+     "name": "Order Date",
+     "dataType": "dateTime",
+     "hidden": false,
+     "isCalc": false,
+     "isKey": false,
+     "rel": true
+    },
+    {
+     "name": "Ship Date",
+     "dataType": "dateTime",
+     "hidden": false,
+     "isCalc": false,
+     "isKey": false,
+     "rel": true
+    },
+    {
+     "name": "ProductKey",
+     "dataType": "int64",
+     "hidden": true,
+     "isCalc": false,
+     "isKey": false,
+     "rel": true
+    },
+    {
+     "name": "Region",
+     "dataType": "string",
+     "hidden": false,
+     "isCalc": false,
+     "isKey": false,
+     "rel": true
+    },
+    {
+     "name": "Margin",
+     "dataType": "decimal",
+     "hidden": false,
+     "isCalc": true,
+     "isKey": false,
+     "rel": false
+    }
+   ],
+   "measures": [
+    {
+     "name": "Total Sales",
+     "dax": "SUM('Fact Sales'[Amount])\n",
+     "folder": "Sales\\Base",
+     "fmt": "#,0"
+    },
+    {
+     "name": "Sales YoY",
+     "dax": "// year over year delta\nVAR _cur = [Total Sales]\nVAR _prev = CALCULATE([Total Sales], DATEADD('Dim Date'[Date], -1, YEAR))\nRETURN\n\t_cur - _prev\n",
+     "folder": "Sales\\Time",
+     "fmt": "#,0",
+     "h": 1
+    },
+    {
+     "name": "Margin%",
+     "dax": "DIVIDE([Total Sales] - SUM('Fact Sales'[Cost]), [Total Sales])\n",
+     "folder": "",
+     "fmt": "0.0%"
+    },
+    {
+     "name": "Broken Measure",
+     "dax": "[Does Not Exist] + 1\n",
+     "folder": "",
+     "fmt": ""
+    }
+   ],
+   "source": {
+    "kind": "databricks",
+    "schema": "finance",
+    "table": "fact_sales"
+   },
+   "role": "fact",
+   "domain": "Finance",
+   "colCount": 7,
+   "measureCount": 4,
+   "relCount": 4
+  },
+  {
+   "name": "Measures Table",
+   "columns": [
+    {
+     "name": "Value",
+     "dataType": "int64",
+     "hidden": true,
+     "isCalc": false,
+     "isKey": false,
+     "rel": false
+    }
+   ],
+   "measures": [
+    {
+     "name": "Sales per Product",
+     "dax": "DIVIDE([Total Sales], [Product Count])\n",
+     "folder": "Ratios",
+     "fmt": ""
+    },
+    {
+     "name": "Sales Rank",
+     "dax": "RANKX(ALL(Product[Product Name]), [Total Sales])\n",
+     "folder": "",
+     "fmt": ""
+    }
+   ],
+   "source": {
+    "kind": "manual"
+   },
+   "role": "measures",
+   "domain": "Measures",
+   "colCount": 1,
+   "measureCount": 2,
+   "relCount": 0
+  },
+  {
+   "name": "Metric Selector",
+   "columns": [
+    {
+     "name": "Metric Selector",
+     "dataType": "string",
+     "hidden": false,
+     "isCalc": false,
+     "isKey": false,
+     "rel": false
+    },
+    {
+     "name": "Metric Selector Fields",
+     "dataType": "string",
+     "hidden": true,
+     "isCalc": false,
+     "isKey": false,
+     "rel": false
+    },
+    {
+     "name": "Metric Selector Order",
+     "dataType": "int64",
+     "hidden": true,
+     "isCalc": false,
+     "isKey": false,
+     "rel": false
+    }
+   ],
+   "measures": [],
+   "source": {
+    "kind": "calculated"
+   },
+   "role": "fieldparam",
+   "domain": "Field Params",
+   "colCount": 3,
+   "measureCount": 0,
+   "relCount": 0
+  },
+  {
+   "name": "Product",
+   "columns": [
+    {
+     "name": "ProductKey",
+     "dataType": "int64",
+     "hidden": true,
+     "isCalc": false,
+     "isKey": true,
+     "rel": true
+    },
+    {
+     "name": "Product Name",
+     "dataType": "string",
+     "hidden": false,
+     "isCalc": false,
+     "isKey": false,
+     "rel": false
+    }
+   ],
+   "measures": [
+    {
+     "name": "Product Count",
+     "dax": "DISTINCTCOUNT(Product[ProductKey])\n",
+     "folder": "",
+     "fmt": ""
+    }
+   ],
+   "source": {
+    "kind": "db",
+    "schema": "dbo",
+    "table": "DimProduct"
+   },
+   "role": "dim",
+   "domain": "Dbo",
+   "colCount": 2,
+   "measureCount": 1,
+   "relCount": 1
+  },
+  {
+   "name": "Region Bridge",
+   "columns": [
+    {
+     "name": "Region",
+     "dataType": "string",
+     "hidden": false,
+     "isCalc": false,
+     "isKey": false,
+     "rel": true
+    },
+    {
+     "name": "Area",
+     "dataType": "string",
+     "hidden": false,
+     "isCalc": false,
+     "isKey": false,
+     "rel": false
+    }
+   ],
+   "measures": [],
+   "source": {
+    "kind": "manual"
+   },
+   "role": "fact",
+   "domain": "Manual",
+   "colCount": 2,
+   "measureCount": 0,
+   "relCount": 1
+  },
+  {
+   "name": "Time Intelligence",
+   "columns": [
+    {
+     "name": "Name",
+     "dataType": "string",
+     "hidden": false,
+     "isCalc": false,
+     "isKey": false,
+     "rel": false
+    }
+   ],
+   "measures": [],
+   "source": {
+    "kind": "calculated"
+   },
+   "role": "calcgroup",
+   "domain": "Calc Groups",
+   "colCount": 1,
+   "measureCount": 0,
+   "relCount": 0
+  }
+ ],
+ "relationships": [
+  {
+   "fromCard": "many",
+   "toCard": "one",
+   "inactive": false,
+   "both": false,
+   "from": "Fact Sales",
+   "fromCol": "Order Date",
+   "to": "Dim Date",
+   "toCol": "Date"
+  },
+  {
+   "fromCard": "many",
+   "toCard": "one",
+   "inactive": true,
+   "both": false,
+   "from": "Fact Sales",
+   "fromCol": "Ship Date",
+   "to": "Dim Date",
+   "toCol": "Date"
+  },
+  {
+   "fromCard": "many",
+   "toCard": "one",
+   "inactive": false,
+   "both": true,
+   "from": "Fact Sales",
+   "fromCol": "ProductKey",
+   "to": "Product",
+   "toCol": "ProductKey"
+  },
+  {
+   "fromCard": "many",
+   "toCard": "many",
+   "inactive": false,
+   "both": false,
+   "from": "Fact Sales",
+   "fromCol": "Region",
+   "to": "Region Bridge",
+   "toCol": "Region"
+  }
+ ]
+}

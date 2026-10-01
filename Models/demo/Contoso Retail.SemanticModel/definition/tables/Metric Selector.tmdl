@@ -1,0 +1,31 @@
+table 'Metric Selector'
+	lineageTag: e8b11b7f-24cd-5afd-98ea-a38a68cefd33
+
+	column 'Metric Selector'
+		dataType: string
+		sourceColumn: [Value1]
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Metric Selector Fields'
+		isHidden
+		dataType: string
+		sourceColumn: [Value2]
+
+	column 'Metric Selector Order'
+		isHidden
+		dataType: int64
+		sourceColumn: [Value3]
+
+	partition 'Metric Selector' = calculated
+		mode: import
+		source =
+				{
+				    ("Total Sales", NAMEOF([Total Sales]), 0),
+				    ("Gross Profit", NAMEOF([Gross Profit]), 1),
+				    ("Units Sold", NAMEOF([Units Sold]), 2),
+				    ("Order Count", NAMEOF([Order Count]), 3)
+				}

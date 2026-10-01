@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: vscode-extension/package-lock.json
+      - name: Install
+        working-directory: vscode-extension
+        run: npm ci
+      - name: Test viewer and extension
+        working-directory: vscode-extension
+        run: npm test
+      - name: Package the extension
+        working-directory: vscode-extension
+        run: npm run package

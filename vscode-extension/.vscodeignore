@@ -1,0 +1,10 @@
+# Runtime allowlist: exclude development dependencies, fixtures and source models.
+**/*
+!package.json
+!README.md
+!CHANGELOG.md
+!images/**
+!src/**
+!media/index.html
+!media/*.css
+!media/js/*.js

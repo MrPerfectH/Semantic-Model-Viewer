@@ -1,0 +1,40 @@
+table Employee
+	lineageTag: 91d93cbc-1084-5033-a4b2-7d3e3ce3794b
+
+	column EmployeeKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: f3bcc5cb-5ebc-58fb-a6b8-f97430e270ee
+		sourceColumn: employeekey
+
+	column 'Employee Name'
+		dataType: string
+		lineageTag: 36e16561-d992-5e29-8f46-976d6391f170
+		sourceColumn: employee_name
+
+	column 'Job Title'
+		dataType: string
+		lineageTag: 840ba3d9-d22a-5034-a9cb-2e1d4cd0035a
+		sourceColumn: job_title
+
+	column 'Hire Date'
+		dataType: dateTime
+		lineageTag: e9234a18-c7d4-5b36-98a1-a7e8285b1fa3
+		sourceColumn: hire_date
+
+	column 'Manager Key'
+		dataType: int64
+		isHidden
+		lineageTag: f249ee2b-ba0d-5d7d-892e-a6255a51d102
+		sourceColumn: manager_key
+
+	partition Employee = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="people",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_employee",Kind="Table"]}[Data]
+				in
+				    tbl

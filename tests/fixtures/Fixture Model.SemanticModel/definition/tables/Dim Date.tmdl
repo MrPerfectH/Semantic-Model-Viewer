@@ -1,0 +1,29 @@
+table 'Dim Date'
+	column Date
+		dataType: dateTime
+		isKey
+		sourceColumn: Date
+
+	column Year
+		dataType: int64
+		sourceColumn: Year
+
+	column 'Month Name'
+		dataType: string
+		sortByColumn: Month
+		sourceColumn: Month Name
+
+	column Month
+		dataType: int64
+		isHidden
+		sourceColumn: Month
+
+	partition 'Dim Date' = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-1.azuredatabricks.net", "/sql/1.0/warehouses/abc", []),
+				    db = Source{[Name = "dimensions", Kind = "Schema"]}[Data],
+				    tbl = db{[Name = "dim_date", Kind = "View"]}[Data]
+				in
+				    tbl

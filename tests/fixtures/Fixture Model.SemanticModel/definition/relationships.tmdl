@@ -1,0 +1,27 @@
+relationship 1a2b-order-date
+	fromColumn: 'Fact Sales'.'Order Date'
+	toColumn: 'Dim Date'.Date
+
+relationship 3c4d-ship-date
+	isActive: false
+	fromColumn: 'Fact Sales'.'Ship Date'
+	toColumn: 'Dim Date'.Date
+
+relationship 5e6f-product
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Fact Sales'.ProductKey
+	toColumn: Product.ProductKey
+
+relationship 7a8b-region
+	fromCardinality: many
+	toCardinality: many
+	fromColumn: 'Fact Sales'.Region
+	toColumn: 'Region Bridge'.Region
+
+relationship 9c0d-duplicate-of-order-date
+	fromColumn: 'Fact Sales'.'Order Date'
+	toColumn: 'Dim Date'.Date
+
+relationship 1e2f-ghost
+	fromColumn: 'Fact Sales'.Region
+	toColumn: Missing.Region

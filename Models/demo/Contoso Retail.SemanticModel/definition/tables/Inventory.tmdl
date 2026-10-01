@@ -1,0 +1,48 @@
+table Inventory
+	lineageTag: 2486610b-5db4-59a5-8745-99feab3bfcd3
+
+	column 'Product Key'
+		dataType: int64
+		isHidden
+		lineageTag: 9664d83f-5ed4-5c40-a3d8-689ba683cbf4
+		sourceColumn: product_key
+
+	column 'Warehouse Key'
+		dataType: int64
+		isHidden
+		lineageTag: 814a1833-f1d4-50ff-bb49-083a77b9a1d9
+		sourceColumn: warehouse_key
+
+	column 'Snapshot Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: f5af80d2-fecc-519a-8466-175b62223d4c
+		sourceColumn: snapshot_date
+
+	column 'Units On Hand'
+		dataType: decimal
+		isHidden
+		lineageTag: 8d574125-1b7e-5557-a2a4-ac7f5350ac9d
+		sourceColumn: units_on_hand
+
+	column 'Units On Order'
+		dataType: decimal
+		isHidden
+		lineageTag: e1c8b019-bf24-5a51-bd97-18db1a160089
+		sourceColumn: units_on_order
+
+	column 'Stock Value'
+		dataType: decimal
+		isHidden
+		lineageTag: 0529e47b-0273-5921-96b5-ca9185c82346
+		sourceColumn: stock_value
+
+	partition Inventory = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="supply",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_inventory",Kind="Table"]}[Data]
+				in
+				    tbl

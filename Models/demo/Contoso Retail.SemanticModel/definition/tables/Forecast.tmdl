@@ -1,0 +1,42 @@
+table Forecast
+	lineageTag: d3a1de9b-3dfa-5b06-88ce-6dbc036bc018
+
+	column 'Product Key'
+		dataType: int64
+		isHidden
+		lineageTag: bec41346-dfb2-5aaa-8bbf-93c3aa754103
+		sourceColumn: product_key
+
+	column 'Store Key'
+		dataType: int64
+		isHidden
+		lineageTag: 231f41ef-878f-5dd0-a786-425a21d18f9e
+		sourceColumn: store_key
+
+	column 'Forecast Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: e4e21982-232c-54c8-a5c7-f33eac721733
+		sourceColumn: forecast_date
+
+	column 'Forecast Units'
+		dataType: decimal
+		isHidden
+		lineageTag: c270ec26-94cf-5cae-973e-438241b2b04e
+		sourceColumn: forecast_units
+
+	column 'Forecast Revenue'
+		dataType: decimal
+		isHidden
+		lineageTag: 843f2595-ed4a-5c7b-a5ed-a2c52c764819
+		sourceColumn: forecast_revenue
+
+	partition Forecast = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="finance",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_forecast",Kind="Table"]}[Data]
+				in
+				    tbl

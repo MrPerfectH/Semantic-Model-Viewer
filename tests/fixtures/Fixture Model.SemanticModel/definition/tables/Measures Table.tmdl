@@ -1,0 +1,19 @@
+table 'Measures Table'
+	measure 'Sales per Product' = DIVIDE([Total Sales], [Product Count])
+		displayFolder: Ratios
+
+	measure 'Sales Rank' =
+			RANKX(ALL(Product[Product Name]), [Total Sales])
+
+	column Value
+		dataType: int64
+		isHidden
+		sourceColumn: Value
+
+	partition 'Measures Table' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows({{1}}, {"Value"})
+				in
+				    Source

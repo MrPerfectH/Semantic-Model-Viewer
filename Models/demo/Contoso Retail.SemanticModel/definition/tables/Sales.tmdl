@@ -1,0 +1,84 @@
+table Sales
+	lineageTag: b33afb5e-3ed7-576d-ba25-5c1cd825b28e
+
+	column 'Product Key'
+		dataType: int64
+		isHidden
+		lineageTag: 12adce46-131a-5727-8f03-dbef72338d68
+		sourceColumn: product_key
+
+	column 'Customer Key'
+		dataType: int64
+		isHidden
+		lineageTag: c4a78ad0-9fbb-53b0-a65e-f624f5899fee
+		sourceColumn: customer_key
+
+	column 'Store Key'
+		dataType: int64
+		isHidden
+		lineageTag: 429a2027-936a-5157-bbbe-7ef6bbac4d0a
+		sourceColumn: store_key
+
+	column 'Sales Channel Key'
+		dataType: int64
+		isHidden
+		lineageTag: b92a85a9-cebc-581c-be23-05887a6b6307
+		sourceColumn: sales_channel_key
+
+	column 'Promotion Key'
+		dataType: int64
+		isHidden
+		lineageTag: 6040c30f-e395-50dc-8190-c74344d475a7
+		sourceColumn: promotion_key
+
+	column 'Currency Key'
+		dataType: int64
+		isHidden
+		lineageTag: bc6beaaf-d696-5e84-bc80-397263ee566f
+		sourceColumn: currency_key
+
+	column 'Order Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: d384500e-693c-558d-8b28-4578ab705623
+		sourceColumn: order_date
+
+	column 'Ship Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: 138bbeec-2df7-5191-9848-b551174d664d
+		sourceColumn: ship_date
+
+	column Quantity
+		dataType: decimal
+		isHidden
+		lineageTag: 9f449e61-0575-5cab-9bf7-77f67d88176b
+		sourceColumn: quantity
+
+	column 'Net Amount'
+		dataType: decimal
+		isHidden
+		lineageTag: 8db6e610-2180-5db6-b3b3-2011d14f6eba
+		sourceColumn: net_amount
+
+	column 'Discount Amount'
+		dataType: decimal
+		isHidden
+		lineageTag: f5829eb6-85bb-5205-9dc5-7954cc3a6978
+		sourceColumn: discount_amount
+
+	column 'Unit Cost'
+		dataType: decimal
+		isHidden
+		lineageTag: 6f11f4e7-23a8-559d-b6ec-5e0bde31a433
+		sourceColumn: unit_cost
+
+	partition Sales = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="sales",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_sales",Kind="Table"]}[Data]
+				in
+				    tbl

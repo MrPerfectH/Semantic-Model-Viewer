@@ -1,0 +1,54 @@
+table 'Web Traffic'
+	lineageTag: dcf09e5a-a269-5967-9554-38555cc66da7
+
+	column 'Campaign Key'
+		dataType: int64
+		isHidden
+		lineageTag: bfbeef58-48d6-58be-9155-11d094600e6e
+		sourceColumn: campaign_key
+
+	column 'Sales Channel Key'
+		dataType: int64
+		isHidden
+		lineageTag: 7afdd777-15e7-5890-9fef-954d2d48e1ee
+		sourceColumn: sales_channel_key
+
+	column 'Geography Key'
+		dataType: int64
+		isHidden
+		lineageTag: ccfb7d96-4d34-5667-a90a-f5b7cb7b99df
+		sourceColumn: geography_key
+
+	column 'Visit Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: 60c16b97-c5db-5a9b-a382-7192d2ff687e
+		sourceColumn: visit_date
+
+	column Sessions
+		dataType: decimal
+		isHidden
+		lineageTag: 7b6f9204-b26a-5e6f-8d13-4d2871172680
+		sourceColumn: sessions
+
+	column 'Page Views'
+		dataType: decimal
+		isHidden
+		lineageTag: 81adcdcb-754e-5980-ba5e-b40ca70b218a
+		sourceColumn: page_views
+
+	column Conversions
+		dataType: decimal
+		isHidden
+		lineageTag: 059ff346-4240-5fe7-b259-ebc48842ba1d
+		sourceColumn: conversions
+
+	partition 'Web Traffic' = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="marketing",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_web_traffic",Kind="Table"]}[Data]
+				in
+				    tbl

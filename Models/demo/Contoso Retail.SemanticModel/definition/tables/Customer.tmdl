@@ -1,0 +1,51 @@
+table Customer
+	lineageTag: ca633a94-9783-5ee6-b1f5-27e3e1b376b3
+
+	column CustomerKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: 231a461a-0f68-5ba7-a171-bb3b0daf6217
+		sourceColumn: customerkey
+
+	column 'Customer Name'
+		dataType: string
+		lineageTag: 57692ecb-9511-5997-91a5-234ce3cfcab6
+		sourceColumn: customer_name
+
+	column Gender
+		dataType: string
+		lineageTag: a3060e16-4c78-58b6-b9a5-6124ee73df63
+		sourceColumn: gender
+
+	column 'Birth Date'
+		dataType: dateTime
+		lineageTag: 37ab66ad-f0f3-54eb-aebb-b29744989c1c
+		sourceColumn: birth_date
+
+	column 'Signup Date'
+		dataType: dateTime
+		lineageTag: 842f52d1-507d-5f9f-96e7-70ea67bcb7c4
+		sourceColumn: signup_date
+
+	column 'Segment Key'
+		dataType: int64
+		isHidden
+		lineageTag: 02eac100-5f09-5607-acc3-d81d93c5d170
+		sourceColumn: segment_key
+
+	column 'Geography Key'
+		dataType: int64
+		isHidden
+		lineageTag: 16e0e1b8-dd73-5ed9-98b4-9a2679a886a1
+		sourceColumn: geography_key
+
+	partition Customer = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="sales",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_customer",Kind="Table"]}[Data]
+				in
+				    tbl

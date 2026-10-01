@@ -1,0 +1,40 @@
+table Promotion
+	lineageTag: b1092bcf-05f7-57e0-b1c1-105c298a6a71
+
+	column PromotionKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: 41257843-2e30-58a4-9768-0b714c5a6c4e
+		sourceColumn: promotionkey
+
+	column 'Promotion Name'
+		dataType: string
+		lineageTag: e868b227-8cb1-5d22-bb07-3b93c3a9fd53
+		sourceColumn: promotion_name
+
+	column 'Discount Percent'
+		dataType: decimal
+		summarizeBy: sum
+		lineageTag: fd45fe9c-ccca-56ea-9af9-fde6cf529486
+		sourceColumn: discount_percent
+
+	column 'Start Date'
+		dataType: dateTime
+		lineageTag: 51aa613b-afb4-517b-aed5-08a289d8b456
+		sourceColumn: start_date
+
+	column 'End Date'
+		dataType: dateTime
+		lineageTag: 2e00e219-2301-536d-bafc-ccec5056ab54
+		sourceColumn: end_date
+
+	partition Promotion = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="marketing",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_promotion",Kind="Table"]}[Data]
+				in
+				    tbl

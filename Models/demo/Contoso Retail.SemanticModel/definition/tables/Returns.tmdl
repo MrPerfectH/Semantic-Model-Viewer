@@ -1,0 +1,54 @@
+table Returns
+	lineageTag: cf0007f2-dfc9-58b0-98a7-d3e6d692a0b2
+
+	column 'Product Key'
+		dataType: int64
+		isHidden
+		lineageTag: 81d28ca1-90c6-5172-8e56-a5d4d789f3ee
+		sourceColumn: product_key
+
+	column 'Customer Key'
+		dataType: int64
+		isHidden
+		lineageTag: 927ce07e-eac8-5092-8f86-4ee7f007a619
+		sourceColumn: customer_key
+
+	column 'Return Reason Key'
+		dataType: int64
+		isHidden
+		lineageTag: 9f471843-92e1-57c5-854c-ebaa6fb8c5d0
+		sourceColumn: return_reason_key
+
+	column 'Store Key'
+		dataType: int64
+		isHidden
+		lineageTag: a40884db-dc25-5d17-89fe-143a8548d437
+		sourceColumn: store_key
+
+	column 'Return Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: f85590fa-82c9-5110-be70-462dbfef8045
+		sourceColumn: return_date
+
+	column 'Return Quantity'
+		dataType: decimal
+		isHidden
+		lineageTag: b6e0c08a-ee48-5401-9214-f5d892c5b313
+		sourceColumn: return_quantity
+
+	column 'Refund Amount'
+		dataType: decimal
+		isHidden
+		lineageTag: eeb0dc53-e449-54ed-a3d2-5639f99dae0c
+		sourceColumn: refund_amount
+
+	partition Returns = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="sales",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_returns",Kind="Table"]}[Data]
+				in
+				    tbl

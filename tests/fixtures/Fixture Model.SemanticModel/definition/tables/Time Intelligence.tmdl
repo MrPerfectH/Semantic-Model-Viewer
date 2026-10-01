@@ -1,0 +1,13 @@
+table 'Time Intelligence'
+	calculationGroup
+		precedence: 1
+
+		calculationItem Current = SELECTEDMEASURE()
+
+		calculationItem YTD = CALCULATE(SELECTEDMEASURE(), DATESYTD('Dim Date'[Date]))
+
+	column Name
+		dataType: string
+		sourceColumn: Name
+
+	partition 'Time Intelligence' = calculationGroup

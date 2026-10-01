@@ -1,0 +1,19 @@
+table Scenario
+	lineageTag: 7c2fb597-be81-569a-80ec-02cb5a159308
+
+	column Scenario
+		dataType: string
+		sourceColumn: Scenario
+
+	column Scenario Order
+		dataType: int64
+		isHidden
+		sourceColumn: Order
+
+	partition Scenario = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows({{"Actual", 1}, {"Budget", 2}, {"Forecast", 3}}, {"Scenario", "Order"})
+				in
+				    Source

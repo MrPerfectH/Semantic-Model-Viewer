@@ -1,0 +1,42 @@
+table 'Price History'
+	lineageTag: b2180214-02c9-518f-a576-2e89cdffce05
+
+	column 'Product Key'
+		dataType: int64
+		isHidden
+		lineageTag: cfd89082-0d2d-5b67-a625-a6a7f6f1bc2c
+		sourceColumn: product_key
+
+	column 'Currency Key'
+		dataType: int64
+		isHidden
+		lineageTag: d1ac9122-3638-547d-b537-efee00446a56
+		sourceColumn: currency_key
+
+	column 'Effective Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: e38c15b1-743f-51a7-ab5b-a7d358dbb618
+		sourceColumn: effective_date
+
+	column 'List Price'
+		dataType: decimal
+		isHidden
+		lineageTag: 7d08f8f8-337b-5f48-88c4-132d82c942a2
+		sourceColumn: list_price
+
+	column 'Promo Price'
+		dataType: decimal
+		isHidden
+		lineageTag: 352e4781-ed79-5ed4-bc6e-6ef394c0060b
+		sourceColumn: promo_price
+
+	partition 'Price History' = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="sales",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_price_history",Kind="Table"]}[Data]
+				in
+				    tbl

@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: vscode-extension/package-lock.json
+      - name: Check the tag matches the extension version
+        working-directory: vscode-extension
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match vscode-extension/package.json version $version" >&2
+            exit 1
+          fi
+      - name: Install and test
+        working-directory: vscode-extension
+        run: |
+          npm ci
+          npm test
+      - name: Build the VS Code extension
+        working-directory: vscode-extension
+        run: npm run package
+      - name: Bundle the static web app
+        run: |
+          mkdir -p dist/semantic-model-viewer-web
+          cd Models/tools/viewer
+          cp -r index.html explorer.css measures.css js icons sw.js manifest.webmanifest \
+            model-data.json report-usage.json ../../../dist/semantic-model-viewer-web/
+          cd ../../../dist
+          zip -r "semantic-model-viewer-web-${GITHUB_REF_NAME#v}.zip" semantic-model-viewer-web
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "Semantic Model Viewer $GITHUB_REF_NAME" \
+            --generate-notes \
+            vscode-extension/*.vsix \
+            dist/*.zip

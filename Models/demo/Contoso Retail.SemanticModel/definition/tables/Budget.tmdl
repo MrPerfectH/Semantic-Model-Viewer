@@ -1,0 +1,42 @@
+table Budget
+	lineageTag: 0cd84c2c-6136-5745-bbf4-03926f59b028
+
+	column 'Account Key'
+		dataType: int64
+		isHidden
+		lineageTag: d9c0391a-e08c-503c-af30-32a39cb8d749
+		sourceColumn: account_key
+
+	column 'Cost Center Key'
+		dataType: int64
+		isHidden
+		lineageTag: 54db8f75-2efc-522c-bf9f-4bbc596160dd
+		sourceColumn: cost_center_key
+
+	column 'Currency Key'
+		dataType: int64
+		isHidden
+		lineageTag: 4214d0e4-c184-5f7f-b42b-848e7e121ddf
+		sourceColumn: currency_key
+
+	column 'Budget Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: a80dcb7c-213b-556e-b7ba-08e5256b67f9
+		sourceColumn: budget_date
+
+	column 'Budget Amount'
+		dataType: decimal
+		isHidden
+		lineageTag: 94aff38c-2f4e-50d3-8f97-c7dcd543b1ef
+		sourceColumn: budget_amount
+
+	partition Budget = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="finance",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_budget",Kind="Table"]}[Data]
+				in
+				    tbl

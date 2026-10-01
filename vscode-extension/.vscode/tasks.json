@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "semantic-model-viewer: sync",
+      "type": "process",
+      "command": "node",
+      "args": [
+        "${workspaceFolder}/scripts/sync-viewer.js"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

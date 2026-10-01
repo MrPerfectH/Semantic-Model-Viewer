@@ -1,0 +1,35 @@
+table Supplier
+	lineageTag: 8a496591-7a09-54e4-9eea-34f81c092b51
+
+	column SupplierKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: 73f2d15f-b72b-5e2a-b7d4-8f66448a70aa
+		sourceColumn: supplierkey
+
+	column 'Supplier Name'
+		dataType: string
+		lineageTag: 78726837-e63d-554a-8fe8-312819c33b6f
+		sourceColumn: supplier_name
+
+	column 'Lead Time Days'
+		dataType: int64
+		summarizeBy: sum
+		lineageTag: e10d86a1-d9cf-5a30-a571-6e1b692c13bd
+		sourceColumn: lead_time_days
+
+	column Rating
+		dataType: string
+		lineageTag: b86cae5f-7812-532d-bee0-66b942d8dc26
+		sourceColumn: rating
+
+	partition Supplier = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="supply",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_supplier",Kind="Table"]}[Data]
+				in
+				    tbl

@@ -1,0 +1,40 @@
+# Changelog
+
+## 0.3.0
+
+- Add the MIT license.
+- Replace the built-in sample with a synthetic "Contoso Retail" demo model.
+- Ship the same viewer as an installable web app (PWA) hosted on GitHub Pages.
+- Release `.vsix` packages through GitHub Releases.
+
+## 0.2.1
+
+- Combine star, constellation and layered layouts with the current desktop viewer.
+- Keep table labels readable at overview scale and center measure dependency graphs.
+- Group large dependent lists and improve view switching.
+- Correct unnamed TMDL database imports and preserve per-model layout scale.
+- Start new web profiles without a selected model; restore an explicitly chosen model.
+- Harden desktop launcher paths and local server startup checks.
+
+## 0.2.0
+
+- Integrate the extension with the canonical `Models/tools/viewer` application.
+- Add the table library, blank canvas, relationship expansion, saved views, and minimap.
+- Include the redesigned measure workspace and complete DAX inspection.
+- Support self-contained HTML snapshots for offline model sharing.
+- Package all required viewer CSS and JavaScript, including the VS Code host, cleaner
+  usage adapter, and snapshot runtime. Exclude sample model and report datasets.
+- Run the shared viewer and extension regression suites together and verify generated
+  assets before packaging.
+
+## 0.1.0
+
+- First release: open any `*.SemanticModel` folder or `model.bim` from the workspace in the
+  Semantic Model Viewer (graph canvas, clusters, relationship matrix, measure dependency
+  flow).
+- **Semantic Models** view in the Activity Bar listing every model in the workspace.
+- Explorer context menu entry on `*.SemanticModel` folders and `model.bim` files.
+- `semanticModelViewer.defaultModel` setting to open a model without picking.
+- Live refresh when TMDL files change on disk.
+- Optional report-usage badges from a Semantic Model Cleaner analysis (run it from the
+  viewer or load an existing `smc --format json` export).

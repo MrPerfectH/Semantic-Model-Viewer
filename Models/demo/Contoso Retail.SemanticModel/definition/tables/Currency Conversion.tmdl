@@ -1,0 +1,14 @@
+table 'Currency Conversion'
+	lineageTag: e56db20a-bbaa-56e5-aa7b-3fd59b03f7d4
+	calculationGroup
+		precedence: 2
+
+		calculationItem 'Local Currency' = SELECTEDMEASURE()
+
+		calculationItem USD = SUMX(VALUES(Currency[Currency Code]), SELECTEDMEASURE())
+
+	column Name
+		dataType: string
+		sourceColumn: Name
+
+	partition 'Currency Conversion' = calculationGroup

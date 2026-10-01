@@ -1,0 +1,44 @@
+table Geography
+	lineageTag: 063c29eb-2842-58d7-a994-d6a5ae950b6c
+
+	column GeographyKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: 2f888bb3-2aa5-5e94-b954-ac0c7d3bcb62
+		sourceColumn: geographykey
+
+	column City
+		dataType: string
+		lineageTag: 72d1763d-955a-50be-a49a-11da751bbb55
+		sourceColumn: city
+
+	column State
+		dataType: string
+		lineageTag: 4d575f57-dae3-5a98-99ad-54c65dd9fe74
+		sourceColumn: state
+
+	column Country
+		dataType: string
+		lineageTag: a6e2e705-f53f-57a9-ad0d-f90369239eb2
+		sourceColumn: country
+
+	column Region
+		dataType: string
+		lineageTag: d2b60d56-7521-5bbe-b45a-dbf9a4b73676
+		sourceColumn: region
+
+	column Continent
+		dataType: string
+		lineageTag: e55f01f9-f4ac-5c43-bc58-310f95634d51
+		sourceColumn: continent
+
+	partition Geography = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="shared",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_geography",Kind="Table"]}[Data]
+				in
+				    tbl

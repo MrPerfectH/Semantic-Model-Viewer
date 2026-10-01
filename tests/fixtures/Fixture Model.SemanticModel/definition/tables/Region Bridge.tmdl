@@ -1,0 +1,16 @@
+table 'Region Bridge'
+	column Region
+		dataType: string
+		sourceColumn: Region
+
+	column Area
+		dataType: string
+		sourceColumn: Area
+
+	partition 'Region Bridge' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45W", BinaryEncoding.Base64), Compression.Deflate)), {"Region", "Area"})
+				in
+				    Source

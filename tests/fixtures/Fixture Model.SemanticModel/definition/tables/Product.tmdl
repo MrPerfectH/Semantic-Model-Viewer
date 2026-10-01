@@ -1,0 +1,21 @@
+table Product
+	column ProductKey
+		dataType: int64
+		isKey
+		isHidden
+		sourceColumn: ProductKey
+
+	column 'Product Name'
+		dataType: string
+		sourceColumn: ProductName
+
+	measure 'Product Count' = DISTINCTCOUNT(Product[ProductKey])
+
+	partition Product = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql.contoso.com", "warehouse"),
+				    tbl = Source{[Schema="dbo",Item="DimProduct"]}[Data]
+				in
+				    tbl

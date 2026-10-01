@@ -1,0 +1,275 @@
+relationship b9a31161-8121-59ea-b528-38f3644e1c44
+	fromColumn: Sales.'Product Key'
+	toColumn: Product.ProductKey
+
+relationship e64012f0-c9a4-5cac-b7f5-a93c18fce8dc
+	fromColumn: Sales.'Customer Key'
+	toColumn: Customer.CustomerKey
+
+relationship 6324ca65-bf28-51b7-a2c7-175689ea85bd
+	fromColumn: Sales.'Store Key'
+	toColumn: Store.StoreKey
+
+relationship 7a10eba9-5086-50dd-a853-95ce90b78185
+	fromColumn: Sales.'Sales Channel Key'
+	toColumn: 'Sales Channel'.ChannelKey
+
+relationship 940d7e57-e790-571e-9938-d4d51061015e
+	fromColumn: Sales.'Promotion Key'
+	toColumn: Promotion.PromotionKey
+
+relationship 10f99390-13be-58ee-a4f3-f13dd9682fbc
+	fromColumn: Sales.'Currency Key'
+	toColumn: Currency.CurrencyKey
+
+relationship 470d1e32-65ae-5dfe-9d87-b3bbfb96d912
+	fromColumn: Sales.'Order Date'
+	toColumn: Date.Date
+
+relationship 82a3a901-1242-5e98-9fac-b90acd8856d7
+	isActive: false
+	fromColumn: Sales.'Ship Date'
+	toColumn: Date.Date
+
+relationship 21026f9d-fc2f-50ef-9435-f0c780442350
+	fromColumn: 'Sales Orders'.'Customer Key'
+	toColumn: Customer.CustomerKey
+
+relationship 0614bf18-3f79-5712-bad4-ea10a18ff251
+	fromColumn: 'Sales Orders'.'Sales Channel Key'
+	toColumn: 'Sales Channel'.ChannelKey
+
+relationship ad605029-b951-5482-852b-0c53e6589190
+	fromColumn: 'Sales Orders'.'Payment Method Key'
+	toColumn: 'Payment Method'.PaymentMethodKey
+
+relationship e21899d7-3450-5c0f-9c85-9234f14eaca1
+	fromColumn: 'Sales Orders'.'Employee Key'
+	toColumn: Employee.EmployeeKey
+
+relationship 12d740ca-5c1c-5d03-b5f0-946d433ed051
+	fromColumn: 'Sales Orders'.'Order Date'
+	toColumn: Date.Date
+
+relationship 978f855e-073c-57d8-8e2e-f396e6eb4ab0
+	fromColumn: Returns.'Product Key'
+	toColumn: Product.ProductKey
+
+relationship 58193ed2-e99b-55b9-80cf-54226508efbc
+	fromColumn: Returns.'Customer Key'
+	toColumn: Customer.CustomerKey
+
+relationship 75d34631-5694-5a45-b6c2-a7a9d90730ab
+	fromColumn: Returns.'Return Reason Key'
+	toColumn: 'Return Reason'.ReasonKey
+
+relationship 9b9225fc-21a6-56f2-aeba-59f9b2e41b7d
+	fromColumn: Returns.'Store Key'
+	toColumn: Store.StoreKey
+
+relationship e0b1fb17-a09a-5cf8-bb25-a938785857de
+	fromColumn: Returns.'Return Date'
+	toColumn: Date.Date
+
+relationship 0010da88-c96c-5a2c-ad92-64a9ef8f490d
+	fromColumn: Inventory.'Product Key'
+	toColumn: Product.ProductKey
+
+relationship dc2b4eb5-939a-5461-8753-3c41a6ac9e6d
+	fromColumn: Inventory.'Warehouse Key'
+	toColumn: Warehouse.WarehouseKey
+
+relationship ec4b178b-c18b-5093-913d-6bfb788f78d5
+	fromColumn: Inventory.'Snapshot Date'
+	toColumn: Date.Date
+
+relationship c7aa934a-f2df-58d6-bd35-28ca33d27a5a
+	fromColumn: Purchases.'Product Key'
+	toColumn: Product.ProductKey
+
+relationship 5c0548ca-9419-55d2-a71a-3bb7a7aada27
+	fromColumn: Purchases.'Supplier Key'
+	toColumn: Supplier.SupplierKey
+
+relationship ad0f7423-479c-5c38-a852-2c65094dfc46
+	fromColumn: Purchases.'Warehouse Key'
+	toColumn: Warehouse.WarehouseKey
+
+relationship 33f9f8e5-3e0c-5075-aeca-a8593475643d
+	fromColumn: Purchases.'Purchase Date'
+	toColumn: Date.Date
+
+relationship 2e26d45f-37b8-5241-a701-30927ee76f84
+	isActive: false
+	fromColumn: Purchases.'Receipt Date'
+	toColumn: Date.Date
+
+relationship 5eec74bf-13a6-5828-b510-b7395badfce3
+	fromColumn: Shipments.'Carrier Key'
+	toColumn: Carrier.CarrierKey
+
+relationship 3225a216-7440-5d56-bf2a-f4a98de82a99
+	fromColumn: Shipments.'Warehouse Key'
+	toColumn: Warehouse.WarehouseKey
+
+relationship cb6ae847-9170-508c-92f2-adda70592d53
+	fromColumn: Shipments.'Geography Key'
+	toColumn: Geography.GeographyKey
+
+relationship aa2200ea-1a96-5330-b4fd-a2cd672475ca
+	fromColumn: Shipments.'Ship Date'
+	toColumn: Date.Date
+
+relationship 23d738fc-51bb-58cf-9a64-9c18286374d8
+	fromColumn: 'Web Traffic'.'Campaign Key'
+	toColumn: Campaign.CampaignKey
+
+relationship cccdea23-1fe1-563b-9817-0d13da28d000
+	fromColumn: 'Web Traffic'.'Sales Channel Key'
+	toColumn: 'Sales Channel'.ChannelKey
+
+relationship eccf2180-cde3-5173-a382-3cb48961da5e
+	fromColumn: 'Web Traffic'.'Geography Key'
+	toColumn: Geography.GeographyKey
+
+relationship 9d2c24e1-bd2b-531d-b4cf-3164e63228c3
+	fromColumn: 'Web Traffic'.'Visit Date'
+	toColumn: Date.Date
+
+relationship 8e20da8c-0a0a-5fe8-a094-91c6a2f12080
+	fromColumn: 'Marketing Spend'.'Campaign Key'
+	toColumn: Campaign.CampaignKey
+
+relationship 2284a86a-9496-588d-b1cc-f846df577478
+	fromColumn: 'Marketing Spend'.'Sales Channel Key'
+	toColumn: 'Sales Channel'.ChannelKey
+
+relationship ab9139a6-b860-588d-9f29-d315a5f057fb
+	fromColumn: 'Marketing Spend'.'Currency Key'
+	toColumn: Currency.CurrencyKey
+
+relationship a83f49e7-a3c8-57ea-845a-7dccec2dd9e5
+	fromColumn: 'Marketing Spend'.'Spend Date'
+	toColumn: Date.Date
+
+relationship 0a2b686c-7327-55e8-a536-d2247a6ae208
+	fromColumn: Budget.'Account Key'
+	toColumn: Account.AccountKey
+
+relationship b691d43b-ed74-5946-99ee-65e03693928b
+	fromColumn: Budget.'Cost Center Key'
+	toColumn: 'Cost Center'.CostCenterKey
+
+relationship 56f8b416-01e8-5f50-80dd-0e9e18e634b5
+	fromColumn: Budget.'Currency Key'
+	toColumn: Currency.CurrencyKey
+
+relationship 4d7832ee-3b11-5f85-b2c6-c524f0f12788
+	fromColumn: Budget.'Budget Date'
+	toColumn: Date.Date
+
+relationship db933003-245c-5c45-a0a0-2e32adc8f7c0
+	fromColumn: Forecast.'Product Key'
+	toColumn: Product.ProductKey
+
+relationship 4254297a-cc37-5e07-97ab-1614f0577f75
+	fromColumn: Forecast.'Store Key'
+	toColumn: Store.StoreKey
+
+relationship dede1123-cf16-593d-af6c-7815c3e2274b
+	fromColumn: Forecast.'Forecast Date'
+	toColumn: Date.Date
+
+relationship 452dcc7a-73d4-55eb-a2d4-0a18a90e5434
+	fromColumn: 'GL Entries'.'Account Key'
+	toColumn: Account.AccountKey
+
+relationship dd60c986-1be1-5469-a298-365e08384acc
+	fromColumn: 'GL Entries'.'Cost Center Key'
+	toColumn: 'Cost Center'.CostCenterKey
+
+relationship 8174b4b3-14e4-58fc-89d5-e30286fa48ff
+	fromColumn: 'GL Entries'.'Currency Key'
+	toColumn: Currency.CurrencyKey
+
+relationship 02ddbbc8-4624-5fdd-a65a-786c9b31954b
+	fromColumn: 'GL Entries'.'Posting Date'
+	toColumn: Date.Date
+
+relationship 0379caca-1966-5506-85af-f5da37a1cf55
+	fromColumn: Payroll.'Employee Key'
+	toColumn: Employee.EmployeeKey
+
+relationship 24690192-473e-5d74-8c94-b8e67bf892b1
+	fromColumn: Payroll.'Cost Center Key'
+	toColumn: 'Cost Center'.CostCenterKey
+
+relationship 1620b7b4-5ed5-57ce-8182-4a1b09d3b4d0
+	fromColumn: Payroll.'Pay Date'
+	toColumn: Date.Date
+
+relationship 56b6f8a5-cac2-576b-a493-22d8380b12dc
+	fromColumn: 'Support Tickets'.'Customer Key'
+	toColumn: Customer.CustomerKey
+
+relationship 42d81a3e-c735-5cf7-96f7-7d623f9dbb09
+	fromColumn: 'Support Tickets'.'Product Key'
+	toColumn: Product.ProductKey
+
+relationship 55c7ae25-0660-5122-9eca-1cd74492c9a1
+	fromColumn: 'Support Tickets'.'Employee Key'
+	toColumn: Employee.EmployeeKey
+
+relationship c1b9aaab-5570-58d5-bd73-eb977cb03c4b
+	fromColumn: 'Support Tickets'.'Opened Date'
+	toColumn: Date.Date
+
+relationship 47bbb9b6-8cb8-5160-a515-16f3d09c909d
+	isActive: false
+	fromColumn: 'Support Tickets'.'Closed Date'
+	toColumn: Date.Date
+
+relationship d0f15eef-71b6-5e89-891a-862946d1c75a
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Loyalty Points'.'Customer Key'
+	toColumn: Customer.CustomerKey
+
+relationship 69803644-8b87-5c37-90fb-bd3c3d307a6a
+	fromColumn: 'Loyalty Points'.'Store Key'
+	toColumn: Store.StoreKey
+
+relationship 4dff93ee-c8fb-5cb7-9e04-d770eef93ac2
+	fromColumn: 'Loyalty Points'.'Activity Date'
+	toColumn: Date.Date
+
+relationship 7d37486f-dca0-562e-96d2-2e79afbdc559
+	fromColumn: 'Price History'.'Product Key'
+	toColumn: Product.ProductKey
+
+relationship 2e908a8f-091c-5a30-bad0-2ba2a6c82a11
+	fromColumn: 'Price History'.'Currency Key'
+	toColumn: Currency.CurrencyKey
+
+relationship 876c5eb3-c069-52bf-b43b-438914305ccb
+	fromColumn: 'Price History'.'Effective Date'
+	toColumn: Date.Date
+
+relationship 0c335272-5d60-5b09-b2c4-8d8a3f83acf0
+	fromColumn: Product.'Category Key'
+	toColumn: 'Product Category'.CategoryKey
+
+relationship bb01603c-c2e7-5e70-8f24-538935608050
+	fromColumn: Customer.'Segment Key'
+	toColumn: 'Customer Segment'.SegmentKey
+
+relationship f63f8462-1f4e-5e48-82dd-7da88078f983
+	fromColumn: Customer.'Geography Key'
+	toColumn: Geography.GeographyKey
+
+relationship ad237587-e113-5811-add5-e0288d669816
+	fromColumn: Store.'Geography Key'
+	toColumn: Geography.GeographyKey
+
+relationship d50ebc90-06db-5299-97b7-22a8c633e025
+	fromColumn: Warehouse.'Geography Key'
+	toColumn: Geography.GeographyKey

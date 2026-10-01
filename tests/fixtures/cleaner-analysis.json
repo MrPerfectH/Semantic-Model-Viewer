@@ -1,0 +1,68 @@
+{
+  "summary": {
+    "total_items": 9,
+    "used_in_visuals": 3,
+    "indirect": 1,
+    "broken": 1,
+    "not_used": 2,
+    "total_usage_refs": 5,
+    "models": ["Fixture Model"],
+    "reports": ["Sales Overview", "Exec Summary"],
+    "tables": {}
+  },
+  "tables": [],
+  "warnings": [],
+  "reportIssues": [
+    { "kind": "missing_measure", "report": "Sales Overview", "page": "Overview", "message": "Visual references [Old Measure] which no longer exists" }
+  ],
+  "items": [
+    {
+      "type": "Measure", "table": "Fact Sales", "name": "Total Sales", "sourceKind": "model",
+      "displayFolder": "Sales\\Base", "isHidden": false, "status": "USED", "removalRisk": null,
+      "usages": [
+        { "report": "Sales Overview", "page": "Overview", "visualType": "card", "visualTitle": "Total", "context": "Values" },
+        { "report": "Sales Overview", "page": "Overview", "visualType": "barChart", "visualTitle": "By region", "context": "Y-axis" },
+        { "report": "Exec Summary", "page": "Summary", "visualType": "", "visualTitle": "", "context": "Filter" }
+      ]
+    },
+    {
+      "type": "Measure", "table": "Fact Sales", "name": "Sales YoY", "sourceKind": "model",
+      "displayFolder": "Sales\\Time", "isHidden": true, "status": "NOT USED", "removalRisk": "low", "usages": []
+    },
+    {
+      "type": "Measure", "table": "Fact Sales", "name": "Broken Measure", "sourceKind": "model",
+      "status": "BROKEN (missing reference: [Does Not Exist])", "brokenDaxRefs": ["Does Not Exist"], "usages": []
+    },
+    {
+      "type": "Measure", "table": "Fact Sales", "name": "Margin%", "sourceKind": "model",
+      "status": "INDIRECT (via: Sales per Product)", "usages": []
+    },
+    {
+      "type": "Measure", "table": "Measures Table", "name": "Sales per Product", "sourceKind": "model",
+      "status": "USED", "usages": [
+        { "report": "Sales Overview", "page": "Detail", "visualType": "tableEx", "visualTitle": "", "context": "Values" },
+        { "report": "Sales Overview", "page": "Detail", "visualType": "tableEx", "visualTitle": "", "context": "Filters pane (visual)" }
+      ]
+    },
+    {
+      "type": "Measure", "table": "Product", "name": "Product Count", "sourceKind": "model",
+      "status": "USED (RLS: Region Role)", "usages": []
+    },
+    {
+      "type": "Measure", "table": "Sales Overview", "name": "Report Only Measure", "sourceKind": "report", "sourceArtifact": "Sales Overview",
+      "status": "USED", "usages": [ { "report": "Sales Overview", "page": "Overview", "visualType": "card", "visualTitle": "", "context": "Values" } ]
+    },
+    {
+      "type": "Column", "table": "Fact Sales", "name": "Amount", "sourceKind": "model",
+      "status": "USED", "usages": [ { "report": "Sales Overview", "page": "Overview", "visualType": "barChart", "visualTitle": "", "context": "Category" } ]
+    },
+    {
+      "type": "Calculated Column", "table": "Fact Sales", "name": "Margin", "sourceKind": "model",
+      "status": "NOT USED", "removalRisk": "medium", "usages": []
+    },
+    {
+      "type": "Column", "table": "Dim Date", "name": "Date", "sourceKind": "model",
+      "status": "USED (Relationship)", "usages": []
+    }
+  ]
+}

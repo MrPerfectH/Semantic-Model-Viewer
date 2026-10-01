@@ -1,0 +1,30 @@
+table 'Time Grain Selector'
+	lineageTag: 599e56ea-648e-5d56-8014-d094eb639935
+
+	column 'Time Grain Selector'
+		dataType: string
+		sourceColumn: [Value1]
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Time Grain Selector Fields'
+		isHidden
+		dataType: string
+		sourceColumn: [Value2]
+
+	column 'Time Grain Selector Order'
+		isHidden
+		dataType: int64
+		sourceColumn: [Value3]
+
+	partition 'Time Grain Selector' = calculated
+		mode: import
+		source =
+				{
+				    ("Year", NAMEOF(Date[Year]), 0),
+				    ("Quarter", NAMEOF(Date[Quarter]), 1),
+				    ("Month", NAMEOF(Date[Month]), 2)
+				}

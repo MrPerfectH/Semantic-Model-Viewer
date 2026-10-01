@@ -1,0 +1,48 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+
+ref table Date
+ref table Product
+ref table 'Product Category'
+ref table Customer
+ref table 'Customer Segment'
+ref table Geography
+ref table Store
+ref table Employee
+ref table 'Sales Channel'
+ref table Supplier
+ref table Promotion
+ref table Campaign
+ref table Currency
+ref table Warehouse
+ref table Account
+ref table 'Cost Center'
+ref table 'Payment Method'
+ref table Carrier
+ref table 'Return Reason'
+ref table Sales
+ref table 'Sales Orders'
+ref table Returns
+ref table Inventory
+ref table Purchases
+ref table Shipments
+ref table 'Web Traffic'
+ref table 'Marketing Spend'
+ref table Budget
+ref table Forecast
+ref table 'GL Entries'
+ref table Payroll
+ref table 'Support Tickets'
+ref table 'Loyalty Points'
+ref table 'Price History'
+ref table Measures
+ref table 'Time Intelligence'
+ref table 'Currency Conversion'
+ref table 'Metric Selector'
+ref table 'Dimension Selector'
+ref table 'Time Grain Selector'
+ref table Scenario
+ref table 'Exchange Rates'
+ref table 'Report Notes'

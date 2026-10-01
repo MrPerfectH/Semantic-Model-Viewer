@@ -1,0 +1,190 @@
+{
+  "name": "semantic-model-viewer",
+  "displayName": "Semantic Model Viewer",
+  "description": "Explore Power BI semantic models with a table workspace, relationship filters, measure dependencies and DAX. Save complete interactive HTML snapshots for offline sharing.",
+  "version": "0.3.0",
+  "license": "MIT",
+  "publisher": "MrPerfectH",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MrPerfectH/Semantic-Model-Viewer"
+  },
+  "bugs": {
+    "url": "https://github.com/MrPerfectH/Semantic-Model-Viewer/issues"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Visualization",
+    "Data Science",
+    "Other"
+  ],
+  "keywords": [
+    "power bi",
+    "tmdl",
+    "pbip",
+    "semantic model",
+    "dax",
+    "fabric"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      {
+        "command": "semanticModelViewer.open",
+        "title": "Open Model\u2026",
+        "category": "Semantic Model Viewer",
+        "icon": "$(type-hierarchy)"
+      },
+      {
+        "command": "semanticModelViewer.openFolder",
+        "title": "Open in Semantic Model Viewer",
+        "category": "Semantic Model Viewer"
+      },
+      {
+        "command": "semanticModelViewer.loadAnalysis",
+        "title": "Load Semantic Model Cleaner Analysis\u2026",
+        "category": "Semantic Model Viewer"
+      },
+      {
+        "command": "semanticModelViewer.refresh",
+        "title": "Refresh Model",
+        "category": "Semantic Model Viewer"
+      },
+      {
+        "command": "semanticModelViewer.openEntry",
+        "title": "Open in Semantic Model Viewer",
+        "category": "Semantic Model Viewer"
+      },
+      {
+        "command": "semanticModelViewer.refreshModels",
+        "title": "Refresh Model List",
+        "category": "Semantic Model Viewer",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "semanticModelViewer.openFolder",
+          "when": "explorerResourceIsFolder && resourceFilename =~ /\\.SemanticModel$/ || resourceFilename == model.bim",
+          "group": "navigation@5"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "semanticModelViewer.openFolder",
+          "when": "false"
+        },
+        {
+          "command": "semanticModelViewer.openEntry",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "semanticModelViewer.refreshModels",
+          "when": "view == semanticModelViewer.models",
+          "group": "navigation@1"
+        },
+        {
+          "command": "semanticModelViewer.open",
+          "when": "view == semanticModelViewer.models",
+          "group": "navigation@2"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Semantic Model Viewer",
+      "properties": {
+        "semanticModelViewer.defaultModel": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Path to a `*.SemanticModel` folder or a `model.bim` to open by default, absolute or relative to the workspace folder. Leave empty to choose from the models found in the workspace."
+        },
+        "semanticModelViewer.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**`. Hidden folders (`.worktrees`, `.pbi`, `.venv`\u2026), `node_modules` and `.git` are always skipped."
+        },
+        "semanticModelViewer.cleaner.command": {
+          "type": "string",
+          "default": "smc",
+          "markdownDescription": "Command used to run [Semantic Model Cleaner](https://github.com/MrPerfectH/Semantic-Model-Cleaner) (`pip install semantic-model-cleaner`). Report-usage badges are only ever shown from its `--format json` output."
+        },
+        "semanticModelViewer.cleaner.reportsPath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Folder searched for `*.Report` folders when the cleaner runs, absolute or relative to the workspace folder. Empty = the workspace folder."
+        },
+        "semanticModelViewer.cleaner.extraArgs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Extra arguments appended to the cleaner command line."
+        },
+        "semanticModelViewer.cleaner.autoRun": {
+          "type": "boolean",
+          "default": false,
+          "description": "Run Semantic Model Cleaner automatically whenever a model is opened or refreshed in the viewer."
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "semanticModelViewer",
+          "title": "Semantic Models",
+          "icon": "images/activity.svg"
+        }
+      ]
+    },
+    "views": {
+      "semanticModelViewer": [
+        {
+          "id": "semanticModelViewer.models",
+          "name": "Semantic Models",
+          "icon": "images/activity.svg",
+          "contextualTitle": "Semantic Models"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "semanticModelViewer.models",
+        "contents": "No *.SemanticModel folder or model.bim found in the open workspace.\n\nOpen a folder that contains a Power BI project (.pbip) and the models appear here.\n[Refresh](command:semanticModelViewer.refreshModels)"
+      }
+    ]
+  },
+  "scripts": {
+    "sync-viewer": "node scripts/sync-viewer.js",
+    "check-viewer": "node scripts/sync-viewer.js --check",
+    "vscode:prepublish": "npm run sync-viewer",
+    "package": "vsce package",
+    "test": "npm run sync-viewer && npm run check-viewer && node --test ../tests/*.test.cjs ../tests/extension.test.js ../tests/usage-adapter.test.js ../Models/tools/viewer/tests/*.test.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0"
+  },
+  "icon": "images/icon.png",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "Model browsing is available; running Semantic Model Cleaner requires workspace trust.",
+      "restrictedConfigurations": [
+        "semanticModelViewer.cleaner.command",
+        "semanticModelViewer.cleaner.extraArgs",
+        "semanticModelViewer.cleaner.reportsPath",
+        "semanticModelViewer.cleaner.autoRun"
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+table Product
+	lineageTag: 767034bb-6be3-5ad1-b1d0-e3f6b6a8cccb
+
+	column ProductKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: ad79ae40-4a05-55cd-b2b6-50e9b6e74523
+		sourceColumn: productkey
+
+	column 'Product Name'
+		dataType: string
+		lineageTag: 2840e8ee-957a-5780-9039-c01cffa18185
+		sourceColumn: product_name
+
+	column Brand
+		dataType: string
+		lineageTag: 2c596d49-50a4-5e6c-84f8-9171c495e557
+		sourceColumn: brand
+
+	column Color
+		dataType: string
+		lineageTag: 2c5a45bd-ec18-5b60-809d-531880055f74
+		sourceColumn: color
+
+	column Size
+		dataType: string
+		lineageTag: d003b5a6-41de-5da2-9cf7-2ed45e91c337
+		sourceColumn: size
+
+	column 'List Price'
+		dataType: decimal
+		summarizeBy: sum
+		lineageTag: 90256503-b415-5c66-85dd-bcefa8c8eafe
+		sourceColumn: list_price
+
+	column 'Category Key'
+		dataType: int64
+		isHidden
+		lineageTag: 1e24cc81-31fd-5169-bb9d-c4d75dff0908
+		sourceColumn: category_key
+
+	partition Product = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="sales",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_product",Kind="Table"]}[Data]
+				in
+				    tbl

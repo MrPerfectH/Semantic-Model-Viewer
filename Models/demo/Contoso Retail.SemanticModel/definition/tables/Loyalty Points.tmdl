@@ -1,0 +1,42 @@
+table 'Loyalty Points'
+	lineageTag: c0974c88-f2e4-52c8-be54-a6a4e311eac3
+
+	column 'Customer Key'
+		dataType: int64
+		isHidden
+		lineageTag: e0e920bf-b463-5a1c-bf86-5a1fa212cea8
+		sourceColumn: customer_key
+
+	column 'Store Key'
+		dataType: int64
+		isHidden
+		lineageTag: 5681d496-60dc-5ed6-a1a0-c8457c14e72b
+		sourceColumn: store_key
+
+	column 'Activity Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: d466d357-7144-5c61-b018-6dac51a52517
+		sourceColumn: activity_date
+
+	column 'Points Earned'
+		dataType: decimal
+		isHidden
+		lineageTag: 633b5b65-4f6c-5067-9906-53700feaa5d2
+		sourceColumn: points_earned
+
+	column 'Points Redeemed'
+		dataType: decimal
+		isHidden
+		lineageTag: 007d1d79-0ff2-5e42-a761-c23866219d96
+		sourceColumn: points_redeemed
+
+	partition 'Loyalty Points' = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="sales",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_loyalty_points",Kind="Table"]}[Data]
+				in
+				    tbl

@@ -1,0 +1,29 @@
+table 'Return Reason'
+	lineageTag: 93d74745-c825-593e-b28f-a147325dff0c
+
+	column ReasonKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: b22070b4-1303-5aad-9c34-a9bb406c6187
+		sourceColumn: reasonkey
+
+	column Reason
+		dataType: string
+		lineageTag: 57944746-b9e2-50ac-b4d5-ead76c1e5973
+		sourceColumn: reason
+
+	column 'Is Defect'
+		dataType: string
+		lineageTag: e6ad9077-ae73-595d-84b4-de42898127b9
+		sourceColumn: is_defect
+
+	partition 'Return Reason' = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="sales",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_return_reason",Kind="Table"]}[Data]
+				in
+				    tbl

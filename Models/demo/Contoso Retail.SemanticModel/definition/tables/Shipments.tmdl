@@ -1,0 +1,54 @@
+table Shipments
+	lineageTag: 58b36fce-7f8d-5380-96b3-56bb51b11a11
+
+	column 'Carrier Key'
+		dataType: int64
+		isHidden
+		lineageTag: 0ccf963e-e8df-5acf-851f-24e4ce6fb592
+		sourceColumn: carrier_key
+
+	column 'Warehouse Key'
+		dataType: int64
+		isHidden
+		lineageTag: e7c88c3d-e85e-59fc-b352-404336955830
+		sourceColumn: warehouse_key
+
+	column 'Geography Key'
+		dataType: int64
+		isHidden
+		lineageTag: 11407f3c-b768-5ecd-abad-311e4c29c3d6
+		sourceColumn: geography_key
+
+	column 'Ship Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: 343f0cd3-120b-51f9-924f-697349873353
+		sourceColumn: ship_date
+
+	column 'Package Count'
+		dataType: decimal
+		isHidden
+		lineageTag: bf8d6aca-ec66-58ce-b0bf-46cc4724114f
+		sourceColumn: package_count
+
+	column 'Shipping Cost'
+		dataType: decimal
+		isHidden
+		lineageTag: 85f5a880-be92-57ee-9652-8c179dd007b3
+		sourceColumn: shipping_cost
+
+	column 'Transit Days'
+		dataType: decimal
+		isHidden
+		lineageTag: ef2bbd18-bae3-5ffe-bfa1-d28e3b4d7b09
+		sourceColumn: transit_days
+
+	partition Shipments = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="supply",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_shipments",Kind="Table"]}[Data]
+				in
+				    tbl

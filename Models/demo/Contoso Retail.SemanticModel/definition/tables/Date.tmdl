@@ -1,0 +1,61 @@
+table Date
+	lineageTag: f07a85cd-23dd-5cc2-811e-d4f07fa4a3fd
+
+	column Date
+		dataType: dateTime
+		isKey
+		lineageTag: 759d8f82-3afb-51d9-a854-b1fe9a0fc15d
+		sourceColumn: date
+
+	column Year
+		dataType: int64
+		summarizeBy: sum
+		lineageTag: e638275d-c532-5ba4-a561-d98bcb0495f9
+		sourceColumn: year
+
+	column Quarter
+		dataType: string
+		lineageTag: 17be656c-4205-5fd7-8248-554b814a97c3
+		sourceColumn: quarter
+
+	column Month
+		dataType: string
+		lineageTag: 70e0f40c-9df7-52bf-98d8-439320dcef7f
+		sourceColumn: month
+
+	column 'Month Number'
+		dataType: int64
+		isHidden
+		lineageTag: 804ffa8d-52ff-52e8-a6de-b5207676c570
+		sourceColumn: month_number
+
+	column Week
+		dataType: int64
+		summarizeBy: sum
+		lineageTag: ff710a5c-b0b4-5b30-bb4c-b0ee77b0b7ee
+		sourceColumn: week
+
+	column 'Day of Week'
+		dataType: string
+		lineageTag: b603e166-2a26-593c-b3dd-1ff033d4826c
+		sourceColumn: day_of_week
+
+	column 'Is Weekend'
+		dataType: string
+		lineageTag: ecc41858-cbd5-5b0c-8d99-c0b82a47f20c
+		sourceColumn: is_weekend
+
+	column 'Fiscal Year'
+		dataType: string
+		lineageTag: ceaef77e-17a1-57f4-b32f-bdb4bac07510
+		sourceColumn: fiscal_year
+
+	partition Date = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="shared",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_date",Kind="Table"]}[Data]
+				in
+				    tbl
