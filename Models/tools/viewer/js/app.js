@@ -59,26 +59,26 @@
   }
 
   /* Two looks for the same model. `vivid` is the original one hue per domain with solid filled
-     fact headers; `muted` keeps the same hue families desaturated, with a dark neutral fact
-     header and the colour reduced to a stripe. */
+     fact headers; `muted` keeps the same hue families desaturated, with a dark fact header
+     faintly tinted by the hue, plus a solid stripe, badge and outline carrying the colour. */
   var PALETTES = {
     muted: {
       domain: {
-        'Finance / Supply': '#5b7ca8', 'Commercial': '#4d8f85', 'Vena': '#8b7cb0',
-        'Profit & Loss': '#b8935a', 'Core Dims': '#5b6472', 'Scenario / Helper': '#b56575',
-        'Calc Groups': '#5c96a3', 'Field Params': '#5f9873', 'Measures': '#9a6ba8', 'Other': '#7a8699'
+        'Finance / Supply': '#4f8ff7', 'Commercial': '#18b9a6', 'Vena': '#9b7bf0',
+        'Profit & Loss': '#e8a33d', 'Core Dims': '#6f7f96', 'Scenario / Helper': '#ee5f80',
+        'Calc Groups': '#27b5da', 'Field Params': '#42c274', 'Measures': '#d363e3', 'Other': '#8896aa'
       },
-      schema: { finance: '#5b7ca8', commercial: '#4d8f85', supply: '#b57a5a', whitespaces: '#8b7cb0', dimensions: '#5b6472' },
+      schema: { finance: '#4f8ff7', commercial: '#18b9a6', supply: '#f27f45', whitespaces: '#9b7bf0', dimensions: '#6f7f96' },
       source: {
-        databricks: '#5b7ca8', vertica: '#5a8aab', db: '#4f6d99', oracle: '#a5615f', postgres: '#4f7a99',
-        mysql: '#4f8590', snowflake: '#5c96a3', synapse: '#6e70a8', lakehouse: '#529580', ssas: '#7377ab',
-        sap: '#4a5f8a', odbc: '#5b6472', dataflow: '#8b7cb0', sharepoint: '#4f8580', blob: '#4d8f85',
-        salesforce: '#5e9ab5', folder: '#a08a55', excel: '#5f9873', csv: '#5a8a68', web: '#b0714f',
-        odata: '#a8814f', parameter: '#807a75', manual: '#b8935a', calculated: '#9a6ba8', other: '#7a8699'
+        databricks: '#4f8ff7', vertica: '#3b9de0', db: '#4a7ae0', oracle: '#e0605c', postgres: '#3f8fc4',
+        mysql: '#2fa3b8', snowflake: '#27b5da', synapse: '#7479e0', lakehouse: '#22b88f', ssas: '#7d82e8',
+        sap: '#4468b8', odbc: '#6f7f96', dataflow: '#9b7bf0', sharepoint: '#1fa89a', blob: '#18b9a6',
+        salesforce: '#38b2ee', folder: '#c9a042', excel: '#42c274', csv: '#38b060', web: '#e8764a',
+        odata: '#d99a3e', parameter: '#908a84', manual: '#e8a33d', calculated: '#d363e3', other: '#8896aa'
       },
-      list: ['#5b7ca8', '#4d8f85', '#8b7cb0', '#b8935a', '#b56575', '#5c96a3', '#5f9873', '#9a6ba8', '#b57a5a', '#5b6472', '#7f6aa5', '#529580', '#a5615f', '#7a8699'],
-      edge: { out: '#5b7ca8', 'in': '#4d8f85', hop: '#c08a5a', pin: '#8b7cb0' },
-      fallback: '#7a8699'
+      list: ['#4f8ff7', '#18b9a6', '#9b7bf0', '#e8a33d', '#ee5f80', '#27b5da', '#42c274', '#d363e3', '#f27f45', '#6f7f96', '#8a6fe0', '#22b88f', '#e0605c', '#8896aa'],
+      edge: { out: '#4f8ff7', 'in': '#18b9a6', hop: '#f27f45', pin: '#9b7bf0' },
+      fallback: '#8896aa'
     },
     vivid: {
       domain: {

@@ -3,6 +3,14 @@
 (function (g) {
   'use strict';
   var el = U.el, sv = U.sv, tint = U.tint, store = U.store;
+  function mixHex(base, accent, a) {
+    var b = base.replace('#', ''), c = accent.replace('#', ''), out = '#';
+    for (var i = 0; i < 6; i += 2) {
+      var v = Math.round(parseInt(b.slice(i, i + 2), 16) * (1 - a) + parseInt(c.slice(i, i + 2), 16) * a);
+      out += (v < 16 ? '0' : '') + v.toString(16);
+    }
+    return out;
+  }
 
   function GraphCanvas(app, host) {
     this.app = app;
@@ -1245,7 +1253,7 @@
         var t = c.table; var col = app.tableColor(t); var fact = app.isFact(t);
         var head = c.head, role = c.roleEl, caretSvg = c.caret.firstChild;
         if (c.rm) c.rm.style.color = fact ? 'rgba(255,255,255,.85)' : '#6b7280';
-        head.style.boxShadow = vivid ? 'none' : 'inset 2px 0 0 ' + col;
+        head.style.boxShadow = 'none';
         if (fact && vivid) {
           head.style.borderLeftColor = 'transparent';
           head.style.background = col;
@@ -1256,18 +1264,18 @@
           if (c.src) c.src.style.color = 'rgba(255,255,255,.85)';
         } else if (fact) {
           head.style.borderLeftColor = col;
-          head.style.background = '#323a4a';
+          head.style.background = mixHex('#1d2330', col, 0.26);
           c.nm.style.color = '#fff';
-          role.style.background = 'rgba(255,255,255,.94)'; role.style.color = '#323a4a';
-          c.el.style.borderColor = '#d8dce3';
+          role.style.background = col; role.style.color = '#fff';
+          c.el.style.borderColor = tint(col, 0.6);
           if (caretSvg) caretSvg.setAttribute('stroke', 'rgba(255,255,255,.78)');
           if (c.src) c.src.style.color = 'rgba(255,255,255,.85)';
         } else {
           head.style.borderLeftColor = col;
-          head.style.background = tint(col, 0.07);
+          head.style.background = tint(col, vivid ? 0.07 : 0.1);
           c.nm.style.color = '#1f2430';
           role.style.background = col; role.style.color = '#fff';
-          c.el.style.borderColor = '#e4e7ec';
+          c.el.style.borderColor = vivid ? '#e4e7ec' : tint(col, 0.35);
           if (caretSvg) caretSvg.setAttribute('stroke', '#b0b6c0');
           if (c.src) c.src.style.color = app.srcMeta(t).color;
         }
