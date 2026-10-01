@@ -430,6 +430,22 @@ test('refresh re-reads the open model, reports new tables, and remembers the fol
   assert.ok(h.idb.has('src:m1'));
 });
 
+test('a folder import remembers its folder, so refresh never shows the picker', async () => {
+  const h = refreshFixture([{ name: 'Sales.tmdl', text: 'table Sales\n\tcolumn A\n' }, { name: 'Brand.tmdl', text: 'table Brand\n\tcolumn B\n' }]);
+  const { app, context } = h; const folder = { name: 'Demo.SemanticModel', kind: 'directory', queryPermission: async () => 'granted' };
+  context.showDirectoryPicker = async () => folder;
+  app.readModelDir = async () => [{ name: 'Sales.tmdl', path: 'Sales.tmdl', text: 'table Sales\n\tcolumn A\n' }];
+  await app.chooseImportFolder(() => assert.fail('fallback input used'));
+  assert.equal(app.state.importReady, true);
+  app.state.importName = 'Demo'; app.confirmImport();
+  await new Promise(r => setImmediate(r));
+  assert.equal(h.idb.get('src:m1'), folder);
+  context.showDirectoryPicker = async () => assert.fail('picker shown on refresh');
+  app.readModelDir = async () => h.files;
+  await app.refreshSource();
+  assert.match(app.state.snapshotMessage, /Refreshed from source · 2 tables/);
+});
+
 test('refresh with an unchanged source makes no change', async () => {
   const h = refreshFixture([{ name: 'Sales.tmdl', text: 'table Sales\n\tcolumn A\n' }]);
   const before = JSON.stringify(h.app.getStore());

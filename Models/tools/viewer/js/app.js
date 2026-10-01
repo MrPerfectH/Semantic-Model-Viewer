@@ -126,7 +126,7 @@
     this.colorBy = 'domain';
     this.model = null;
     this._usage = null; this._usageMeta = null; this._usageStatus = null; this._usageCols = null;
-    this._importModel = null;
+    this._importModel = null; this._importHandle = null;
     this.repoHandle = null; this.repoModels = null; this._repoLive = false;
     this._cbs = [];
 
@@ -754,9 +754,12 @@
       e.preventDefault();
       e.stopPropagation();
       var items = e.dataTransfer && e.dataTransfer.items;
+      // a single dropped folder keeps its handle so Refresh can re-read it without a picker;
+      // the handle must be requested synchronously, before the drop event ends
+      var hp = items && items.length === 1 && items[0].getAsFileSystemHandle ? items[0].getAsFileSystemHandle().catch(function () { return null; }) : Promise.resolve(null);
       if (items && items.length && items[0].webkitGetAsEntry) {
         var entries = Array.from(items).map(function (i) { return i.webkitGetAsEntry(); }).filter(Boolean);
-        this.walkEntries(entries).then(function (fs) { self.handleFiles(fs); });
+        Promise.all([this.walkEntries(entries), hp]).then(function (r) { self.handleFiles(r[0], r[1] && r[1].kind === 'directory' ? r[1] : null); });
       } else {
         this.handleFiles(Array.from((e.dataTransfer && e.dataTransfer.files) || []).map(function (f) { return { f: f, p: f.webkitRelativePath || f.name }; }));
       }
@@ -782,10 +785,21 @@
       };
       return (async function () { for (var i = 0; i < entries.length; i++) await walk(entries[i]); return out; })();
     },
-    handleFiles: async function (list) {
+    /* "Choose folder": the File System Access picker keeps a handle for later refreshes;
+       browsers without it fall back to the webkitdirectory input */
+    chooseImportFolder: async function (fallback) {
+      if (!this.canFS()) { fallback(); return; }
+      var h;
+      try { h = await window.showDirectoryPicker({ mode: 'read' }); } catch (e) { return; }
+      var files = await this.readModelDir(h);
+      this.handleFiles(files.map(function (f) { return { name: f.name, p: h.name + '/' + f.path, text: f.text }; }), h);
+    },
+    handleFiles: async function (list, srcHandle) {
       var self = this;
       var files = [];
+      this._importHandle = srcHandle || null;
       for (var i = 0; i < list.length; i++) {
+        if (list[i].text != null) { files.push({ name: list[i].name, path: list[i].p, text: list[i].text }); continue; }
         var f = list[i].f, p = list[i].p || list[i].f.name;
         if (!/\.(tmdl|bim|json)$/i.test(f.name)) continue;
         try { files.push({ name: f.name, path: p, text: await f.text() }); } catch (e) { }
@@ -807,6 +821,7 @@
             var id = 'repo:' + k + '.SemanticModel';
             var idx = st.findIndex(function (m) { return m.id === id; }); if (idx >= 0) st.splice(idx, 1);
             st.push({ id: id, name: nm, at: Date.now(), repo: true, model: mod });
+            if (srcHandle) self._idbSet('src:' + id, srcHandle).catch(function () { });
             ok++; if (!opened) opened = id;
           } catch (err) { bad.push(nm); }
         });
@@ -856,7 +871,8 @@
         this.setState({ importError: 'Could not save this model in the browser. Free browser storage and try again. Your imported model is still ready to add.', importReady: true });
         return;
       }
-      this._importModel = null;
+      if (this._importHandle) this._idbSet('src:' + id, this._importHandle).catch(function () { });
+      this._importModel = null; this._importHandle = null;
       this.setState({ showImport: false, importReady: false });
       this.loadModel(id);
     },
@@ -953,8 +969,8 @@
     canRefreshSource: function () {
       return !this.host && !this.snapshotMode && !!this.state.loaded && !!this.modelKey && this.modelKey !== 'builtin' && this.canFS();
     },
-    /* An imported model has no live link to disk, so the first refresh asks for its folder
-       once; the handle is remembered (IndexedDB) and later refreshes only re-confirm access. */
+    /* Folder imports remember their handle (IndexedDB), so refresh only re-confirms access.
+       Models imported as loose files have no folder link: the first refresh asks for it once. */
     _sourceHandle: async function (key) {
       var h = await this._idbGet('src:' + key).catch(function () { return null; });
       if (h) {
@@ -981,7 +997,7 @@
       if (!this.canRefreshSource() || this.state.refreshing) return;
       var isRepo = key.indexOf('repo:') === 0;
       var rm = isRepo && (this.repoModels || []).find(function (r) { return r.handle && 'repo:' + r.path === key; });
-      if (isRepo && !rm) { this.reconnectRepo(); return; }
+      if (isRepo && !rm && !(await this._idbGet('src:' + key).catch(function () { return null; }))) { this.reconnectRepo(); return; }
       var rec = this.getStore().find(function (m) { return m.id === key; });
       var name = rec ? rec.name : this.state.modelName;
       this.setState({ refreshing: true, repoError: '', snapshotMessage: '', snapshotError: '' });

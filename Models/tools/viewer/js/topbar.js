@@ -318,7 +318,7 @@
       el('div', { style: 'font-size:12.5px;color:#4b5563;font-weight:500;', html: 'Drop a repo folder — every <span style="' + mono + '">*.SemanticModel</span> inside is found —<br>or a TMDL folder / <span style="' + mono + '">model.bim</span> file' }),
       el('div', { style: 'display:flex;gap:8px;justify-content:center;margin-top:13px;' }, [
         el('button', { text: 'Choose files', onClick: function () { fileInput.click(); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" }),
-        el('button', { text: 'Choose folder', onClick: function () { folderInput.click(); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" })
+        el('button', { text: 'Choose folder', onClick: function () { app.chooseImportFolder(function () { folderInput.click(); }); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" })
       ]),
       fileInput, folderInput
     ]);
