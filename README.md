@@ -6,40 +6,38 @@ dependency flow** — pick a measure and see everything that feeds it (upstream,
 everything built on it (downstream, blue), with side-by-side DAX, hidden-measure flags and
 per-measure report usage.
 
-**Try it now:** <https://MrPerfectH.github.io/Semantic-Model-Viewer/> (opens a built-in
-demo model, nothing to install, nothing is uploaded; your models never leave your browser).
+## Install (2 minutes, no Python)
 
-## Install in 2 minutes
+The viewer runs on your own computer, straight from a copy of this repo. Your models are
+read on your machine and never leave it. No Python, Node, server or admin rights needed.
+Use **Chrome** or **Edge**: they can open a model folder directly and re-read it with
+**Refresh**.
 
-The viewer is a web app. You can use it in the browser tab, or install it so it gets its
-own icon and window and works offline. No Python, Node or terminal needed.
+1. Get the repo: `git clone https://github.com/MrPerfectH/Semantic-Model-Viewer.git`
+   (or **Code → Download ZIP** on GitHub and unzip it).
+2. Double-click the installer in the repo folder:
+   - **Mac:** `Install on Mac.command`. It adds **Semantic Model Viewer** to
+     `~/Applications`; drag it to the Dock.
+   - **Windows:** `Install on Windows.cmd`. It adds a Desktop icon and a Start menu entry.
+3. The app opens in its own window. Drag a `.pbip` repo folder, a `*.SemanticModel`
+   folder or a `model.bim` onto it, or use **Open model** / **Connect repo folder…**.
 
-### Mac
+When you choose a folder, the browser asks for permission to view it. That is the browser
+granting this local page read access to that one folder; nothing is uploaded.
 
-1. Open <https://MrPerfectH.github.io/Semantic-Model-Viewer/> in **Chrome** or **Edge**
-   (recommended: only these two can open a model folder directly from disk).
-2. Click **Install app** in the top bar of the viewer (or the install icon at the right end
-   of the address bar; or menu → **Cast, save and share → Install page as app** in Chrome /
-   **Apps → Install this site as an app** in Edge). No button appears in Safari, Firefox or
-   a private window, or if the app is already installed.
-3. Open **Semantic Model Viewer** from Launchpad, or drag it to the Dock from `~/Applications`
-   (Chrome: `~/Applications/Chrome Apps.localized`).
+If you downloaded the ZIP, macOS or Windows may warn about the installer the first time
+because it came from the internet. On Mac, right-click `Install on Mac.command` → **Open**;
+on Windows, choose **More info → Run anyway**. Cloning with git avoids the warning.
 
-Safari 17+ also works: **File → Add to Dock**. Safari and Firefox cannot use *Connect repo
-folder*, but drag-and-drop import of a model folder still works.
+**Updating:** run `git pull` in the repo folder (or download the ZIP again into the same
+place) and reopen the app. Your saved models and layouts are kept.
 
-### Windows
+**Uninstalling:** `Models/tools/viewer/scripts/mac/uninstall-app.sh` or
+`Models\tools\viewer\scripts\windows\uninstall-shortcuts.ps1`. On Mac,
+`Models/tools/viewer/scripts/mac/reset-app-data.sh` clears just the saved models and layouts.
 
-1. Open <https://MrPerfectH.github.io/Semantic-Model-Viewer/> in **Edge** or **Chrome**.
-2. Click **Install app** in the top bar of the viewer (or the install icon at the right end
-   of the address bar), then **Install**.
-3. Start it from the Start menu; optionally pin it to the taskbar.
-
-### Open your own model
-
-Drag a `.pbip` repo folder, a `*.SemanticModel` folder or a `model.bim` onto the window,
-or use **Connect repo folder…** (Chrome/Edge) to keep it in sync with the files on disk.
-Everything is parsed locally in your browser.
+The app window uses its **own, separate browser profile**, never your regular one, so it
+keeps its saved models apart from your everyday browsing. Opening it again reuses that window.
 
 ### VS Code
 
@@ -47,11 +45,12 @@ Download `semantic-model-viewer-<version>.vsix` from the
 [Releases page](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases), then in VS Code run
 **Extensions: Install from VSIX…** from the Command Palette (or
 `code --install-extension <file>.vsix`). Details: [vscode-extension/README.md](vscode-extension/README.md).
+To update, install the newer `.vsix`.
 
-### Updating
+### Online demo
 
-The hosted page and installed app update themselves: they check for a new version every
-time you open them while online. For the VS Code extension, install the newer `.vsix`.
+<https://MrPerfectH.github.io/Semantic-Model-Viewer/> opens the same viewer with a
+built-in synthetic demo model, so you can look around before installing.
 
 ## About the app
 
@@ -74,65 +73,20 @@ Models/demo/              TMDL source of the demo model
 
 ## Run it from source
 
+Open `Models/tools/viewer/index.html` in Chrome or Edge; that is all the installers do.
+The built-in demo model is the one thing that needs a web server (browsers block loading
+`model-data.json` from a file), so to see it locally:
+
 ```bash
 cd Models/tools/viewer
 python3 -m http.server 8931 --bind 127.0.0.1
 # open http://localhost:8931
 ```
 
-`file://` also works for everything except the two `fetch()` calls that load
-`model-data.json` / `report-usage.json` (browsers block those on `file://`), so a static
-server is the way to see the built-in model. Any static host works — the app is plain
-files.
+Any static host works too: the app is plain files.
 
-A fresh browser profile starts with **No model selected**. Choose the sample, import
-your model, or connect a repository. Once chosen, the model is restored on reload.
-
-## Advanced: run it like an always-on local app (optional)
-
-You only need this if you want to run from a git checkout with no hosted page. The
-installable app above is simpler. One script sets up a
-desktop icon and makes the server start on its own, so the app is always there —
-the same way any other installed app is.
-
-**macOS:**
-
-```bash
-Models/tools/viewer/scripts/mac/install-app.sh
-```
-
-Creates a **Semantic Model Viewer** app in `~/Applications` (drag it to the Dock)
-and a background service that starts the server at login and restarts it if it
-ever stops. Needs Python 3 and, for the app-window look, Google Chrome or
-Microsoft Edge (falls back to your default browser otherwise). The app window
-runs in its **own, separate browser profile** — never your regular browsing
-profile — so it never picks up unrelated history or storage, and opening it
-again reuses that one window instead of piling up new ones. Undo with
-`Models/tools/viewer/scripts/mac/uninstall-app.sh`; reset just the app's own
-saved models/layouts (keep the icon and login service) with
-`Models/tools/viewer/scripts/mac/reset-app-data.sh`.
-
-**Windows:**
-
-```powershell
-Models\tools\viewer\scripts\windows\install-shortcuts.ps1
-```
-
-Right-click the file → **Run with PowerShell** (or run that command from a
-PowerShell prompt). Creates a Desktop icon and copies it into your Startup
-folder, so it opens automatically at every sign-in. Needs Python 3 on `PATH`
-(get it from [python.org](https://python.org), check "Add python.exe to PATH"
-during install) and Chrome or Edge for the app-window look — like the macOS
-app, it runs in its own, separate browser profile. Undo with
-`Models\tools\viewer\scripts\windows\uninstall-shortcuts.ps1`.
-
-Both installers only touch your OS (a login service/shortcut and an icon) —
-nothing about the app itself changes, and everything still points at this
-folder, so pulling updates and reloading is all you need to do afterwards. Run the
-installer from your stable checkout, not a temporary worktree. To move an existing
-Mac installation, rerun the installer from the new checkout; do not uninstall or
-reset data. The existing profile, models and saved views are preserved. Servers
-bind to loopback only, and startup checks reject a different service on the port.
+A fresh browser profile starts with **No model selected**. Import your model or connect a
+repository. Once chosen, the model is restored on reload.
 
 ## VS Code extension
 

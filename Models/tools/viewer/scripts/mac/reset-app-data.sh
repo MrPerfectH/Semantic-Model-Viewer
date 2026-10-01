@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Clears the app's own saved models/layouts (the isolated Chrome profile
-# install-app.sh created) without removing the app icon or the login
-# service. Use this to start over from a clean state - it only touches the
-# app's own profile, never your regular Chrome.
+# Clears the app's own saved models/layouts (the isolated browser profile
+# install-app.sh created) without removing the app icon. Use this to start
+# over from a clean state - it only touches the app's own profile, never your
+# regular browser.
 set -euo pipefail
 PROFILE_DIR="$HOME/Library/Application Support/Semantic Model Viewer/chrome-profile"
 

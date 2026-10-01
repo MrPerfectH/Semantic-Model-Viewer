@@ -1,13 +1,10 @@
-# Installs Semantic Model Viewer as an always-on Windows app:
-#   - a Desktop icon that starts the server (if needed) and opens the app window
-#   - the same icon copied into your Startup folder, so it launches at every sign-in
+# Installs Semantic Model Viewer as a Windows app:
+#   - a Desktop icon and a Start menu entry that open the app window
+#   - it opens this viewer folder's index.html directly from disk, so there is
+#     no server, no Python and nothing running in the background
 #
-# Run once, from PowerShell:
-#   Right-click this file -> Run with PowerShell
-#   or:  powershell -ExecutionPolicy Bypass -File install-shortcuts.ps1
-#
-# Needs Python 3 on this machine (python.org, check "Add python.exe to PATH"
-# during install) - the same requirement the rest of this project has.
+# Run once: double-click "Install on Windows.cmd" in the repo root, or
+#   powershell -ExecutionPolicy Bypass -File install-shortcuts.ps1
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $startScript = Join-Path $here "start-viewer.ps1"
@@ -18,9 +15,9 @@ if (-not (Test-Path $powershellExe)) {
     $powershellExe = "powershell.exe"
 }
 
-if (-not (Get-Command py -ErrorAction SilentlyContinue) -and -not (Get-Command python -ErrorAction SilentlyContinue)) {
-    Write-Warning "Python was not found on PATH. Install it from https://python.org (check 'Add python.exe to PATH') and re-run this script."
-}
+# Earlier versions started a Python server at every sign-in; it is no longer needed.
+$startupFolder = [Environment]::GetFolderPath("Startup")
+if ($startupFolder) { Remove-Item -ErrorAction SilentlyContinue (Join-Path $startupFolder "Semantic Model Viewer.lnk") }
 
 function New-AppShortcut {
     param([string]$Path)
@@ -51,11 +48,12 @@ function New-NamedShortcut {
 }
 
 $desktopShortcut = New-NamedShortcut -FolderSpecialName "Desktop" -Label "Desktop icon"
-$startupShortcut = New-NamedShortcut -FolderSpecialName "Startup" -Label "auto-start shortcut"
+$startMenuShortcut = New-NamedShortcut -FolderSpecialName "Programs" -Label "Start menu entry"
 
 if ($desktopShortcut) { Write-Host "Desktop icon created: $desktopShortcut" }
-if ($startupShortcut) { Write-Host "Auto-start added:    $startupShortcut  (runs at every sign-in from now on)" }
-if ($desktopShortcut -or $startupShortcut) {
+if ($startMenuShortcut) { Write-Host "Start menu entry:     $startMenuShortcut" }
+Write-Host "To update, run 'git pull' in the repo and reopen the app."
+if ($desktopShortcut -or $startMenuShortcut) {
     Write-Host "Opening it now..."
     & $startScript
 }
