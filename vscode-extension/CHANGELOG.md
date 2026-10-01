@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1
+
+- Make the Muted palette's table accent colours clearly visible.
+- Web app: Refresh re-reads a model imported from a folder without asking for the folder again.
+
 ## 0.3.0
 
 - Add the MIT license.
