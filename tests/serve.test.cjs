@@ -13,7 +13,7 @@ const SERVE = path.join(__dirname, '../Models/tools/viewer/scripts/serve.py');
 const python = ['python3', 'python'].find(p => spawnSync(p, ['--version'], { stdio: 'ignore' }).status === 0);
 
 function fixture() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'smv-serve-'));
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'smv-serve-')));
   const model = path.join(root, 'Repo', 'Sub', 'Demo.SemanticModel');
   fs.mkdirSync(path.join(model, 'definition', 'tables'), { recursive: true });
   fs.writeFileSync(path.join(model, 'definition', 'tables', 'Sales.tmdl'), '﻿table Sales\n\tcolumn A\n');
