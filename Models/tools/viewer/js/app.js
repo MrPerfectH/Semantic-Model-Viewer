@@ -188,23 +188,7 @@
     window.addEventListener('resize', function () { self.canvas.renderLines(); });
   }
 
-  var installEvent = null;
-  window.addEventListener('beforeinstallprompt', function (e) {
-    e.preventDefault(); installEvent = e;
-    if (window.app) window.app.setState({ canInstall: true });
-  });
-  window.addEventListener('appinstalled', function () {
-    installEvent = null;
-    if (window.app) window.app.setState({ canInstall: false });
-  });
-
   App.prototype = {
-    canInstall: function () { return !!installEvent; },
-    installApp: function () {
-      var e = installEvent; if (!e) return;
-      installEvent = null; this.setState({ canInstall: false });
-      e.prompt();
-    },
     /* ---------- state ---------- */
     setState: function (patch, cb) {
       var self = this;
