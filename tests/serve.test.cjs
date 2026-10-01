@@ -13,7 +13,7 @@ const SERVE = path.join(__dirname, '../Models/tools/viewer/scripts/serve.py');
 const python = ['python3', 'python'].find(p => spawnSync(p, ['--version'], { stdio: 'ignore' }).status === 0);
 
 function fixture() {
-  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'smv-serve-')));
+  const root = fs.realpathSync.native(fs.mkdtempSync(path.join(os.tmpdir(), 'smv-serve-')));
   const model = path.join(root, 'Repo', 'Sub', 'Demo.SemanticModel');
   fs.mkdirSync(path.join(model, 'definition', 'tables'), { recursive: true });
   fs.writeFileSync(path.join(model, 'definition', 'tables', 'Sales.tmdl'), '﻿table Sales\n\tcolumn A\n');
@@ -76,6 +76,8 @@ test('serve.py answers the page: ping, browse, find, model, static files', { ski
     const index = await fetch(s.url + '/index.html');
     assert.equal(index.status, 200);
     assert.match(await index.text(), /Semantic Model Viewer/);
+    assert.equal(index.headers.get('cache-control'), 'no-cache', 'page files are re-checked so an updated viewer shows up without a hard reload');
+    assert.equal((await fetch(s.url + '/api/ping')).headers.get('cache-control'), 'no-store');
 
     assert.equal((await get(s.url + '/api/nope')).status, 404);
     const missing = await get(s.url + '/api/browse?path=' + encodeURIComponent(path.join(root, 'missing')));

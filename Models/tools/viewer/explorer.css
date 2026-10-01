@@ -3,7 +3,7 @@
 button,input,select{font-family:'IBM Plex Sans',system-ui,sans-serif}
 button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid #739dff!important;outline-offset:2px}
 button:disabled{opacity:.45;cursor:default!important}
-#topbar{flex-wrap:nowrap!important;min-height:64px!important;padding:10px 20px!important;gap:20px!important;box-shadow:none!important}
+#topbar{z-index:80!important;flex-wrap:nowrap!important;min-height:64px!important;padding:10px 20px!important;gap:20px!important;box-shadow:none!important}
 .ex-brand{display:flex;align-items:center;gap:10px;position:relative;min-width:220px}
 .ex-logo{display:flex;align-items:center;justify-content:center;width:34px;height:34px;background:#3459dc;border-radius:9px}
 .ex-model-button{border:0;background:transparent;text-align:left;cursor:pointer;min-width:0;color:var(--ink);padding:0}
