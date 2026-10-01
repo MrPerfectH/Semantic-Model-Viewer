@@ -18,8 +18,10 @@ own icon and window and works offline. No Python, Node or terminal needed.
 
 1. Open <https://MrPerfectH.github.io/Semantic-Model-Viewer/> in **Chrome** or **Edge**
    (recommended: only these two can open a model folder directly from disk).
-2. Click the install icon at the right end of the address bar (or menu → **Cast, save and
-   share → Install page as app** in Chrome / **Apps → Install this site as an app** in Edge).
+2. Click **Install app** in the top bar of the viewer (or the install icon at the right end
+   of the address bar; or menu → **Cast, save and share → Install page as app** in Chrome /
+   **Apps → Install this site as an app** in Edge). No button appears in Safari, Firefox or
+   a private window, or if the app is already installed.
 3. Open **Semantic Model Viewer** from Launchpad, or drag it to the Dock from `~/Applications`
    (Chrome: `~/Applications/Chrome Apps.localized`).
 
@@ -29,7 +31,8 @@ folder*, but drag-and-drop import of a model folder still works.
 ### Windows
 
 1. Open <https://MrPerfectH.github.io/Semantic-Model-Viewer/> in **Edge** or **Chrome**.
-2. Click the install icon at the right end of the address bar, then **Install**.
+2. Click **Install app** in the top bar of the viewer (or the install icon at the right end
+   of the address bar), then **Install**.
 3. Start it from the Start menu; optionally pin it to the taskbar.
 
 ### Open your own model
