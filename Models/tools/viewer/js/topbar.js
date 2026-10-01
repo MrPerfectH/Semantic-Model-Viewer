@@ -320,6 +320,7 @@
         el('button', { text: 'Choose files', onClick: function () { fileInput.click(); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" }),
         el('button', { text: 'Choose folder', onClick: function () { app.chooseImportFolder(function () { folderInput.click(); }); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" })
       ]),
+      app.canFS() ? el('div', { style: 'font-size:11px;line-height:1.45;color:#6b7280;margin-top:11px;', text: 'Choose folder: your browser asks to let this site view the folder — click Allow so Refresh can re-read it later. Dropping the folder here skips that prompt.' }) : null,
       fileInput, folderInput
     ]);
 
