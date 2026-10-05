@@ -1,10 +1,30 @@
 # Semantic Model Viewer
 
-An interactive viewer for Power BI semantic models (TMDL). It renders a model as an
-explorable canvas of tables and relationships, a relationship matrix, and a **measure
-dependency flow** — pick a measure and see everything that feeds it (upstream, purple) and
-everything built on it (downstream, blue), with side-by-side DAX, hidden-measure flags and
-per-measure report usage.
+**See how a Power BI semantic model fits together: tables, relationships and the DAX behind every measure.**
+
+[![CI](https://github.com/MrPerfectH/Semantic-Model-Viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/MrPerfectH/Semantic-Model-Viewer/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/github/license/MrPerfectH/Semantic-Model-Viewer)](LICENSE)
+[![Latest release](https://img.shields.io/github/v/release/MrPerfectH/Semantic-Model-Viewer)](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/latest)
+
+### 👉 [Try the live demo](https://MrPerfectH.github.io/Semantic-Model-Viewer/)
+
+No install needed. The demo opens with a synthetic "Contoso Retail" model already loaded.
+
+[![Semantic Model Viewer showing the Contoso Retail demo model: fact and dimension tables with their relationships on a canvas](docs/img/tables.png)](https://MrPerfectH.github.io/Semantic-Model-Viewer/)
+
+## Why use it
+
+* **Explore tables and relationships.** Build a canvas of just the tables you care about, with a star
+  layout, filter-path highlighting and a table inspector.
+* **Follow a measure through its DAX.** Pick a measure and see everything that feeds it (upstream, purple)
+  and everything built on it (downstream, blue), with side-by-side DAX, hidden-measure flags and
+  per-measure report usage.
+* **Share a single-file offline snapshot.** One HTML file holds the whole model. The recipient needs no
+  install and no connection to the model.
+* **Runs locally.** Your models are parsed on your own computer and never leave it.
+
+It reads TMDL (`*.SemanticModel` folders and `.pbip` repos) and `model.bim`. It also renders a
+relationship matrix and a domain map of the whole model.
 
 ## Install (2 minutes)
 
@@ -138,6 +158,13 @@ new file. See [snapshot sharing and offline behavior](docs/snapshots.md).
 | **Measures** | Search names, folders, home tables or DAX, filter visible/hidden measures, and inspect dependency and dependent counts. Split view places DAX beside or below the graph with a pointer/keyboard divider; dedicated DAX and Dependencies modes provide more room. Graphs run left-to-right, top-to-bottom or bottom-to-top. DAX comparison uses the full panel width. Workspace preferences persist in this browser. Graph opens at readable scale with Fit all/Center/zoom. Click a reference to compare formulas, then Analyze this measure to re-root. Copy DAX, line wrapping and detected column references are included. |
 | **Domains** | Full-model domain/source groups with aggregated relationships and expandable group cards. |
 | **Matrix** | Full-model fact-centered relationship matrix, with explicit scope, semantic cells and navigation back to the table diagram. Models without connected fact tables get an explanatory empty state. |
+
+
+| Measure dependency flow | Table inspector |
+| --- | --- |
+| ![Dependency flow for the Operating Profit measure: upstream measures in purple, downstream in blue](docs/img/measure-flow.png) | ![Table inspector for the Sales fact table with canvas focus and filter-path options](docs/img/table-inspector.png) |
+| **Relationship matrix** | **Domains** |
+| ![Fact relationship matrix: fact tables across, related dimensions down](docs/img/matrix.png) | ![Domain map grouping the model into Sales, Finance, Supply and other domains](docs/img/domains.png) |
 
 ### Layouts
 
@@ -356,3 +383,16 @@ node --test tests/star-layout.browser.cjs tests/measures-layout.browser.cjs test
 ```
 
 These use a disposable browser profile and the shipped CSS/JS. The measures checks cover wide-screen formula sizing, split placement, resizing, orientation and preferences; `star-layout.browser.cjs` opens the bundled model at 1440x900, runs Show all and Fit, and asserts against real DOM rects that no two cards are drawn on top of each other and that every table name stays between 11 and 13 CSS pixels.
+
+## Feedback and contributing
+
+Bug reports, ideas and questions are welcome through
+[GitHub Issues](https://github.com/MrPerfectH/Semantic-Model-Viewer/issues). To contribute code, read
+[CONTRIBUTING.md](CONTRIBUTING.md) first. To report a security problem privately, follow
+[SECURITY.md](SECURITY.md). The project is released under the [MIT License](LICENSE).
+
+## About the author
+
+Semantic Model Viewer is built and maintained by Przemek Harazny
+([@MrPerfectH](https://github.com/MrPerfectH)) as a personal open-source project. The demo
+model and its screenshots use only synthetic data.
