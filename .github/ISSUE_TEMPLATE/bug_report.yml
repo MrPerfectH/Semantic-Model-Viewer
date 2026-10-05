@@ -1,0 +1,67 @@
+name: Bug report
+description: Something is broken or does not look right
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report.
+        **Do not paste confidential model content** (real table names, measures or DAX).
+        Reproduce the problem with the built-in "Contoso Retail" demo, or with a small made-up model.
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where does it run?
+      options:
+        - Web demo (GitHub Pages)
+        - Installed app (Mac)
+        - Installed app (Windows)
+        - Run from source (serve.py)
+        - VS Code extension
+        - Saved HTML snapshot
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: App or extension version
+      description: For the extension, see the Extensions view. For the repo, give the commit or release tag.
+      placeholder: "0.3.1"
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: "macOS 15, Windows 11, Ubuntu 24.04"
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      description: Write "n/a" for the VS Code extension.
+      placeholder: "Chrome 130"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the demo
+        2. Click ...
+        3. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or console errors (optional)
+      description: Remove any confidential names before you attach them.
