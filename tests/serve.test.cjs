@@ -95,6 +95,15 @@ test('serve.py refuses requests from other websites and never writes', { skip: !
     assert.equal((await get(s.url + '/api/ping', { 'Sec-Fetch-Site': 'same-origin' })).status, 200);
     const post = await fetch(s.url + '/api/model?path=' + encodeURIComponent(root), { method: 'POST', body: 'x' });
     assert.equal(post.status, 501, 'only GET is implemented');
+    // DNS rebinding: a foreign host name that resolves to 127.0.0.1 must not reach the server.
+    const withHost = (host) => new Promise((resolve, reject) => {
+      const u = new URL(s.url + '/api/ping');
+      require('node:http').get({ hostname: u.hostname, port: u.port, path: u.pathname, headers: { Host: host } },
+        res => { res.resume(); resolve(res.statusCode); }).on('error', reject);
+    });
+    assert.equal(await withHost('evil.example:' + new URL(s.url).port), 403);
+    assert.equal(await withHost('localhost:' + new URL(s.url).port), 200);
+    assert.equal(await withHost('[::1]:' + new URL(s.url).port), 200);
   } finally { s.stop(); fs.rmSync(root, { recursive: true, force: true }); }
 });
 

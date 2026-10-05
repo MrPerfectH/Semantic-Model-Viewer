@@ -47,6 +47,8 @@ APPLESCRIPT
 
 cp "$HERE/SMV.icns" "$APP/Contents/Resources/applet.icns"
 touch "$APP"
+# Copying the icon changed the bundle after osacompile signed it; sign it again (ad hoc).
+codesign --force --deep -s - "$APP" >/dev/null 2>&1 || true
 
 echo "Installed: $APP"
 echo "  Runs:    $HERE/launch.sh  (local app on http://localhost:8931, this computer only)"
