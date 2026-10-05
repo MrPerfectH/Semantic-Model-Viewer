@@ -329,6 +329,80 @@ test('cellFor(k) always clears the chip drawn at k', () => {
   assert.ok(canvas.cellFor(0.25).w >= canvas.cellFor(0.5).w);
 });
 
+test('full-card lanes leave room for the relationship pill, chip lanes keep the 12px gutter', () => {
+  const context = runtime();
+  const canvas = canvasFor(context, bundled(), 'star');
+  const gutter = k => canvas.cellFor(k).w - canvas.chipBoxAt(k).w;
+  const room = canvas.PILL_W + 2 * canvas.PILL_ROOM;
+  canvas.detailMode = 'auto';
+  assert.equal(gutter(0.5), 12, 'a chip picture keeps the reader gutter');
+  assert.equal(gutter(0.69), 12);
+  assert.ok(gutter(1) >= room, `cards at 100% need ${room}px of stub, got ${gutter(1)}`);
+  assert.ok(gutter(0.8) >= room / 0.8 - 1, 'the room is a screen size, so it grows as the zoom drops');
+  assert.ok(gutter(1.25) >= room / 1.25 - 1);
+  canvas.detailMode = 'names';
+  assert.equal(gutter(1), 12, 'Names is always chips — no pill room');
+  canvas.detailMode = 'cards';
+  assert.equal(gutter(0.3), 12, 'below PILL_ZOOM there is no pill to make room for');
+  assert.ok(gutter(0.6) >= room / 0.6 - 1, 'Cards above PILL_ZOOM carry pills');
+  canvas.detailMode = 'auto';
+  // _gapBox (the other arrange algorithms) reads the same gutter at the layout zoom
+  canvas.setLayoutK(1.2);
+  assert.ok(canvas._gapBox().x - canvas.chipBandBox().w >= room / 1.2 - 1);
+  canvas.setLayoutK(0.5);
+  assert.equal(canvas._gapBox().x - canvas.chipBandBox().w, 12);
+});
+
+test('an arrange whose fit lands on full cards lays out again for that zoom', () => {
+  const context = runtime();
+  const canvas = canvasFor(context, bundled(), 'star');
+  canvas.detailMode = 'auto';
+  const runAt = [];
+  const run = () => runAt.push(canvas.layoutK);
+  // a small focused star: Fit says 1.2 — lanes cut for 0.5 would be chip lanes under cards
+  canvas.fitZoom = () => 1.2;
+  canvas.setLayoutK(canvas.ZOOM_FLOOR);
+  assert.ok(Math.abs(canvas.arrangeAtFitZoom(run) - 1.2) < 1e-9);
+  assert.deepEqual(runAt.map(k => +k.toFixed(2)), [0.5, 1.2]);
+  // the wider picture fitting a touch smaller is followed down, and the loop stays bounded
+  runAt.length = 0;
+  let calls = 0;
+  canvas.fitZoom = () => (++calls === 1 ? 1.2 : 1.05);
+  canvas.setLayoutK(canvas.ZOOM_FLOOR);
+  canvas.arrangeAtFitZoom(run);
+  assert.deepEqual(runAt.map(k => +k.toFixed(2)), [0.5, 1.2, 1.05]);
+  // a whole-model fit below the guess behaves as before: down, never up
+  runAt.length = 0;
+  canvas.fitZoom = () => 0.4;
+  canvas.setLayoutK(canvas.ZOOM_FLOOR);
+  canvas.arrangeAtFitZoom(run);
+  assert.deepEqual(runAt.map(k => +k.toFixed(2)), [0.5, 0.4]);
+  // Names mode never grows a gutter, so there is nothing to re-lay for
+  runAt.length = 0;
+  canvas.detailMode = 'names';
+  canvas.fitZoom = () => 1.2;
+  canvas.setLayoutK(canvas.ZOOM_FLOOR);
+  canvas.arrangeAtFitZoom(run);
+  assert.deepEqual(runAt.map(k => +k.toFixed(2)), [0.5]);
+});
+
+test('a focused star at card zoom seats its cards a pill apart', () => {
+  const context = runtime(), model = bundled();
+  const canvas = canvasFor(context, model, 'star');
+  canvas.detailMode = 'auto';
+  canvas.setLayoutK(1.2);
+  const names = ['Budget', 'Account', 'Cost Center', 'Currency', 'Date'];
+  canvas.untangle({ names: new Set(names), center: 'Budget' });
+  const gutter = canvas.laneGutterX(1.2), H = 105;
+  for (let i = 0; i < names.length; i++) for (let j = i + 1; j < names.length; j++) {
+    const a = canvas.pos[names[i]], b = canvas.pos[names[j]];
+    const sameRow = Math.abs(a.y - b.y) < H;
+    if (!sameRow) continue;
+    const gap = Math.abs(a.x - b.x) - CARD_W;
+    assert.ok(gap >= gutter - 1, `${names[i]} / ${names[j]} are ${gap.toFixed(0)}px apart, the pill needs ${gutter}`);
+  }
+});
+
 test('detail mode decides the chip treatment, zoom only decides it on Auto', () => {
   const context = runtime();
   const canvas = canvasFor(context, bundled(), 'star');
@@ -360,42 +434,94 @@ test('the filter arrow is a fixed size on screen and doubles up for bidirectiona
   assert.equal(measure(1, true).heads, 2, 'a both-directions relationship gets a head each way');
 });
 
-test('cardinality pills read both ends when both ends say the same thing', () => {
+/* The pill is one SVG group: rect, two glyph holders (a `text` "1" or a `g` of three `line`s
+   for "*"), then one or two filled `polyline` heads. Read it back as what a reader sees:
+   which glyph sits on which side of the centre, and which way the head points. */
+function readPill(pill, vert) {
+  const axis = node => Number(node.props.transform.match(/translate\(([-\d.]+),([-\d.]+)\)/).slice(1)[vert ? 1 : 0]);
+  const glyphs = pill.children.filter(n => n.tag === 'g').map(n => ({ at: axis(n), glyph: n.children[0].tag === 'text' ? '1' : '*' }));
+  const heads = pill.children.filter(n => n.tag === 'polyline').map(n => {
+    const pts = n.props.points.split(' ').map(p => p.split(',').map(Number));
+    const along = pts.map(p => p[vert ? 1 : 0]);
+    return { tip: along[1], base: along[0], dir: Math.sign(along[1] - along[0]) };
+  });
+  return { rect: pill.children.find(n => n.tag === 'rect'), glyphs, heads };
+}
+
+test('the combined pill puts each cardinality on the side its table lies, arrow in between', () => {
   const context = runtime();
   const canvas = canvasFor(context, bundled(), 'star');
   canvas.view = { x: 0, y: 0, k: 1 };
-  const g0 = { ax: 100, ay: 40, bx: 700, by: 240, adir: 1, bdir: -1, a: 'A', b: 'B' };
-  const seat = (r, end) => canvas.pickSpot(canvas.pillSpots(g0, end.end, end.glyph), []);
+  const side = g => g.at > 0 ? '+' : '-';
+  const star = canvas.edgeGlyph({ fromCard: 'many', toCard: 'one' }, { x: 0, y: 0, orient: 'h', toA: 1 }, '#000', 1, false, false);
+  let p = readPill(star, false);
+  // table A (the many side) is to the right (toA = 1): `*` right, `1` left, head points right
+  assert.equal(p.glyphs.map(g => side(g) + g.glyph).sort().join(' '), '+* -1');
+  assert.equal(p.heads.length, 1);
+  assert.equal(p.heads[0].dir, 1, 'the filter flows to -> from, towards table A');
+  assert.equal(p.rect.props.width, canvas.PILL_W); assert.equal(p.rect.props.height, canvas.PILL_H);
 
-  // an ordinary star spoke: one pill, on the many end, riding the stub that leaves it
-  const star = canvas.manyEnds({ fromCard: 'many', toCard: 'one' });
-  assert.equal(star.map(e => e.glyph).join(''), '*');   // arrays cross a vm boundary
-  assert.equal(star[0].end, 'a');
-  const spot = seat(null, star[0]);
-  assert.ok(spot.x > g0.ax && spot.x < g0.bx, 'the pill rides the stub leaving the many table');
-  assert.equal(spot.y, g0.ay);
+  // table A on the left: the whole pill mirrors, the glyphs do not swap sides on their own
+  p = readPill(canvas.edgeGlyph({ fromCard: 'many', toCard: 'one' }, { x: 0, y: 0, orient: 'h', toA: -1 }, '#000', 1, false, false), false);
+  assert.equal(p.glyphs.map(g => side(g) + g.glyph).sort().join(' '), '+1 -*');
+  assert.equal(p.heads[0].dir, -1);
 
-  const flipped = canvas.manyEnds({ fromCard: 'one', toCard: 'many' });
-  assert.equal(flipped.map(e => e.glyph).join(''), '*');
-  assert.equal(seat(null, flipped[0]).y, g0.by, 'when `to` carries the many side the pill moves to that end');
+  // on a vertical run the pill stands upright and reads top-to-bottom
+  p = readPill(canvas.edgeGlyph({ fromCard: 'one', toCard: 'many' }, { x: 0, y: 0, orient: 'v', toA: 1 }, '#000', 1, false, false), true);
+  assert.equal(p.glyphs.map(g => side(g) + g.glyph).sort().join(' '), '+1 -*', 'A below carries the 1');
+  assert.equal(p.rect.props.width, canvas.PILL_H); assert.equal(p.rect.props.height, canvas.PILL_W);
 
-  // many-to-many and one-to-one are the cases a single glyph cannot describe
-  assert.equal(canvas.manyEnds({ fromCard: 'many', toCard: 'many' }).map(e => e.glyph).join(''), '**');
-  assert.equal(canvas.manyEnds({ fromCard: 'one', toCard: 'one' }).map(e => e.glyph).join(''), '11');
+  // the cases a single glyph could never describe now read straight off the pill
+  const glyphsOf = r => readPill(canvas.edgeGlyph(r, { x: 0, y: 0, orient: 'h', toA: 1 }, '#000', 1, false, false), false).glyphs.map(g => g.glyph).sort().join('');
+  assert.equal(glyphsOf({ fromCard: 'many', toCard: 'many' }), '**');
+  assert.equal(glyphsOf({ fromCard: 'one', toCard: 'one' }), '11');
+  // a both-directions edge gets a head each way, tips pointing outward
+  p = readPill(canvas.edgeGlyph({ fromCard: 'many', toCard: 'one', both: true }, { x: 0, y: 0, orient: 'h', toA: 1 }, '#000', 1, false, false), false);
+  assert.deepEqual(p.heads.map(h => h.dir).sort(), [-1, 1]);
+  assert.ok(p.heads.every(h => Math.abs(h.tip) > Math.abs(h.base)));
+
+  // a selected edge is a filled pill with white ink; an inactive one is dashed
+  const selPill = canvas.edgeGlyph({ fromCard: 'many', toCard: 'one' }, { x: 0, y: 0, orient: 'h', toA: 1 }, '#123', 1, true, true);
+  assert.equal(readPill(selPill, false).rect.props.fill, '#123');
+  assert.equal(selPill.children.find(n => n.tag === 'polyline').props.fill, '#fff');
+  assert.ok(readPill(canvas.edgeGlyph({ fromCard: 'many', toCard: 'one', inactive: true }, { x: 0, y: 0, orient: 'h', toA: 1 }, '#000', 1, false, false), false).rect.props['stroke-dasharray']);
   assert.equal(canvas.PILL_ZOOM, 0.5);
 });
 
-test('a pill that would land on a card steps further out along the same stub', () => {
+test('the pill is a fixed size on screen and its seat box follows it', () => {
+  const context = runtime();
+  const canvas = canvasFor(context, bundled(), 'star');
+  const scaleOf = pill => Number(pill.props.transform.match(/scale\(([-\d.]+)\)/)[1]);
+  const r = { fromCard: 'many', toCard: 'one' }, spot = { x: 0, y: 0, orient: 'h', toA: 1 };
+  canvas.view = { x: 0, y: 0, k: 1 };
+  const atOne = scaleOf(canvas.edgeGlyph(r, spot, '#000', 1, false, false)), boxOne = canvas.pillBox(spot);
+  canvas.view = { x: 0, y: 0, k: 0.5 };
+  const atHalf = scaleOf(canvas.edgeGlyph(r, spot, '#000', 1, false, false)), boxHalf = canvas.pillBox(spot);
+  assert.ok(Math.abs(atOne * 1 - atHalf * 0.5) < 1e-3, 'the pill keeps its on-screen size at any zoom');
+  assert.ok(Math.abs(boxOne.w * 1 - boxHalf.w * 0.5) < 1e-6 && Math.abs(boxOne.w - canvas.PILL_W) < 1e-6, 'the reserved box is the drawn box');
+  // below PILL_ZOOM only the bare arrow is drawn, and the seat shrinks to it
+  canvas.view = { x: 0, y: 0, k: 0.3 };
+  assert.ok(canvas.pillBox(spot).w * 0.3 < canvas.PILL_W / 2, 'an arrow-only seat does not reserve a pill');
+});
+
+test('a label that would land on a card or on another label takes the next free seat', () => {
   const context = runtime();
   const canvas = canvasFor(context, bundled(), 'star');
   canvas.view = { x: 0, y: 0, k: 1 };
+  canvas.lineStyle = 'ortho';
   const g0 = { ax: 100, ay: 40, bx: 700, by: 240, adir: 1, bdir: -1, a: 'A', b: 'B' };
-  const spots = canvas.pillSpots(g0, 'a', '*');
-  assert.ok(spots.length > 1 && spots.every(s => s.y === g0.ay && s.glyph === '*'));
-  const blocked = { x0: spots[0].x - 40, y0: g0.ay - 40, x1: spots[0].x + 40, y1: g0.ay + 40 };
+  const spots = canvas.edgeGeom(g0, 0, 0, []).spots;
+  assert.ok(spots.length > 1, 'a Z-shaped edge offers several seats');
+  const first = spots[0], bx = canvas.pillBox(first);
+  const blocked = { x0: first.x - bx.w, y0: first.y - bx.h, x1: first.x + bx.w, y1: first.y + bx.h };
   const picked = canvas.pickSpot(spots, [blocked]);
-  assert.notEqual(picked.x, spots[0].x, 'the first seat is taken, so another one is used');
-  assert.ok(picked.x - canvas.PILL_W / 2 >= blocked.x1 || picked.x + canvas.PILL_W / 2 <= blocked.x0);
+  assert.ok(picked !== first, 'the first seat is taken, so another one is used');
+  const pb = canvas.pillBox(picked);
+  assert.ok(picked.x - pb.w / 2 >= blocked.x1 || picked.x + pb.w / 2 <= blocked.x0 || picked.y - pb.h / 2 >= blocked.y1 || picked.y + pb.h / 2 <= blocked.y0);
+  // the seats on the vertical run are staggered per channel slot, so four edges sharing one
+  // channel do not sit on the same y
+  const ys = [-1.5, -0.5, 0.5, 1.5].map(slot => canvas.edgeGeom(g0, 0, slot, []).spots[0].y);
+  assert.equal(new Set(ys).size, 4, 'slots spread the labels along the channel: ' + ys.join(', '));
 });
 
 test('a subset arrange never moves a table that is not on the canvas', () => {

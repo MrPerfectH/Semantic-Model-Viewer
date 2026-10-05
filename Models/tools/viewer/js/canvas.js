@@ -124,7 +124,7 @@
        the tallest chip the card becomes inside the band the fitted picture is read at, not
        the collapsed card: the renderer scales a chip by 1/zoom, so a lane cut to the card
        height is around 40% too short at the zoom a whole model actually lands on. */
-    _gapBox: function () { var K = this.chipBandBox(); return { x: K.w + 12, y: K.h + 12 }; },
+    _gapBox: function () { var K = this.chipBandBox(); return { x: K.w + this.laneGutterX(this.layoutK), y: K.h + 12 }; },
     /* Force-layout flavour: collapsed card boxes, one sweep, the caller's strength. */
     _separate: function (nodes, strength) {
       var B = this._box();
@@ -546,7 +546,20 @@
     /* The lane: the chip box at zoom k plus the gutter a reader needs between two names. */
     cellFor: function (k) {
       var b = this.chipBoxAt(k);
-      return { w: b.w + 12, h: b.h + 12, cw: this.CARD_W, ch: b.h };
+      return { w: b.w + this.laneGutterX(k), h: b.h + 12, cw: this.CARD_W, ch: b.h };
+    },
+    /* Is a picture shown at zoom k one of full cards carrying relationship pills? Chips get the
+       12px gutter a reader needs between two names; full cards need room between them for the
+       `[ * ◂ 1 ]` pill on the stub that joins them, or every focused star packs its cards a
+       gutter apart and the pill has nowhere to sit. Below PILL_ZOOM there is no pill to make
+       room for, whatever the detail mode says. */
+    cardLanes: function (k) { return !this.chipOn(k) && k >= this.PILL_ZOOM; },
+    PILL_ROOM: 14,           /* screen px of clear line the pill wants on each side of it */
+    /* Horizontal gutter between two lanes, in world units at zoom k: the pill is a screen-pixel
+       size, so the room it needs in the model grows as the zoom drops. */
+    laneGutterX: function (k) {
+      if (!this.cardLanes(k)) return 12;
+      return Math.max(12, Math.ceil((this.PILL_W + 2 * this.PILL_ROOM) / Math.max(this.PILL_ZOOM, k)));
     },
     /* The zoom the positions on the canvas right now were laid out for. Every lane metric
        reads through it, and Fit never zooms out past it — showing a layout smaller than the
@@ -940,8 +953,11 @@
       }
       return clamp(base);
     },
-    /* Path + candidate label spots for one edge in the current line style. */
-    edgeGeom: function (g0, spread, slot, rects) {
+    /* Path + candidate label spots for one edge in the current line style. `bare` picks the
+       label the seats are cut for — the combined pill, or the bare arrow it falls back to —
+       and is stamped on every seat so the box reserved later is the box that gets drawn. */
+    edgeGeom: function (g0, spread, slot, rects, bare) {
+      bare = bare == null ? this.view.k < this.PILL_ZOOM : !!bare;
       if (this.lineStyle === 'curve') {
         var cp = g0.adir === g0.bdir ? 70 : Math.max(46, Math.min(190, Math.abs(g0.bx - g0.ax) * 0.5));
         var p1x = g0.ax + g0.adir * cp, p2x = g0.bx + g0.bdir * cp;
@@ -953,23 +969,29 @@
           var vert = Math.abs(ty) > Math.abs(tx);
           return { x: u * u * u * g0.ax + 3 * u * u * t * p1x + 3 * u * t * t * p2x + t * t * t * g0.bx,
                    y: u * u * u * g0.ay + 3 * u * u * t * g0.ay + 3 * u * t * t * g0.by + t * t * t * g0.by,
-                   orient: vert ? 'v' : 'h', toA: vert ? (ty > 0 ? -1 : 1) : (tx > 0 ? -1 : 1) };
+                   orient: vert ? 'v' : 'h', toA: vert ? (ty > 0 ? -1 : 1) : (tx > 0 ? -1 : 1), bare: bare };
         };
         return { d: this.bezierPath(g0.ax, g0.ay, g0.bx, g0.by, g0.adir, g0.bdir), spots: [B(0.5), B(0.35), B(0.65), B(0.2), B(0.8)] };
       }
       var cx = this.channelX(g0, spread, rects);
       var pts = [{ x: g0.ax, y: g0.ay }, { x: cx, y: g0.by === g0.ay ? g0.ay : g0.ay }, { x: cx, y: g0.by }, { x: g0.bx, y: g0.by }];
-      var S = this.chipScale();
+      /* Seats are measured against the label actually drawn: its length along the line plus
+         a reader's margin either side. Both are screen-pixel sizes (hence world units through
+         labelDims), so a run that can carry the pill at one zoom carries it at every zoom. */
+      var L = this.labelDims(bare), Lw = L.w, M = L.m, need = Lw + 2 * M;
       var spots = [];
+      var seat = function (x, y, orient, toA) { return { x: x, y: y, orient: orient, toA: toA, bare: bare }; };
       var vlen = Math.abs(g0.by - g0.ay);
-      /* on the vertical run the pill reads top-to-bottom; toA says which way table A lies */
+      /* on the vertical run the pill stands upright; toA says which way table A lies */
       var vToA = g0.ay > g0.by ? 1 : -1;
-      if (vlen >= 62 * S) {
-        /* stagger pills that share a channel along the vertical run so they never stack */
-        var lo = Math.min(g0.ay, g0.by) + 30 * S, hi = Math.max(g0.ay, g0.by) - 30 * S;
-        var y0 = (g0.ay + g0.by) / 2 + (slot || 0) * 58 * S;
-        spots.push({ x: cx, y: Math.max(lo, Math.min(hi, y0)), orient: 'v', toA: vToA });
-        [0.3, 0.7, 0.15, 0.85].forEach(function (t) { spots.push({ x: cx, y: Math.max(lo, Math.min(hi, Math.min(g0.ay, g0.by) + vlen * t)), orient: 'v', toA: vToA }); });
+      if (vlen >= need) {
+        /* stagger labels that share a channel along the vertical run so they never stack */
+        var lo = Math.min(g0.ay, g0.by) + Lw / 2 + M, hi = Math.max(g0.ay, g0.by) - Lw / 2 - M;
+        var y0 = (g0.ay + g0.by) / 2 + (slot || 0) * (Lw + 1.7 * M);
+        spots.push(seat(cx, Math.max(lo, Math.min(hi, y0)), 'v', vToA));
+        /* then walk the run both ways from the middle: a long channel in a dense picture
+           brushes several cards, and the gap between two of them is where the pill fits */
+        [0.3, 0.7, 0.15, 0.85, 0.4, 0.6, 0.22, 0.78].forEach(function (t) { spots.push(seat(cx, Math.max(lo, Math.min(hi, Math.min(g0.ay, g0.by) + vlen * t)), 'v', vToA)); });
       }
       /* Horizontal runs only when the line actually crosses from one side to the other.
          On a C-shaped hook both cards sit on the same side of the channel, so a left/right
@@ -977,13 +999,16 @@
       var zShape = g0.adir !== g0.bdir;
       if (zShape) {
         var hA = Math.abs(cx - g0.ax), hB = Math.abs(g0.bx - cx);
-        if (hA >= 70 * S) spots.push({ x: (g0.ax + cx) / 2, y: g0.ay, orient: 'h', toA: g0.ax > cx ? 1 : -1 });
-        if (hB >= 70 * S) spots.push({ x: (cx + g0.bx) / 2, y: g0.by, orient: 'h', toA: cx > g0.bx ? 1 : -1 });
+        [0.5, 0.35, 0.65].forEach(function (t) {
+          if (hA >= need) spots.push(seat(g0.ax + (cx - g0.ax) * t, g0.ay, 'h', g0.ax > cx ? 1 : -1));
+          if (hB >= need) spots.push(seat(cx + (g0.bx - cx) * t, g0.by, 'h', cx > g0.bx ? 1 : -1));
+        });
       }
-      if (vlen >= 30 * S && vlen < 62 * S) spots.push({ x: cx, y: (g0.ay + g0.by) / 2, orient: 'v', toA: vToA });
+      /* a short vertical run still beats the fallback: the label overhangs the bends a little */
+      if (vlen >= Lw * 0.6 && vlen < need) spots.push(seat(cx, (g0.ay + g0.by) / 2, 'v', vToA));
       if (!spots.length) spots.push(zShape
-        ? { x: cx, y: (g0.ay + g0.by) / 2, orient: 'h', toA: g0.ax > g0.bx ? 1 : -1 }
-        : { x: cx, y: (g0.ay + g0.by) / 2, orient: 'v', toA: vToA });
+        ? seat(cx, (g0.ay + g0.by) / 2, 'h', g0.ax > g0.bx ? 1 : -1)
+        : seat(cx, (g0.ay + g0.by) / 2, 'v', vToA));
       return { d: this.orthoPath(pts, 9), spots: spots };
     },
     /* Visible card rectangles in world space, slightly inflated. */
@@ -995,24 +1020,51 @@
       });
       return out;
     },
+    /* World units per screen pixel of label. Labels are sized for the reader, not the model:
+       like the bare arrow they are drawn in screen pixels and scaled by 1/zoom, so the pill is
+       the same size on screen whether the picture is at 50% or 200%. The chip view thickens
+       its lines and the label follows a little — not the full 1.6x the chip strokes take,
+       because the label already holds its on-screen size and a 30px pill beside an 11px
+       table name would be the loudest thing on the canvas. */
+    labelUnit: function () { return (this._chip ? 1.12 : 1) / Math.max(0.05, this.view.k); },
+    /* The label an edge carries, horizontal, in world units: the combined cardinality pill,
+       or (`bare`) the arrowhead on its own — below PILL_ZOOM always, above it when no run of
+       the line has room for the pill. `m` is the margin a seat has to leave on each side.
+       Seat eligibility, the stagger along a shared channel and the collision ledger all read
+       through here, so the box that is reserved is always the box that is drawn. */
+    labelDims: function (bare) {
+      var u = this.labelUnit();
+      if (bare == null) bare = this.view.k < this.PILL_ZOOM;
+      if (!bare) return { w: this.PILL_W * u, h: this.PILL_H * u, m: 10 * u };
+      return { w: 16 * u, h: 12 * u, m: 6 * u };
+    },
+    /* Collision box of the label at a seat: the pill reads along the line, so on a vertical
+       run it stands tall and narrow. The seat says which label it was cut for. */
     pillBox: function (sp) {
-      var S = this.chipScale();
-      var w = this.PILL_W * S, h = this.PILL_H * S;
-      return sp.orient === 'v' ? { w: h, h: w } : { w: w, h: h };
+      var d = this.labelDims(sp.bare);
+      return sp.orient === 'v' ? { w: d.h, h: d.w } : { w: d.w, h: d.h };
     },
-    pickSpot: function (spots, rects) {
+    /* First seat whose box clears every rect. When none does, the seat that overlaps least is
+       used anyway — unless `strict`, which lets the caller try a smaller label instead. */
+    pickSpot: function (spots, rects, strict) {
+      var best = null, bestArea = Infinity;
       for (var i = 0; i < spots.length; i++) {
-        var sp = spots[i], bx = this.pillBox(sp), clash = false;
-        for (var j = 0; j < rects.length && !clash; j++) {
+        var sp = spots[i], bx = this.pillBox(sp), area = 0;
+        for (var j = 0; j < rects.length; j++) {
           var R = rects[j];
-          clash = sp.x + bx.w / 2 > R.x0 && sp.x - bx.w / 2 < R.x1 && sp.y + bx.h / 2 > R.y0 && sp.y - bx.h / 2 < R.y1;
+          var ox = Math.min(sp.x + bx.w / 2, R.x1) - Math.max(sp.x - bx.w / 2, R.x0);
+          var oy = Math.min(sp.y + bx.h / 2, R.y1) - Math.max(sp.y - bx.h / 2, R.y0);
+          if (ox > 0 && oy > 0) area += ox * oy;
         }
-        if (!clash) return sp;
+        if (area === 0) return sp;
+        if (area < bestArea) { bestArea = area; best = sp; }
       }
-      return spots[0];
+      return strict ? null : best;
     },
-    PILL_W: 34, PILL_H: 20,
-    PILL_ZOOM: 0.5,          /* below this the cardinality pills are noise, the arrows are not */
+    /* Screen-pixel size of the pill: `[ * ◂ 1 ]` — a cardinality glyph, the filter arrowhead,
+       the other glyph. PILL_SIDE is how far from the centre each glyph sits. */
+    PILL_W: 50, PILL_H: 20, PILL_SIDE: 16,
+    PILL_ZOOM: 0.5,          /* below this the cardinality glyphs are noise, the arrow is not */
     /* Filter direction is the one thing an edge must say at every zoom, so the arrowhead is
        drawn on the line itself and sized in screen pixels: 6px wherever the zoom sits. The
        filter flows to -> from, i.e. towards table A; a bidirectional edge gets both heads. */
@@ -1035,55 +1087,62 @@
       g.appendChild(arrow);
       return g;
     },
-    /* Which ends of an edge earn a cardinality pill. On an ordinary star spoke only the many
-       side is worth the ink — the other end is always `1` and a pill there just repeats the
-       arrow. When both ends carry the *same* cardinality the reader cannot infer the other
-       one, so both are drawn: `*`…`*` for a many-to-many, `1`…`1` for a one-to-one. Pills
-       disappear below PILL_ZOOM, where they would be unreadable anyway. */
-    manyEnds: function (r) {
-      var a = { end: 'a', glyph: r.fromCard === 'one' ? '1' : '*' };
-      var b = { end: 'b', glyph: r.toCard === 'many' ? '*' : '1' };
-      if (a.glyph === b.glyph) return [a, b];
-      return [a.glyph === '*' ? a : b];
-    },
-    /* Candidate seats for one end's pill, walking out along the stub that leaves that table
-       — so a pill that would land on a card can step further out instead of covering it. */
-    pillSpots: function (g0, end, glyph) {
-      var atA = end === 'a', s = this.chipScale();
-      var x = atA ? g0.ax : g0.bx, y = atA ? g0.ay : g0.by, dir = atA ? g0.adir : g0.bdir;
-      var base = this.PILL_W * s / 2 + 12;
-      return [1, 1.6, 2.3, 3.1, 0.62].map(function (f) {
-        return { x: x + dir * base * f, y: y, orient: 'h', glyph: glyph };
-      });
-    },
-    edgeCard: function (r, spot, col, op, filled) {
-      var s = this.chipScale();
-      var box = this.pillBox(spot);
-      var g = sv('g', { transform: 'translate(' + spot.x.toFixed(1) + ',' + spot.y.toFixed(1) + ')', opacity: op, style: 'pointer-events:none;' });
+    /* The one label an edge carries once the zoom can hold it: `[ * ◂ 1 ]`. Each end's
+       cardinality sits on the side of the pill its table lies on, and the filter arrowhead
+       between them points the way the filter flows — to -> from, i.e. towards table A, exactly
+       as the bare arrow does; a bidirectional edge gets a head each way. Putting both glyphs
+       and the arrow in one pill is what fixes the stacking: four edges leaving one table used
+       to want the same seats for their end pills and ended up on top of each other, reading as
+       two asterisks instead of four. One label per edge means one seat per edge.
+       Built in screen pixels and scaled by 1/zoom like the arrow. On a vertical run the pill
+       stands upright — the glyphs stack and the head points up or down; text never rotates. */
+    edgeGlyph: function (r, spot, col, op, filled, heavy) {
+      var u = this.labelUnit();
+      var vert = spot.orient === 'v', toA = spot.toA || 1;
+      var W = this.PILL_W, H = this.PILL_H, SIDE = this.PILL_SIDE;
+      var g = sv('g', { transform: 'translate(' + spot.x.toFixed(1) + ',' + spot.y.toFixed(1) + ') scale(' + u.toFixed(4) + ')', opacity: op, style: 'pointer-events:none;' });
       g.appendChild(sv('rect', {
-        x: -box.w / 2, y: -box.h / 2, width: box.w, height: box.h, rx: Math.min(box.w, box.h) / 2,
-        fill: filled ? col : '#fff', stroke: col, 'stroke-width': 1.3 * s,
-        'stroke-dasharray': r.inactive ? (3 * s) + ' ' + (2.5 * s) : null
+        x: -(vert ? H : W) / 2, y: -(vert ? W : H) / 2, width: vert ? H : W, height: vert ? W : H, rx: H / 2,
+        fill: filled ? col : '#fff', stroke: col, 'stroke-width': heavy ? 1.7 : 1.3,
+        'stroke-dasharray': r.inactive ? '3 2.5' : null
       }));
       var ink = filled ? '#fff' : col;
-      if (spot.glyph === '1') {
-        var t = sv('text', {
-          x: 0, y: 0.5 * s, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: ink,
-          style: 'font:700 ' + (11.5 * s) + 'px "IBM Plex Sans",sans-serif;'
+      /* `s` is a distance along the line, positive towards table A */
+      var along = function (s) { return 'translate(' + (vert ? 0 : s).toFixed(1) + ',' + (vert ? s : 0).toFixed(1) + ')'; };
+      var glyph = function (ch, s) {
+        var holder = sv('g', { transform: along(s) });
+        if (ch === '1') {
+          var t = sv('text', {
+            x: 0, y: 0.5, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: ink,
+            style: 'font:700 11.5px "IBM Plex Sans",sans-serif;'
+          });
+          t.textContent = '1'; holder.appendChild(t);
+        } else {
+          var star = sv('g', { stroke: ink, 'stroke-width': 1.7, 'stroke-linecap': 'round' });
+          [90, 30, 150].forEach(function (deg) {
+            var a = deg * Math.PI / 180, dx = Math.cos(a) * 4, dy = Math.sin(a) * 4;
+            star.appendChild(sv('line', { x1: -dx, y1: -dy, x2: dx, y2: dy }));
+          });
+          holder.appendChild(star);
+        }
+        return holder;
+      };
+      g.appendChild(glyph(r.fromCard === 'one' ? '1' : '*', toA * SIDE));
+      g.appendChild(glyph(r.toCard === 'many' ? '*' : '1', -toA * SIDE));
+      /* a filled head, as long as the bare arrow; `off` shifts it off centre for the pair */
+      var L = this.ARROW_PX;
+      var head = function (sign, off) {
+        var hw = 3.6, tip = off + sign * L / 2, base = off - sign * L / 2;
+        var pts = vert ? [[hw, base], [0, tip], [-hw, base]] : [[base, hw], [tip, 0], [base, -hw]];
+        return sv('polyline', {
+          points: pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' '),
+          fill: ink, stroke: ink, 'stroke-width': 1, 'stroke-linejoin': 'round'
         });
-        t.textContent = '1'; g.appendChild(t);
-      } else {
-        var star = sv('g', { stroke: ink, 'stroke-width': 1.7 * s, 'stroke-linecap': 'round' });
-        var rr = 4 * s;
-        [90, 30, 150].forEach(function (deg) {
-          var a = deg * Math.PI / 180, dx = Math.cos(a) * rr, dy = Math.sin(a) * rr;
-          star.appendChild(sv('line', { x1: -dx, y1: -dy, x2: dx, y2: dy }));
-        });
-        g.appendChild(star);
-      }
+      };
+      if (r.both) { g.appendChild(head(toA, toA * 3.6)); g.appendChild(head(-toA, -toA * 3.6)); }
+      else g.appendChild(head(toA, 0));
       return g;
     },
-    chipScale: function () { return this._chip ? 1.6 : 1; },
     relTip: function (r) {
       var cd = (r.fromCard === 'one' ? '1' : '*') + ' : ' + (r.toCard === 'many' ? '*' : '1');
       var dirTxt = r.both ? '⇄ both directions' : ('filter: ' + U.esc(r.to) + ' → ' + U.esc(r.from));
@@ -1181,35 +1240,35 @@
         if (!dim) {
           var ink = kind === 'base' && !isSel ? '#7d8593' : col;
           var op2 = active || hop || isSel ? 1 : (chip ? 0.95 : 0.85);
-          /* the filter arrow is never dropped — it is what tells the reader which way the
-             relationship points, and at 30% zoom it is the only label left on the line */
-          var spot = self.pickSpot(geom.spots, rects.concat(placed));
-          var bx = self.pillBox(spot);
-          placed.push({ x0: spot.x - bx.w / 2 - 3, y0: spot.y - bx.h / 2 - 3, x1: spot.x + bx.w / 2 + 3, y1: spot.y + bx.h / 2 + 3 });
+          /* One label per edge, through one seat picker and one `placed` ledger, so it can
+             never land on a card or on another edge's label. Above PILL_ZOOM it is the
+             combined cardinality pill — where the line has a run long enough to carry it;
+             a line boxed in by its cards (the focused star packs them a gutter apart) drops
+             to the bare filter arrow rather than hide a pill under a card. Below PILL_ZOOM
+             the arrow is all there is, and it is never dropped: it is what tells the reader
+             which way the relationship points, and at 30% zoom it is the only label left. */
+          var taken = rects.concat(placed);
+          var spot = self.pickSpot(geom.spots, taken, true);
+          if (!spot) {
+            /* the arrow's seats; if even those are boxed in, keeping clear of the other labels
+               matters more than the card inflation — an arrow drawn over a pill reads as a
+               second head on it, an arrow a few pixels into a chip's margin is still an arrow */
+            var bareSpots = self.edgeGeom(g0, item.spread, item.slot, rects, true).spots;
+            spot = self.pickSpot(bareSpots, taken, true) || self.pickSpot(bareSpots, placed);
+          }
+          var bx = self.pillBox(spot), pad = 4 * self.labelUnit();
+          placed.push({ x0: spot.x - bx.w / 2 - pad, y0: spot.y - bx.h / 2 - pad, x1: spot.x + bx.w / 2 + pad, y1: spot.y + bx.h / 2 + pad });
           self._relSpots[item.i] = spot;
-          item.arrow = self.edgeArrow(r, spot, ink, op2, isSel || active ? 1.15 : 1);
+          item.arrow = spot.bare
+            ? self.edgeArrow(r, spot, ink, op2, isSel || active ? 1.15 : 1)
+            : self.edgeGlyph(r, spot, ink, op2, isSel, active);
           item.arrow.style.pointerEvents = 'auto'; item.arrow.style.cursor = 'pointer';
           bind(item.arrow);
-          if (self.view.k >= self.PILL_ZOOM) {
-            item.pills = [];
-            self.manyEnds(r).forEach(function (e) {
-              /* the pill goes through the same seat picker and the same `placed` ledger as
-                 the arrow, so it can never be dropped on a card or on another label */
-              var seat = self.pickSpot(self.pillSpots(g0, e.end, e.glyph), rects.concat(placed));
-              var pb = self.pillBox(seat);
-              placed.push({ x0: seat.x - pb.w / 2 - 3, y0: seat.y - pb.h / 2 - 3, x1: seat.x + pb.w / 2 + 3, y1: seat.y + pb.h / 2 + 3 });
-              var pill = self.edgeCard(r, seat, ink, op2, isSel);
-              pill.style.pointerEvents = 'auto'; pill.style.cursor = 'pointer';
-              bind(pill);
-              item.pills.push(pill);
-            });
-          }
         }
       });
-      /* hit strokes above the lines, arrows and pills on top so a crossing line never cuts a label */
+      /* hit strokes above the lines, labels on top so a crossing line never cuts one */
       vis.forEach(function (item) { if (item.hit) self.svg.appendChild(item.hit); });
       vis.forEach(function (item) { if (item.arrow) self.svg.appendChild(item.arrow); });
-      vis.forEach(function (item) { (item.pills || []).forEach(function (p) { self.svg.appendChild(p); }); });
       this._lineK = this.view.k;
       this.positionRelPopover();
       if (this.app.explorer) this.app.explorer.drawMap();
@@ -1572,8 +1631,15 @@
            which is the widest lane a chip can ever need, rather than to the optimistic
            first guess: a layout cut for 0.5 and then shown at 0.3 is the old overlap. */
         if (next == null) { if (this.setLayoutK(ZOOM_FLOOR) !== k) run(); break; }
-        if (!(next < this.layoutK - 0.02)) break;
-        k = next;
+        if (next < this.layoutK - 0.02) { k = next; continue; }
+        /* Fit landed ABOVE the guess, at a zoom that draws full cards: the lanes were cut for
+           chips at k0, a gutter that leaves no room for the pill between two cards. Lay out
+           once more for the zoom the cards will actually be read at, so the card gutter
+           applies; if that wider picture then fits a little smaller, the next pass follows
+           it down as usual. Going up is safe only here — the picture is shown no smaller
+           than the lanes it gets. */
+        if (pass === 0 && next > this.layoutK + 0.02 && this.cardLanes(next)) { k = next; continue; }
+        break;
       }
       return this.layoutK;
     },
