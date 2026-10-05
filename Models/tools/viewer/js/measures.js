@@ -643,16 +643,18 @@
       var filter = app.state.mvFilter || 'all';
       var table = M.byName[app.state.mvTable] ? app.state.mvTable : '';
       var open = app.state.mvOpen || {}, rows = [], total = 0, modelTotal = 0;
-      var root = { sub: {}, items: [] };
+      var root = { sub: {}, items: [] }, daxRoot = { sub: {}, items: [] }, daxOnly = 0;
       M.tables.forEach(function (t) {
         t.measures.forEach(function (m) {
           modelTotal++;
           if (table && t.name !== table) return;
           if (filter === 'hidden' && !m.h || filter === 'visible' && m.h) return;
-          if (q && ![m.name, m.folder, t.name, m.dax].join(' ').toLowerCase().includes(q)) return;
+          var inLabel = !q || [m.name, m.folder, t.name].join(' ').toLowerCase().includes(q);
+          if (!inLabel && !String(m.dax || '').toLowerCase().includes(q)) return;
           total++;
+          if (!inLabel) daxOnly++;
           String(m.folder || '').split(';').forEach(function (fp) {
-            var node = root;
+            var node = inLabel ? root : daxRoot;
             fp.split('\\').map(function (s) { return s.trim(); }).filter(Boolean).forEach(function (seg) {
               node = (node.sub[seg] = node.sub[seg] || { sub: {}, items: [] });
             });
@@ -685,7 +687,15 @@
         });
         node.items.slice().sort(function (a, b) { return a.measure.name.localeCompare(b.measure.name); }).forEach(function (m) { pushM(m, depth); });
       };
+      // Name, folder and table matches come first; measures that only mention the text in their DAX follow.
+      var heading = function (key, name, count) { rows.push({ key: 'section:' + key, isFolder: false, isHeader: true, name: name, meta: String(count), depth: 0 }); };
+      var split = daxOnly > 0 && daxOnly < total;
+      if (split) heading('name', 'Name matches', total - daxOnly);
       walk(root, 0, '');
+      if (daxOnly) {
+        if (split) heading('dax', 'Found in DAX', daxOnly);
+        walk(daxRoot, 0, 'dax:');
+      }
       return { rows: rows, total: total, modelTotal: modelTotal };
     },
 
@@ -778,6 +788,10 @@
       }
       var frag = document.createDocumentFragment(), restore;
       built.rows.forEach(function (R) {
+        if (R.isHeader) {
+          frag.appendChild(el('div', { cls: 'mv-section-head' }, [el('span', { text: R.name }), el('span', { text: R.meta })]));
+          return;
+        }
         var kids = [];
         if (R.isFolder) kids.push(el('span', { cls: 'mv-folder-caret', text: R.expanded ? '▾' : '▸', 'aria-hidden': 'true' }));
         else kids.push(el('span', { cls: 'mv-measure-icon', text: 'ƒ', 'aria-hidden': 'true' }));

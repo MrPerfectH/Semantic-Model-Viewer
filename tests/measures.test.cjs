@@ -32,7 +32,7 @@ function harness(preferences = {}) {
   return { view: new context.MeasuresView(app, {}), app, saved, flushFrame() { const pending = [...frames.values()]; frames.clear(); pending.forEach(callback => callback()); } };
 }
 
-const rowNames = rows => Array.from(rows.filter(row => !row.isFolder), row => row.name);
+const rowNames = rows => Array.from(rows.filter(row => !row.isFolder && !row.isHeader), row => row.name);
 
 test('library search finds names, folders, home tables and DAX, expanding matching folders', () => {
   const { view, app } = harness();
@@ -456,4 +456,16 @@ test('Expand all reports the display limit and does not hide additional groups a
   assert.equal(graph.capped, true);
   assert.equal(graph.canExpand, false);
   assert.equal(graph.nodes.find(n => n.name === 'Base Amount').dnMore[0], '−', 'does not offer an impossible expansion at the cap');
+});
+
+test('library search lists name matches before measures that only mention the text in DAX', () => {
+  const { view, app } = harness();
+  app.state.mvQuery = 'revenue';
+  const rows = view.buildRows().rows;
+  assert.deepEqual(Array.from(rows.filter(row => row.isHeader), row => row.name), ['Name matches', 'Found in DAX']);
+  assert.deepEqual(rowNames(rows), ['Revenue', 'Margin', 'Profit']);
+  app.state.mvQuery = 'profit';
+  assert.deepEqual(Array.from(view.buildRows().rows.filter(row => row.isHeader), row => row.name), ['Name matches', 'Found in DAX']);
+  app.state.mvQuery = 'divide(';
+  assert.equal(view.buildRows().rows.some(row => row.isHeader), false);
 });
