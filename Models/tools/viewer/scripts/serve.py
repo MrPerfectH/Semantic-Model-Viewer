@@ -8,8 +8,9 @@ to ask for folder permission. Python 3 standard library only.
     python3 serve.py --open          # ...and opens it in the default browser
     python3 serve.py --idle-exit 180 # stop when the page has been closed for 3 minutes
 
-Safety: listens on 127.0.0.1 only, is read-only (GET, no writes), serves only .tmdl/.bim/.json
-model files, and refuses requests coming from other websites open in the browser.
+Safety: listens on 127.0.0.1 only, is read-only (GET, no writes), reads only .tmdl/.bim/.json
+model files, and refuses requests coming from other websites open in the browser or addressed
+to any host name other than localhost.
 """
 import argparse
 import json
@@ -156,6 +157,9 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         self.server.touch()
+        if not self.local_host():
+            self.send_json(403, {"error": "Use http://localhost to reach this server."})
+            return
         url = urllib.parse.urlsplit(self.path)
         if url.path.startswith("/api/"):
             self.api(url)
@@ -168,6 +172,15 @@ class Handler(SimpleHTTPRequestHandler):
         else:
             self.send_header("Cache-Control", "no-cache")
         super().end_headers()
+
+    # A page on an attacker's domain that resolves to 127.0.0.1 (DNS rebinding) looks like the
+    # same origin to the browser, but its Host header carries the attacker's name. Only
+    # accept the names this computer is reached by.
+    def local_host(self):
+        host = self.headers.get("Host", "")
+        if not host.endswith("]"):  # drop ":port" (an IPv6 literal like [::1] ends with "]")
+            host = host.rsplit(":", 1)[0]
+        return host.strip("[]").lower() in ("localhost", "127.0.0.1", "::1")
 
     # Only the viewer page itself may call the API. A page from another site that tries to
     # read local folders through this server sends an Origin / Sec-Fetch-Site header that
