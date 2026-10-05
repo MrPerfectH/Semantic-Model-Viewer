@@ -105,26 +105,30 @@ test('blank canvas and table membership persist separately for each model', () =
    restored saved view is. Until one of those happens, Explore all runs the chosen layout. */
 test('Explore all keeps laying the model out until the reader actually arranges it', () => {
   const { explorer, cv } = fixture();
+  /* One Explore all may run the layout more than once — the arrange loop re-cuts the lanes
+     for the zoom Fit lands on — so count whether it ran at all, not how many passes it took. */
   const runs = [];
   cv.untangle = opts => { runs.push(opts); };
+  let before = 0;
+  const ran = () => { const yes = runs.length > before; before = runs.length; return yes; };
 
   explorer.add(['A']);                       // adding a table persists positions...
   explorer.showAll();
-  assert.equal(runs.length, 1, '...but that is not an arrangement, so the layout still runs');
+  assert.ok(ran(), '...but that is not an arrangement, so the layout still runs');
 
   explorer.blank();
   explorer.showAll();
-  assert.equal(runs.length, 2);
+  assert.ok(ran());
 
   cv.markArranged();                         // a drag, Arrange, or a restored view
   explorer.blank();
   explorer.showAll();
-  assert.equal(runs.length, 2, 'an arranged model keeps the positions the reader gave it');
+  assert.equal(ran(), false, 'an arranged model keeps the positions the reader gave it');
 
   cv.clearArranged();                        // Reset layout puts it back
   explorer.blank();
   explorer.showAll();
-  assert.equal(runs.length, 3);
+  assert.ok(ran());
 });
 
 test('saved membership ignores deleted table names', () => {
