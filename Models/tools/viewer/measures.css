@@ -28,6 +28,7 @@
 .mv-row-count{font:500 10px/1.3 'IBM Plex Mono',monospace;color:#7c899b;flex:none;}
 .mv-folder{min-height:33px;padding-top:7px;padding-bottom:7px;}
 .mv-folder .mv-row-name{font-size:11px;font-weight:600;color:#59677b;}
+.mv-section-head{display:flex;justify-content:space-between;padding:10px 10px 4px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8290a3;}
 .mv-folder-caret{width:13px;flex:none;color:#8290a3;font-size:13px;}
 .mv-hidden-icon{display:flex;flex:none;color:#8b96a7;}
 .mv-usage-badge{flex:none;font-size:9px;color:#2563eb;background:#eef4ff;padding:2px 4px;border-radius:3px;}
