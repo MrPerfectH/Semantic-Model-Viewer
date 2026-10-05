@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.2
+
+- Show cardinality and filter direction together in one pill (`* ◂ 1`) on every relationship, so lines no longer hide their cardinality behind stacked markers.
+- Leave room between cards in the focused view so those pills fit.
+
 ## 0.3.1
 
 - Make the Muted palette's table accent colours clearly visible.
