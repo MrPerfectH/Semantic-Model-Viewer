@@ -66,7 +66,9 @@ place) and reopen the app. Your saved models and layouts are kept.
 `Models/tools/viewer/scripts/mac/reset-app-data.sh` clears just the saved models and layouts.
 
 The app window uses its **own, separate browser profile**, never your regular one, so it
-keeps its saved models apart from your everyday browsing. Opening it again reuses that window.
+keeps its saved models apart from your everyday browsing. On Mac, opening the app again
+opens a viewer window using that same profile; if a viewer window is already open, this
+can create another one. Close extra windows normally; your saved models and layouts are kept.
 
 ### VS Code
 

@@ -3,9 +3,10 @@
 # viewer as its own window. The app icon that install-app.sh creates runs this script.
 #
 # The window uses its OWN, separate Chrome/Edge profile (never your regular browsing
-# profile), and opening it again brings the existing window forward instead of piling
-# up new ones. The server listens on this computer only and stops by itself a few
-# minutes after the window is closed.
+# profile). Every launch opens a viewer window, including when the browser is still
+# running after its last window was closed. Saved models and layouts stay in that
+# profile. The server listens on this computer only and stops by itself a few
+# minutes after all viewer windows are closed.
 set -uo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -39,11 +40,10 @@ else BROWSER_APP=""; fi
 
 if [ -n "$BROWSER_APP" ]; then
   mkdir -p "$PROFILE_DIR"
-  if pgrep -f "$PROFILE_DIR" >/dev/null 2>&1; then
-    osascript -e "tell application \"$BROWSER_APP\" to activate" >/dev/null 2>&1
-  else
-    open -na "$BROWSER_APP" --args --user-data-dir="$PROFILE_DIR" --no-first-run --no-default-browser-check --app="$URL" --new-window
-  fi
+  # A surviving profile process does not imply that a viewer window exists.
+  # Always send the app URL; Chromium forwards it to the existing profile process.
+  # Activating Chrome alone can leave the user with no viewer (or a regular tab).
+  open -na "$BROWSER_APP" --args --user-data-dir="$PROFILE_DIR" --no-first-run --no-default-browser-check --app="$URL" --new-window
 else
   open "$URL"
 fi
