@@ -878,7 +878,7 @@
       if (nCols) metadata.appendChild(el('span', { cls: 'mv-chip', text: nCols + (nCols === 1 ? ' column reference' : ' column references'), title: colGs.map(function (cg) { return cg.t + ': ' + cg.cs.join(', '); }).join('\n') }));
       if (m.h) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'Hidden in model' }));
       var usage = app.msrUse(sn), status = app.statusPill ? app.statusPill(app.msrStatus(sn), !!usage, false) : null;
-      if (usage) metadata.appendChild(el('span', { cls: 'mv-chip mv-chip-blue', text: usage.length + ' report pages', title: app.useTip(usage) }));
+      if (usage) metadata.appendChild(el('span', { cls: 'mv-chip mv-chip-blue', text: usage.length + (usage.length === 1 ? ' report page' : ' report pages'), title: app.useTip(usage) }));
       if (status) metadata.appendChild(el('span', status));
       else if (!usage && app._usage) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'No direct report usage', title: 'Not directly referenced in ' + ((app._usageMeta && app._usageMeta.report) || 'the scanned report') + '. It may feed other measures that are used.' }));
       var header = el('header', { cls: 'mv-analysis-header' });
