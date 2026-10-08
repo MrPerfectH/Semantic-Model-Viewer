@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.3
+
+- Refuse requests to the local server that use a foreign host name, which closes a DNS-rebinding gap.
+- Reopen the Mac app window after the viewer window is closed.
+- List measure name matches before DAX-only matches in measure search.
+
 ## 0.3.2
 
 - Show cardinality and filter direction together in one pill (`* ◂ 1`) on every relationship, so lines no longer hide their cardinality behind stacked markers.
