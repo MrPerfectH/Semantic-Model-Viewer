@@ -5,9 +5,19 @@ Branch: `feat/power-query-metadata-lineage`, based on `cf28982`.
 
 ## Automated verification
 
-- `npm test --prefix vscode-extension`: **235 passed, 0 failed**. This includes
-  five metadata/snapshot tests, existing app, extension host/viewer, relationships,
-  DAX/measures, canvas, layout and offline snapshot regressions.
+- The earlier **235 passed, 0 failed** claim for `b816694` is retracted. That run
+  preceded adding the discoverable BIM fixture and therefore did not verify the
+  committed state. Independent babysitter verification at exact
+  `b81669452cadc175d7d94e9b3094e197f2ee5b7d` produced **234 passed, 1 failed**;
+  `/tmp/pq-babysit-prerequisite-tests-20261008.log` preserves the failure.
+- Root cause: the new `tests/fixtures/power-query/model.bim` correctly adds a second
+  discovered model, but `tests/extension.test.js` assumed only one throughout tree,
+  archive exclusion, init handshake and listModels assertions. The correction keeps
+  the BIM discoverable, asserts the exact complete TMDL/BIM set, and verifies BIM
+  host-protocol delivery and exact M parsing. No discovery filters were weakened.
+- The corrected commit requires a fresh full `npm test --prefix vscode-extension`
+  and generated-asset `--check` at its exact hash. Results and hashes are recorded
+  in the #34/#35 correction comments after that run.
 - `node --test tests/power-query.test.cjs tests/snapshot.test.cjs`: **16 passed**.
 - `node vscode-extension/scripts/sync-viewer.js --check`: **21 runtime assets
   byte-matched** against this checkout; no model/report data bundled.
@@ -54,7 +64,8 @@ argument/state errors, not acceptance evidence; successful checks above followed
 
 ## Boundary and remaining owners
 
-#34/#35 source, automated checks and browser inspection are verified. Packaged VS
+#34/#35 browser inspection is recorded above; the original committed full-suite
+claim was invalidated and requires the corrected-commit run described above. Packaged VS
 Code/native workflow, independent review and full combined end-to-end acceptance
 are **not claimed** here; #38 owns those gates after #36/#37 integration. The
 existing extension host/viewer harness passed but is not installed-native evidence.

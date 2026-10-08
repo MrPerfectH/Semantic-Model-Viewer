@@ -30,11 +30,16 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   /* --- Activity Bar tree: one row per model, click opens it --- */
   assert.strictEqual(vscode._trees['semanticModelViewer.models'], tree, 'tree provider registered under the view id');
   const rows = await tree.getChildren();
-  assert.strictEqual(rows.length, 1);
+  assert.deepStrictEqual(rows.map((row) => row.id), ['ws:Fixture Model.SemanticModel', 'ws:power-query/model.bim'],
+    'the tree discovers both the TMDL folder and standalone BIM fixture');
   const item = tree.getTreeItem(rows[0]);
   assert.strictEqual(item.label, 'Fixture Model');
   assert.strictEqual(item.description, 'Fixture Model.SemanticModel');
   assert.strictEqual(item.command.command, 'semanticModelViewer.openEntry');
+  const bimItem = tree.getTreeItem(rows[1]);
+  assert.strictEqual(bimItem.label, 'power-query');
+  assert.strictEqual(bimItem.description, 'power-query/model.bim');
+  assert.strictEqual(bimItem.command.command, 'semanticModelViewer.openEntry');
   assert.strictEqual(vscode._contexts['semanticModelViewer.hasModels'], true, 'hasModels context set for the welcome view');
   let fired = 0; tree.onDidChangeTreeData(() => fired++);
   await vscode.commands.executeCommand('semanticModelViewer.refreshModels');
@@ -44,24 +49,24 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   /* --- discovery --- */
   const ws = require(path.join(EXT, 'src', 'workspace.js'));
   const models = await ws.findModels();
-  assert.deepStrictEqual(models.map((m) => [m.id, m.name, m.kind]), [['ws:Fixture Model.SemanticModel', 'Fixture Model', 'folder']],
+  assert.deepStrictEqual(models.map((m) => [m.id, m.name, m.kind]), [['ws:Fixture Model.SemanticModel', 'Fixture Model', 'folder'], ['ws:power-query/model.bim', 'power-query', 'file']],
     'models under hidden folders (.worktrees) are not listed');
   // Archive copies are found by default, sorted after the main copy, and can be excluded by setting
   fs.mkdirSync(path.join(FIX, 'Archive', 'Fixture Model.SemanticModel', 'definition'), { recursive: true });
   fs.writeFileSync(path.join(FIX, 'Archive', 'Fixture Model.SemanticModel', 'definition', 'model.tmdl'), 'model Model\n');
   try {
     const withArchive = await ws.findModels();
-    assert.deepStrictEqual(withArchive.map((m) => m.path), ['Fixture Model.SemanticModel', 'Archive/Fixture Model.SemanticModel']);
+    assert.deepStrictEqual(withArchive.map((m) => m.path), ['Fixture Model.SemanticModel', 'Archive/Fixture Model.SemanticModel', 'power-query/model.bim']);
     const cfg0 = vscode.workspace.getConfiguration;
     vscode.workspace.getConfiguration = () => ({ get: (k) => (k === 'exclude' ? ['**/Archive/**'] : cfg0().get(k)) });
     const excluded = await ws.findModels();
     vscode.workspace.getConfiguration = cfg0;
-    assert.deepStrictEqual(excluded.map((m) => m.path), ['Fixture Model.SemanticModel'], 'semanticModelViewer.exclude honoured');
+    assert.deepStrictEqual(excluded.map((m) => m.path), ['Fixture Model.SemanticModel', 'power-query/model.bim'], 'semanticModelViewer.exclude removes the archive while preserving standalone BIM discovery');
   } finally { fs.rmSync(path.join(FIX, 'Archive'), { recursive: true, force: true }); }
   assert.strictEqual(await ws.modelFromUri(Uri.file(path.join(FIX, 'cleaner-analysis.json'))), null);
   assert.strictEqual((await ws.modelFromUri(Uri.file(path.join(FIX, 'Fixture Model.SemanticModel')))).name, 'Fixture Model');
 
-  /* --- open command: one model in the workspace opens straight away --- */
+  /* --- explicitly opening the TMDL model works in a multi-model workspace --- */
   await vscode.commands.executeCommand('semanticModelViewer.openEntry', rows[0]);
   const wv = vscode._panels[0];
   assert.ok(wv, 'webview panel created');
@@ -83,7 +88,8 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   await wv.webview.receive({ type: 'ready' });
   const init = wv.webview.posted.find((m) => m.type === 'init');
   assert.ok(init, 'init message sent');
-  assert.deepStrictEqual(init.models, [{ id: 'ws:Fixture Model.SemanticModel', name: 'Fixture Model', path: 'Fixture Model.SemanticModel' }]);
+  assert.deepStrictEqual(init.models, [{ id: 'ws:Fixture Model.SemanticModel', name: 'Fixture Model', path: 'Fixture Model.SemanticModel' },
+    { id: 'ws:power-query/model.bim', name: 'power-query', path: 'power-query/model.bim' }]);
   assert.ok(init.open && init.open.files.length >= 9, 'model files sent with init: ' + (init.open && init.open.files.length));
   assert.ok(init.open.files.every((f) => /\.(tmdl)$/.test(f.name)), 'only model files, no .pbi / .pbism content: ' + init.open.files.map((f) => f.path).join(','));
   assert.ok(!init.open.files.some((f) => f.path.startsWith('.pbi')));
@@ -101,7 +107,7 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   /* --- request/response: listModels, openModel, storage --- */
   await wv.webview.receive({ type: 'listModels', id: 7 });
   const lm = wv.webview.posted.find((m) => m.id === 7);
-  assert.strictEqual(lm.models.length, 1);
+  assert.deepStrictEqual(lm.models, init.models, 'listModels returns the complete discovered TMDL and BIM set');
 
   await wv.webview.receive({ type: 'openModel', id: 9, modelId: 'ws:nope' });
   const bad = wv.webview.posted.find((m) => m.id === 9);
@@ -114,6 +120,21 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   assert.strictEqual(om.modelId, 'ws:Fixture Model.SemanticModel');
   assert.strictEqual(om.type, 'openModel', 'reply keeps the request type');
   assert.strictEqual(wv.title, 'Fixture Model — Semantic Model Viewer');
+
+  // Standalone BIM discovery must deliver its real metadata through the same host protocol.
+  await wv.webview.receive({ type: 'openModel', id: 11, modelId: 'ws:power-query/model.bim' });
+  const bimOpen = wv.webview.posted.find((m) => m.id === 11);
+  assert.strictEqual(bimOpen.modelId, 'ws:power-query/model.bim');
+  assert.strictEqual(bimOpen.name, 'power-query');
+  assert.deepStrictEqual(bimOpen.files.map((f) => f.name), ['model.bim']);
+  const bimFixture = JSON.parse(fs.readFileSync(path.join(FIX, 'power-query', 'model.bim'), 'utf8'));
+  assert.deepStrictEqual(JSON.parse(bimOpen.files[0].text), bimFixture, 'host preserves the BIM bytes as text');
+  const bimParsed = globalThis.TMDLParser.parseAny(bimOpen.files);
+  assert.strictEqual(bimParsed.powerQuery.nodes.length, 7, 'four partitions and three shared expressions reach the parser');
+  assert.strictEqual(bimParsed.powerQuery.nodes[1].code, bimFixture.model.tables[0].partitions[1].source.expression,
+    'BIM partition M retains its exact trailing whitespace through host delivery and parsing');
+  assert.strictEqual(bimParsed.powerQuery.nodes[4].code, bimFixture.model.expressions[0].expression);
+
 
   await wv.webview.receive({ type: 'storage', key: 'smv_layout_ws:Fixture Model.SemanticModel', value: '{"Fact Sales":{"x":1,"y":2}}' });
   await wv.webview.receive({ type: 'storage', key: 'smv-detail', value: 'cards' });
