@@ -1,6 +1,9 @@
 /* Read-only partial M analysis. No evaluation or connector access.
  * Public API v1 for #37:
- * analyze(node, metadata) -> {dependencies:[{id,name,at}], uncertainty:[string], partial:true}
+ * analyze(node, metadata) -> {dependencies:[{id,name,at}], references:[{id,name,at,end}],
+ *                             uncertainty:[string], partial:true}
+ * References contain every resolved explicit identifier occurrence, using UTF-16
+ * source offsets (end-exclusive). Synthetic implicit-field '_' has no code link.
  * graph(metadata) -> {nodes:[{node,result}], edges:[{from,to,name,at}], cycles:[[id,...]],
  *                     uncertainty:[string], partial:true}
  * Edges are direct syntactic references, not proof of execution. Cycles are strongly
@@ -11,10 +14,10 @@
   'use strict';
   var notice='Partial static inspection; absence of an edge does not prove absence of a dependency.';
   function analyze(node,metadata){
-    var uncertainty=[],dependencies=[],ts=[],pos=0,steps=0;
+    var uncertainty=[],dependencies=[],references=[],ts=[],pos=0,steps=0;
     function warn(s){if(!uncertainty.includes(s))uncertainty.push(s);}
     function fail(s){throw new Error(s);}
-    if(!node||node.state!=='available'||typeof node.code!=='string')return {dependencies:[],uncertainty:['M metadata is missing or not M.',notice],partial:true};
+    if(!node||node.state!=='available'||typeof node.code!=='string')return {dependencies:[],references:[],uncertainty:['M metadata is missing or not M.',notice],partial:true};
     var code=node.code;
     function decode(s){return s.replace(/""/g,'"').replace(/#\(([^)]*)\)/g,function(all,v){var parts=v.split(','),out='';for(var x of parts){if(x==='cr')out+='\r';else if(x==='lf')out+='\n';else if(x==='tab')out+='\t';else if(x==='#')out+='#';else if(/^(?:[0-9a-f]{4}|[0-9a-f]{8})$/i.test(x)&&parseInt(x,16)<=0x10ffff)out+=String.fromCodePoint(parseInt(x,16));else {warn('Unsupported escape: '+all);return all;}}return out;});}
     try{
@@ -28,12 +31,12 @@
           var quoted=c==='#';i+=quoted?2:1;var begin=i,closed=false;
           while(i<code.length){if(code[i]==='"'){if(code[i+1]==='"'){i+=2;continue;}closed=true;break;}i++;}
           if(!closed)fail('Unclosed string or quoted identifier');
-          ts.push({v:decode(code.slice(begin,i)),kind:quoted?'id':'literal',quoted:quoted,at:start});i++;continue;
+          ts.push({v:decode(code.slice(begin,i)),kind:quoted?'id':'literal',quoted:quoted,at:start,end:i+1});i++;continue;
         }
         m=/^(?:[\p{L}_][\p{L}\p{N}\p{M}_]*)(?:\.[\p{L}_][\p{L}\p{N}\p{M}_]*)*/u.exec(code.slice(i));
-        if(m){ts.push({v:m[0],kind:'id',at:start});i+=m[0].length;continue;}
+        if(m){ts.push({v:m[0],kind:'id',at:start,end:i+m[0].length});i+=m[0].length;continue;}
         m=/^#(?:shared|sections|[A-Za-z]+)/.exec(code.slice(i));
-        if(m){ts.push({v:m[0],kind:'id',at:start});i+=m[0].length;continue;}
+        if(m){ts.push({v:m[0],kind:'id',at:start,end:i+m[0].length});i+=m[0].length;continue;}
         m=/^(?:0[xX][\da-fA-F]+|\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/.exec(code.slice(i));
         if(m){ts.push({v:m[0],kind:'literal',at:start});i+=m[0].length;continue;}
         m=/^(?:=>|<>|<=|>=|\.\.\.|\.\.|\?\?)/.exec(code.slice(i));var v=m?m[0]:c;ts.push({v:v,kind:'punct',at:start});i+=v.length;
@@ -95,7 +98,10 @@
         if(a.ref){var t=a.ref,n=t.v,local=scope.get(n);if(local){if(local==='initializing'&&!a.inclusive)warn('Exclusive self-reference during initialization: '+n);return;}
           if(['Expression.Evaluate','Record.Field','Record.FieldOrDefault','#shared','#sections'].includes(n))warn('Dynamic/environment reference: '+n+'; targets cannot be established statically.');
           var found=names.get(n)||[];
-          if(found.length===1&&ids.get(found[0].id)===1){if(!dependencies.some(function(d){return d.id===found[0].id;}))dependencies.push({id:found[0].id,name:n,at:t.at});}
+          if(found.length===1&&ids.get(found[0].id)===1){
+            if(!dependencies.some(function(d){return d.id===found[0].id;}))dependencies.push({id:found[0].id,name:n,at:t.at});
+            if(t.kind==='id')references.push({id:found[0].id,name:n,at:t.at,end:t.end});
+          }
           else if(found.length)warn('Ambiguous reference: '+n+' (duplicate identity/name or multiple partitions).');
           else warn('Unresolved '+(n.includes('.')?'library/external symbol: ':'reference: ')+n);return;
         }
@@ -104,8 +110,8 @@
         (a.items||[]).forEach(function(x){visit(x,scope);});
       }
       visit(ast,new Map());
-    }catch(e){warn('Analysis incomplete: '+e.message);dependencies=[];}
-    warn(notice);return {dependencies:dependencies,uncertainty:uncertainty,partial:true};
+    }catch(e){warn('Analysis incomplete: '+e.message);dependencies=[];references=[];}
+    warn(notice);return {dependencies:dependencies,references:references,uncertainty:uncertainty,partial:true};
   }
   function graph(metadata){
     var nodes=(metadata.nodes||[]).map(function(n){return {node:n,result:analyze(n,metadata)};}),edges=[],uncertainty=[],byId=new Map();
