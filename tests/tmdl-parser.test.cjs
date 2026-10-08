@@ -73,3 +73,16 @@ test('names with an escaped apostrophe keep their measures and columns', () => {
   assert.deepEqual([...table.measures.map(m => m.name)], ["Owner's Total", 'Plain']);
   assert.deepEqual([...table.columns.map(c => c.name)], ["It's"]);
 });
+
+test('measure multiline descriptions and quoted metadata parse correctly',()=>{
+ const model=parser().parseTMDL([file('table.tmdl','table T\n\t/// First\n\t///\n\t/// Third\n\tmeasure M = 1\n\t\tdisplayFolder: "A\\B"\n\t\tformatString: "0 ""units"""\n')]);
+ const m=model.tables[0].measures[0]; assert.equal(m.description,'First\n\nThird'); assert.equal(m.folder,'A\\B'); assert.equal(m.fmt,'0 "units"');
+});
+
+test('relationship projection retains source identity including a BOM first declaration', () => {
+  const model = parser().parseTMDL([
+    file('A.tmdl', 'table A\n\tcolumn Id\n'), file('B.tmdl', 'table B\n\tcolumn Id\n'),
+    file('relationships.tmdl', '\uFEFFrelationship stable-id\n\tfromColumn: A.Id\n\ttoColumn: B.Id\n')
+  ]);
+  assert.equal(model.relationships[0].name, 'stable-id');
+});

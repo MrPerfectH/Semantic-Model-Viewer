@@ -11,7 +11,7 @@ const { runCleaner, loadAnalysisInteractive } = require('./cleaner');
 const STORAGE_PREFIX = 'smv:';
 const VIEW_TYPE = 'semanticModelViewer';
 const MAX_SNAPSHOT_BYTES = 100 * 1024 * 1024;
-const REQUESTS = new Set(['listModels', 'openModel', 'loadAnalysis', 'refreshModel', 'snapshotAssets', 'saveSnapshot', 'prepareMeasureEdit', 'saveMeasureEdit']);
+const REQUESTS = new Set(['listModels', 'openModel', 'loadAnalysis', 'refreshModel', 'snapshotAssets', 'saveSnapshot', 'prepareMeasureEdit', 'saveMeasureEdit', 'prepareRelationshipEdit', 'saveRelationshipEdit']);
 const EVENTS = new Set(['ready', 'storage', 'notify', 'openFile']);
 const storageKey = (key) => typeof key === 'string' && key.length <= 1024 && /^(?:smv[_-].+|lsa_model_layout_v1)$/.test(key) && !/[\u0000-\u001f]/.test(key);
 const requestId = (id) => (typeof id === 'number' && Number.isSafeInteger(id) && id >= 0) || (typeof id === 'string' && id.length > 0 && id.length <= 128);
@@ -200,6 +200,12 @@ class ViewerPanel {
         this.afterOpen(entry, panel, epoch);
         return;
       }
+      case 'prepareRelationshipEdit':
+      case 'saveRelationshipEdit': {
+        if (!vscode.workspace.isTrusted) throw new Error('Trust the workspace before editing model source.');
+        const editor = require('./relationship-save');
+        return reply(msg.type === 'prepareRelationshipEdit' ? await editor.prepare(this, msg, panel, readModelFiles) : await editor.save(this, msg, panel, readModelFiles, vscode));
+      }
       case 'prepareMeasureEdit': {
         if (!vscode.workspace.isTrusted) throw new Error('Trust the workspace before editing model source.');
         if (!this.current || msg.modelId !== this.current.id || this.current.kind === 'file') throw new Error('Open the same TMDL model before editing.');
@@ -207,17 +213,17 @@ class ViewerPanel {
         const files = await readModelFiles(entry);
         if (!this.isCurrent(panel, epoch)) throw new Error('The model changed.');
         const { prepareMeasurePatch } = require('./measure-edit');
-        const candidates = files.filter(f => /\.tmdl$/i.test(f.path)).map(f => ({ file: f, patch: prepareMeasurePatch(f.text, msg.table, msg.measure, msg.dax) })).filter(c => c.patch);
+        const candidates = files.filter(f => /\.tmdl$/i.test(f.path)).map(f => ({ file: f, patch: prepareMeasurePatch(f.text, msg.table, msg.measure, msg.dax, msg.metadata) })).filter(c => c.patch);
         if (candidates.length !== 1) throw new Error('Could not identify one measure source file.');
         const { file, patch } = candidates[0];
         const uri = modelFileUri(entry, file.path);
         const bytes = fs.readFileSync(uri.fsPath);
         if (bytes.toString('utf8').replace(/^\uFEFF/, '') !== file.text.replace(/^\uFEFF/, '') || !Buffer.from(bytes.toString('utf8'), 'utf8').equals(bytes)) throw new Error('Source changed or is not UTF-8. Refresh the model.');
         const original = bytes.toString('utf8');
-        const exact = prepareMeasurePatch(original, msg.table, msg.measure, msg.dax);
+        const exact = prepareMeasurePatch(original, msg.table, msg.measure, msg.dax, msg.metadata);
         const token = crypto.randomBytes(24).toString('hex');
         this.measureEdit = { token, entry, epoch, uri, original, next: exact.text };
-        return reply({ token, path: file.path, before: patch.original, after: msg.dax });
+        return reply({ token, path: file.path, before: msg.metadata ? exact.before : patch.original, after: msg.metadata ? exact.after : msg.dax });
       }
       case 'saveMeasureEdit': {
         if (!vscode.workspace.isTrusted) throw new Error('Trust the workspace before editing model source.');

@@ -56,6 +56,8 @@
     pickAnalysis: function () { return request('loadAnalysis').then(function (r) { return r && r.data ? r.data : null; }); },
     snapshotAssets: function () { return request('snapshotAssets'); },
     saveSnapshot: function (data) { return request('saveSnapshot', data); },
+    prepareRelationshipEdit: function (data) { return request('prepareRelationshipEdit', data); },
+    saveRelationshipEdit: function (token) { return request('saveRelationshipEdit', { token: token }); },
     prepareMeasureEdit: function (data) { return request('prepareMeasureEdit', data); },
     saveMeasureEdit: function (token) { return request('saveMeasureEdit', { token: token }); },
     refreshModel: function () { return request('refreshModel'); },
