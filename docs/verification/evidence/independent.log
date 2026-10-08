@@ -1,0 +1,39 @@
+✔ BIM independently authored inventory, exact text and states (3.539167ms)
+✖ TMDL independently authored inventory, exact text and states (2.964375ms)
+✔ independent scope/lexical/dynamic oracle and cycles (3.5855ms)
+✔ snapshot analytical allowlist excludes all acceptance raw-code sentinels (0.240125ms)
+✔ replacement metadata contains no previous query identities (0.190792ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44.999417
+
+✖ failing tests:
+
+test at tests/pq38-acceptance.test.cjs:12:56
+✖ TMDL independently authored inventory, exact text and states (2.964375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'let\r\n  x = Scalar\r\nin x'
+  - 'let\n  x = Scalar\nin x'
+         ^
+  
+      at TestContext.<anonymous> (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-pq-verification/tests/pq38-acceptance.test.cjs:16:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'let\r\n  x = Scalar\r\nin x',
+    expected: 'let\n  x = Scalar\nin x',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

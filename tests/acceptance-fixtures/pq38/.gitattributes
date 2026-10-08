@@ -1,0 +1,2 @@
+*.tmdl -text
+PQ38.SemanticModel/definition/tables/Sales.tmdl -diff

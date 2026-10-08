@@ -1,0 +1,52 @@
+▶ measure workspace occupies wide screens and persists adjustable layouts
+  ✔ DAX comparison uses both full columns at 1280px (1226.775875ms)
+  ✔ both split positions fit at 1280px (467.34525ms)
+  ✔ DAX comparison uses both full columns at 1920px (419.493625ms)
+  ✔ both split positions fit at 1920px (263.429917ms)
+  ✔ DAX comparison uses both full columns at 2978px (422.010917ms)
+  ✔ both split positions fit at 2978px (81.7145ms)
+  ✔ Fit centers a small vertical graph and zoom still centers the selected node (483.992916ms)
+  ✔ divider supports pointer drag, keyboard resize and persistence (231.477667ms)
+  ✔ snapshot round-trip restores formulas, library, layout and viewport after a fresh document (482.268667ms)
+  ✔ top-level view switching preserves the measure viewport for a Matrix export (432.710291ms)
+  ✔ narrow workspace stacks gracefully without discarding the saved beside preference (35.941125ms)
+✔ measure workspace occupies wide screens and persists adjustable layouts (7137.2285ms)
+✔ lineage inspector preserves root across keyboard code navigation, partition changes and model resets (2118.50825ms)
+ℹ {"stage":"before-key","text":"Collapse 1 references","key":"expand:[\"expression\",\"\",\"A\"]"}
+ℹ {"stage":"after-arrow","text":"Open code","key":"code:[\"expression\",\"\",\"A\"]"}
+ℹ {"stage":"after-enter","focus":"code:[\"expression\",\"\",\"A\"]","heading":"A","highlight":"A"}
+▶ downloaded whole-app snapshot works as a standalone offline file
+  ✔ exports each starting view through the Save snapshot button (762.475959ms)
+  ✔ every downloaded starting view restores in a fresh offline document (648.28625ms)
+  ✔ a blank starting canvas keeps the entire model available offline (132.108625ms)
+  ✔ recipient can explore tables, DAX, Domains and Matrix without the source (334.919334ms)
+  ✔ offline re-export retains recipient changes and can be opened again (199.726042ms)
+✔ downloaded whole-app snapshot works as a standalone offline file (7134.002541ms)
+▶ the whole model fits and stays readable on the first screen (1440x900)
+  ✔ Explore all arranges, fits at or above the floor, and stacks nothing (57.626417ms)
+  ✔ every arrange algorithm lands with nothing stacked (327.659ms)
+  ✔ a focused star opens at half zoom or better (68.841625ms)
+  ✔ names stay at 11px or better from the LOD threshold down to the floor (180.578292ms)
+  ✔ arrowheads are always drawn, cardinality pills only above 50% (65.509167ms)
+✔ the whole model fits and stays readable on the first screen (1440x900) (3084.466209ms)
+ℹ 1440x900 star :: fit 43.9% extent 2492x1207 font 11.31px overlaps 0
+ℹ 1440x900 :: star 43.9% 2492x1207 font 11.3 | constellation 45.0% 2500x1117 font 11.6 | layered 25.1% 5736x1153 font 12.1 | galaxy 44.9% 2492x1180 font 11.5 | columns 25.0% 2144x4721 font 12.1 | waterfall 25.0% 4145x5332 font 12.1 | grid 45.1% 2492x658 font 11.6
+ℹ 1440x900 focused star :: 8 tables at 78.6%
+▶ the whole model fits and stays readable on the first screen (1280x720)
+  ✔ Explore all arranges, fits at or above the floor, and stacks nothing (178.41375ms)
+  ✔ every arrange algorithm lands with nothing stacked (327.061292ms)
+  ✔ a focused star opens at half zoom or better (62.53125ms)
+  ✔ names stay at 11px or better from the LOD threshold down to the floor (201.576625ms)
+  ✔ arrowheads are always drawn, cardinality pills only above 50% (80.537667ms)
+✔ the whole model fits and stays readable on the first screen (1280x720) (2688.152125ms)
+ℹ 1280x720 star :: fit 25.0% extent 3388x2067 font 12.06px overlaps 0
+ℹ 1280x720 :: star 25.0% 3388x2067 font 12.1 | constellation 25.0% 3717x1814 font 12.1 | layered 25.0% 5736x1153 font 12.1 | galaxy 25.0% 2881x2285 font 12.1 | columns 25.0% 2144x4721 font 12.1 | waterfall 25.0% 4145x5332 font 12.1 | grid 40.8% 2412x671 font 12.3
+ℹ 1280x720 focused star :: 8 tables at 62.7%
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7176.227333

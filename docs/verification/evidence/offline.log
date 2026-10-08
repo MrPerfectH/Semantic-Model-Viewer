@@ -1,0 +1,11 @@
+✔ actual PQ38 exports open and re-export offline without raw M or source access (1560.423458ms)
+ℹ {"input":"/Users/przemek.harazny/.t3/userdata/server-browser/downloads/01fa84a6c04dc46899d3d78ec9ca59b8ab8e8edf1e319fdd4dce80c4efb19014/09d76293-6bf4-44f2-add3-8d36b0c23821","reexportBytes":581143,"access":{"network":0,"storage":0,"errors":[]}}
+ℹ {"input":"/tmp/pq38-native-snapshot.html","reexportBytes":580677,"access":{"network":0,"storage":0,"errors":[]}}
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1603.702542

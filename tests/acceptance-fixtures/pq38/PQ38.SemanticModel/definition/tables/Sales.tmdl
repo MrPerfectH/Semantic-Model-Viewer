@@ -1,0 +1,19 @@
+table 'Acceptance Sales'
+	column Amount
+		dataType: int64
+	partition 'Main ''quoted''' = m
+		source = ```
+			let
+			  Source = #"Base Query",
+			  Text = "PQ_RAW_ONLY_38 ""quoted"" λ"  
+			in Source
+			
+			```
+	partition Other = m
+		source =
+			let
+			  x = Scalar
+			in x
+	partition Calculated = calculated
+		source = 1
+	partition Missing = m

@@ -1,0 +1,13 @@
+{
+  "candidate": "234dfae6b5588364ef49d559b72a3235204655d0",
+  "file": "/Users/przemek.harazny/.t3/userdata/server-browser/downloads/01fa84a6c04dc46899d3d78ec9ca59b8ab8e8edf1e319fdd4dce80c4efb19014/ce24ade5-6f68-4119-85b7-e3f6db5fd3af",
+  "bytes": 580560,
+  "sha256": "0c9a26a284ea279c214f19cd0f6e6316bbbf199044941453b53cd3c591a65a82",
+  "markersAbsent": {
+    "PQ_RAW_ONLY_38": true,
+    "PQ_SHARED_ONLY_38": true,
+    "PQ_CREDENTIAL_ONLY_38": true,
+    "pq-private-38.invalid": true
+  },
+  "powerQueryAbsent": true
+}
