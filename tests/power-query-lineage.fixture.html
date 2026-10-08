@@ -1,0 +1,24 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Power Query lineage interaction fixture</title>
+<link rel="stylesheet" href="../Models/tools/viewer/power-query.css">
+<link rel="stylesheet" href="../Models/tools/viewer/power-query-lineage.css">
+<style>body{font-family:system-ui;background:#172033;color:#edf2fa}button,select,input{font:inherit} button{background:#25324b;color:inherit;border:1px solid #526078;border-radius:5px;padding:6px}</style>
+<h1>Synthetic lineage interaction fixture</h1>
+<p>Open → expand A → ArrowUp → Enter opens exact A code while Main remains the graph root. Other partition has one node. Switching back restores expansion. Replace model resets it. Large model exposes reference pages.</p>
+<button id="open">Open synthetic model</button>
+<button id="replace">Replace model</button>
+<button id="large">Open large model</button>
+<script src="../Models/tools/viewer/js/util.js"></script>
+<script src="../Models/tools/viewer/js/roles.js"></script>
+<script src="../Models/tools/viewer/js/tmdl-parser.js"></script>
+<script src="../Models/tools/viewer/js/power-query-dependencies.js"></script>
+<script src="../Models/tools/viewer/js/power-query-lineage.js"></script>
+<script src="../Models/tools/viewer/js/power-query.js"></script>
+<script>
+function synthetic(large){return TMDLParser.parseBIM({model:{tables:[{name:'Sales',partitions:[{name:'Main',source:{type:'m',expression:large?Array.from({length:100},(_,i)=>'Q'+i).join(' & '):'A'}},{name:'Other',source:{type:'m',expression:'1'}}]}],expressions:large?Array.from({length:350},(_,i)=>({name:'Q'+i,kind:'m',expression:'1'})):[{name:'A',kind:'m',expression:'B & Expression.Evaluate("Unknown")'},{name:'B',kind:'m',expression:'A'},{name:'Disconnected',kind:'m',expression:'1'}]}});}
+window.fixtureApp={model:synthetic(false)};
+document.getElementById('open').onclick=function(){PowerQuery.open(fixtureApp,'Sales');};
+document.getElementById('replace').onclick=function(){PowerQuery.close(fixtureApp);fixtureApp.model=synthetic(false);PowerQuery.open(fixtureApp,'Sales');};
+document.getElementById('large').onclick=function(){PowerQuery.close(fixtureApp);fixtureApp.model=synthetic(true);PowerQuery.open(fixtureApp,'Sales');};
+</script>
