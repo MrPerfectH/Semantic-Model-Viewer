@@ -1,6 +1,7 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
+const path=require('node:path');
 const vm=require('node:vm');
 class Element {
  constructor(tag,doc){this.tagName=tag;this.ownerDocument=doc;this.children=[];this.dataset={};this.listeners={};this.attributes={};this.scrollTop=0;this.className='';this.classList={add:(name)=>{this.className+=' '+name;}};}
@@ -13,7 +14,7 @@ class Element {
  focus(options){this.focusOptions=options;this.ownerDocument.activeElement=this;}
  click(){this.listeners.click?.();}
 }
-function harness(){const doc={createElement(tag){return new Element(tag,this);}},g={console};g.window=g;vm.createContext(g);for(const file of ['power-query-dependencies.js','power-query-lineage.js'])vm.runInContext(fs.readFileSync('Models/tools/viewer/js/'+file,'utf8'),g);return {g,doc,host:doc.createElement('section')};}
+function harness(){const doc={createElement(tag){return new Element(tag,this);}},g={console};g.window=g;vm.createContext(g);for(const file of ['power-query-dependencies.js','power-query-lineage.js'])vm.runInContext(fs.readFileSync(path.resolve(__dirname,'../Models/tools/viewer/js',file),'utf8'),g);return {g,doc,host:doc.createElement('section')};}
 function node(name,code='1',extra={}){return {id:name,name,code,kind:'expression',classification:'query',state:'available',...extra};}
 function setup(nodes){const h=harness(),metadata={nodes,warnings:[]},app={model:{powerQuery:metadata}},context={app,metadata,table:'Sales',partitionId:'P',selected:nodes[0]};context.openCode=id=>{context.selected=metadata.nodes.find(n=>n.id===id);h.host=h.doc.createElement('section');h.g.PowerQueryLineage.render(h.host,context);};h.context=context;h.render=()=>h.g.PowerQueryLineage.render(h.host,context);h.render();return h;}
 const root=(code='A',extra={})=>node('P',code,{kind:'partition',table:'Sales',...extra});
