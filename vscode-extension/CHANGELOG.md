@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Inspect read-only Power Query partition M and shared queries, parameters and functions.
+- Follow partial static dependencies and table/partition-focused upstream flows with
+  explicit uncertainty, cycle markers, keyboard navigation and bounded reference pages.
+- Keep raw M excluded from shared snapshots; no M evaluation or source-data reads.
 - Keep measures, columns and tables whose names contain an apostrophe (`measure 'Owner''s Total'`). They were silently dropped before.
 - Stop the hosted demo from probing for the local app, which logged a 404 in the browser console.
 

@@ -4,7 +4,7 @@
   'use strict';
   var FORMAT = 'semantic-model-viewer', VERSION = 1;
   var FILES = ['js/util.js', 'js/snapshot.js', 'js/usage-adapter.js', 'js/roles.js', 'js/tmdl-parser.js', 'js/canvas.js', 'js/layouts.js',
-    'js/matrix.js', 'js/measures.js', 'js/power-query-dependencies.js', 'js/power-query.js', 'js/sidebar.js', 'js/topbar.js', 'js/rules.js', 'js/relationships.js', 'js/explorer.js', 'js/app.js', 'explorer.css', 'measures.css', 'power-query.css'];
+    'js/matrix.js', 'js/measures.js', 'js/power-query-dependencies.js', 'js/power-query-lineage.js', 'js/power-query.js', 'js/sidebar.js', 'js/topbar.js', 'js/rules.js', 'js/relationships.js', 'js/explorer.js', 'js/app.js', 'explorer.css', 'measures.css', 'power-query.css', 'power-query-lineage.css'];
   var CSP = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
   function clone(value) { return value == null ? null : JSON.parse(JSON.stringify(value)); }
   function pick(value, keys) {

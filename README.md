@@ -409,3 +409,14 @@ sources and shared expressions, plus the corresponding `model.bim` metadata, are
 supported. Missing and non-M metadata have explicit states. Pre-generated viewer
 JSON and shared snapshots may omit M. Raw M remains excluded from **Save snapshot**.
 See [the metadata contract and limitations](docs/power-query-contract.md).
+
+
+Select a table and partition to explore **Upstream query flow**. Expand or collapse
+references, follow arrow links and open exact code from a node. Shared-code inspection
+highlights that node while keeping the chosen table/partition as the graph root. Cycles,
+missing metadata, ambiguous references and unsupported/dynamic M are explicit; static
+references do not establish execution order or complete dependency coverage. Large
+flows page references 40 at a time and cap the display at 80 nodes / 160 edges. Above
+300 metadata nodes, graph analysis covers visible upstream nodes and visible cycles.
+Keyboard users can Tab to actions, use Enter to open code, and use arrow keys/Home/End
+within graph actions. Escape closes the inspector. Changing models resets graph state.

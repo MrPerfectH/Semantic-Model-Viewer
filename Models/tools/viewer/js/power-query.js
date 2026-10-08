@@ -20,11 +20,12 @@
   var el=U.el,sv=U.sv;
   function open(app,table){
     close(app);var previous=document.activeElement,metadata=app.model&&app.model.powerQuery||{nodes:[],warnings:[]},model=app.model;
+    var metadataIdentity=model&&model.powerQuery;
     var nodes=metadata.nodes||[], selected=null,root=null,query='',codeQuery='';
     var overlay=el('div',{cls:'pq-overlay','data-canvas-overlay':true}),dialog=el('section',{cls:'pq-dialog',role:'dialog','aria-modal':'true','aria-label':'Power Query metadata',tabindex:'-1'});
-    function dismiss(){close(app);if(previous&&previous.isConnected)previous.focus();}
+    function dismiss(){var current=app._powerQueryOverlay===overlay;if(current)close(app);else overlay.remove();if(current&&previous&&previous.isConnected)previous.focus();}
     overlay.appendChild(dialog);document.body.appendChild(overlay);app._powerQueryOverlay=overlay;app._powerQueryClose=dismiss;
-    function valid(){if(app.model!==model){dismiss();return false;}return true;}
+    function valid(){if(app.model!==model||app.model.powerQuery!==metadataIdentity||app._powerQueryOverlay!==overlay){if(app._powerQueryOverlay===overlay)close(app);else overlay.remove();return false;}return true;}
     var head=el('header',{},[el('h2',{text:'Power Query metadata'}),el('button',{text:'Close',onClick:dismiss})]);dialog.appendChild(head);
     dialog.appendChild(el('p',{cls:'pq-note',text:'Read-only metadata. M is never executed. Raw M is excluded from shared snapshots. Dependencies are partial static findings.'}));
     var content=el('div',{cls:'pq-content'}),library=el('aside',{cls:'pq-library'}),main=el('main',{cls:'pq-main'});content.appendChild(library);content.appendChild(main);dialog.appendChild(content);
