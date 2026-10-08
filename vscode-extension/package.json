@@ -171,7 +171,7 @@
     "test": "npm run sync-viewer && npm run check-viewer && node --test --test-concurrency=1 ../tests/*.test.cjs ../tests/extension.test.js ../tests/usage-adapter.test.js ../Models/tools/viewer/tests/*.test.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.85.0",
+    "@types/vscode": "^1.140.0",
     "@vscode/vsce": "^3.0.0"
   },
   "icon": "images/icon.png",
