@@ -271,7 +271,7 @@
       var rmap = { fact: 'FACT', dim: 'DIM', helper: 'HLP', calcgroup: 'CG', fieldparam: 'FP', measures: 'M', standalone: 'STD', unknown: 'UNK' };
       var role = el('span', { text: rmap[t.role] || 'TBL', style: 'font:700 8.5px/1 "IBM Plex Mono",monospace;letter-spacing:.4px;padding:4px 5px;border-radius:4px;flex:none;color:#fff;margin-top:1px;' });
       var titleWrap = el('div', { style: 'flex:1;min-width:0;' });
-      var nm = el('div', { text: t.name, title: t.name, style: 'font:600 13.5px/1.2 "IBM Plex Sans";letter-spacing:-.2px;color:#1f2430;word-break:break-word;' });
+      var nm = el('div', { text: t.name, title: t.name, style: 'font:600 13.5px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:-.2px;color:#1f2430;word-break:break-word;' });
       var src = el('div', {
         title: sm.kind + (sm.detail && sm.detail !== '—' ? ' · ' + sm.detail : '') + (sm.via ? '\nvia ' + sm.via : '') + (sm.server ? '\n' + sm.server : ''),
         html: '<span style="margin-right:4px;opacity:.85;">' + sm.icon + '</span>' + U.esc(sm.detail && sm.detail !== '—' ? sm.detail : sm.kind),
@@ -340,7 +340,7 @@
       });
       if (t.measures && t.measures.length) {
         body.appendChild(el('div', {
-          text: 'Measures', style: 'padding:7px 14px 4px;font:700 9px/1 "IBM Plex Sans";letter-spacing:.5px;text-transform:uppercase;color:#b3b9c2;border-top:1px solid #eef0f3;margin-top:2px;'
+          text: 'Measures', style: 'padding:7px 14px 4px;font:700 9px/1 "IBM Plex Sans",sans-serif;letter-spacing:.5px;text-transform:uppercase;color:#b3b9c2;border-top:1px solid #eef0f3;margin-top:2px;'
         }));
         t.measures.forEach(function (m) {
           var u = app.msrUse(m.name);
@@ -615,7 +615,7 @@
           /* -webkit-box + line-clamp is the one wrap that ellipsises the LAST line instead of
              cutting it: the name breaks over up to three lines and only what still does not
              fit is replaced by the ellipsis, so a reader always keeps the opening words. */
-          c.nm.style.font = '600 ' + m.font.toFixed(2) + 'px/' + m.lead + ' "IBM Plex Sans"';
+          c.nm.style.font = '600 ' + m.font.toFixed(2) + 'px/' + m.lead + ' "IBM Plex Sans",sans-serif';
           c.nm.style.display = '-webkit-box';
           c.nm.style.webkitLineClamp = String(m.lines);
           c.nm.style.webkitBoxOrient = 'vertical';
@@ -637,7 +637,7 @@
           c.caret.style.display = 'flex';
           c.meta.style.display = 'flex';
           c.body.style.display = c.expanded ? 'block' : 'none';
-          c.nm.style.font = '600 13.5px/1.2 "IBM Plex Sans"';
+          c.nm.style.font = '600 13.5px/1.2 "IBM Plex Sans",sans-serif';
           c.nm.style.display = '';
           c.nm.style.webkitLineClamp = '';
           c.nm.style.overflow = '';
@@ -1370,12 +1370,12 @@
           el('span', { style: 'display:block;font-size:12.5px;font-weight:600;color:#1f2430;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', text: t.name }),
           el('span', { style: 'display:block;font:500 10.5px/1.3 "IBM Plex Mono",monospace;color:#5b6472;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;', text: colName })
         ]));
-        row.appendChild(el('span', { text: card, style: 'flex:none;width:24px;height:24px;border-radius:7px;background:#eef0f3;color:#1f2430;font:700 13px/24px "IBM Plex Sans";text-align:center;' }));
+        row.appendChild(el('span', { text: card, style: 'flex:none;width:24px;height:24px;border-radius:7px;background:#eef0f3;color:#1f2430;font:700 13px/24px "IBM Plex Sans",sans-serif;text-align:center;' }));
         return row;
       };
       var head = el('div', { style: 'display:flex;align-items:center;gap:8px;padding:9px 10px 8px 12px;background:#1f2430;color:#fff;' }, [
         el('span', { style: 'font-size:10px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;color:#c9ced8;flex:1;', text: 'Relationship' }),
-        r.inactive ? el('span', { text: 'inactive', style: 'font:600 9.5px/1 "IBM Plex Sans";padding:4px 6px;border-radius:5px;background:#fca5a5;color:#7f1d1d;' }) : null,
+        r.inactive ? el('span', { text: 'inactive', style: 'font:600 9.5px/1 "IBM Plex Sans",sans-serif;padding:4px 6px;border-radius:5px;background:#fca5a5;color:#7f1d1d;' }) : null,
         el('button', {
           text: '×', title: 'Close (Esc)', onClick: function () { self.selectRel(null); },
           style: 'width:22px;height:22px;border:none;background:rgba(255,255,255,.14);color:#fff;border-radius:6px;cursor:pointer;font-size:14px;line-height:1;flex:none;'
