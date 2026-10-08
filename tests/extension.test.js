@@ -134,6 +134,13 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   assert.strictEqual(bimParsed.powerQuery.nodes[1].code, bimFixture.model.tables[0].partitions[1].source.expression,
     'BIM partition M retains its exact trailing whitespace through host delivery and parsing');
   assert.strictEqual(bimParsed.powerQuery.nodes[4].code, bimFixture.model.expressions[0].expression);
+  // Restore the TMDL model before the existing analysis/refresh lifecycle checks.
+  await wv.webview.receive({ type: 'openModel', id: 12, modelId: 'ws:Fixture Model.SemanticModel' });
+  const restored = wv.webview.posted.find((m) => m.id === 12);
+  assert.strictEqual(restored.modelId, 'ws:Fixture Model.SemanticModel');
+  assert.ok(restored.files.length >= 9, 'switching back restores the full TMDL file set');
+  assert.strictEqual(wv.title, 'Fixture Model — Semantic Model Viewer');
+
 
 
   await wv.webview.receive({ type: 'storage', key: 'smv_layout_ws:Fixture Model.SemanticModel', value: '{"Fact Sales":{"x":1,"y":2}}' });

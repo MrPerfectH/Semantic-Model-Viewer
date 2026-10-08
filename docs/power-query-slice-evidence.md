@@ -15,6 +15,12 @@ Branch: `feat/power-query-metadata-lineage`, based on `cf28982`.
   archive exclusion, init handshake and listModels assertions. The correction keeps
   the BIM discoverable, asserts the exact complete TMDL/BIM set, and verifies BIM
   host-protocol delivery and exact M parsing. No discovery filters were weakened.
+- First correction commit `b4a37a0238017c67500847da0b18699cea08cec4` still failed
+  **234 passed, 1 failed** in the existing refresh assertion. The new BIM protocol
+  check left that model active; the later TMDL refresh assertion therefore saw one
+  BIM file. Log: `/tmp/pq-prerequisite-b4a37a0238017c67500847da0b18699cea08cec4.log`.
+  The follow-up explicitly reopens/asserts the TMDL model before its analysis/refresh
+  lifecycle checks, preserving both BIM coverage and the original refresh checks.
 - The corrected commit requires a fresh full `npm test --prefix vscode-extension`
   and generated-asset `--check` at its exact hash. Results and hashes are recorded
   in the #34/#35 correction comments after that run.
