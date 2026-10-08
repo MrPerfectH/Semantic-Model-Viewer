@@ -105,10 +105,10 @@ Version 0.2.0 integrates the VS Code extension work recovered from
 `origin/claude/model-viewer-vsc-plugin-dfmn8c` with the current shared viewer. It supersedes
 the earlier 0.1.0 package, which targeted the former `viewer/` source directory.
 
-## Preview: editing existing measure DAX
+## Preview: editing model source
 
-On the `t3/edit-model-context` branch, open a TMDL model, select a measure in **Measures**, and choose **Edit DAX**. Enter a formula, choose **Review change**, inspect the before/after expressions and source path, then choose **Save to TMDL**. Cancel leaves source unchanged. Changing the draft invalidates the review.
+On the `t3/edit-model-context` branch, open a TMDL model and use **Measures → select measure → Edit DAX** or **Edit metadata**. Metadata includes description, display folder and static format string. Use **Edit relationships** in the toolbar to create or modify a relationship between existing columns. Every flow offers Review, Save to TMDL and Cancel; changing a draft invalidates its review.
 
-This preview supports ordinary tab-indented measure expressions in UTF-8 TMDL files. It preserves unrelated source, BOM and line endings, and blocks saves after external file changes, unsaved source-editor changes or model switching. Fenced expressions and other unsupported layouts must be edited in the source editor. DAX engine validation, relationship editing, metadata editing and renames are not included in this first slice.
+This preview patches supported UTF-8 source sections instead of serializing the simplified viewer model. It preserves unrelated content, BOM and line endings, checks source changes and dirty model editors, and refreshes from saved source. Descriptions and scalar metadata follow [Microsoft's TMDL syntax](https://learn.microsoft.com/en-us/analysis-services/tmdl/tmdl-overview).
 
-For manual verification, use a disposable model copy: save a formula and inspect the Git diff, cancel another edit, then modify the source after reviewing and confirm that saving is refused. Installed VS Code behavior requires separate manual verification before merge.
+Supported boundaries and the manual verification checklist are in [Model editing preview](../docs/model-editing-preview.md). Rename design is a separate proposal. Installed VS Code behavior and model-engine validation require separate acceptance before merge.
