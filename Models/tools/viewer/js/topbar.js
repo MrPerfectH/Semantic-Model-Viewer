@@ -45,6 +45,7 @@
     [['graph','Tables'],['measures','Measures'],['clusters','Domains'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
     this.host.appendChild(nav);
     var actions=el('div',{cls:'ex-header-actions'});
+    if(!offline && st.loaded && (app.editHost ? app.editHost() : app.host) && (app.editHost ? app.editHost() : app.host).prepareRelationshipEdit) actions.appendChild(el('button',{cls:'ex-button',text:'Edit relationships',onClick:function(){g.SMVRelationshipEditor.open(app);}}));
     actions.appendChild(el('span',{cls:offline?'ex-snapshot-badge':'ex-local-badge',text:offline?'Offline snapshot':app.host?'VS Code workspace':'Local analysis',
       title:offline?'Includes model metadata and DAX. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'}));
     actions.appendChild(el('button',{cls:'ex-button ex-snapshot-export',text:st.snapshotSaving?'Saving snapshot…':'Save snapshot',disabled:!st.loaded||!!st.snapshotSaving,
