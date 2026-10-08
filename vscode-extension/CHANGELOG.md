@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Keep measures, columns and tables whose names contain an apostrophe (`measure 'Owner''s Total'`). They were silently dropped before.
+- Stop the hosted demo from probing for the local app, which logged a 404 in the browser console.
+
 ## 0.3.3
 
 - Refuse requests to the local server that use a foreign host name, which closes a DNS-rebinding gap.

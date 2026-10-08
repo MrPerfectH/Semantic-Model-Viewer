@@ -8,3 +8,6 @@ updates:
     directory: /vscode-extension
     schedule:
       interval: weekly
+    ignore:
+      # @types/vscode must not be newer than engines.vscode, or `vsce package` fails.
+      - dependency-name: "@types/vscode"

@@ -60,3 +60,16 @@ test('the repo fixture (inline database name) still parses to its real name', ()
   assert.equal(model.name, 'Fixture Model');
   assert.ok(model.tables.length > 0);
 });
+
+test('names with an escaped apostrophe keep their measures and columns', () => {
+  const TMDLParser = parser();
+  const files = [
+    file('model.tmdl', 'model Model\n\tculture: en-US\n'),
+    file('table.tmdl', "table 'Owner''s Sales'\n\tmeasure 'Owner''s Total' = 42\n\tmeasure Plain = [Owner's Total] + 1\n\n\tcolumn 'It''s'\n\t\tdataType: string\n"),
+  ];
+  const model = TMDLParser.parseTMDL(files);
+  const table = model.tables[0];
+  assert.equal(table.name, "Owner's Sales");
+  assert.deepEqual([...table.measures.map(m => m.name)], ["Owner's Total", 'Plain']);
+  assert.deepEqual([...table.columns.map(c => c.name)], ["It's"]);
+});
