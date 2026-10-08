@@ -1,8 +1,8 @@
 /* TMDL / BIM -> viewer model JSON. Exposes global TMDLParser. */
 (function(g){
-  function unq(s){ s=String(s).trim(); return (s[0]==="'"&&s[s.length-1]==="'")?s.slice(1,-1):s; }
+  function unq(s){ s=String(s).trim(); return (s[0]==="'"&&s[s.length-1]==="'")?s.slice(1,-1).replace(/''/g,"'"):s; }
   function cap(s){ s=String(s||''); return s? s[0].toUpperCase()+s.slice(1):s; }
-  function parseRef(s){ s=s.trim(); var m=s.match(/^'([^']+)'\.(.+)$/); if(m) return {table:m[1], column:unq(m[2])};
+  function parseRef(s){ s=s.trim(); var m=s.match(/^'((?:[^']|'')+)'\.(.+)$/); if(m) return {table:m[1].replace(/''/g,"'"), column:unq(m[2])};
     var i=s.indexOf('.'); if(i<0) return null; return {table:s.slice(0,i).trim(), column:unq(s.slice(i+1))}; }
 
   function parseRelText(text){
@@ -33,8 +33,8 @@
       if(!table) continue;
       if(ind===1){
         curCol=null; curMeas=null; mode=null;
-        if((m=t.match(/^column\s+('[^']+'|"[^"]+"|[^\s=]+)(\s*=.*)?$/))){ curCol={name:unq(m[1].replace(/"/g,'')), dataType:'', hidden:false, isCalc:!!m[2], isKey:false, rel:false}; table.columns.push(curCol); mode='column'; continue; }
-        if((m=t.match(/^measure\s+('[^']+'|"[^"]+"|[^\s=]+)\s*=\s*(.*)$/))){ curMeas={name:unq(m[1].replace(/"/g,'')), dax:(m[2]||'').trim(), folder:'', fmt:''}; table.measures.push(curMeas); mode='measure'; continue; }
+        if((m=t.match(/^column\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)(\s*=.*)?$/))){ curCol={name:unq(m[1].replace(/"/g,'')), dataType:'', hidden:false, isCalc:!!m[2], isKey:false, rel:false}; table.columns.push(curCol); mode='column'; continue; }
+        if((m=t.match(/^measure\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)\s*=\s*(.*)$/))){ curMeas={name:unq(m[1].replace(/"/g,'')), dax:(m[2]||'').trim(), folder:'', fmt:''}; table.measures.push(curMeas); mode='measure'; continue; }
         if(/^calculationGroup\b/.test(t)){ isCG=true; continue; }
         if((m=t.match(/^partition\s+.*?=\s*(\w+)\s*$/))){ partKind=m[1]; mode='partition'; continue; }
         if((m=t.match(/^annotation\s+SMV_Role\s*=\s*(\w+)/i))){ table.roleAnnotation=m[1].toLowerCase(); continue; }
@@ -232,7 +232,7 @@
       var raw=lines[i], t=raw.trim(), m;
       if(/^\S/.test(raw)){
         flush();
-        if((m=t.match(/^expression\s+('[^']+'|[^\s=]+)\s*=\s*(.*)$/))){
+        if((m=t.match(/^expression\s+('(?:[^']|'')+'|[^\s=]+)\s*=\s*(.*)$/))){
           cur=unq(m[1]); buf=[];
           var inline=(m[2]||'').trim();
           if(inline){

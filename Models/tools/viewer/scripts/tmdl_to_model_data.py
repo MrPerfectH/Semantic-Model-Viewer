@@ -36,7 +36,7 @@ import sys
 def unq(s: str) -> str:
     s = str(s).strip()
     if len(s) >= 2 and s[0] == "'" and s[-1] == "'":
-        return s[1:-1]
+        return s[1:-1].replace("''", "'")
     return s
 
 
@@ -48,9 +48,9 @@ def cap(s: str) -> str:
 def parse_ref(s: str):
     """'Table Name'.column  |  Table.column -> (table, column)"""
     s = s.strip()
-    m = re.match(r"^'([^']+)'\.(.+)$", s)
+    m = re.match(r"^'((?:[^']|'')+)'\.(.+)$", s)
     if m:
-        return m.group(1), unq(m.group(2))
+        return m.group(1).replace("''", "'"), unq(m.group(2))
     i = s.find(".")
     if i < 0:
         return None
@@ -127,14 +127,14 @@ def parse_table_text(text: str):
         if ind == 1:
             cur_col = cur_meas = None
             mode = None
-            m = re.match(r"^column\s+('[^']+'|\"[^\"]+\"|[^\s=]+)(\s*=.*)?$", t)
+            m = re.match(r"^column\s+('(?:[^']|'')+'|\"[^\"]+\"|[^\s=]+)(\s*=.*)?$", t)
             if m:
                 cur_col = {"name": unq(m.group(1).replace('"', "")), "dataType": "", "hidden": False,
                            "isCalc": bool(m.group(2)), "isKey": False, "rel": False}
                 table["columns"].append(cur_col)
                 mode = "column"
                 continue
-            m = re.match(r"^measure\s+('[^']+'|\"[^\"]+\"|[^\s=]+)\s*=\s*(.*)$", t)
+            m = re.match(r"^measure\s+('(?:[^']|'')+'|\"[^\"]+\"|[^\s=]+)\s*=\s*(.*)$", t)
             if m:
                 cur_meas = {"name": unq(m.group(1).replace('"', "")), "dax": (m.group(2) or "").strip(),
                             "folder": "", "fmt": ""}
@@ -357,7 +357,7 @@ def parse_expr_text(text: str, ctx: dict) -> None:
         t = raw.strip()
         if raw[:1] not in ("", "\t", " "):
             flush()
-            m = re.match(r"^expression\s+('[^']+'|[^\s=]+)\s*=\s*(.*)$", t)
+            m = re.match(r"^expression\s+('(?:[^']|'')+'|[^\s=]+)\s*=\s*(.*)$", t)
             if m:
                 cur, buf = unq(m.group(1)), []
                 inline = (m.group(2) or "").strip()

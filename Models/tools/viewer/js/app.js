@@ -895,6 +895,8 @@
        the File System Access API when there is no server. */
     detectServer: async function () {
       if (this.host || this.snapshotMode || typeof location === 'undefined' || !/^https?:$/.test(location.protocol)) return null;
+      // The local app only answers on this computer; skip the probe on a hosted copy (it would just 404).
+      if (!/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) return null;
       try {
         var r = await fetch('api/ping', { cache: 'no-store' });
         if (!r.ok) return null;
