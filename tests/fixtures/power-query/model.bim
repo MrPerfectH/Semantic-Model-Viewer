@@ -1,0 +1,19 @@
+{
+  "name": "Power Query synthetic fixture",
+  "model": {
+    "tables": [
+      {"name":"Sales","columns":[{"name":"Amount","dataType":"double"}],"partitions":[
+        {"name":"Current","source":{"type":"m","expression":["let","  Source = #\"Staged Sales\",","  Quoted = \"a \"\"quoted\"\" value\"","in Source"]}},
+        {"name":"Archive","source":{"type":"m","expression":"let\n  Source = #\"Staged Sales\"\nin Source  "}},
+        {"name":"Calculated","source":{"type":"calculated","expression":"ROW(\"Amount\", 1)"}},
+        {"name":"Missing M","source":{"type":"m"}}
+      ]}
+    ],
+    "expressions": [
+      {"name":"Staged Sales","kind":"m","expression":"let\n  Source = #table({\"Amount\"}, {{1}})\nin Source"},
+      {"name":"Environment","kind":"m","expression":"\"synthetic\" meta [IsParameterQuery=true, Type=\"Text\"]"},
+      {"name":"Transform Sales","kind":"m","expression":"(input as table) as table => input"}
+    ],
+    "relationships": []
+  }
+}

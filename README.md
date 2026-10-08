@@ -398,3 +398,14 @@ Bug reports, ideas and questions are welcome through
 Semantic Model Viewer is built and maintained by Przemek Harazny
 ([@MrPerfectH](https://github.com/MrPerfectH)) as a personal open-source project. The demo
 model and its screenshots use only synthetic data.
+
+### Power Query metadata (feature branch)
+
+Open **Power Query** in the top bar, or select a table and choose **Power Query code**.
+Choose a partition to inspect read-only highlighted M, find text and copy it. The
+searchable shared-expression library shows query, parameter and function hints with
+the classification basis. No M runs and no source data is fetched. TMDL partition
+sources and shared expressions, plus the corresponding `model.bim` metadata, are
+supported. Missing and non-M metadata have explicit states. Pre-generated viewer
+JSON and shared snapshots may omit M. Raw M remains excluded from **Save snapshot**.
+See [the metadata contract and limitations](docs/power-query-contract.md).

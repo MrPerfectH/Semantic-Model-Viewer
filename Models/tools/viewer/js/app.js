@@ -451,6 +451,7 @@
       if (opts.persist !== false) store.set('smv_current_v1', key);
       this.prepareModel(model);
       this.applyRoles(model, key);
+      if(g.PowerQuery)g.PowerQuery.close(this);
       this.model = model;
       this._tableWorkspace = null; this._tableViewport = null; this._domainWorkspace = null; this._matrixWorkspace = null;
       if (this.explorer) this.explorer.loadModel();
@@ -538,7 +539,7 @@
       this.state.viewMode = 'graph';
       this.modelKey = record.id; this.canvas.setLayoutKey('smv_layout_' + record.id);
       this._usage = null; this._usageMeta = null; this._usageStatus = null; this._usageCols = null;
-      this.prepareModel(model); this.applyRoles(model, record.id); this.model = model;
+      this.prepareModel(model); this.applyRoles(model, record.id); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
       this._tableWorkspace = null; this._tableViewport = null; this._domainWorkspace = null; this._matrixWorkspace = null;
       if (this.explorer) this.explorer.loadModel();
       var cv = this.canvas;
@@ -1274,7 +1275,7 @@
       var model = JSON.parse(JSON.stringify(payload.model)), workspace = payload.workspace || {}, cv = this.canvas, ex = this.explorer;
       model.tables.forEach(function (table) { table.source = table.source || { kind: 'other' }; table.domain = table.domain || 'Other'; });
       // Exported role decisions are part of the snapshot. Do not apply recipient rules.
-      this.prepareModel(model); this.model = model;
+      this.prepareModel(model); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
       this._usage = payload.usage && payload.usage.measures || null;
       this._usageMeta = payload.usage && payload.usage.meta || null;
       this._usageStatus = payload.usage && payload.usage.status || null; this._usageCols = payload.usage && payload.usage.columns || null;

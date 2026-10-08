@@ -251,6 +251,56 @@
     flush();
   }
 
+  /* Read metadata, never evaluate expressions. IDs encode object paths, not file order. */
+  function pqId(kind, table, name) { return JSON.stringify([kind, table || '', name]); }
+  function pqNode(kind, table, name, type, code, declared) {
+    var classification='query', basis='inferred from syntax';
+    if(declared && declared!=='m') {classification=declared;basis='declared kind';}
+    else if(typeof code==='string' && /\bmeta\s*\[[\s\S]*\bIsParameterQuery\s*=\s*true\b/.test(code)) {classification='parameter';basis='M metadata marker (not evaluated)';}
+    else if(typeof code==='string' && /^\s*\([^]*?\)\s*(?:as\s+\w+\s*)?=>/.test(code)) classification='function';
+    return {id:pqId(kind,table,name),kind:kind,table:table||null,name:name,type:type,code:type==='m'?code:null,classification:classification,basis:basis,
+      state:type==='unknown'?'missing':type!=='m'?'non-m':typeof code!=='string'?'missing':'available'};
+  }
+  function pqTMDL(files) {
+    var nodes=[], warnings=[];
+    files.forEach(function(f){
+      if(typeof f.text!=='string' || !/\.tmdl$/i.test(f.name||f.path||'')) return;
+      var lines=f.text.split(/\r\n|\n|\r/), newline=f.text.includes('\r\n')?'\r\n':'\n', table=null, partition=null;
+      function indent(s){return (s.match(/^[\t ]*/)||[''])[0];}
+      function read(i, inline, base) {
+        if(inline.trim()==='```') {
+          var end=i+1;while(end<lines.length && lines[end].trim()!=='```')end++;
+          if(end===lines.length){warnings.push('Unclosed expression fence in '+(f.path||f.name));return {code:null,end:end};}
+          var prefix=indent(lines[end]), body=lines.slice(i+1,end).map(function(s){return s.startsWith(prefix)?s.slice(prefix.length):s;});
+          return {code:body.join(newline),end:end};
+        }
+        if(inline.trim())return {code:inline.trim(),end:i};
+        var j=i+1, body=[];
+        while(j<lines.length && (!lines[j].trim() || indent(lines[j]).length>base.length)){body.push(lines[j]);j++;}
+        while(body.length&&!body[body.length-1].trim())body.pop();
+        var first=body.find(function(s){return s.trim();}), prefix=first?indent(first):'';
+        return {code:body.length?body.map(function(s){return s.trim()?(s.startsWith(prefix)?s.slice(prefix.length):s).replace(/[\t ]+$/,''):'';}).join(newline):null,end:j-1};
+      }
+      for(var i=0;i<lines.length;i++){
+        var raw=lines[i], t=raw.trim(), m, ind=indent(raw);
+        if((m=t.match(/^table\s+(.+)$/i)) && !ind){table=unq(m[1]);partition=null;continue;}
+        if((m=t.match(/^partition\s+('(?:[^']|'')*'|[^=]+?)\s*=\s*(\w+)\s*$/i))){
+          partition=pqNode('partition',table,unq(m[1]),m[2].toLowerCase(),null);nodes.push(partition);continue;
+        }
+        if(partition && (m=t.match(/^source\s*=([\s\S]*)$/i))){var r=read(i,m[1],ind);partition.code=partition.type==='m'?r.code:null;partition.state=partition.type!=='m'?'non-m':r.code===null?'missing':'available';i=r.end;continue;}
+        if((m=t.match(/^expression\s+('(?:[^']|'')*'|[^\s=]+)\s*=([\s\S]*)$/i)) && !ind){var e=read(i,m[2],ind+'\t');nodes.push(pqNode('expression',null,unq(m[1]),'m',e.code));partition=null;i=e.end;continue;}
+        if(partition && ind.length<=1 && t && !/^partition\b/i.test(t))partition=null;
+      }
+    });
+    return {version:1,nodes:nodes,warnings:warnings};
+  }
+  function pqBIM(mdl) {
+    var nodes=[], txt=function(x){return Array.isArray(x)?x.join('\n'):typeof x==='string'?x:null;};
+    (mdl.tables||[]).forEach(function(t){(t.partitions||[]).forEach(function(p){var s=p.source||{};nodes.push(pqNode('partition',t.name,p.name||'',s.type||'unknown',txt(s.expression)));});});
+    (mdl.expressions||[]).forEach(function(e){nodes.push(pqNode('expression',null,e.name,e.kind||'m',txt(e.expression),e.kind));});
+    return {version:1,nodes:nodes,warnings:[]};
+  }
+
   function parseTMDL(files){
     var tables=[], rels=[], name='';
     var ctx={exprs:{}, exprNames:[], params:{}};
@@ -272,7 +322,7 @@
     /* tables are queries too — `Source = MdGeoEntities` points at another table's partition */
     tables.forEach(function(t){ var fl=t._flags||{}; if(fl.partSrc && !ctx.exprs[t.name]) ctx.exprs[t.name]=fl.partSrc; });
     ctx.exprNames=Object.keys(ctx.exprs).sort(function(a,b){ return b.length-a.length; });
-    return finalize(name, tables, rels, ctx);
+    var result=finalize(name, tables, rels, ctx); result.powerQuery=pqTMDL(files); return result;
   }
 
   function parseBIM(j){
@@ -303,7 +353,7 @@
     });
     tables.forEach(function(t){ var fl=t._flags||{}; fl.tableName=t.name; if(fl.partSrc && !ctx.exprs[t.name]) ctx.exprs[t.name]=fl.partSrc; });
     ctx.exprNames=Object.keys(ctx.exprs).sort(function(a,b){ return b.length-a.length; });
-    return finalize(name, tables, rels, ctx);
+    var result=finalize(name, tables, rels, ctx); result.powerQuery=pqBIM(mdl); return result;
   }
 
   function parseAny(files){

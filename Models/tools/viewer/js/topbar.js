@@ -43,6 +43,7 @@
     if(st.showModelMenu&&!offline)model.appendChild(this.modelMenu());this.host.appendChild(model);
     var nav=el('nav',{cls:'ex-main-nav','aria-label':'Analysis views'});
     [['graph','Tables'],['measures','Measures'],['clusters','Domains'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
+    if(g.PowerQuery)nav.appendChild(el('button',{text:'Power Query',disabled:!st.loaded,onClick:function(){g.PowerQuery.open(app,app.state.selected);}}));
     this.host.appendChild(nav);
     var actions=el('div',{cls:'ex-header-actions'});
     actions.appendChild(el('span',{cls:offline?'ex-snapshot-badge':'ex-local-badge',text:offline?'Offline snapshot':app.host?'VS Code workspace':'Local analysis',
