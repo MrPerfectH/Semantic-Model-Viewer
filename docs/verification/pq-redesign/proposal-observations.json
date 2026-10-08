@@ -1,0 +1,20 @@
+{
+  "evidenceKind": "synthetic-proposal-only",
+  "candidateSha": null,
+  "baseline": "f45f69605b8620d39495d96b8d04a7ed4cdf70ae",
+  "selection": {
+    "toolIcon": {
+      "_tag": "website",
+      "pageUrl": "http://127.0.0.1:53543/proposal.html"
+    },
+    "value": "{\"width\":1280,\"code\":\"let\\n  Result = Table.NestedJoin(\\n    Sales Raw, {\\\"CustomerID\\\"},\\n    Customers, {\\\"ID\\\"},\\n    \\\"Customer\\\"\\n  )\\nin\\n  Result\",\"font\":\"11px\",\"viewBox\":\"0 0 920 480\",\"inspector\":{\"x\":919,\"y\":217.3984375,\"width\":360,\"height\":548,\"top\":217.3984375,\"right\":1279,\"bottom\":765.3984375,\"left\":919},\"canvas\":{\"x\":179,\"y\":217.3984375,\"width\":740,\"height\":510,\"top\":217.3984375,\"right\":919,\"bottom\":727.3984375,\"left\":179}}"
+  },
+  "reset": {
+    "toolIcon": {
+      "_tag": "website",
+      "pageUrl": "http://127.0.0.1:53543/proposal.html"
+    },
+    "value": "{\"open\":false,\"retainedCode\":\"let\\n  Result = Table.NestedJoin(\\n    Sales Raw, {\\\"CustomerID\\\"},\\n    Customers, {\\\"ID\\\"},\\n    \\\"Customer\\\"\\n  )\\nin\\n  Result\",\"status\":\"Model state reset: selection, history, search and viewport cleared.\"}"
+  },
+  "productAcceptance": false
+}

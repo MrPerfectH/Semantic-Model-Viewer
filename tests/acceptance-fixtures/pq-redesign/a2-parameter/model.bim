@@ -1,0 +1,54 @@
+{
+  "name": "Independent PQ redesign a2-parameter",
+  "model": {
+    "tables": [],
+    "expressions": [
+      {
+        "name": "Server",
+        "kind": "m",
+        "expression": "\"PQ_REDESIGN_PARAMETER_ONLY\" meta [IsParameterQuery=true]"
+      },
+      {
+        "name": "Consumer1",
+        "kind": "m",
+        "expression": "Sql.Database(Server, \"SameDB\")"
+      },
+      {
+        "name": "Consumer2",
+        "kind": "m",
+        "expression": "Sql.Database(Server, \"SameDB\")"
+      },
+      {
+        "name": "Consumer3",
+        "kind": "m",
+        "expression": "Sql.Database(Server, \"SameDB\")"
+      },
+      {
+        "name": "Consumer4",
+        "kind": "m",
+        "expression": "Sql.Database(Server, \"SameDB\")"
+      },
+      {
+        "name": "Consumer5",
+        "kind": "m",
+        "expression": "Sql.Database(Server, \"SameDB\")"
+      },
+      {
+        "name": "LocalShadow",
+        "kind": "m",
+        "expression": "let Server = \"local\", Text = \"Server\" /* Server */ in Server"
+      },
+      {
+        "name": "FunctionShadow",
+        "kind": "m",
+        "expression": "(Server as text) => Server"
+      },
+      {
+        "name": "FieldOnly",
+        "kind": "m",
+        "expression": "let r = [Server = \"field\"] in r[Server]"
+      }
+    ],
+    "relationships": []
+  }
+}
