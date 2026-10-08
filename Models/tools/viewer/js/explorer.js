@@ -6,7 +6,7 @@
     return el('button', {text:text, cls:'ex-button' + (primary ? ' ex-primary' : ''), title:title || text, onClick:action});
   }
   function TableExplorer(app) {
-    this.app = app; this.names = new Set(); this.query = ''; this.filter = 'all'; this.history = [];
+    this.app = app; this.names = new Set(); this.query = ''; this.filter = 'all'; this.domain = ''; this.source = ''; this.history = [];
     this.direction = 'connected'; this.depth = 'direct'; this.includeInactive = true; this.message = '';
     this.library = document.getElementById('table-library'); this.toolbar = document.getElementById('workspace-toolbar');
     this.empty = document.getElementById('canvas-empty'); this.nav = document.getElementById('canvas-navigation');
@@ -56,7 +56,7 @@
       var data=store.getJSON(this.storageKey(),null), M=this.app.model;
       this.names=new Set(data && Array.isArray(data.tables)?data.tables.filter(function(n){return !!M.byName[n];}):[]);
       this.direction='connected';this.depth='direct';this.includeInactive=true;this.app.state.focusDepth=1;
-      this.history=[];this.query='';this.filter='all';this.message='';this._key=null;this._relationKey=null;this.optionsOpen=false;
+      this.history=[];this.query='';this.filter='all';this.domain='';this.source='';this.message='';this._key=null;this._relationKey=null;this.optionsOpen=false;
       this.app.canvas.workspaceNames=this.names;this.app.state.isolate=false;this.app.state.showStandalone=true;this.app.canvas.showSA=true;
     },
     persist:function(){store.setJSON(this.storageKey(),{tables:Array.from(this.names)});},
@@ -226,9 +226,31 @@
       if(!graph)return;
       this.empty.hidden=!!this.names.size;
       this.status.textContent=this.message || 'Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several';
-      var key=[app.modelKey,this.query,this.filter,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,st.isolate,st.focusDepth].join('|');
+      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,st.isolate,st.focusDepth].join('|');
       if(key!==this._key){this._key=key;this.renderLibrary();this.renderToolbar();this.renderEmpty();}
       this.renderNavigation();this.drawMap();
+    },
+    /* Domain / Source facets for the library. Source uses the same key as the colour legend
+       (connector kind, or the schema for Databricks / SQL), so the two always agree. */
+    facetKey:function(kind,t){return kind==='source'?this.app.srcKeyOf(t):t.domain;},
+    facetLabel:function(kind,key){
+      if(kind!=='source')return key;
+      var kinds=this.app.SOURCE_KINDS||{};
+      if(key==='manual')return 'Manual';if(key==='calculated')return 'Calculated';
+      return kinds[key]?kinds[key].label:key;
+    },
+    facetOptions:function(kind){
+      var self=this,counts={};
+      this.app.model.tables.forEach(function(t){var k=self.facetKey(kind,t);counts[k]=(counts[k]||0)+1;});
+      return Object.keys(counts).sort(function(a,b){return counts[b]-counts[a]||a.localeCompare(b);}).map(function(k){return {key:k,label:self.facetLabel(kind,k),count:counts[k]};});
+    },
+    matchesLibrary:function(t){
+      var q=this.query.trim().toLowerCase();
+      if(this.filter==='canvas'&&!this.names.has(t.name))return false;
+      if(this.filter==='available'&&this.names.has(t.name))return false;
+      if(this.domain&&this.facetKey('domain',t)!==this.domain)return false;
+      if(this.source&&this.facetKey('source',t)!==this.source)return false;
+      return !q||[t.name,t.domain,t.role].join(' ').toLowerCase().includes(q)||t.columns.some(function(c){return c.name.toLowerCase().includes(q);});
     },
     renderLibrary:function(){
       var self=this,app=this.app,active=document.activeElement,focus=active&&active===this.input,start=focus?active.selectionStart:0,scroll=this.list?this.list.scrollTop:0;
@@ -236,14 +258,23 @@
       this.library.appendChild(el('div',{cls:'ex-library-heading'},[el('div',{},[el('h2',{text:'Tables'}),el('p',{text:app.model.tables.length+' in this model'})]),el('span',{cls:'ex-count',text:String(this.names.size)+' on canvas'})]));
       this.input=el('input',{type:'search',placeholder:'Find tables or columns…','aria-label':'Search table library',value:this.query,onInput:function(e){self.query=e.target.value;self._key=null;self.update();}});this.library.appendChild(this.input);
       var filters=el('div',{cls:'ex-segments','aria-label':'Table library filter'});[['all','All tables'],['canvas','On canvas'],['available','Available']].forEach(function(p){var b=button(p[1],function(){self.filter=p[0];self._key=null;self.update();});b.setAttribute('aria-pressed',String(self.filter===p[0]));filters.appendChild(b);});this.library.appendChild(filters);
+      var facets=el('div',{cls:'ex-facets'});
+      [['domain','Domain','All domains'],['source','Source','All sources']].forEach(function(f){
+        var opts=self.facetOptions(f[0]);if(self[f[0]]&&!opts.some(function(o){return o.key===self[f[0]];}))self[f[0]]='';
+        if(opts.length<2&&!self[f[0]])return;
+        var sel=el('select',{'aria-label':'Filter tables by '+f[1].toLowerCase(),onChange:function(e){self[f[0]]=e.target.value;self._key=null;self.update();}},
+          [el('option',{value:'',text:f[2]})].concat(opts.map(function(o){return el('option',{value:o.key,text:o.label+' ('+o.count+')'});})));
+        sel.value=self[f[0]];facets.appendChild(sel);
+      });
+      if(facets.children.length)this.library.appendChild(facets);
       this.list=el('div',{cls:'ex-table-list'});this.library.appendChild(this.list);
-      var q=this.query.trim().toLowerCase(),ts=app.model.tables.filter(function(t){return(self.filter==='all'||self.filter==='canvas'&&self.names.has(t.name)||self.filter==='available'&&!self.names.has(t.name))&&(!q||[t.name,t.domain,t.role].join(' ').toLowerCase().includes(q)||t.columns.some(function(c){return c.name.toLowerCase().includes(q);}));}).sort(function(a,b){return a.name.localeCompare(b.name);});
+      var ts=app.model.tables.filter(function(t){return self.matchesLibrary(t);}).sort(function(a,b){return a.name.localeCompare(b.name);});
       ts.forEach(function(t){var on=self.names.has(t.name),row=el('div',{cls:'ex-table-row'+(app.state.selected===t.name?' selected':''),draggable:'true'});
         row.addEventListener('dragstart',function(e){document.getElementById('main').classList.add('ex-dragging');e.dataTransfer.setData(MIME,t.name);e.dataTransfer.effectAllowed='copy';});
         var name=el('button',{cls:'ex-table-name',title:t.name,onClick:function(){if(!on)self.add([t.name]);app.focusTable(t.name);}},[el('span',{cls:'ex-table-dot',style:'background:'+app.tableColor(t)}),el('span',{},[el('strong',{text:t.name}),el('small',{text:({dim:'Dimension',fact:'Fact',measures:'Measures',calcgroup:'Calculation group',fieldparam:'Field parameter'}[t.role]||'Table')+' · '+t.colCount+' columns'})])]);
         row.appendChild(name);var add=button(on?'−':'+',function(){if(on)self.remove(t.name);else self.add([t.name]);},false,(on?'Remove ':'Add ')+t.name+(on?' from layout':' to canvas'));add.setAttribute('aria-label',(on?'Remove ':'Add ')+t.name+(on?' from layout':' to canvas'));row.appendChild(add);self.list.appendChild(row);
       });
-      if(!ts.length)this.list.appendChild(el('div',{cls:'ex-list-empty'},[el('strong',{text:'No matching tables'}),el('p',{text:'Try another name or change the filter.'})]));
+      if(!ts.length)this.list.appendChild(el('div',{cls:'ex-list-empty'},[el('strong',{text:'No matching tables'}),el('p',{text:'Try another name or change the filters.'})]));
       this.library.appendChild(el('div',{cls:'ex-library-footer',text:app.snapshotMode?'Changes stay in this tab. Save snapshot downloads a copy with your changes.':app.host?'Add with + or drag onto the canvas. Save view keeps your arrangement and focus in this VS Code workspace.':'Add with + or drag onto the canvas. Save view keeps your arrangement and focus in this browser.'}));
       this.list.scrollTop=scroll;if(focus){this.input.focus();this.input.setSelectionRange(start,start);}
     },
