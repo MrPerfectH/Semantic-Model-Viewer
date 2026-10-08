@@ -73,3 +73,11 @@ test('names with an escaped apostrophe keep their measures and columns', () => {
   assert.deepEqual([...table.measures.map(m => m.name)], ["Owner's Total", 'Plain']);
   assert.deepEqual([...table.columns.map(c => c.name)], ["It's"]);
 });
+
+test('relationship projection retains source identity including a BOM first declaration', () => {
+  const model = parser().parseTMDL([
+    file('A.tmdl', 'table A\n\tcolumn Id\n'), file('B.tmdl', 'table B\n\tcolumn Id\n'),
+    file('relationships.tmdl', '\uFEFFrelationship stable-id\n\tfromColumn: A.Id\n\ttoColumn: B.Id\n')
+  ]);
+  assert.equal(model.relationships[0].name, 'stable-id');
+});

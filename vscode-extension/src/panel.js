@@ -11,7 +11,7 @@ const { runCleaner, loadAnalysisInteractive } = require('./cleaner');
 const STORAGE_PREFIX = 'smv:';
 const VIEW_TYPE = 'semanticModelViewer';
 const MAX_SNAPSHOT_BYTES = 100 * 1024 * 1024;
-const REQUESTS = new Set(['listModels', 'openModel', 'loadAnalysis', 'refreshModel', 'snapshotAssets', 'saveSnapshot', 'prepareMeasureEdit', 'saveMeasureEdit']);
+const REQUESTS = new Set(['listModels', 'openModel', 'loadAnalysis', 'refreshModel', 'snapshotAssets', 'saveSnapshot', 'prepareMeasureEdit', 'saveMeasureEdit', 'prepareRelationshipEdit', 'saveRelationshipEdit']);
 const EVENTS = new Set(['ready', 'storage', 'notify', 'openFile']);
 const storageKey = (key) => typeof key === 'string' && key.length <= 1024 && /^(?:smv[_-].+|lsa_model_layout_v1)$/.test(key) && !/[\u0000-\u001f]/.test(key);
 const requestId = (id) => (typeof id === 'number' && Number.isSafeInteger(id) && id >= 0) || (typeof id === 'string' && id.length > 0 && id.length <= 128);
@@ -199,6 +199,12 @@ class ViewerPanel {
         await reply(message);
         this.afterOpen(entry, panel, epoch);
         return;
+      }
+      case 'prepareRelationshipEdit':
+      case 'saveRelationshipEdit': {
+        if (!vscode.workspace.isTrusted) throw new Error('Trust the workspace before editing model source.');
+        const editor = require('./relationship-save');
+        return reply(msg.type === 'prepareRelationshipEdit' ? await editor.prepare(this, msg, panel, readModelFiles) : await editor.save(this, msg, panel, readModelFiles, vscode));
       }
       case 'prepareMeasureEdit': {
         if (!vscode.workspace.isTrusted) throw new Error('Trust the workspace before editing model source.');

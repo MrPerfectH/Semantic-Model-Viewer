@@ -9,7 +9,7 @@
     var out=[], cur=null;
     text.split(/\r?\n/).forEach(function(raw){
       var t=raw.trim(); if(!t) return;
-      if(/^relationship\s/.test(t) && !/^\t/.test(raw)){ cur={fromCard:'many',toCard:'one',inactive:false,both:false}; out.push(cur); return; }
+      if(/^relationship\s/.test(t) && !/^\t/.test(raw)){ cur={name:unq(t.replace(/^relationship\s+/,'')),fromCard:'many',toCard:'one',inactive:false,both:false}; out.push(cur); return; }
       if(!cur) return; var m;
       if((m=t.match(/^fromColumn:\s*(.+)$/))){ var r=parseRef(m[1]); if(r){cur.from=r.table;cur.fromCol=r.column;} }
       else if((m=t.match(/^toColumn:\s*(.+)$/))){ var r2=parseRef(m[1]); if(r2){cur.to=r2.table;cur.toCol=r2.column;} }
@@ -266,7 +266,7 @@
          `database` line, so it would greedily swallow the next line's own
          property (e.g. `compatibilityLevel: 1606`) and misread it as the name */
       var m=txt.match(/^database[ \t]+(.+)$/m); if(m) name=unq(m[1]);
-      if(/^relationship\s/m.test(txt) && /fromColumn:/.test(txt)) rels=rels.concat(parseRelText(txt));
+      if(/^\uFEFF?relationship\s/m.test(txt) && /fromColumn:/.test(txt)) rels=rels.concat(parseRelText(txt));
       if(/^table\s/m.test(txt)){ var t=parseTableText(txt); if(t) tables.push(t); }
     });
     /* tables are queries too — `Source = MdGeoEntities` points at another table's partition */
