@@ -207,17 +207,17 @@ class ViewerPanel {
         const files = await readModelFiles(entry);
         if (!this.isCurrent(panel, epoch)) throw new Error('The model changed.');
         const { prepareMeasurePatch } = require('./measure-edit');
-        const candidates = files.filter(f => /\.tmdl$/i.test(f.path)).map(f => ({ file: f, patch: prepareMeasurePatch(f.text, msg.table, msg.measure, msg.dax) })).filter(c => c.patch);
+        const candidates = files.filter(f => /\.tmdl$/i.test(f.path)).map(f => ({ file: f, patch: prepareMeasurePatch(f.text, msg.table, msg.measure, msg.dax, msg.metadata) })).filter(c => c.patch);
         if (candidates.length !== 1) throw new Error('Could not identify one measure source file.');
         const { file, patch } = candidates[0];
         const uri = modelFileUri(entry, file.path);
         const bytes = fs.readFileSync(uri.fsPath);
         if (bytes.toString('utf8').replace(/^\uFEFF/, '') !== file.text.replace(/^\uFEFF/, '') || !Buffer.from(bytes.toString('utf8'), 'utf8').equals(bytes)) throw new Error('Source changed or is not UTF-8. Refresh the model.');
         const original = bytes.toString('utf8');
-        const exact = prepareMeasurePatch(original, msg.table, msg.measure, msg.dax);
+        const exact = prepareMeasurePatch(original, msg.table, msg.measure, msg.dax, msg.metadata);
         const token = crypto.randomBytes(24).toString('hex');
         this.measureEdit = { token, entry, epoch, uri, original, next: exact.text };
-        return reply({ token, path: file.path, before: patch.original, after: msg.dax });
+        return reply({ token, path: file.path, before: msg.metadata ? exact.before : patch.original, after: msg.metadata ? exact.after : msg.dax });
       }
       case 'saveMeasureEdit': {
         if (!vscode.workspace.isTrusted) throw new Error('Trust the workspace before editing model source.');

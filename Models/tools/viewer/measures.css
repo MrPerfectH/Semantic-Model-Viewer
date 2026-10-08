@@ -135,3 +135,7 @@
 .mv-edit-dialog::backdrop { background: rgba(0,0,0,.4); }
 .mv-edit-dialog textarea { width: 100%; min-height: 220px; box-sizing: border-box; font: 14px/1.6 monospace; margin-bottom: 16px; }
 .mv-edit-dialog pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 12px; background: #f4f5f7; }
+
+.mv-edit-dialog label { display: block; margin-bottom: 12px; }
+.mv-edit-dialog .mv-metadata-input { display: block; width: 100%; box-sizing: border-box; padding: 8px; }
+.mv-edit-dialog textarea.mv-metadata-input { min-height: 100px; }
