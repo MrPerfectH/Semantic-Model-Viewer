@@ -5,6 +5,7 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { physicalPath, dirtyFile, regularSource } = require('./edit-guards');
 const { findModels, readModelFiles } = require('./workspace');
 const { runCleaner, loadAnalysisInteractive } = require('./cleaner');
 
@@ -217,12 +218,13 @@ class ViewerPanel {
         if (candidates.length !== 1) throw new Error('Could not identify one measure source file.');
         const { file, patch } = candidates[0];
         const uri = modelFileUri(entry, file.path);
+        regularSource(uri.fsPath);
         const bytes = fs.readFileSync(uri.fsPath);
         if (bytes.toString('utf8').replace(/^\uFEFF/, '') !== file.text.replace(/^\uFEFF/, '') || !Buffer.from(bytes.toString('utf8'), 'utf8').equals(bytes)) throw new Error('Source changed or is not UTF-8. Refresh the model.');
         const original = bytes.toString('utf8');
         const exact = prepareMeasurePatch(original, msg.table, msg.measure, msg.dax, msg.metadata);
         const token = crypto.randomBytes(24).toString('hex');
-        this.measureEdit = { token, entry, epoch, uri, original, next: exact.text };
+        this.measureEdit = { token, entry, epoch, uri, original, next: exact.text, root: physicalPath(entry.uri.fsPath), target: physicalPath(uri.fsPath) };
         return reply({ token, path: file.path, before: msg.metadata ? exact.before : patch.original, after: msg.metadata ? exact.after : msg.dax });
       }
       case 'saveMeasureEdit': {
@@ -230,7 +232,9 @@ class ViewerPanel {
         const edit = this.measureEdit;
         if (!edit || msg.token !== edit.token || this.current !== edit.entry || !this.isCurrent(panel, edit.epoch)) throw new Error('The edit is stale. Review it again.');
         modelFileUri(edit.entry, path.relative(edit.entry.uri.fsPath, edit.uri.fsPath));
-        if ((vscode.workspace.textDocuments || []).some(d => d.uri.toString() === edit.uri.toString() && d.isDirty)) throw new Error('The source has unsaved editor changes. Save or discard them before reviewing again.');
+        regularSource(edit.uri.fsPath);
+        if (physicalPath(edit.entry.uri.fsPath) !== edit.root || physicalPath(edit.uri.fsPath) !== edit.target) throw new Error('Model source location changed externally. Review again.');
+        if (dirtyFile(vscode.workspace.textDocuments || [], edit.uri.fsPath)) throw new Error('The source has unsaved editor changes. Save or discard them before reviewing again.');
         if (fs.readFileSync(edit.uri.fsPath, 'utf8') !== edit.original) throw new Error('The source changed externally. Refresh and review again.');
         const temp = edit.uri.fsPath + '.smv-' + edit.token;
         try {
@@ -238,7 +242,8 @@ class ViewerPanel {
           fs.renameSync(temp, edit.uri.fsPath);
         } finally { if (fs.existsSync(temp)) fs.unlinkSync(temp); }
         this.measureEdit = null;
-        return reply({ saved: true, model: await this.modelMessage(edit.entry) });
+        try { return await reply({ saved: true, model: await this.modelMessage(edit.entry) }); }
+        catch (error) { throw new Error('Source saved, but refresh failed: ' + error.message); }
       }
       case 'refreshModel': return reply(await this.refresh());
       case 'loadAnalysis': {

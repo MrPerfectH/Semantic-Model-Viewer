@@ -375,3 +375,38 @@ test('metadata edit reviews and atomically saves only the selected source expres
   await webview.receive({ type: 'saveMeasureEdit', id: 503, token: review.token });
   assert.match(webview.posted.find(m => m.id === 503).error, /stale/);
 });
+
+test('measure saves block physical dirty aliases and linked sources introduced after review', async (t) => {
+  const dir = scratch(t);
+  const physical = path.join(dir, 'physical'); fs.mkdirSync(physical);
+  fs.cpSync(path.join(FIX, 'Fixture Model.SemanticModel'), path.join(physical, 'Fixture Model.SemanticModel'), { recursive: true });
+  const alias = path.join(dir, 'alias'); fs.symlinkSync(physical, alias, 'dir');
+  const h = harness(t, { folders: [alias] }); const { models, webview } = await open(h);
+  const real = path.join(physical, 'Fixture Model.SemanticModel/definition/tables/Measures Table.tmdl');
+  const lexical = path.join(alias, 'Fixture Model.SemanticModel/definition/tables/Measures Table.tmdl');
+  const before = fs.readFileSync(real, 'utf8');
+  await webview.receive({ type:'prepareMeasureEdit', id:901, modelId:models[0].id, table:'Measures Table', measure:'Sales Rank', dax:'1' });
+  const token = webview.posted.find(m => m.id === 901).token; assert.ok(token);
+  h.vscode.workspace.textDocuments = [{ uri:Uri.file(fs.realpathSync(real)), isDirty:true }];
+  await webview.receive({ type:'saveMeasureEdit', id:902, token });
+  assert.match(webview.posted.find(m => m.id === 902).error, /unsaved/);
+  assert.equal(fs.readFileSync(real, 'utf8'), before);
+  h.vscode.workspace.textDocuments = [];
+  const alternate = path.join(path.dirname(real), 'identical.txt'); fs.writeFileSync(alternate, before);
+  fs.unlinkSync(real); fs.symlinkSync(alternate, real);
+  await webview.receive({ type:'saveMeasureEdit', id:903, token });
+  assert.match(webview.posted.find(m => m.id === 903).error, /Linked/);
+  assert.ok(fs.lstatSync(lexical).isSymbolicLink()); assert.equal(fs.readFileSync(alternate, 'utf8'), before);
+});
+
+test('native measure save reports committed source when refresh fails', async (t) => {
+  const dir=scratch(t); fs.cpSync(path.join(FIX,'Fixture Model.SemanticModel'),path.join(dir,'Fixture Model.SemanticModel'),{recursive:true});
+  const h=harness(t,{folders:[dir]}); const {models,webview}=await open(h);
+  await webview.receive({type:'prepareMeasureEdit',id:911,modelId:models[0].id,table:'Measures Table',measure:'Sales Rank',dax:'123'});
+  const token=webview.posted.find(m=>m.id===911).token; assert.ok(token);
+  h.panel.modelMessage=async()=>{throw Error('read failed');};
+  await webview.receive({type:'saveMeasureEdit',id:912,token});
+  assert.match(webview.posted.find(m=>m.id===912).error,/Source saved, but refresh failed/);
+  assert.match(fs.readFileSync(path.join(dir,'Fixture Model.SemanticModel/definition/tables/Measures Table.tmdl'),'utf8'),/\t\t\t123/);
+  assert.equal(h.panel.measureEdit,null);
+});

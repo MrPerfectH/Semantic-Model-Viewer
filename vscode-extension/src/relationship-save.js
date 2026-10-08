@@ -1,11 +1,13 @@
 'use strict';
 const fs=require('fs'),path=require('path'),crypto=require('crypto');
+const {dirtyModel,regularSource}=require('./edit-guards');
 const {prepareRelationshipPatch}=require('../media/js/relationship-edit');
 function capture(entry, files) {
   const root=fs.realpathSync(entry.uri.fsPath), out=[];
   for(const f of files) {
     const full=path.resolve(entry.uri.fsPath,f.path),real=fs.realpathSync(full),delta=path.relative(root,real);
     if(delta.startsWith('..')||path.isAbsolute(delta)||real!==path.join(root,f.path)) throw Error('Symlink model sources are unsupported for editing.');
+    regularSource(full);
     const bytes=fs.readFileSync(full),text=bytes.toString('utf8');
     if(!Buffer.from(text).equals(bytes)||text.replace(/^\uFEFF/,'')!==f.text.replace(/^\uFEFF/,'')) throw Error('Source changed or is not UTF-8. Refresh the model.');
     out.push({path:f.path,text});
@@ -28,7 +30,7 @@ async function prepare(owner,msg,panel,read) {
 async function save(owner,msg,panel,read,vscode) {
   const e=owner.relationshipEdit;
   if(!e||e.token!==msg.token||owner.current!==e.entry||!owner.isCurrent(panel,e.epoch)) throw Error('The edit is stale. Review again.');
-  if((vscode.workspace.textDocuments||[]).some(d=>d.isDirty&&path.resolve(d.uri.fsPath).startsWith(path.resolve(e.entry.uri.fsPath)+path.sep))) throw Error('The model has unsaved editor changes.');
+  if(dirtyModel(vscode.workspace.textDocuments||[],e.entry.uri.fsPath)) throw Error('The model has unsaved editor changes.');
   if(fs.realpathSync(e.entry.uri.fsPath)!==e.root) throw Error('Model source directory changed externally.');
   const fresh=capture(e.entry,await read(e.entry));
   if(JSON.stringify(fresh)!==JSON.stringify(e.files)||fs.existsSync(e.target)!==e.exists||!owner.isCurrent(panel,e.epoch)) throw Error('Model source changed externally. Refresh and review again.');
@@ -41,6 +43,7 @@ async function save(owner,msg,panel,read,vscode) {
     if(e.exists) fs.renameSync(temp,e.target); else { fs.linkSync(temp,e.target); fs.unlinkSync(temp); }
   } finally {if(fs.existsSync(temp)) fs.unlinkSync(temp);}
   owner.relationshipEdit=null;
-  return {saved:true,model:await owner.modelMessage(e.entry)};
+  try { return {saved:true,model:await owner.modelMessage(e.entry)}; }
+  catch(error) { throw Error('Source saved, but refresh failed: '+error.message); }
 }
 module.exports={prepare,save};

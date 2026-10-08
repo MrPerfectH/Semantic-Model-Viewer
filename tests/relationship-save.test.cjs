@@ -6,4 +6,26 @@ const request={modelId:'model',relationshipId:null,fromTable:'A',fromColumn:'Id'
 const vscode={workspace:{textDocuments:[]}};
 test('review leaves source absent; save creates first file and returns refreshed metadata',async()=>{const f=fixture();try{const p=await editor.prepare(f.owner,request,f.panel,f.read);assert.equal(fs.existsSync(path.join(f.root,p.path)),false);const saved=await editor.save(f.owner,{token:p.token},f.panel,f.read,vscode);assert.equal(saved.saved,true);assert.equal(saved.model.files.length,3);await assert.rejects(()=>editor.save(f.owner,{token:p.token},f.panel,f.read,vscode),/stale/);}finally{f.clean();}});
 test('endpoint schema change after review invalidates save and keeps target absent',async()=>{const f=fixture();try{const p=await editor.prepare(f.owner,request,f.panel,f.read);fs.appendFileSync(path.join(f.root,'definition/tables/A.tmdl'),'\tcolumn New\n');await assert.rejects(()=>editor.save(f.owner,{token:p.token},f.panel,f.read,vscode),/changed/);assert.equal(fs.existsSync(path.join(f.root,p.path)),false);}finally{f.clean();}});
-test('concurrent first file creation and unsaved model documents invalidate save',async()=>{const f=fixture();try{const p=await editor.prepare(f.owner,request,f.panel,f.read);await assert.rejects(()=>editor.save(f.owner,{token:p.token},f.panel,f.read,{workspace:{textDocuments:[{isDirty:true,uri:{fsPath:path.join(f.root,'definition/tables/A.tmdl')}}]}}),/unsaved/);fs.writeFileSync(path.join(f.root,p.path),'// external file\n');await assert.rejects(()=>editor.save(f.owner,{token:p.token},f.panel,f.read,vscode),/changed/);assert.equal(fs.readFileSync(path.join(f.root,p.path),'utf8'),'// external file\n');}finally{f.clean();}});
+test('concurrent first file creation and unsaved model documents invalidate save',async()=>{const f=fixture();try{const p=await editor.prepare(f.owner,request,f.panel,f.read);await assert.rejects(()=>editor.save(f.owner,{token:p.token},f.panel,f.read,{workspace:{textDocuments:[{isDirty:true,uri:{scheme:'file',fsPath:path.join(f.root,'definition/tables/A.tmdl')}}]}}),/unsaved/);fs.writeFileSync(path.join(f.root,p.path),'// external file\n');await assert.rejects(()=>editor.save(f.owner,{token:p.token},f.panel,f.read,vscode),/changed/);assert.equal(fs.readFileSync(path.join(f.root,p.path),'utf8'),'// external file\n');}finally{f.clean();}});
+
+test('relationship save rejects physical dirty document aliases', async () => {
+  const f = fixture();
+  try {
+    const p = await editor.prepare(f.owner, request, f.panel, f.read);
+    const source = fs.realpathSync(path.join(f.root, 'definition/tables/A.tmdl'));
+    const dirty = {workspace:{textDocuments:[{isDirty:true,uri:{scheme:'file',fsPath:source}}]}};
+    await assert.rejects(() => editor.save(f.owner, {token:p.token}, f.panel, f.read, dirty), /unsaved/);
+    assert.equal(fs.existsSync(path.join(f.root, p.path)), false);
+  } finally { f.clean(); }
+});
+
+test('relationship committed-save refresh failure reports source saved', async () => {
+  const f = fixture();
+  try {
+    const p = await editor.prepare(f.owner, request, f.panel, f.read);
+    f.owner.modelMessage = async () => { throw Error('refresh unavailable'); };
+    await assert.rejects(() => editor.save(f.owner, {token:p.token}, f.panel, f.read, vscode), /Source saved, but refresh failed/);
+    assert.match(fs.readFileSync(path.join(f.root, p.path), 'utf8'), /^relationship /);
+    assert.equal(f.owner.relationshipEdit, null);
+  } finally { f.clean(); }
+});
