@@ -39,3 +39,31 @@ test('metadata rejects dynamic formats, duplicate and multiline properties and i
  assert.throws(()=>patch(base,'T','M',undefined,{rename:'X'}),/Invalid/);
  assert.throws(()=>patch(base+'\t\tdescription: Old\n','T','M',undefined,{description:'New'}),/Unsupported/);
 });
+
+test('scalar casing and colon whitespace replace existing properties without duplicates', () => {
+  const base = 'table T\n\tmeasure M = 1\n';
+  for (const [key, spelling] of [['displayFolder', 'DisplayFolder'], ['formatString', 'FORMATSTRING']]) {
+    for (const gap of ['', ' ', '\t']) {
+      const source = base + '\t\t' + spelling + gap + ': Old\n';
+      assert.equal(patch(source, 'T', 'M', undefined, { [key]: 'New' }).text, base + '\t\t' + key + ': "New"\n');
+      assert.equal(patch(source, 'T', 'M', undefined, { [key]: '' }).text, base);
+      assert.throws(() => patch(source + '\t\t' + key + ': Duplicate\n', 'T', 'M', undefined, { [key]: 'New' }), /Duplicate/);
+    }
+  }
+});
+test('case variants cannot bypass description or dynamic format layout guards', () => {
+  const base = 'table T\n\tmeasure M = 1\n';
+  for (const spelling of ['Description', 'DESCRIPTION']) {
+    assert.throws(() => patch(base + '\t\t' + spelling + ' \t: Old\n', 'T', 'M', undefined, { description: 'New' }), /Unsupported description/);
+  }
+  for (const spelling of ['FormatStringDefinition', 'FORMATSTRINGDEFINITION']) {
+    const source = base + '\t\t' + spelling + ' =\n\t\t\texpression = "0"\n';
+    assert.throws(() => patch(source, 'T', 'M', undefined, { formatString: '0.00' }), /Dynamic format/);
+    assert.equal(patch(source, 'T', 'M', undefined, { description: 'New' }).text, 'table T\n\t/// New\n' + source.slice('table T\n'.length));
+  }
+});
+test('metadata patch preserves the next object description byte for byte', () => {
+  const prefix = '\uFEFFtable T\r\n\t/// Before\r\n\tmeasure M = 1\r\n\t\tDisplayFolder : Old\r\n\r\n';
+  const next = '\t/// Next object description\r\n\t///  Indented detail\r\n\tmeasure N = 2\r\n\t\tformatString: 0\r\n';
+  assert.equal(patch(prefix + next, 'T', 'M', undefined, { description: 'Updated', displayFolder: 'New', formatString: '0.00' }).text, prefix.replace('/// Before', '/// Updated').replace('DisplayFolder : Old', 'displayFolder: "New"').replace('\r\n\r\n', '\r\n\t\tformatString: "0.00"\r\n\r\n') + next);
+});

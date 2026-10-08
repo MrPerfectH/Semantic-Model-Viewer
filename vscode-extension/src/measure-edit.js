@@ -57,13 +57,13 @@ function prepareMeasurePatch(text, table, measure, dax, metadata) {
   const before = lines.slice(start, end).join('');
   let comments = lines.slice(start, i).join('');
   if (Object.hasOwn(metadata, 'description')) {
-    if (body.some(l => /^\t\tdescription\s*:/.test(l))) throw new Error('Unsupported description layout. Edit the source file instead.');
+    if (body.some(l => /^\t\tdescription[ \t]*:/i.test(l))) throw new Error('Unsupported description layout. Edit the source file instead.');
     comments = metadata.description ? metadata.description.split('\n').map(l => '\t///' + (l ? ' ' + l : '') + nl).join('') : '';
   }
   for (const key of ['displayFolder', 'formatString']) {
     if (!Object.hasOwn(metadata, key)) continue;
-    if (key === 'formatString' && body.some(l => /^\t\tformatStringDefinition\b/.test(l))) throw new Error('Dynamic format strings are unsupported. Edit the source file instead.');
-    const re = new RegExp('^\\t\\t' + key + ':');
+    if (key === 'formatString' && body.some(l => /^\t\tformatStringDefinition\b/i.test(l))) throw new Error('Dynamic format strings are unsupported. Edit the source file instead.');
+    const re = new RegExp('^\\t\\t' + key + '[ \\t]*:', 'i');
     const hits = body.map((l, j) => re.test(l) ? j : -1).filter(j => j >= 0);
     if (hits.length > 1) throw new Error('Duplicate ' + key + ' properties.');
     if (hits.length && (!body[hits[0]].replace(/\r?\n$/, '').slice(body[hits[0]].indexOf(':') + 1).trim() || (body[hits[0] + 1] && /^\t{3}/.test(body[hits[0] + 1])))) throw new Error('Unsupported ' + key + ' layout. Edit the source file instead.');
