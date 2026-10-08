@@ -469,3 +469,11 @@ test('library search lists name matches before measures that only mention the te
   app.state.mvQuery = 'divide(';
   assert.equal(view.buildRows().rows.some(row => row.isHeader), false);
 });
+
+test('DAX code block resets the host <code> styling so tokens stay readable in VS Code themes', () => {
+  const css = fs.readFileSync(path.join(__dirname, '../Models/tools/viewer/measures.css'), 'utf8');
+  const rule = css.match(/\.mv-dax-code\{([^}]*)\}/);
+  assert.ok(rule, '.mv-dax-code rule exists');
+  assert.match(rule[1], /background:none/);
+  assert.match(rule[1], /color:inherit/);
+});
