@@ -887,6 +887,12 @@
     _idbSet: async function (k, v) { var db = await this._idb(); return new Promise(function (res, rej) { var tx = db.transaction('handles', 'readwrite'); tx.objectStore('handles').put(v, k); tx.oncomplete = res; tx.onerror = function () { rej(tx.error); }; }); },
     _idbGet: async function (k) { var db = await this._idb(); return new Promise(function (res, rej) { var q = db.transaction('handles', 'readonly').objectStore('handles').get(k); q.onsuccess = function () { res(q.result); }; q.onerror = function () { rej(q.error); }; }); },
     _idbDel: async function (k) { var db = await this._idb(); return new Promise(function (res) { var tx = db.transaction('handles', 'readwrite'); tx.objectStore('handles').delete(k); tx.oncomplete = res; tx.onerror = res; }); },
+    editHost: function () {
+      if (this.snapshotMode) return null;
+      if (this.host) return this.host;
+      if (!this.browserEditor && g.SMVBrowserEdit) this.browserEditor = g.SMVBrowserEdit.create(this);
+      return this.browserEditor && this.browserEditor.available() ? this.browserEditor : null;
+    },
     canFS: function () { return typeof window.showDirectoryPicker === 'function'; },
 
     /* ---------- local app server (scripts/serve.py) ----------
