@@ -1,16 +1,17 @@
 /* Repository source editing only. Never serialize the viewer projection. */
 (function (g, factory) {
-  if (typeof module === 'object' && module.exports) module.exports = factory(require('./measure-edit'));
-  else g.SMVBrowserEdit = factory(g.SMVMeasureEdit);
-})(typeof window !== 'undefined' ? window : globalThis, function (patcher) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./measure-edit'), require('./relationship-edit'));
+  else g.SMVBrowserEdit = factory(g.SMVMeasureEdit, g.SMVRelationshipEdit);
+})(typeof window !== 'undefined' ? window : globalThis, function (patcher, relationships) {
   'use strict';
   async function read(handle) {
     var bytes = new Uint8Array(await (await handle.getFile()).arrayBuffer());
     return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes);
   }
   function create(app) {
-    var pending = null, sequence = 0, saving = false;
+    var pending = null, sequence = 0, saving = false, failedRefresh = null;
     function source() {
+      if (failedRefresh && failedRefresh.modelId === app.modelKey && failedRefresh.epoch === app._modelLoadRequest) return null;
       if (app.host || app.snapshotMode || !app._repoLive || !app.repoHandle || !app.state.loaded) return null;
       return (app.repoModels || []).find(function (r) { return r.handle && 'repo:' + r.path === app.modelKey; }) || null;
     }
@@ -39,6 +40,7 @@
         }
         var patch = prepare(files, request);
         var target = files.filter(function (f) { return f.path === patch.path; });
+        if (!target.length && patch.path === 'definition/relationships.tmdl') throw new Error('Not saved. Browser editing requires an existing definition/relationships.tmdl file. Create it in your source editor, then refresh; exclusive file creation is unavailable in this browser.');
         if (target.length !== 1 || !target[0].handle.createWritable) throw new Error('The source is not writable.');
         var edit = { source: rm, modelId: request.modelId, epoch: epoch, files: files.map(function (f) { return { path: f.path, text: f.text }; }), file: target[0], original: target[0].text, next: patch.text, token: String(reviewId) };
         if (!current(edit) || reviewId !== sequence) throw new Error('The edit is stale. Review it again.');
@@ -70,6 +72,7 @@
           return { saved: true, model: message };
         } catch (error) {
           if (stream && !committed) await stream.abort().catch(function () {});
+          if (committed) failedRefresh = { modelId: edit.modelId, epoch: edit.epoch };
           if (committed && !/^Source saved/.test(error.message)) throw new Error('Source saved, but refresh failed: ' + error.message);
           throw error;
         } finally { saving = false; }
@@ -77,16 +80,22 @@
       prepareMeasureEdit: function (request) {
         return adapter.prepareEdit(request, function (files, data) {
           var matches = files.filter(function (f) { return /\.tmdl$/i.test(f.path); }).map(function (f) {
-            var p = patcher.prepareMeasurePatch(f.text, data.table, data.measure, data.dax);
-            return p && { path: f.path, text: p.text, before: p.original, after: data.dax };
+            var p = patcher.prepareMeasurePatch(f.text, data.table, data.measure, data.dax, data.metadata);
+            return p && { path: f.path, text: p.text, before: p.before === undefined ? p.original : p.before, after: p.after === undefined ? data.dax : p.after };
           }).filter(Boolean);
           if (matches.length !== 1) throw new Error('Could not identify one measure source file.');
           return matches[0];
         });
       },
+      prepareRelationshipEdit: function (request) {
+        return adapter.prepareEdit(request, function (files, data) {
+          return relationships.prepareRelationshipPatch(files, data, data.relationshipId == null ? globalThis.crypto.randomUUID() : undefined);
+        });
+      },
+      saveRelationshipEdit: function (token) { return adapter.saveEdit(token); },
       saveMeasureEdit: function (token) { return adapter.saveEdit(token); },
       parseModelMessage: function (message) {
-        return { id: message.modelId, name: message.name, path: message.path, model: app.parseSourceFiles ? app.parseSourceFiles(message.files) : g.TMDLParser.parseAny(message.files) };
+        return { id: message.modelId, name: message.name, path: message.path, model: app.parseSourceFiles ? app.parseSourceFiles(message.files) : globalThis.TMDLParser.parseAny(message.files) };
       }
     };
     return adapter;
