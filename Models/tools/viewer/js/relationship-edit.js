@@ -6,6 +6,7 @@
   const quote = s => "'" + s.replace(/'/g, "''") + "'";
   const ref = s => { const m = new RegExp('^(' + atom + ')\\.(' + atom + ')$').exec(s); if (!m) throw Error('Unsupported relationship endpoint layout.'); return [unquote(m[1]), unquote(m[2])]; };
   const keys = ['fromColumn','toColumn','fromCardinality','toCardinality','crossFilteringBehavior','isActive'];
+  const canonicalKeys = new Map(keys.map(key => [key.toLowerCase(), key]));
   function prepareRelationshipPatch(files, request, newId) {
     const r = request;
     if (!r || [r.fromTable,r.fromColumn,r.toTable,r.toColumn].some(s => typeof s !== 'string' || !s || /[\r\n\x00]/.test(s))) throw Error('Select existing table and column endpoints.');
@@ -29,12 +30,16 @@
         for (const line of lines) {
           const t = line.replace(/^\uFEFF/, '').replace(/\r?\n$/, '');
           const header = /^relationship ([A-Za-z0-9_-]+)$/.exec(t);
-          if (header) { if (current) current.end = offset; current = { id:header[1], start:offset, end:f.text.length, props:{}, lines:[] }; relationships.push(current); }
+          if (header) { if (current) current.end = offset; current = { id:header[1], start:offset, end:f.text.length, props:{}, propertyNames:new Set(), lines:[] }; relationships.push(current); }
           else if (t.trim() && !/^\s*\/\//.test(t)) {
-            const prop = /^\t([A-Za-z][A-Za-z0-9]*):[ \t]*(.*)$/.exec(t);
+            const prop = /^\t([A-Za-z][A-Za-z0-9]*)[ \t]*:[ \t]*(.*)$/.exec(t);
             // Scalar unknown properties are preserved, but nested/fenced/annotation layouts fail closed.
-            if (!current || !prop || /```/.test(t) || Object.hasOwn(current.props, prop[1])) throw Error('Unsupported relationship source layout.');
-            current.props[prop[1]] = prop[2]; current.lines.push({key:prop[1],start:offset,end:offset+line.length,line});
+            if (!current || !prop || /```/.test(t)) throw Error('Unsupported relationship source layout.');
+            const lowerKey = prop[1].toLowerCase();
+            if (current.propertyNames.has(lowerKey)) throw Error('Duplicate relationship property.');
+            current.propertyNames.add(lowerKey);
+            const key = canonicalKeys.get(lowerKey) || prop[1];
+            current.props[key] = prop[2]; current.lines.push({key,start:offset,end:offset+line.length,line});
           }
           offset += line.length;
         }
@@ -73,7 +78,7 @@
     if (target) {
       before = original.slice(target.start,target.end); after=before;
       const patches = target.lines.filter(x=>keys.includes(x.key)).sort((a,b)=>b.start-a.start);
-      for (const p of patches) { const start=p.start-target.start,end=p.end-target.start; const prefix=/^\t\w+:[ \t]*/.exec(p.line)[0]; after=after.slice(0,start)+prefix+values[p.key]+(/\r?\n$/.test(p.line)?nl:'')+after.slice(end); }
+      for (const p of patches) { const start=p.start-target.start,end=p.end-target.start; const prefix=/^\t\w+[ \t]*:[ \t]*/.exec(p.line)[0]; after=after.slice(0,start)+prefix+values[p.key]+(/\r?\n$/.test(p.line)?nl:'')+after.slice(end); }
       const missing=keys.filter(k=>!Object.hasOwn(target.props,k));
       if(missing.length) {
         const tail=/(?:[ \t]*(?:\/\/[^\r\n]*)?(?:\r\n|\n))*$/.exec(after)[0];
