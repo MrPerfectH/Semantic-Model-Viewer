@@ -270,3 +270,54 @@ test('disposing the panel clears pending watcher refresh and prevents old reads 
   assert.equal(webview.posted.filter((m) => m.type === 'model').length, 0);
   assert.equal(h.vscode._watchers[0].disposed, true);
 });
+
+test('measure edit reviews and atomically saves only the selected source expression', async (t) => {
+  const dir = scratch(t);
+  fs.cpSync(path.join(FIX, 'Fixture Model.SemanticModel'), path.join(dir, 'Fixture Model.SemanticModel'), { recursive: true });
+  const h = harness(t, { folders: [dir] });
+  const { models, webview } = await open(h);
+  const file = path.join(dir, 'Fixture Model.SemanticModel/definition/tables/Measures Table.tmdl');
+  const before = fs.readFileSync(file, 'utf8');
+  await webview.receive({ type: 'prepareMeasureEdit', id: 501, modelId: models[0].id, table: 'Measures Table', measure: 'Sales per Product', dax: 'DIVIDE([Total Sales], 2)' });
+  const review = webview.posted.find(m => m.id === 501);
+  assert.ok(review.token, JSON.stringify(review));
+  assert.equal(fs.readFileSync(file, 'utf8'), before);
+  await webview.receive({ type: 'saveMeasureEdit', id: 502, token: review.token });
+  const saved = webview.posted.find(m => m.id === 502);
+  assert.equal(saved.saved, true);
+  assert.ok(saved.model.files);
+  assert.equal(fs.readFileSync(file, 'utf8'), before.replace("\tmeasure 'Sales per Product' = DIVIDE([Total Sales], [Product Count])", "\tmeasure 'Sales per Product' =\n\t\t\tDIVIDE([Total Sales], 2)"));
+  await webview.receive({ type: 'saveMeasureEdit', id: 503, token: review.token });
+  assert.match(webview.posted.find(m => m.id === 503).error, /stale/);
+});
+
+test('measure edits reject external conflicts, dirty documents, model switches and untrusted workspaces', async (t) => {
+  const dir = scratch(t);
+  fs.cpSync(path.join(FIX, 'Fixture Model.SemanticModel'), path.join(dir, 'Fixture Model.SemanticModel'), { recursive: true });
+  const h = harness(t, { folders: [dir] });
+  const { models, webview } = await open(h);
+  const file = path.join(dir, 'Fixture Model.SemanticModel/definition/tables/Measures Table.tmdl');
+  const before = fs.readFileSync(file, 'utf8');
+  let id = 600;
+  async function review() {
+    const request = ++id;
+    await webview.receive({ type: 'prepareMeasureEdit', id: request, modelId: models[0].id, table: 'Measures Table', measure: 'Sales Rank', dax: '1' });
+    return webview.posted.find(m => m.id === request);
+  }
+  async function save(token) {
+    const request = ++id;
+    await webview.receive({ type: 'saveMeasureEdit', id: request, token });
+    return webview.posted.find(m => m.id === request);
+  }
+  let r = await review(); fs.writeFileSync(file, before + '\n');
+  assert.match((await save(r.token)).error, /changed externally/);
+  assert.equal(fs.readFileSync(file, 'utf8'), before + '\n');
+  fs.writeFileSync(file, before); r = await review();
+  h.vscode.workspace.textDocuments = [{ uri: Uri.file(file), isDirty: true }];
+  assert.match((await save(r.token)).error, /unsaved/);
+  assert.equal(fs.readFileSync(file, 'utf8'), before);
+  h.vscode.workspace.textDocuments = []; r = await review(); h.panel.epoch++;
+  assert.match((await save(r.token)).error, /stale/);
+  h.vscode.workspace.isTrusted = false;
+  assert.match((await review()).error, /Trust/);
+});

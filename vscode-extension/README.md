@@ -104,3 +104,11 @@ viewer rather than generated `media/`.
 Version 0.2.0 integrates the VS Code extension work recovered from
 `origin/claude/model-viewer-vsc-plugin-dfmn8c` with the current shared viewer. It supersedes
 the earlier 0.1.0 package, which targeted the former `viewer/` source directory.
+
+## Preview: editing existing measure DAX
+
+On the `t3/edit-model-context` branch, open a TMDL model, select a measure in **Measures**, and choose **Edit DAX**. Enter a formula, choose **Review change**, inspect the before/after expressions and source path, then choose **Save to TMDL**. Cancel leaves source unchanged. Changing the draft invalidates the review.
+
+This preview supports ordinary tab-indented measure expressions in UTF-8 TMDL files. It preserves unrelated source, BOM and line endings, and blocks saves after external file changes, unsaved source-editor changes or model switching. Fenced expressions and other unsupported layouts must be edited in the source editor. DAX engine validation, relationship editing, metadata editing and renames are not included in this first slice.
+
+For manual verification, use a disposable model copy: save a formula and inspect the Git diff, cancel another edit, then modify the source after reviewing and confirm that saving is refused. Installed VS Code behavior requires separate manual verification before merge.

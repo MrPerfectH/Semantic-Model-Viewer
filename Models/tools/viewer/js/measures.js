@@ -1208,6 +1208,9 @@
         navigator.clipboard.writeText(raw).then(function () { status.textContent = 'Copied'; }, function () { status.textContent = 'Copy unavailable. Select the formula to copy.'; });
       });
       var actions = el('div', { cls: 'mv-dax-actions' }, [status, copy]);
+      if (!onClose && this.app.host && this.app.host.prepareMeasureEdit && !this.app.snapshotMode) {
+        actions.appendChild(el('button', { cls: 'mv-button', text: 'Edit DAX', onClick: function () { self.editDax(card); } }));
+      }
       if (onClose) {
         actions.appendChild(el('button', { cls: 'mv-button mv-button-primary', text: 'Analyze this measure', onClick: function () { self.pickMeasure(card.name); } }));
         actions.appendChild(el('button', { cls: 'mv-text-button', title: 'Clear comparison', 'aria-label': 'Clear comparison with ' + card.name, text: 'Clear', onClick: onClose }));
@@ -1223,6 +1226,46 @@
       ]);
       return header;
     },
+    editDax: function (card) {
+      var app = this.app, modelId = app.modelKey;
+      var dialog = el('dialog', { cls: 'mv-edit-dialog', 'aria-label': 'Edit DAX for ' + card.name });
+      var input = el('textarea', { 'aria-label': 'DAX formula', spellcheck: 'false' });
+      input.value = app.msrOf(card.name).dax || '';
+      var status = el('p', { role: 'status', 'aria-live': 'polite' });
+      var preview = el('div'), token = null, busy = false;
+      var save = el('button', { cls: 'mv-button mv-button-primary', text: 'Save to TMDL' }); save.disabled = true;
+      var review = el('button', { cls: 'mv-button', text: 'Review change' });
+      input.addEventListener('input', function () { token = null; save.disabled = true; U.clear(preview); status.textContent = ''; });
+      review.addEventListener('click', async function () {
+        if (busy) return;
+        busy = true; input.disabled = true; review.disabled = true; save.disabled = true;
+        try {
+          var result = await app.host.prepareMeasureEdit({ modelId: modelId, table: card.table, measure: card.name, dax: input.value });
+          token = result.token; U.clear(preview);
+          preview.appendChild(el('p', { text: result.path }));
+          preview.appendChild(el('h4', { text: 'Before' })); preview.appendChild(el('pre', { text: result.before }));
+          preview.appendChild(el('h4', { text: 'After' })); preview.appendChild(el('pre', { text: result.after }));
+          status.textContent = 'Review the formula before saving. DAX is not validated by a model engine.'; save.disabled = false;
+        } catch (error) { status.textContent = error.message; token = null; }
+        finally { busy = false; input.disabled = false; review.disabled = false; }
+      });
+      save.addEventListener('click', async function () {
+        if (busy || !token) return;
+        busy = true; input.disabled = true; review.disabled = true; save.disabled = true;
+        try {
+          var result = await app.host.saveMeasureEdit(token);
+          if (app.modelKey === modelId) app.hostOpenModel(app.host.parseModelMessage(result.model));
+          dialog.close();
+        } catch (error) { status.textContent = error.message; token = null; }
+        finally { busy = false; input.disabled = false; review.disabled = false; }
+      });
+      dialog.addEventListener('cancel', function (e) { if (busy) e.preventDefault(); });
+      dialog.addEventListener('close', function () { dialog.remove(); });
+      dialog.appendChild(el('h3', { text: 'Edit ' + card.name })); dialog.appendChild(input);
+      dialog.appendChild(el('div', { cls: 'mv-dax-actions' }, [review, save, el('button', { cls: 'mv-button', text: 'Cancel', onClick: function () { if (!busy) dialog.close(); } })]));
+      dialog.appendChild(status); dialog.appendChild(preview); document.body.appendChild(dialog); dialog.showModal(); input.focus();
+    },
+
     renderDax: function () {
       var self = this, app = this.app;
       var sn = app.state.selMeasure;

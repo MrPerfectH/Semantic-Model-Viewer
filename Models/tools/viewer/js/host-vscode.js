@@ -56,6 +56,8 @@
     pickAnalysis: function () { return request('loadAnalysis').then(function (r) { return r && r.data ? r.data : null; }); },
     snapshotAssets: function () { return request('snapshotAssets'); },
     saveSnapshot: function (data) { return request('saveSnapshot', data); },
+    prepareMeasureEdit: function (data) { return request('prepareMeasureEdit', data); },
+    saveMeasureEdit: function (token) { return request('saveMeasureEdit', { token: token }); },
     refreshModel: function () { return request('refreshModel'); },
     openFile: function (path) { post({ type: 'openFile', path: path }); },
     notify: function (level, message) { post({ type: 'notify', level: level, message: message }); },
