@@ -112,7 +112,7 @@
       isolate: false, focusDepth: 1, viewMode: 'graph',
       showModelMenu: false, showPresets: false, presetName: '',
       showImport: false, importError: '', importReady: false, importName: '', importSummary: '',
-      msrQuery: '', expandedMeasure: null, pngLabel: 'PNG',
+      msrQuery: '', expandedMeasure: null, calcOpen: {}, pngLabel: 'PNG',
       selMeasure: null, mvQuery: '', mvOpen: {}, gExtra: {}, gHover: null, gPin: null,
       mvW: Math.max(230, Math.min(600, parseInt(store.get('smv-mvw'), 10) || 296)),
       repoScanning: false, repoError: '', showRules: false,
@@ -462,7 +462,7 @@
       this.matrix._key = null; this.sidebar._key = null;
       var state = {
         loaded: true, allExpanded: false, modelName: name, selected: null, activeFilter: null, search: '',
-        isolate: false, showModelMenu: !!opts.showModelMenu, msrQuery: '', expandedMeasure: null,
+        isolate: false, showModelMenu: !!opts.showModelMenu, msrQuery: '', expandedMeasure: null, calcOpen: {},
         selMeasure: null, mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, viewMode: 'graph',
         showRules: false
       };

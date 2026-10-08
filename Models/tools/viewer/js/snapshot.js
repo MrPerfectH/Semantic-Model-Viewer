@@ -18,8 +18,10 @@
   function modelData(model) {
     return { name: String(model.name || ''), tables: model.tables.map(function(t){
       var row = pick(t, ['name','domain','role','baseRole','autoRole','roleVia','ann','description','hidden']);
-      row.columns = (t.columns || []).map(function(c){return pick(c,['name','dataType','hidden','isCalc','isKey','rel','description']);});
+      row.columns = (t.columns || []).map(function(c){return pick(c,['name','dataType','hidden','isCalc','isKey','rel','description','dax']);});
       row.measures = (t.measures || []).map(function(m){var measure=pick(m,['name','dax','fmt','folder','h','description']);measure.dax=String(measure.dax||'');return measure;});
+      if (typeof t.dax === 'string' && t.dax) row.dax = t.dax;
+      if (Array.isArray(t.calcItems)) row.calcItems = t.calcItems.map(function(ci){return pick(ci,['name','dax','fmt']);});
       row.colCount = row.columns.length; row.measureCount = row.measures.length;
       // Human-readable source identity is useful; endpoints and raw query text are not required to explore the model.
       row.source = pick(t.source, ['kind','schema','table','via']);

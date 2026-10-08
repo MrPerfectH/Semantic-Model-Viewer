@@ -15,7 +15,9 @@ The input may be a *.SemanticModel folder, its `definition` folder, any folder h
 Output schema (as consumed by the viewer):
     {"name": str,
      "tables": [{"name","role","domain","source","colCount","measureCount","relCount",
-                 "columns":[{"name","dataType","hidden","isCalc","isKey","rel"}],
+                 "dax"?: calculated table / field parameter expression,
+                 "calcItems"?: [{"name","dax","fmt"}]  (calculation groups),
+                 "columns":[{"name","dataType","hidden","isCalc","isKey","rel","dax"?}],
                  "measures":[{"name","dax","folder","fmt","h"?}]}],
      "relationships": [{"from","fromCol","to","toCol","fromCard","toCard","inactive","both"}]}
 
@@ -55,6 +57,18 @@ def parse_ref(s: str):
     if i < 0:
         return None
     return s[:i].strip(), unq(s[i + 1:])
+
+
+def dedent(lines):
+    """DAX bodies come as raw lines: drop ``` fences, trim blank edges, remove the common indent."""
+    ls = [l for l in lines if not re.match(r"^\s*```", l)]
+    while ls and not ls[0].strip():
+        ls.pop(0)
+    while ls and not ls[-1].strip():
+        ls.pop()
+    indents = [len(re.match(r"^[ \t]*", l).group(0)) for l in ls if l.strip()]
+    cut = min(indents) if indents else 0
+    return "\n".join(l[cut:].rstrip() for l in ls)
 
 
 # ---------------------------------------------------------------- relationships.tmdl
@@ -108,6 +122,29 @@ def parse_table_text(text: str):
     mode = cur_col = cur_meas = None
     part_kind, part_src = "", ""
     is_cg = is_fp = False
+    col_buf = calc_buf = cur_item = item_buf = item_fmt = None
+    item_phase, in_source = "", False
+
+    def flush_col():
+        nonlocal col_buf
+        if cur_col is not None and col_buf is not None:
+            d = dedent(col_buf)
+            if d:
+                cur_col["dax"] = d
+        col_buf = None
+
+    def flush_item():
+        nonlocal cur_item, item_buf, item_fmt, item_phase
+        if cur_item is not None:
+            d = dedent(item_buf or [])
+            if d:
+                cur_item["dax"] = d
+            if item_fmt:
+                f = dedent(item_fmt)
+                if f:
+                    cur_item["fmt"] = f
+        cur_item = item_buf = item_fmt = None
+        item_phase = ""
 
     for raw in lines:
         t = raw.strip()
@@ -115,6 +152,14 @@ def parse_table_text(text: str):
         if not t:
             if mode == "measure" and cur_meas and cur_meas["dax"]:
                 cur_meas["dax"] += "\n"
+            elif col_buf is not None:
+                col_buf.append("")
+            elif mode == "cg" and item_phase == "expr" and item_buf is not None:
+                item_buf.append("")
+            elif mode == "cg" and item_phase == "fmt" and item_fmt is not None:
+                item_fmt.append("")
+            elif mode == "partition" and in_source and calc_buf is not None:
+                calc_buf.append("")
             continue
         if ind == 0:
             if table is None:
@@ -125,6 +170,9 @@ def parse_table_text(text: str):
         if table is None:
             continue
         if ind == 1:
+            flush_col()
+            flush_item()
+            in_source = False
             cur_col = cur_meas = None
             mode = None
             m = re.match(r"^column\s+('(?:[^']|'')+'|\"[^\"]+\"|[^\s=]+)(\s*=.*)?$", t)
@@ -133,6 +181,9 @@ def parse_table_text(text: str):
                            "isCalc": bool(m.group(2)), "isKey": False, "rel": False}
                 table["columns"].append(cur_col)
                 mode = "column"
+                if m.group(2):
+                    inline = re.sub(r"^\s*=\s*", "", m.group(2))
+                    col_buf = [inline] if inline else []
                 continue
             m = re.match(r"^measure\s+('(?:[^']|'')+'|\"[^\"]+\"|[^\s=]+)\s*=\s*(.*)$", t)
             if m:
@@ -143,6 +194,7 @@ def parse_table_text(text: str):
                 continue
             if re.match(r"^calculationGroup\b", t):
                 is_cg = True
+                mode = "cg"
                 continue
             m = re.match(r"^partition\s+.*?=\s*(\w+)\s*$", t)
             if m:
@@ -157,7 +209,36 @@ def parse_table_text(text: str):
             continue
         if re.match(r"^extendedProperty\s+ParameterMetadata", t):
             is_fp = True
+        if mode == "cg":
+            if ind == 2:
+                flush_item()
+                m = re.match(r"^calculationItem\s+('(?:[^']|'')+'|\"[^\"]+\"|[^\s=]+)\s*(?:=\s*(.*))?$", t)
+                if m:
+                    cur_item = {"name": unq(m.group(1).replace('"', "")), "dax": "", "fmt": ""}
+                    table.setdefault("calcItems", []).append(cur_item)
+                    first = (m.group(2) or "").strip()
+                    item_buf = [first] if first else []
+                    item_phase = "expr"
+            elif cur_item is not None:
+                is_prop = ind == 3 and re.match(
+                    r"^(formatStringDefinition|description|ordinal|lineageTag|annotation|isHidden|changedProperty)\b", t)
+                if is_prop:
+                    item_phase = ""
+                    m = re.match(r"^formatStringDefinition\s*=\s*(.*)$", t)
+                    if m:
+                        item_phase = "fmt"
+                        item_fmt = [m.group(1).strip()] if m.group(1).strip() else []
+                elif item_phase == "expr":
+                    item_buf.append(raw)
+                elif item_phase == "fmt" and item_fmt is not None:
+                    item_fmt.append(raw)
+            continue
         if mode == "column" and cur_col is not None:
+            if ind >= 3 and col_buf is not None:
+                col_buf.append(raw)
+                continue
+            if ind == 2:
+                flush_col()
             m = re.match(r"^dataType:\s*(\S+)", t)
             if m:
                 cur_col["dataType"] = m.group(1)
@@ -181,7 +262,21 @@ def parse_table_text(text: str):
                     cur_meas["h"] = 1          # REQUIRED for the hidden-measure badge
         elif mode == "partition":
             part_src += t + "\n"
+            if ind == 2:
+                in_source = False
+                m = re.match(r"^source\s*=\s*(.*)$", t)
+                if m:
+                    in_source = True
+                    calc_buf = [m.group(1).strip()] if m.group(1).strip() else []
+            elif in_source and calc_buf is not None:
+                calc_buf.append(raw)
 
+    flush_col()
+    flush_item()
+    if table is not None and part_kind == "calculated" and calc_buf is not None:
+        tdax = dedent(calc_buf)
+        if tdax:
+            table["dax"] = tdax
     if table is not None:
         table["_flags"] = {"isCG": is_cg, "isFP": is_fp, "partKind": part_kind,
                            "partSrc": part_src, "tableName": table["name"]}
@@ -570,9 +665,14 @@ def parse_bim(j: dict, rules: list = None) -> dict:
     for t in mdl.get("tables", []):
         if skip.match(t.get("name", "")):
             continue
-        columns = [{"name": c.get("name"), "dataType": c.get("dataType", ""), "hidden": bool(c.get("isHidden")),
-                    "isCalc": c.get("type") == "calculated", "isKey": bool(c.get("isKey")), "rel": False}
-                   for c in t.get("columns", [])]
+        columns = []
+        for c in t.get("columns", []):
+            o = {"name": c.get("name"), "dataType": c.get("dataType", ""), "hidden": bool(c.get("isHidden")),
+                 "isCalc": c.get("type") == "calculated", "isKey": bool(c.get("isKey")), "rel": False}
+            d = txt(c.get("expression")).strip() if c.get("type") == "calculated" else ""
+            if d:
+                o["dax"] = d
+            columns.append(o)
         measures = []
         for mm in t.get("measures", []):
             o = {"name": mm.get("name"), "dax": txt(mm.get("expression")).strip(),
@@ -589,11 +689,21 @@ def parse_bim(j: dict, rules: list = None) -> dict:
             part_kind = "calculated" if src.get("type") == "calculated" else (src.get("type") or "m")
             part_src = txt(src.get("expression"))
         role_ann = next((a for a in (t.get("annotations") or []) if a.get("name") == "SMV_Role"), None)
-        tables.append({"name": t.get("name"), "columns": columns, "measures": measures,
-                       "roleAnnotation": str(role_ann.get("value")) if role_ann else None,
-                       "_flags": {"isCG": bool(t.get("calculationGroup")), "isFP": is_fp,
-                                  "partKind": part_kind, "partSrc": part_src,
-                                  "tableName": t.get("name")}})
+        row = {"name": t.get("name"), "columns": columns, "measures": measures,
+               "roleAnnotation": str(role_ann.get("value")) if role_ann else None,
+               "_flags": {"isCG": bool(t.get("calculationGroup")), "isFP": is_fp,
+                          "partKind": part_kind, "partSrc": part_src,
+                          "tableName": t.get("name")}}
+        if part_kind == "calculated" and part_src.strip():
+            row["dax"] = part_src.strip()
+        items = (t.get("calculationGroup") or {}).get("calculationItems")
+        if isinstance(items, list):
+            row["calcItems"] = []
+            for ci in items:
+                f = ci.get("formatStringDefinition")
+                fmt = txt(f.get("expression") if isinstance(f, dict) else f).strip() if f else ""
+                row["calcItems"].append({"name": ci.get("name"), "dax": txt(ci.get("expression")).strip(), "fmt": fmt})
+        tables.append(row)
     rels = []
     for r in mdl.get("relationships", []):
         if skip.match(r.get("fromTable", "")) or skip.match(r.get("toTable", "")):
