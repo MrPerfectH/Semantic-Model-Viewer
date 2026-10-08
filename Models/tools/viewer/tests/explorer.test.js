@@ -623,3 +623,29 @@ test('saved views restore filter path direction, distance and inactive setting',
   assert.equal(explorer.depth, 'direct');
   assert.equal(explorer.includeInactive, true);
 });
+
+test('the table library filters by domain and by source, alongside search and the canvas filter', () => {
+  const { explorer, app } = fixture();
+  const [a, b, c] = app.model.tables;
+  Object.assign(a, { domain: 'Sales', source: { kind: 'databricks', schema: 'gold' } });
+  Object.assign(b, { domain: 'Sales', source: { kind: 'excel' } });
+  Object.assign(c, { domain: 'Finance', source: { kind: 'databricks', schema: 'gold' } });
+  app.srcKeyOf = t => (t.source.kind === 'databricks' ? t.source.schema : t.source.kind);
+  app.SOURCE_KINDS = { excel: { label: 'Excel' } };
+  const shown = () => app.model.tables.filter(t => explorer.matchesLibrary(t)).map(t => t.name);
+  assert.deepEqual(shown(), ['A', 'B', 'C']);
+  explorer.domain = 'Sales';
+  assert.deepEqual(shown(), ['A', 'B']);
+  explorer.source = 'gold';
+  assert.deepEqual(shown(), ['A']);
+  explorer.domain = '';
+  assert.deepEqual(shown(), ['A', 'C']);
+  explorer.add(['C']); explorer.filter = 'available';
+  assert.deepEqual(shown(), ['A'], 'facets combine with the On canvas / Available switch');
+  explorer.filter = 'all'; explorer.query = 'finance';
+  assert.deepEqual(shown(), ['C'], 'facets combine with search');
+  assert.deepEqual(copy(explorer.facetOptions('domain').map(o => [o.key, o.count])), [['Sales', 2], ['Finance', 1]]);
+  assert.deepEqual(copy(explorer.facetOptions('source').map(o => [o.label, o.count])), [['gold', 2], ['Excel', 1]]);
+  explorer.loadModel();
+  assert.equal(explorer.domain + explorer.source, '', 'opening another model clears the facets');
+});
