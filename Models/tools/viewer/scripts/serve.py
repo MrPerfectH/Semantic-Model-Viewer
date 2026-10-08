@@ -137,7 +137,9 @@ def read_model(path):
             except OSError:
                 continue
             if os.path.splitext(e.name)[1].lower() in MODEL_FILE_EXT:
-                text = (d / e.name).read_text(encoding="utf-8-sig", errors="replace")
+                # Preserve expression newlines verbatim; default text reads normalize CRLF/CR.
+                with (d / e.name).open("r", encoding="utf-8-sig", errors="replace", newline="") as source:
+                    text = source.read()
                 files.append({"name": e.name, "path": rel + e.name, "text": text})
 
     walk(root, "")
