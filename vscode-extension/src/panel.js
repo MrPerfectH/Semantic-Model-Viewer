@@ -5,13 +5,14 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { physicalPath, dirtyFile, regularSource } = require('./edit-guards');
 const { findModels, readModelFiles } = require('./workspace');
 const { runCleaner, loadAnalysisInteractive } = require('./cleaner');
 
 const STORAGE_PREFIX = 'smv:';
 const VIEW_TYPE = 'semanticModelViewer';
 const MAX_SNAPSHOT_BYTES = 100 * 1024 * 1024;
-const REQUESTS = new Set(['listModels', 'openModel', 'loadAnalysis', 'refreshModel', 'snapshotAssets', 'saveSnapshot']);
+const REQUESTS = new Set(['listModels', 'openModel', 'loadAnalysis', 'refreshModel', 'snapshotAssets', 'saveSnapshot', 'prepareMeasureEdit', 'saveMeasureEdit', 'prepareRelationshipEdit', 'saveRelationshipEdit']);
 const EVENTS = new Set(['ready', 'storage', 'notify', 'openFile']);
 const storageKey = (key) => typeof key === 'string' && key.length <= 1024 && /^(?:smv[_-].+|lsa_model_layout_v1)$/.test(key) && !/[\u0000-\u001f]/.test(key);
 const requestId = (id) => (typeof id === 'number' && Number.isSafeInteger(id) && id >= 0) || (typeof id === 'string' && id.length > 0 && id.length <= 128);
@@ -89,6 +90,7 @@ class ViewerPanel {
     this.watchTimer = null;
     this.epoch = 0;
     this.initializing = null;
+    this.measureEdit = null;
     this.output = vscode.window.createOutputChannel ? vscode.window.createOutputChannel('Semantic Model Viewer') : null;
   }
 
@@ -198,6 +200,50 @@ class ViewerPanel {
         await reply(message);
         this.afterOpen(entry, panel, epoch);
         return;
+      }
+      case 'prepareRelationshipEdit':
+      case 'saveRelationshipEdit': {
+        if (!vscode.workspace.isTrusted) throw new Error('Trust the workspace before editing model source.');
+        const editor = require('./relationship-save');
+        return reply(msg.type === 'prepareRelationshipEdit' ? await editor.prepare(this, msg, panel, readModelFiles) : await editor.save(this, msg, panel, readModelFiles, vscode));
+      }
+      case 'prepareMeasureEdit': {
+        if (!vscode.workspace.isTrusted) throw new Error('Trust the workspace before editing model source.');
+        if (!this.current || msg.modelId !== this.current.id || this.current.kind === 'file') throw new Error('Open the same TMDL model before editing.');
+        const entry = this.current, epoch = this.epoch;
+        const files = await readModelFiles(entry);
+        if (!this.isCurrent(panel, epoch)) throw new Error('The model changed.');
+        const { prepareMeasurePatch } = require('./measure-edit');
+        const candidates = files.filter(f => /\.tmdl$/i.test(f.path)).map(f => ({ file: f, patch: prepareMeasurePatch(f.text, msg.table, msg.measure, msg.dax, msg.metadata) })).filter(c => c.patch);
+        if (candidates.length !== 1) throw new Error('Could not identify one measure source file.');
+        const { file, patch } = candidates[0];
+        const uri = modelFileUri(entry, file.path);
+        regularSource(uri.fsPath);
+        const bytes = fs.readFileSync(uri.fsPath);
+        if (bytes.toString('utf8').replace(/^\uFEFF/, '') !== file.text.replace(/^\uFEFF/, '') || !Buffer.from(bytes.toString('utf8'), 'utf8').equals(bytes)) throw new Error('Source changed or is not UTF-8. Refresh the model.');
+        const original = bytes.toString('utf8');
+        const exact = prepareMeasurePatch(original, msg.table, msg.measure, msg.dax, msg.metadata);
+        const token = crypto.randomBytes(24).toString('hex');
+        this.measureEdit = { token, entry, epoch, uri, original, next: exact.text, root: physicalPath(entry.uri.fsPath), target: physicalPath(uri.fsPath) };
+        return reply({ token, path: file.path, before: msg.metadata ? exact.before : patch.original, after: msg.metadata ? exact.after : msg.dax });
+      }
+      case 'saveMeasureEdit': {
+        if (!vscode.workspace.isTrusted) throw new Error('Trust the workspace before editing model source.');
+        const edit = this.measureEdit;
+        if (!edit || msg.token !== edit.token || this.current !== edit.entry || !this.isCurrent(panel, edit.epoch)) throw new Error('The edit is stale. Review it again.');
+        modelFileUri(edit.entry, path.relative(edit.entry.uri.fsPath, edit.uri.fsPath));
+        regularSource(edit.uri.fsPath);
+        if (physicalPath(edit.entry.uri.fsPath) !== edit.root || physicalPath(edit.uri.fsPath) !== edit.target) throw new Error('Model source location changed externally. Review again.');
+        if (dirtyFile(vscode.workspace.textDocuments || [], edit.uri.fsPath)) throw new Error('The source has unsaved editor changes. Save or discard them before reviewing again.');
+        if (fs.readFileSync(edit.uri.fsPath, 'utf8') !== edit.original) throw new Error('The source changed externally. Refresh and review again.');
+        const temp = edit.uri.fsPath + '.smv-' + edit.token;
+        try {
+          fs.writeFileSync(temp, edit.next, { encoding: 'utf8', flag: 'wx', mode: fs.statSync(edit.uri.fsPath).mode });
+          fs.renameSync(temp, edit.uri.fsPath);
+        } finally { if (fs.existsSync(temp)) fs.unlinkSync(temp); }
+        this.measureEdit = null;
+        try { return await reply({ saved: true, model: await this.modelMessage(edit.entry) }); }
+        catch (error) { throw new Error('Source saved, but refresh failed: ' + error.message); }
       }
       case 'refreshModel': return reply(await this.refresh());
       case 'loadAnalysis': {

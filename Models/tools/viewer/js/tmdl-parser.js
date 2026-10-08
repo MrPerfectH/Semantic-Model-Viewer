@@ -1,6 +1,7 @@
 /* TMDL / BIM -> viewer model JSON. Exposes global TMDLParser. */
 (function(g){
   function unq(s){ s=String(s).trim(); return (s[0]==="'"&&s[s.length-1]==="'")?s.slice(1,-1).replace(/''/g,"'"):s; }
+  function scalar(s){ s=String(s); return s[0]==='"' && s[s.length-1]==='"' ? s.slice(1,-1).replace(/""/g,'"') : s; }
   function cap(s){ s=String(s||''); return s? s[0].toUpperCase()+s.slice(1):s; }
   function parseRef(s){ s=s.trim(); var m=s.match(/^'((?:[^']|'')+)'\.(.+)$/); if(m) return {table:m[1].replace(/''/g,"'"), column:unq(m[2])};
     var i=s.indexOf('.'); if(i<0) return null; return {table:s.slice(0,i).trim(), column:unq(s.slice(i+1))}; }
@@ -9,32 +10,38 @@
     var out=[], cur=null;
     text.split(/\r?\n/).forEach(function(raw){
       var t=raw.trim(); if(!t) return;
-      if(/^relationship\s/.test(t) && !/^\t/.test(raw)){ cur={fromCard:'many',toCard:'one',inactive:false,both:false}; out.push(cur); return; }
-      if(!cur) return; var m;
-      if((m=t.match(/^fromColumn:\s*(.+)$/))){ var r=parseRef(m[1]); if(r){cur.from=r.table;cur.fromCol=r.column;} }
-      else if((m=t.match(/^toColumn:\s*(.+)$/))){ var r2=parseRef(m[1]); if(r2){cur.to=r2.table;cur.toCol=r2.column;} }
-      else if((m=t.match(/^toCardinality:\s*(\w+)/))) cur.toCard=m[1];
-      else if((m=t.match(/^fromCardinality:\s*(\w+)/))) cur.fromCard=m[1];
-      else if(/^isActive:\s*false/.test(t)) cur.inactive=true;
-      else if(/^crossFilteringBehavior:\s*bothDirections/.test(t)) cur.both=true;
+      if(/^relationship\s/.test(t) && !/^\t/.test(raw)){ cur={name:unq(t.replace(/^relationship\s+/,'')),fromCard:'many',toCard:'one',inactive:false,both:false}; out.push(cur); return; }
+      if(!cur) return;
+      var m=t.match(/^([a-z][a-z0-9]*)[ \t]*:[ \t]*(.*)$/i); if(!m) return;
+      var key=m[1].toLowerCase(), value=m[2].trim(), normalized=value.toLowerCase();
+      if(key==='fromcolumn' || key==='tocolumn'){
+        var r=parseRef(value); if(r){ var side=key==='fromcolumn'?'from':'to'; cur[side]=r.table; cur[side+'Col']=r.column; }
+      }
+      else if(key==='tocardinality' || key==='fromcardinality') cur[key==='tocardinality'?'toCard':'fromCard']=['one','many'].indexOf(normalized)>=0?normalized:value;
+      else if(key==='isactive' && (normalized==='true'||normalized==='false')) cur.inactive=normalized==='false';
+      else if(key==='crossfilteringbehavior'){
+        cur.both=normalized==='bothdirections';
+        // Unknown direction must remain unresolved in metadata traversal.
+        if(normalized!=='bothdirections' && normalized!=='onedirection') cur.crossFilteringBehavior=value;
+      }
     });
     return out.filter(function(r){ return r.from&&r.fromCol&&r.to&&r.toCol; });
   }
 
   function parseTableText(text){
     var lines=text.split(/\r?\n/);
-    var table=null, mode=null, curCol=null, curMeas=null, partKind='', partSrc='', isCG=false, isFP=false;
+    var table=null, mode=null, curCol=null, curMeas=null, partKind='', partSrc='', measureExpression=false, isCG=false, isFP=false;
     for(var i=0;i<lines.length;i++){
       var raw=lines[i], t=raw.trim();
       var ind=raw.match(/^\t*/)[0].length;
       var m;
-      if(!t){ if(mode==='measure'&&curMeas&&curMeas.dax) curMeas.dax+='\n'; continue; }
+      if(!t){ if(mode==='measure'&&measureExpression&&curMeas&&curMeas.dax) curMeas.dax+='\n'; continue; }
       if(ind===0){ if(!table && (m=t.match(/^table\s+(.+)$/))){ table={name:unq(m[1]), columns:[], measures:[]}; } continue; }
       if(!table) continue;
       if(ind===1){
-        curCol=null; curMeas=null; mode=null;
+        curCol=null; curMeas=null; mode=null; measureExpression=false;
         if((m=t.match(/^column\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)(\s*=.*)?$/))){ curCol={name:unq(m[1].replace(/"/g,'')), dataType:'', hidden:false, isCalc:!!m[2], isKey:false, rel:false}; table.columns.push(curCol); mode='column'; continue; }
-        if((m=t.match(/^measure\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)\s*=\s*(.*)$/))){ curMeas={name:unq(m[1].replace(/"/g,'')), dax:(m[2]||'').trim(), folder:'', fmt:''}; table.measures.push(curMeas); mode='measure'; continue; }
+        if((m=t.match(/^measure\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)\s*=\s*(.*)$/))){ curMeas={name:unq(m[1].replace(/"/g,'')), dax:(m[2]||'').trim(), folder:'', fmt:'', description:''}; var descriptions=[], di=i-1; while(di>=0 && /^\t\/\/\//.test(lines[di])) { descriptions.unshift(lines[di].replace(/^\t\/\/\/ ?/,'')); di--; } curMeas.description=descriptions.join('\n'); table.measures.push(curMeas); mode='measure'; measureExpression=true; continue; }
         if(/^calculationGroup\b/.test(t)){ isCG=true; continue; }
         if((m=t.match(/^partition\s+.*?=\s*(\w+)\s*$/))){ partKind=m[1]; mode='partition'; continue; }
         if((m=t.match(/^annotation\s+SMV_Role\s*=\s*(\w+)/i))){ table.roleAnnotation=m[1].toLowerCase(); continue; }
@@ -46,10 +53,13 @@
         else if(/^isHidden\s*$/.test(t)) curCol.hidden=true;
         else if(/^isKey\s*$/.test(t)) curCol.isKey=true;
       } else if(mode==='measure'&&curMeas){
-        if(ind>=3){ curMeas.dax += (curMeas.dax?'\n':'') + raw.replace(/^\t{3}/,''); }
-        else {
-          if((m=t.match(/^formatString:\s*(.*)$/))) curMeas.fmt=m[1];
-          else if((m=t.match(/^displayFolder:\s*(.*)$/))) curMeas.folder=m[1];
+        if(ind>=3 && measureExpression){ curMeas.dax += (curMeas.dax?'\n':'') + raw.replace(/^\t{3}/,''); }
+        else if(ind===2){
+          // A property/child starts the metadata section; deeper child lines are never DAX.
+          measureExpression=false;
+          if((m=t.match(/^formatString[ \t]*:[ \t]*(.*)$/i))) curMeas.fmt=scalar(m[1]);
+          else if((m=t.match(/^displayFolder[ \t]*:[ \t]*(.*)$/i))) curMeas.folder=scalar(m[1]);
+          else if((m=t.match(/^description[ \t]*:[ \t]*(.*)$/i))) curMeas.description=scalar(m[1]);
           /* h:1 drives the hidden-measure badge — see handoff schema (build step 1). */
           else if(/^isHidden\s*$/.test(t)) curMeas.h=1;
         }
@@ -266,7 +276,7 @@
          `database` line, so it would greedily swallow the next line's own
          property (e.g. `compatibilityLevel: 1606`) and misread it as the name */
       var m=txt.match(/^database[ \t]+(.+)$/m); if(m) name=unq(m[1]);
-      if(/^relationship\s/m.test(txt) && /fromColumn:/.test(txt)) rels=rels.concat(parseRelText(txt));
+      if(/^\uFEFF?relationship\s/m.test(txt) && /fromColumn[ \t]*:/i.test(txt)) rels=rels.concat(parseRelText(txt));
       if(/^table\s/m.test(txt)){ var t=parseTableText(txt); if(t) tables.push(t); }
     });
     /* tables are queries too — `Source = MdGeoEntities` points at another table's partition */
@@ -281,7 +291,7 @@
     var txt=function(x){ return Array.isArray(x)?x.join('\n'):(x||''); };
     var tables=(mdl.tables||[]).filter(function(t){return !skip.test(t.name);}).map(function(t){
       var columns=(t.columns||[]).map(function(c){ return {name:c.name, dataType:c.dataType||'', hidden:!!c.isHidden, isCalc:c.type==='calculated', isKey:!!c.isKey, rel:false}; });
-      var measures=(t.measures||[]).map(function(mm){ var o={name:mm.name, dax:txt(mm.expression).trim(), folder:mm.displayFolder||'', fmt:mm.formatString||''}; if(mm.isHidden) o.h=1; return o; });
+      var measures=(t.measures||[]).map(function(mm){ var o={name:mm.name, dax:txt(mm.expression).trim(), folder:mm.displayFolder||'', fmt:mm.formatString||'', description:mm.description||''}; if(mm.isHidden) o.h=1; return o; });
       var isCG=!!t.calculationGroup;
       var isFP=(t.columns||[]).some(function(c){ return (c.extendedProperties||[]).some(function(p){return p.name==='ParameterMetadata';}); });
       var partKind='', partSrc='';

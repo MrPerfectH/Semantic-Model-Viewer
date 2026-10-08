@@ -20,6 +20,7 @@ function node(tag = 'div') {
     addEventListener(type, action) { this.listeners[type] = action; }, removeEventListener() {},
     setAttribute(key, value) { this.attrs[key] = String(value); }, getAttribute(key) { return this.attrs[key]; },
     getBoundingClientRect() { return { x: 0, y: 0, left: 0, top: 0, right: 1200, bottom: 800, width: 1200, height: 800 }; },
+    showModal() { this.open = true; }, close() { this.open = false; this.listeners.close?.(); },
     focus() {}, querySelectorAll() { return []; }, querySelector() { return null; }
   };
   return n;
@@ -246,4 +247,79 @@ test('host model switching restores each model lane zoom before layout and fit',
   h.receive({ type: 'model', ...record() }); await flush();
   assert.equal(app.canvas.layoutK, 0.42);
   h.isolated();
+});
+
+
+test('DAX editor reviews before save, invalidates edited previews, and refreshes the saved model', async () => {
+  const h = harness(), app = await h.boot({ open: record() });
+  app.measures.editDax({ name: 'Derived', table: 'Sales' });
+  const dialog = h.document.body.children.at(-1);
+  const input = dialog.children.find(n => n.tag === 'textarea');
+  const actions = dialog.children.find(n => n.className === 'mv-dax-actions');
+  const [review, save] = actions.children;
+  assert.equal(save.disabled, true);
+  input.value = '[Base] + 2';
+  const reviewing = review.listeners.click();
+  const request = h.next('prepareMeasureEdit');
+  assert.equal(request.table, 'Sales'); assert.equal(request.measure, 'Derived');
+  h.respond(request, { token: 'first', path: 'definition/tables/Sales.tmdl', before: '[Base] + 1', after: input.value });
+  await reviewing; assert.equal(save.disabled, false);
+  input.value = '[Base] + 3'; input.listeners.input(); assert.equal(save.disabled, true);
+  const again = review.listeners.click();
+  h.respond(h.next('prepareMeasureEdit'), { token: 'second', path: 'definition/tables/Sales.tmdl', before: '[Base] + 1', after: input.value });
+  await again;
+  const saving = save.listeners.click(); const saveRequest = h.next('saveMeasureEdit');
+  assert.equal(saveRequest.token, 'second');
+  const updated = record(); const data = JSON.parse(updated.files[0].text);
+  data.tables[0].measures[1].dax = '[Base] + 3'; updated.files[0].text = JSON.stringify(data);
+  h.respond(saveRequest, { saved: true, model: updated }); await saving;
+  assert.equal(app.msrOf('Derived').dax, '[Base] + 3');
+  assert.equal(dialog.open, false); assert.equal(h.document.body.children.includes(dialog), false);
+});
+
+test('cancelling the DAX editor sends no write request', async () => {
+  const h = harness(), app = await h.boot({ open: record() });
+  app.measures.editDax({ name: 'Base', table: 'Sales' });
+  const dialog = h.document.body.children.at(-1);
+  const actions = dialog.children.find(n => n.className === 'mv-dax-actions');
+  actions.children[2].listeners.click();
+  assert.equal(dialog.open, false);
+  assert.equal(h.posted.some(m => m.type === 'saveMeasureEdit' || m.type === 'prepareMeasureEdit'), false);
+});
+
+test('metadata editor reviews before save, invalidates edited previews, and refreshes the saved model', async () => {
+  const h = harness(), app = await h.boot({ open: record() });
+  app.measures.editDax({ name: 'Derived', table: 'Sales' }, true);
+  const dialog = h.document.body.children.at(-1);
+  const input = dialog.children.find(n => n.tag === 'label').children[0];
+  const actions = dialog.children.find(n => n.className === 'mv-dax-actions');
+  const [review, save] = actions.children;
+  assert.equal(save.disabled, true);
+  input.value = '[Base] + 2';
+  const reviewing = review.listeners.click();
+  const request = h.next('prepareMeasureEdit');
+  assert.equal(request.dax, undefined); assert.equal(request.metadata.description, input.value); assert.equal(request.table, 'Sales'); assert.equal(request.measure, 'Derived');
+  h.respond(request, { token: 'first', path: 'definition/tables/Sales.tmdl', before: '[Base] + 1', after: input.value });
+  await reviewing; assert.equal(save.disabled, false);
+  input.value = '[Base] + 3'; input.listeners.input(); assert.equal(save.disabled, true);
+  const again = review.listeners.click();
+  h.respond(h.next('prepareMeasureEdit'), { token: 'second', path: 'definition/tables/Sales.tmdl', before: '[Base] + 1', after: input.value });
+  await again;
+  const saving = save.listeners.click(); const saveRequest = h.next('saveMeasureEdit');
+  assert.equal(saveRequest.token, 'second');
+  const updated = record(); const data = JSON.parse(updated.files[0].text);
+  data.tables[0].measures[1].description = '[Base] + 3'; updated.files[0].text = JSON.stringify(data);
+  h.respond(saveRequest, { saved: true, model: updated }); await saving;
+  assert.equal(app.msrOf('Derived').description, '[Base] + 3');
+  assert.equal(dialog.open, false); assert.equal(h.document.body.children.includes(dialog), false);
+});
+
+test('cancelling metadata editor sends no write request', async () => {
+  const h = harness(), app = await h.boot({ open: record() });
+  app.measures.editDax({ name: 'Base', table: 'Sales' }, true);
+  const dialog = h.document.body.children.at(-1);
+  const actions = dialog.children.find(n => n.className === 'mv-dax-actions');
+  actions.children[2].listeners.click();
+  assert.equal(dialog.open, false);
+  assert.equal(h.posted.some(m => m.type === 'saveMeasureEdit' || m.type === 'prepareMeasureEdit'), false);
 });

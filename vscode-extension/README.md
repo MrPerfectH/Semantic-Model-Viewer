@@ -104,3 +104,11 @@ viewer rather than generated `media/`.
 Version 0.2.0 integrates the VS Code extension work recovered from
 `origin/claude/model-viewer-vsc-plugin-dfmn8c` with the current shared viewer. It supersedes
 the earlier 0.1.0 package, which targeted the former `viewer/` source directory.
+
+## Preview: editing model source
+
+On the `t3/edit-model-context` branch, open a TMDL model and use **Measures → select measure → Edit DAX** or **Edit metadata**. Metadata includes description, display folder and static format string. Use **Edit relationships** in the toolbar to create or modify a relationship between existing columns. Every flow offers Review, Save to TMDL and Cancel; changing a draft invalidates its review.
+
+This preview patches supported UTF-8 source sections instead of serializing the simplified viewer model. It preserves unrelated content, BOM and line endings, checks source changes and dirty model editors, and refreshes from saved source. Descriptions and scalar metadata follow [Microsoft's TMDL syntax](https://learn.microsoft.com/en-us/analysis-services/tmdl/tmdl-overview).
+
+Supported boundaries and the manual verification checklist are in [Model editing preview](../docs/model-editing-preview.md). Rename design is a separate proposal. Installed VS Code behavior and model-engine validation require separate acceptance before merge.

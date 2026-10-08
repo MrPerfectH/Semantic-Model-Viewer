@@ -16,7 +16,7 @@ for (const file of required) {
   if (!fs.existsSync(path.join(src, file))) throw new Error('Missing canonical viewer asset: ' + file);
 }
 const files = ['index.html', ...fs.readdirSync(src).filter(file => file.endsWith('.css')),
-  ...fs.readdirSync(path.join(src, 'js')).filter(file => file.endsWith('.js') && file !== 'host-web.js').map(file => 'js/' + file)].sort();
+  ...fs.readdirSync(path.join(src, 'js')).filter(file => file.endsWith('.js')).map(file => 'js/' + file)].sort();
 const expected = new Set(files);
 const html = fs.readFileSync(path.join(src, 'index.html'), 'utf8');
 for (const match of html.matchAll(/(?:src|href)=["']\.\/([^"'?#]+)(?:[?#][^"']*)?["']/g)) {

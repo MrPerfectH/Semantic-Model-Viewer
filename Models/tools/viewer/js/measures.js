@@ -1208,6 +1208,10 @@
         navigator.clipboard.writeText(raw).then(function () { status.textContent = 'Copied'; }, function () { status.textContent = 'Copy unavailable. Select the formula to copy.'; });
       });
       var actions = el('div', { cls: 'mv-dax-actions' }, [status, copy]);
+      if (!onClose && this.app.editHost() && this.app.editHost().prepareMeasureEdit && !this.app.snapshotMode) {
+        actions.appendChild(el('button', { cls: 'mv-button', text: 'Edit DAX', onClick: function () { self.editDax(card); } }));
+        actions.appendChild(el('button', { cls: 'mv-button', text: 'Edit metadata', onClick: function () { self.editDax(card, true); } }));
+      }
       if (onClose) {
         actions.appendChild(el('button', { cls: 'mv-button mv-button-primary', text: 'Analyze this measure', onClick: function () { self.pickMeasure(card.name); } }));
         actions.appendChild(el('button', { cls: 'mv-text-button', title: 'Clear comparison', 'aria-label': 'Clear comparison with ' + card.name, text: 'Clear', onClick: onClose }));
@@ -1223,6 +1227,60 @@
       ]);
       return header;
     },
+    editDax: function (card, metadataOnly) {
+      var app = this.app, modelId = app.modelKey, editHost = app.editHost();
+      var dialog = el('dialog', { cls: 'mv-edit-dialog', 'aria-label': (metadataOnly ? 'Edit metadata for ' : 'Edit DAX for ') + card.name });
+      var input = el('textarea', { 'aria-label': 'DAX formula', spellcheck: 'false' });
+      input.value = app.msrOf(card.name).dax || '';
+      var fields = [], m = app.msrOf(card.name);
+      if (metadataOnly) {
+        [['description', 'Description', m.description], ['displayFolder', 'Display folder', m.folder], ['formatString', 'Format string', m.fmt]].forEach(function (f) {
+          var field = el(f[0] === 'description' ? 'textarea' : 'input', { 'aria-label': f[1], cls: 'mv-metadata-input' });
+          field.value = f[2] || ''; fields.push({ key: f[0], label: f[1], input: field });
+        });
+      }
+      var inputs = metadataOnly ? fields.map(function (f) { return f.input; }) : [input];
+      function disableInputs(value) { inputs.forEach(function (f) { f.disabled = value; }); }
+      var status = el('p', { role: 'status', 'aria-live': 'polite' });
+      var preview = el('div'), token = null, busy = false;
+      var save = el('button', { cls: 'mv-button mv-button-primary', text: 'Save to TMDL' }); save.disabled = true;
+      var review = el('button', { cls: 'mv-button', text: 'Review change' });
+      inputs.forEach(function (field) { field.addEventListener('input', function () { if (editHost.cancelEdit) editHost.cancelEdit(); token = null; save.disabled = true; U.clear(preview); status.textContent = ''; }); });
+      review.addEventListener('click', async function () {
+        if (busy) return;
+        busy = true; disableInputs(true); review.disabled = true; save.disabled = true;
+        try {
+          var payload = { modelId: modelId, table: card.table, measure: card.name };
+          if (metadataOnly) { payload.metadata = {}; fields.forEach(function (f) { if (f.input.value !== (m[f.key === 'displayFolder' ? 'folder' : f.key === 'formatString' ? 'fmt' : f.key] || '')) payload.metadata[f.key] = f.input.value; }); }
+          else payload.dax = input.value;
+          var result = await editHost.prepareMeasureEdit(payload);
+          token = result.token; U.clear(preview);
+          preview.appendChild(el('p', { text: result.path }));
+          preview.appendChild(el('h4', { text: 'Before' })); preview.appendChild(el('pre', { text: result.before }));
+          preview.appendChild(el('h4', { text: 'After' })); preview.appendChild(el('pre', { text: result.after }));
+          status.textContent = metadataOnly ? 'Review the source metadata before saving. Empty values remove a property.' : 'Review the formula before saving. DAX is not validated by a model engine.'; save.disabled = false;
+        } catch (error) { status.textContent = error.message; token = null; }
+        finally { busy = false; disableInputs(false); review.disabled = false; }
+      });
+      save.addEventListener('click', async function () {
+        if (busy || !token) return;
+        busy = true; disableInputs(true); review.disabled = true; save.disabled = true;
+        try {
+          var result = await editHost.saveMeasureEdit(token);
+          if (app.modelKey === modelId) app.hostOpenModel(editHost.parseModelMessage(result.model));
+          dialog.close();
+        } catch (error) { status.textContent = error.message; token = null; }
+        finally { busy = false; disableInputs(false); review.disabled = false; }
+      });
+      dialog.addEventListener('cancel', function (e) { if (busy) e.preventDefault(); });
+      dialog.addEventListener('close', function () { if (editHost.cancelEdit) editHost.cancelEdit(); dialog.remove(); });
+      dialog.appendChild(el('h3', { text: 'Edit ' + card.name }));
+      if (metadataOnly) fields.forEach(function (f) { dialog.appendChild(el('label', { text: f.label }, f.input)); });
+      else dialog.appendChild(input);
+      dialog.appendChild(el('div', { cls: 'mv-dax-actions' }, [review, save, el('button', { cls: 'mv-button', text: 'Cancel', onClick: function () { if (!busy) dialog.close(); } })]));
+      dialog.appendChild(status); dialog.appendChild(preview); document.body.appendChild(dialog); dialog.showModal(); inputs[0].focus();
+    },
+
     renderDax: function () {
       var self = this, app = this.app;
       var sn = app.state.selMeasure;
