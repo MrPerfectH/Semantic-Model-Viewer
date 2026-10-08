@@ -31,6 +31,13 @@
     this.map.addEventListener('keydown', function(e){if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();var v=app.canvas.view;v.x += e.key==='ArrowLeft'?70:e.key==='ArrowRight'?-70:0;v.y += e.key==='ArrowUp'?70:e.key==='ArrowDown'?-70:0;app.canvas.updateTransform();});
     window.addEventListener('resize', function(){self.update();self.drawMap();});
     this.selbar=el('div',{id:'canvas-selection',hidden:true,role:'status'});dropSurface.appendChild(this.selbar);
+    /* A press anywhere outside an open toolbar popover closes it. Presses on the menu or on
+       its own button are left alone (the button toggles by itself). */
+    window.addEventListener('pointerdown', function(e){
+      if(!(self.legendOpen||self.optionsOpen||app.state.showPresets))return;
+      if(e.target&&e.target.closest&&e.target.closest('.ex-menu-anchor'))return;
+      self.closeMenus(true);
+    },true);
     window.addEventListener('keydown', function(e){
       if(e.key==='Escape'){if(self.closeMenus())e.stopPropagation();else if(app.canvas.marked.size)app.canvas.setMarked([]);return;}
       if(e.key!=='Delete'&&e.key!=='Backspace')return;
@@ -44,11 +51,17 @@
     /* Escape closes the toolbar popovers and hands focus back to the button that opened
        them, so keyboard users are never left with focus inside a menu that is gone.
        Returns true when something was actually closed. */
-    closeMenus:function(){
-      var app=this.app;
+    closeMenus:function(outside){
+      var app=this.app,self=this;
+      if(outside){
+        var any=this.legendOpen||this.optionsOpen||app.state.showPresets;
+        this.legendOpen=false;this.optionsOpen=false;this._clusterKey=null;this._key=null;
+        if(app.state.showPresets)app.setState({showPresets:false});else if(any)this.update();
+        return any;
+      }
       if(this.legendOpen){this.legendOpen=false;this._clusterKey=null;this.update();if(this.legendBtn&&this.legendBtn.focus)this.legendBtn.focus();return true;}
       if(this.optionsOpen){this.optionsOpen=false;this._key=null;this.update();if(this.displayBtn&&this.displayBtn.focus)this.displayBtn.focus();return true;}
-      if(app.state.showPresets){var self=this;app.setState({showPresets:false},function(){if(self.presetsBtn&&self.presetsBtn.focus)self.presetsBtn.focus();});return true;}
+      if(app.state.showPresets){app.setState({showPresets:false},function(){if(self.presetsBtn&&self.presetsBtn.focus)self.presetsBtn.focus();});return true;}
       return false;
     },
     storageKey:function(){return 'smv_workspace_v1_'+this.app.modelKey;},

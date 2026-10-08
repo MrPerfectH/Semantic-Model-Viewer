@@ -705,3 +705,24 @@ test('Escape closes the Display popover first, then Saved views, and returns foc
 
   assert.equal(explorer.closeMenus(), false, 'Escape with nothing open is left to other handlers');
 });
+
+test('a press outside closes every open toolbar popover without stealing focus', () => {
+  const context = runtime();
+  const focused = [];
+  let updates = 0;
+  const explorer = Object.create(context.TableExplorer.prototype);
+  const app = { state: { showPresets: true }, setState(patch, cb) { Object.assign(this.state, patch); if (cb) cb(); } };
+  Object.assign(explorer, { app, optionsOpen: true, legendOpen: true, update() { updates++; },
+    displayBtn: { focus: () => focused.push('Display') },
+    legendBtn: { focus: () => focused.push('Legend') },
+    presetsBtn: { focus: () => focused.push('Saved views') } });
+
+  assert.equal(explorer.closeMenus(true), true);
+  assert.equal(explorer.optionsOpen, false);
+  assert.equal(explorer.legendOpen, false);
+  assert.equal(app.state.showPresets, false);
+  assert.deepEqual(focused, [], 'clicking elsewhere keeps the focus where the user clicked');
+
+  assert.equal(explorer.closeMenus(true), false, 'nothing open, nothing to do');
+  assert.equal(updates, 0, 'no redraw when nothing was open');
+});
