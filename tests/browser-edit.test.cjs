@@ -39,5 +39,36 @@ test('write failure aborts staged stream and does not report save',async()=>{
  const r=await f.adapter.prepareMeasureEdit(f.request);await assert.rejects(f.adapter.saveMeasureEdit(r.token),/disk full/);assert.equal(aborted,true);assert.equal(f.writes,0);
 });
 test('source save followed by refresh failure reports saved boundary explicitly',async()=>{
- const f=fixture(),r=await f.adapter.prepareMeasureEdit(f.request);f.app.parseSourceFiles=()=>{throw Error('parse failed');};await assert.rejects(f.adapter.saveMeasureEdit(r.token),/Source saved, but refresh failed/);assert.equal(f.writes,1);
+ const f=fixture(),r=await f.adapter.prepareMeasureEdit(f.request);f.app.parseSourceFiles=()=>{throw Error('parse failed');};await assert.rejects(f.adapter.saveMeasureEdit(r.token),/Source saved, but refresh failed/);assert.equal(f.writes,1);assert.equal(f.adapter.available(),false);await assert.rejects(f.adapter.prepareMeasureEdit(f.request),/Connect/);f.app._modelLoadRequest++;assert.equal(f.adapter.available(),true);
+});
+require('../Models/tools/viewer/js/roles');
+require('../Models/tools/viewer/js/tmdl-parser');
+test('browser metadata forwards fifth argument and reviews source block; refresh parses saved metadata',async()=>{
+ const f=fixture();delete f.request.dax;f.request.metadata={description:'Line one\nLine two',displayFolder:'Totals',formatString:'0.00'};f.app.parseSourceFiles=files=>globalThis.TMDLParser.parseAny(files);
+ const r=await f.adapter.prepareMeasureEdit(f.request);assert.match(r.before,/measure M = 1/);assert.match(r.after,/\/\/\/ Line one/);assert.match(r.after,/displayFolder: "Totals"/);assert.equal(f.writes,0);
+ await f.adapter.saveMeasureEdit(r.token);const m=f.app.records[0].model.tables[0].measures[0];assert.equal(m.description,'Line one\nLine two');assert.equal(m.folder,'Totals');assert.equal(m.fmt,'0.00');assert.equal(m.dax.trim(),'1');assert.match(f.text,/\tmeasure M = 1\r\n/);assert.ok(f.text.startsWith('\uFEFFtable T\r\n'));
+});
+function relationshipFixture(include=true) {
+ const f=fixture(),texts=new Map([['definition/tables/A.tmdl','table A\n\tcolumn Id\n'],['definition/tables/B.tmdl','table B\n\tcolumn Id\n']]);if(include)texts.set('definition/relationships.tmdl','\uFEFF');
+ let writes=0,created=0;const handles=new Map();for(const path of texts.keys())handles.set(path,{getFile:async()=>({arrayBuffer:async()=>new TextEncoder().encode(texts.get(path)).buffer}),createWritable:async()=>{let staged;return{write:async bytes=>{staged=new TextDecoder('utf-8',{ignoreBOM:true}).decode(bytes);},close:async()=>{texts.set(path,staged);writes++;},abort:async()=>{}};}});
+ f.app.readModelDir=async()=>[...texts].map(([path,text])=>({path,text,handle:handles.get(path)}));f.app.parseSourceFiles=files=>globalThis.TMDLParser.parseAny(files);
+ const request={modelId:f.app.modelKey,relationshipId:null,fromTable:'A',fromColumn:'Id',toTable:'B',toColumn:'Id',fromCardinality:'many',toCardinality:'one',crossFilteringBehavior:'oneDirection',isActive:true};
+ return{...f,adapter:create(f.app),request,texts,handles,get writes(){return writes;},get created(){return created;},deny:()=>{f.permission='denied';}};
+}
+test('browser relationship creates within existing source then updates stable identity and reparses source',async()=>{
+ const f=relationshipFixture(),r=await f.adapter.prepareRelationshipEdit(f.request);assert.match(r.relationshipId,/^[a-f0-9-]{36}$/);assert.equal(f.writes,0);await f.adapter.saveRelationshipEdit(r.token);assert.equal(f.writes,1);
+ const parsed=f.app.records[0].model.relationships[0];assert.equal(parsed.name,r.relationshipId);assert.equal(parsed.from,'A');assert.equal(parsed.to,'B');
+ const update=await f.adapter.prepareRelationshipEdit({...f.request,relationshipId:r.relationshipId,isActive:false});assert.match(update.before,new RegExp(r.relationshipId));await f.adapter.saveRelationshipEdit(update.token);assert.equal(f.app.records[0].model.relationships[0].inactive,true);assert.ok(f.texts.get('definition/relationships.tmdl').startsWith('\uFEFF'));
+});
+test('browser missing canonical relationship source review and cancel never create files',async()=>{
+ const f=relationshipFixture(false),before=[...f.texts];await assert.rejects(f.adapter.prepareRelationshipEdit(f.request),/existing definition\/relationships.tmdl.*exclusive file creation/);f.adapter.cancelEdit();assert.deepEqual([...f.texts],before);assert.equal(f.writes,0);assert.equal(f.created,0);await assert.rejects(f.adapter.saveRelationshipEdit('1'),/stale/);
+});
+test('browser relationship denial, cancel, raw source, schema and inventory conflicts never commit',async()=>{
+ for(const mode of ['denied','cancel','source','schema','inventory']){const f=relationshipFixture(),r=await f.adapter.prepareRelationshipEdit(f.request);if(mode==='denied')f.deny();if(mode==='cancel')f.adapter.cancelEdit();if(mode==='source')f.texts.set('definition/relationships.tmdl','// external\n');if(mode==='schema')f.texts.set('definition/tables/B.tmdl','table B\n\tcolumn Gone\n');if(mode==='inventory')f.texts.delete('definition/tables/B.tmdl');const before=[...f.texts];await assert.rejects(f.adapter.saveRelationshipEdit(r.token),/permission|stale|externally/);assert.deepEqual([...f.texts],before);assert.equal(f.writes,0);}
+});
+test('browser parser fallback works and cache failure blocks edits until reopen',async()=>{
+ const f=relationshipFixture();delete f.app.parseSourceFiles;const r=await f.adapter.prepareRelationshipEdit(f.request);f.app.setStore=()=>false;await assert.rejects(f.adapter.saveRelationshipEdit(r.token),/Source saved, but browser cache refresh failed/);assert.equal(f.writes,1);assert.equal(f.adapter.available(),false);await assert.rejects(f.adapter.prepareRelationshipEdit(f.request),/Connect/);f.app._modelLoadRequest++;assert.equal(f.adapter.available(),true);
+});
+test('schema conflict while writing aborts staged relationship save',async()=>{
+ const f=relationshipFixture();let aborted=false;const handle=f.handles.get('definition/relationships.tmdl');handle.createWritable=async()=>({write:async()=>{f.texts.set('definition/tables/B.tmdl','table B\n\tcolumn Changed\n');},abort:async()=>{aborted=true;},close:async()=>{throw Error('must not close');}});const r=await f.adapter.prepareRelationshipEdit(f.request);await assert.rejects(f.adapter.saveRelationshipEdit(r.token),/source changed/);assert.equal(aborted,true);assert.equal(f.texts.get('definition/relationships.tmdl'),'\uFEFF');assert.equal(f.writes,0);
 });
