@@ -134,3 +134,28 @@ test('relationship projection retains source identity including a BOM first decl
   ]);
   assert.equal(model.relationships[0].name, 'stable-id');
 });
+
+test('relationship properties project case-insensitive keys, colon whitespace and supported enum values', () => {
+  const files = [file('A.tmdl', 'table A\n\tcolumn Id\n'), file('B.tmdl', 'table B\n\tcolumn Id\n'),
+    file('relationships.tmdl', 'relationship stable\n\tFROMCOLUMN \t: A.Id\n\tToColumn : B.Id\n\tFromCardinality : ONE\n\tToCardinality: MANY\n\tIsActive : FALSE\n\tCrossFilteringBehavior : BOTHDIRECTIONS\n')];
+  const r = parser().parseTMDL(files).relationships[0];
+  assert.equal(r.name, 'stable'); assert.equal(r.from, 'A'); assert.equal(r.to, 'B');
+  assert.equal(r.fromCard, 'one'); assert.equal(r.toCard, 'many'); assert.equal(r.inactive, true); assert.equal(r.both, true);
+  const unknown = parser().parseTMDL(files.map(f => ({ ...f, text: f.text.replace('BOTHDIRECTIONS', 'Automatic') }))).relationships[0];
+  assert.equal(unknown.crossFilteringBehavior, 'Automatic');
+});
+
+test('source projection to existing form settings to patch and reparse retains relationship semantics', () => {
+  const { prepareRelationshipPatch } = require('../Models/tools/viewer/js/relationship-edit');
+  const files = [{name:'A.tmdl',path:'definition/tables/A.tmdl',text:'table A\n\tcolumn Id\n\tcolumn Other\n'},
+    {name:'B.tmdl',path:'definition/tables/B.tmdl',text:'table B\n\tcolumn Id\n'},
+    {name:'relationships.tmdl',path:'definition/relationships.tmdl',text:'relationship stable\n\tFromColumn : A.Id\n\tToColumn : B.Id\n\tFromCardinality : one\n\tToCardinality : many\n\tIsActive : false\n\tCrossFilteringBehavior : bothDirections\n\tCustomScalar: untouched\n'}];
+  const p = parser(), original = p.parseTMDL(files).relationships[0];
+  // Mirror the existing form's projected defaults; user changes only From column.
+  const patch = prepareRelationshipPatch(files, {relationshipId:original.name,fromTable:original.from,fromColumn:'Other',toTable:original.to,toColumn:original.toCol,
+    fromCardinality:original.fromCard,toCardinality:original.toCard,isActive:!original.inactive,crossFilteringBehavior:original.both?'bothDirections':'oneDirection'}, 'unused');
+  const result = p.parseTMDL(files.map(f => f.path===patch.path?{...f,text:patch.text}:f)).relationships[0];
+  for (const key of ['name','fromCard','toCard','inactive','both']) assert.equal(result[key],original[key],key);
+  assert.equal(result.fromCol,'Other'); assert.ok(patch.text.includes('\tCustomScalar: untouched\n'));
+  assert.ok(patch.text.includes('\tIsActive : false\n')); assert.ok(patch.text.includes('\tCrossFilteringBehavior : bothDirections\n'));
+});
