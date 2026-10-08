@@ -115,3 +115,20 @@ their ownership. Do not duplicate prerequisite extraction or inspector implement
 
 Expression decoding follows [Microsoft's TMDL expression rules](https://learn.microsoft.com/en-us/analysis-services/tmdl/tmdl-overview#expressions).
 Dependency workers should use the [M language specification](https://learn.microsoft.com/en-us/powerquery-m/power-query-m-language-specification), particularly lexical structure and scope rules.
+
+
+## #36 integration
+
+Owned worker commit: `d5ded3113f1bbc6a1ea120e7e204152bacb1f1ab`.
+`js/power-query-dependencies.js` is registered before the inspector and included in
+`Snapshots.files`. The metadata export allowlist remains unchanged: including
+runtime analysis code does not export raw M.
+
+Public API v1: `PowerQueryDependencies.analyze(node, metadata)` returns
+`{dependencies: [{id, name, at}], uncertainty: [string], partial: true}`.
+`graph(metadata)` returns `{nodes: [{node, result}], edges: [{from, to, name, at}],
+cycles: [[id, ...]], uncertainty: [string], partial: true}`. Cycle groups are strongly
+connected components, including self edges. Unsupported/malformed syntax returns
+an explicit incomplete result without resolved edges. Complex types and sections
+are unsupported. No retained analyzer state or mutation of metadata is permitted.
+See the module header and focused tests for #37's graph contract.
