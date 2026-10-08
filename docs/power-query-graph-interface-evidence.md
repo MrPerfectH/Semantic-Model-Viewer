@@ -110,3 +110,56 @@ edits, source data reads, M execution or credential access occurred. Consumers m
 coordinate this written contract before implementation. UI registration, lifecycle,
 accessibility/browser/installed-app checks and A10 user acceptance remain separate
 coordinator/user gates. This thread has no integration assignment.
+
+## Independent-run diagnosis and presentation clarification
+
+The independent c4d9386 two-file run failed at graph-file level (239.313459 ms),
+with seven reference tests passing. `/tmp/pq-parent-graph-contract-review.log`
+is preserved. Its shell wrapper returned tail's status, so the original Node
+exit code, signal and PID were not captured. This failure is not reclassified
+as a pass by later successful probes; the prerequisite review gate remains open.
+
+A matching macOS report, `~/Library/Logs/DiagnosticReports/node-2026-10-08-182404.ips`,
+records /usr/local/bin/node PID77216/parent77215, capture 18:24:03.7234 +0200,
+EXC_BAD_ACCESS/SIGSEGV at address 0xe. Native lifetime is 237.99 ms, matching the
+file-level duration and log modification second. Top frame is
+`v8::internal::ClearStaleLeftTrimmedPointerVisitor::VisitRootPointers`, followed
+by GC root iteration/MarkCompact. This strongly correlates the failure with a
+native Node/V8 GC crash. Original-PID correlation and the exact triggering V8
+defect remain unproven; concurrency, OOM and source assertions are not established
+causes. No production/test fix is justified by this evidence alone.
+
+Bounded diagnostics changed one variable at a time, without pass-seeking loops.
+All used unchanged c4d9386 source/tests, the same isolated cwd, arm64 macOS, and
+otherwise unset NODE_OPTIONS/UV_THREADPOOL_SIZE:
+
+- Exact `node --test tests/power-query-graph-model.test.cjs tests/power-query-reference-ranges.test.cjs`, with external process-event preload: 20/20, root exit0, both children exit0/signal null. Graph child maxRSS344240 KiB. This instrumented result changes timing and is not a native-crash fix.
+- Same command without preload: 20/20, actual Node exit0, 388.72 ms test duration.
+- Instrumented baseline plus `--max-old-space-size=128` (earlier-GC diagnostic only): 20/20, root/children exit0 with no signal. Not evidence of an original memory limit or a supported workaround.
+- Same two-file command using temporary official Node v22.23.3 (V8 12.4.254.21-node.57): 20/20, actual exit0, 408.67 ms. System Node remains v24.15.0 (V8 13.6.233.17-node.48). This checks CONTRIBUTING.md's Node22 requirement; it does not prove the Node24 failure fixed.
+
+Receipts, process events, stdout/stderr, original crash extract and verified Node22
+archive checksum are preserved under `/tmp/pq-graph-native-diagnosis-20261008/`.
+To reproduce supported-runtime validation without replacing system Node:
+
+```sh
+/tmp/pq-graph-native-diagnosis-20261008/node-v22.23.3-darwin-arm64/bin/node --test tests/power-query-graph-model.test.cjs tests/power-query-reference-ranges.test.cjs > /tmp/pq-graph-review-new.log 2>&1
+test_status=$?
+tail -n 25 /tmp/pq-graph-review-new.log
+exit "$test_status"
+```
+
+Preserving Node status is the verification-wrapper correction; it does not repair
+the native crash. Diagnostic scripts are explicitly marked outside production;
+tests and implementation are unchanged. UI remains HOLD; independent verification
+and any runtime-defect escalation belong to the coordinator.
+
+Presentation mapping guarantee for c4d9386: the first `metadata.nodes.length`
+graph nodes pair one-to-one with the same captured metadata inventory **in order**;
+placeholders follow. Build never reorders nodes. A pure graph-ID→metadata-row Map
+by index handles duplicate rows without decoding IDs; assert metadataId matches
+the paired row ID. Keep the captured inventory immutable through build/publication.
+Unique resolved occurrence IDs equal metadata IDs and graph IDs. Dynamic/name/
+multipartition ambiguity has no structured subtype beyond opaque
+analysis-uncertainty; duplicate-identity is a distinct identity finding. Code,
+classification and basis can be read through this captured presentation lookup.
