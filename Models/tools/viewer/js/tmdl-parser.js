@@ -10,13 +10,19 @@
     text.split(/\r?\n/).forEach(function(raw){
       var t=raw.trim(); if(!t) return;
       if(/^relationship\s/.test(t) && !/^\t/.test(raw)){ cur={name:unq(t.replace(/^relationship\s+/,'')),fromCard:'many',toCard:'one',inactive:false,both:false}; out.push(cur); return; }
-      if(!cur) return; var m;
-      if((m=t.match(/^fromColumn:\s*(.+)$/))){ var r=parseRef(m[1]); if(r){cur.from=r.table;cur.fromCol=r.column;} }
-      else if((m=t.match(/^toColumn:\s*(.+)$/))){ var r2=parseRef(m[1]); if(r2){cur.to=r2.table;cur.toCol=r2.column;} }
-      else if((m=t.match(/^toCardinality:\s*(\w+)/))) cur.toCard=m[1];
-      else if((m=t.match(/^fromCardinality:\s*(\w+)/))) cur.fromCard=m[1];
-      else if(/^isActive:\s*false/.test(t)) cur.inactive=true;
-      else if(/^crossFilteringBehavior:\s*bothDirections/.test(t)) cur.both=true;
+      if(!cur) return;
+      var m=t.match(/^([a-z][a-z0-9]*)[ \t]*:[ \t]*(.*)$/i); if(!m) return;
+      var key=m[1].toLowerCase(), value=m[2].trim(), normalized=value.toLowerCase();
+      if(key==='fromcolumn' || key==='tocolumn'){
+        var r=parseRef(value); if(r){ var side=key==='fromcolumn'?'from':'to'; cur[side]=r.table; cur[side+'Col']=r.column; }
+      }
+      else if(key==='tocardinality' || key==='fromcardinality') cur[key==='tocardinality'?'toCard':'fromCard']=['one','many'].indexOf(normalized)>=0?normalized:value;
+      else if(key==='isactive' && (normalized==='true'||normalized==='false')) cur.inactive=normalized==='false';
+      else if(key==='crossfilteringbehavior'){
+        cur.both=normalized==='bothdirections';
+        // Unknown direction must remain unresolved in metadata traversal.
+        if(normalized!=='bothdirections' && normalized!=='onedirection') cur.crossFilteringBehavior=value;
+      }
     });
     return out.filter(function(r){ return r.from&&r.fromCol&&r.to&&r.toCol; });
   }
@@ -266,7 +272,7 @@
          `database` line, so it would greedily swallow the next line's own
          property (e.g. `compatibilityLevel: 1606`) and misread it as the name */
       var m=txt.match(/^database[ \t]+(.+)$/m); if(m) name=unq(m[1]);
-      if(/^\uFEFF?relationship\s/m.test(txt) && /fromColumn:/.test(txt)) rels=rels.concat(parseRelText(txt));
+      if(/^\uFEFF?relationship\s/m.test(txt) && /fromColumn[ \t]*:/i.test(txt)) rels=rels.concat(parseRelText(txt));
       if(/^table\s/m.test(txt)){ var t=parseTableText(txt); if(t) tables.push(t); }
     });
     /* tables are queries too — `Source = MdGeoEntities` points at another table's partition */
