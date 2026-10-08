@@ -24,18 +24,18 @@
 
   function parseTableText(text){
     var lines=text.split(/\r?\n/);
-    var table=null, mode=null, curCol=null, curMeas=null, partKind='', partSrc='', isCG=false, isFP=false;
+    var table=null, mode=null, curCol=null, curMeas=null, partKind='', partSrc='', measureExpression=false, isCG=false, isFP=false;
     for(var i=0;i<lines.length;i++){
       var raw=lines[i], t=raw.trim();
       var ind=raw.match(/^\t*/)[0].length;
       var m;
-      if(!t){ if(mode==='measure'&&curMeas&&curMeas.dax) curMeas.dax+='\n'; continue; }
+      if(!t){ if(mode==='measure'&&measureExpression&&curMeas&&curMeas.dax) curMeas.dax+='\n'; continue; }
       if(ind===0){ if(!table && (m=t.match(/^table\s+(.+)$/))){ table={name:unq(m[1]), columns:[], measures:[]}; } continue; }
       if(!table) continue;
       if(ind===1){
-        curCol=null; curMeas=null; mode=null;
+        curCol=null; curMeas=null; mode=null; measureExpression=false;
         if((m=t.match(/^column\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)(\s*=.*)?$/))){ curCol={name:unq(m[1].replace(/"/g,'')), dataType:'', hidden:false, isCalc:!!m[2], isKey:false, rel:false}; table.columns.push(curCol); mode='column'; continue; }
-        if((m=t.match(/^measure\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)\s*=\s*(.*)$/))){ curMeas={name:unq(m[1].replace(/"/g,'')), dax:(m[2]||'').trim(), folder:'', fmt:'', description:''}; var descriptions=[], di=i-1; while(di>=0 && /^\t\/\/\//.test(lines[di])) { descriptions.unshift(lines[di].replace(/^\t\/\/\/ ?/,'')); di--; } curMeas.description=descriptions.join('\n'); table.measures.push(curMeas); mode='measure'; continue; }
+        if((m=t.match(/^measure\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)\s*=\s*(.*)$/))){ curMeas={name:unq(m[1].replace(/"/g,'')), dax:(m[2]||'').trim(), folder:'', fmt:'', description:''}; var descriptions=[], di=i-1; while(di>=0 && /^\t\/\/\//.test(lines[di])) { descriptions.unshift(lines[di].replace(/^\t\/\/\/ ?/,'')); di--; } curMeas.description=descriptions.join('\n'); table.measures.push(curMeas); mode='measure'; measureExpression=true; continue; }
         if(/^calculationGroup\b/.test(t)){ isCG=true; continue; }
         if((m=t.match(/^partition\s+.*?=\s*(\w+)\s*$/))){ partKind=m[1]; mode='partition'; continue; }
         if((m=t.match(/^annotation\s+SMV_Role\s*=\s*(\w+)/i))){ table.roleAnnotation=m[1].toLowerCase(); continue; }
@@ -47,10 +47,13 @@
         else if(/^isHidden\s*$/.test(t)) curCol.hidden=true;
         else if(/^isKey\s*$/.test(t)) curCol.isKey=true;
       } else if(mode==='measure'&&curMeas){
-        if(ind>=3){ curMeas.dax += (curMeas.dax?'\n':'') + raw.replace(/^\t{3}/,''); }
-        else {
-          if((m=t.match(/^formatString:\s*(.*)$/))) curMeas.fmt=scalar(m[1]);
-          else if((m=t.match(/^displayFolder:\s*(.*)$/))) curMeas.folder=scalar(m[1]);
+        if(ind>=3 && measureExpression){ curMeas.dax += (curMeas.dax?'\n':'') + raw.replace(/^\t{3}/,''); }
+        else if(ind===2){
+          // A property/child starts the metadata section; deeper child lines are never DAX.
+          measureExpression=false;
+          if((m=t.match(/^formatString[ \t]*:[ \t]*(.*)$/i))) curMeas.fmt=scalar(m[1]);
+          else if((m=t.match(/^displayFolder[ \t]*:[ \t]*(.*)$/i))) curMeas.folder=scalar(m[1]);
+          else if((m=t.match(/^description[ \t]*:[ \t]*(.*)$/i))) curMeas.description=scalar(m[1]);
           /* h:1 drives the hidden-measure badge — see handoff schema (build step 1). */
           else if(/^isHidden\s*$/.test(t)) curMeas.h=1;
         }
