@@ -26,6 +26,14 @@
 @media(max-width:500px){.pqi-header,.pqi .ex-related{padding:14px}.pqi-code-scroll{max-height:420px;font-size:13px}}
 
 .pqi-option-label{display:block;font-size:13px;font-weight:500;margin-top:12px;color:#465a76}.pqi-option-label select{font-weight:400}
-.pqi-reader{box-sizing:border-box;width:min(1100px,calc(100vw - 40px));height:min(860px,calc(100dvh - 40px));max-width:none;max-height:none;padding:0;border:1px solid #dce3ee;border-radius:12px;background:white;color:#293b56;box-shadow:0 16px 64px #14203235;font:13px/1.5 'IBM Plex Sans',system-ui,sans-serif}
-.pqi-reader[open]{display:flex;flex-direction:column}.pqi-reader::backdrop{background:#1f293766}.pqi-reader-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid #e2e8f0}.pqi-reader-header h2{font-size:16px;margin:0;overflow-wrap:anywhere}.pqi-reader-body{flex:1;min-height:0;display:flex;padding:16px}.pqi-reader .pqi-code-card{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;margin:0}.pqi-reader .pqi-code-scroll{flex:1;min-height:0;max-height:none}.pqi-reader [hidden]{display:none!important}
+.pqi-reader{box-sizing:border-box;width:calc(100vw - 32px);height:calc(100dvh - 32px);max-width:none;max-height:none;padding:0;border:1px solid #dce3ee;border-radius:12px;background:white;color:#293b56;box-shadow:0 16px 64px #14203235;font:13px/1.5 'IBM Plex Sans',system-ui,sans-serif}
+.pqi-reader[open]{display:flex;flex-direction:column}.pqi-reader::backdrop{background:#1f293766}.pqi-reader-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid #e2e8f0}.pqi-reader-header h2{font-size:16px;margin:0;overflow-wrap:anywhere}.pqi-reader-body{flex:1;min-height:0;display:flex;padding:0 16px 16px}.pqi-reader .pqi-code-card{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;margin:0}.pqi-reader .pqi-code-scroll{flex:1;min-height:0;max-height:none}.pqi-reader [hidden]{display:none!important}
 @media(max-width:600px){.pqi-reader{width:calc(100vw - 16px);height:calc(100dvh - 16px)}.pqi-reader-header,.pqi-reader-body{padding:12px}.pqi-reader-header{flex-wrap:wrap}}
+
+/* Keep the full-source entry visible before the graph exploration controls. */
+.pqi-reader-launcher{position:sticky;top:0;z-index:2;padding:12px 16px;background:#fff;border-bottom:1px solid #e2e8f0}
+.pqi .pqi-open-query{display:block;width:100%;padding:9px 12px;background:#edf3ff;border-color:#b9cdf7;color:#2453cb;font-size:13px;font-weight:600;text-align:left}
+.pqi-open-query::after{content:"↗";float:right;font-size:17px;font-weight:400}.pqi .pqi-open-query:hover{background:#e2ecff;border-color:#8aacef}
+.pqi-reader-hint{display:block;margin-top:6px;font-size:11px;color:#677a96}
+.pqi-reader .pqi-code-scroll{font-size:14px;line-height:1.7}.pqi-reader .pqi-line-number{line-height:23.8px}.pqi-reader .pqi-source-line{min-height:23.8px}
+.pqi-reader-header{border-bottom:0}.pqi-reader-header .pqi-button{flex-shrink:0}

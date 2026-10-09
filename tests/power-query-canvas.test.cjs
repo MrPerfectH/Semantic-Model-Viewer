@@ -60,3 +60,26 @@ test('narrow side canvas prefers a visible vertical neighbor; collisions preserv
   const next=s.canvas.placeAdded('id-3',{visibleIds:new Set(['id-0','id-1','id-2']),anchorId:'id-0'});assert.equal(next.x,anchor.x);assert.equal(next.y,anchor.y-126);
   assert.deepEqual(plain(s.canvas.captureLayout().get('id-0')),plain(before.get('id-0')));
 });
+test('straight routes retain input-to-consumer endpoints after reversal, stacking and self cycles; hit path follows geometry',()=>{
+  const c=context();c.graph.edges=[{id:'forward',inputId:'id-0',consumerId:'id-1',referenceOccurrences:[]},{id:'reverse',inputId:'id-1',consumerId:'id-0',referenceOccurrences:[]},{id:'self',inputId:'id-0',consumerId:'id-0',referenceOccurrences:[]}];
+  const s=setup(c);s.canvas.setVisibleIds(new Set(['id-0','id-1']));
+  const points=line=>[...line.getAttribute('d').matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]);
+  for(const b of [{x:450,y:170},{x:-450,y:170},{x:0,y:170}]){
+    s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',b]]));
+    const lines=s.host.querySelectorAll('.pqc-edge-line'),hits=s.host.querySelectorAll('.pqc-edge-hit');
+    lines.forEach((line,i)=>{assert.doesNotMatch(line.getAttribute('d'),/[CQAZ]/);assert.equal(line.getAttribute('d'),hits[i].getAttribute('d'));const p=points(line);for(let j=1;j<p.length;j++)assert.ok(p[j][0]===p[j-1][0]||p[j][1]===p[j-1][1]);});
+    const forward=points(lines[0]),reverse=points(lines[1]);
+    function boundary(p,r){return ((p[0]===r.x||p[0]===r.x+252)&&p[1]>=r.y&&p[1]<=r.y+96)||((p[1]===r.y||p[1]===r.y+96)&&p[0]>=r.x&&p[0]<=r.x+252);}
+    assert.ok(boundary(forward[0],{x:0,y:0}));assert.ok(boundary(forward.at(-1),b));assert.ok(boundary(reverse[0],b));assert.ok(boundary(reverse.at(-1),{x:0,y:0}));
+    assert.notEqual(lines[0].getAttribute('d'),lines[1].getAttribute('d'));
+  }
+  const marker=s.host.querySelector('marker');assert.equal(marker.getAttribute('markerUnits'),'userSpaceOnUse');assert.equal(marker.querySelector('path').getAttribute('fill'),'none');
+});
+test('straight long links detour around visible intervening cards and simplify when the obstacle is hidden',()=>{
+  const c=context();c.graph.edges=[{id:'long',inputId:'id-0',consumerId:'id-1',referenceOccurrences:[]}];const s=setup(c);
+  s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',{x:800,y:0}],['id-2',{x:400,y:0}]]));s.canvas.setVisibleIds(new Set(['id-0','id-1','id-2']));
+  const line=s.host.querySelector('.pqc-edge-line'),detour=line.getAttribute('d');assert.match(detour,/,(-18|114)/);
+  const pts=[...detour.matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]);
+  for(let i=1;i<pts.length;i++){const a=pts[i-1],b=pts[i];assert.equal(a[0]===b[0]?a[0]>400&&a[0]<652&&Math.max(a[1],b[1])>0&&Math.min(a[1],b[1])<96:a[1]>0&&a[1]<96&&Math.max(a[0],b[0])>400&&Math.min(a[0],b[0])<652,false);}
+  s.canvas.setVisibleIds(new Set(['id-0','id-1']));assert.notEqual(line.getAttribute('d'),detour);assert.equal([...line.getAttribute('d').matchAll(/[ML]-?[\d.]+,(-?[\d.]+)/g)].every(m=>+m[1]===48),true);
+});

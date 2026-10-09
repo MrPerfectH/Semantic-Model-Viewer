@@ -429,7 +429,13 @@ Category filters hide canvas/library rows; search narrows the library and dims c
 nonmatches. Counts retain total inventory. A filtered selection retains its inspector
 and offers Show all. Reset filters preserves selection/layout; model changes clear them.
 
-Pan, zoom, Fit and the whole-model minimap explore all components without upstream
+Use **Open full query** beneath the selected query name for a nearly full-window M
+reader with 14px code, line wrapping, exact Copy M and clickable references. Escape
+returns focus to the opener. Source text and original line endings are never reformatted.
+Query connectors use thin straight segments and small open chevrons pointing from input
+to consumer; click a connector for reference details.
+
+Pan, zoom, Fit and the visible-canvas minimap explore all components without upstream
 expansion caps. Analysis builds atomically in a cancellable background worker; cancellation
 and worker failure do not imply absent dependencies. Static findings remain partial:
 dynamic/missing/ambiguous references, unsupported syntax, cycles and analysis notices

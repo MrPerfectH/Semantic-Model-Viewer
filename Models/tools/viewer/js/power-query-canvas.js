@@ -20,8 +20,8 @@
     root.setAttribute('aria-label', 'Power Query input to consumer canvas'); root.setAttribute('role', 'group');
     surface.tabIndex = 0; surface.setAttribute('aria-label', 'Query canvas. Arrow keys pan; F fits; plus and minus zoom.');
     var edgesSvg = svg('svg', { class: 'pqc-edges', 'aria-label': 'Resolved query references' });
-    var defs = svg('defs'), marker = svg('marker', { id: markerId, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto' });
-    marker.appendChild(svg('path', { d: 'M 0 0 L 10 5 L 0 10 z', fill: 'context-stroke' })); defs.appendChild(marker); edgesSvg.appendChild(defs);
+    var defs = svg('defs'), marker = svg('marker', { id: markerId, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 8, markerHeight: 8, markerUnits: 'userSpaceOnUse', orient: 'auto' });
+    marker.appendChild(svg('path', { d: 'M 3 1 L 8 5 L 3 9', fill: 'none', stroke: 'context-stroke', 'stroke-width': 1.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' })); defs.appendChild(marker); edgesSvg.appendChild(defs);
     var edgeLayer = svg('g'), cycleLayer = el('div', 'pqc-cycles'), nodeLayer = el('div', 'pqc-nodes');
     edgesSvg.appendChild(edgeLayer); world.appendChild(cycleLayer); world.appendChild(edgesSvg); world.appendChild(nodeLayer); surface.appendChild(world); root.appendChild(surface);
     var legend = el('div', 'pqc-legend'); legend.appendChild(el('span', 'pqc-solid-key', 'Query input → consumer')); legend.appendChild(el('span', 'pqc-parameter-key', 'Parameter → consumer')); root.appendChild(legend);
@@ -67,16 +67,51 @@
       var y0 = incident.size ? bottom + 48 : 0;
       standalone.forEach(function (u, i) { var id = u.members[0]; if (!positions.has(id)) positions.set(id, { x: (i % cols) * (W + 42), y: y0 + Math.floor(i / cols) * (H + GAP_Y) }); });
     }
-    function edgePath(edge) {
+    // Orthogonal routes use actual input/consumer ports, even after dragging a
+    // consumer to the left. No source analysis or change to graph direction.
+    function edgePath(edge, obstacles) {
       var a = positions.get(edge.inputId), b = positions.get(edge.consumerId); if (!a || !b) return '';
-      if (edge.inputId === edge.consumerId) return 'M' + (a.x + W - 25) + ',' + a.y + ' C' + (a.x + W + 65) + ',' + (a.y - 80) + ' ' + (a.x + W + 65) + ',' + (a.y + H + 80) + ' ' + (a.x + W) + ',' + (a.y + H / 2);
-      var x = a.x + W, y = a.y + H / 2, tx = b.x, ty = b.y + H / 2, bend = Math.max(45, Math.abs(tx - x) * 0.5);
-      if (tx <= a.x) return 'M' + x + ',' + y + ' C' + (x + 65) + ',' + y + ' ' + (x + 65) + ',' + (ty - 70) + ' ' + (tx + W / 2) + ',' + (ty - H / 2);
-      return 'M' + x + ',' + y + ' C' + (x + bend) + ',' + y + ' ' + (tx - bend) + ',' + ty + ' ' + tx + ',' + ty;
+      function path(points) { return points.map(function (p, i) { return (i ? 'L' : 'M') + p[0] + ',' + p[1]; }).join(' '); }
+      if (edge.inputId === edge.consumerId) return path([[a.x + W / 2, a.y], [a.x + W / 2, a.y - 22], [a.x + W + 22, a.y - 22], [a.x + W + 22, a.y + H / 2], [a.x + W, a.y + H / 2]]);
+      var right = b.x >= a.x + W + 32, left = a.x >= b.x + W + 32, vertical = !right && !left;
+      var forward = vertical ? b.y >= a.y : right, sign = forward ? 1 : -1;
+      // Reverse vertical links use a separate port, so both sides of a cycle
+      // remain visible instead of drawing two directions over one segment.
+      var start = vertical ? [a.x + W / 2 + sign * 12, a.y + (forward ? H : 0)] : [a.x + (right ? W : 0), a.y + H / 2];
+      var end = vertical ? [b.x + W / 2 + sign * 12, b.y + (forward ? 0 : H)] : [b.x + (right ? 0 : W), b.y + H / 2];
+      var axis = vertical ? 1 : 0, cross = 1 - axis, channel = (start[axis] + end[axis]) / 2;
+      var p = start.slice(), q = end.slice(); p[axis] = q[axis] = channel;
+      var direct = [start, p, q, end];
+      function blocked(points, rect) {
+        for (var i = 1; i < points.length; i++) {
+          var u = points[i - 1], v = points[i];
+          if (u[0] === v[0] ? u[0] > rect.x && u[0] < rect.x + W && Math.max(u[1], v[1]) > rect.y && Math.min(u[1], v[1]) < rect.y + H
+            : u[1] > rect.y && u[1] < rect.y + H && Math.max(u[0], v[0]) > rect.x && Math.min(u[0], v[0]) < rect.x + W) return true;
+        }
+        return false;
+      }
+      var blockers = obstacles.filter(function (rect) { return blocked(direct, rect); });
+      if (!blockers.length) return path(direct);
+      // Detour around intervening visible cards. Hidden registry members cannot
+      // distort the visible route. The common adjacent-card case stays O(nodes).
+      var rails = [], dimension = vertical ? W : H, key = vertical ? 'x' : 'y';
+      blockers.forEach(function (r) { rails.push(r[key] - 18, r[key] + dimension + 18); });
+      rails.push(Math.min.apply(null, obstacles.map(function (r) { return r[key]; })) - 18, Math.max.apply(null, obstacles.map(function (r) { return r[key] + dimension; })) + 18);
+      rails = Array.from(new Set(rails)).sort(function (x, y) { return Math.abs(start[cross] - x) + Math.abs(end[cross] - x) - Math.abs(start[cross] - y) - Math.abs(end[cross] - y); });
+      var sa = start.slice(), sb = end.slice(); sa[axis] += sign * 16; sb[axis] -= sign * 16;
+      for (var i = 0; i < rails.length; i++) {
+        var ca = sa.slice(), cb = sb.slice(); ca[cross] = cb[cross] = rails[i];
+        var detour = [start, sa, ca, cb, sb, end];
+        if (!obstacles.some(function (r) { return blocked(detour, r); })) return path(detour);
+      }
+      // Manually overlapping cards may leave no clear port. Keep their exact
+      // positions and semantic endpoints; never silently rearrange the canvas.
+      return path(direct);
     }
     function updateGeometry() {
       elements.forEach(function (e, id) { var p = positions.get(id); e.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)'; });
-      edgeElements.forEach(function (entry) { var d = edgePath(entry.edge); entry.line.setAttribute('d', d); entry.hit.setAttribute('d', d); });
+      var obstacles = ids().map(function (id) { return positions.get(id); });
+      edgeElements.forEach(function (entry) { var d = edgePath(entry.edge, obstacles); entry.line.setAttribute('d', d); entry.hit.setAttribute('d', d); });
       cycleLayer.replaceChildren(); groups.forEach(function (members) {
         var pts = members.filter(shown).map(function (id) { return positions.get(id); }); if (!pts.length) return;
         var x = Math.min.apply(null, pts.map(function (p) { return p.x; })), y = Math.min.apply(null, pts.map(function (p) { return p.y; }));

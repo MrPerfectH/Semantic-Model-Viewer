@@ -7,7 +7,7 @@
     var doc = host.ownerDocument, win = doc.defaultView || g;
     var context = null, generation, selected = null, opened = false, wrap = true, alive = true, suspended = false;
     var focusControls = null, focusBox = null, controlsVersion = 0, controlsOff = [], controlEntries = [];
-    var expanded = false, readerDialog = null, readerBody = null, codeCard = null, codeSlot = null, expandButton = null, readerReturn = null;
+    var expanded = false, readerDialog = null, readerBody = null, codeCard = null, codeSlot = null, expandButton = null, readerReturn = null, readerLauncher = null;
     var epoch = 0, contentVersion = 0, row = null, codeScroll = null, focusEntries = [], contentOff = [], jobs = new Set();
     function el(tag, cls, text) { var e = doc.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
     var root = el('section', 'pqi'); root.setAttribute('aria-label', 'Selected Power Query details'); root.hidden = true; host.appendChild(root);
@@ -15,7 +15,7 @@
     function on(target, name, callback) { target.addEventListener(name, callback); contentOff.push(function () { target.removeEventListener(name, callback); }); }
     function emit(name, payload) { if (alive && context && !suspended && generation === payload.generation && typeof options[name] === 'function') options[name](payload); }
     function cancelRestores() { epoch++; jobs.forEach(function (job) { win.cancelAnimationFrame(job.frame); job.resolve(); }); jobs.clear(); }
-    function clearContent() { setExpanded(false, false); readerDialog = readerBody = codeCard = codeSlot = expandButton = readerReturn = null; clearControlDOM(); focusBox = null; contentVersion++; contentOff.forEach(function (off) { off(); }); contentOff = []; focusEntries = []; codeScroll = wrapButton = null; row = null; root.replaceChildren(); }
+    function clearContent() { setExpanded(false, false); readerDialog = readerBody = codeCard = codeSlot = expandButton = readerReturn = readerLauncher = null; clearControlDOM(); focusBox = null; contentVersion++; contentOff.forEach(function (off) { off(); }); contentOff = []; focusEntries = []; codeScroll = wrapButton = null; row = null; root.replaceChildren(); }
     function clear() { cancelRestores(); clearContent(); context = null; generation = undefined; selected = null; opened = false; wrap = true; focusControls = null; root.hidden = true; root.scrollLeft = root.scrollTop = 0; }
     function lookup(id) { return context && context.byNodeId && context.byNodeId.get(id); }
     function descriptor(kind, occurrence) { var value = { kind: kind, nodeId: selected }; if (occurrence) { value.at = occurrence.at; value.end = occurrence.end; } return value; }
@@ -176,8 +176,10 @@
       var copy = record(el('button', 'pqi-button', 'Copy M'), 'copy'); copy.type = 'button'; copy.setAttribute('aria-label', 'Copy exact M source');
       wrapButton = record(el('button', 'pqi-button'), 'wrap'); wrapButton.type = 'button'; updateWrapLabel();
       var status = el('span', 'pqi-copy-status'); status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite');
-      expandButton = record(el('button', 'pqi-button', 'Expand M'), 'expand'); expandButton.type = 'button'; expandButton.setAttribute('aria-haspopup', 'dialog');
-      bar.appendChild(caption); bar.appendChild(copy); bar.appendChild(wrapButton); bar.appendChild(expandButton); parent.appendChild(bar); parent.appendChild(status);
+      expandButton = record(el('button', 'pqi-button pqi-open-query', 'Open full query'), 'expand'); expandButton.type = 'button'; expandButton.setAttribute('aria-haspopup', 'dialog');
+      readerLauncher.appendChild(expandButton);
+      readerLauncher.appendChild(el('span', 'pqi-reader-hint', 'M source · ' + source.split(/\r\n|\r|\n/).length + ' lines · opens in a wide reader'));
+      bar.appendChild(caption); bar.appendChild(copy); bar.appendChild(wrapButton); parent.appendChild(bar); parent.appendChild(status);
       codeScroll = record(el('div', 'pqi-code-scroll' + (wrap ? ' pqi-wrap' : '')), 'code'); codeScroll.tabIndex = 0; codeScroll.setAttribute('aria-label', 'Read-only M source with line numbers'); parent.appendChild(codeScroll);
       var gen = generation, id = selected, version = contentVersion;
       createReader(parent);
@@ -231,6 +233,7 @@
       var gen = generation, id = selected; on(closeButton, 'click', function () { if (current(gen, id)) close('close'); });
       var chrome = row.chrome || {}; head.style.background = chrome.headerTint || '#f8fafc'; if (chrome.fact) name.style.color = '#fff'; name.appendChild(el('p', 'pqi-subtitle', chrome.subtitle || row.node.subtitle));
       var counts = el('div', 'pqi-counts'); counts.appendChild(el('span', '', (row.inputIds || []).length + ' inputs')); counts.appendChild(el('span', '', (row.consumerIds || []).length + ' consumers')); head.appendChild(counts);
+      if (typeof row.code === 'string') { readerLauncher = el('div', 'pqi-reader-launcher'); root.appendChild(readerLauncher); }
       focusBox = el('section', 'ex-related pqi-focus'); focusBox.setAttribute('aria-label', 'Explore related queries'); root.appendChild(focusBox); renderFocusControls();
       var provenanceBox = el('details', 'pqi-provenance'); provenanceBox.appendChild(el('summary', '', 'Metadata and provenance')); root.appendChild(provenanceBox);
       var metadata = el('dl', 'pqi-metadata');

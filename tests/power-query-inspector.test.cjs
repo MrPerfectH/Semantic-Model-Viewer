@@ -114,7 +114,7 @@ test('primary neighborhood controls stay visible, default wrap is true and expli
 test('expanded reader moves exact code DOM, copies original CRLF/UTF16 source, Escape closes reader first and returns focus',async()=>{
   const c=context(),row=c.byNodeId.get('id-1');row.code='// 😀 '+'.'.repeat(400)+'\r\nServer\r\n';const at=row.code.indexOf('Server');row.occurrences=[{at,end:at+6,targetId:'id-0'}];
   const s=setup(c),code=s.code(),reference=s.host.querySelector('.pqi-reference'),copied=[];s.win.navigator.clipboard.writeText=raw=>{copied.push(raw);return Promise.resolve();};
-  const expand=s.host.querySelectorAll('button').find(b=>b.textContent==='Expand M');expand.fire('click');
+  const expand=s.host.querySelectorAll('button').find(b=>b.textContent==='Open full query');expand.fire('click');
   const dialog=s.host.querySelector('.pqi-reader');assert.equal(dialog.open,true);assert.equal(s.code(),code);assert.equal(code.closest('.pqi-reader'),dialog);assert.equal(s.host.querySelector('.pqi-reference'),reference);assert.equal(s.inspector.captureViewState().expanded,true);
   s.host.querySelectorAll('button').find(b=>b.textContent==='Copy M').fire('click');await Promise.resolve();assert.equal(copied[0],row.code);assert.equal(s.host.querySelectorAll('.pqi-source-line').map(e=>e.textContent).join(''),row.code);
   s.inspector.focus({kind:'reference',nodeId:'id-1',at,end:at+6});const e=reference.fire('keydown',{key:'Escape'});
@@ -122,7 +122,7 @@ test('expanded reader moves exact code DOM, copies original CRLF/UTF16 source, E
   expand.fire('keydown',{key:'Escape'});assert.equal(s.events.close.length,1);
 });
 test('expanded history restores source focus/scroll and cannot reopen after stale lifecycle work',async()=>{
-  const s=setup(),expand=()=>s.host.querySelectorAll('button').find(b=>b.textContent==='Expand M').fire('click');expand();s.code().scrollTop=81;s.inspector.focus({kind:'reference',nodeId:'id-1',at:0,end:6});const saved=s.inspector.captureViewState();
+  const s=setup(),expand=()=>s.host.querySelectorAll('button').find(b=>b.textContent==='Open full query').fire('click');expand();s.code().scrollTop=81;s.inspector.focus({kind:'reference',nodeId:'id-1',at:0,end:6});const saved=s.inspector.captureViewState();
   s.inspector.select('id-3',{open:true});s.inspector.select('id-1',{open:true});const p=s.inspector.restoreViewState(saved);s.flush();await p;
   assert.equal(s.host.querySelector('.pqi-reader').open,true);assert.equal(s.code().scrollTop,81);assert.equal(s.inspector.captureViewState().focus.kind,'reference');
   for(const action of ['new','same','close','suspend','reset','destroy']){
@@ -132,7 +132,7 @@ test('expanded history restores source focus/scroll and cannot reopen after stal
   }
 });
 test('reader keyboard boundary stays inside, and native-dialog autofocus navigation cancels old view restore',async()=>{
-  const s=setup();s.host.querySelectorAll('button').find(b=>b.textContent==='Expand M').fire('click');
+  const s=setup();s.host.querySelectorAll('button').find(b=>b.textContent==='Open full query').fire('click');
   const close=s.host.querySelectorAll('button').find(b=>b.textContent==='Close expanded reader'),last=s.host.querySelector('.pqi-reference');
   last.focus();const tab=last.fire('keydown',{key:'Tab'});assert.equal(tab.defaultPrevented,true);assert.equal(s.doc.activeElement,close);
   const reverse=close.fire('keydown',{key:'Tab',shiftKey:true});assert.equal(reverse.defaultPrevented,true);assert.equal(s.doc.activeElement,last);
@@ -140,4 +140,13 @@ test('reader keyboard boundary stays inside, and native-dialog autofocus navigat
   old.showModal=()=>{old.open=true;s.inspector.select('id-3',{open:true});};
   const p=s.inspector.restoreViewState({expanded:true,wrap:false,codeY:99,inspectorY:99});s.flush();await p;
   assert.equal(s.host.querySelector('.pqi-title').textContent,'Query 3');assert.equal(s.inspector.captureViewState().expanded,false);assert.equal(s.code().scrollTop,0);assert.equal(s.inspector.captureViewState().wrap,true);assert.equal(old.open,false);
+});
+test('full-query entry precedes all focus controls and source without duplicating or reformatting code',()=>{
+  const s=setup(),launcher=s.host.querySelector('.pqi-reader-launcher'),focus=s.host.querySelector('.pqi-focus');
+  assert.ok(s.root().children.indexOf(launcher)<s.root().children.indexOf(focus));
+  const entry=launcher.querySelector('button');assert.equal(entry.textContent,'Open full query');assert.equal(entry.getAttribute('aria-haspopup'),'dialog');
+  assert.equal(entry.closest('.pqi-code-bar'),null);
+  const source=s.code();entry.fire('click');s.host.querySelectorAll('button').find(b=>b.textContent==='Close expanded reader').fire('click');
+  assert.equal(s.doc.activeElement,entry);assert.equal(s.code(),source);assert.equal(s.inspector.captureViewState().expanded,false);
+  s.ctx.byNodeId.get('id-4').code=null;s.inspector.select('id-4',{open:true});assert.equal(s.host.querySelector('.pqi-reader-launcher'),null);
 });
