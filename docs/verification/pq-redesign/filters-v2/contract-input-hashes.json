@@ -1,0 +1,14 @@
+{
+  "interface-contract.md": {
+    "source": "/tmp/pq-redesign-20261008-v2/interface-contract.md",
+    "sha256": "7f4de17a78cde3641d316a596eb7eabfb1098229dc043e9410b03298270e7ad5"
+  },
+  "revision-review.md": {
+    "source": "/tmp/pq-redesign-20261008-v2/revision-review.md",
+    "sha256": "ab9d2ed46d02b1bdc10c1fe74612cd9e87e01ca0bbb62d67462f052a83bc0a79"
+  },
+  "integration-filter-addendum.md": {
+    "source": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/docs/power-query-redesign/filter-addendum.md",
+    "sha256": "306cf0b781d5302430b5a181debe9bf959c6139daeb732cae1a6a0e4b5314482"
+  }
+}

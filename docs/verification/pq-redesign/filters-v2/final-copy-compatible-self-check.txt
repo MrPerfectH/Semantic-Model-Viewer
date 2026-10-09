@@ -1,0 +1,142 @@
+TAP version 13
+# Subtest: filter addendum artifacts are reproducible and preserve explicit expected incidence sets
+ok 1 - filter addendum artifacts are reproducible and preserve explicit expected incidence sets
+  ---
+  duration_ms: 3.084708
+  type: 'test'
+  ...
+# Subtest: all-disconnected same SQL and semantic relationship is All6 Connected0 Disconnected6
+ok 2 - all-disconnected same SQL and semantic relationship is All6 Connected0 Disconnected6
+  ---
+  duration_ms: 0.517917
+  type: 'test'
+  ...
+# Subtest: parameter fanout counts unique incident objects, not arrow count or inbound-only dependencies
+ok 3 - parameter fanout counts unique incident objects, not arrow count or inbound-only dependencies
+  ---
+  duration_ms: 1.488958
+  type: 'test'
+  ...
+# Subtest: cycles, duplicate rows, unavailable inputs, status objects and unused parameter have deliberate categories
+ok 4 - cycles, duplicate rows, unavailable inputs, status objects and unused parameter have deliberate categories
+  ---
+  duration_ms: 0.193042
+  type: 'test'
+  ...
+# Subtest: 300/301/350/1000 category totals do not truncate; same-ID replacement changes category membership
+ok 5 - 300/301/350/1000 category totals do not truncate; same-ID replacement changes category membership
+  ---
+  duration_ms: 0.141708
+  type: 'test'
+  ...
+# Subtest: state oracle rejects search-derived graph, category counts after search, stale filter/search and invented independence
+ok 6 - state oracle rejects search-derived graph, category counts after search, stale filter/search and invented independence
+  ---
+  duration_ms: 2.776791
+  type: 'test'
+  ...
+# Subtest: hidden methods and explicit empty category are separate from empty model
+ok 7 - hidden methods and explicit empty category are separate from empty model
+  ---
+  duration_ms: 0.409458
+  type: 'test'
+  ...
+# Subtest: combined hidden-selection, Show all, reference/library navigation, Back and Reset workflows reject violations
+ok 8 - combined hidden-selection, Show all, reference/library navigation, Back and Reset workflows reject violations
+  ---
+  duration_ms: 19.105917
+  type: 'test'
+  ...
+# Subtest: atomic ready oracle accepts pending links without progressive edges, rejects early category finalization
+ok 9 - atomic ready oracle accepts pending links without progressive edges, rejects early category finalization
+  ---
+  duration_ms: 3.101334
+  type: 'test'
+  ...
+# Subtest: generation reset invalidates same-ID membership, filter/search/selection/code/history and late messages
+ok 10 - generation reset invalidates same-ID membership, filter/search/selection/code/history and late messages
+  ---
+  duration_ms: 1.226083
+  type: 'test'
+  ...
+# Subtest: new filter browser validator requires supplied exact candidate and rejects synthetic evidence before execution
+ok 11 - new filter browser validator requires supplied exact candidate and rejects synthetic evidence before execution
+  ---
+  duration_ms: 1.417875
+  type: 'test'
+  ...
+# Subtest: new corpus is reproducible without any production imports
+ok 12 - new corpus is reproducible without any production imports
+  ---
+  duration_ms: 4.796625
+  type: 'test'
+  ...
+# Subtest: every authored dependency has an exact occurrence oracle; no expected edge is inferred by scanning names
+ok 13 - every authored dependency has an exact occurrence oracle; no expected edge is inferred by scanning names
+  ---
+  duration_ms: 5.527709
+  type: 'test'
+  ...
+# Subtest: A1 independently has six same-source queries, a semantic relationship and zero expected edges
+ok 14 - A1 independently has six same-source queries, a semantic relationship and zero expected edges
+  ---
+  duration_ms: 0.130917
+  type: 'test'
+  ...
+# Subtest: A2 five parameter arrows; A3 four result arrows; A6 exact boundary totals and >200 fanout
+ok 15 - A2 five parameter arrows; A3 four result arrows; A6 exact boundary totals and >200 fanout
+  ---
+  duration_ms: 0.489042
+  type: 'test'
+  ...
+# Subtest: A4 literal UTF-16 oracle protects repeated/escaped refs and CRLF bytes
+ok 16 - A4 literal UTF-16 oracle protects repeated/escaped refs and CRLF bytes
+  ---
+  duration_ms: 0.990291
+  type: 'test'
+  ...
+# Subtest: A7 contains intentional duplicate IDs, ambiguity, cycles, unavailable metadata; A8 reuses identities
+ok 17 - A7 contains intentional duplicate IDs, ambiguity, cycles, unavailable metadata; A8 reuses identities
+  ---
+  duration_ms: 0.112958
+  type: 'test'
+  ...
+# Subtest: graph oracle rejects invented SQL/relationship edges, reversal, missing inventory and duplicate UI IDs
+ok 18 - graph oracle rejects invented SQL/relationship edges, reversal, missing inventory and duplicate UI IDs
+  ---
+  duration_ms: 0.557416
+  type: 'test'
+  ...
+# Subtest: A4/A5/A6/A8 evidence oracles fail closed on missing or stale observations
+ok 19 - A4/A5/A6/A8 evidence oracles fail closed on missing or stale observations
+  ---
+  duration_ms: 0.438917
+  type: 'test'
+  ...
+# Subtest: A9 privacy oracle rejects exports of M, altered raw text, XSS and source requests
+ok 20 - A9 privacy oracle rejects exports of M, altered raw text, XSS and source requests
+  ---
+  duration_ms: 0.306458
+  type: 'test'
+  ...
+# Subtest: candidate gate rejects absent/short/exact rejected baseline SHA
+ok 21 - candidate gate rejects absent/short/exact rejected baseline SHA
+  ---
+  duration_ms: 0.287
+  type: 'test'
+  ...
+# Subtest: browser receipt validator rejects synthetic/absent provenance before any acceptance
+ok 22 - browser receipt validator rejects synthetic/absent provenance before any acceptance
+  ---
+  duration_ms: 1.199791
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 85.381042
