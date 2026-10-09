@@ -1,0 +1,14 @@
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a1-disconnected","graphPrerequisite":"pass","elapsedMs":5.361083000000001,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a2-parameter","graphPrerequisite":"pass","elapsedMs":1.1766249999999943,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a3-results","graphPrerequisite":"pass","elapsedMs":0.7154579999999982,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a4-occurrences","graphPrerequisite":"pass","elapsedMs":1.744209000000005,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a6-disconnected-300","graphPrerequisite":"pass","elapsedMs":40.253207999999994,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a6-disconnected-301","graphPrerequisite":"pass","elapsedMs":31.186917000000008,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a6-disconnected-350","graphPrerequisite":"pass","elapsedMs":39.98233300000001,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a6-disconnected-1000","graphPrerequisite":"pass","elapsedMs":180.440959,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a6-fanout-250","graphPrerequisite":"pass","elapsedMs":21.222583000000043,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a7-uncertainty","graphPrerequisite":"pass","elapsedMs":2.690832999999998,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a8-reset-a","graphPrerequisite":"pass","elapsedMs":0.2997919999999681,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a8-reset-b","graphPrerequisite":"pass","elapsedMs":0.24824999999998454,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a8-without-m","graphPrerequisite":"pass","elapsedMs":0.10745800000000827,"productAcceptance":false}
+{"candidateSha":"29fc2fc6d745140a6e60723c46e8fa21076fd1f6","case":"a9-privacy","graphPrerequisite":"pass","elapsedMs":0.1339580000000069,"productAcceptance":false}

@@ -1,0 +1,342 @@
+[
+  {
+    "id": "[\"partition\",\"Sales\",\"Current\"]",
+    "presentation": {
+      "title": "Sales / Current",
+      "body": "SELECTED QUERYSales / Current×m · Current1 inputs0 consumersKindqueryTypemBasisinferred from syntaxM · READ ONLYCopy MWrap lines1RangeStart",
+      "expectedCode": "RangeStart",
+      "issues": [],
+      "refs": [
+        "RangeStart"
+      ]
+    },
+    "code": "RangeStart"
+  },
+  {
+    "id": "[\"partition\",\"Sales\",\"History\"]",
+    "presentation": {
+      "title": "Sales / History",
+      "body": "SELECTED QUERYSales / History×m · History1 inputs0 consumersKindqueryTypemBasisinferred from syntaxM · READ ONLYCopy MWrap lines1RangeStart",
+      "expectedCode": "RangeStart",
+      "issues": [],
+      "refs": [
+        "RangeStart"
+      ]
+    },
+    "code": "RangeStart"
+  },
+  {
+    "id": "[\"partition\",\"NonM\",\"Calc\"]",
+    "presentation": {
+      "title": "NonM",
+      "body": "SELECTED QUERYNonM×calculated · Calc0 inputs0 consumersKindqueryTypecalculatedBasisinferred from syntaxStatic analysis details · 1M metadata is missing or not M.This source is not M.No query references resolved.",
+      "expectedCode": null,
+      "issues": [
+        {
+          "consumerId": "[\"partition\",\"NonM\",\"Calc\"]",
+          "kind": "analysis-uncertainty",
+          "message": "M metadata is missing or not M."
+        }
+      ],
+      "refs": []
+    },
+    "code": ""
+  },
+  {
+    "id": "[\"partition\",\"Missing\",\"Main\"]",
+    "presentation": {
+      "title": "Missing",
+      "body": "SELECTED QUERYMissing×unknown · Main0 inputs0 consumersKindqueryTypeunknownBasisinferred from syntaxStatic analysis details · 1M metadata is missing or not M.M source metadata is unavailable.No query references resolved.",
+      "expectedCode": null,
+      "issues": [
+        {
+          "consumerId": "[\"partition\",\"Missing\",\"Main\"]",
+          "kind": "analysis-uncertainty",
+          "message": "M metadata is missing or not M."
+        }
+      ],
+      "refs": []
+    },
+    "code": ""
+  },
+  {
+    "id": "[\"partition\",\"Collision\",\"Main\"]",
+    "presentation": {
+      "title": "Collision",
+      "body": "SELECTED QUERYCollision×m · Main0 inputs0 consumersKindqueryTypemBasisinferred from syntaxM · READ ONLYCopy MWrap lines11No query references resolved.",
+      "expectedCode": "1",
+      "issues": [],
+      "refs": []
+    },
+    "code": "1"
+  },
+  {
+    "id": "[\"expression\",\"\",\"RangeStart\"]",
+    "presentation": {
+      "title": "RangeStart",
+      "body": "SELECTED QUERYRangeStart×parameter0 inputs2 consumersKindparameterTypemBasisM metadata marker (not evaluated)M · READ ONLYCopy MWrap lines1\"2026-01-01\" meta [IsParameterQuery=true]",
+      "expectedCode": "\"2026-01-01\" meta [IsParameterQuery=true]",
+      "issues": [],
+      "refs": []
+    },
+    "code": "\"2026-01-01\" meta [IsParameterQuery=true]"
+  },
+  {
+    "id": "[\"expression\",\"\",\"AmbiguousTable\"]",
+    "presentation": {
+      "title": "AmbiguousTable",
+      "body": "SELECTED QUERYAmbiguousTable×query0 inputs0 consumersKindqueryTypemBasisinferred from syntaxStatic analysis details · 1Ambiguous reference: Sales (duplicate identity/name or multiple partitions).M · READ ONLYCopy MWrap lines1SalesNo query references resolved.",
+      "expectedCode": "Sales",
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"AmbiguousTable\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Ambiguous reference: Sales (duplicate identity/name or multiple partitions)."
+        }
+      ],
+      "refs": []
+    },
+    "code": "Sales"
+  },
+  {
+    "id": "[\"expression\",\"\",\"Collision\"]",
+    "presentation": {
+      "title": "Collision",
+      "body": "SELECTED QUERYCollision×query0 inputs0 consumersKindqueryTypemBasisinferred from syntaxM · READ ONLYCopy MWrap lines12No query references resolved.",
+      "expectedCode": "2",
+      "issues": [],
+      "refs": []
+    },
+    "code": "2"
+  },
+  {
+    "id": "[\"expression\",\"\",\"AmbiguousName\"]",
+    "presentation": {
+      "title": "AmbiguousName",
+      "body": "SELECTED QUERYAmbiguousName×query0 inputs0 consumersKindqueryTypemBasisinferred from syntaxStatic analysis details · 1Ambiguous reference: Collision (duplicate identity/name or multiple partitions).M · READ ONLYCopy MWrap lines1CollisionNo query references resolved.",
+      "expectedCode": "Collision",
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"AmbiguousName\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Ambiguous reference: Collision (duplicate identity/name or multiple partitions)."
+        }
+      ],
+      "refs": []
+    },
+    "code": "Collision"
+  },
+  {
+    "id": "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",0]",
+    "presentation": {
+      "title": "Duplicate",
+      "body": "SELECTED QUERYDuplicate×query0 inputs0 consumersKindqueryTypemBasisinferred from syntaxDuplicate metadata identity; navigation and dependency edges are ambiguous.M · READ ONLYCopy MWrap lines11No query references resolved.",
+      "expectedCode": "1",
+      "issues": [
+        {
+          "consumerId": "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",0]",
+          "kind": "duplicate-identity",
+          "message": "Duplicate metadata identity; navigation and dependency edges are ambiguous."
+        }
+      ],
+      "refs": []
+    },
+    "code": "1"
+  },
+  {
+    "id": "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",1]",
+    "presentation": {
+      "title": "Duplicate",
+      "body": "SELECTED QUERYDuplicate×query0 inputs0 consumersKindqueryTypemBasisinferred from syntaxDuplicate metadata identity; navigation and dependency edges are ambiguous.M · READ ONLYCopy MWrap lines12No query references resolved.",
+      "expectedCode": "2",
+      "issues": [
+        {
+          "consumerId": "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",1]",
+          "kind": "duplicate-identity",
+          "message": "Duplicate metadata identity; navigation and dependency edges are ambiguous."
+        }
+      ],
+      "refs": []
+    },
+    "code": "2"
+  },
+  {
+    "id": "[\"expression\",\"\",\"DuplicateConsumer\"]",
+    "presentation": {
+      "title": "DuplicateConsumer",
+      "body": "SELECTED QUERYDuplicateConsumer×query0 inputs0 consumersKindqueryTypemBasisinferred from syntaxStatic analysis details · 1Ambiguous reference: Duplicate (duplicate identity/name or multiple partitions).M · READ ONLYCopy MWrap lines1DuplicateNo query references resolved.",
+      "expectedCode": "Duplicate",
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"DuplicateConsumer\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Ambiguous reference: Duplicate (duplicate identity/name or multiple partitions)."
+        }
+      ],
+      "refs": []
+    },
+    "code": "Duplicate"
+  },
+  {
+    "id": "[\"expression\",\"\",\"Dynamic\"]",
+    "presentation": {
+      "title": "Dynamic",
+      "body": "SELECTED QUERYDynamic×query0 inputs0 consumersKindqueryTypemBasisinferred from syntaxStatic analysis details · 4Dynamic/environment reference: Expression.Evaluate; targets cannot be established statically.Unresolved library/external symbol: Expression.EvaluateDynamic/environment reference: #shared; targets cannot be established statically.Unresolved reference: #sharedM · READ ONLYCopy MWrap lines1Expression.Evaluate(\"Sales\", #shared)No query references resolved.",
+      "expectedCode": "Expression.Evaluate(\"Sales\", #shared)",
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"Dynamic\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Dynamic/environment reference: Expression.Evaluate; targets cannot be established statically."
+        },
+        {
+          "consumerId": "[\"expression\",\"\",\"Dynamic\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved library/external symbol: Expression.Evaluate"
+        },
+        {
+          "consumerId": "[\"expression\",\"\",\"Dynamic\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Dynamic/environment reference: #shared; targets cannot be established statically."
+        },
+        {
+          "consumerId": "[\"expression\",\"\",\"Dynamic\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved reference: #shared"
+        }
+      ],
+      "refs": []
+    },
+    "code": "Expression.Evaluate(\"Sales\", #shared)"
+  },
+  {
+    "id": "[\"expression\",\"\",\"MissingRef\"]",
+    "presentation": {
+      "title": "MissingRef",
+      "body": "SELECTED QUERYMissingRef×query0 inputs0 consumersKindqueryTypemBasisinferred from syntaxStatic analysis details · 1Unresolved reference: NotInMetadataM · READ ONLYCopy MWrap lines1NotInMetadataNo query references resolved.",
+      "expectedCode": "NotInMetadata",
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"MissingRef\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved reference: NotInMetadata"
+        }
+      ],
+      "refs": []
+    },
+    "code": "NotInMetadata"
+  },
+  {
+    "id": "[\"expression\",\"\",\"Unsupported\"]",
+    "presentation": {
+      "title": "Unsupported",
+      "body": "SELECTED QUERYUnsupported×query0 inputs0 consumersKindqueryTypemBasisinferred from syntaxStatic analysis details · 1Analysis incomplete: Unsupported syntax at 0M · READ ONLYCopy MWrap lines1section Section1; shared Probe = RangeStart;No query references resolved.",
+      "expectedCode": "section Section1; shared Probe = RangeStart;",
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"Unsupported\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Analysis incomplete: Unsupported syntax at 0"
+        }
+      ],
+      "refs": []
+    },
+    "code": "section Section1; shared Probe = RangeStart;"
+  },
+  {
+    "id": "[\"expression\",\"\",\"CycleA\"]",
+    "presentation": {
+      "title": "CycleA",
+      "body": "SELECTED QUERYCycleA×query1 inputs1 consumersKindqueryTypemBasisinferred from syntaxCycle among resolved static references.M · READ ONLYCopy MWrap lines1CycleB",
+      "expectedCode": "CycleB",
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"CycleA\"]",
+          "kind": "cycle",
+          "message": "Cycle among resolved static references.",
+          "componentIds": [
+            "[\"expression\",\"\",\"CycleA\"]",
+            "[\"expression\",\"\",\"CycleB\"]"
+          ]
+        }
+      ],
+      "refs": [
+        "CycleB"
+      ]
+    },
+    "code": "CycleB"
+  },
+  {
+    "id": "[\"expression\",\"\",\"CycleB\"]",
+    "presentation": {
+      "title": "CycleB",
+      "body": "SELECTED QUERYCycleB×query1 inputs1 consumersKindqueryTypemBasisinferred from syntaxCycle among resolved static references.M · READ ONLYCopy MWrap lines1CycleA",
+      "expectedCode": "CycleA",
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"CycleB\"]",
+          "kind": "cycle",
+          "message": "Cycle among resolved static references.",
+          "componentIds": [
+            "[\"expression\",\"\",\"CycleA\"]",
+            "[\"expression\",\"\",\"CycleB\"]"
+          ]
+        }
+      ],
+      "refs": [
+        "CycleA"
+      ]
+    },
+    "code": "CycleA"
+  },
+  {
+    "id": "[\"expression\",\"\",\"SelfCycle\"]",
+    "presentation": {
+      "title": "SelfCycle",
+      "body": "SELECTED QUERYSelfCycle×query1 inputs1 consumersKindqueryTypemBasisinferred from syntaxCycle among resolved static references.M · READ ONLYCopy MWrap lines1SelfCycle",
+      "expectedCode": "SelfCycle",
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"SelfCycle\"]",
+          "kind": "cycle",
+          "message": "Cycle among resolved static references.",
+          "componentIds": [
+            "[\"expression\",\"\",\"SelfCycle\"]"
+          ]
+        }
+      ],
+      "refs": [
+        "SelfCycle"
+      ]
+    },
+    "code": "SelfCycle"
+  },
+  {
+    "id": "[\"expression\",\"\",\"ParseFailure\"]",
+    "presentation": {
+      "title": "ParseFailure",
+      "body": "SELECTED QUERYParseFailure×query0 inputs0 consumersKindqueryTypemBasisinferred from syntaxStatic analysis details · 1Analysis incomplete: Missing expressionM · READ ONLYCopy MWrap lines1RangeStart +No query references resolved.",
+      "expectedCode": "RangeStart +",
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"ParseFailure\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Analysis incomplete: Missing expression"
+        }
+      ],
+      "refs": []
+    },
+    "code": "RangeStart +"
+  },
+  {
+    "id": "[\"table-status\",\"NoPartitions\"]",
+    "presentation": {
+      "title": "NoPartitions",
+      "body": "SELECTED QUERYNoPartitions×No partition metadata0 inputs0 consumersKindtable-statusPartition metadata was not supplied.No query references resolved.",
+      "expectedCode": null,
+      "issues": [],
+      "refs": []
+    },
+    "code": ""
+  }
+]

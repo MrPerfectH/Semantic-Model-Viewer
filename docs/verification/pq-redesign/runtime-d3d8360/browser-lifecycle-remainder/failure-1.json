@@ -1,0 +1,120 @@
+{
+  "phase": "ready",
+  "message": "Metadata inspected. Static analysis remains partial.",
+  "category": "all",
+  "query": "",
+  "selectedId": "[\"expression\",\"\",\"SameIdentity\"]",
+  "inspectorOpen": true,
+  "count": "2 visible / 2 total objects · 2 library results",
+  "banner": "",
+  "code": "\"PQ_REDESIGN_RESET_A_ONLY\"",
+  "viewport": {
+    "x": 272.5,
+    "y": 308.5,
+    "k": 1.25
+  },
+  "inspectorView": {
+    "codeX": 0,
+    "codeY": 0,
+    "inspectorX": 0,
+    "inspectorY": 0,
+    "wrap": false,
+    "focus": null
+  },
+  "history": [
+    {
+      "generation": 7,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 272.5,
+        "y": 308.5,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": ""
+    }
+  ],
+  "domNodes": 2,
+  "visible": [
+    "[\"partition\",\"SameTable\",\"Main\"]",
+    "[\"expression\",\"\",\"SameIdentity\"]"
+  ],
+  "library": [
+    "SameTable · m · Main",
+    "SameIdentity · query"
+  ],
+  "map": "2 visible / 2 objects",
+  "graph": {
+    "nodes": [
+      {
+        "id": "[\"partition\",\"SameTable\",\"Main\"]",
+        "metadataId": "[\"partition\",\"SameTable\",\"Main\"]",
+        "label": "SameTable",
+        "subtitle": "m · Main",
+        "kind": "partition",
+        "table": "SameTable",
+        "partition": "Main",
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"SameIdentity\"]",
+        "metadataId": "[\"expression\",\"\",\"SameIdentity\"]",
+        "label": "SameIdentity",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      }
+    ],
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"SameIdentity\\\"]\",\"[\\\"partition\\\",\\\"SameTable\\\",\\\"Main\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"SameIdentity\"]",
+        "consumerId": "[\"partition\",\"SameTable\",\"Main\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"SameIdentity\"]",
+            "name": "SameIdentity",
+            "at": 0,
+            "end": 12
+          }
+        ]
+      }
+    ],
+    "issues": [
+      {
+        "consumerId": null,
+        "kind": "analysis-notice",
+        "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+      }
+    ],
+    "generation": 7,
+    "analysisProgress": {
+      "analyzed": 2,
+      "total": 2,
+      "complete": true,
+      "generation": 7
+    }
+  },
+  "sets": {
+    "all": [
+      "[\"partition\",\"SameTable\",\"Main\"]",
+      "[\"expression\",\"\",\"SameIdentity\"]"
+    ],
+    "connected": [
+      "[\"expression\",\"\",\"SameIdentity\"]",
+      "[\"partition\",\"SameTable\",\"Main\"]"
+    ],
+    "disconnected": []
+  }
+}

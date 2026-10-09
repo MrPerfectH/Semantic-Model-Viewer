@@ -1,0 +1,25 @@
+{
+  "cliInstalledCandidates": [
+    "d3d8360",
+    "29fc2fc"
+  ],
+  "nativeInteraction": "not established",
+  "reason": "CUA selected a separate existing Code Insiders instance and exposed no documented per-window targeting inventory; no unrelated window interaction attempted",
+  "isolatedProfile": "/tmp/pq-independent-vscode-d3d8360-user",
+  "isolatedExtensions": "/tmp/pq-independent-vscode-d3d8360-extensions",
+  "currentIsolatedInstallProfile": "/tmp/pq-independent-vscode-29fc2fc-user",
+  "currentIsolatedExtensions": "/tmp/pq-independent-vscode-29fc2fc-extensions",
+  "cleanup": [
+    {
+      "pid": 74029,
+      "ownCommand": "/Applications/Visual Studio Code - Insiders.app/Contents/MacOS/Code - Insiders --user-data-dir /tmp/pq-independent-vscode-d3d8360-user --extensions-dir /tmp/pq-independent-vscode-d3d8360-extensions --new-window --skip-welcome --skip-release-notes tests/acceptance-fixtures/pq-redesign/a1-disconnected",
+      "action": "SIGTERM only owned process"
+    },
+    {
+      "pid": 55752,
+      "ownCommand": "/opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python -u -m http.server 0 --bind 127.0.0.1 --directory Models/tools/viewer",
+      "action": "SIGTERM only owned process"
+    }
+  ],
+  "temporaryProfilesPreserved": true
+}

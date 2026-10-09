@@ -1,0 +1,11 @@
+{
+  "ownStaticServer": {
+    "pid": 94991,
+    "command": "/opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python -u -m http.server 60017 --bind 127.0.0.1 --directory Models/tools/viewer",
+    "action": "SIGTERM"
+  },
+  "chromeProfiles": "Closed by each collector finally block",
+  "nativeBoundary": "No native Code process launched for a8; previous own d3 native process stopped; baseline Code instances untouched",
+  "t3Preview": "Owned tab previously closed",
+  "watchers": false
+}

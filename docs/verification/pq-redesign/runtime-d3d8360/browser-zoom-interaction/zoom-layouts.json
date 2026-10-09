@@ -1,0 +1,358 @@
+[
+  {
+    "width": 1280,
+    "zoomPercent": 200,
+    "normal": {
+      "innerWidth": 1280,
+      "innerHeight": 1000,
+      "outerWidth": 1280,
+      "outerHeight": 1087,
+      "dpr": 1
+    },
+    "measured": {
+      "innerWidth": 640,
+      "innerHeight": 500,
+      "outerWidth": 1280,
+      "outerHeight": 1087,
+      "dpr": 2,
+      "visualScale": 1,
+      "canvas": {
+        "x": 170,
+        "y": 229,
+        "width": 461,
+        "height": 230,
+        "top": 229,
+        "right": 631,
+        "bottom": 459,
+        "left": 170
+      },
+      "library": {
+        "x": 0,
+        "y": 229,
+        "width": 170,
+        "height": 96,
+        "top": 229,
+        "right": 170,
+        "bottom": 325,
+        "left": 0
+      },
+      "inspector": {
+        "x": 0,
+        "y": 466,
+        "width": 631,
+        "height": 96,
+        "top": 466,
+        "right": 631,
+        "bottom": 562,
+        "left": 0
+      },
+      "below": true,
+      "codeFont": 13,
+      "controls": [
+        {
+          "text": "Queries",
+          "rect": {
+            "x": 8,
+            "y": 117,
+            "width": 66.90625,
+            "height": 33.5,
+            "top": 117,
+            "right": 74.90625,
+            "bottom": 150.5,
+            "left": 8
+          }
+        },
+        {
+          "text": "Back",
+          "rect": {
+            "x": 81.90625,
+            "y": 117,
+            "width": 49.75,
+            "height": 33.5,
+            "top": 117,
+            "right": 131.65625,
+            "bottom": 150.5,
+            "left": 81.90625
+          }
+        },
+        {
+          "text": "All (4)Connected (4)Disconnected (0)",
+          "rect": {
+            "x": 138.65625,
+            "y": 118.25,
+            "width": 145.5,
+            "height": 31,
+            "top": 118.25,
+            "right": 284.15625,
+            "bottom": 149.25,
+            "left": 138.65625
+          }
+        },
+        {
+          "text": "Reset filters",
+          "rect": {
+            "x": 291.15625,
+            "y": 117,
+            "width": 92.2421875,
+            "height": 33.5,
+            "top": 117,
+            "right": 383.3984375,
+            "bottom": 150.5,
+            "left": 291.15625
+          }
+        },
+        {
+          "text": "Fit",
+          "rect": {
+            "x": 390.3984375,
+            "y": 117,
+            "width": 35.1484375,
+            "height": 33.5,
+            "top": 117,
+            "right": 425.546875,
+            "bottom": 150.5,
+            "left": 390.3984375
+          }
+        },
+        {
+          "text": "−",
+          "rect": {
+            "x": 432.546875,
+            "y": 117,
+            "width": 28.1171875,
+            "height": 33.5,
+            "top": 117,
+            "right": 460.6640625,
+            "bottom": 150.5,
+            "left": 432.546875
+          }
+        },
+        {
+          "text": "85%",
+          "rect": {
+            "x": 467.6640625,
+            "y": 117,
+            "width": 48.140625,
+            "height": 33.5,
+            "top": 117,
+            "right": 515.8046875,
+            "bottom": 150.5,
+            "left": 467.6640625
+          }
+        },
+        {
+          "text": "+",
+          "rect": {
+            "x": 522.8046875,
+            "y": 117,
+            "width": 28.1171875,
+            "height": 33.5,
+            "top": 117,
+            "right": 550.921875,
+            "bottom": 150.5,
+            "left": 522.8046875
+          }
+        }
+      ],
+      "codeScroll": {
+        "x": 20,
+        "y": 732.5,
+        "width": 582,
+        "height": 325,
+        "top": 732.5,
+        "right": 602,
+        "bottom": 1057.5,
+        "left": 20
+      },
+      "documentWidth": 640,
+      "workspace": {
+        "x": 0,
+        "y": 109,
+        "width": 640,
+        "height": 391,
+        "top": 109,
+        "right": 640,
+        "bottom": 500,
+        "left": 0
+      }
+    }
+  },
+  {
+    "width": 1440,
+    "zoomPercent": 200,
+    "normal": {
+      "innerWidth": 1440,
+      "innerHeight": 1000,
+      "outerWidth": 1440,
+      "outerHeight": 1087,
+      "dpr": 1
+    },
+    "measured": {
+      "innerWidth": 720,
+      "innerHeight": 500,
+      "outerWidth": 1440,
+      "outerHeight": 1087,
+      "dpr": 2,
+      "visualScale": 1,
+      "canvas": {
+        "x": 220,
+        "y": 234.5,
+        "width": 500,
+        "height": 220,
+        "top": 234.5,
+        "right": 720,
+        "bottom": 454.5,
+        "left": 220
+      },
+      "library": {
+        "x": 0,
+        "y": 234.5,
+        "width": 220,
+        "height": 93.796875,
+        "top": 234.5,
+        "right": 220,
+        "bottom": 328.296875,
+        "left": 0
+      },
+      "inspector": {
+        "x": 0,
+        "y": 373.625,
+        "width": 720,
+        "height": 93.796875,
+        "top": 373.625,
+        "right": 720,
+        "bottom": 467.421875,
+        "left": 0
+      },
+      "below": true,
+      "codeFont": 13,
+      "controls": [
+        {
+          "text": "Queries",
+          "rect": {
+            "x": 14,
+            "y": 119,
+            "width": 66.90625,
+            "height": 33.5,
+            "top": 119,
+            "right": 80.90625,
+            "bottom": 152.5,
+            "left": 14
+          }
+        },
+        {
+          "text": "Back",
+          "rect": {
+            "x": 87.90625,
+            "y": 119,
+            "width": 49.75,
+            "height": 33.5,
+            "top": 119,
+            "right": 137.65625,
+            "bottom": 152.5,
+            "left": 87.90625
+          }
+        },
+        {
+          "text": "All (4)Connected (4)Disconnected (0)",
+          "rect": {
+            "x": 144.65625,
+            "y": 120.25,
+            "width": 145.5,
+            "height": 31,
+            "top": 120.25,
+            "right": 290.15625,
+            "bottom": 151.25,
+            "left": 144.65625
+          }
+        },
+        {
+          "text": "Reset filters",
+          "rect": {
+            "x": 297.15625,
+            "y": 119,
+            "width": 92.2421875,
+            "height": 33.5,
+            "top": 119,
+            "right": 389.3984375,
+            "bottom": 152.5,
+            "left": 297.15625
+          }
+        },
+        {
+          "text": "Fit",
+          "rect": {
+            "x": 396.3984375,
+            "y": 119,
+            "width": 35.1484375,
+            "height": 33.5,
+            "top": 119,
+            "right": 431.546875,
+            "bottom": 152.5,
+            "left": 396.3984375
+          }
+        },
+        {
+          "text": "−",
+          "rect": {
+            "x": 438.546875,
+            "y": 119,
+            "width": 28.1171875,
+            "height": 33.5,
+            "top": 119,
+            "right": 466.6640625,
+            "bottom": 152.5,
+            "left": 438.546875
+          }
+        },
+        {
+          "text": "85%",
+          "rect": {
+            "x": 473.6640625,
+            "y": 119,
+            "width": 48.140625,
+            "height": 33.5,
+            "top": 119,
+            "right": 521.8046875,
+            "bottom": 152.5,
+            "left": 473.6640625
+          }
+        },
+        {
+          "text": "+",
+          "rect": {
+            "x": 528.8046875,
+            "y": 119,
+            "width": 28.1171875,
+            "height": 33.5,
+            "top": 119,
+            "right": 556.921875,
+            "bottom": 152.5,
+            "left": 528.8046875
+          }
+        }
+      ],
+      "codeScroll": {
+        "x": 20,
+        "y": 640.125,
+        "width": 671,
+        "height": 325,
+        "top": 640.125,
+        "right": 691,
+        "bottom": 965.125,
+        "left": 20
+      },
+      "documentWidth": 720,
+      "workspace": {
+        "x": 0,
+        "y": 109,
+        "width": 720,
+        "height": 391,
+        "top": 109,
+        "right": 720,
+        "bottom": 500,
+        "left": 0
+      }
+    }
+  }
+]

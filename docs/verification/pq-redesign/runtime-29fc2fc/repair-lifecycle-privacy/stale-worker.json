@@ -1,0 +1,215 @@
+{
+  "pending": {
+    "phase": "building",
+    "message": "Inspecting metadata — links pending · 2 / 2",
+    "category": "all",
+    "query": "",
+    "selectedId": null,
+    "inspectorOpen": false,
+    "count": "",
+    "banner": "",
+    "code": "",
+    "viewport": {
+      "x": 0,
+      "y": 0,
+      "k": 1
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null
+    },
+    "history": [],
+    "domNodes": 0,
+    "visible": [],
+    "library": [],
+    "map": "2 visible / 2 objects",
+    "sets": null
+  },
+  "stale": {
+    "phase": "ready",
+    "message": "Power Query metadata is unavailable here. Raw M is excluded from shared snapshots; open the original TMDL or model.bim to inspect it.",
+    "category": "all",
+    "query": "",
+    "selectedId": null,
+    "inspectorOpen": false,
+    "count": "",
+    "banner": "",
+    "code": "",
+    "viewport": {
+      "x": 0,
+      "y": 0,
+      "k": 1
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null
+    },
+    "history": [],
+    "domNodes": 0,
+    "visible": [],
+    "library": [],
+    "map": "2 visible / 2 objects",
+    "sets": null
+  },
+  "actualHeldMessage": {
+    "jobId": "pq-14",
+    "generation": 14,
+    "type": "ready",
+    "graph": {
+      "nodes": [
+        {
+          "id": "[\"partition\",\"SameTable\",\"Main\"]",
+          "metadataId": "[\"partition\",\"SameTable\",\"Main\"]",
+          "label": "SameTable",
+          "subtitle": "m · Main",
+          "kind": "partition",
+          "table": "SameTable",
+          "partition": "Main",
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"SameIdentity\"]",
+          "metadataId": "[\"expression\",\"\",\"SameIdentity\"]",
+          "label": "SameIdentity",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        }
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"SameIdentity\\\"]\",\"[\\\"partition\\\",\\\"SameTable\\\",\\\"Main\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"SameIdentity\"]",
+          "consumerId": "[\"partition\",\"SameTable\",\"Main\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"SameIdentity\"]",
+              "name": "SameIdentity",
+              "at": 0,
+              "end": 12
+            }
+          ]
+        }
+      ],
+      "issues": [
+        {
+          "consumerId": null,
+          "kind": "analysis-notice",
+          "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+        }
+      ],
+      "generation": 14,
+      "analysisProgress": {
+        "analyzed": 2,
+        "total": 2,
+        "complete": true,
+        "generation": 14
+      }
+    }
+  },
+  "worker": {
+    "created": 2778.4000000059605,
+    "messages": [
+      {
+        "time": 2780.9000000059605,
+        "data": {
+          "jobId": "pq-14",
+          "generation": 14,
+          "type": "progress",
+          "progress": {
+            "analyzed": 0,
+            "total": 2,
+            "complete": false,
+            "generation": 14
+          }
+        }
+      },
+      {
+        "time": 2781.9000000059605,
+        "data": {
+          "jobId": "pq-14",
+          "generation": 14,
+          "type": "progress",
+          "progress": {
+            "analyzed": 2,
+            "total": 2,
+            "complete": true,
+            "generation": 14
+          }
+        }
+      },
+      {
+        "time": 2781.9000000059605,
+        "data": {
+          "jobId": "pq-14",
+          "generation": 14,
+          "type": "ready",
+          "graph": {
+            "nodes": [
+              {
+                "id": "[\"partition\",\"SameTable\",\"Main\"]",
+                "metadataId": "[\"partition\",\"SameTable\",\"Main\"]",
+                "label": "SameTable",
+                "subtitle": "m · Main",
+                "kind": "partition",
+                "table": "SameTable",
+                "partition": "Main",
+                "state": "available"
+              },
+              {
+                "id": "[\"expression\",\"\",\"SameIdentity\"]",
+                "metadataId": "[\"expression\",\"\",\"SameIdentity\"]",
+                "label": "SameIdentity",
+                "subtitle": "query",
+                "kind": "query",
+                "table": null,
+                "partition": null,
+                "state": "available"
+              }
+            ],
+            "edges": [
+              {
+                "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"SameIdentity\\\"]\",\"[\\\"partition\\\",\\\"SameTable\\\",\\\"Main\\\"]\"]",
+                "inputId": "[\"expression\",\"\",\"SameIdentity\"]",
+                "consumerId": "[\"partition\",\"SameTable\",\"Main\"]",
+                "referenceOccurrences": [
+                  {
+                    "id": "[\"expression\",\"\",\"SameIdentity\"]",
+                    "name": "SameIdentity",
+                    "at": 0,
+                    "end": 12
+                  }
+                ]
+              }
+            ],
+            "issues": [
+              {
+                "consumerId": null,
+                "kind": "analysis-notice",
+                "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+              }
+            ],
+            "generation": 14,
+            "analysisProgress": {
+              "analyzed": 2,
+              "total": 2,
+              "complete": true,
+              "generation": 14
+            }
+          }
+        }
+      }
+    ],
+    "terminated": true
+  }
+}

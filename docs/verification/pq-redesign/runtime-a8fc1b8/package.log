@@ -1,0 +1,42 @@
+Executing prepublish script 'npm run vscode:prepublish'...
+
+> semantic-model-viewer@0.3.3 vscode:prepublish
+> npm run sync-viewer
+
+
+> semantic-model-viewer@0.3.3 sync-viewer
+> node scripts/sync-viewer.js
+
+synced 31 viewer runtime assets from Models/tools/viewer into media/
+ WARNING  LICENSE, LICENSE.md, or LICENSE.txt not found
+ INFO  Files included in the VSIX:
+pq-independent-a8fc1b8.vsix
+├─ [Content_Types].xml 
+├─ extension.vsixmanifest 
+└─ extension/
+   ├─ changelog.md [3.28 KB]
+   ├─ package.json [6.31 KB]
+   ├─ readme.md [5.78 KB]
+   ├─ images/
+   │  ├─ activity.svg [0.31 KB]
+   │  └─ icon.png [1.68 KB]
+   ├─ media/
+   │  ├─ explorer.css [13.98 KB]
+   │  ├─ index.html [6.57 KB]
+   │  ├─ measures.css [13.82 KB]
+   │  ├─ power-query-canvas.css [3.95 KB]
+   │  ├─ power-query-inspector.css [3.81 KB]
+   │  ├─ power-query-lineage.css [1.7 KB]
+   │  ├─ power-query-workspace.css [4.17 KB]
+   │  ├─ power-query.css [1.71 KB]
+   │  └─ js/ (23 files) [595.22 KB]
+   └─ src/
+      ├─ cleaner.js [5.49 KB]
+      ├─ extension.js [2.44 KB]
+      ├─ panel.js [15.71 KB]
+      ├─ tree.js [1.22 KB]
+      └─ workspace.js [4.8 KB]
+
+=> Run vsce ls --tree to see all included files.
+
+ DONE  Packaged: /tmp/pq-independent-a8fc1b8.vsix (43 files, 218.81 KB)

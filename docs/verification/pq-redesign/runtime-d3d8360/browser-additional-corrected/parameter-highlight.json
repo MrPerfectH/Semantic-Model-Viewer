@@ -1,0 +1,712 @@
+{
+  "before": {
+    "phase": "ready",
+    "message": "Metadata inspected. Static analysis remains partial.",
+    "category": "all",
+    "query": "",
+    "selectedId": null,
+    "inspectorOpen": false,
+    "count": "9 visible / 9 total objects · 9 library results",
+    "banner": "",
+    "code": "",
+    "viewport": {
+      "x": 396.88574938574936,
+      "y": 51.786240786240796,
+      "k": 0.7893120393120393
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null
+    },
+    "history": [],
+    "domNodes": 9,
+    "visible": [
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Consumer1\"]",
+      "[\"expression\",\"\",\"Consumer2\"]",
+      "[\"expression\",\"\",\"Consumer3\"]",
+      "[\"expression\",\"\",\"Consumer4\"]",
+      "[\"expression\",\"\",\"Consumer5\"]",
+      "[\"expression\",\"\",\"LocalShadow\"]",
+      "[\"expression\",\"\",\"FunctionShadow\"]",
+      "[\"expression\",\"\",\"FieldOnly\"]"
+    ],
+    "library": [
+      "Server · parameter",
+      "Consumer1 · query",
+      "Consumer2 · query",
+      "Consumer3 · query",
+      "Consumer4 · query",
+      "Consumer5 · query",
+      "LocalShadow · query",
+      "FunctionShadow · function",
+      "FieldOnly · query"
+    ],
+    "map": "9 visible / 9 objects",
+    "graph": {
+      "nodes": [
+        {
+          "id": "[\"expression\",\"\",\"Server\"]",
+          "metadataId": "[\"expression\",\"\",\"Server\"]",
+          "label": "Server",
+          "subtitle": "parameter",
+          "kind": "parameter",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Consumer1\"]",
+          "metadataId": "[\"expression\",\"\",\"Consumer1\"]",
+          "label": "Consumer1",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Consumer2\"]",
+          "metadataId": "[\"expression\",\"\",\"Consumer2\"]",
+          "label": "Consumer2",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Consumer3\"]",
+          "metadataId": "[\"expression\",\"\",\"Consumer3\"]",
+          "label": "Consumer3",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Consumer4\"]",
+          "metadataId": "[\"expression\",\"\",\"Consumer4\"]",
+          "label": "Consumer4",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Consumer5\"]",
+          "metadataId": "[\"expression\",\"\",\"Consumer5\"]",
+          "label": "Consumer5",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"LocalShadow\"]",
+          "metadataId": "[\"expression\",\"\",\"LocalShadow\"]",
+          "label": "LocalShadow",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"FunctionShadow\"]",
+          "metadataId": "[\"expression\",\"\",\"FunctionShadow\"]",
+          "label": "FunctionShadow",
+          "subtitle": "function",
+          "kind": "function",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"FieldOnly\"]",
+          "metadataId": "[\"expression\",\"\",\"FieldOnly\"]",
+          "label": "FieldOnly",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        }
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer1\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"Consumer1\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Server\"]",
+              "name": "Server",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer2\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"Consumer2\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Server\"]",
+              "name": "Server",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer3\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"Consumer3\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Server\"]",
+              "name": "Server",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer4\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"Consumer4\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Server\"]",
+              "name": "Server",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer5\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"Consumer5\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Server\"]",
+              "name": "Server",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        }
+      ],
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"Consumer1\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved library/external symbol: Sql.Database"
+        },
+        {
+          "consumerId": "[\"expression\",\"\",\"Consumer2\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved library/external symbol: Sql.Database"
+        },
+        {
+          "consumerId": "[\"expression\",\"\",\"Consumer3\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved library/external symbol: Sql.Database"
+        },
+        {
+          "consumerId": "[\"expression\",\"\",\"Consumer4\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved library/external symbol: Sql.Database"
+        },
+        {
+          "consumerId": "[\"expression\",\"\",\"Consumer5\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved library/external symbol: Sql.Database"
+        },
+        {
+          "consumerId": null,
+          "kind": "analysis-notice",
+          "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+        }
+      ],
+      "generation": 3,
+      "analysisProgress": {
+        "analyzed": 9,
+        "total": 9,
+        "complete": true,
+        "generation": 3
+      }
+    },
+    "sets": {
+      "all": [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Consumer1\"]",
+        "[\"expression\",\"\",\"Consumer2\"]",
+        "[\"expression\",\"\",\"Consumer3\"]",
+        "[\"expression\",\"\",\"Consumer4\"]",
+        "[\"expression\",\"\",\"Consumer5\"]",
+        "[\"expression\",\"\",\"LocalShadow\"]",
+        "[\"expression\",\"\",\"FunctionShadow\"]",
+        "[\"expression\",\"\",\"FieldOnly\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Consumer1\"]",
+        "[\"expression\",\"\",\"Consumer2\"]",
+        "[\"expression\",\"\",\"Consumer3\"]",
+        "[\"expression\",\"\",\"Consumer4\"]",
+        "[\"expression\",\"\",\"Consumer5\"]"
+      ],
+      "disconnected": [
+        "[\"expression\",\"\",\"LocalShadow\"]",
+        "[\"expression\",\"\",\"FunctionShadow\"]",
+        "[\"expression\",\"\",\"FieldOnly\"]"
+      ]
+    }
+  },
+  "after": {
+    "phase": "ready",
+    "message": "Metadata inspected. Static analysis remains partial.",
+    "category": "all",
+    "query": "",
+    "selectedId": "[\"expression\",\"\",\"Server\"]",
+    "inspectorOpen": true,
+    "count": "9 visible / 9 total objects · 9 library results",
+    "banner": "",
+    "code": "\"PQ_REDESIGN_PARAMETER_ONLY\" meta [IsParameterQuery=true]",
+    "viewport": {
+      "x": 313,
+      "y": 369.1,
+      "k": 0.85
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null
+    },
+    "history": [
+      {
+        "generation": 3,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 396.88574938574936,
+          "y": 51.786240786240796,
+          "k": 0.7893120393120393
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null
+        },
+        "category": "all",
+        "query": ""
+      }
+    ],
+    "domNodes": 9,
+    "visible": [
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Consumer1\"]",
+      "[\"expression\",\"\",\"Consumer2\"]",
+      "[\"expression\",\"\",\"Consumer3\"]",
+      "[\"expression\",\"\",\"Consumer4\"]",
+      "[\"expression\",\"\",\"Consumer5\"]",
+      "[\"expression\",\"\",\"LocalShadow\"]",
+      "[\"expression\",\"\",\"FunctionShadow\"]",
+      "[\"expression\",\"\",\"FieldOnly\"]"
+    ],
+    "library": [
+      "Server · parameter",
+      "Consumer1 · query",
+      "Consumer2 · query",
+      "Consumer3 · query",
+      "Consumer4 · query",
+      "Consumer5 · query",
+      "LocalShadow · query",
+      "FunctionShadow · function",
+      "FieldOnly · query"
+    ],
+    "map": "9 visible / 9 objects",
+    "graph": {
+      "nodes": [
+        {
+          "id": "[\"expression\",\"\",\"Server\"]",
+          "metadataId": "[\"expression\",\"\",\"Server\"]",
+          "label": "Server",
+          "subtitle": "parameter",
+          "kind": "parameter",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Consumer1\"]",
+          "metadataId": "[\"expression\",\"\",\"Consumer1\"]",
+          "label": "Consumer1",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Consumer2\"]",
+          "metadataId": "[\"expression\",\"\",\"Consumer2\"]",
+          "label": "Consumer2",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Consumer3\"]",
+          "metadataId": "[\"expression\",\"\",\"Consumer3\"]",
+          "label": "Consumer3",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Consumer4\"]",
+          "metadataId": "[\"expression\",\"\",\"Consumer4\"]",
+          "label": "Consumer4",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Consumer5\"]",
+          "metadataId": "[\"expression\",\"\",\"Consumer5\"]",
+          "label": "Consumer5",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"LocalShadow\"]",
+          "metadataId": "[\"expression\",\"\",\"LocalShadow\"]",
+          "label": "LocalShadow",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"FunctionShadow\"]",
+          "metadataId": "[\"expression\",\"\",\"FunctionShadow\"]",
+          "label": "FunctionShadow",
+          "subtitle": "function",
+          "kind": "function",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"FieldOnly\"]",
+          "metadataId": "[\"expression\",\"\",\"FieldOnly\"]",
+          "label": "FieldOnly",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        }
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer1\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"Consumer1\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Server\"]",
+              "name": "Server",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer2\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"Consumer2\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Server\"]",
+              "name": "Server",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer3\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"Consumer3\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Server\"]",
+              "name": "Server",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer4\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"Consumer4\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Server\"]",
+              "name": "Server",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer5\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"Consumer5\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Server\"]",
+              "name": "Server",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        }
+      ],
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"Consumer1\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved library/external symbol: Sql.Database"
+        },
+        {
+          "consumerId": "[\"expression\",\"\",\"Consumer2\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved library/external symbol: Sql.Database"
+        },
+        {
+          "consumerId": "[\"expression\",\"\",\"Consumer3\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved library/external symbol: Sql.Database"
+        },
+        {
+          "consumerId": "[\"expression\",\"\",\"Consumer4\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved library/external symbol: Sql.Database"
+        },
+        {
+          "consumerId": "[\"expression\",\"\",\"Consumer5\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved library/external symbol: Sql.Database"
+        },
+        {
+          "consumerId": null,
+          "kind": "analysis-notice",
+          "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+        }
+      ],
+      "generation": 3,
+      "analysisProgress": {
+        "analyzed": 9,
+        "total": 9,
+        "complete": true,
+        "generation": 3
+      }
+    },
+    "sets": {
+      "all": [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Consumer1\"]",
+        "[\"expression\",\"\",\"Consumer2\"]",
+        "[\"expression\",\"\",\"Consumer3\"]",
+        "[\"expression\",\"\",\"Consumer4\"]",
+        "[\"expression\",\"\",\"Consumer5\"]",
+        "[\"expression\",\"\",\"LocalShadow\"]",
+        "[\"expression\",\"\",\"FunctionShadow\"]",
+        "[\"expression\",\"\",\"FieldOnly\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Consumer1\"]",
+        "[\"expression\",\"\",\"Consumer2\"]",
+        "[\"expression\",\"\",\"Consumer3\"]",
+        "[\"expression\",\"\",\"Consumer4\"]",
+        "[\"expression\",\"\",\"Consumer5\"]"
+      ],
+      "disconnected": [
+        "[\"expression\",\"\",\"LocalShadow\"]",
+        "[\"expression\",\"\",\"FunctionShadow\"]",
+        "[\"expression\",\"\",\"FieldOnly\"]"
+      ]
+    }
+  },
+  "visual": {
+    "related": 5,
+    "dashed": 5,
+    "nodes": [
+      {
+        "id": "[\"expression\",\"\",\"Server\"]",
+        "rect": {
+          "x": 533,
+          "y": 533.5999755859375,
+          "width": 187,
+          "height": 66.300048828125,
+          "top": 533.5999755859375,
+          "right": 720,
+          "bottom": 599.9000244140625,
+          "left": 533
+        },
+        "text": "Serverparameter"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Consumer1\"]",
+        "rect": {
+          "x": 805,
+          "y": 533.5999755859375,
+          "width": 187,
+          "height": 66.300048828125,
+          "top": 533.5999755859375,
+          "right": 992,
+          "bottom": 599.9000244140625,
+          "left": 805
+        },
+        "text": "Consumer1query"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Consumer2\"]",
+        "rect": {
+          "x": 805,
+          "y": 625.4000244140625,
+          "width": 187,
+          "height": 66.29998779296875,
+          "top": 625.4000244140625,
+          "right": 992,
+          "bottom": 691.7000122070312,
+          "left": 805
+        },
+        "text": "Consumer2query"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Consumer3\"]",
+        "rect": {
+          "x": 805,
+          "y": 717.2000122070312,
+          "width": 187,
+          "height": 66.29998779296875,
+          "top": 717.2000122070312,
+          "right": 992,
+          "bottom": 783.5,
+          "left": 805
+        },
+        "text": "Consumer3query"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Consumer4\"]",
+        "rect": {
+          "x": 805,
+          "y": 809,
+          "width": 187,
+          "height": 66.300048828125,
+          "top": 809,
+          "right": 992,
+          "bottom": 875.300048828125,
+          "left": 805
+        },
+        "text": "Consumer4query"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Consumer5\"]",
+        "rect": {
+          "x": 805,
+          "y": 900.800048828125,
+          "width": 187,
+          "height": 66.2999267578125,
+          "top": 900.800048828125,
+          "right": 992,
+          "bottom": 967.0999755859375,
+          "left": 805
+        },
+        "text": "Consumer5query"
+      },
+      {
+        "id": "[\"expression\",\"\",\"LocalShadow\"]",
+        "rect": {
+          "x": 533,
+          "y": 1033.4000244140625,
+          "width": 187,
+          "height": 66.300048828125,
+          "top": 1033.4000244140625,
+          "right": 720,
+          "bottom": 1099.7000732421875,
+          "left": 533
+        },
+        "text": "LocalShadowquery"
+      },
+      {
+        "id": "[\"expression\",\"\",\"FunctionShadow\"]",
+        "rect": {
+          "x": 755.7000122070312,
+          "y": 1033.4000244140625,
+          "width": 187,
+          "height": 66.300048828125,
+          "top": 1033.4000244140625,
+          "right": 942.7000122070312,
+          "bottom": 1099.7000732421875,
+          "left": 755.7000122070312
+        },
+        "text": "FunctionShadowfunction"
+      },
+      {
+        "id": "[\"expression\",\"\",\"FieldOnly\"]",
+        "rect": {
+          "x": 533,
+          "y": 1125.2000732421875,
+          "width": 187,
+          "height": 66.2999267578125,
+          "top": 1125.2000732421875,
+          "right": 720,
+          "bottom": 1191.5,
+          "left": 533
+        },
+        "text": "FieldOnlyquery"
+      }
+    ],
+    "arrows": [
+      "url(#pqc-arrow-1)",
+      "url(#pqc-arrow-1)",
+      "url(#pqc-arrow-1)",
+      "url(#pqc-arrow-1)",
+      "url(#pqc-arrow-1)"
+    ]
+  }
+}
