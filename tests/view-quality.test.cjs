@@ -153,3 +153,127 @@ test('switching away from Tables closes the inspector, and coming back reopens i
   assert.equal(app.state.selected, 'Sales', 'the selection survives the round trip');
   assert.equal(host.children.length, 1);
 });
+
+
+function routingCanvas(boxes, expanded = []) {
+  const context = runtime(), canvas = Object.create(context.GraphCanvas.prototype);
+  Object.assign(canvas, { cards: Object.fromEntries(Object.keys(boxes).map(n => [n, { expanded: expanded.includes(n) }])),
+    cardBox: n => boxes[n], anchorY: n => boxes[n].y + 24, lineStyle: 'ortho', view: { k: 1 } });
+  return canvas;
+}
+function routingRects(boxes) {
+  return Object.entries(boxes).map(([name, b]) => ({ name, x0: b.x - 6, x1: b.x + b.w + 6, y0: b.y - 6, y1: b.y + b.h + 6 }));
+}
+
+test('layered date-to-fact connection uses facing row edges and clears the item card', () => {
+  const boxes = { Customer: { x: 0, y: 0, w: 252, h: 100 }, Date: { x: 310, y: 0, w: 252, h: 100 },
+    Item: { x: 620, y: 0, w: 252, h: 100 }, Region: { x: 930, y: 0, w: 252, h: 100 },
+    Fact: { x: 465, y: 300, w: 252, h: 100 } };
+  const canvas = routingCanvas(boxes), rects = routingRects(boxes);
+  for (const name of ['Customer', 'Date', 'Item', 'Region']) {
+    const route = canvas.routeOf({ from: 'Fact', to: name });
+    assert.equal(route.axis, 'v');
+    assert.equal(route.ay, boxes.Fact.y);
+    assert.equal(route.by, boxes[name].y + boxes[name].h);
+    const geom = canvas.edgeGeom(route, 0, 0, rects);
+    assert.ok(canvas.routeClear(geom.points, rects.filter(r => r.name !== name && r.name !== 'Fact')));
+    assert.ok(geom.spots.length);
+    assert.doesNotMatch(geom.d, /NaN|Infinity/);
+  }
+});
+
+test('expanded cards preserve column anchors while horizontal approaches avoid obstacles', () => {
+  const boxes = { A: { x: 0, y: 0, w: 252, h: 100 }, B: { x: 700, y: 220, w: 252, h: 100 },
+    Block: { x: 290, y: 0, w: 252, h: 100 } };
+  const canvas = routingCanvas(boxes, ['A']), route = canvas.routeOf({ from: 'A', to: 'B', fromCol: 'Key' });
+  assert.equal(route.axis, undefined);
+  assert.equal(route.ay, 24);
+  const geom = canvas.edgeGeom(route, 0, 0, routingRects(boxes));
+  assert.ok(canvas.routeClear(geom.points, routingRects({ Block: boxes.Block })));
+  assert.ok(geom.points.length > 4, 'blocked horizontal leg requires a detour');
+});
+
+test('vertical obstacle detours retain endpoints and labels follow the routed segments', () => {
+  const boxes = { A: { x: 0, y: 0, w: 252, h: 100 }, B: { x: 0, y: 500, w: 252, h: 100 },
+    Block: { x: -40, y: 200, w: 330, h: 180 } };
+  const canvas = routingCanvas(boxes), route = canvas.routeOf({ from: 'A', to: 'B' });
+  const geom = canvas.edgeGeom(route, 0, 0, routingRects(boxes));
+  assert.ok(canvas.routeClear(geom.points, routingRects({ Block: boxes.Block })));
+  assert.equal(geom.points[0].x, route.ax);
+  assert.equal(geom.points.at(-1).y, route.by);
+  for (const spot of geom.spots) {
+    assert.ok(geom.points.some((b, i) => {
+      if (!i) return false;
+      const a = geom.points[i - 1];
+      return spot.x >= Math.min(a.x, b.x) && spot.x <= Math.max(a.x, b.x) &&
+        spot.y >= Math.min(a.y, b.y) && spot.y <= Math.max(a.y, b.y) &&
+        (a.x === b.x ? spot.orient === 'v' : spot.orient === 'h');
+    }));
+  }
+});
+
+test('fact ports are distinct and ordered by the other endpoint, regardless of metadata order', () => {
+  const boxes = { Left: { x: 0, y: 0, w: 252, h: 100 }, Middle: { x: 310, y: 0, w: 252, h: 100 },
+    Right: { x: 620, y: 0, w: 252, h: 100 }, Fact: { x: 310, y: 300, w: 252, h: 100 } };
+  const canvas = routingCanvas(boxes);
+  const vis = ['Right', 'Left', 'Middle'].map(to => ({ g0: canvas.routeOf({ from: 'Fact', to }) }));
+  canvas.assignRelationshipPorts(vis);
+  const ports = Object.fromEntries(vis.map(item => [item.g0.b, item.g0.ax]));
+  assert.ok(ports.Left < ports.Middle && ports.Middle < ports.Right);
+  assert.equal(new Set(Object.values(ports)).size, 3);
+  assert.ok(Object.values(ports).every(x => x > boxes.Fact.x && x < boxes.Fact.x + boxes.Fact.w));
+  assert.ok(vis.every(item => item.g0.adegree === 3 && item.g0.bdegree === 1));
+});
+
+test('curved row connections leave and enter vertically with the correct label direction', () => {
+  const boxes = { A: { x: 0, y: 0, w: 252, h: 100 }, B: { x: 0, y: 300, w: 252, h: 100 } };
+  const canvas = routingCanvas(boxes); canvas.lineStyle = 'curve';
+  const geom = canvas.edgeGeom(canvas.routeOf({ from: 'A', to: 'B' }), 0, 0, []);
+  assert.match(geom.d, /^M 126 100 C 126 200, 126 200, 126 300$/);
+  assert.ok(geom.spots.every(spot => spot.orient === 'v' && spot.toA === -1));
+});
+
+test('each endpoint chooses its side independently for a diagonal layout', () => {
+  const boxes = { Wide: { x: 0, y: 0, w: 252, h: 100 }, Tall: { x: 350, y: 250, w: 120, h: 300 } };
+  const canvas = routingCanvas(boxes), route = canvas.routeOf({ from: 'Wide', to: 'Tall' });
+  assert.equal(route.axis, 'mixed');
+  assert.equal(route.aaxis, 'v');
+  assert.equal(route.baxis, 'h');
+  assert.equal(route.ay, boxes.Wide.h);
+  assert.equal(route.bx, boxes.Tall.x);
+  const points = canvas.edgeGeom(route, 0, 0, routingRects(boxes)).points;
+  assert.equal(points[0].x, points[1].x, 'leave the bottom vertically');
+  assert.equal(points.at(-1).y, points.at(-2).y, 'enter the left side horizontally');
+  const reversed = canvas.routeOf({ from: 'Tall', to: 'Wide' });
+  assert.equal(reversed.aaxis, 'h');
+  assert.equal(reversed.baxis, 'v');
+  canvas.lineStyle = 'curve';
+  assert.doesNotMatch(canvas.edgeGeom(route, 0, 0, []).d, /NaN|Infinity/);
+});
+
+test('one table uses different sides for neighbors above, below, left and right', () => {
+  const boxes = { Center: { x: 400, y: 300, w: 252, h: 100 }, Above: { x: 400, y: 0, w: 252, h: 100 },
+    Below: { x: 400, y: 600, w: 252, h: 100 }, Left: { x: 0, y: 300, w: 252, h: 100 },
+    Right: { x: 800, y: 300, w: 252, h: 100 }, FarDiagonal: { x: 2000, y: 500, w: 252, h: 100 } };
+  const canvas = routingCanvas(boxes);
+  const vis = ['Above', 'Below', 'Left', 'Right', 'FarDiagonal'].map(to => ({ g0: canvas.routeOf({ from: 'Center', to }) }));
+  canvas.assignRelationshipPorts(vis);
+  const routes = Object.fromEntries(vis.map(item => [item.g0.b, item.g0]));
+  assert.equal(routes.Above.aaxis, 'v'); assert.equal(routes.Above.adir, -1);
+  assert.equal(routes.Below.aaxis, 'v'); assert.equal(routes.Below.adir, 1);
+  assert.equal(routes.Left.aaxis, 'h'); assert.equal(routes.Left.adir, -1);
+  assert.equal(routes.Right.aaxis, 'h'); assert.equal(routes.Right.adir, 1);
+  assert.equal(routes.FarDiagonal.aaxis, 'h', 'vertical separation alone must not force a bottom connection');
+  assert.notEqual(routes.Right.ay, routes.FarDiagonal.ay, 'separate ports on the right edge');
+});
+
+
+test('a tiny relationship still provides a fallback arrow seat at the zoom floor', () => {
+  const canvas = routingCanvas({}); canvas.view.k = 0.25;
+  const g0 = { ax: 0, ay: 0, bx: 8, by: 8, adir: 1, bdir: -1, aaxis: 'v', baxis: 'h', axis: 'mixed' };
+  for (const bare of [true, false]) {
+    const geom = canvas.edgeGeom(g0, 0, 0, [], bare);
+    assert.ok(geom.spots.length);
+    assert.doesNotThrow(() => canvas.pillBox(canvas.pickSpot(geom.spots, [])));
+  }
+});
