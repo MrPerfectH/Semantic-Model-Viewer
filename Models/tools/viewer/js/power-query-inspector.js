@@ -26,23 +26,50 @@
       var details = entry.element.closest('details'); if (details) details.open = true; entry.element.focus({ preventScroll: true }); return true;
     }
     function focus(d) { cancelRestores(); return applyFocus(d); }
+    // Stable module-owned section keys, independent of display text or focus
+    // mode. Optional sections are captured/restored only when they exist.
+    var disclosureSections = { references: '.pqi-reference-details', provenance: '.pqi-provenance', analysis: '.pqi-analysis-details' };
+    function captureDisclosures() {
+      var value = {};
+      Object.keys(disclosureSections).forEach(function (key) { var section = root.querySelector(disclosureSections[key]); if (section) value[key] = !!section.open; });
+      return value;
+    }
+    function copyDisclosures(state) {
+      var value = {};
+      Object.keys(disclosureSections).forEach(function (key) { if (state && Object.prototype.hasOwnProperty.call(state, key) && typeof state[key] === 'boolean') value[key] = state[key]; });
+      return value;
+    }
+    function restoreDisclosures(value) {
+      Object.keys(value).forEach(function (key) { var section = root.querySelector(disclosureSections[key]); if (section) section.open = value[key]; });
+    }
     function captureViewState() {
       var active = focusEntries.find(function (entry) { return entry.element === doc.activeElement; });
-      return { codeX: codeScroll ? codeScroll.scrollLeft : 0, codeY: codeScroll ? codeScroll.scrollTop : 0, inspectorX: root.scrollLeft, inspectorY: root.scrollTop, wrap: wrap, focus: active ? Object.assign({}, active.descriptor) : null };
+      return { codeX: codeScroll ? codeScroll.scrollLeft : 0, codeY: codeScroll ? codeScroll.scrollTop : 0, inspectorX: root.scrollLeft, inspectorY: root.scrollTop, wrap: wrap, focus: active ? Object.assign({}, active.descriptor) : null, disclosures: captureDisclosures() };
     }
     function scrollValue(v) { return Number.isFinite(v) ? Math.max(0, v) : 0; }
     function restoreViewState(state) {
       cancelRestores(); if (!state || !alive || !context || !opened || suspended) return Promise.resolve();
       var gen = generation, id = selected, version = epoch;
       // Retain values/descriptors only, never a prior DOM element or source row.
-      var value = { codeX: scrollValue(state.codeX), codeY: scrollValue(state.codeY), inspectorX: scrollValue(state.inspectorX), inspectorY: scrollValue(state.inspectorY), wrap: !!state.wrap, focus: state.focus ? Object.assign({}, state.focus) : null };
+      var value = { codeX: scrollValue(state.codeX), codeY: scrollValue(state.codeY), inspectorX: scrollValue(state.inspectorX), inspectorY: scrollValue(state.inspectorY), wrap: !!state.wrap, focus: state.focus ? Object.assign({}, state.focus) : null, disclosures: copyDisclosures(state.disclosures) };
       return new Promise(function (resolve) {
         var job = { resolve: resolve, frame: 0 }; jobs.add(job);
         job.frame = win.requestAnimationFrame(function () {
           if (!current(gen, id) || epoch !== version) { jobs.delete(job); resolve(); return; }
           job.frame = win.requestAnimationFrame(function () {
             jobs.delete(job);
-            if (current(gen, id) && epoch === version) { wrap = value.wrap; if (codeScroll) { codeScroll.classList.toggle('pqi-wrap', wrap); updateWrapLabel(); codeScroll.scrollLeft = value.codeX; codeScroll.scrollTop = value.codeY; } root.scrollLeft = value.inspectorX; root.scrollTop = value.inspectorY; if (value.focus) applyFocus(value.focus); }
+            if (current(gen, id) && epoch === version) {
+              restoreDisclosures(value.disclosures); wrap = value.wrap;
+              if (codeScroll) { codeScroll.classList.toggle('pqi-wrap', wrap); updateWrapLabel(); }
+              // Disclosures (and any focused control's ancestor) must be open
+              // before scroll assignment, or the browser clamps to a short range.
+              if (value.focus) applyFocus(value.focus);
+              // Focusing can synchronously trigger a later host navigation.
+              if (current(gen, id) && epoch === version) {
+                if (codeScroll) { codeScroll.scrollLeft = value.codeX; codeScroll.scrollTop = value.codeY; }
+                root.scrollLeft = value.inspectorX; root.scrollTop = value.inspectorY;
+              }
+            }
             resolve();
           });
         });
