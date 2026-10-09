@@ -1,0 +1,1 @@
+Initial harness asserted native select value immediately after ArrowUp. Screenshot retains Direct only and focus-depth; controls do not intercept ArrowUp. Native macOS select navigation requires commit. Targeted replay adds trusted Enter after each arrow before asserting the unchanged projection oracle; record full trusted key events. No production changes.

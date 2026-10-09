@@ -1,0 +1,5 @@
+[
+  { native: 38, value: 'C' },
+  { native: null, value: 'C' },
+  { native: 126, value: 'C' }
+]

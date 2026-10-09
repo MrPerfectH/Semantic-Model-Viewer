@@ -1,0 +1,21 @@
+{
+  "candidate": "6b352ca8c85e99874ce702f51a6adad47867f922",
+  "transport": "authorized fresh isolated Chrome CDP fallback",
+  "startedAt": "2026-10-09T10:48:22.320Z",
+  "checks": [
+    {
+      "name": "exact-back-filter",
+      "status": "pass"
+    },
+    {
+      "name": "reset-stale",
+      "status": "pass"
+    },
+    {
+      "name": "disclosure-legacy-races",
+      "status": "pass"
+    }
+  ],
+  "failures": [],
+  "endedAt": "2026-10-09T10:48:26.910Z"
+}

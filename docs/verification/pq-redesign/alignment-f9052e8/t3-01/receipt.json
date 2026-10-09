@@ -1,0 +1,22 @@
+{
+  "candidate": "f9052e8f269cd097f687eb7a9428b7b105a2803d",
+  "transport": "T3 collaborative preview",
+  "startedAt": "2026-10-09T10:35:13.475Z",
+  "checks": [
+    {
+      "name": "neighborhoods",
+      "status": "pass"
+    }
+  ],
+  "failures": [
+    {
+      "name": "visual-membership",
+      "error": "Error: cp: /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/alignment-f9052e8/t3-01/01-tables-1280.png: No such file or directory\n\n    at shot (eval at <anonymous> (exec_main.mjs:3:21), <anonymous>:19:262)\n    at async eval (eval at <anonymous> (exec_main.mjs:3:21), <anonymous>:27:91)\n    at async check (eval at <anonymous> (exec_main.mjs:3:21), <anonymous>:25:84)\n    at async eval (eval at <anonymous> (exec_main.mjs:3:21), <anonymous>:26:1)\n    at async exec_main.mjs:3:15"
+    },
+    {
+      "name": "exact-back-filter",
+      "error": "Error: full Back state\nactual {\"membership\":[\"[\\\"partition\\\",\\\"SyntheticSales\\\",\\\"SyntheticSales\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Quote\\\\\\\"Query\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"],\"focusMode\":\"hide\",\"direction\":\"inputs\",\"depth\":0,\"listFacet\":\"canvas\",\"generation\":8,\"selectedId\":\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\",\"inspectorOpen\":true,\"viewport\":{\"x\":123,\"y\":87,\"k\":1.3},\"inspectorView\":{\"codeX\":0,\"codeY\":0,\"inspectorX\":0,\"inspectorY\":39,\"wrap\":false,\"focus\":{\"kind\":\"reference\",\"nodeId\":\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\",\"at\":32,\"end\":44}},\"category\":\"disconnected\",\"query\":\"Occurrence\"}\nexpected {\"membership\":[\"[\\\"partition\\\",\\\"SyntheticSales\\\",\\\"SyntheticSales\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Quote\\\\\\\"Query\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"],\"focusMode\":\"hide\",\"direction\":\"inputs\",\"depth\":0,\"listFacet\":\"canvas\",\"generation\":8,\"selectedId\":\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\",\"inspectorOpen\":true,\"viewport\":{\"x\":123,\"y\":87,\"k\":1.3},\"inspectorView\":{\"codeX\":0,\"codeY\":0,\"inspectorX\":0,\"inspectorY\":318,\"wrap\":false,\"focus\":{\"kind\":\"reference\",\"nodeId\":\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\",\"at\":32,\"end\":44}},\"category\":\"disconnected\",\"query\":\"Occurrence\"}\n    at eq (eval at <anonymous> (exec_main.mjs:3:21), <anonymous>:10:77)\n    at eval (eval at <anonymous> (exec_main.mjs:3:21), <anonymous>:46:797)\n    at async check (eval at <anonymous> (exec_main.mjs:3:21), <anonymous>:25:84)\n    at async eval (eval at <anonymous> (exec_main.mjs:3:21), <anonymous>:45:1)\n    at async exec_main.mjs:3:15"
+    }
+  ]
+}
+

@@ -1,0 +1,10 @@
+{
+  "out": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/alignment-f9052e8/zoom-transitions",
+  "passed": 5,
+  "failures": [
+    {
+      "name": "Actual resize transition 1440 step1 zoom1",
+      "error": "Error: Timed out cached PQ\n    at Object.until (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:15:176)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-alignment-f905-zoom.browser.cjs:52:110\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-alignment-f905-zoom.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-alignment-f905-zoom.browser.cjs:46:45"
+    }
+  ]
+}

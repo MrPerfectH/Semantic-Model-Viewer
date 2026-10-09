@@ -1,0 +1,379 @@
+{
+  "navigation": {
+    "membership": [
+      "[\"partition\",\"Sales\",\"Current\"]",
+      "[\"partition\",\"Sales\",\"History\"]",
+      "[\"partition\",\"NonM\",\"Calc\"]",
+      "[\"partition\",\"Missing\",\"Main\"]",
+      "[\"partition\",\"Collision\",\"Main\"]",
+      "[\"expression\",\"\",\"RangeStart\"]",
+      "[\"expression\",\"\",\"AmbiguousTable\"]",
+      "[\"expression\",\"\",\"Collision\"]",
+      "[\"expression\",\"\",\"AmbiguousName\"]",
+      "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",0]",
+      "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",1]",
+      "[\"expression\",\"\",\"DuplicateConsumer\"]",
+      "[\"expression\",\"\",\"Dynamic\"]",
+      "[\"expression\",\"\",\"MissingRef\"]",
+      "[\"expression\",\"\",\"Unsupported\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"SelfCycle\"]",
+      "[\"expression\",\"\",\"ParseFailure\"]",
+      "[\"table-status\",\"NoPartitions\"]"
+    ],
+    "focusMode": "hide",
+    "direction": "inputs",
+    "depth": null,
+    "listFacet": "all",
+    "generation": 6,
+    "selectedId": "[\"expression\",\"\",\"CycleA\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": 145,
+      "y": -19.25,
+      "k": 1.25
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": {
+        "kind": "focus-hide",
+        "nodeId": "[\"expression\",\"\",\"CycleA\"]"
+      }
+    },
+    "category": "all",
+    "query": ""
+  },
+  "phase": "ready",
+  "generation": 6,
+  "selected": "[\"expression\",\"\",\"CycleA\"]",
+  "code": "CycleB",
+  "visible": [
+    "[\"expression\",\"\",\"CycleA\"]",
+    "[\"expression\",\"\",\"CycleB\"]"
+  ],
+  "dimmed": [],
+  "layout": [
+    [
+      "[\"partition\",\"Sales\",\"Current\"]",
+      {
+        "x": 352,
+        "y": 0
+      }
+    ],
+    [
+      "[\"partition\",\"Sales\",\"History\"]",
+      {
+        "x": 352,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"RangeStart\"]",
+      {
+        "x": 0,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CycleA\"]",
+      {
+        "x": 0,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CycleB\"]",
+      {
+        "x": 0,
+        "y": 252
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"SelfCycle\"]",
+      {
+        "x": 0,
+        "y": 430
+      }
+    ],
+    [
+      "[\"partition\",\"NonM\",\"Calc\"]",
+      {
+        "x": 0,
+        "y": 632
+      }
+    ],
+    [
+      "[\"partition\",\"Missing\",\"Main\"]",
+      {
+        "x": 294,
+        "y": 632
+      }
+    ],
+    [
+      "[\"partition\",\"Collision\",\"Main\"]",
+      {
+        "x": 588,
+        "y": 632
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"AmbiguousTable\"]",
+      {
+        "x": 882,
+        "y": 632
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Collision\"]",
+      {
+        "x": 0,
+        "y": 758
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"AmbiguousName\"]",
+      {
+        "x": 294,
+        "y": 758
+      }
+    ],
+    [
+      "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",0]",
+      {
+        "x": 588,
+        "y": 758
+      }
+    ],
+    [
+      "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",1]",
+      {
+        "x": 882,
+        "y": 758
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"DuplicateConsumer\"]",
+      {
+        "x": 0,
+        "y": 884
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Dynamic\"]",
+      {
+        "x": 294,
+        "y": 884
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"MissingRef\"]",
+      {
+        "x": 588,
+        "y": 884
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Unsupported\"]",
+      {
+        "x": 882,
+        "y": 884
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"ParseFailure\"]",
+      {
+        "x": 0,
+        "y": 1010
+      }
+    ],
+    [
+      "[\"table-status\",\"NoPartitions\"]",
+      {
+        "x": 294,
+        "y": 1010
+      }
+    ]
+  ],
+  "history": [
+    {
+      "membership": [
+        "[\"partition\",\"Sales\",\"Current\"]",
+        "[\"partition\",\"Sales\",\"History\"]",
+        "[\"partition\",\"NonM\",\"Calc\"]",
+        "[\"partition\",\"Missing\",\"Main\"]",
+        "[\"partition\",\"Collision\",\"Main\"]",
+        "[\"expression\",\"\",\"RangeStart\"]",
+        "[\"expression\",\"\",\"AmbiguousTable\"]",
+        "[\"expression\",\"\",\"Collision\"]",
+        "[\"expression\",\"\",\"AmbiguousName\"]",
+        "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",0]",
+        "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",1]",
+        "[\"expression\",\"\",\"DuplicateConsumer\"]",
+        "[\"expression\",\"\",\"Dynamic\"]",
+        "[\"expression\",\"\",\"MissingRef\"]",
+        "[\"expression\",\"\",\"Unsupported\"]",
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]",
+        "[\"expression\",\"\",\"SelfCycle\"]",
+        "[\"expression\",\"\",\"ParseFailure\"]",
+        "[\"table-status\",\"NoPartitions\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "generation": 6,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 267.5235602094241,
+        "y": 44.41186736474697,
+        "k": 0.4205933682373473
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": ""
+    }
+  ],
+  "undo": 0,
+  "registry": [
+    "[\"partition\",\"Sales\",\"Current\"]",
+    "[\"partition\",\"Sales\",\"History\"]",
+    "[\"partition\",\"NonM\",\"Calc\"]",
+    "[\"partition\",\"Missing\",\"Main\"]",
+    "[\"partition\",\"Collision\",\"Main\"]",
+    "[\"expression\",\"\",\"RangeStart\"]",
+    "[\"expression\",\"\",\"AmbiguousTable\"]",
+    "[\"expression\",\"\",\"Collision\"]",
+    "[\"expression\",\"\",\"AmbiguousName\"]",
+    "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",0]",
+    "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",1]",
+    "[\"expression\",\"\",\"DuplicateConsumer\"]",
+    "[\"expression\",\"\",\"Dynamic\"]",
+    "[\"expression\",\"\",\"MissingRef\"]",
+    "[\"expression\",\"\",\"Unsupported\"]",
+    "[\"expression\",\"\",\"CycleA\"]",
+    "[\"expression\",\"\",\"CycleB\"]",
+    "[\"expression\",\"\",\"SelfCycle\"]",
+    "[\"expression\",\"\",\"ParseFailure\"]",
+    "[\"table-status\",\"NoPartitions\"]"
+  ],
+  "edges": [
+    [
+      "[\"expression\",\"\",\"RangeStart\"]",
+      "[\"partition\",\"Sales\",\"Current\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"RangeStart\"]",
+      "[\"partition\",\"Sales\",\"History\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"CycleA\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"SelfCycle\"]",
+      "[\"expression\",\"\",\"SelfCycle\"]"
+    ]
+  ],
+  "sets": {
+    "all": [
+      "[\"partition\",\"Sales\",\"Current\"]",
+      "[\"partition\",\"Sales\",\"History\"]",
+      "[\"partition\",\"NonM\",\"Calc\"]",
+      "[\"partition\",\"Missing\",\"Main\"]",
+      "[\"partition\",\"Collision\",\"Main\"]",
+      "[\"expression\",\"\",\"RangeStart\"]",
+      "[\"expression\",\"\",\"AmbiguousTable\"]",
+      "[\"expression\",\"\",\"Collision\"]",
+      "[\"expression\",\"\",\"AmbiguousName\"]",
+      "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",0]",
+      "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",1]",
+      "[\"expression\",\"\",\"DuplicateConsumer\"]",
+      "[\"expression\",\"\",\"Dynamic\"]",
+      "[\"expression\",\"\",\"MissingRef\"]",
+      "[\"expression\",\"\",\"Unsupported\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"SelfCycle\"]",
+      "[\"expression\",\"\",\"ParseFailure\"]",
+      "[\"table-status\",\"NoPartitions\"]"
+    ],
+    "connected": [
+      "[\"expression\",\"\",\"RangeStart\"]",
+      "[\"partition\",\"Sales\",\"Current\"]",
+      "[\"partition\",\"Sales\",\"History\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"SelfCycle\"]"
+    ],
+    "disconnected": [
+      "[\"partition\",\"NonM\",\"Calc\"]",
+      "[\"partition\",\"Missing\",\"Main\"]",
+      "[\"partition\",\"Collision\",\"Main\"]",
+      "[\"expression\",\"\",\"AmbiguousTable\"]",
+      "[\"expression\",\"\",\"Collision\"]",
+      "[\"expression\",\"\",\"AmbiguousName\"]",
+      "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",0]",
+      "[\"metadata-occurrence\",\"[\\\"expression\\\",\\\"\\\",\\\"Duplicate\\\"]\",1]",
+      "[\"expression\",\"\",\"DuplicateConsumer\"]",
+      "[\"expression\",\"\",\"Dynamic\"]",
+      "[\"expression\",\"\",\"MissingRef\"]",
+      "[\"expression\",\"\",\"Unsupported\"]",
+      "[\"expression\",\"\",\"ParseFailure\"]",
+      "[\"table-status\",\"NoPartitions\"]"
+    ]
+  },
+  "library": [
+    "Sales / Current",
+    "Sales / History",
+    "NonM",
+    "Missing",
+    "Collision",
+    "RangeStart",
+    "AmbiguousTable",
+    "Collision",
+    "AmbiguousName",
+    "Duplicate",
+    "Duplicate",
+    "DuplicateConsumer",
+    "Dynamic",
+    "MissingRef",
+    "Unsupported",
+    "CycleA",
+    "CycleB",
+    "SelfCycle",
+    "ParseFailure",
+    "NoPartitions"
+  ],
+  "banner": "",
+  "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+  "mapCount": 20,
+  "map": "2 visible / 20 objects",
+  "focus": {
+    "tag": "BUTTON",
+    "cls": "ex-button"
+  },
+  "options": [
+    "All (20)",
+    "Connected (6)",
+    "Disconnected (14)"
+  ]
+}
+
