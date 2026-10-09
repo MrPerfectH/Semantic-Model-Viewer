@@ -1,0 +1,117 @@
+{
+  "runtime": "a8fc1b85de05a269bcb019932f86eb3bbf78d19a",
+  "vsixSha256": "4ac3b3416775857b274cec86c26377f250fd617c45d61ae92f71c2fab7b9427b",
+  "isolatedUserData": "/tmp/pq-v2-native-a8fc-user",
+  "appBundle": "com.microsoft.VSCode",
+  "window": "pq-v2-native-a8fc1b8 \u2014 Semantic Model Viewer \u2014 pq-v2-native-a8fc1b8",
+  "readOnlyConsole": {
+    "ready": "complete",
+    "app": true,
+    "loaded": true,
+    "model": "pq-v2-native-a8fc1b8",
+    "tables": 6,
+    "rootDisplay": "flex",
+    "rootVisibility": "visible",
+    "rootOpacity": "1",
+    "documentHidden": true,
+    "nestedFrameBounds": [
+      0,
+      0,
+      786,
+      772
+    ],
+    "outerBoundsWithDevTools": [
+      353,
+      95,
+      231,
+      772
+    ],
+    "externalScriptNonces": true
+  },
+  "viewerCspExceptionsObserved": false,
+  "targetedReproduction": "Welcome tab then existing viewer tab; native panel still blank",
+  "automationFailure": "Raise action returned -10005 noWindowsAvailable; inventory and read-only rebind recovered same exact window; Raise not retried",
+  "changes": "No source edit, restart, trust/security toggle, unrelated Code interaction",
+  "verdict": "Native visual interaction blocked; host visibility/compositing hypothesis unproven",
+  "hostInspection": {
+    "timestamp": "2026-10-09T09:44:54.076Z",
+    "selectedTab": "pq-v2-native-a8fc1b8 \u2014 Semantic Model Viewer",
+    "activeElement": "IFRAME",
+    "documentHidden": true,
+    "documentFocus": false,
+    "hostIframeClient": [
+      231,
+      772
+    ],
+    "ancestors": "iframe + overlay + editor + workbench + body + html nonzero, display inline/block, visibility visible, opacity1, aria-hidden null",
+    "overlayZIndex": "2"
+  },
+  "nestedInspection": {
+    "timestamp": "2026-10-09T09:45:24.821Z",
+    "boundsAndClientRects": [
+      0,
+      0,
+      786,
+      772
+    ],
+    "client": [
+      786,
+      772
+    ],
+    "display": "block",
+    "visibility": "visible",
+    "opacity": "1",
+    "ariaHidden": null
+  },
+  "welcomeComparison": {
+    "timestamp": "2026-10-09T09:45:54.921Z",
+    "selectedTab": "Welcome, preview",
+    "documentHidden": true,
+    "documentFocus": false,
+    "screenshot": "Welcome renders visibly in same window; hidden flag therefore not causal proof"
+  },
+  "capabilityBoundary": "Sandbox renderer has no require/process/BrowserWindow. Exposed vscode.context configuration/resolveConfiguration, webFrame setZoomLevel, ipc generic send/invoke/on/once/removeListener; no documented read-only BrowserWindow visibility/minimized accessor. No guessed IPC call made. CUA native AX exposes window title/controls but no Electron visibility/minimized status.",
+  "exactWarnings": [
+    "Unrecognized feature: 'local-network-access'.",
+    "An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing.",
+    "WARN [perf] Renderer reported VERY LONG TASK (164ms)"
+  ],
+  "activeClippingComparison": {
+    "outerTimestamp": "2026-10-09T09:47:41.994Z",
+    "viewerTimestamp": "2026-10-09T09:47:57.540Z",
+    "outerIframe": [
+      353,
+      95,
+      231,
+      772
+    ],
+    "outerOverlay": [
+      353,
+      95,
+      231,
+      772
+    ],
+    "outerOverlayOverflow": "hidden",
+    "editorAncestor": [
+      352,
+      61,
+      233,
+      807
+    ],
+    "editorClipPath": "content-box",
+    "viewerRootBodyHtml": [
+      0,
+      0,
+      786,
+      772
+    ],
+    "viewerScrollClient": [
+      786,
+      772
+    ],
+    "viewerRootOverflow": "hidden",
+    "viewerClipPath": "none",
+    "conclusion": "Width mismatch remains. Root origin0 and height772 do not alone explain complete blank left231px; no layout repair justified without renderer pixel capture."
+  },
+  "screenshotCapability": "Tool catalog exposes no CDP native Page.captureScreenshot or nested frame capture. Existing isolated Code launch has no remote-debugging-port/address; no CDP endpoint is configured. CUA getScreenshot captures native window only (captured with exact title/time-associated console). Did not restart to enable CDP, use guessed protocol IPC, or substitute Chrome."
+}
