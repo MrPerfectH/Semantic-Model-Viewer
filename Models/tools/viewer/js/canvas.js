@@ -261,16 +261,17 @@
     makeCard: function (world, t) {
       var self = this, app = this.app;
       var fact = app.isFact(t);
+      var chrome = g.WorkspaceUI ? g.WorkspaceUI.cardStyles({fact:fact,color:app.tableColor(t),headerTint:U.tint(app.tableColor(t),.1)}) : {};
       var card = el('div', {
         data: { name: t.name },
         style: 'position:absolute;width:' + this.CARD_W + 'px;background:#fff;border:1px solid #e4e7ec;border-radius:' + (fact ? '7px' : '13px') +
           ';box-shadow:0 1px 2px rgba(20,30,50,.05),0 4px 12px rgba(20,30,50,.07);font-family:\'IBM Plex Sans\',sans-serif;overflow:hidden;transition:box-shadow .15s,opacity .15s,border-color .15s;'
       });
       var sm = app.srcMeta(t);
-      var head = el('div', { data: { head: '1' }, style: 'display:flex;align-items:flex-start;gap:9px;padding:10px 11px 10px 12px;cursor:grab;border-left:4px solid transparent;' });
+      var head = el('div', { data: { head: '1' }, style: chrome.head || 'display:flex;align-items:flex-start;gap:9px;padding:10px 11px 10px 12px;cursor:grab;border-left:4px solid transparent;' });
       var rmap = { fact: 'FACT', dim: 'DIM', helper: 'HLP', calcgroup: 'CG', fieldparam: 'FP', measures: 'M', standalone: 'STD', unknown: 'UNK' };
       var role = el('span', { text: rmap[t.role] || 'TBL', style: 'font:700 8.5px/1 "IBM Plex Mono",monospace;letter-spacing:.4px;padding:4px 5px;border-radius:4px;flex:none;color:#fff;margin-top:1px;' });
-      var titleWrap = el('div', { style: 'flex:1;min-width:0;' });
+      var titleWrap = el('div', { style: chrome.titleWrap || 'flex:1;min-width:0;' });
       var nm = el('div', { text: t.name, title: t.name, style: 'font:600 13.5px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:-.2px;color:#1f2430;word-break:break-word;' });
       var src = el('div', {
         title: sm.kind + (sm.detail && sm.detail !== '—' ? ' · ' + sm.detail : '') + (sm.via ? '\nvia ' + sm.via : '') + (sm.server ? '\n' + sm.server : ''),
@@ -298,7 +299,7 @@
       rm.addEventListener('click', function (e) { e.stopPropagation(); if (app.explorer) app.explorer.removeMany([t.name]); });
       head.appendChild(role); head.appendChild(titleWrap); head.appendChild(lock); head.appendChild(rm); head.appendChild(caret);
       card.appendChild(head);
-      var meta = el('div', { data: { meta: '1' }, style: 'display:flex;align-items:center;gap:6px;padding:9px 11px 10px 16px;border-top:1px solid #eef0f3;' });
+      var meta = el('div', { data: { meta: '1' }, style: chrome.meta || 'display:flex;align-items:center;gap:6px;padding:9px 11px 10px 16px;border-top:1px solid #eef0f3;' });
       var chip = function (num, label) {
         return el('span', {
           html: '<b style="font-weight:600;color:#5b6472;">' + num + '</b> <span style="color:#9aa1ad;">' + label + '</span>',
