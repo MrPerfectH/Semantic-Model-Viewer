@@ -73,3 +73,79 @@ test('names with an escaped apostrophe keep their measures and columns', () => {
   assert.deepEqual([...table.measures.map(m => m.name)], ["Owner's Total", 'Plain']);
   assert.deepEqual([...table.columns.map(c => c.name)], ["It's"]);
 });
+
+test('calculated columns, calculated tables and calculation items keep their DAX (TMDL)', () => {
+  const TMDLParser = parser();
+  const files = [
+    file('model.tmdl', 'model Model\n\tculture: en-US\n'),
+    file('sales.tmdl', [
+      'table Sales', '\tcolumn Amount', '\t\tdataType: double', '',
+      '\tcolumn Inline = [Amount] * 2', '\t\tdataType: double', '',
+      '\tcolumn Banded =', '\t\t\t\tSWITCH(', '\t\t\t\t    TRUE(),', '\t\t\t\t    [Amount] > 5, "Big",', '\t\t\t\t    "Small"', '\t\t\t\t)',
+      '\t\tdataType: string', '\t\tlineageTag: abc', '',
+      '\tpartition Sales = m', '\t\tsource = let x = 1 in x', ''].join('\n')),
+    file('top.tmdl', [
+      'table Top', '\tcolumn Name', '\t\tdataType: string', '',
+      '\tpartition Top = calculated', '\t\tmode: import', '\t\tsource =', '\t\t\t\tTOPN(', '\t\t\t\t    5,', '\t\t\t\t    Sales', '\t\t\t\t)', ''].join('\n')),
+    file('time.tmdl', [
+      'table Time', '\tcalculationGroup', '\t\tprecedence: 1', '',
+      '\t\tcalculationItem Current = SELECTEDMEASURE()', '',
+      '\t\tcalculationItem YTD =', '\t\t\t\tCALCULATE(', '\t\t\t\t    SELECTEDMEASURE(),', '\t\t\t\t    DATESYTD(Date[Date])', '\t\t\t\t)',
+      '\t\t\tformatStringDefinition = "0.0"', '',
+      '\tcolumn Name', '\t\tdataType: string', '\tpartition Time = calculationGroup', ''].join('\n')),
+  ];
+  const model = TMDLParser.parseTMDL(files);
+  const by = n => model.tables.find(t => t.name === n);
+  const cols = Object.fromEntries(by('Sales').columns.map(c => [c.name, c]));
+  assert.equal(cols.Amount.dax, undefined);
+  assert.equal(cols.Inline.dax, '[Amount] * 2');
+  assert.equal(cols.Banded.dax, 'SWITCH(\n    TRUE(),\n    [Amount] > 5, "Big",\n    "Small"\n)');
+  assert.equal(cols.Banded.dataType, 'string');
+  assert.equal(by('Sales').dax, undefined);
+  assert.equal(by('Top').dax, 'TOPN(\n    5,\n    Sales\n)');
+  const items = by('Time').calcItems;
+  assert.deepEqual([...items.map(i => i.name)], ['Current', 'YTD']);
+  assert.equal(items[0].dax, 'SELECTEDMEASURE()');
+  assert.equal(items[1].dax, 'CALCULATE(\n    SELECTEDMEASURE(),\n    DATESYTD(Date[Date])\n)');
+  assert.equal(items[1].fmt, '"0.0"');
+  assert.equal(by('Time').role, 'calcgroup');
+});
+
+test('calculated columns, calculated tables and calculation items keep their DAX (BIM)', () => {
+  const TMDLParser = parser();
+  const bim = { name: 'M', compatibilityLevel: 1601, model: { tables: [
+    { name: 'Sales', columns: [{ name: 'Amount', dataType: 'double' }, { name: 'Dbl', type: 'calculated', dataType: 'double', expression: ['[Amount]', '* 2'] }],
+      partitions: [{ source: { type: 'm', expression: 'let x = 1 in x' } }] },
+    { name: 'Calc', columns: [{ name: 'V', dataType: 'string' }], partitions: [{ source: { type: 'calculated', expression: 'ROW("V", 1)' } }] },
+    { name: 'Time', columns: [{ name: 'Name', dataType: 'string' }], calculationGroup: { calculationItems: [
+      { name: 'Current', expression: 'SELECTEDMEASURE()' },
+      { name: 'YTD', expression: ['CALCULATE(', 'SELECTEDMEASURE())'], formatStringDefinition: { expression: '"0.0"' } }] } },
+  ], relationships: [] } };
+  const model = TMDLParser.parseAny([file('model.bim', JSON.stringify(bim))]);
+  const by = n => model.tables.find(t => t.name === n);
+  assert.equal(by('Sales').columns[1].dax, '[Amount]\n* 2');
+  assert.equal(by('Sales').columns[0].dax, undefined);
+  assert.equal(by('Calc').dax, 'ROW("V", 1)');
+  assert.equal(by('Time').calcItems[1].dax, 'CALCULATE(\nSELECTEDMEASURE())');
+  assert.equal(by('Time').calcItems[1].fmt, '"0.0"');
+});
+
+test('``` fences around a multi-line measure are not part of its DAX', () => {
+  const TMDLParser = parser();
+  const files = [
+    file('model.tmdl', 'model Model\n\tculture: en-US\n'),
+    file('table.tmdl', 'table T\n\tmeasure A = ```\n\t\t\tCALCULATE (\n\t\t\t    [B],\n\t\t\t    T[x] = 1\n\t\t\t)\n\t\t\t```\n\t\tformatString: 0\n\n\tmeasure B = ```SUM ( T[x] )```\n\n\tmeasure C = 1 + 1\n'),
+  ];
+  const ms = TMDLParser.parseTMDL(files).tables[0].measures;
+  assert.equal(ms[0].dax, 'CALCULATE (\n    [B],\n    T[x] = 1\n)');
+  assert.equal(ms[0].fmt, '0');
+  assert.equal(ms[1].dax, 'SUM ( T[x] )');
+  assert.equal(ms[2].dax, '1 + 1');
+});
+
+test('unfence drops ``` fences that an older import left in a stored measure', () => {
+  const { unfence } = parser();
+  assert.equal(unfence('```\nSUM ( x )\n```'), 'SUM ( x )');
+  assert.equal(unfence('SUM ( x )'), 'SUM ( x )');
+  assert.equal(unfence(undefined), '');
+});

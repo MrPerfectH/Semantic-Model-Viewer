@@ -1,0 +1,24 @@
+{
+  "name": "semantic-model-viewer-cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Offline interactive HTML snapshots from TMDL semantic models",
+  "bin": {
+    "smv": "bin/smv.cjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test tests/cli.test.cjs"
+  },
+  "files": [
+    "bin/",
+    "Models/tools/viewer/index.html",
+    "Models/tools/viewer/*.css",
+    "Models/tools/viewer/js/",
+    "Models/tools/viewer/scripts/cli/",
+    "docs/cli.md",
+    "docs/snapshots.md"
+  ]
+}

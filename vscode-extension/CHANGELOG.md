@@ -8,6 +8,11 @@
 - Build static analysis in a cancellable background worker; disclose uncertainty,
   cycles and unavailable metadata without claiming complete lineage.
 - Keep raw M excluded from shared snapshots; no M evaluation or source-data reads.
+- Inline measures in the DAX view: the analyzed measure shows its DAX with every referenced measure replaced by that measure's DAX, one colour per level. Fold any inlined measure or nested call with the arrows in the left margin. Switch between SQLBI-style long and short lines, view the result as plain text, and copy it as DAX or as an `EVALUATE ROW` query.
+- Drop the TMDL ``` fences from multi-line measure expressions, including in models imported earlier.
+- Let the DAX card fill the panel; the referenced columns list sits at the bottom.
+- Route straight relationship lines around table cards, choosing each collapsed card’s connection side from its position and proportions, with separate ordered ports. Expanded cards keep their column anchors.
+
 - Keep measures, columns and tables whose names contain an apostrophe (`measure 'Owner''s Total'`). They were silently dropped before.
 - Stop the hosted demo from probing for the local app, which logged a 404 in the browser console.
 

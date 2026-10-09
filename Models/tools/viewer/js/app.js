@@ -112,7 +112,7 @@
       isolate: false, focusDepth: 1, viewMode: 'graph',
       showModelMenu: false, showPresets: false, presetName: '',
       showImport: false, importError: '', importReady: false, importName: '', importSummary: '',
-      msrQuery: '', expandedMeasure: null, pngLabel: 'PNG',
+      msrQuery: '', expandedMeasure: null, calcOpen: {}, pngLabel: 'PNG',
       selMeasure: null, mvQuery: '', mvOpen: {}, gExtra: {}, gHover: null, gPin: null,
       mvW: Math.max(230, Math.min(600, parseInt(store.get('smv-mvw'), 10) || 296)),
       repoScanning: false, repoError: '', showRules: false,
@@ -399,6 +399,8 @@
         tableNames.set(t.name.toLowerCase(), t.name);
         var names = new Map(); tableMeasures.set(t.name, names);
         t.measures.forEach(function (m) {
+          // models imported before the parser dropped TMDL ``` fences still carry them in storage
+          if (window.TMDLParser && window.TMDLParser.unfence) m.dax = window.TMDLParser.unfence(m.dax);
           names.set(m.name.toLowerCase(), m.name);
           if (!measureNames.has(m.name.toLowerCase())) {
             measureNames.set(m.name.toLowerCase(), m.name); msrHome[m.name] = t.name;
@@ -465,7 +467,7 @@
       this.matrix._key = null; this.sidebar._key = null;
       var state = {
         loaded: true, allExpanded: false, modelName: name, selected: null, activeFilter: null, search: '',
-        isolate: false, showModelMenu: !!opts.showModelMenu, msrQuery: '', expandedMeasure: null,
+        isolate: false, showModelMenu: !!opts.showModelMenu, msrQuery: '', expandedMeasure: null, calcOpen: {},
         selMeasure: null, mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, viewMode: 'graph',
         showRules: false
       };
@@ -1292,6 +1294,8 @@
       cv.computeLayout(); this.render(true); cv.build();
       var tableView = workspace.tableView || { name: 'Snapshot', tables: model.tables.map(function (table) { return table.name; }), pos: {} };
       cv.applyPreset(tableView);
+      // CLI snapshots have positions but no sender viewport. Fit for the recipient.
+      if (tableView.autoFit === true) cv.fitView();
       this._tableViewport = Object.assign({}, cv.view);
       this._tableWorkspace = this.captureTableView();
       cv.setPresets(Array.isArray(workspace.presets) ? workspace.presets : []);
@@ -1379,6 +1383,9 @@
       this._idbGet('repo').then(function (h) { if (h) { self.repoHandle = h; self.autoReconnect(); } }).catch(function () { });
     }
   };
+
+  // The CLI reuses model preparation without constructing the browser application.
+  if (typeof module === 'object' && module.exports) module.exports = App;
 
   window.addEventListener('DOMContentLoaded', function () {
     function start() { var app = new App(); window.app = app; app.render(); return app.init(); }

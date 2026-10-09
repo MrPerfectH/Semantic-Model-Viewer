@@ -33,8 +33,11 @@
     var columns = t.columns.map(function (c) {
       var isRel = c.rel, hid = c.hidden, ty = app.shortType(c.dataType);
       var status = app.colStatus ? app.colStatus(t.name, c.name) : null;
+      var ckey = 'col|' + c.name, copen = !!(app.state.calcOpen || {})[ckey];
       return {
-        name: c.name, type: ty, pill: status && status.status !== 'used' && app.statusPill ? app.statusPill(status, false, true) : null,
+        name: c.name, type: ty, isCalc: !!c.isCalc, dax: c.dax || '', open: copen,
+        toggle: function () { app.setState({ calcOpen: Object.assign({}, app.state.calcOpen, (function (o) { o[ckey] = !copen; return o; })({})) }); },
+        pill: status && status.status !== 'used' && app.statusPill ? app.statusPill(status, false, true) : null,
         rowStyle: 'display:flex;align-items:center;gap:10px;padding:5px 16px;' + (isRel ? ('background:' + tint('#f59e0b', 0.07) + ';') : ''),
         dotStyle: isRel ? 'width:7px;height:7px;border-radius:50%;background:#f59e0b;flex:none;'
           : (hid ? 'width:7px;height:7px;border-radius:50%;border:1.5px solid #cbd0d8;flex:none;box-sizing:border-box;'
@@ -62,7 +65,14 @@
         }
       };
     });
+    var calcOpen = app.state.calcOpen || {};
+    var calcItems = (t.calcItems || []).map(function (ci) {
+      var key = 'item|' + ci.name, open = !!calcOpen[key];
+      return { name: ci.name, dax: ci.dax || '—', fmt: ci.fmt || '', open: open,
+        toggle: function () { app.setState({ calcOpen: Object.assign({}, app.state.calcOpen, (function (o) { o[key] = !open; return o; })({})) }); } };
+    });
     return {
+      tableDax: t.dax || '', calcItems: calcItems,
       name: t.name, domain: t.domain, role: t.role, roleShort: rmap[t.role] || 'TBL', roleLabel: rlabel[t.role] || 'Table',
       roleGlyphStyle: "font:700 9px/1 'IBM Plex Mono',monospace;letter-spacing:.5px;padding:5px 6px;border-radius:5px;color:#fff;background:" + col + ';flex:none;',
       tintBg: tint(col, 0.08),
@@ -82,7 +92,7 @@
        selection when the reader comes back to Tables. */
     var key = app.state.loaded && app.state.selected && app.state.viewMode === 'graph'
       ? [app.modelKey, app.state.selected, app.state.msrQuery, app.state.expandedMeasure, app.colorBy, app._usage ? 1 : 0, app.canvas.locked, app.canvas.relIndex(app.canvas.selRel), app.state.isolate, app.state.focusDepth,
-        app.model.byName[app.state.selected] ? app.model.byName[app.state.selected].role : '', JSON.stringify(app.state.roleSave), !!app.roleRepo()].join('|')
+        app.model.byName[app.state.selected] ? app.model.byName[app.state.selected].role : '', JSON.stringify(app.state.roleSave), !!app.roleRepo(), JSON.stringify(app.state.calcOpen || {})].join('|')
       : null;
     if (key === this._key && (key || !this.host.firstChild)) return;
     this._key = key;
@@ -165,11 +175,49 @@
     var roleSettings = null;
     if (PICKABLE[sel.role]) { roleSettings = head.lastElementChild; roleSettings.remove(); }
     var body = el('div', { style: 'flex:1;overflow:auto;padding:4px 0 20px;' });
-    if (app.explorer && app.state.viewMode === 'graph') body.appendChild(app.explorer.relationControls());
     var sectionTitle = function (label, count) {
       return el('div', { style: 'padding:14px 16px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:#9aa1ad;font-weight:700;display:flex;justify-content:space-between;' },
         count == null ? label : [el('span', { text: label }), el('span', { style: 'color:#c2c7d0;', text: String(count) })]);
     };
+
+    var daxBox = function (text, margin) {
+      return el('div', {
+        'data-dax-box': true,
+        style: 'margin:' + margin + ";padding:9px 11px;background:#232836;color:#d8dee9;border-radius:8px;font:400 10.5px/1.55 'IBM Plex Mono',monospace;white-space:pre-wrap;overflow-wrap:anywhere;max-height:260px;overflow:auto;",
+        text: text
+      });
+    };
+    var fxBadge = function (title) {
+      return el('span', { title: title, text: 'fx', style: "flex:none;font:700 9px/1 'IBM Plex Mono',monospace;color:#7c2d92;background:#f8f5ff;border:1px solid #e2d8f5;border-radius:4px;padding:2px 4px;" });
+    };
+
+    /* calculated table / field parameter: the DAX that builds the table */
+    if (sel.tableDax) {
+      body.appendChild(sectionTitle(sel.role === 'fieldparam' ? 'Field parameter DAX' : 'Calculated table DAX'));
+      body.appendChild(daxBox(sel.tableDax, '2px 16px 8px'));
+    }
+    if (sel.calcItems.length) {
+      body.appendChild(sectionTitle('Calculation items', sel.calcItems.length));
+      sel.calcItems.forEach(function (ci) {
+        var wrap = el('div', {}, el('button', {
+          cls: 'hv-f5f7f9', onClick: ci.toggle,
+          style: 'display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:5px 16px;border:none;background:transparent;cursor:pointer;'
+        }, [
+          el('span', { style: 'flex:none;display:flex;transition:transform .15s;transform:rotate(' + (ci.open ? '90deg' : '0deg') + ');', html: U.icon('chevRight', 10, '#9aa1ad') }),
+          el('span', { style: "flex:1;min-width:0;font:500 11.5px/1.3 'IBM Plex Mono',monospace;color:#7c2d92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;", text: ci.name })
+        ]));
+        if (ci.open) {
+          wrap.appendChild(daxBox(ci.dax, '2px 16px 8px 34px'));
+          if (ci.fmt) {
+            wrap.appendChild(el('div', { style: 'margin:0 16px 4px 34px;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:#9aa1ad;font-weight:700;', text: 'Format string' }));
+            wrap.appendChild(daxBox(ci.fmt, '0 16px 8px 34px'));
+          }
+        }
+        body.appendChild(wrap);
+      });
+    }
+
+    if (app.explorer && app.state.viewMode === 'graph') body.appendChild(app.explorer.relationControls());
 
     if (roleSettings) body.appendChild(el('details', {open:true,style:'padding:12px 16px;border-bottom:1px solid #e6ebf2;font-size:11px;color:#66758a;'}, [el('summary',{text:'Table role settings',style:'cursor:pointer;'}),roleSettings]));
     if (g.PowerQuery) body.appendChild(el('button',{text:'Open Power Query',cls:'ex-button',style:'margin:12px 16px;',onClick:function(){app.setViewMode('power-query');}}));
@@ -237,12 +285,20 @@
 
     body.appendChild(sectionTitle('Columns', sel.colCount));
     sel.columns.forEach(function (c) {
-      body.appendChild(el('div', { cls: 'hv-f0f2f5', style: c.rowStyle }, [
+      var rowKids = [
         el('span', { style: c.dotStyle }),
         el('span', { style: "flex:1;min-width:0;font-size:12.5px;font-family:'IBM Plex Mono',monospace;color:" + c.nameColor + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', text: c.name }),
+        c.dax ? fxBadge('Calculated column — click to read the DAX') : null,
         c.pill ? el('span', c.pill) : null,
         el('span', { style: c.typeStyle, text: c.type })
-      ]));
+      ];
+      if (!c.dax) { body.appendChild(el('div', { cls: 'hv-f0f2f5', style: c.rowStyle }, rowKids)); return; }
+      var wrap = el('div', {}, el('button', {
+        cls: 'hv-f0f2f5', onClick: c.toggle, title: 'Show / hide the column DAX',
+        style: c.rowStyle + 'width:100%;text-align:left;border:none;cursor:pointer;box-sizing:border-box;'
+      }, rowKids));
+      if (c.open) wrap.appendChild(daxBox(c.dax, '2px 16px 8px 34px'));
+      body.appendChild(wrap);
     });
 
     this.host.appendChild(el('div', {

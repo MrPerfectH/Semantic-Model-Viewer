@@ -70,7 +70,7 @@ function harness() {
   };
   context.window = context; vm.createContext(context);
   const load = file => vm.runInContext(fs.readFileSync(path.join(viewerDir, 'js', file), 'utf8'), context, { filename: file });
-  for (const file of ['util.js', 'snapshot.js', 'roles.js', 'usage-adapter.js', 'tmdl-parser.js', 'canvas.js', 'layouts.js', 'matrix.js', 'measures.js', 'sidebar.js', 'topbar.js', 'rules.js', 'relationships.js', 'explorer.js', 'host-vscode.js']) load(file);
+  for (const file of ['util.js', 'snapshot.js', 'roles.js', 'usage-adapter.js', 'tmdl-parser.js', 'canvas.js', 'layouts.js', 'matrix.js', 'dax-format.js', 'measures.js', 'sidebar.js', 'topbar.js', 'rules.js', 'relationships.js', 'explorer.js', 'host-vscode.js']) load(file);
   const sidebarUpdate = context.Sidebar.prototype.update;
   for (const name of ['Legend', 'Hint', 'MatrixView', 'MeasuresView', 'Sidebar', 'ImportModal', 'RulesModal', 'TableExplorer']) context[name].prototype.update = function () {};
   const cv = context.GraphCanvas.prototype;

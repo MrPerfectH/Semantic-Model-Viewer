@@ -31,6 +31,8 @@
     this._graphOrientation = choice(prefs.orientation, ['lr', 'tb', 'bt'], 'lr');
     this._splitShares = { beside: share(prefs.besideShare, .55), below: share(prefs.belowShare, .52) };
     this._wrapDax = prefs.wrap !== false;
+    this._fmt = choice(prefs.fmt, ['original', 'long', 'short'], 'long');
+    this._folds = {};
   }
 
   MeasuresView.prototype = {
@@ -607,7 +609,31 @@
       if (last < dax.length) pushTxt(dax.slice(last));
       return out;
     },
-    daxCard: function (name) {
+    /* One colour per inlining level: the analyzed measure is purple, each level below it gets its own hue. */
+    DEPTH_COLORS: [['#6d28d9', '#f2edfd', '#dcd0f7'], ['#2563eb', '#eef4fe', '#c9dcf8'], ['#0f766e', '#ecfaf7', '#bfe6df'],
+      ['#b45309', '#fdf5e8', '#f1d9b0'], ['#be185d', '#fdeef5', '#f4c5da'], ['#475569', '#f1f3f6', '#d5dae2']],
+    depthColor: function (d) { return this.DEPTH_COLORS[d % this.DEPTH_COLORS.length]; },
+    depthChipStyle: function (d) {
+      var P = this.depthColor(d);
+      return 'display:inline;border:1px solid ' + P[2] + ';background:' + P[1] + ';color:' + P[0] + ';border-radius:4px;padding:0 3px;margin:0 1px;cursor:pointer;font:600 12px/1.7 "IBM Plex Mono",monospace;vertical-align:baseline;';
+    },
+    refStyle: function (name) {
+      var r = (this._gRel || {})[name];
+      var P = r === 'up' ? ['#6d28d9', '#f2edfd', '#dcd0f7'] : (r === 'dn' ? ['#2563eb', '#eef4fe', '#c9dcf8'] : ['#3a414d', '#f1f3f6', '#d5dae2']);
+      return 'display:inline;border:1px solid ' + P[2] + ';background:' + P[1] + ';color:' + P[0] + ';border-radius:4px;padding:0 3px;margin:0 1px;cursor:pointer;font:600 12px/1.7 "IBM Plex Mono",monospace;vertical-align:baseline;';
+    },
+    /* Format a measure's DAX with the local formatter; `inline` also splices in every measure it uses. */
+    formatDax: function (name, dax, inline, style) {
+      var self = this, app = this.app, opts = { style: style };
+      if (!inline) return DaxFormat.format(dax, opts);
+      return DaxFormat.formatInlined(dax, name, function (ref) {
+        var t = self.daxToks(ref)[0];
+        if (!t || !t.msr) return null;
+        var m = app.msrOf(t.msr);
+        return m ? { name: t.msr, dax: m.dax } : null;
+      }, opts);
+    },
+    daxCard: function (name, inline) {
       var self = this, app = this.app;
       var m = app.msrOf(name); if (!m) return null;
       var rel = this._gRel || {}, dax = (m.dax || '').trim();
@@ -615,13 +641,17 @@
       var flags = { hid: !!m.h, hasUse: !!u, useN: u ? u.length : 0, useTip: app.useTip(u),
         pill: app.statusPill ? app.statusPill(app.msrStatus(name), !!u, false) : null };
       if (!dax) return Object.assign({ name: name, table: app.model.msrHome[name] || '', toks: [{ isM: false, isT: true, txt: '— no expression —', s: 'color:#9aa1ad;' }] }, flags);
+      var style = this._fmt || 'long';
+      if (typeof DaxFormat !== 'undefined' && (style !== 'original' || inline)) {
+        var printed = this.formatDax(name, dax, inline, style === 'original' ? 'long' : style);
+        return Object.assign({ name: name, table: app.model.msrHome[name] || '', printed: printed, text: DaxFormat.toText(printed),
+          inlined: inline ? { count: printed.count, cycles: printed.cycles, capped: printed.capped } : null }, flags);
+      }
       var toks = this.daxToks(dax).map(function (t) {
         if (t.msr) {
-          var r = rel[t.msr];
-          var P = r === 'up' ? ['#6d28d9', '#f2edfd', '#dcd0f7'] : (r === 'dn' ? ['#2563eb', '#eef4fe', '#c9dcf8'] : ['#3a414d', '#f1f3f6', '#d5dae2']);
           return {
             isM: true, isT: false, txt: t.raw || '[' + t.msr + ']', tip: 'Show ' + t.msr + ' on the flow',
-            s: 'display:inline;border:1px solid ' + P[2] + ';background:' + P[1] + ';color:' + P[0] + ';border-radius:4px;padding:0 3px;margin:0 1px;cursor:pointer;font:600 12px/1.7 "IBM Plex Mono",monospace;vertical-align:baseline;',
+            s: self.refStyle(t.msr),
             pick: function () { self.gShow(t.msr); }
           };
         }
@@ -977,7 +1007,7 @@
     },
     savePreferences: function () {
       store.setJSON(PREF_KEY, { mode: this._workspaceMode, split: this._splitLayout, orientation: this._graphOrientation,
-        besideShare: this._splitShares.beside, belowShare: this._splitShares.below, wrap: this._wrapDax });
+        besideShare: this._splitShares.beside, belowShare: this._splitShares.below, wrap: this._wrapDax, fmt: this._fmt });
     },
     setWorkspaceMode: function (mode, persist) {
       if (mode === 'dax' && this._workspaceMode !== 'dax') this.rememberGraphViewport();
@@ -1190,6 +1220,7 @@
     },
 
     daxBody: function (card) {
+      if (card.printed) return this.printedBody(card);
       var code = el('code', { cls: 'mv-dax-code' });
       card.toks.forEach(function (T) {
         if (T.isM) code.appendChild(el('button', { cls: 'mv-dax-ref', style: T.s, title: T.tip, text: T.txt, onClick: T.pick }));
@@ -1197,17 +1228,153 @@
       });
       return el('pre', { cls: 'mv-dax-body', tabindex: '0', 'aria-label': 'DAX formula for ' + card.name }, code);
     },
-    daxHeader: function (card, label, dotStyle, onClose) {
-      var self = this, m = this.app.msrOf(card.name), raw = ((m && m.dax) || '').trim();
-      var copy = el('button', { cls: 'mv-button', text: 'Copy DAX', 'aria-label': 'Copy DAX for ' + card.name });
+    /* Formatted DAX as rows with a fold arrow in the left margin. Fold state lives in this._folds,
+       keyed by measure, layout and inline mode, so it survives a redraw but not a layout switch. */
+    printedBody: function (card) {
+      var self = this, P = card.printed, STYLE = {
+        fn: 'color:#0e7490;font-weight:600;', kw: 'color:#334155;font-weight:700;', str: 'color:#b45309;',
+        cmt: 'color:#94a0b0;font-style:italic;', num: 'color:#3a414d;', op: 'color:#3a414d;', txt: 'color:#3a414d;' };
+      var plain = !!(card.inlined && this._plainDax);
+      var foldKey = [card.name, this._fmt, card.inlined ? 'i' : 'n'].join('|');
+      var set = this._folds[foldKey] || (this._folds[foldKey] = {});
+      var seen = {}, byFrom = {};
+      P.regions.forEach(function (r) {
+        var base = r.kind + ':' + r.label; seen[base] = (seen[base] || 0) + 1; r.key = base + '#' + seen[base];
+        (byFrom[r.from] = byFrom[r.from] || []).push(r);
+      });
+      var body = el('pre', { cls: 'mv-dax-body mv-dax-fold' + (plain ? ' mv-dax-plain' : ''), tabindex: '0', 'aria-label': 'DAX formula for ' + card.name });
+      var refCache = {};
+      var segment = function (p) {
+        if (p.k === 'inl') {
+          return el('button', { cls: 'mv-dax-ref mv-dax-chip', style: self.depthChipStyle(p.depth || 0), text: p.v,
+            title: (p.depth ? 'Inlined measure, level ' + p.depth : 'The analyzed measure') + '. Click to show it on the flow.',
+            onClick: function () { var t = refCache[p.v] || (refCache[p.v] = self.daxToks(p.v)[0] || {}); if (t.msr) self.gShow(t.msr); } });
+        }
+        if (p.k === 'ref') {
+          var t = refCache[p.v] || (refCache[p.v] = self.daxToks(p.v)[0] || {});
+          if (t.msr) {
+            return el('button', { cls: 'mv-dax-ref', style: self.refStyle(t.msr), text: p.v,
+              title: 'Show ' + t.msr + ' on the flow', onClick: function () { self.gShow(t.msr); } });
+          }
+          return el('span', { style: 'color:#0f766e;', text: p.v });
+        }
+        return el('span', { style: STYLE[p.k] || STYLE.txt, text: p.v });
+      };
+      var foldButton = function (reg, collapsed) {
+        return el('button', { cls: 'mv-dax-fold-btn', text: collapsed ? '▸' : '▾', 'aria-expanded': String(!collapsed),
+          title: (collapsed ? 'Expand ' : 'Collapse ') + reg.label, 'aria-label': (collapsed ? 'Expand ' : 'Collapse ') + reg.label,
+          onClick: function () { if (set[reg.key]) delete set[reg.key]; else set[reg.key] = true; draw(); } });
+      };
+      var moreButton = function (reg) {
+        return el('button', { cls: 'mv-dax-more', text: '⋯', title: 'Expand ' + reg.label, 'aria-label': 'Expand ' + reg.label,
+          onClick: function () { delete set[reg.key]; draw(); } });
+      };
+      /* The innermost inlined measure that holds each line sets the colour of that line's left edge. */
+      var lineDepth = [];
+      P.regions.forEach(function (r) {
+        if (r.kind !== 'measure') return;
+        for (var k = r.from; k <= r.to; k++) if (!lineDepth[k] || lineDepth[k] < r.depth) lineDepth[k] = r.depth;
+      });
+      var tint = function (row, i) {
+        var P2 = self.depthColor(lineDepth[i] || 0);
+        row.style.cssText = 'border-left:3px solid ' + P2[2] + ';background:' + P2[1] + '66;';
+        row.setAttribute('data-level', String(lineDepth[i] || 0));
+      };
+      if (plain) {
+        DaxFormat.plainLines(P).forEach(function (L) {
+          var parts = L.parts;
+          var row = el('div', { cls: 'mv-dax-row' });
+          var code = el('span', { cls: 'mv-dax-line' });
+          if (L.indent) code.appendChild(document.createTextNode(Array(L.indent + 1).join('    ')));
+          parts.forEach(function (p) { code.appendChild(segment(p)); });
+          row.appendChild(code); body.appendChild(row);
+        });
+        return body;
+      }
+      var draw = function () {
+        U.clear(body);
+        var i = 0;
+        while (i < P.lines.length) {
+          var L = P.lines[i], opens = byFrom[i] || [];
+          var coll = opens.filter(function (r) { return set[r.key]; }).sort(function (x, y) { return y.to - x.to; })[0];
+          var row = el('div', { cls: 'mv-dax-row' });
+          var gutter = el('span', { cls: 'mv-dax-gutter' });
+          var reg = coll || opens[0];
+          if (reg) gutter.appendChild(foldButton(reg, !!coll));
+          var code = el('span', { cls: 'mv-dax-line' });
+          if (L.indent) code.appendChild(document.createTextNode(Array(L.indent + 1).join('    ')));
+          /* A collapsed measure shows its label, then "(", then the ⋯ button, then ")". */
+          var split = coll && coll.openLine > coll.from;
+          var upTo = coll && !split ? coll.openPart + 1 : L.parts.length;
+          L.parts.slice(0, upTo).forEach(function (p) { code.appendChild(segment(p)); });
+          if (split) {
+            code.appendChild(document.createTextNode(' '));
+            P.lines[coll.openLine].parts.slice(0, coll.openPart + 1).forEach(function (p) { code.appendChild(segment(p)); });
+          }
+          if (coll) {
+            code.appendChild(moreButton(coll));
+            P.lines[coll.to].parts.slice(coll.closePart).forEach(function (p) { code.appendChild(segment(p)); });
+          }
+          if (card.inlined) tint(row, i);
+          row.appendChild(gutter); row.appendChild(code); body.appendChild(row);
+          i = coll ? coll.to + 1 : i + 1;
+        }
+      };
+      card.fold = {
+        count: P.regions.length,
+        measures: P.regions.filter(function (r) { return r.kind === 'measure'; }).length,
+        collapse: function (kind) {
+          P.regions.forEach(function (r) { if (!kind || r.kind === kind) set[r.key] = true; });
+          draw();
+        },
+        expand: function () { Object.keys(set).forEach(function (k) { delete set[k]; }); draw(); }
+      };
+      draw();
+      return body;
+    },
+    daxHeader: function (card, label, dotStyle, onClose, canInline) {
+      var self = this, m = this.app.msrOf(card.name), raw = card.text || ((m && m.dax) || '').trim();
+      var inl = !!card.inlined;
+      var copy = el('button', { cls: 'mv-button', text: inl ? 'Copy inlined DAX' : 'Copy DAX', 'aria-label': (inl ? 'Copy inlined DAX for ' : 'Copy DAX for ') + card.name,
+        title: inl ? 'Copies plain DAX with every measure replaced by its DAX. No labels, nothing folded. Paste it into Tabular Editor as a measure expression.' : 'Copies the DAX as shown' });
       var status = el('span', { cls: 'mv-copy-status', role: 'status', 'aria-live': 'polite' });
-      copy.addEventListener('click', function () {
+      var copyText = function (text) {
         if (!navigator.clipboard || !navigator.clipboard.writeText) {
           status.textContent = 'Copy unavailable. Select the formula to copy.'; return;
         }
-        navigator.clipboard.writeText(raw).then(function () { status.textContent = 'Copied'; }, function () { status.textContent = 'Copy unavailable. Select the formula to copy.'; });
-      });
+        navigator.clipboard.writeText(text).then(function () { status.textContent = 'Copied'; }, function () { status.textContent = 'Copy unavailable. Select the formula to copy.'; });
+      };
+      copy.addEventListener('click', function () { copyText(raw); });
       var actions = el('div', { cls: 'mv-dax-actions' }, [status, copy]);
+      if (inl) {
+        var asQuery = el('button', { cls: 'mv-button', text: 'Copy as query', 'aria-label': 'Copy inlined DAX for ' + card.name + ' as a query',
+          title: 'Copies EVALUATE ROW ( "Value", ... ). Paste it into DAX Studio and run it.',
+          onClick: function () { copyText('EVALUATE\nROW (\n    "Value",\n' + raw.replace(/^/gm, '    ') + '\n)'); } });
+        actions.insertBefore(asQuery, copy.nextSibling);
+      }
+      if (card.fold && card.fold.count && !(card.inlined && this._plainDax)) {
+        var F = card.fold;
+        if (F.measures) actions.insertBefore(el('button', { cls: 'mv-button', text: 'Collapse measures', title: 'Fold every inlined measure so only the top-level formula shows', onClick: function () { F.collapse('measure'); } }), copy);
+        actions.insertBefore(el('button', { cls: 'mv-button', text: 'Collapse all', onClick: function () { F.collapse(); } }), copy);
+        actions.insertBefore(el('button', { cls: 'mv-button', text: 'Expand all', onClick: function () { F.expand(); } }), copy);
+      }
+      if (canInline && raw) {
+        var layout = el('select', { cls: 'mv-layout-select', 'aria-label': 'DAX layout', title: 'DAX layout: original text, or SQLBI-style short or long lines',
+          onChange: function () { self._fmt = layout.value; self.savePreferences(); self._daxKey = null; self.renderDax(); } },
+          [['original', 'Original'], ['long', 'Long lines'], ['short', 'Short lines']].map(function (o) { return el('option', { value: o[0], text: o[1] }); }));
+        layout.value = this._fmt;
+        var inlineBtn = el('button', { cls: 'mv-button', text: 'Inline measures', 'aria-pressed': String(!!this._inlineDax),
+          title: 'Replace every measure reference with that measure\'s DAX. A reference used in a row context loses its implicit context transition.',
+          onClick: function () { self._inlineDax = !self._inlineDax; self._daxKey = null; self.renderDax(); } });
+        actions.insertBefore(layout, actions.firstChild);
+        if (this._inlineDax) {
+          var plainBtn = el('button', { cls: 'mv-button', text: 'Plain text', 'aria-pressed': String(!!this._plainDax),
+            title: 'Show the full inlined DAX as plain text: no labels, no folding. This is what Copy inlined DAX copies.',
+            onClick: function () { self._plainDax = !self._plainDax; self._daxKey = null; self.renderDax(); } });
+          actions.insertBefore(plainBtn, layout);
+        }
+        actions.insertBefore(inlineBtn, actions.firstChild);
+      }
       if (onClose) {
         actions.appendChild(el('button', { cls: 'mv-button mv-button-primary', text: 'Analyze this measure', onClick: function () { self.pickMeasure(card.name); } }));
         actions.appendChild(el('button', { cls: 'mv-text-button', title: 'Clear comparison', 'aria-label': 'Clear comparison with ' + card.name, text: 'Clear', onClick: onClose }));
@@ -1217,7 +1384,10 @@
         el('h3', { text: card.name }),
         el('div', { cls: 'mv-dax-card-meta' }, [
           el('span', { text: card.table + (m && m.fmt ? ' · Format: ' + m.fmt : '') }),
-          card.pill ? el('span', Object.assign({}, card.pill, { style: card.pill.style + 'margin-left:8px;' })) : null
+          card.pill ? el('span', Object.assign({}, card.pill, { style: card.pill.style + 'margin-left:8px;' })) : null,
+          card.inlined ? el('span', { cls: 'mv-inline-note', text: ' · Inlined ' + card.inlined.count + (card.inlined.count === 1 ? ' measure' : ' measures') +
+            (card.inlined.cycles.length ? ' · Circular, kept as reference: ' + card.inlined.cycles.join(', ') : '') +
+            (card.inlined.capped ? ' · Too large, some references kept' : '') }) : null
         ]),
         actions
       ]);
@@ -1227,24 +1397,26 @@
       var self = this, app = this.app;
       var sn = app.state.selMeasure;
       var pinName = app.state.gPin && app.state.gPin !== sn ? app.state.gPin : null;
-      var key = [app.modelKey, sn, pinName || '', app._usage ? 1 : 0, JSON.stringify(app.state.gExtra || {})].join('|');
+      var key = [app.modelKey, sn, pinName || '', this._inlineDax ? 1 : 0, this._plainDax ? 1 : 0, this._fmt, app._usage ? 1 : 0, JSON.stringify(app.state.gExtra || {})].join('|');
       if (key === this._daxKey) return;
       this._daxKey = key;
       U.clear(this.daxGrid);
-      var left = this.daxCard(sn);
+      var left = this.daxCard(sn, this._inlineDax);
       if (!left) return;
+      var leftBody = this.daxBody(left);
       this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card' }, [
-        this.daxHeader(left, 'Analyzed measure', 'width:8px;height:8px;border-radius:2px;background:#1f2430;flex:none;', null),
-        this.daxBody(left)
+        this.daxHeader(left, 'Analyzed measure', 'width:8px;height:8px;border-radius:2px;background:#1f2430;flex:none;', null, true),
+        leftBody
       ]));
       var pinCard = pinName ? this.daxCard(pinName) : null;
       this.daxGrid.setAttribute('data-comparing', String(!!pinCard));
       if (pinCard) {
         var pr = (this._gRel || {})[pinName];
         var pinColor = pr === 'up' ? '#6d28d9' : (pr === 'dn' ? '#2563eb' : '#3a414d');
+        var pinBody = this.daxBody(pinCard);
         this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card mv-comparison-card' }, [
           this.daxHeader(pinCard, 'Comparing · ' + (pr === 'up' ? 'upstream' : pr === 'dn' ? 'downstream' : 'related measure'), 'width:8px;height:8px;border-radius:2px;flex:none;background:' + pinColor + ';', function () { app.setState({ gPin: null, gHover: null }); }),
-          this.daxBody(pinCard)
+          pinBody
         ]));
       } else {
         this.daxGrid.appendChild(el('div', { cls: 'mv-compare-empty' }, [

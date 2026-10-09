@@ -4,7 +4,7 @@
   'use strict';
   var FORMAT = 'semantic-model-viewer', VERSION = 1;
   var FILES = ['js/util.js', 'js/snapshot.js', 'js/usage-adapter.js', 'js/roles.js', 'js/tmdl-parser.js', 'js/canvas.js', 'js/layouts.js',
-    'js/matrix.js', 'js/measures.js', 'js/power-query-dependencies.js', 'js/power-query-graph-model.js', 'js/power-query-canvas.js', 'js/power-query-inspector.js', 'js/power-query-workspace.js', 'js/power-query-lineage.js', 'js/power-query.js', 'js/sidebar.js', 'js/topbar.js', 'js/rules.js', 'js/relationships.js', 'js/explorer.js', 'js/app.js', 'explorer.css', 'measures.css', 'power-query.css', 'power-query-canvas.css', 'power-query-inspector.css', 'power-query-workspace.css', 'power-query-lineage.css'];
+    'js/matrix.js', 'js/dax-format.js', 'js/measures.js', 'js/power-query-dependencies.js', 'js/power-query-graph-model.js', 'js/power-query-canvas.js', 'js/power-query-inspector.js', 'js/power-query-workspace.js', 'js/power-query-lineage.js', 'js/power-query.js', 'js/sidebar.js', 'js/topbar.js', 'js/rules.js', 'js/relationships.js', 'js/explorer.js', 'js/app.js', 'explorer.css', 'measures.css', 'power-query.css', 'power-query-canvas.css', 'power-query-inspector.css', 'power-query-workspace.css', 'power-query-lineage.css'];
   var CSP = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
   function clone(value) { return value == null ? null : JSON.parse(JSON.stringify(value)); }
   function pick(value, keys) {
@@ -18,8 +18,10 @@
   function modelData(model) {
     return { name: String(model.name || ''), tables: model.tables.map(function(t){
       var row = pick(t, ['name','domain','role','baseRole','autoRole','roleVia','ann','description','hidden']);
-      row.columns = (t.columns || []).map(function(c){return pick(c,['name','dataType','hidden','isCalc','isKey','rel','description']);});
+      row.columns = (t.columns || []).map(function(c){return pick(c,['name','dataType','hidden','isCalc','isKey','rel','description','dax']);});
       row.measures = (t.measures || []).map(function(m){var measure=pick(m,['name','dax','fmt','folder','h','description']);measure.dax=String(measure.dax||'');return measure;});
+      if (typeof t.dax === 'string' && t.dax) row.dax = t.dax;
+      if (Array.isArray(t.calcItems)) row.calcItems = t.calcItems.map(function(ci){return pick(ci,['name','dax','fmt']);});
       row.colCount = row.columns.length; row.measureCount = row.measures.length;
       // Human-readable source identity is useful; endpoints and raw query text are not required to explore the model.
       row.source = pick(t.source, ['kind','schema','table','via']);

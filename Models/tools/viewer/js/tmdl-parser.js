@@ -5,7 +5,18 @@
   function parseRef(s){ s=s.trim(); var m=s.match(/^'((?:[^']|'')+)'\.(.+)$/); if(m) return {table:m[1].replace(/''/g,"'"), column:unq(m[2])};
     var i=s.indexOf('.'); if(i<0) return null; return {table:s.slice(0,i).trim(), column:unq(s.slice(i+1))}; }
 
-  function parseRelText(text){
+  /* DAX bodies come as raw lines: drop ``` fences, trim blank edges, remove the common indent. */
+  function dedent(lines){
+    var ls=lines.filter(function(l){ return !/^\s*```/.test(l); });
+    while(ls.length&&!ls[0].trim()) ls.shift();
+    while(ls.length&&!ls[ls.length-1].trim()) ls.pop();
+    var min=Infinity;
+    ls.forEach(function(l){ if(l.trim()) min=Math.min(min, l.match(/^[ \t]*/)[0].length); });
+    if(!isFinite(min)) min=0;
+    return ls.map(function(l){ return l.slice(min).replace(/\s+$/,''); }).join('\n');
+  }
+
+  function parseRelText(text, options){
     var out=[], cur=null;
     text.split(/\r?\n/).forEach(function(raw){
       var t=raw.trim(); if(!t) return;
@@ -16,32 +27,76 @@
       else if((m=t.match(/^toCardinality:\s*(\w+)/))) cur.toCard=m[1];
       else if((m=t.match(/^fromCardinality:\s*(\w+)/))) cur.fromCard=m[1];
       else if(/^isActive:\s*false/.test(t)) cur.inactive=true;
-      else if(/^crossFilteringBehavior:\s*bothDirections/.test(t)) cur.both=true;
+      else if((m=t.match(/^crossFilteringBehavior:\s*(\S+)/))){
+        cur.both=m[1]==='bothDirections';
+      }
+    });
+    if(options && options.strictRelationships) out.forEach(function(r){
+      if(!r.from||!r.fromCol||!r.to||!r.toCol) throw new Error('Relationship is missing a table or column endpoint.');
     });
     return out.filter(function(r){ return r.from&&r.fromCol&&r.to&&r.toCol; });
+  }
+
+  /* TMDL wraps a multi-line expression in ``` fences. They are not DAX, so drop them. */
+  function unfence(s){
+    var m=String(s||'').match(/^\s*```([\s\S]*?)(?:```)?\s*$/);
+    return m ? m[1].trim() : String(s||'').trim();
   }
 
   function parseTableText(text){
     var lines=text.split(/\r?\n/);
     var table=null, mode=null, curCol=null, curMeas=null, partKind='', partSrc='', isCG=false, isFP=false;
+    var colBuf=null, calcBuf=null, curItem=null, itemBuf=null, itemFmt=null, itemPhase='', inSource=false;
+    var flushCol=function(){ if(curCol&&colBuf){ var d=dedent(colBuf); if(d) curCol.dax=d; } colBuf=null; };
+    var flushItem=function(){ if(curItem){ var d=dedent(itemBuf||[]); if(d) curItem.dax=d; if(itemFmt){ var f=dedent(itemFmt); if(f) curItem.fmt=f; } } curItem=null; itemBuf=null; itemFmt=null; itemPhase=''; };
     for(var i=0;i<lines.length;i++){
       var raw=lines[i], t=raw.trim();
       var ind=raw.match(/^\t*/)[0].length;
       var m;
-      if(!t){ if(mode==='measure'&&curMeas&&curMeas.dax) curMeas.dax+='\n'; continue; }
+      if(!t){
+        if(mode==='measure'&&curMeas&&curMeas.dax) curMeas.dax+='\n';
+        else if(colBuf) colBuf.push('');
+        else if(mode==='cg'&&itemPhase==='expr'&&itemBuf) itemBuf.push('');
+        else if(mode==='cg'&&itemPhase==='fmt'&&itemFmt) itemFmt.push('');
+        else if(mode==='partition'&&inSource&&calcBuf) calcBuf.push('');
+        continue;
+      }
       if(ind===0){ if(!table && (m=t.match(/^table\s+(.+)$/))){ table={name:unq(m[1]), columns:[], measures:[]}; } continue; }
       if(!table) continue;
       if(ind===1){
+        flushCol(); flushItem(); inSource=false;
         curCol=null; curMeas=null; mode=null;
-        if((m=t.match(/^column\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)(\s*=.*)?$/))){ curCol={name:unq(m[1].replace(/"/g,'')), dataType:'', hidden:false, isCalc:!!m[2], isKey:false, rel:false}; table.columns.push(curCol); mode='column'; continue; }
+        if((m=t.match(/^column\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)(\s*=.*)?$/))){ curCol={name:unq(m[1].replace(/"/g,'')), dataType:'', hidden:false, isCalc:!!m[2], isKey:false, rel:false}; table.columns.push(curCol); mode='column';
+          if(m[2]){ var inl=m[2].replace(/^\s*=\s*/,''); colBuf=inl?[inl]:[]; }
+          continue; }
         if((m=t.match(/^measure\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)\s*=\s*(.*)$/))){ curMeas={name:unq(m[1].replace(/"/g,'')), dax:(m[2]||'').trim(), folder:'', fmt:''}; table.measures.push(curMeas); mode='measure'; continue; }
-        if(/^calculationGroup\b/.test(t)){ isCG=true; continue; }
+        if(/^calculationGroup\b/.test(t)){ isCG=true; mode='cg'; continue; }
         if((m=t.match(/^partition\s+.*?=\s*(\w+)\s*$/))){ partKind=m[1]; mode='partition'; continue; }
         if((m=t.match(/^annotation\s+SMV_Role\s*=\s*(\w+)/i))){ table.roleAnnotation=m[1].toLowerCase(); continue; }
         continue;
       }
       if(/^extendedProperty\s+ParameterMetadata/.test(t)) isFP=true;
+      if(mode==='cg'){
+        if(ind===2){
+          flushItem();
+          if((m=t.match(/^calculationItem\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)\s*(?:=\s*(.*))?$/))){
+            curItem={name:unq(m[1].replace(/"/g,'')), dax:'', fmt:''}; (table.calcItems=table.calcItems||[]).push(curItem);
+            itemBuf=(m[2]||'').trim()?[m[2].trim()]:[]; itemPhase='expr';
+          }
+        } else if(curItem){
+          var isProp=ind===3 && /^(formatStringDefinition|description|ordinal|lineageTag|annotation|isHidden|changedProperty)\b/.test(t);
+          if(isProp){
+            itemPhase='';
+            if((m=t.match(/^formatStringDefinition\s*=\s*(.*)$/))){ itemPhase='fmt'; itemFmt=m[1].trim()?[m[1].trim()]:[]; }
+          }
+          else if(itemPhase==='expr') itemBuf.push(raw);
+          else if(itemPhase==='fmt'&&itemFmt) itemFmt.push(raw);
+        }
+        continue;
+      }
       if(mode==='column'&&curCol){
+        if(ind>=3&&colBuf){ colBuf.push(raw); continue; }
+        if(ind===2) flushCol();
         if((m=t.match(/^dataType:\s*(\S+)/))) curCol.dataType=m[1];
         else if(/^isHidden\s*$/.test(t)) curCol.hidden=true;
         else if(/^isKey\s*$/.test(t)) curCol.isKey=true;
@@ -53,8 +108,14 @@
           /* h:1 drives the hidden-measure badge — see handoff schema (build step 1). */
           else if(/^isHidden\s*$/.test(t)) curMeas.h=1;
         }
-      } else if(mode==='partition'){ partSrc+=t+'\n'; }
+      } else if(mode==='partition'){
+        partSrc+=t+'\n';
+        if(ind===2){ inSource=false; if((m=t.match(/^source\s*=\s*(.*)$/))){ inSource=true; calcBuf=m[1].trim()?[m[1].trim()]:[]; } }
+        else if(inSource&&calcBuf) calcBuf.push(raw);
+      }
     }
+    flushCol(); flushItem();
+    if(table&&partKind==='calculated'&&calcBuf){ var tdax=dedent(calcBuf); if(tdax) table.dax=tdax; }
     if(table) table._flags={isCG:isCG,isFP:isFP,partKind:partKind,partSrc:partSrc,tableName:table.name};
     return table;
   }
@@ -189,11 +250,16 @@
     return out;
   }
 
-  function finalize(name, tables, rels, ctx){
-    var byName={}; tables.forEach(function(t){ byName[t.name]=t; });
+  function finalize(name, tables, rels, ctx, options){
+    var byName={}; tables.forEach(function(t){ byName[t.name]=t; (t.measures||[]).forEach(function(mm){ mm.dax=unfence(mm.dax); }); });
     var seen={};
-    rels=rels.filter(function(r){ return byName[r.from]&&byName[r.to]; })
-      .filter(function(r){ var k=r.from+'|'+r.fromCol+'|'+r.to+'|'+r.toCol; if(seen[k])return false; seen[k]=1; return true; });
+    if(options && options.strictRelationships){
+      // A snapshot must not silently drop dangling or parallel relationships.
+      rels.forEach(function(r){if(!byName[r.from]||!byName[r.to])throw new Error('Relationship refers to a missing table: '+r.from+' → '+r.to);});
+    } else {
+      rels=rels.filter(function(r){ return byName[r.from]&&byName[r.to]; })
+        .filter(function(r){ var k=r.from+'|'+r.fromCol+'|'+r.to+'|'+r.toCol; if(seen[k])return false; seen[k]=1; return true; });
+    }
     var oneSide={}, manySide={}, rc={};
     rels.forEach(function(r){
       rc[r.from]=(rc[r.from]||0)+1; rc[r.to]=(rc[r.to]||0)+1;
@@ -301,7 +367,7 @@
     return {version:1,nodes:nodes,warnings:[]};
   }
 
-  function parseTMDL(files){
+  function parseTMDL(files, options){
     var tables=[], rels=[], name='';
     var ctx={exprs:{}, exprNames:[], params:{}};
     files.forEach(function(f){
@@ -316,13 +382,13 @@
          `database` line, so it would greedily swallow the next line's own
          property (e.g. `compatibilityLevel: 1606`) and misread it as the name */
       var m=txt.match(/^database[ \t]+(.+)$/m); if(m) name=unq(m[1]);
-      if(/^relationship\s/m.test(txt) && /fromColumn:/.test(txt)) rels=rels.concat(parseRelText(txt));
+      if(/^relationship\s/m.test(txt) && ((options && options.strictRelationships) || /fromColumn:/.test(txt))) rels=rels.concat(parseRelText(txt, options));
       if(/^table\s/m.test(txt)){ var t=parseTableText(txt); if(t) tables.push(t); }
     });
     /* tables are queries too — `Source = MdGeoEntities` points at another table's partition */
     tables.forEach(function(t){ var fl=t._flags||{}; if(fl.partSrc && !ctx.exprs[t.name]) ctx.exprs[t.name]=fl.partSrc; });
     ctx.exprNames=Object.keys(ctx.exprs).sort(function(a,b){ return b.length-a.length; });
-    var result=finalize(name, tables, rels, ctx); result.powerQuery=pqTMDL(files); return result;
+    var result=finalize(name, tables, rels, ctx, options); result.powerQuery=pqTMDL(files); return result;
   }
 
   function parseBIM(j){
@@ -330,7 +396,7 @@
     var skip=/^(LocalDateTable_|DateTableTemplate_)/;
     var txt=function(x){ return Array.isArray(x)?x.join('\n'):(x||''); };
     var tables=(mdl.tables||[]).filter(function(t){return !skip.test(t.name);}).map(function(t){
-      var columns=(t.columns||[]).map(function(c){ return {name:c.name, dataType:c.dataType||'', hidden:!!c.isHidden, isCalc:c.type==='calculated', isKey:!!c.isKey, rel:false}; });
+      var columns=(t.columns||[]).map(function(c){ var o={name:c.name, dataType:c.dataType||'', hidden:!!c.isHidden, isCalc:c.type==='calculated', isKey:!!c.isKey, rel:false}; var d=c.type==='calculated'?txt(c.expression).trim():''; if(d) o.dax=d; return o; });
       var measures=(t.measures||[]).map(function(mm){ var o={name:mm.name, dax:txt(mm.expression).trim(), folder:mm.displayFolder||'', fmt:mm.formatString||''}; if(mm.isHidden) o.h=1; return o; });
       var isCG=!!t.calculationGroup;
       var isFP=(t.columns||[]).some(function(c){ return (c.extendedProperties||[]).some(function(p){return p.name==='ParameterMetadata';}); });
@@ -338,7 +404,11 @@
       var p=(t.partitions||[])[0];
       if(p&&p.source){ partKind=(p.source.type==='calculated')?'calculated':(p.source.type||'m'); partSrc=txt(p.source.expression); }
       var roleAnn=(t.annotations||[]).find(function(a){return a.name==='SMV_Role';});
-      return {name:t.name, columns:columns, measures:measures, roleAnnotation: roleAnn?String(roleAnn.value):undefined, _flags:{isCG:isCG,isFP:isFP,partKind:partKind,partSrc:partSrc}};
+      var out={name:t.name, columns:columns, measures:measures, roleAnnotation: roleAnn?String(roleAnn.value):undefined, _flags:{isCG:isCG,isFP:isFP,partKind:partKind,partSrc:partSrc}};
+      if(partKind==='calculated'&&partSrc.trim()) out.dax=partSrc.trim();
+      if(t.calculationGroup&&Array.isArray(t.calculationGroup.calculationItems)) out.calcItems=t.calculationGroup.calculationItems.map(function(ci){
+        var o={name:ci.name, dax:txt(ci.expression).trim(), fmt:''}; var f=ci.formatStringDefinition; if(f) o.fmt=txt(f.expression||f).trim(); return o; });
+      return out;
     });
     var rels=(mdl.relationships||[]).filter(function(r){return !skip.test(r.fromTable)&&!skip.test(r.toTable);}).map(function(r){
       return {from:r.fromTable, fromCol:r.fromColumn, to:r.toTable, toCol:r.toColumn,
@@ -374,5 +444,5 @@
     return m;
   }
 
-  g.TMDLParser={parseAny:parseAny, parseTMDL:parseTMDL, parseBIM:parseBIM, CONNECTORS:CONNECTORS};
+  g.TMDLParser={unfence:unfence, parseAny:parseAny, parseTMDL:parseTMDL, parseBIM:parseBIM, CONNECTORS:CONNECTORS};
 })(typeof window!=='undefined'?window:globalThis);
