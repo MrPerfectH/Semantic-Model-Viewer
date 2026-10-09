@@ -893,6 +893,14 @@
       if (!this.browserEditor && g.SMVBrowserEdit) this.browserEditor = g.SMVBrowserEdit.create(this);
       return this.browserEditor && this.browserEditor.available() ? this.browserEditor : null;
     },
+    localEditSource: function () {
+      if (!this.server || !this.server.editKey || this.snapshotMode || !this.state.loaded || !this.modelKey || this.modelKey === 'builtin') return null;
+      var path = store.get('smv_src_' + this.modelKey, '');
+      if (!path) return null;
+      if (!this._localEditSource || this._localEditSource.modelId !== this.modelKey || this._localEditSource.dir !== path)
+        this._localEditSource = { modelId: this.modelKey, dir: path, name: this.state.modelName, imported: true };
+      return this._localEditSource;
+    },
     canFS: function () { return typeof window.showDirectoryPicker === 'function'; },
 
     /* ---------- local app server (scripts/serve.py) ----------
@@ -919,6 +927,13 @@
       var r = await fetch('api/' + path + (q ? '?' + q : ''), { cache: 'no-store' });
       var j = null; try { j = await r.json(); } catch (e) { }
       if (!r.ok) throw new Error((j && j.error) || ('The local app returned ' + r.status + '.'));
+      return j;
+    },
+    editApi: async function (path, data) {
+      var r = await fetch('api/edit-' + path, { method: 'POST', cache: 'no-store',
+        headers: { 'Content-Type': 'application/json', 'X-SMV-Edit-Key': this.server.editKey }, body: JSON.stringify(data) });
+      var j = await r.json();
+      if (!r.ok) throw new Error(j.error || 'Local source edit failed.');
       return j;
     },
     /* In-page folder chooser backed by the server. Resolves to {dir, name} or null. */

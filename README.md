@@ -54,7 +54,7 @@ because it came from the internet. On Mac, right-click `Install on Mac.command` 
 on Windows, choose **More info → Run anyway**. Cloning with git avoids the warning.
 
 **What the local app does:** it listens on `http://localhost:8931` on this computer only,
-only ever reads files (`.tmdl`, `.bim`, `.json`), refuses requests from other websites
+reads model files (`.tmdl`, `.bim`, `.json`) and saves explicitly reviewed TMDL edits, refuses requests from other websites
 open in your browser, and stops itself a few minutes after you close the window.
 Nothing runs at login.
 

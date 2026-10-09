@@ -8,9 +8,9 @@ to ask for folder permission. Python 3 standard library only.
     python3 serve.py --open          # ...and opens it in the default browser
     python3 serve.py --idle-exit 180 # stop when the page has been closed for 3 minutes
 
-Safety: listens on 127.0.0.1 only, is read-only (GET, no writes), reads only .tmdl/.bim/.json
-model files, and refuses requests coming from other websites open in the browser or addressed
-to any host name other than localhost.
+Safety: listens on 127.0.0.1 only, reads only .tmdl/.bim/.json
+model files, writes reviewed TMDL with a same-origin capability, and refuses requests
+coming from other websites or addressed to any host name other than localhost.
 """
 import argparse
 import json
@@ -24,6 +24,7 @@ import urllib.request
 import webbrowser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from edit_source import SourceEdits
 
 VERSION = "1"
 VIEWER_DIR = Path(__file__).resolve().parent.parent
@@ -148,6 +149,32 @@ class Handler(SimpleHTTPRequestHandler):
     server_version = "SemanticModelViewer/" + VERSION
     quiet = True
 
+    def do_POST(self):
+        self.server.touch()
+        if not self.local_host() or not self.same_origin() or self.headers.get('X-SMV-Edit-Key') != self.server.edits.key:
+            self.send_json(403, {'error': 'Only the local viewer may edit source files.'})
+            return
+        if self.path not in ('/api/edit-read', '/api/edit-prepare', '/api/edit-save', '/api/edit-cancel'):
+            self.send_json(404, {'error': 'Unknown request.'})
+            return
+        try:
+            size = int(self.headers.get('Content-Length', '0'))
+            if size <= 0 or size > 32 * 1024 * 1024:
+                raise ValueError('Invalid edit request size.')
+            data = json.loads(self.rfile.read(size))
+            if self.path == '/api/edit-read':
+                result = self.server.edits.read(data['dir'])
+            elif self.path == '/api/edit-prepare':
+                result = self.server.edits.prepare(data)
+            elif self.path == '/api/edit-save':
+                result = self.server.edits.save(data['token'])
+            else:
+                result = self.server.edits.cancel(data['token'])
+        except (ValueError, KeyError, TypeError, OSError) as error:
+            self.send_json(400, {'error': str(error)})
+            return
+        self.send_json(200, result)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(VIEWER_DIR), **kwargs)
 
@@ -207,7 +234,7 @@ class Handler(SimpleHTTPRequestHandler):
         q = dict(urllib.parse.parse_qsl(url.query))
         try:
             if url.path == "/api/ping":
-                data = {"ok": True, "version": VERSION, "home": str(Path.home()), "sep": os.sep, "viewer": str(VIEWER_DIR)}
+                data = {"ok": True, "version": VERSION, "home": str(Path.home()), "sep": os.sep, "viewer": str(VIEWER_DIR), "editKey": self.server.edits.key}
             elif url.path == "/api/browse":
                 data = browse(q.get("path", ""))
             elif url.path == "/api/find":
@@ -233,6 +260,7 @@ class Server(ThreadingHTTPServer):
         super().__init__(address, Handler)
         self.idle_exit = idle_exit
         self.last = time.time()
+        self.edits = SourceEdits()
 
     def touch(self):
         self.last = time.time()

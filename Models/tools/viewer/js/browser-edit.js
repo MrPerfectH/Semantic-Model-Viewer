@@ -12,8 +12,11 @@
     var pending = null, sequence = 0, saving = false, failedRefresh = null;
     function source() {
       if (failedRefresh && failedRefresh.modelId === app.modelKey && failedRefresh.epoch === app._modelLoadRequest) return null;
-      if (app.host || app.snapshotMode || !app._repoLive || !app.repoHandle || !app.state.loaded) return null;
-      return (app.repoModels || []).find(function (r) { return r.handle && 'repo:' + r.path === app.modelKey; }) || null;
+      if (app.host || app.snapshotMode || !app.state.loaded) return null;
+      var imported = app.localEditSource && app.localEditSource();
+      if (imported) return imported;
+      if (!app._repoLive) return null;
+      return (app.repoModels || []).find(function (r) { return ((app.repoHandle && r.handle) || (app.server && app.server.editKey && app.repoPath && r.dir)) && 'repo:' + r.path === app.modelKey; }) || null;
     }
     function current(edit) { return source() === edit.source && app.modelKey === edit.modelId && app._modelLoadRequest === edit.epoch; }
     async function unchanged(edit) {
@@ -27,23 +30,28 @@
     }
     var adapter = {
       available: function () { return !!source(); },
-      cancelEdit: function () { pending = null; sequence++; },
+      cancelEdit: function () { if (pending && pending.localToken) app.editApi('cancel', {token: pending.localToken}).catch(function () {}); pending = null; sequence++; },
       prepareEdit: async function (request, prepare) {
-        pending = null; var reviewId = ++sequence;
+        adapter.cancelEdit(); var reviewId = sequence;
         if (saving) throw new Error('A save is in progress.');
         var rm = source(), epoch = app._modelLoadRequest;
         if (!rm || request.modelId !== app.modelKey) throw new Error('Not saved. Connect this repository model before editing.');
-        var files = await app.readModelDir(rm.handle);
+        var local = !!(app.server && rm.dir);
+        var directory = local && rm.imported ? (await app._findModelDir({dir: rm.dir, name: rm.name}, rm.name)).dir : rm.dir;
+        var files = local ? (await app.editApi('read', {dir: directory})).files : await app.readModelDir(rm.handle);
         for (var file of files) {
+          if (local) continue;
           if (!file.handle) throw new Error('Source file handle is unavailable.');
           file.text = await read(file.handle);
         }
         var patch = prepare(files, request);
         var target = files.filter(function (f) { return f.path === patch.path; });
-        if (!target.length && patch.path === 'definition/relationships.tmdl') throw new Error('Not saved. Browser editing requires an existing definition/relationships.tmdl file. Create it in your source editor, then refresh; exclusive file creation is unavailable in this browser.');
-        if (target.length !== 1 || !target[0].handle.createWritable) throw new Error('The source is not writable.');
-        var edit = { source: rm, modelId: request.modelId, epoch: epoch, files: files.map(function (f) { return { path: f.path, text: f.text }; }), file: target[0], original: target[0].text, next: patch.text, token: String(reviewId) };
-        if (!current(edit) || reviewId !== sequence) throw new Error('The edit is stale. Review it again.');
+        if (!local && !target.length && patch.path === 'definition/relationships.tmdl') throw new Error('Not saved. Browser editing requires an existing definition/relationships.tmdl file. Create it in your source editor, then refresh; exclusive file creation is unavailable in this browser.');
+        if (!local && (target.length !== 1 || !target[0].handle.createWritable)) throw new Error('The source is not writable.');
+        var edit = { source: rm, modelId: request.modelId, epoch: epoch, files: files.map(function (f) { return { path: f.path, text: f.text }; }), file: target[0], original: target[0] && target[0].text, next: patch.text, token: String(reviewId) };
+        edit.directory = directory;
+        if (local) edit.localToken = (await app.editApi('prepare', {dir: directory, path: patch.path, text: patch.text, files: edit.files})).token;
+        if (!current(edit) || reviewId !== sequence) { if (edit.localToken) app.editApi('cancel', {token: edit.localToken}).catch(function () {}); throw new Error('The edit is stale. Review it again.'); }
         pending = edit;
         return Object.assign({}, patch, { token: edit.token, text: undefined });
       },
@@ -53,21 +61,25 @@
         saving = true; pending = null;
         var stream = null, committed = false;
         try {
-          // Called directly from the Save gesture, before other asynchronous work.
-          var permission = await app.repoHandle.requestPermission({ mode: 'readwrite' });
-          if (permission !== 'granted') throw new Error('Not saved. Write permission was not granted.');
-          if (!current(edit)) throw new Error('The edit is stale. Review it again.');
-          if (!await unchanged(edit)) throw new Error('The source changed externally. Refresh and review again.');
-          stream = await edit.file.handle.createWritable({ keepExistingData: false });
-          if (!current(edit) || !await unchanged(edit)) throw new Error('The source changed or the review is stale. Review it again.');
-          await stream.write(new TextEncoder().encode(edit.next));
-          if (!current(edit) || !await unchanged(edit)) throw new Error('The source changed or the review is stale. Review it again.');
-          await stream.close(); committed = true;
-          var files = await app.readModelDir(edit.source.handle);
+          if (edit.localToken) {
+            await app.editApi('save', {token: edit.localToken}); committed = true;
+          } else {
+            // Called directly from the Save gesture, before other asynchronous work.
+            var permission = await app.repoHandle.requestPermission({ mode: 'readwrite' });
+            if (permission !== 'granted') throw new Error('Not saved. Write permission was not granted.');
+            if (!current(edit)) throw new Error('The edit is stale. Review it again.');
+            if (!await unchanged(edit)) throw new Error('The source changed externally. Refresh and review again.');
+            stream = await edit.file.handle.createWritable({ keepExistingData: false });
+            if (!current(edit) || !await unchanged(edit)) throw new Error('The source changed or the review is stale. Review it again.');
+            await stream.write(new TextEncoder().encode(edit.next));
+            if (!current(edit) || !await unchanged(edit)) throw new Error('The source changed or the review is stale. Review it again.');
+            await stream.close(); committed = true;
+          }
+          var files = await app.readModelDir(edit.source.handle || {dir: edit.directory});
           var message = { modelId: edit.modelId, name: edit.source.name, path: edit.source.path, files: files };
           var model = adapter.parseModelMessage(message).model;
           var records = app.getStore().filter(function (r) { return r.id !== edit.modelId; });
-          records.push({ id: edit.modelId, name: edit.source.name, at: Date.now(), repo: true, model: model });
+          records.push({ id: edit.modelId, name: edit.source.name, at: Date.now(), repo: !edit.source.imported, model: model });
           if (!app.setStore(records)) throw new Error('Source saved, but browser cache refresh failed. Reopen the repository model.');
           return { saved: true, model: message };
         } catch (error) {
