@@ -83,3 +83,45 @@ test('straight long links detour around visible intervening cards and simplify w
   for(let i=1;i<pts.length;i++){const a=pts[i-1],b=pts[i];assert.equal(a[0]===b[0]?a[0]>400&&a[0]<652&&Math.max(a[1],b[1])>0&&Math.min(a[1],b[1])<96:a[1]>0&&a[1]<96&&Math.max(a[0],b[0])>400&&Math.min(a[0],b[0])<652,false);}
   s.canvas.setVisibleIds(new Set(['id-0','id-1']));assert.notEqual(line.getAttribute('d'),detour);assert.equal([...line.getAttribute('d').matchAll(/[ML]-?[\d.]+,(-?[\d.]+)/g)].every(m=>+m[1]===48),true);
 });
+
+test('reciprocal edges have independent 14px hit corridors in every orientation and after the reported drag',()=>{
+  const c=context();c.graph.edges=[{id:'B-to-A',inputId:'id-1',consumerId:'id-0',referenceOccurrences:[]},{id:'A-to-B',inputId:'id-0',consumerId:'id-1',referenceOccurrences:[]}];
+  const s=setup(c),graph=JSON.stringify(c.graph);s.canvas.setVisibleIds(new Set(['id-0','id-1']));s.canvas.setViewport({x:0,y:0,k:1});
+  const points=d=>[...d.matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]);
+  const distance=(p,a,b)=>Math.hypot(p[0]-Math.max(Math.min(a[0],b[0]),Math.min(Math.max(a[0],b[0]),p[0])),p[1]-Math.max(Math.min(a[1],b[1]),Math.min(Math.max(a[1],b[1]),p[1])));
+  function verify(label){
+    const lines=s.host.querySelectorAll('.pqc-edge-line'),hits=s.host.querySelectorAll('.pqc-edge-hit'),routes=lines.map(l=>points(l.getAttribute('d')));
+    assert.notDeepEqual(routes[0],routes[1].slice().reverse(),label+' must not retrace the other direction');
+    routes.forEach((route,i)=>{
+      assert.equal(lines[i].getAttribute('d'),hits[i].getAttribute('d'));
+      const other=routes[1-i];let exclusive=0;
+      for(let j=1;j<route.length;j++){
+        const a=route[j-1],b=route[j];assert.ok(a[0]===b[0]||a[1]===b[1]);
+        if(Math.hypot(b[0]-a[0],b[1]-a[1])<30)continue;
+        const midpoint=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+        if(other.slice(1).every((p,k)=>distance(midpoint,other[k],p)>14))exclusive++;
+      }
+      assert.ok(exclusive>0,label+' independently hittable '+c.graph.edges[i].id);
+      hits[i].fire('click',{clientX:300,clientY:200});assert.equal(s.events.edge.at(-1).edgeId,c.graph.edges[i].id);
+    });
+    assert.equal(JSON.stringify(c.graph),graph);
+  }
+  for(const b of [{x:581.456005859375,y:395.031982421875},{x:600,y:0},{x:-600,y:0},{x:0,y:300},{x:0,y:-300},{x:160,y:400},{x:-160,y:-400},{x:-600,y:350}]){
+    const layout=new Map([['id-0',{x:0,y:0}],['id-1',b]]);s.canvas.restoreLayout(layout);verify(JSON.stringify(b));assert.deepEqual(plain(s.canvas.captureLayout().get('id-1')),b);
+  }
+  s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',{x:0,y:300}]]));verify('before drag');
+  s.node('id-1').fire('pointerdown',{clientX:100,clientY:350});s.node('id-1').fire('pointermove',{clientX:681.456005859375,clientY:445.031982421875});s.node('id-1').fire('pointerup');s.flush();
+  assert.deepEqual(plain(s.canvas.captureLayout().get('id-1')),{x:581.456005859375,y:395.031982421875});verify('after exact drag');
+  // Reversing DOM paint order cannot be the repair: each route stays identical.
+  const paths=new Map(s.host.querySelectorAll('.pqc-edge-hit').map(e=>[e.dataset.edgeId,e.getAttribute('d')]));
+  s.canvas.setContext({...c,graph:{...c.graph,edges:c.graph.edges.slice().reverse()}});
+  s.host.querySelectorAll('.pqc-edge-hit').forEach(e=>assert.equal(e.getAttribute('d'),paths.get(e.dataset.edgeId)));
+  s.canvas.setContext(c);
+  // Reciprocal detours also retain separate corridors around a visible card.
+  s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',{x:800,y:0}],['id-2',{x:400,y:0}]]));
+  s.canvas.setVisibleIds(new Set(['id-0','id-1','id-2']));verify('reciprocal obstacle detours');
+  for(const line of s.host.querySelectorAll('.pqc-edge-line')){
+    const p=points(line.getAttribute('d'));assert.equal(p.length,6);
+    for(let i=1;i<p.length;i++)assert.equal(p[i][0]===p[i-1][0]?p[i][0]>400&&p[i][0]<652&&Math.max(p[i][1],p[i-1][1])>0&&Math.min(p[i][1],p[i-1][1])<96:p[i][1]>0&&p[i][1]<96&&Math.max(p[i][0],p[i-1][0])>400&&Math.min(p[i][0],p[i-1][0])<652,false);
+  }
+});

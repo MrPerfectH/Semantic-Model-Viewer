@@ -1,0 +1,177 @@
+TAP version 13
+# Subtest: entire registry is initially laid out including disconnected/status/duplicate display IDs
+ok 1 - entire registry is initially laid out including disconnected/status/duplicate display IDs
+  ---
+  duration_ms: 7.844417
+  type: 'test'
+  ...
+# Subtest: zero-edge model is complete and supplied cycle components are grouped
+ok 2 - zero-edge model is complete and supplied cycle components are grouped
+  ---
+  duration_ms: 1.899708
+  type: 'test'
+  ...
+# Subtest: visibility is silent induced-edge projection; matches only dim; hidden selection/minimap remain explicit
+ok 3 - visibility is silent induced-edge projection; matches only dim; hidden selection/minimap remain explicit
+  ---
+  duration_ms: 2.033708
+  type: 'test'
+  ...
+# Subtest: empty projection does not discard complete model or auto-fit
+ok 4 - empty projection does not discard complete model or auto-fit
+  ---
+  duration_ms: 0.900458
+  type: 'test'
+  ...
+# Subtest: pan threshold distinguishes blank click from drag; node drag is layout only
+ok 5 - pan threshold distinguishes blank click from drag; node drag is layout only
+  ---
+  duration_ms: 4.989375
+  type: 'test'
+  ...
+# Subtest: wheel/pinch keep gesture anchor fixed and have finite positive scale
+ok 6 - wheel/pinch keep gesture anchor fixed and have finite positive scale
+  ---
+  duration_ms: 3.694875
+  type: 'test'
+  ...
+# Subtest: provided-host keyboard fallback pans; node arrows rove/Enter selects; input shortcuts ignored
+ok 7 - provided-host keyboard fallback pans; node arrows rove/Enter selects; input shortcuts ignored
+  ---
+  duration_ms: 1.319584
+  type: 'test'
+  ...
+# Subtest: queued resize after explicit Back viewport restore cannot translate or notify
+ok 8 - queued resize after explicit Back viewport restore cannot translate or notify
+  ---
+  duration_ms: 0.740708
+  type: 'test'
+  ...
+# Subtest: edge callback uses host CSS anchor and full stable edge ID
+ok 9 - edge callback uses host CSS anchor and full stable edge ID
+  ---
+  duration_ms: 1.590083
+  type: 'test'
+  ...
+# Subtest: layout captures cannot restore into another generation with coincident IDs
+ok 10 - layout captures cannot restore into another generation with coincident IDs
+  ---
+  duration_ms: 1.111375
+  type: 'test'
+  ...
+# Subtest: same-generation updates/layout restores preserve view; generation/null clears filters and old gestures
+ok 11 - same-generation updates/layout restores preserve view; generation/null clears filters and old gestures
+  ---
+  duration_ms: 1.655916
+  type: 'test'
+  ...
+# Subtest: 300/301/350/1000 registries and parameter fanout retain last object without caps
+ok 12 - 300/301/350/1000 registries and parameter fanout retain last object without caps
+  ---
+  duration_ms: 76.750167
+  type: 'test'
+  ...
+# Subtest: search and focus dim independently without hiding membership or mutating registry
+ok 13 - search and focus dim independently without hiding membership or mutating registry
+  ---
+  duration_ms: 1.415167
+  type: 'test'
+  ...
+# Subtest: explicit Arrange touches only visible requested positions and is silent, registry preserving and undoable
+ok 14 - explicit Arrange touches only visible requested positions and is silent, registry preserving and undoable
+  ---
+  duration_ms: 0.721584
+  type: 'test'
+  ...
+# Subtest: minimap nodes, induced edges and bounds use only rendered IDs; empty stays honest and registry survives
+ok 15 - minimap nodes, induced edges and bounds use only rendered IDs; empty stays honest and registry survives
+  ---
+  duration_ms: 0.790292
+  type: 'test'
+  ...
+# Subtest: Center genuinely centers already-visible nodes at pan/zoom and side/below/resized host bounds
+ok 16 - Center genuinely centers already-visible nodes at pan/zoom and side/below/resized host bounds
+  ---
+  duration_ms: 0.821541
+  type: 'test'
+  ...
+# Subtest: blank/add repositions far-away new members near current view collision-free, preserves other manual positions and Undo
+ok 17 - blank/add repositions far-away new members near current view collision-free, preserves other manual positions and Undo
+  ---
+  duration_ms: 0.835583
+  type: 'test'
+  ...
+# Subtest: narrow side canvas prefers a visible vertical neighbor; collisions preserve the manual anchor
+ok 18 - narrow side canvas prefers a visible vertical neighbor; collisions preserve the manual anchor
+  ---
+  duration_ms: 0.718584
+  type: 'test'
+  ...
+# Subtest: straight routes retain input-to-consumer endpoints after reversal, stacking and self cycles; hit path follows geometry
+ok 19 - straight routes retain input-to-consumer endpoints after reversal, stacking and self cycles; hit path follows geometry
+  ---
+  duration_ms: 0.974208
+  type: 'test'
+  ...
+# Subtest: straight long links detour around visible intervening cards and simplify when the obstacle is hidden
+ok 20 - straight long links detour around visible intervening cards and simplify when the obstacle is hidden
+  ---
+  duration_ms: 0.590292
+  type: 'test'
+  ...
+# Subtest: reciprocal edges have independent 14px hit corridors in every orientation and after the reported drag
+not ok 21 - reciprocal edges have independent 14px hit corridors in every orientation and after the reported drag
+  ---
+  duration_ms: 1.023541
+  type: 'test'
+  location: '/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/tests/power-query-canvas.test.cjs:87:1'
+  failureType: 'testCodeFailure'
+  error: '{"x":581.456005859375,"y":395.031982421875} must not retrace the other direction'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: 581.456005859375
+      1: 443.031982421875
+    1:
+      0: 416.7280029296875
+      1: 443.031982421875
+    2:
+      0: 416.7280029296875
+      1: 48
+    3:
+      0: 252
+      1: 48
+  actual:
+    0:
+      0: 581.456005859375
+      1: 443.031982421875
+    1:
+      0: 416.7280029296875
+      1: 443.031982421875
+    2:
+      0: 416.7280029296875
+      1: 48
+    3:
+      0: 252
+      1: 48
+  operator: 'notDeepStrictEqual'
+  stack: |-
+    verify (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/tests/power-query-canvas.test.cjs:94:12)
+    TestContext.<anonymous> (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/tests/power-query-canvas.test.cjs:110:90)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..21
+# tests 21
+# suites 0
+# pass 20
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 165.148292

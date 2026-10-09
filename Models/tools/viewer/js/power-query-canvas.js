@@ -69,17 +69,18 @@
     }
     // Orthogonal routes use actual input/consumer ports, even after dragging a
     // consumer to the left. No source analysis or change to graph direction.
-    function edgePath(edge, obstacles) {
+    function edgePath(edge, obstacles, reciprocal) {
       var a = positions.get(edge.inputId), b = positions.get(edge.consumerId); if (!a || !b) return '';
       function path(points) { return points.map(function (p, i) { return (i ? 'L' : 'M') + p[0] + ',' + p[1]; }).join(' '); }
       if (edge.inputId === edge.consumerId) return path([[a.x + W / 2, a.y], [a.x + W / 2, a.y - 22], [a.x + W + 22, a.y - 22], [a.x + W + 22, a.y + H / 2], [a.x + W, a.y + H / 2]]);
       var right = b.x >= a.x + W + 32, left = a.x >= b.x + W + 32, vertical = !right && !left;
       var forward = vertical ? b.y >= a.y : right, sign = forward ? 1 : -1;
-      // Reverse vertical links use a separate port, so both sides of a cycle
-      // remain visible instead of drawing two directions over one segment.
-      var start = vertical ? [a.x + W / 2 + sign * 12, a.y + (forward ? H : 0)] : [a.x + (right ? W : 0), a.y + H / 2];
-      var end = vertical ? [b.x + W / 2 + sign * 12, b.y + (forward ? 0 : H)] : [b.x + (right ? 0 : W), b.y + H / 2];
-      var axis = vertical ? 1 : 0, cross = 1 - axis, channel = (start[axis] + end[axis]) / 2;
+      // Opposing references need separate ports AND middle channels. Port-only
+      // offsets still share the long middle segment after a diagonal drag.
+      var lane = reciprocal ? sign * 12 : 0;
+      var start = vertical ? [a.x + W / 2 + sign * 12, a.y + (forward ? H : 0)] : [a.x + (right ? W : 0), a.y + H / 2 + lane];
+      var end = vertical ? [b.x + W / 2 + sign * 12, b.y + (forward ? 0 : H)] : [b.x + (right ? 0 : W), b.y + H / 2 + lane];
+      var axis = vertical ? 1 : 0, cross = 1 - axis, channel = (start[axis] + end[axis]) / 2 + lane;
       var p = start.slice(), q = end.slice(); p[axis] = q[axis] = channel;
       var direct = [start, p, q, end];
       function blocked(points, rect) {
@@ -94,11 +95,11 @@
       if (!blockers.length) return path(direct);
       // Detour around intervening visible cards. Hidden registry members cannot
       // distort the visible route. The common adjacent-card case stays O(nodes).
-      var rails = [], dimension = vertical ? W : H, key = vertical ? 'x' : 'y';
-      blockers.forEach(function (r) { rails.push(r[key] - 18, r[key] + dimension + 18); });
-      rails.push(Math.min.apply(null, obstacles.map(function (r) { return r[key]; })) - 18, Math.max.apply(null, obstacles.map(function (r) { return r[key] + dimension; })) + 18);
+      var rails = [], dimension = vertical ? W : H, key = vertical ? 'x' : 'y', separation = reciprocal && !forward ? 24 : 0, clearance = 18 + separation;
+      blockers.forEach(function (r) { rails.push(r[key] - clearance, r[key] + dimension + clearance); });
+      rails.push(Math.min.apply(null, obstacles.map(function (r) { return r[key]; })) - clearance, Math.max.apply(null, obstacles.map(function (r) { return r[key] + dimension; })) + clearance);
       rails = Array.from(new Set(rails)).sort(function (x, y) { return Math.abs(start[cross] - x) + Math.abs(end[cross] - x) - Math.abs(start[cross] - y) - Math.abs(end[cross] - y); });
-      var sa = start.slice(), sb = end.slice(); sa[axis] += sign * 16; sb[axis] -= sign * 16;
+      var sa = start.slice(), sb = end.slice(); sa[axis] += sign * (16 + separation); sb[axis] -= sign * (16 + separation);
       for (var i = 0; i < rails.length; i++) {
         var ca = sa.slice(), cb = sb.slice(); ca[cross] = cb[cross] = rails[i];
         var detour = [start, sa, ca, cb, sb, end];
@@ -111,7 +112,8 @@
     function updateGeometry() {
       elements.forEach(function (e, id) { var p = positions.get(id); e.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)'; });
       var obstacles = ids().map(function (id) { return positions.get(id); });
-      edgeElements.forEach(function (entry) { var d = edgePath(entry.edge, obstacles); entry.line.setAttribute('d', d); entry.hit.setAttribute('d', d); });
+      var directions = new Set(edgeElements.map(function (entry) { return JSON.stringify([entry.edge.inputId, entry.edge.consumerId]); }));
+      edgeElements.forEach(function (entry) { var reciprocal = directions.has(JSON.stringify([entry.edge.consumerId, entry.edge.inputId])); var d = edgePath(entry.edge, obstacles, reciprocal); entry.line.setAttribute('d', d); entry.hit.setAttribute('d', d); });
       cycleLayer.replaceChildren(); groups.forEach(function (members) {
         var pts = members.filter(shown).map(function (id) { return positions.get(id); }); if (!pts.length) return;
         var x = Math.min.apply(null, pts.map(function (p) { return p.x; })), y = Math.min.apply(null, pts.map(function (p) { return p.y; }));

@@ -1,0 +1,5 @@
+
+> semantic-model-viewer@0.3.3 check-viewer
+> node scripts/sync-viewer.js --check
+
+verified 33 viewer runtime assets; no model or report data bundled
