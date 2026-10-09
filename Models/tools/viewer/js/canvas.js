@@ -247,7 +247,7 @@
       host.appendChild(pop); this.relPop = pop;
       if (!this._escBound) {
         this._escBound = true;
-        window.addEventListener('keydown', function (e) { if (e.key === 'Escape' && self.selRel) self.selectRel(null); });
+        window.addEventListener('keydown', function (e) { if (e.key === 'Escape' && self.selRel && ['graph', 'clusters'].includes(self.app.state.viewMode)) self.selectRel(null); });
       }
       this.cards = {};
       this.app.model.tables.forEach(function (t) { self.makeCard(world, t); });

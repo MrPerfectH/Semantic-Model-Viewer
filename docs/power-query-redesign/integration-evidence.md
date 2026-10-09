@@ -41,3 +41,11 @@ Node24 V8 native GC crash remains preserved and unresolved in graph diagnosis do
 Next: integrate owned UI commit; register all four assets and sync; fresh full suite,
 registered T3 preview, worker scale/cancel/CSP/privacy/package checks; then exact-SHA
 independent A1–A9 release. A10 remains user-owned. No old acceptance receipt is reused.
+
+## UI registration checkpoint — 2026-10-09
+
+Owned UI ce2760576e57057ecf4354c21be15be35a561ec9 was picked as 4a5e4f6 (eight new owned files only). Both JS modules precede the workspace coordinator; both CSS modules and all four snapshot runtime assets are registered. Local JS/CSS URL cache hashes were refreshed from actual canonical bytes. Generated media is integration-owned and sync verifies 31 assets.
+
+Node22 registered regression passed 342/342, exit0, in /tmp/pq-v2-registered-node22.log. The UI owner's earlier 305-test / 14 ENOENT failure remains preserved at /tmp/pq-ui-node22-20261009.tap; module synthetic evidence is /tmp/pq-ui-owned-20261009/evidence.json and does not establish registered acceptance.
+
+Fresh T3 reload at localhost:8944 restored the synthetic a3-results model and reported the workspace constructor present. Power Query click verification did not complete: an initial locator syntax error was corrected, then the valid role locator timed out and preview_evaluate reported no automation host connected, explicitly instructing not to retry. Browser worker/lifecycle/history/filter/resize/CRLF/Escape retention acceptance remains OPEN, as do installed and independent A1–A9 acceptance. No legacy acceptance reused, no push/merge/release.
