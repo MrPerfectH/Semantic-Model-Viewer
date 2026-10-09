@@ -1,0 +1,97 @@
+{
+  "name": "Independent followup groups",
+  "model": {
+    "tables": [
+      {
+        "name": "SyntheticSales",
+        "columns": [
+          {
+            "name": "Amount",
+            "dataType": "int64",
+            "sourceColumn": "Amount"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Base Amount",
+            "expression": "SUM(SyntheticSales[Amount])"
+          },
+          {
+            "name": "Formatted Probe",
+            "expression": "VAR total=[Base Amount] RETURN DIVIDE(total,2,0)"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "SyntheticSales",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let Source = #table({\"Amount\"}, {{1}, {2}}), Marker = \"PQ_REDESIGN_MAIN_PRIVATE\" in Source"
+            },
+            "queryGroup": "ResultGroup"
+          }
+        ]
+      }
+    ],
+    "expressions": [
+      {
+        "name": "Sales Raw",
+        "kind": "m",
+        "expression": "1",
+        "queryGroup": "InputGroup"
+      },
+      {
+        "name": "Quote\"Query",
+        "kind": "m",
+        "expression": "2",
+        "annotations": [
+          {
+            "name": "QueryGroup",
+            "value": "FAKE/Guessed"
+          }
+        ]
+      },
+      {
+        "name": "Server",
+        "kind": "m",
+        "expression": "\"PQ_REDESIGN_PARAMETER_ONLY\" meta [IsParameterQuery=true]",
+        "queryGroup": "DeclaredOnly"
+      },
+      {
+        "name": "OccurrenceProbe",
+        "kind": "m",
+        "expression": "let\r\n  Emoji = \"\ud83d\ude00\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n",
+        "queryGroup": "ResultGroup"
+      },
+      {
+        "name": "FarA",
+        "kind": "m",
+        "expression": "let x = 1 in x",
+        "queryGroup": "InputGroup"
+      },
+      {
+        "name": "FarB",
+        "kind": "m",
+        "expression": "let x = 2 in x",
+        "annotations": [
+          {
+            "name": "PBI_QueryGroup",
+            "value": "FAKE/Guessed"
+          }
+        ]
+      }
+    ],
+    "relationships": [],
+    "queryGroups": [
+      {
+        "name": "InputGroup",
+        "folder": "Landing/SQL"
+      },
+      {
+        "name": "ResultGroup",
+        "folder": "Curated/Results/Nested"
+      }
+    ]
+  }
+}

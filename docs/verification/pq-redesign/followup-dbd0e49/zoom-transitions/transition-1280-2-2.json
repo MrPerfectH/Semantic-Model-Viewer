@@ -1,0 +1,1190 @@
+{
+  "initial": {
+    "innerWidth": 640,
+    "innerHeight": 500,
+    "outerWidth": 1280,
+    "outerHeight": 1087,
+    "dpr": 2,
+    "below": true,
+    "width": 400,
+    "height": 400,
+    "inspectorOpen": true,
+    "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "inspector": {
+      "x": 268,
+      "y": 406,
+      "width": 363,
+      "height": 400,
+      "top": 406,
+      "right": 631,
+      "bottom": 806,
+      "left": 268
+    },
+    "separator": {
+      "x": 268,
+      "y": 399,
+      "width": 363,
+      "height": 7,
+      "top": 399,
+      "right": 631,
+      "bottom": 406,
+      "left": 268
+    },
+    "surface": {
+      "x": 268,
+      "y": 179,
+      "width": 363,
+      "height": 220,
+      "top": 179,
+      "right": 631,
+      "bottom": 399,
+      "left": 268
+    },
+    "aria": {
+      "orientation": "horizontal",
+      "value": "400"
+    },
+    "hit": {
+      "tag": "DIV",
+      "cls": "pqw-resizer",
+      "html": "<div class=\"pqw-resizer\" role=\"separator\" tabindex=\"0\" aria-label=\"Resize Power Query inspector\" aria-orientation=\"horizontal\" aria-valuemin=\"300\" aria-valuemax=\"650\" aria-valuenow=\"400\"></div>"
+    },
+    "visualViewport": {
+      "offsetLeft": 0,
+      "offsetTop": 0,
+      "pageLeft": 0,
+      "pageTop": 0,
+      "width": 640,
+      "height": 500,
+      "scale": 1
+    },
+    "scroll": {
+      "windowX": 0,
+      "windowY": 0,
+      "documentX": 0,
+      "documentY": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "pqBodyX": 0,
+      "pqBodyY": 0,
+      "inspectorHostY": 0,
+      "inspectorRootY": 0
+    },
+    "active": {
+      "tag": "DIV",
+      "cls": "wui-card pqc-node pqc-kind-query pqc-selected"
+    },
+    "pointer": [
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": ""
+        },
+        "clientX": 193,
+        "clientY": 262.5,
+        "pageX": 193,
+        "pageY": 262.5,
+        "screenX": 408,
+        "screenY": 634,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 107.5
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": ""
+        },
+        "clientX": 193,
+        "clientY": 262.5,
+        "pageX": 193,
+        "pageY": 262.5,
+        "screenX": 408,
+        "screenY": 634,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 107.89999997615814
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 465.94140625,
+        "clientY": 338.7265625,
+        "pageX": 465.94140625,
+        "pageY": 338.7265625,
+        "screenX": 953.8828125,
+        "screenY": 786.453125,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 173.7999999821186
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 465.94140625,
+        "clientY": 338.7265625,
+        "pageX": 465.94140625,
+        "pageY": 338.7265625,
+        "screenX": 953.8828125,
+        "screenY": 786.453125,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 174.09999999403954
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 207.2999999821186
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 207.69999998807907
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "STRONG",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 109.8984375,
+        "clientY": 443.64453125,
+        "pageX": 109.8984375,
+        "pageY": 443.64453125,
+        "screenX": 241.796875,
+        "screenY": 996.2890625,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 323.69999998807907
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "STRONG",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 109.8984375,
+        "clientY": 443.64453125,
+        "pageX": 109.8984375,
+        "pageY": 443.64453125,
+        "screenX": 241.796875,
+        "screenY": 996.2890625,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 324.2999999821186
+      }
+    ]
+  },
+  "before": {
+    "innerWidth": 640,
+    "innerHeight": 500,
+    "outerWidth": 1280,
+    "outerHeight": 1087,
+    "dpr": 2,
+    "below": true,
+    "width": 400,
+    "height": 400,
+    "inspectorOpen": true,
+    "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "inspector": {
+      "x": 268,
+      "y": 293,
+      "width": 363,
+      "height": 400,
+      "top": 293,
+      "right": 631,
+      "bottom": 693,
+      "left": 268
+    },
+    "separator": {
+      "x": 268,
+      "y": 286,
+      "width": 363,
+      "height": 7,
+      "top": 286,
+      "right": 631,
+      "bottom": 293,
+      "left": 268
+    },
+    "surface": {
+      "x": 268,
+      "y": 66,
+      "width": 363,
+      "height": 220,
+      "top": 66,
+      "right": 631,
+      "bottom": 286,
+      "left": 268
+    },
+    "aria": {
+      "orientation": "horizontal",
+      "value": "400"
+    },
+    "hit": {
+      "tag": "DIV",
+      "cls": "pqw-resizer",
+      "html": "<div class=\"pqw-resizer\" role=\"separator\" tabindex=\"0\" aria-label=\"Resize Power Query inspector\" aria-orientation=\"horizontal\" aria-valuemin=\"300\" aria-valuemax=\"650\" aria-valuenow=\"400\"></div>"
+    },
+    "visualViewport": {
+      "offsetLeft": 0,
+      "offsetTop": 0,
+      "pageLeft": 0,
+      "pageTop": 0,
+      "width": 640,
+      "height": 500,
+      "scale": 1
+    },
+    "scroll": {
+      "windowX": 0,
+      "windowY": 0,
+      "documentX": 0,
+      "documentY": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "pqBodyX": 0,
+      "pqBodyY": 113,
+      "inspectorHostY": 0,
+      "inspectorRootY": 0
+    },
+    "active": {
+      "tag": "DIV",
+      "cls": "pqw-resizer"
+    },
+    "pointer": [
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": ""
+        },
+        "clientX": 193,
+        "clientY": 262.5,
+        "pageX": 193,
+        "pageY": 262.5,
+        "screenX": 408,
+        "screenY": 634,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 107.5
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": ""
+        },
+        "clientX": 193,
+        "clientY": 262.5,
+        "pageX": 193,
+        "pageY": 262.5,
+        "screenX": 408,
+        "screenY": 634,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 107.89999997615814
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 465.94140625,
+        "clientY": 338.7265625,
+        "pageX": 465.94140625,
+        "pageY": 338.7265625,
+        "screenX": 953.8828125,
+        "screenY": 786.453125,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 173.7999999821186
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 465.94140625,
+        "clientY": 338.7265625,
+        "pageX": 465.94140625,
+        "pageY": 338.7265625,
+        "screenX": 953.8828125,
+        "screenY": 786.453125,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 174.09999999403954
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 207.2999999821186
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 207.69999998807907
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "STRONG",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 109.8984375,
+        "clientY": 443.64453125,
+        "pageX": 109.8984375,
+        "pageY": 443.64453125,
+        "screenX": 241.796875,
+        "screenY": 996.2890625,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 323.69999998807907
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "STRONG",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 109.8984375,
+        "clientY": 443.64453125,
+        "pageX": 109.8984375,
+        "pageY": 443.64453125,
+        "screenX": 241.796875,
+        "screenY": 996.2890625,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 324.2999999821186
+      }
+    ]
+  },
+  "keyboard": {
+    "innerWidth": 640,
+    "innerHeight": 500,
+    "outerWidth": 1280,
+    "outerHeight": 1087,
+    "dpr": 2,
+    "below": true,
+    "width": 400,
+    "height": 440,
+    "inspectorOpen": true,
+    "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "inspector": {
+      "x": 268,
+      "y": 293,
+      "width": 363,
+      "height": 440,
+      "top": 293,
+      "right": 631,
+      "bottom": 733,
+      "left": 268
+    },
+    "separator": {
+      "x": 268,
+      "y": 286,
+      "width": 363,
+      "height": 7,
+      "top": 286,
+      "right": 631,
+      "bottom": 293,
+      "left": 268
+    },
+    "surface": {
+      "x": 268,
+      "y": 66,
+      "width": 363,
+      "height": 220,
+      "top": 66,
+      "right": 631,
+      "bottom": 286,
+      "left": 268
+    },
+    "aria": {
+      "orientation": "horizontal",
+      "value": "440"
+    },
+    "hit": {
+      "tag": "DIV",
+      "cls": "pqw-resizer",
+      "html": "<div class=\"pqw-resizer\" role=\"separator\" tabindex=\"0\" aria-label=\"Resize Power Query inspector\" aria-orientation=\"horizontal\" aria-valuemin=\"300\" aria-valuemax=\"650\" aria-valuenow=\"440\"></div>"
+    },
+    "visualViewport": {
+      "offsetLeft": 0,
+      "offsetTop": 0,
+      "pageLeft": 0,
+      "pageTop": 0,
+      "width": 640,
+      "height": 500,
+      "scale": 1
+    },
+    "scroll": {
+      "windowX": 0,
+      "windowY": 0,
+      "documentX": 0,
+      "documentY": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "pqBodyX": 0,
+      "pqBodyY": 113,
+      "inspectorHostY": 0,
+      "inspectorRootY": 0
+    },
+    "active": {
+      "tag": "DIV",
+      "cls": "pqw-resizer"
+    },
+    "pointer": [
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": ""
+        },
+        "clientX": 193,
+        "clientY": 262.5,
+        "pageX": 193,
+        "pageY": 262.5,
+        "screenX": 408,
+        "screenY": 634,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 107.5
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": ""
+        },
+        "clientX": 193,
+        "clientY": 262.5,
+        "pageX": 193,
+        "pageY": 262.5,
+        "screenX": 408,
+        "screenY": 634,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 107.89999997615814
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 465.94140625,
+        "clientY": 338.7265625,
+        "pageX": 465.94140625,
+        "pageY": 338.7265625,
+        "screenX": 953.8828125,
+        "screenY": 786.453125,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 173.7999999821186
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 465.94140625,
+        "clientY": 338.7265625,
+        "pageX": 465.94140625,
+        "pageY": 338.7265625,
+        "screenX": 953.8828125,
+        "screenY": 786.453125,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 174.09999999403954
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 207.2999999821186
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 207.69999998807907
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "STRONG",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 109.8984375,
+        "clientY": 443.64453125,
+        "pageX": 109.8984375,
+        "pageY": 443.64453125,
+        "screenX": 241.796875,
+        "screenY": 996.2890625,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 323.69999998807907
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "STRONG",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 109.8984375,
+        "clientY": 443.64453125,
+        "pageX": 109.8984375,
+        "pageY": 443.64453125,
+        "screenX": 241.796875,
+        "screenY": 996.2890625,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 324.2999999821186
+      }
+    ]
+  },
+  "prePointer": {
+    "innerWidth": 640,
+    "innerHeight": 500,
+    "outerWidth": 1280,
+    "outerHeight": 1087,
+    "dpr": 2,
+    "below": true,
+    "width": 400,
+    "height": 440,
+    "inspectorOpen": true,
+    "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "inspector": {
+      "x": 268,
+      "y": 293,
+      "width": 363,
+      "height": 440,
+      "top": 293,
+      "right": 631,
+      "bottom": 733,
+      "left": 268
+    },
+    "separator": {
+      "x": 268,
+      "y": 286,
+      "width": 363,
+      "height": 7,
+      "top": 286,
+      "right": 631,
+      "bottom": 293,
+      "left": 268
+    },
+    "surface": {
+      "x": 268,
+      "y": 66,
+      "width": 363,
+      "height": 220,
+      "top": 66,
+      "right": 631,
+      "bottom": 286,
+      "left": 268
+    },
+    "aria": {
+      "orientation": "horizontal",
+      "value": "440"
+    },
+    "hit": {
+      "tag": "DIV",
+      "cls": "pqw-resizer",
+      "html": "<div class=\"pqw-resizer\" role=\"separator\" tabindex=\"0\" aria-label=\"Resize Power Query inspector\" aria-orientation=\"horizontal\" aria-valuemin=\"300\" aria-valuemax=\"650\" aria-valuenow=\"440\"></div>"
+    },
+    "visualViewport": {
+      "offsetLeft": 0,
+      "offsetTop": 0,
+      "pageLeft": 0,
+      "pageTop": 0,
+      "width": 640,
+      "height": 500,
+      "scale": 1
+    },
+    "scroll": {
+      "windowX": 0,
+      "windowY": 0,
+      "documentX": 0,
+      "documentY": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "pqBodyX": 0,
+      "pqBodyY": 113,
+      "inspectorHostY": 0,
+      "inspectorRootY": 0
+    },
+    "active": {
+      "tag": "DIV",
+      "cls": "pqw-resizer"
+    },
+    "pointer": [
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": ""
+        },
+        "clientX": 193,
+        "clientY": 262.5,
+        "pageX": 193,
+        "pageY": 262.5,
+        "screenX": 408,
+        "screenY": 634,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 107.5
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": ""
+        },
+        "clientX": 193,
+        "clientY": 262.5,
+        "pageX": 193,
+        "pageY": 262.5,
+        "screenX": 408,
+        "screenY": 634,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 107.89999997615814
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 465.94140625,
+        "clientY": 338.7265625,
+        "pageX": 465.94140625,
+        "pageY": 338.7265625,
+        "screenX": 953.8828125,
+        "screenY": 786.453125,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 173.7999999821186
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 465.94140625,
+        "clientY": 338.7265625,
+        "pageX": 465.94140625,
+        "pageY": 338.7265625,
+        "screenX": 953.8828125,
+        "screenY": 786.453125,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 174.09999999403954
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 207.2999999821186
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 207.69999998807907
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "STRONG",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 109.8984375,
+        "clientY": 443.64453125,
+        "pageX": 109.8984375,
+        "pageY": 443.64453125,
+        "screenX": 241.796875,
+        "screenY": 996.2890625,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 323.69999998807907
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "STRONG",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 109.8984375,
+        "clientY": 443.64453125,
+        "pageX": 109.8984375,
+        "pageY": 443.64453125,
+        "screenX": 241.796875,
+        "screenY": 996.2890625,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 324.2999999821186
+      }
+    ]
+  },
+  "sent": {
+    "x": 449.5,
+    "y": 289.5,
+    "dx": 0,
+    "dy": -40
+  },
+  "pointer": {
+    "innerWidth": 640,
+    "innerHeight": 500,
+    "outerWidth": 1280,
+    "outerHeight": 1087,
+    "dpr": 2,
+    "below": true,
+    "width": 400,
+    "height": 480,
+    "inspectorOpen": true,
+    "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "inspector": {
+      "x": 268,
+      "y": 293,
+      "width": 363,
+      "height": 480,
+      "top": 293,
+      "right": 631,
+      "bottom": 773,
+      "left": 268
+    },
+    "separator": {
+      "x": 268,
+      "y": 286,
+      "width": 363,
+      "height": 7,
+      "top": 286,
+      "right": 631,
+      "bottom": 293,
+      "left": 268
+    },
+    "surface": {
+      "x": 268,
+      "y": 66,
+      "width": 363,
+      "height": 220,
+      "top": 66,
+      "right": 631,
+      "bottom": 286,
+      "left": 268
+    },
+    "aria": {
+      "orientation": "horizontal",
+      "value": "480"
+    },
+    "hit": {
+      "tag": "DIV",
+      "cls": "pqw-resizer",
+      "html": "<div class=\"pqw-resizer\" role=\"separator\" tabindex=\"0\" aria-label=\"Resize Power Query inspector\" aria-orientation=\"horizontal\" aria-valuemin=\"300\" aria-valuemax=\"650\" aria-valuenow=\"480\"></div>"
+    },
+    "visualViewport": {
+      "offsetLeft": 0,
+      "offsetTop": 0,
+      "pageLeft": 0,
+      "pageTop": 0,
+      "width": 640,
+      "height": 500,
+      "scale": 1
+    },
+    "scroll": {
+      "windowX": 0,
+      "windowY": 0,
+      "documentX": 0,
+      "documentY": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "pqBodyX": 0,
+      "pqBodyY": 113,
+      "inspectorHostY": 0,
+      "inspectorRootY": 0
+    },
+    "active": {
+      "tag": "DIV",
+      "cls": "pqw-resizer"
+    },
+    "pointer": [
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": ""
+        },
+        "clientX": 193,
+        "clientY": 262.5,
+        "pageX": 193,
+        "pageY": 262.5,
+        "screenX": 408,
+        "screenY": 634,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 107.5
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": ""
+        },
+        "clientX": 193,
+        "clientY": 262.5,
+        "pageX": 193,
+        "pageY": 262.5,
+        "screenX": 408,
+        "screenY": 634,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 107.89999997615814
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 465.94140625,
+        "clientY": 338.7265625,
+        "pageX": 465.94140625,
+        "pageY": 338.7265625,
+        "screenX": 953.8828125,
+        "screenY": 786.453125,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 173.7999999821186
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 465.94140625,
+        "clientY": 338.7265625,
+        "pageX": 465.94140625,
+        "pageY": 338.7265625,
+        "screenX": 953.8828125,
+        "screenY": 786.453125,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 174.09999999403954
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 207.2999999821186
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 207.69999998807907
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "STRONG",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 109.8984375,
+        "clientY": 443.64453125,
+        "pageX": 109.8984375,
+        "pageY": 443.64453125,
+        "screenX": 241.796875,
+        "screenY": 996.2890625,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 323.69999998807907
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "STRONG",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 109.8984375,
+        "clientY": 443.64453125,
+        "pageX": 109.8984375,
+        "pageY": 443.64453125,
+        "screenX": 241.796875,
+        "screenY": 996.2890625,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 324.2999999821186
+      },
+      {
+        "type": "pointermove",
+        "target": {
+          "tag": "DIV",
+          "cls": "pqw-resizer",
+          "id": ""
+        },
+        "clientX": 449.5,
+        "clientY": 289.5,
+        "pageX": 449.5,
+        "pageY": 289.5,
+        "screenX": 921,
+        "screenY": 688,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 506.19999998807907
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "DIV",
+          "cls": "pqw-resizer",
+          "id": ""
+        },
+        "clientX": 449.5,
+        "clientY": 289.5,
+        "pageX": 449.5,
+        "pageY": 289.5,
+        "screenX": 921,
+        "screenY": 688,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 512.5999999940395
+      },
+      {
+        "type": "pointermove",
+        "target": {
+          "tag": "DIV",
+          "cls": "pqw-resizer",
+          "id": ""
+        },
+        "clientX": 449.5,
+        "clientY": 249.5,
+        "pageX": 449.5,
+        "pageY": 249.5,
+        "screenX": 921,
+        "screenY": 608,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 522.6999999880791
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "DIV",
+          "cls": "pqw-resizer",
+          "id": ""
+        },
+        "clientX": 449.5,
+        "clientY": 249.5,
+        "pageX": 449.5,
+        "pageY": 249.5,
+        "screenX": 921,
+        "screenY": 608,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 524.2999999821186
+      }
+    ]
+  }
+}

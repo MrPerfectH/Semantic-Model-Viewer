@@ -1,0 +1,66 @@
+{
+  "metadataIds": [
+    "[\"expression\",\"\",\"Sales Raw\"]",
+    "[\"expression\",\"\",\"Quote\\\"Query\"]",
+    "[\"expression\",\"\",\"Server\"]",
+    "[\"expression\",\"\",\"OccurrenceProbe\"]"
+  ],
+  "statusTables": [],
+  "edges": [
+    {
+      "inputId": "[\"expression\",\"\",\"Sales Raw\"]",
+      "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    },
+    {
+      "inputId": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    },
+    {
+      "inputId": "[\"expression\",\"\",\"Server\"]",
+      "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    }
+  ],
+  "occurrences": {
+    "[\"expression\",\"\",\"OccurrenceProbe\"]": [
+      {
+        "id": "[\"expression\",\"\",\"Sales Raw\"]",
+        "name": "Sales Raw",
+        "at": 32,
+        "end": 44,
+        "text": "#\"Sales Raw\""
+      },
+      {
+        "id": "[\"expression\",\"\",\"Sales Raw\"]",
+        "name": "Sales Raw",
+        "at": 57,
+        "end": 69,
+        "text": "#\"Sales Raw\""
+      },
+      {
+        "id": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "name": "Quote\"Query",
+        "at": 84,
+        "end": 99,
+        "text": "#\"Quote\"\"Query\""
+      },
+      {
+        "id": "[\"expression\",\"\",\"Sales Raw\"]",
+        "name": "Sales Raw",
+        "at": 118,
+        "end": 136,
+        "text": "#\"Sales#(0020)Raw\""
+      },
+      {
+        "id": "[\"expression\",\"\",\"Server\"]",
+        "name": "Server",
+        "at": 153,
+        "end": 159,
+        "text": "Server"
+      }
+    ]
+  },
+  "exactSource": {
+    "id": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "file": "exact-source.m"
+  }
+}

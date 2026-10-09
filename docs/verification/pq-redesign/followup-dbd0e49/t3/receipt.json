@@ -1,0 +1,13 @@
+{
+  "candidate": "dbd0e49dc7470db58865d6e0d8d77824d58335dc",
+  "transport": "T3 collaborative preview",
+  "startedAt": "2026-10-09T13:37:41.878Z",
+  "checks": [
+    {
+      "name": "placement-map-center",
+      "status": "pass"
+    }
+  ],
+  "failures": [],
+  "endedAt": "2026-10-09T13:37:44.300Z"
+}

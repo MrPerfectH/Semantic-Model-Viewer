@@ -1,0 +1,13 @@
+{
+  "candidate": "dbd0e49dc7470db58865d6e0d8d77824d58335dc",
+  "transport": "T3 collaborative preview",
+  "startedAt": "2026-10-09T13:39:28.232Z",
+  "checks": [],
+  "failures": [
+    {
+      "name": "groups-intersections-history",
+      "error": "Error: {\"content\":[{\"type\":\"text\",\"text\":\"Preview automation evaluate failed: SyntaxError: Identifier 'q' has already been declared\"}],\"isError\":true}\n    at unwrap (eval at <anonymous> (exec_main.mjs:3:12), <anonymous>:4:37)\n    at run (eval at <anonymous> (exec_main.mjs:3:12), <anonymous>:5:29)\n    at async eval (eval at <anonymous> (exec_main.mjs:3:12), <anonymous>:38:2)\n    at async check (eval at <anonymous> (exec_main.mjs:3:12), <anonymous>:18:84)\n    at async eval (eval at <anonymous> (exec_main.mjs:3:12), <anonymous>:33:1)\n    at async exec_main.mjs:3:6"
+    }
+  ],
+  "endedAt": "2026-10-09T13:39:29.406Z"
+}

@@ -1,0 +1,17 @@
+{
+  "candidate": "dbd0e49dc7470db58865d6e0d8d77824d58335dc",
+  "transport": "T3 collaborative preview",
+  "startedAt": "2026-10-09T13:41:14.431Z",
+  "checks": [
+    {
+      "name": "exact-UTF16-all-five-reference-activations",
+      "status": "pass"
+    },
+    {
+      "name": "TMDL-groups-and-reader-model-reset",
+      "status": "pass"
+    }
+  ],
+  "failures": [],
+  "endedAt": "2026-10-09T13:41:20.103Z"
+}
