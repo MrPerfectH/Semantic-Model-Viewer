@@ -14,7 +14,7 @@ const candidates = [process.env.CHROME_PATH, '/Applications/Google Chrome.app/Co
 const chrome = candidates.find(file => fs.existsSync(file));
 function fixture() {
   const css = fs.readFileSync(path.join(sourceRoot, 'measures.css'), 'utf8');
-  const scripts = ['util.js', 'measures.js'].map(file => fs.readFileSync(path.join(sourceRoot, 'js', file), 'utf8')).join('\n');
+  const scripts = ['util.js', 'dax-format.js', 'measures.js'].map(file => fs.readFileSync(path.join(sourceRoot, 'js', file), 'utf8')).join('\n');
   return `<!doctype html><html><head><style>*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:system-ui}button,input,select{font:inherit}${css}</style></head><body><div id="fixture" style="position:fixed;inset:64px 0 0"></div><script>${scripts.replace(/<\/script/gi, '<\\/script')}</script><script>
   const measures = [
     {name:'Base', dax:'SUM(Sales[Amount])', _deps:[]},
@@ -69,12 +69,12 @@ test('measure workspace occupies wide screens and persists adjustable layouts', 
     await t.test('DAX comparison uses both full columns at ' + width + 'px', async () => {
       await browser.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:false});
       await browser.evaluate("app.setState({gPin:'Base'}); view.setWorkspaceMode('dax');"); await settle();
-      const result = await browser.evaluate(`({grid:box('.mv-dax-grid'), cards:[...document.querySelectorAll('.mv-dax-card')].map(el=>({x:el.getBoundingClientRect().x,right:el.getBoundingClientRect().right,width:el.getBoundingClientRect().width})), columns:getComputedStyle(document.querySelector('.mv-dax-grid')).gridTemplateColumns.split(' ')})`);
+      const result = await browser.evaluate(`({grid:box('.mv-dax-grid'), cards:[...document.querySelectorAll('.mv-dax-card')].map(el=>({x:el.getBoundingClientRect().x,right:el.getBoundingClientRect().right,width:el.getBoundingClientRect().width})), bodyScrolls:[...document.querySelectorAll('.mv-dax-body')].some(b=>b.scrollHeight>b.clientHeight), columns:getComputedStyle(document.querySelector('.mv-dax-grid')).gridTemplateColumns.split(' ')})`);
       assert.equal(result.columns.length,2);
       assert.equal(result.cards.length,2);
       assert.ok(result.cards[0].width > result.grid.clientWidth * .45, JSON.stringify(result));
       assert.ok(result.cards[1].right - result.cards[0].x >= result.grid.clientWidth - 26, JSON.stringify(result));
-      assert.ok(result.grid.scrollHeight > result.grid.clientHeight || height > 1100, 'Long DAX remains scrollable');
+      assert.ok(result.grid.scrollHeight > result.grid.clientHeight || result.bodyScrolls || height > 1100, 'Long DAX remains scrollable');
       await browser.evaluate('app.setState({gPin:null})'); await settle();
       const single = await browser.evaluate(`({grid:box('.mv-dax-grid'),card:box('.mv-dax-card'),columns:getComputedStyle(document.querySelector('.mv-dax-grid')).gridTemplateColumns.split(' ')})`);
       assert.equal(single.columns.length,1); assert.ok(single.card.width >= single.grid.clientWidth-26);

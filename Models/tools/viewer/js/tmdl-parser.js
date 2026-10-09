@@ -37,6 +37,12 @@
     return out.filter(function(r){ return r.from&&r.fromCol&&r.to&&r.toCol; });
   }
 
+  /* TMDL wraps a multi-line expression in ``` fences. They are not DAX, so drop them. */
+  function unfence(s){
+    var m=String(s||'').match(/^\s*```([\s\S]*?)(?:```)?\s*$/);
+    return m ? m[1].trim() : String(s||'').trim();
+  }
+
   function parseTableText(text){
     var lines=text.split(/\r?\n/);
     var table=null, mode=null, curCol=null, curMeas=null, partKind='', partSrc='', isCG=false, isFP=false;
@@ -245,7 +251,7 @@
   }
 
   function finalize(name, tables, rels, ctx, options){
-    var byName={}; tables.forEach(function(t){ byName[t.name]=t; });
+    var byName={}; tables.forEach(function(t){ byName[t.name]=t; (t.measures||[]).forEach(function(mm){ mm.dax=unfence(mm.dax); }); });
     var seen={};
     if(options && options.strictRelationships){
       // A snapshot must not silently drop dangling or parallel relationships.
@@ -388,5 +394,5 @@
     return m;
   }
 
-  g.TMDLParser={parseAny:parseAny, parseTMDL:parseTMDL, parseBIM:parseBIM, CONNECTORS:CONNECTORS};
+  g.TMDLParser={unfence:unfence, parseAny:parseAny, parseTMDL:parseTMDL, parseBIM:parseBIM, CONNECTORS:CONNECTORS};
 })(typeof window!=='undefined'?window:globalThis);
