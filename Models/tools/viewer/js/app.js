@@ -397,6 +397,8 @@
         tableNames.set(t.name.toLowerCase(), t.name);
         var names = new Map(); tableMeasures.set(t.name, names);
         t.measures.forEach(function (m) {
+          // models imported before the parser dropped TMDL ``` fences still carry them in storage
+          if (window.TMDLParser && window.TMDLParser.unfence) m.dax = window.TMDLParser.unfence(m.dax);
           names.set(m.name.toLowerCase(), m.name);
           if (!measureNames.has(m.name.toLowerCase())) {
             measureNames.set(m.name.toLowerCase(), m.name); msrHome[m.name] = t.name;

@@ -367,6 +367,7 @@ The engine lives in `js/roles.js` and is mirrored in `scripts/tmdl_to_model_data
 | `js/canvas.js` | Table cards, pan/zoom, level-of-detail, relationship edges, selection/highlighting, fit, presets |
 | `js/layouts.js` | Arrange algorithms (star / constellation / layered / grid / galaxy / star columns / waterfall) and cluster mode |
 | `js/matrix.js` | Relationship matrix |
+| `js/dax-format.js` | Local DAX formatter (SQLBI short/long layout) and measure inliner |
 | `js/measures.js` | Measures rail, dependency DAG layout, DAX tokenizer, DAX cards |
 | `js/sidebar.js` | Table detail drawer |
 | `js/topbar.js` | Top bar, model menu, legend, hint chip, import modal |

@@ -129,3 +129,23 @@ test('calculated columns, calculated tables and calculation items keep their DAX
   assert.equal(by('Time').calcItems[1].dax, 'CALCULATE(\nSELECTEDMEASURE())');
   assert.equal(by('Time').calcItems[1].fmt, '"0.0"');
 });
+
+test('``` fences around a multi-line measure are not part of its DAX', () => {
+  const TMDLParser = parser();
+  const files = [
+    file('model.tmdl', 'model Model\n\tculture: en-US\n'),
+    file('table.tmdl', 'table T\n\tmeasure A = ```\n\t\t\tCALCULATE (\n\t\t\t    [B],\n\t\t\t    T[x] = 1\n\t\t\t)\n\t\t\t```\n\t\tformatString: 0\n\n\tmeasure B = ```SUM ( T[x] )```\n\n\tmeasure C = 1 + 1\n'),
+  ];
+  const ms = TMDLParser.parseTMDL(files).tables[0].measures;
+  assert.equal(ms[0].dax, 'CALCULATE (\n    [B],\n    T[x] = 1\n)');
+  assert.equal(ms[0].fmt, '0');
+  assert.equal(ms[1].dax, 'SUM ( T[x] )');
+  assert.equal(ms[2].dax, '1 + 1');
+});
+
+test('unfence drops ``` fences that an older import left in a stored measure', () => {
+  const { unfence } = parser();
+  assert.equal(unfence('```\nSUM ( x )\n```'), 'SUM ( x )');
+  assert.equal(unfence('SUM ( x )'), 'SUM ( x )');
+  assert.equal(unfence(undefined), '');
+});
