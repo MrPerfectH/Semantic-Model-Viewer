@@ -42,8 +42,7 @@
     var model=el('div',{cls:'ex-brand'},[el('span',{cls:'ex-logo',html:U.ICON.logo}),identity]);
     if(st.showModelMenu&&!offline)model.appendChild(this.modelMenu());this.host.appendChild(model);
     var nav=el('nav',{cls:'ex-main-nav','aria-label':'Analysis views'});
-    [['graph','Tables'],['measures','Measures'],['clusters','Domains'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
-    if(g.PowerQuery)nav.appendChild(el('button',{text:'Power Query',disabled:!st.loaded,onClick:function(){g.PowerQuery.open(app,app.state.selected);}}));
+    [['graph','Tables'],['measures','Measures'],['power-query','Power Query'],['clusters','Domains'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
     this.host.appendChild(nav);
     var actions=el('div',{cls:'ex-header-actions'});
     actions.appendChild(el('span',{cls:offline?'ex-snapshot-badge':'ex-local-badge',text:offline?'Offline snapshot':app.host?'VS Code workspace':'Local analysis',
@@ -56,7 +55,7 @@
     if(!offline&&!app.host){
       if(app.canRefreshSource())actions.appendChild(el('button',{cls:'ex-button',text:st.refreshing?'Refreshing…':'Refresh',disabled:!!st.refreshing,
         title:'Re-read this model from its source folder. Your layout and saved views are kept.',onClick:function(){app.refreshSource();}}));
-      actions.appendChild(el('button',{cls:'ex-button',text:st.pngLabel,title:'Export current view as PNG',onClick:function(){app.exportPNG();}}));
+      if(st.viewMode!=='power-query')actions.appendChild(el('button',{cls:'ex-button',text:st.pngLabel,title:'Export current view as PNG',onClick:function(){app.exportPNG();}}));
       if(!app.server)actions.appendChild(el('a',{cls:'ex-button',text:'Get the app',href:'https://github.com/MrPerfectH/Semantic-Model-Viewer#install-2-minutes',target:'_blank',rel:'noopener',
         title:'Download the desktop app: it opens your model folders directly, with no browser permission prompt',style:'text-decoration:none;display:inline-flex;align-items:center;'}));
       actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Open model',onClick:function(){app.setState({showImport:true,importError:'',importReady:false});}}));

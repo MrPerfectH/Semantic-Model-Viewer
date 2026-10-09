@@ -75,6 +75,8 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   assert.ok(!wv.webview.html.includes('host-web.js'));
   assert.ok(!wv.webview.html.includes('fonts.googleapis.com'), 'no external font in the webview');
   assert.ok(/Content-Security-Policy/.test(wv.webview.html) && /script-src 'nonce-/.test(wv.webview.html), 'CSP with nonce');
+  assert.ok(/worker-src blob:/.test(wv.webview.html), 'background analysis allows blob workers');
+  assert.ok(/connect-src 'none'/.test(wv.webview.html), 'worker support does not allow webview network connections');
   const scripts = wv.webview.html.match(/<script nonce="[A-Za-z0-9]{32}" src="https:\/\/file\+\.vscode-resource[^"]+"><\/script>/g) || [];
   const canonicalHtml = fs.readFileSync(path.join(ROOT, 'Models', 'tools', 'viewer', 'index.html'), 'utf8');
   const sourceScriptCount = (canonicalHtml.match(/<script\b[^>]*src=/g) || []).length;

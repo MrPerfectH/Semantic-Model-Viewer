@@ -172,7 +172,7 @@
     };
 
     if (roleSettings) body.appendChild(el('details', {open:true,style:'padding:12px 16px;border-bottom:1px solid #e6ebf2;font-size:11px;color:#66758a;'}, [el('summary',{text:'Table role settings',style:'cursor:pointer;'}),roleSettings]));
-    if (g.PowerQuery) body.appendChild(el('button',{text:'Power Query code',cls:'ex-button',style:'margin:12px 16px;',onClick:function(){g.PowerQuery.open(app,sel.name);}}));
+    if (g.PowerQuery) body.appendChild(el('button',{text:'Open Power Query',cls:'ex-button',style:'margin:12px 16px;',onClick:function(){app.setViewMode('power-query');}}));
     if (sel.hasRels) {
       body.appendChild(sectionTitle('Relationships'));
       sel.rels.forEach(function (rel) {

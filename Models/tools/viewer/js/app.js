@@ -171,6 +171,7 @@
     this.matrix = new g.MatrixView(this, document.getElementById('matrix'));
     this.measures = new g.MeasuresView(this, document.getElementById('measures'));
     this.sidebar = new g.Sidebar(this, document.getElementById('drawer'));
+    if (g.PowerQueryWorkspace && g.PowerQueryCanvas && g.PowerQueryInspector) this.powerQueryWorkspace = new g.PowerQueryWorkspace(this, document.getElementById('power-query-workspace'));
     if (g.TableExplorer) this.explorer = new g.TableExplorer(this);
     this.importModal = new g.ImportModal(this, document.getElementById('modal'));
     this.rulesModal = new g.RulesModal(this, document.getElementById('rolesetup'));
@@ -216,6 +217,7 @@
       this.measures.update();
       if (this.explorer) this.explorer.update();
       this.sidebar.update();
+      if (this.powerQueryWorkspace) this.powerQueryWorkspace.update();
       this.importModal.update();
       this.rulesModal.update();
     },
@@ -451,7 +453,7 @@
       if (opts.persist !== false) store.set('smv_current_v1', key);
       this.prepareModel(model);
       this.applyRoles(model, key);
-      if(g.PowerQuery)g.PowerQuery.close(this);
+      if(this.powerQueryWorkspace)this.powerQueryWorkspace.reset(); if(g.PowerQuery)g.PowerQuery.close(this);
       this.model = model;
       this._tableWorkspace = null; this._tableViewport = null; this._domainWorkspace = null; this._matrixWorkspace = null;
       if (this.explorer) this.explorer.loadModel();
@@ -539,7 +541,7 @@
       this.state.viewMode = 'graph';
       this.modelKey = record.id; this.canvas.setLayoutKey('smv_layout_' + record.id);
       this._usage = null; this._usageMeta = null; this._usageStatus = null; this._usageCols = null;
-      this.prepareModel(model); this.applyRoles(model, record.id); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
+      this.prepareModel(model); this.applyRoles(model, record.id); if(this.powerQueryWorkspace)this.powerQueryWorkspace.reset(); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
       this._tableWorkspace = null; this._tableViewport = null; this._domainWorkspace = null; this._matrixWorkspace = null;
       if (this.explorer) this.explorer.loadModel();
       var cv = this.canvas;
@@ -1275,7 +1277,7 @@
       var model = JSON.parse(JSON.stringify(payload.model)), workspace = payload.workspace || {}, cv = this.canvas, ex = this.explorer;
       model.tables.forEach(function (table) { table.source = table.source || { kind: 'other' }; table.domain = table.domain || 'Other'; });
       // Exported role decisions are part of the snapshot. Do not apply recipient rules.
-      this.prepareModel(model); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
+      this.prepareModel(model); if(this.powerQueryWorkspace)this.powerQueryWorkspace.reset(); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
       this._usage = payload.usage && payload.usage.measures || null;
       this._usageMeta = payload.usage && payload.usage.meta || null;
       this._usageStatus = payload.usage && payload.usage.status || null; this._usageCols = payload.usage && payload.usage.columns || null;
@@ -1305,7 +1307,7 @@
       if (this.measures.restoreSnapshot) this.measures.restoreSnapshot(payload.measures);
       this._domainWorkspace = workspace.domains || null;
       this._matrixWorkspace = workspace.matrix || null;
-      this.state.viewMode = ['graph', 'measures', 'clusters', 'matrix'].includes(workspace.viewMode) ? workspace.viewMode : 'graph';
+      this.state.viewMode = ['graph', 'measures', 'clusters', 'matrix', 'power-query'].includes(workspace.viewMode) ? workspace.viewMode : 'graph';
       this.matrix._key = null; this.sidebar._key = null;
       this.render(true);
       if (this.state.viewMode === 'clusters') this.restoreDomains(this._domainWorkspace);

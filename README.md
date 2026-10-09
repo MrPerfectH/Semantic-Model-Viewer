@@ -401,22 +401,30 @@ model and its screenshots use only synthetic data.
 
 ### Power Query metadata (feature branch)
 
-Open **Power Query** in the top bar, or select a table and choose **Power Query code**.
-Choose a partition to inspect read-only highlighted M, find text and copy it. The
-searchable shared-expression library shows query, parameter and function hints with
-the classification basis. No M runs and no source data is fetched. TMDL partition
-sources and shared expressions, plus the corresponding `model.bim` metadata, are
-supported. Missing and non-M metadata have explicit states. Pre-generated viewer
-JSON and shared snapshots may omit M. Raw M remains excluded from **Save snapshot**.
-See [the metadata contract and limitations](docs/power-query-contract.md).
+Open the **Power Query** workspace next to Tables and Measures. It shows the complete
+available metadata inventory as an input → consumer query graph, including disconnected
+objects, parameters, functions, explicit table partitions and missing-partition status.
+Select an object for read-only, line-numbered M; exact resolved reference occurrences
+navigate to their input. Back restores selection, filters, viewport and inspector scroll.
+No M runs and no source data is fetched. TMDL partition sources/shared expressions and
+corresponding `model.bim` metadata are supported, with explicit missing/non-M states.
 
+**All / Connected / Disconnected** filters use resolved incident Power Query references
+in the complete model, never semantic relationships or source co-location. Disconnected
+means zero resolved edges, with an uncertainty caveat; it does not prove independence.
+Category filters hide canvas/library rows; search narrows the library and dims canvas
+nonmatches. Counts retain total inventory. A filtered selection retains its inspector
+and offers Show all. Reset filters preserves selection/layout; model changes clear them.
 
-Select a table and partition to explore **Upstream query flow**. Expand or collapse
-references, follow arrow links and open exact code from a node. Shared-code inspection
-highlights that node while keeping the chosen table/partition as the graph root. Cycles,
-missing metadata, ambiguous references and unsupported/dynamic M are explicit; static
-references do not establish execution order or complete dependency coverage. Large
-flows page references 40 at a time and cap the display at 80 nodes / 160 edges. Above
-300 metadata nodes, graph analysis covers visible upstream nodes and visible cycles.
-Keyboard users can Tab to actions, use Enter to open code, and use arrow keys/Home/End
-within graph actions. Escape closes the inspector. Changing models resets graph state.
+Pan, zoom, Fit and the whole-model minimap explore all components without upstream
+expansion caps. Analysis builds atomically in a cancellable background worker; cancellation
+and worker failure do not imply absent dependencies. Static findings remain partial:
+dynamic/missing/ambiguous references, unsupported syntax, cycles and analysis notices
+remain explicit and do not establish execution order or complete lineage.
+
+Raw M and PQ workspace/context/history stay excluded from **Save snapshot**. Offline
+snapshots explain that code is unavailable. Pre-generated JSON may also omit M.
+See [metadata limitations](docs/power-query-contract.md), the
+[presentation contract](docs/power-query-redesign/interface-contract-v2.md), and
+[filter policy](docs/power-query-redesign/filter-addendum.md). Original verification
+remains historical; redesigned UI acceptance is recorded separately.
