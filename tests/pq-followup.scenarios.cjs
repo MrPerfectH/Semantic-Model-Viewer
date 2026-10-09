@@ -1,0 +1,34 @@
+'use strict';
+// Integration-owned synthetic registered journey. Driver chooses T3 preview first.
+module.exports=async function(d,{fixture}) {
+ const assert=require('node:assert/strict'),checks=[],failures=[],e=d.evaluate;
+ const w='app.powerQueryWorkspace',button=t=>`.pqw button:text-is(${JSON.stringify(t)})`,row=t=>`.pqw-list .ex-table-name:has(strong:text-is(${JSON.stringify(t)}))`;
+ const pause=()=>e('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))',true);
+ const state=()=>e(`(()=>{let w=${w};return {navigation:w.captureNavigation(),visible:[...w.visible],positions:[...w.canvas.captureLayout()],map:[...document.querySelectorAll('[data-map-id]')].map(x=>x.dataset.mapId),code:w.context.byNodeId.get(w.selectedId)?.code,rendered:[...document.querySelectorAll('.pqi-source-line')].map(x=>x.textContent).join(''),reader:!!document.querySelector('.pqi-reader'),wrap:!!document.querySelector('.pqi-wrap')}})()`);
+ async function check(name,fn){try{await fn();checks.push({name,pass:true});}catch(error){failures.push({name,error:error.stack,state:await state()});}await d.save(name,{checks,failures});}
+ await d.click('button:text-is("Open model")');await d.upload(fixture);await d.wait('app.state.importReady');await d.click('button:text-matches("^(Add|Update) model")');await d.wait('!app.state.showImport');await d.click('nav button:text-is("Power Query")');await d.wait(`${w}.phase==='ready'`);await pause();
+ await check('local placement, exact drop, Undo and visible-only minimap',async()=>{
+  const original=await e(`[...${w}.canvas.captureLayout()]`);await d.click(button('Blank layout'));assert.equal((await state()).visible.length,0);assert.equal((await state()).map.length,0);
+  await d.click(row('OccurrenceProbe'));await pause();let first=await state();assert.equal(first.visible.length,1);assert.deepEqual(first.map,first.visible);
+  const firstId=first.navigation.selectedId,firstPos=first.positions.find(x=>x[0]===firstId)[1];await d.click(row('Distant Synthetic 19'));await pause();let second=await state();assert.equal(second.visible.length,2);assert.deepEqual(second.map.sort(),second.visible.sort());assert.deepEqual(second.positions.find(x=>x[0]===firstId)[1],firstPos);
+  const p=second.positions.find(x=>x[0]===second.navigation.selectedId)[1];assert.ok(Math.hypot(p.x-firstPos.x,p.y-firstPos.y)<700);assert.ok(!(Math.abs(p.x-firstPos.x)<252&&Math.abs(p.y-firstPos.y)<96));
+  assert.ok(Math.hypot(original.find(x=>x[0]===firstId)[1].x-original.find(x=>x[0]===second.navigation.selectedId)[1].x,original.find(x=>x[0]===firstId)[1].y-original.find(x=>x[0]===second.navigation.selectedId)[1].y)>700);
+  await d.click(button('Undo'));let undone=await state();assert.equal(undone.visible.length,1);assert.deepEqual(undone.positions.find(x=>x[0]===firstId)[1],firstPos);
+ });
+ await check('actual repeated Center selected dispatch with pan and zoom',async()=>{
+  for(const view of [{x:-9000,y:8000,k:.4},{x:5000,y:-6000,k:2},{x:30,y:40,k:1}]){await e(`${w}.canvas.setViewport(${JSON.stringify(view)})`);await d.click(button('Center selected'));await pause();const bounds=await e(`(()=>{let w=${w},node=[...document.querySelectorAll('.pqc-node')].find(n=>n.dataset.nodeId===w.selectedId),a=node.getBoundingClientRect(),b=document.querySelector('.pqc-surface').getBoundingClientRect();return {dx:a.x+a.width/2-b.x-b.width/2,dy:a.y+a.height/2-b.y-b.height/2,view:w.canvas.getViewport()}})()`);assert.ok(Math.abs(bounds.dx)<1&&Math.abs(bounds.dy)<1,JSON.stringify(bounds));await d.click(button('Center selected'));assert.deepEqual(await e(`${w}.canvas.getViewport()`),bounds.view);}
+ });
+ await check('explicit nested groups, Unassigned, Back reset and model invalidation',async()=>{
+  await d.click(button('Show all'));await e(`${w}.groupFilter='group:Synthetic/Stage';${w}.applyFilters()`);let filtered=await state();assert.equal(filtered.visible.length,2);assert.deepEqual(filtered.map.sort(),filtered.visible.sort());
+  await d.click(row('Sales Raw'));await pause();const before=await state();await e(`${w}.groupFilter='unassigned';${w}.applyFilters()`);assert.ok((await state()).visible.length>0);await d.click(row('Distant Synthetic 19'));await d.click(button('Back'));await pause();assert.equal((await state()).navigation.groupFilter,'unassigned');await d.click(button('Reset filters'));assert.equal((await state()).navigation.groupFilter,'all');
+  await e(`${w}.groupFilter='group:Synthetic/Inputs';${w}.applyFilters()`);await d.click(row('Server'));await e(`${w}.navigate(${w}.context.graph.nodes.find(n=>n.label==='Sales Raw').id,true)`);await d.click(button('Back'));await pause();assert.equal((await state()).navigation.groupFilter,'group:Synthetic/Inputs');
+ });
+ await check('readable controls and exact expanded M source/reference/copy/history',async()=>{
+  await d.click(button('Show all'));await d.click(row('OccurrenceProbe'));await pause();const code=await e(`${w}.context.byNodeId.get(${w}.selectedId).code`);assert.equal(await e(`${w}.inspector.captureViewState().wrap`),true);
+  const controls=await e(`([...document.querySelectorAll('.pqi select')].map(s=>({label:s.getAttribute('aria-label'),height:s.getBoundingClientRect().height,display:getComputedStyle(s).display})))`);assert.equal(controls.length,2);assert.ok(controls.every(c=>c.height>=30&&c.display!=='none'));
+  await d.click('.pqi button:text-is("Expand M")');await pause();const expanded=await e(`${w}.inspector.captureViewState()`);assert.equal(expanded.expanded,true);await e('window.pqCopy=null;navigator.clipboard.writeText=async t=>{window.pqCopy=t}');await d.click('button:text-is("Copy M")');assert.equal(await e('pqCopy'),code);
+  await d.key('Escape');assert.equal(await e(`${w}.inspector.captureViewState().expanded`),false);assert.equal(await e(`${w}.inspectorOpen`),true);
+  await d.click('.pqi button:text-is("Expand M")');await d.click('.pqi-reader .pqi-reference:first');await pause();await d.click(button('Back'));await pause();assert.equal(await e(`${w}.inspector.captureViewState().expanded`),true);assert.equal(await e(`${w}.context.byNodeId.get(${w}.selectedId).code`),code);await d.key('Escape');
+ });
+ return {checks,failures};
+};

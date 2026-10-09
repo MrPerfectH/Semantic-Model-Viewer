@@ -331,7 +331,7 @@
     var nodes=[], warnings=[], groups=new Map();
     files.forEach(function(f){
       if(typeof f.text!=='string' || !/\.tmdl$/i.test(f.name||f.path||'')) return;
-      var lines=f.text.split(/\r\n|\n|\r/), newline=f.text.includes('\r\n')?'\r\n':'\n', table=null, partition=null, expression=null, group=null;
+      var lines=f.text.split(/\r\n|\n|\r/), newline=f.text.includes('\r\n')?'\r\n':'\n', table=null, partition=null, expression=null, group=null, groupIndent=null, partitionIndent=null;
       function indent(s){return (s.match(/^[\t ]*/)||[''])[0];}
       function read(i, inline, base) {
         if(inline.trim()==='```') {
@@ -349,13 +349,13 @@
       }
       for(var i=0;i<lines.length;i++){
         var raw=lines[i], t=raw.trim(), m, ind=indent(raw);
-        if((m=t.match(/^queryGroup\s+(.+)$/i))){group=unq(m[1]);groups.set(group,{name:group,folder:null});expression=partition=null;continue;}
-        if(group && ind && (m=t.match(/^folder:\s*(.*)$/i))){groups.get(group).folder=unq(m[1]);continue;}
+        if((m=t.match(/^queryGroup\s+(.+)$/i))){group=unq(m[1]);groupIndent=ind;groups.set(group,{name:group,folder:null});expression=partition=null;continue;}
+        if(group && ind.length>groupIndent.length && (m=t.match(/^folder:\s*(.*)$/i))){groups.get(group).folder=unq(m[1]);continue;}
         if(!ind && t)group=null;
-        if(ind && (m=t.match(/^queryGroup:\s*(.*)$/i)) && (expression||partition)){(expression||partition).queryGroup=unq(m[1]);continue;}
+        if(ind && (expression||partition&&ind.length>partitionIndent.length) && (m=t.match(/^queryGroup:\s*(.*)$/i)) && (expression||partition)){(expression||partition).queryGroup=unq(m[1]);continue;}
         if((m=t.match(/^table\s+(.+)$/i)) && !ind){table=unq(m[1]);partition=expression=null;continue;}
         if((m=t.match(/^partition\s+('(?:[^']|'')*'|[^=]+?)\s*=\s*(\w+)\s*$/i))){
-          expression=null;partition=pqNode('partition',table,unq(m[1]),m[2].toLowerCase(),null);nodes.push(partition);continue;
+          expression=null;partitionIndent=ind;partition=pqNode('partition',table,unq(m[1]),m[2].toLowerCase(),null);nodes.push(partition);continue;
         }
         if(partition && (m=t.match(/^source\s*=([\s\S]*)$/i))){var r=read(i,m[1],ind);partition.code=partition.type==='m'?r.code:null;partition.state=partition.type!=='m'?'non-m':r.code===null?'missing':'available';i=r.end;continue;}
         if((m=t.match(/^expression\s+('(?:[^']|'')*'|[^\s=]+)\s*=([\s\S]*)$/i)) && !ind){var e=read(i,m[2],ind+'\t');expression=pqNode('expression',null,unq(m[1]),'m',e.code);nodes.push(expression);partition=null;i=e.end;continue;}
