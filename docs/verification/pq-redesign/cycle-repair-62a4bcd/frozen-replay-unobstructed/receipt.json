@@ -1,0 +1,8 @@
+{
+  "candidate": "62a4bcd30673449d4a0d3bf85365e4e9e83aaabf",
+  "gate": "Both opposing cycle edges retain independently clickable semantic identity after horizontal-separation drag",
+  "checks": [],
+  "failures": [
+    "Error: {\"content\":[{\"type\":\"text\",\"text\":\"Preview automation evaluate produced a result larger than 64000 bytes.\"}],\"isError\":true}\n    at unwrap (eval at <anonymous> (exec_main.mjs:2:13), <anonymous>:6:37)\n    at run (eval at <anonymous> (exec_main.mjs:2:13), <anonymous>:7:29)\n    at async eval (eval at <anonymous> (exec_main.mjs:2:13), <anonymous>:21:17)\n    at async exec_main.mjs:2:6"
+  ]
+}

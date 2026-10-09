@@ -1,0 +1,15 @@
+{
+  "candidate": "62a4bcd30673449d4a0d3bf85365e4e9e83aaabf",
+  "checks": [
+    "exact-frozen",
+    "horizontal-right",
+    "horizontal-left",
+    "vertical-down",
+    "vertical-up",
+    "vertical-diagonal",
+    "horizontal-diagonal-left",
+    "reciprocal-obstacle",
+    "visible map/folder/wide exact same-DOM reader Escape"
+  ],
+  "failures": []
+}

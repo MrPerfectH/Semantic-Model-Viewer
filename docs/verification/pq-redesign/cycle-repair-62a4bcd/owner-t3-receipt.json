@@ -1,0 +1,2658 @@
+{
+  "boundary": "Implementation-owner registered T3 browser, actual app with synthetic BIM. Not independent acceptance.",
+  "baseline": "9c3b836ecfcbf36a6888b576b5b8eba9f16886cd",
+  "before": {
+    "layout": [
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        {
+          "x": 581.456005859375,
+          "y": 395.031982421875
+        }
+      ],
+      [
+        "[\"partition\",\"Synthetic\",\"Synthetic\"]",
+        {
+          "x": 0,
+          "y": 328
+        }
+      ]
+    ],
+    "graph": "{\"nodes\":[{\"id\":\"[\\\"partition\\\",\\\"Synthetic\\\",\\\"Synthetic\\\"]\",\"metadataId\":\"[\\\"partition\\\",\\\"Synthetic\\\",\\\"Synthetic\\\"]\",\"label\":\"Synthetic\",\"subtitle\":\"m · Synthetic\",\"kind\":\"partition\",\"table\":\"Synthetic\",\"partition\":\"Synthetic\",\"state\":\"available\"},{\"id\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"metadataId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"label\":\"CycleA\",\"subtitle\":\"query\",\"kind\":\"query\",\"table\":null,\"partition\":null,\"state\":\"available\"},{\"id\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"metadataId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"label\":\"CycleB\",\"subtitle\":\"query\",\"kind\":\"query\",\"table\":null,\"partition\":null,\"state\":\"available\"}],\"edges\":[{\"id\":\"[\\\"reference\\\",\\\"[\\\\\\\"expression\\\\\\\",\\\\\\\"\\\\\\\",\\\\\\\"CycleB\\\\\\\"]\\\",\\\"[\\\\\\\"expression\\\\\\\",\\\\\\\"\\\\\\\",\\\\\\\"CycleA\\\\\\\"]\\\"]\",\"inputId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"consumerId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"referenceOccurrences\":[{\"id\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"name\":\"CycleB\",\"at\":8,\"end\":14}]},{\"id\":\"[\\\"reference\\\",\\\"[\\\\\\\"expression\\\\\\\",\\\\\\\"\\\\\\\",\\\\\\\"CycleA\\\\\\\"]\\\",\\\"[\\\\\\\"expression\\\\\\\",\\\\\\\"\\\\\\\",\\\\\\\"CycleB\\\\\\\"]\\\"]\",\"inputId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"consumerId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"referenceOccurrences\":[{\"id\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"name\":\"CycleA\",\"at\":8,\"end\":14}]}],\"issues\":[{\"consumerId\":\"[\\\"partition\\\",\\\"Synthetic\\\",\\\"Synthetic\\\"]\",\"kind\":\"analysis-uncertainty\",\"message\":\"Unresolved reference: #table\"},{\"consumerId\":null,\"kind\":\"analysis-notice\",\"message\":\"Partial static inspection; absence of an edge does not prove absence of a dependency.\"},{\"consumerId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"kind\":\"cycle\",\"message\":\"Cycle among resolved static references.\",\"componentIds\":[\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]},{\"consumerId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"kind\":\"cycle\",\"message\":\"Cycle among resolved static references.\",\"componentIds\":[\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]}],\"generation\":3,\"analysisProgress\":{\"analyzed\":3,\"total\":3,\"complete\":true,\"generation\":3}}",
+    "edges": [
+      {
+        "d": "M581.456005859375,443.031982421875 L416.7280029296875,443.031982421875 L416.7280029296875,48 L252,48",
+        "hitPath": "M581.456005859375,443.031982421875 L416.7280029296875,443.031982421875 L416.7280029296875,48 L252,48",
+        "point": {
+          "x": 714.72802734375,
+          "y": 421.5159912109375
+        },
+        "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+      },
+      {
+        "d": "M252,48 L416.7280029296875,48 L416.7280029296875,443.031982421875 L581.456005859375,443.031982421875",
+        "hitPath": "M252,48 L416.7280029296875,48 L416.7280029296875,443.031982421875 L581.456005859375,443.031982421875",
+        "point": {
+          "x": 714.72802734375,
+          "y": 421.5159912109375
+        },
+        "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+      }
+    ]
+  },
+  "beforeClick": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+  "after": {
+    "layout": [
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        {
+          "x": 581.456005859375,
+          "y": 395.031982421875
+        }
+      ],
+      [
+        "[\"partition\",\"Synthetic\",\"Synthetic\"]",
+        {
+          "x": 0,
+          "y": 328
+        }
+      ]
+    ],
+    "graph": "{\"nodes\":[{\"id\":\"[\\\"partition\\\",\\\"Synthetic\\\",\\\"Synthetic\\\"]\",\"metadataId\":\"[\\\"partition\\\",\\\"Synthetic\\\",\\\"Synthetic\\\"]\",\"label\":\"Synthetic\",\"subtitle\":\"m · Synthetic\",\"kind\":\"partition\",\"table\":\"Synthetic\",\"partition\":\"Synthetic\",\"state\":\"available\"},{\"id\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"metadataId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"label\":\"CycleA\",\"subtitle\":\"query\",\"kind\":\"query\",\"table\":null,\"partition\":null,\"state\":\"available\"},{\"id\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"metadataId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"label\":\"CycleB\",\"subtitle\":\"query\",\"kind\":\"query\",\"table\":null,\"partition\":null,\"state\":\"available\"}],\"edges\":[{\"id\":\"[\\\"reference\\\",\\\"[\\\\\\\"expression\\\\\\\",\\\\\\\"\\\\\\\",\\\\\\\"CycleB\\\\\\\"]\\\",\\\"[\\\\\\\"expression\\\\\\\",\\\\\\\"\\\\\\\",\\\\\\\"CycleA\\\\\\\"]\\\"]\",\"inputId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"consumerId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"referenceOccurrences\":[{\"id\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"name\":\"CycleB\",\"at\":8,\"end\":14}]},{\"id\":\"[\\\"reference\\\",\\\"[\\\\\\\"expression\\\\\\\",\\\\\\\"\\\\\\\",\\\\\\\"CycleA\\\\\\\"]\\\",\\\"[\\\\\\\"expression\\\\\\\",\\\\\\\"\\\\\\\",\\\\\\\"CycleB\\\\\\\"]\\\"]\",\"inputId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"consumerId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"referenceOccurrences\":[{\"id\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"name\":\"CycleA\",\"at\":8,\"end\":14}]}],\"issues\":[{\"consumerId\":\"[\\\"partition\\\",\\\"Synthetic\\\",\\\"Synthetic\\\"]\",\"kind\":\"analysis-uncertainty\",\"message\":\"Unresolved reference: #table\"},{\"consumerId\":null,\"kind\":\"analysis-notice\",\"message\":\"Partial static inspection; absence of an edge does not prove absence of a dependency.\"},{\"consumerId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"kind\":\"cycle\",\"message\":\"Cycle among resolved static references.\",\"componentIds\":[\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]},{\"consumerId\":\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"kind\":\"cycle\",\"message\":\"Cycle among resolved static references.\",\"componentIds\":[\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]}],\"generation\":2,\"analysisProgress\":{\"analyzed\":3,\"total\":3,\"complete\":true,\"generation\":2}}",
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "d": "M581.456005859375,431.031982421875 L404.7280029296875,431.031982421875 L404.7280029296875,36 L252,36",
+        "hitPath": "M581.456005859375,431.031982421875 L404.7280029296875,431.031982421875 L404.7280029296875,36 L252,36",
+        "point": {
+          "x": 702.72802734375,
+          "y": 421.5159912109375
+        },
+        "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "d": "M252,60 L428.7280029296875,60 L428.7280029296875,455.031982421875 L581.456005859375,455.031982421875",
+        "hitPath": "M252,60 L428.7280029296875,60 L428.7280029296875,455.031982421875 L581.456005859375,455.031982421875",
+        "point": {
+          "x": 726.72802734375,
+          "y": 421.5159912109375
+        },
+        "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "scenario": "exact-reviewer-position",
+      "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+      "point": {
+        "x": 702.72802734375,
+        "y": 421.5159912109375
+      },
+      "details": {
+        "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+        "hidden": false
+      }
+    },
+    {
+      "scenario": "exact-reviewer-position",
+      "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+      "point": {
+        "x": 726.72802734375,
+        "y": 421.5159912109375
+      },
+      "details": {
+        "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+        "hidden": false
+      }
+    },
+    {
+      "scenario": "horizontal-right",
+      "state": {
+        "layout": [
+          [
+            "[\"expression\",\"\",\"CycleA\"]",
+            {
+              "x": 0,
+              "y": 0
+            }
+          ],
+          [
+            "[\"expression\",\"\",\"CycleB\"]",
+            {
+              "x": 600,
+              "y": 0
+            }
+          ],
+          [
+            "[\"partition\",\"Synthetic\",\"Synthetic\"]",
+            {
+              "x": 0,
+              "y": 328
+            }
+          ]
+        ],
+        "viewport": {
+          "x": 50.954545454545496,
+          "y": 225.72727272727275,
+          "k": 1.0681818181818181
+        },
+        "graphUnchanged": true,
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+            "d": "M600,36 L414,36 L414,36 L252,36",
+            "hitPath": "M600,36 L414,36 L414,36 L252,36",
+            "stroke": "14px",
+            "samples": [
+              {
+                "fraction": 0.05,
+                "x": 941.2772827148438,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.1,
+                "x": 922.69091796875,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.15,
+                "x": 904.1045532226562,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.2,
+                "x": 885.5182495117188,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.25,
+                "x": 866.9318237304688,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.3,
+                "x": 848.345458984375,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.35,
+                "x": 829.7590942382812,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.4,
+                "x": 811.1727294921875,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.45,
+                "x": 792.5863647460938,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.5,
+                "x": 774,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.55,
+                "x": 755.4136352539062,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.6,
+                "x": 736.8272705078125,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.65,
+                "x": 718.2409057617188,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.7,
+                "x": 699.654541015625,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.75,
+                "x": 681.0681762695312,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.8,
+                "x": 662.4818115234375,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.85,
+                "x": 643.8954467773438,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.9,
+                "x": 625.30908203125,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.95,
+                "x": 606.7227172851562,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+            "d": "M252,60 L438,60 L438,60 L600,60",
+            "hitPath": "M252,60 L438,60 L438,60 L600,60",
+            "stroke": "14px",
+            "samples": [
+              {
+                "fraction": 0.05,
+                "x": 606.7227172851562,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.1,
+                "x": 625.30908203125,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.15,
+                "x": 643.8954467773438,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.2,
+                "x": 662.4818115234375,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.25,
+                "x": 681.0681762695312,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.3,
+                "x": 699.654541015625,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.35,
+                "x": 718.2409057617188,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.4,
+                "x": 736.8272705078125,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.45,
+                "x": 755.4136352539062,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.5,
+                "x": 774,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.55,
+                "x": 792.5863647460938,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.6,
+                "x": 811.1727294921875,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.65,
+                "x": 829.7590942382812,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.7,
+                "x": 848.345458984375,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.75,
+                "x": 866.9318237304688,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.8,
+                "x": 885.5182495117188,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.85,
+                "x": 904.1045532226562,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.9,
+                "x": 922.69091796875,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.95,
+                "x": 941.2772827148438,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              }
+            ]
+          }
+        ]
+      },
+      "clicks": [
+        {
+          "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "point": {
+            "fraction": 0.5,
+            "x": 774,
+            "y": 390.1818542480469,
+            "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+          },
+          "detail": {
+            "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+            "hidden": false,
+            "trusted": {
+              "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+              "isTrusted": true
+            }
+          }
+        },
+        {
+          "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "point": {
+            "fraction": 0.5,
+            "x": 774,
+            "y": 415.8182067871094,
+            "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+          },
+          "detail": {
+            "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+            "hidden": false,
+            "trusted": {
+              "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+              "isTrusted": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "horizontal-left",
+      "state": {
+        "layout": [
+          [
+            "[\"expression\",\"\",\"CycleA\"]",
+            {
+              "x": 0,
+              "y": 0
+            }
+          ],
+          [
+            "[\"expression\",\"\",\"CycleB\"]",
+            {
+              "x": -600,
+              "y": 0
+            }
+          ],
+          [
+            "[\"partition\",\"Synthetic\",\"Synthetic\"]",
+            {
+              "x": 0,
+              "y": 328
+            }
+          ]
+        ],
+        "viewport": {
+          "x": 691.8636363636364,
+          "y": 225.72727272727275,
+          "k": 1.0681818181818181
+        },
+        "graphUnchanged": true,
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+            "d": "M-348,60 L-162,60 L-162,60 L0,60",
+            "hitPath": "M-348,60 L-162,60 L-162,60 L0,60",
+            "stroke": "14px",
+            "samples": [
+              {
+                "fraction": 0.05,
+                "x": 606.7227172851562,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.1,
+                "x": 625.30908203125,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.15,
+                "x": 643.8954467773438,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.2,
+                "x": 662.4818115234375,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.25,
+                "x": 681.0681762695312,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.3,
+                "x": 699.654541015625,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.35,
+                "x": 718.2409057617188,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.4,
+                "x": 736.8272705078125,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.45,
+                "x": 755.4136352539062,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.5,
+                "x": 774,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.55,
+                "x": 792.5863647460938,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.6,
+                "x": 811.1727294921875,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.65,
+                "x": 829.7590942382812,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.7,
+                "x": 848.345458984375,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.75,
+                "x": 866.9318237304688,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.8,
+                "x": 885.5181884765625,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.85,
+                "x": 904.1045532226562,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.9,
+                "x": 922.69091796875,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.95,
+                "x": 941.2772827148438,
+                "y": 415.8182067871094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+            "d": "M0,36 L-186,36 L-186,36 L-348,36",
+            "hitPath": "M0,36 L-186,36 L-186,36 L-348,36",
+            "stroke": "14px",
+            "samples": [
+              {
+                "fraction": 0.05,
+                "x": 941.2772827148438,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.1,
+                "x": 922.69091796875,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.15,
+                "x": 904.1045532226562,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.2,
+                "x": 885.5181884765625,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.25,
+                "x": 866.9318237304688,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.3,
+                "x": 848.345458984375,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.35,
+                "x": 829.7590942382812,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.4,
+                "x": 811.1727294921875,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.45,
+                "x": 792.5863647460938,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.5,
+                "x": 774,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.55,
+                "x": 755.4136352539062,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.6,
+                "x": 736.8272705078125,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.65,
+                "x": 718.2409057617188,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.7,
+                "x": 699.654541015625,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.75,
+                "x": 681.0681762695312,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.8,
+                "x": 662.4818115234375,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.85,
+                "x": 643.8954467773438,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.9,
+                "x": 625.30908203125,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.95,
+                "x": 606.7227172851562,
+                "y": 390.1818542480469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              }
+            ]
+          }
+        ]
+      },
+      "clicks": [
+        {
+          "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "point": {
+            "fraction": 0.5,
+            "x": 774,
+            "y": 415.8182067871094,
+            "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+          },
+          "detail": {
+            "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+            "hidden": false,
+            "trusted": {
+              "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+              "isTrusted": true
+            }
+          }
+        },
+        {
+          "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "point": {
+            "fraction": 0.5,
+            "x": 774,
+            "y": 390.1818542480469,
+            "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+          },
+          "detail": {
+            "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+            "hidden": false,
+            "trusted": {
+              "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+              "isTrusted": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "vertical-down",
+      "state": {
+        "layout": [
+          [
+            "[\"expression\",\"\",\"CycleA\"]",
+            {
+              "x": 0,
+              "y": 0
+            }
+          ],
+          [
+            "[\"expression\",\"\",\"CycleB\"]",
+            {
+              "x": 0,
+              "y": 300
+            }
+          ],
+          [
+            "[\"partition\",\"Synthetic\",\"Synthetic\"]",
+            {
+              "x": 0,
+              "y": 328
+            }
+          ]
+        ],
+        "viewport": {
+          "x": 366.70642201834863,
+          "y": 58.110091743119284,
+          "k": 1.1055045871559632
+        },
+        "graphUnchanged": true,
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+            "d": "M114,300 L114,186 L114,186 L114,96",
+            "hitPath": "M114,300 L114,186 L114,186 L114,96",
+            "stroke": "14px",
+            "samples": [
+              {
+                "fraction": 0.05,
+                "x": 760.7339477539062,
+                "y": 504.4853210449219,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.1,
+                "x": 760.7339477539062,
+                "y": 493.2091979980469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.15,
+                "x": 760.7339477539062,
+                "y": 481.93304443359375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.2,
+                "x": 760.7339477539062,
+                "y": 470.65692138671875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.25,
+                "x": 760.7339477539062,
+                "y": 459.3807373046875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.3,
+                "x": 760.7339477539062,
+                "y": 448.1046142578125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.35,
+                "x": 760.7339477539062,
+                "y": 436.8284606933594,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.4,
+                "x": 760.7339477539062,
+                "y": 425.55230712890625,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.45,
+                "x": 760.7339477539062,
+                "y": 414.2761535644531,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.5,
+                "x": 760.7339477539062,
+                "y": 403,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.55,
+                "x": 760.7339477539062,
+                "y": 391.723876953125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.6,
+                "x": 760.7339477539062,
+                "y": 380.4477233886719,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.65,
+                "x": 760.7339477539062,
+                "y": 369.17156982421875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.7,
+                "x": 760.7339477539062,
+                "y": 357.8954162597656,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.75,
+                "x": 760.7339477539062,
+                "y": 346.6192626953125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.8,
+                "x": 760.7339477539062,
+                "y": 335.3431396484375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.85,
+                "x": 760.7339477539062,
+                "y": 324.0669860839844,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.9,
+                "x": 760.7339477539062,
+                "y": 312.79083251953125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.95,
+                "x": 760.7339477539062,
+                "y": 301.5146789550781,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+            "d": "M138,96 L138,210 L138,210 L138,300",
+            "hitPath": "M138,96 L138,210 L138,210 L138,300",
+            "stroke": "14px",
+            "samples": [
+              {
+                "fraction": 0.05,
+                "x": 787.2660522460938,
+                "y": 301.5146789550781,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.1,
+                "x": 787.2660522460938,
+                "y": 312.79083251953125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.15,
+                "x": 787.2660522460938,
+                "y": 324.0669860839844,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.2,
+                "x": 787.2660522460938,
+                "y": 335.3431396484375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.25,
+                "x": 787.2660522460938,
+                "y": 346.6192626953125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.3,
+                "x": 787.2660522460938,
+                "y": 357.8954162597656,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.35,
+                "x": 787.2660522460938,
+                "y": 369.17156982421875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.4,
+                "x": 787.2660522460938,
+                "y": 380.4477233886719,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.45,
+                "x": 787.2660522460938,
+                "y": 391.723876953125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.5,
+                "x": 787.2660522460938,
+                "y": 403,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.55,
+                "x": 787.2660522460938,
+                "y": 414.2761535644531,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.6,
+                "x": 787.2660522460938,
+                "y": 425.55230712890625,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.65,
+                "x": 787.2660522460938,
+                "y": 436.8284606933594,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.7,
+                "x": 787.2660522460938,
+                "y": 448.1046142578125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.75,
+                "x": 787.2660522460938,
+                "y": 459.3807373046875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.8,
+                "x": 787.2660522460938,
+                "y": 470.65692138671875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.85,
+                "x": 787.2660522460938,
+                "y": 481.93304443359375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.9,
+                "x": 787.2660522460938,
+                "y": 493.2091979980469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.95,
+                "x": 787.2660522460938,
+                "y": 504.4853210449219,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              }
+            ]
+          }
+        ]
+      },
+      "clicks": [
+        {
+          "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "point": {
+            "fraction": 0.5,
+            "x": 760.7339477539062,
+            "y": 403,
+            "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+          },
+          "detail": {
+            "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+            "hidden": false,
+            "trusted": {
+              "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+              "isTrusted": true
+            }
+          }
+        },
+        {
+          "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "point": {
+            "fraction": 0.5,
+            "x": 787.2660522460938,
+            "y": 403,
+            "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+          },
+          "detail": {
+            "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+            "hidden": false,
+            "trusted": {
+              "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+              "isTrusted": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "vertical-up",
+      "state": {
+        "layout": [
+          [
+            "[\"expression\",\"\",\"CycleA\"]",
+            {
+              "x": 0,
+              "y": 0
+            }
+          ],
+          [
+            "[\"expression\",\"\",\"CycleB\"]",
+            {
+              "x": 0,
+              "y": -300
+            }
+          ],
+          [
+            "[\"partition\",\"Synthetic\",\"Synthetic\"]",
+            {
+              "x": 0,
+              "y": 328
+            }
+          ]
+        ],
+        "viewport": {
+          "x": 366.70642201834863,
+          "y": 389.76146788990826,
+          "k": 1.1055045871559632
+        },
+        "graphUnchanged": true,
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+            "d": "M138,-204 L138,-90 L138,-90 L138,0",
+            "hitPath": "M138,-204 L138,-90 L138,-90 L138,0",
+            "stroke": "14px",
+            "samples": [
+              {
+                "fraction": 0.05,
+                "x": 787.2660522460938,
+                "y": 301.5146789550781,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.1,
+                "x": 787.2660522460938,
+                "y": 312.79083251953125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.15,
+                "x": 787.2660522460938,
+                "y": 324.0669860839844,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.2,
+                "x": 787.2660522460938,
+                "y": 335.3431091308594,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.25,
+                "x": 787.2660522460938,
+                "y": 346.6192626953125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.3,
+                "x": 787.2660522460938,
+                "y": 357.8954162597656,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.35,
+                "x": 787.2660522460938,
+                "y": 369.1715393066406,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.4,
+                "x": 787.2660522460938,
+                "y": 380.44769287109375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.45,
+                "x": 787.2660522460938,
+                "y": 391.7238464355469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.5,
+                "x": 787.2660522460938,
+                "y": 403,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.55,
+                "x": 787.2660522460938,
+                "y": 414.2761535644531,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.6,
+                "x": 787.2660522460938,
+                "y": 425.55230712890625,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.65,
+                "x": 787.2660522460938,
+                "y": 436.8284606933594,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.7,
+                "x": 787.2660522460938,
+                "y": 448.1045837402344,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.75,
+                "x": 787.2660522460938,
+                "y": 459.3807373046875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.8,
+                "x": 787.2660522460938,
+                "y": 470.6568908691406,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.85,
+                "x": 787.2660522460938,
+                "y": 481.9330139160156,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.9,
+                "x": 787.2660522460938,
+                "y": 493.2091979980469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.95,
+                "x": 787.2660522460938,
+                "y": 504.4853210449219,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+            "d": "M114,0 L114,-114 L114,-114 L114,-204",
+            "hitPath": "M114,0 L114,-114 L114,-114 L114,-204",
+            "stroke": "14px",
+            "samples": [
+              {
+                "fraction": 0.05,
+                "x": 760.7339477539062,
+                "y": 504.4853210449219,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.1,
+                "x": 760.7339477539062,
+                "y": 493.20916748046875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.15,
+                "x": 760.7339477539062,
+                "y": 481.93304443359375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.2,
+                "x": 760.7339477539062,
+                "y": 470.6568908691406,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.25,
+                "x": 760.7339477539062,
+                "y": 459.3807373046875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.3,
+                "x": 760.7339477539062,
+                "y": 448.1045837402344,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.35,
+                "x": 760.7339477539062,
+                "y": 436.82843017578125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.4,
+                "x": 760.7339477539062,
+                "y": 425.55230712890625,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.45,
+                "x": 760.7339477539062,
+                "y": 414.2761535644531,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.5,
+                "x": 760.7339477539062,
+                "y": 403,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.55,
+                "x": 760.7339477539062,
+                "y": 391.7238464355469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.6,
+                "x": 760.7339477539062,
+                "y": 380.44769287109375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.65,
+                "x": 760.7339477539062,
+                "y": 369.1715393066406,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.7,
+                "x": 760.7339477539062,
+                "y": 357.8954162597656,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.75,
+                "x": 760.7339477539062,
+                "y": 346.6192626953125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.8,
+                "x": 760.7339477539062,
+                "y": 335.3431091308594,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.85,
+                "x": 760.7339477539062,
+                "y": 324.0669860839844,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.9,
+                "x": 760.7339477539062,
+                "y": 312.79083251953125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.95,
+                "x": 760.7339477539062,
+                "y": 301.5146789550781,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              }
+            ]
+          }
+        ]
+      },
+      "clicks": [
+        {
+          "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "point": {
+            "fraction": 0.5,
+            "x": 787.2660522460938,
+            "y": 403,
+            "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+          },
+          "detail": {
+            "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+            "hidden": false,
+            "trusted": {
+              "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+              "isTrusted": true
+            }
+          }
+        },
+        {
+          "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "point": {
+            "fraction": 0.5,
+            "x": 760.7339477539062,
+            "y": 403,
+            "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+          },
+          "detail": {
+            "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+            "hidden": false,
+            "trusted": {
+              "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+              "isTrusted": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "vertical-diagonal",
+      "state": {
+        "layout": [
+          [
+            "[\"expression\",\"\",\"CycleA\"]",
+            {
+              "x": 0,
+              "y": 0
+            }
+          ],
+          [
+            "[\"expression\",\"\",\"CycleB\"]",
+            {
+              "x": 160,
+              "y": 400
+            }
+          ],
+          [
+            "[\"partition\",\"Synthetic\",\"Synthetic\"]",
+            {
+              "x": 0,
+              "y": 328
+            }
+          ]
+        ],
+        "viewport": {
+          "x": 320.75373134328356,
+          "y": 53.98507462686567,
+          "k": 0.8992537313432836
+        },
+        "graphUnchanged": true,
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+            "d": "M274,400 L274,236 L114,236 L114,96",
+            "hitPath": "M274,400 L274,236 L114,236 L114,96",
+            "stroke": "14px",
+            "samples": [
+              {
+                "fraction": 0.05,
+                "x": 835.1492309570312,
+                "y": 518.8238525390625,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.1,
+                "x": 835.1492309570312,
+                "y": 497.9612121582031,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.15,
+                "x": 835.1492309570312,
+                "y": 477.0985107421875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.2,
+                "x": 835.1492309570312,
+                "y": 456.23583984375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.25,
+                "x": 835.1492309570312,
+                "y": 435.3731384277344,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.3,
+                "x": 835.1492309570312,
+                "y": 414.51043701171875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.35,
+                "x": 835.1492309570312,
+                "y": 393.64776611328125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.4,
+                "x": 815.725341796875,
+                "y": 392.208984375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.45,
+                "x": 794.8626708984375,
+                "y": 392.208984375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.5,
+                "x": 774,
+                "y": 392.208984375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.55,
+                "x": 753.1373291015625,
+                "y": 392.2089538574219,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.6,
+                "x": 732.2745971679688,
+                "y": 392.2089538574219,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.65,
+                "x": 711.4119262695312,
+                "y": 392.2089538574219,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.7,
+                "x": 691.2686767578125,
+                "y": 391.48956298828125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.75,
+                "x": 691.2686767578125,
+                "y": 370.6268615722656,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.8,
+                "x": 691.2686767578125,
+                "y": 349.76416015625,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.85,
+                "x": 691.2686767578125,
+                "y": 328.9014892578125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.9,
+                "x": 691.2686767578125,
+                "y": 308.0387878417969,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.95,
+                "x": 691.2686767578125,
+                "y": 287.1761169433594,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+            "d": "M138,96 L138,260 L298,260 L298,400",
+            "hitPath": "M138,96 L138,260 L298,260 L298,400",
+            "stroke": "14px",
+            "samples": [
+              {
+                "fraction": 0.05,
+                "x": 712.8507080078125,
+                "y": 287.1761169433594,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.1,
+                "x": 712.8507080078125,
+                "y": 308.0387878417969,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.15,
+                "x": 712.8507080078125,
+                "y": 328.9014892578125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.2,
+                "x": 712.8507080078125,
+                "y": 349.7641906738281,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.25,
+                "x": 712.8507080078125,
+                "y": 370.6268615722656,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.3,
+                "x": 712.8507080078125,
+                "y": 391.48956298828125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.35,
+                "x": 712.8507080078125,
+                "y": 412.35223388671875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.4,
+                "x": 732.2745971679688,
+                "y": 413.7910461425781,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.45,
+                "x": 753.1373291015625,
+                "y": 413.7910461425781,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.5,
+                "x": 774,
+                "y": 413.7910461425781,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.55,
+                "x": 794.8626708984375,
+                "y": 413.7910461425781,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.6,
+                "x": 815.725341796875,
+                "y": 413.7910461425781,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.65,
+                "x": 836.5880737304688,
+                "y": 413.7910461425781,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.7,
+                "x": 856.7313232421875,
+                "y": 414.51043701171875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.75,
+                "x": 856.7313232421875,
+                "y": 435.3731384277344,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.8,
+                "x": 856.7313232421875,
+                "y": 456.23583984375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.85,
+                "x": 856.7313232421875,
+                "y": 477.0985107421875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.9,
+                "x": 856.7313232421875,
+                "y": 497.9612121582031,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.95,
+                "x": 856.7313232421875,
+                "y": 518.8238525390625,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              }
+            ]
+          }
+        ]
+      },
+      "clicks": [
+        {
+          "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "point": {
+            "fraction": 0.5,
+            "x": 774,
+            "y": 392.208984375,
+            "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+          },
+          "detail": {
+            "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+            "hidden": false,
+            "trusted": {
+              "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+              "isTrusted": true
+            }
+          }
+        },
+        {
+          "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "point": {
+            "fraction": 0.5,
+            "x": 774,
+            "y": 413.7910461425781,
+            "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+          },
+          "detail": {
+            "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+            "hidden": false,
+            "trusted": {
+              "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+              "isTrusted": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "horizontal-diagonal",
+      "state": {
+        "layout": [
+          [
+            "[\"expression\",\"\",\"CycleA\"]",
+            {
+              "x": 0,
+              "y": 0
+            }
+          ],
+          [
+            "[\"expression\",\"\",\"CycleB\"]",
+            {
+              "x": 581.456005859375,
+              "y": 395.031982421875
+            }
+          ],
+          [
+            "[\"partition\",\"Synthetic\",\"Synthetic\"]",
+            {
+              "x": 0,
+              "y": 328
+            }
+          ]
+        ],
+        "viewport": {
+          "x": 127.74990572877567,
+          "y": 54.15333222687434,
+          "k": 0.9076666113437178
+        },
+        "graphUnchanged": true,
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+            "d": "M581.456005859375,431.031982421875 L404.7280029296875,431.031982421875 L404.7280029296875,36 L252,36",
+            "hitPath": "M581.456005859375,431.031982421875 L404.7280029296875,431.031982421875 L404.7280029296875,36 L252,36",
+            "stroke": "14px",
+            "samples": [
+              {
+                "fraction": 0.05,
+                "x": 890.638427734375,
+                "y": 571.3866577148438,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.1,
+                "x": 857.7587280273438,
+                "y": 571.3866577148438,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.15,
+                "x": 824.8790283203125,
+                "y": 571.3866577148438,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.2,
+                "x": 791.9993896484375,
+                "y": 571.3866577148438,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.25,
+                "x": 763.1080322265625,
+                "y": 567.3984375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.3,
+                "x": 763.1080322265625,
+                "y": 534.5187377929688,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.35,
+                "x": 763.1080322265625,
+                "y": 501.6390686035156,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.4,
+                "x": 763.1080322265625,
+                "y": 468.7593688964844,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.45,
+                "x": 763.1080322265625,
+                "y": 435.8796691894531,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.5,
+                "x": 763.1080322265625,
+                "y": 403,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.55,
+                "x": 763.1080322265625,
+                "y": 370.1203308105469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.6,
+                "x": 763.1080322265625,
+                "y": 337.24066162109375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.65,
+                "x": 763.1080322265625,
+                "y": 304.3609619140625,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.7,
+                "x": 763.1080322265625,
+                "y": 271.4812927246094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.75,
+                "x": 763.1080322265625,
+                "y": 238.6016082763672,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.8,
+                "x": 756.0006103515625,
+                "y": 212.829345703125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.85,
+                "x": 723.1209716796875,
+                "y": 212.829345703125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.9,
+                "x": 690.2412719726562,
+                "y": 212.829345703125,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              },
+              {
+                "fraction": 0.95,
+                "x": 657.361572265625,
+                "y": 212.82933044433594,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+            "d": "M252,60 L428.7280029296875,60 L428.7280029296875,455.031982421875 L581.456005859375,455.031982421875",
+            "hitPath": "M252,60 L428.7280029296875,60 L428.7280029296875,455.031982421875 L581.456005859375,455.031982421875",
+            "stroke": "14px",
+            "samples": [
+              {
+                "fraction": 0.05,
+                "x": 657.361572265625,
+                "y": 234.6133270263672,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.1,
+                "x": 690.2412719726562,
+                "y": 234.6133270263672,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.15,
+                "x": 723.1209716796875,
+                "y": 234.6133270263672,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.2,
+                "x": 756.0006103515625,
+                "y": 234.6133270263672,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.25,
+                "x": 784.8920288085938,
+                "y": 238.6016082763672,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.3,
+                "x": 784.8920288085938,
+                "y": 271.4812927246094,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.35,
+                "x": 784.8920288085938,
+                "y": 304.3609619140625,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.4,
+                "x": 784.8920288085938,
+                "y": 337.24066162109375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.45,
+                "x": 784.8920288085938,
+                "y": 370.1203308105469,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.5,
+                "x": 784.8920288085938,
+                "y": 403,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.55,
+                "x": 784.8920288085938,
+                "y": 435.8796691894531,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.6,
+                "x": 784.8920288085938,
+                "y": 468.7593688964844,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.65,
+                "x": 784.8920288085938,
+                "y": 501.6390686035156,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.7,
+                "x": 784.8920288085938,
+                "y": 534.5187377929688,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.75,
+                "x": 784.8920288085938,
+                "y": 567.3984375,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.8,
+                "x": 791.9993896484375,
+                "y": 593.170654296875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.85,
+                "x": 824.8790283203125,
+                "y": 593.170654296875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.9,
+                "x": 857.7587280273438,
+                "y": 593.170654296875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              },
+              {
+                "fraction": 0.95,
+                "x": 890.638427734375,
+                "y": 593.170654296875,
+                "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+              }
+            ]
+          }
+        ]
+      },
+      "clicks": [
+        {
+          "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "point": {
+            "fraction": 0.5,
+            "x": 763.1080322265625,
+            "y": 403,
+            "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+          },
+          "detail": {
+            "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+            "hidden": false,
+            "trusted": {
+              "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+              "isTrusted": true
+            }
+          }
+        },
+        {
+          "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "point": {
+            "fraction": 0.5,
+            "x": 784.8920288085938,
+            "y": 403,
+            "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+          },
+          "detail": {
+            "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+            "hidden": false,
+            "trusted": {
+              "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+              "isTrusted": true
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "drag": {
+    "before": {
+      "layout": [
+        [
+          "[\"expression\",\"\",\"CycleA\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CycleB\"]",
+          {
+            "x": 0,
+            "y": 300
+          }
+        ],
+        [
+          "[\"partition\",\"Synthetic\",\"Synthetic\"]",
+          {
+            "x": 0,
+            "y": 328
+          }
+        ]
+      ],
+      "viewport": {
+        "x": 30,
+        "y": 50,
+        "k": 1
+      },
+      "graphUnchanged": true,
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "d": "M114,300 L114,186 L114,186 L114,96",
+          "hitPath": "M114,300 L114,186 L114,186 L114,96",
+          "stroke": "14px",
+          "samples": [
+            {
+              "fraction": 0.05,
+              "x": 412,
+              "y": 465.79998779296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.1,
+              "x": 412,
+              "y": 455.6000061035156,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.15,
+              "x": 412,
+              "y": 445.3999938964844,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.2,
+              "x": 412,
+              "y": 435.20001220703125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.25,
+              "x": 412,
+              "y": 425,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.3,
+              "x": 412,
+              "y": 414.79998779296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.35,
+              "x": 412,
+              "y": 404.6000061035156,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.4,
+              "x": 412,
+              "y": 394.3999938964844,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.45,
+              "x": 412,
+              "y": 384.20001220703125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.5,
+              "x": 412,
+              "y": 374,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.55,
+              "x": 412,
+              "y": 363.79998779296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.6,
+              "x": 412,
+              "y": 353.6000061035156,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.65,
+              "x": 412,
+              "y": 343.3999938964844,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.7,
+              "x": 412,
+              "y": 333.20001220703125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.75,
+              "x": 412,
+              "y": 323,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.8,
+              "x": 412,
+              "y": 312.79998779296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.85,
+              "x": 412,
+              "y": 302.6000061035156,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.9,
+              "x": 412,
+              "y": 292.3999938964844,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.95,
+              "x": 412,
+              "y": 282.20001220703125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "d": "M138,96 L138,210 L138,210 L138,300",
+          "hitPath": "M138,96 L138,210 L138,210 L138,300",
+          "stroke": "14px",
+          "samples": [
+            {
+              "fraction": 0.05,
+              "x": 436,
+              "y": 282.20001220703125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.1,
+              "x": 436,
+              "y": 292.3999938964844,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.15,
+              "x": 436,
+              "y": 302.6000061035156,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.2,
+              "x": 436,
+              "y": 312.79998779296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.25,
+              "x": 436,
+              "y": 323,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.3,
+              "x": 436,
+              "y": 333.20001220703125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.35,
+              "x": 436,
+              "y": 343.3999938964844,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.4,
+              "x": 436,
+              "y": 353.6000061035156,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.45,
+              "x": 436,
+              "y": 363.79998779296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.5,
+              "x": 436,
+              "y": 374,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.55,
+              "x": 436,
+              "y": 384.20001220703125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.6,
+              "x": 436,
+              "y": 394.3999938964844,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.65,
+              "x": 436,
+              "y": 404.6000061035156,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.7,
+              "x": 436,
+              "y": 414.79998779296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.75,
+              "x": 436,
+              "y": 425,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.8,
+              "x": 436,
+              "y": 435.20001220703125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.85,
+              "x": 436,
+              "y": 445.3999938964844,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.9,
+              "x": 436,
+              "y": 455.6000061035156,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.95,
+              "x": 436,
+              "y": 465.79998779296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            }
+          ]
+        }
+      ]
+    },
+    "after": {
+      "layout": [
+        [
+          "[\"expression\",\"\",\"CycleA\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CycleB\"]",
+          {
+            "x": 581.4500122070312,
+            "y": 395.030029296875
+          }
+        ],
+        [
+          "[\"partition\",\"Synthetic\",\"Synthetic\"]",
+          {
+            "x": 0,
+            "y": 328
+          }
+        ]
+      ],
+      "viewport": {
+        "x": 30,
+        "y": 50,
+        "k": 1
+      },
+      "graphUnchanged": true,
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "d": "M581.4500122070312,431.030029296875 L404.7250061035156,431.030029296875 L404.7250061035156,36 L252,36",
+          "hitPath": "M581.4500122070312,431.030029296875 L404.7250061035156,431.030029296875 L404.7250061035156,36 L252,36",
+          "stroke": "14px",
+          "samples": [
+            {
+              "fraction": 0.05,
+              "x": 843.2260131835938,
+              "y": 607.030029296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.1,
+              "x": 807.0020141601562,
+              "y": 607.030029296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.15,
+              "x": 770.7780151367188,
+              "y": 607.030029296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.2,
+              "x": 734.5540161132812,
+              "y": 607.030029296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.25,
+              "x": 702.7250366210938,
+              "y": 602.635009765625,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.3,
+              "x": 702.7250366210938,
+              "y": 566.4110107421875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.35,
+              "x": 702.7249755859375,
+              "y": 530.18701171875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.4,
+              "x": 702.7249755859375,
+              "y": 493.9630126953125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.45,
+              "x": 702.7249755859375,
+              "y": 457.739013671875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.5,
+              "x": 702.7249755859375,
+              "y": 421.5150146484375,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.55,
+              "x": 702.7249755859375,
+              "y": 385.291015625,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.6,
+              "x": 702.7249755859375,
+              "y": 349.0670166015625,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.65,
+              "x": 702.7249755859375,
+              "y": 312.843017578125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.7,
+              "x": 702.7249755859375,
+              "y": 276.6190185546875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.75,
+              "x": 702.7249755859375,
+              "y": 240.39501953125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.8,
+              "x": 694.89599609375,
+              "y": 212.00001525878906,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.85,
+              "x": 658.6719970703125,
+              "y": 212,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.9,
+              "x": 622.447998046875,
+              "y": 212,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "fraction": 0.95,
+              "x": 586.2239990234375,
+              "y": 212,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "d": "M252,60 L428.7250061035156,60 L428.7250061035156,455.030029296875 L581.4500122070312,455.030029296875",
+          "hitPath": "M252,60 L428.7250061035156,60 L428.7250061035156,455.030029296875 L581.4500122070312,455.030029296875",
+          "stroke": "14px",
+          "samples": [
+            {
+              "fraction": 0.05,
+              "x": 586.2239990234375,
+              "y": 236,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.1,
+              "x": 622.447998046875,
+              "y": 236,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.15,
+              "x": 658.6719970703125,
+              "y": 236,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.2,
+              "x": 694.89599609375,
+              "y": 236,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.25,
+              "x": 726.7250366210938,
+              "y": 240.39501953125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.3,
+              "x": 726.7250366210938,
+              "y": 276.6190185546875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.35,
+              "x": 726.7249755859375,
+              "y": 312.843017578125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.4,
+              "x": 726.7249755859375,
+              "y": 349.0670166015625,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.45,
+              "x": 726.7249755859375,
+              "y": 385.291015625,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.5,
+              "x": 726.7249755859375,
+              "y": 421.5150146484375,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.55,
+              "x": 726.7249755859375,
+              "y": 457.739013671875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.6,
+              "x": 726.7249755859375,
+              "y": 493.9630126953125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.65,
+              "x": 726.7249755859375,
+              "y": 530.18701171875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.7,
+              "x": 726.7249755859375,
+              "y": 566.4110107421875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.75,
+              "x": 726.7249755859375,
+              "y": 602.635009765625,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.8,
+              "x": 734.5540161132812,
+              "y": 631.030029296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.85,
+              "x": 770.7780151367188,
+              "y": 631.030029296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.9,
+              "x": 807.0020141601562,
+              "y": 631.030029296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "fraction": 0.95,
+              "x": 843.2260131835938,
+              "y": 631.030029296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            }
+          ]
+        }
+      ]
+    },
+    "events": [
+      {
+        "type": "pointerdown",
+        "isTrusted": true
+      }
+    ],
+    "clicks": [
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "fraction": 0.2,
+          "x": 734.5540161132812,
+          "y": 607.030029296875,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "hidden": false,
+          "trusted": {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+            "isTrusted": true
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "fraction": 0.8,
+          "x": 694.89599609375,
+          "y": 212.00001525878906,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "hidden": false,
+          "trusted": {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+            "isTrusted": true
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "fraction": 0.2,
+          "x": 694.89599609375,
+          "y": 236,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "hidden": false,
+          "trusted": {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+            "isTrusted": true
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "fraction": 0.8,
+          "x": 734.5540161132812,
+          "y": 631.030029296875,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "hidden": false,
+          "trusted": {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+            "isTrusted": true
+          }
+        }
+      }
+    ]
+  },
+  "screenshots": {
+    "before": "/Users/przemek.harazny/.t3/userdata/browser-artifacts/browser-screenshot-localhost-mv137s6f-5afb2b9b.png",
+    "afterExact": "/Users/przemek.harazny/.t3/userdata/browser-artifacts/browser-screenshot-localhost-mv138ri3-b9ae0dab.png",
+    "afterDrag": "/Users/przemek.harazny/.t3/userdata/browser-artifacts/browser-screenshot-localhost-mv13aq00-bc7fbba8.png"
+  }
+}
