@@ -1289,6 +1289,8 @@
       cv.computeLayout(); this.render(true); cv.build();
       var tableView = workspace.tableView || { name: 'Snapshot', tables: model.tables.map(function (table) { return table.name; }), pos: {} };
       cv.applyPreset(tableView);
+      // CLI snapshots have positions but no sender viewport. Fit for the recipient.
+      if (tableView.autoFit === true) cv.fitView();
       this._tableViewport = Object.assign({}, cv.view);
       this._tableWorkspace = this.captureTableView();
       cv.setPresets(Array.isArray(workspace.presets) ? workspace.presets : []);
@@ -1376,6 +1378,9 @@
       this._idbGet('repo').then(function (h) { if (h) { self.repoHandle = h; self.autoReconnect(); } }).catch(function () { });
     }
   };
+
+  // The CLI reuses model preparation without constructing the browser application.
+  if (typeof module === 'object' && module.exports) module.exports = App;
 
   window.addEventListener('DOMContentLoaded', function () {
     function start() { var app = new App(); window.app = app; app.render(); return app.init(); }

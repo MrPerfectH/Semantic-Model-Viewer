@@ -16,7 +16,7 @@
     return ls.map(function(l){ return l.slice(min).replace(/\s+$/,''); }).join('\n');
   }
 
-  function parseRelText(text){
+  function parseRelText(text, options){
     var out=[], cur=null;
     text.split(/\r?\n/).forEach(function(raw){
       var t=raw.trim(); if(!t) return;
@@ -27,7 +27,12 @@
       else if((m=t.match(/^toCardinality:\s*(\w+)/))) cur.toCard=m[1];
       else if((m=t.match(/^fromCardinality:\s*(\w+)/))) cur.fromCard=m[1];
       else if(/^isActive:\s*false/.test(t)) cur.inactive=true;
-      else if(/^crossFilteringBehavior:\s*bothDirections/.test(t)) cur.both=true;
+      else if((m=t.match(/^crossFilteringBehavior:\s*(\S+)/))){
+        cur.both=m[1]==='bothDirections';
+      }
+    });
+    if(options && options.strictRelationships) out.forEach(function(r){
+      if(!r.from||!r.fromCol||!r.to||!r.toCol) throw new Error('Relationship is missing a table or column endpoint.');
     });
     return out.filter(function(r){ return r.from&&r.fromCol&&r.to&&r.toCol; });
   }
@@ -239,11 +244,16 @@
     return out;
   }
 
-  function finalize(name, tables, rels, ctx){
+  function finalize(name, tables, rels, ctx, options){
     var byName={}; tables.forEach(function(t){ byName[t.name]=t; });
     var seen={};
-    rels=rels.filter(function(r){ return byName[r.from]&&byName[r.to]; })
-      .filter(function(r){ var k=r.from+'|'+r.fromCol+'|'+r.to+'|'+r.toCol; if(seen[k])return false; seen[k]=1; return true; });
+    if(options && options.strictRelationships){
+      // A snapshot must not silently drop dangling or parallel relationships.
+      rels.forEach(function(r){if(!byName[r.from]||!byName[r.to])throw new Error('Relationship refers to a missing table: '+r.from+' → '+r.to);});
+    } else {
+      rels=rels.filter(function(r){ return byName[r.from]&&byName[r.to]; })
+        .filter(function(r){ var k=r.from+'|'+r.fromCol+'|'+r.to+'|'+r.toCol; if(seen[k])return false; seen[k]=1; return true; });
+    }
     var oneSide={}, manySide={}, rc={};
     rels.forEach(function(r){
       rc[r.from]=(rc[r.from]||0)+1; rc[r.to]=(rc[r.to]||0)+1;
@@ -301,7 +311,7 @@
     flush();
   }
 
-  function parseTMDL(files){
+  function parseTMDL(files, options){
     var tables=[], rels=[], name='';
     var ctx={exprs:{}, exprNames:[], params:{}};
     files.forEach(function(f){
@@ -316,13 +326,13 @@
          `database` line, so it would greedily swallow the next line's own
          property (e.g. `compatibilityLevel: 1606`) and misread it as the name */
       var m=txt.match(/^database[ \t]+(.+)$/m); if(m) name=unq(m[1]);
-      if(/^relationship\s/m.test(txt) && /fromColumn:/.test(txt)) rels=rels.concat(parseRelText(txt));
+      if(/^relationship\s/m.test(txt) && ((options && options.strictRelationships) || /fromColumn:/.test(txt))) rels=rels.concat(parseRelText(txt, options));
       if(/^table\s/m.test(txt)){ var t=parseTableText(txt); if(t) tables.push(t); }
     });
     /* tables are queries too — `Source = MdGeoEntities` points at another table's partition */
     tables.forEach(function(t){ var fl=t._flags||{}; if(fl.partSrc && !ctx.exprs[t.name]) ctx.exprs[t.name]=fl.partSrc; });
     ctx.exprNames=Object.keys(ctx.exprs).sort(function(a,b){ return b.length-a.length; });
-    return finalize(name, tables, rels, ctx);
+    return finalize(name, tables, rels, ctx, options);
   }
 
   function parseBIM(j){
