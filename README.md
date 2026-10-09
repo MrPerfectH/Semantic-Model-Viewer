@@ -146,6 +146,18 @@ explore **Tables, Measures, Domains, and Matrix** without installing anything or
 connecting to the semantic model. Saved table views, formulas, comparisons, focus,
 layout preferences, and graph positions travel with the file.
 
+### Generate a snapshot from TMDL
+
+With Node.js 22+, export an offline, interactive HTML snapshot from a TMDL folder:
+
+```bash
+node bin/smv.cjs snapshot "Models/demo/Contoso Retail.SemanticModel" --out snapshot.html
+```
+
+Open the file in a browser to explore the model. Optionally use `--tables` or
+`--measure` to choose the starting view; the full model remains available.
+No extra packages or browser are needed to export. See [CLI usage](docs/cli.md).
+
 A snapshot contains the **full model metadata and DAX**, even if the starting canvas
 is empty or focused on a few tables. It is frozen at the displayed creation time.
 Recipients can use **Save snapshot** again to keep their presentation changes in a
