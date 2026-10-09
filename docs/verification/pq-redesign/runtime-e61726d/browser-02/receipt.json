@@ -1,0 +1,38 @@
+{
+  "candidate": "e61726d4b10c798ec7b68fc329a03c54bc1983ca",
+  "mapping": "exact 32 browser runtime assets; worktree feature files unchanged",
+  "boundary": "fresh isolated authorized Chrome CDP fallback; synthetic metadata; not native",
+  "startedAt": "2026-10-09T09:47:13.567Z",
+  "checks": [
+    {
+      "name": "Tables → PQ → Tables retains viewport layout selection marks; PQ Escape is isolated",
+      "status": "pass"
+    },
+    {
+      "name": "Filter hidden selection, exact-reference reveal, Back and reset retain context",
+      "status": "pass"
+    },
+    {
+      "name": "Exact CRLF and five quoted/repeated references survive merged parser; exact clipboard",
+      "status": "pass"
+    },
+    {
+      "name": "Main Measures entry and original/long/short DAX UI formatting",
+      "status": "pass"
+    },
+    {
+      "name": "Default snapshot privacy and offline Measures formatter/PQ unavailable",
+      "status": "pass"
+    }
+  ],
+  "failures": [],
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "assetsReverified": 32,
+  "endedAt": "2026-10-09T09:47:18.533Z"
+}
