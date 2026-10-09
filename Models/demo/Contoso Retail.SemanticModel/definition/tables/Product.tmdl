@@ -40,6 +40,17 @@ table Product
 		lineageTag: 1e24cc81-31fd-5169-bb9d-c4d75dff0908
 		sourceColumn: category_key
 
+	column 'Price Band' = ```
+			SWITCH(
+			    TRUE(),
+			    [List Price] >= 500, "Premium",
+			    [List Price] >= 100, "Standard",
+			    "Entry"
+			)
+			```
+		dataType: string
+		lineageTag: 6a1f3c52-8d1e-5e0b-9b7c-2f4a8c1d7e90
+
 	partition Product = m
 		mode: import
 		source =
