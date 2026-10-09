@@ -1,0 +1,41 @@
+{
+  "candidate": "9c3b836ecfcbf36a6888b576b5b8eba9f16886cd",
+  "startedAt": "2026-10-09T14:48:38.779Z",
+  "boundary": "explicitly authorized narrow capability fallback while T3 available; fresh isolated Chrome; not native VS Code",
+  "cases": [],
+  "checks": [
+    {
+      "name": "Actual resize transition 1280 step0 zoom2",
+      "status": "pass"
+    },
+    {
+      "name": "Actual resize transition 1280 step1 zoom1",
+      "status": "pass"
+    },
+    {
+      "name": "Actual resize transition 1280 step2 zoom2",
+      "status": "pass"
+    },
+    {
+      "name": "Actual resize transition 1440 step0 zoom2",
+      "status": "pass"
+    },
+    {
+      "name": "Actual resize transition 1440 step1 zoom1",
+      "status": "pass"
+    },
+    {
+      "name": "Actual resize transition 1440 step2 zoom2",
+      "status": "pass"
+    }
+  ],
+  "failures": [],
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "endedAt": "2026-10-09T14:48:45.935Z"
+}

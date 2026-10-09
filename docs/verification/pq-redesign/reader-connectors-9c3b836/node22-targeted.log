@@ -1,0 +1,256 @@
+TAP version 13
+# Subtest: entire registry is initially laid out including disconnected/status/duplicate display IDs
+ok 1 - entire registry is initially laid out including disconnected/status/duplicate display IDs
+  ---
+  duration_ms: 3.793709
+  type: 'test'
+  ...
+# Subtest: zero-edge model is complete and supplied cycle components are grouped
+ok 2 - zero-edge model is complete and supplied cycle components are grouped
+  ---
+  duration_ms: 1.451583
+  type: 'test'
+  ...
+# Subtest: visibility is silent induced-edge projection; matches only dim; hidden selection/minimap remain explicit
+ok 3 - visibility is silent induced-edge projection; matches only dim; hidden selection/minimap remain explicit
+  ---
+  duration_ms: 1.564625
+  type: 'test'
+  ...
+# Subtest: empty projection does not discard complete model or auto-fit
+ok 4 - empty projection does not discard complete model or auto-fit
+  ---
+  duration_ms: 0.961667
+  type: 'test'
+  ...
+# Subtest: pan threshold distinguishes blank click from drag; node drag is layout only
+ok 5 - pan threshold distinguishes blank click from drag; node drag is layout only
+  ---
+  duration_ms: 1.840208
+  type: 'test'
+  ...
+# Subtest: wheel/pinch keep gesture anchor fixed and have finite positive scale
+ok 6 - wheel/pinch keep gesture anchor fixed and have finite positive scale
+  ---
+  duration_ms: 1.118
+  type: 'test'
+  ...
+# Subtest: provided-host keyboard fallback pans; node arrows rove/Enter selects; input shortcuts ignored
+ok 7 - provided-host keyboard fallback pans; node arrows rove/Enter selects; input shortcuts ignored
+  ---
+  duration_ms: 0.867167
+  type: 'test'
+  ...
+# Subtest: queued resize after explicit Back viewport restore cannot translate or notify
+ok 8 - queued resize after explicit Back viewport restore cannot translate or notify
+  ---
+  duration_ms: 0.622209
+  type: 'test'
+  ...
+# Subtest: edge callback uses host CSS anchor and full stable edge ID
+ok 9 - edge callback uses host CSS anchor and full stable edge ID
+  ---
+  duration_ms: 1.443958
+  type: 'test'
+  ...
+# Subtest: layout captures cannot restore into another generation with coincident IDs
+ok 10 - layout captures cannot restore into another generation with coincident IDs
+  ---
+  duration_ms: 1.104833
+  type: 'test'
+  ...
+# Subtest: same-generation updates/layout restores preserve view; generation/null clears filters and old gestures
+ok 11 - same-generation updates/layout restores preserve view; generation/null clears filters and old gestures
+  ---
+  duration_ms: 1.379917
+  type: 'test'
+  ...
+# Subtest: 300/301/350/1000 registries and parameter fanout retain last object without caps
+ok 12 - 300/301/350/1000 registries and parameter fanout retain last object without caps
+  ---
+  duration_ms: 66.52125
+  type: 'test'
+  ...
+# Subtest: search and focus dim independently without hiding membership or mutating registry
+ok 13 - search and focus dim independently without hiding membership or mutating registry
+  ---
+  duration_ms: 1.088334
+  type: 'test'
+  ...
+# Subtest: explicit Arrange touches only visible requested positions and is silent, registry preserving and undoable
+ok 14 - explicit Arrange touches only visible requested positions and is silent, registry preserving and undoable
+  ---
+  duration_ms: 0.618125
+  type: 'test'
+  ...
+# Subtest: minimap nodes, induced edges and bounds use only rendered IDs; empty stays honest and registry survives
+ok 15 - minimap nodes, induced edges and bounds use only rendered IDs; empty stays honest and registry survives
+  ---
+  duration_ms: 0.701041
+  type: 'test'
+  ...
+# Subtest: Center genuinely centers already-visible nodes at pan/zoom and side/below/resized host bounds
+ok 16 - Center genuinely centers already-visible nodes at pan/zoom and side/below/resized host bounds
+  ---
+  duration_ms: 0.732166
+  type: 'test'
+  ...
+# Subtest: blank/add repositions far-away new members near current view collision-free, preserves other manual positions and Undo
+ok 17 - blank/add repositions far-away new members near current view collision-free, preserves other manual positions and Undo
+  ---
+  duration_ms: 0.714333
+  type: 'test'
+  ...
+# Subtest: narrow side canvas prefers a visible vertical neighbor; collisions preserve the manual anchor
+ok 18 - narrow side canvas prefers a visible vertical neighbor; collisions preserve the manual anchor
+  ---
+  duration_ms: 0.629625
+  type: 'test'
+  ...
+# Subtest: straight routes retain input-to-consumer endpoints after reversal, stacking and self cycles; hit path follows geometry
+ok 19 - straight routes retain input-to-consumer endpoints after reversal, stacking and self cycles; hit path follows geometry
+  ---
+  duration_ms: 0.866708
+  type: 'test'
+  ...
+# Subtest: straight long links detour around visible intervening cards and simplify when the obstacle is hidden
+ok 20 - straight long links detour around visible intervening cards and simplify when the obstacle is hidden
+  ---
+  duration_ms: 0.575833
+  type: 'test'
+  ...
+# Subtest: exact CRLF/quoted/repeated/non-BMP source slices are separate from numbered gutter; Copy original source
+ok 21 - exact CRLF/quoted/repeated/non-BMP source slices are separate from numbered gutter; Copy original source
+  ---
+  duration_ms: 6.314292
+  type: 'test'
+  ...
+# Subtest: invalid/overlapping/missing-target spans never create guessed links
+ok 22 - invalid/overlapping/missing-target spans never create guessed links
+  ---
+  duration_ms: 2.693917
+  type: 'test'
+  ...
+# Subtest: opaque uncertainty is neutral disclosure; presentation diagnostics are review; no regex classification
+ok 23 - opaque uncertainty is neutral disclosure; presentation diagnostics are review; no regex classification
+  ---
+  duration_ms: 0.520917
+  type: 'test'
+  ...
+# Subtest: duplicate graph IDs select exactly supplied rows; status rows have no invented M
+ok 24 - duplicate graph IDs select exactly supplied rows; status rows have no invented M
+  ---
+  duration_ms: 0.586625
+  type: 'test'
+  ...
+# Subtest: capture/restore contains both scroll axes, wrap and stable occurrence descriptor
+ok 25 - capture/restore contains both scroll axes, wrap and stable occurrence descriptor
+  ---
+  duration_ms: 1.088459
+  type: 'test'
+  ...
+# Subtest: new selection, same-ID select, close, suspend, reset and destroy cancel queued restores
+ok 26 - new selection, same-ID select, close, suspend, reset and destroy cancel queued restores
+  ---
+  duration_ms: 4.223167
+  type: 'test'
+  ...
+# Subtest: newer restore/direct focus wins within same generation
+ok 27 - newer restore/direct focus wins within same generation
+  ---
+  duration_ms: 0.571667
+  type: 'test'
+  ...
+# Subtest: same-generation context and hide/reopen preserve view; generation reset clears hidden source and callbacks
+ok 28 - same-generation context and hide/reopen preserve view; generation reset clears hidden source and callbacks
+  ---
+  duration_ms: 0.498875
+  type: 'test'
+  ...
+# Subtest: clipboard completion after close/reopen or reset cannot repaint code/status
+ok 29 - clipboard completion after close/reopen or reset cannot repaint code/status
+  ---
+  duration_ms: 1.134
+  type: 'test'
+  ...
+# Subtest: focus controls emit only generation/selected-ID actions; Infinity serializes without changing source/view
+ok 30 - focus controls emit only generation/selected-ID actions; Infinity serializes without changing source/view
+  ---
+  duration_ms: 1.123458
+  type: 'test'
+  ...
+# Subtest: history restores focused controls by descriptor and never keeps old control DOM
+ok 31 - history restores focused controls by descriptor and never keeps old control DOM
+  ---
+  duration_ms: 0.605083
+  type: 'test'
+  ...
+# Subtest: Back retains strict 325px scroll with always-visible options; unrelated disclosures stay closed
+ok 32 - Back retains strict 325px scroll with always-visible options; unrelated disclosures stay closed
+  ---
+  duration_ms: 1.638541
+  type: 'test'
+  ...
+# Subtest: all four optional disclosure combinations restore exact scroll and booleans across source selection
+ok 33 - all four optional disclosure combinations restore exact scroll and booleans across source selection
+  ---
+  duration_ms: 3.449
+  type: 'test'
+  ...
+# Subtest: legacy and partial disclosure state leave absent, invalid and unknown sections untouched
+ok 34 - legacy and partial disclosure state leave absent, invalid and unknown sections untouched
+  ---
+  duration_ms: 0.878125
+  type: 'test'
+  ...
+# Subtest: restored primary focus preserves scroll, and focus-triggered navigation cannot receive old scroll
+ok 35 - restored primary focus preserves scroll, and focus-triggered navigation cannot receive old scroll
+  ---
+  duration_ms: 0.852208
+  type: 'test'
+  ...
+# Subtest: stale disclosure restores cannot reopen prior or current source after any lifecycle cancellation
+ok 36 - stale disclosure restores cannot reopen prior or current source after any lifecycle cancellation
+  ---
+  duration_ms: 3.025458
+  type: 'test'
+  ...
+# Subtest: primary neighborhood controls stay visible, default wrap is true and explicit saved false survives history
+ok 37 - primary neighborhood controls stay visible, default wrap is true and explicit saved false survives history
+  ---
+  duration_ms: 1.053333
+  type: 'test'
+  ...
+# Subtest: expanded reader moves exact code DOM, copies original CRLF/UTF16 source, Escape closes reader first and returns focus
+ok 38 - expanded reader moves exact code DOM, copies original CRLF/UTF16 source, Escape closes reader first and returns focus
+  ---
+  duration_ms: 0.622708
+  type: 'test'
+  ...
+# Subtest: expanded history restores source focus/scroll and cannot reopen after stale lifecycle work
+ok 39 - expanded history restores source focus/scroll and cannot reopen after stale lifecycle work
+  ---
+  duration_ms: 2.713667
+  type: 'test'
+  ...
+# Subtest: reader keyboard boundary stays inside, and native-dialog autofocus navigation cancels old view restore
+ok 40 - reader keyboard boundary stays inside, and native-dialog autofocus navigation cancels old view restore
+  ---
+  duration_ms: 0.728375
+  type: 'test'
+  ...
+# Subtest: full-query entry precedes all focus controls and source without duplicating or reformatting code
+ok 41 - full-query entry precedes all focus controls and source without duplicating or reformatting code
+  ---
+  duration_ms: 0.5065
+  type: 'test'
+  ...
+1..41
+# tests 41
+# suites 0
+# pass 41
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 134.405667

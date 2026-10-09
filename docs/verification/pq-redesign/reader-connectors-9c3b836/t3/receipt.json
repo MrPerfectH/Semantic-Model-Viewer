@@ -1,0 +1,13 @@
+{
+  "candidate": "9c3b836ecfcbf36a6888b576b5b8eba9f16886cd",
+  "transport": "T3 collaborative preview",
+  "startedAt": "2026-10-09T14:44:21.752Z",
+  "checks": [
+    {
+      "name": "wide-sticky-long-exact-reader",
+      "status": "pass"
+    }
+  ],
+  "failures": [],
+  "endedAt": "2026-10-09T14:44:25.269Z"
+}
