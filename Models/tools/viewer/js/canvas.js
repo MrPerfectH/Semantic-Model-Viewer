@@ -899,7 +899,19 @@
         else { ax = ca.x; bx = cb.x; adir = -1; bdir = -1; }
         if (Math.abs(ay - by) < 30) { ax = ca.x + ca.w; bx = cb.x + cb.w; adir = 1; bdir = 1; }
       }
-      return { ax: ax, ay: ay, bx: bx, by: by, dir: adir, adir: adir, bdir: bdir, a: a, b: b };
+      // Pick the facing side independently at each endpoint. Normalize the
+      // center-to-center direction by each card's proportions, so a diagonal
+      // relationship can use a bottom port on one card and a side port on another.
+      // Expanded cards retain the horizontal anchors of their column rows.
+      var dx = cb.x + cb.w / 2 - ca.x - ca.w / 2;
+      var dy = cb.y + cb.h / 2 - ca.y - ca.h / 2;
+      var rowGap = cb.y >= ca.y + ca.h + 44 || ca.y >= cb.y + cb.h + 44;
+      var av = !this.cards[a].expanded && rowGap && Math.abs(dy) / ca.h > Math.abs(dx) / ca.w;
+      var bv = !this.cards[b].expanded && rowGap && Math.abs(dy) / cb.h > Math.abs(dx) / cb.w;
+      if (av) { ax = ca.x + ca.w / 2; ay = dy > 0 ? ca.y + ca.h : ca.y; adir = dy > 0 ? 1 : -1; }
+      if (bv) { bx = cb.x + cb.w / 2; by = dy > 0 ? cb.y : cb.y + cb.h; bdir = dy > 0 ? -1 : 1; }
+      return { ax: ax, ay: ay, bx: bx, by: by, dir: adir, adir: adir, bdir: bdir,
+        aaxis: av ? 'v' : 'h', baxis: bv ? 'v' : 'h', axis: av && bv ? 'v' : av || bv ? 'mixed' : undefined, a: a, b: b };
     },
     bezierPath: function (ax, ay, bx, by, adir, bdir) {
       if (bdir == null) bdir = -adir;
@@ -959,57 +971,161 @@
     edgeGeom: function (g0, spread, slot, rects, bare) {
       bare = bare == null ? this.view.k < this.PILL_ZOOM : !!bare;
       if (this.lineStyle === 'curve') {
-        var cp = g0.adir === g0.bdir ? 70 : Math.max(46, Math.min(190, Math.abs(g0.bx - g0.ax) * 0.5));
-        var p1x = g0.ax + g0.adir * cp, p2x = g0.bx + g0.bdir * cp;
+        var cp = g0.adir === g0.bdir ? 70 : Math.max(46, Math.min(190, Math.abs(g0.axis === 'v' ? g0.by - g0.ay : g0.bx - g0.ax) * 0.5));
+        var av = (g0.aaxis || g0.axis) === 'v', bv = (g0.baxis || g0.axis) === 'v';
+        var p1x = g0.ax + (av ? 0 : g0.adir * cp), p2x = g0.bx + (bv ? 0 : g0.bdir * cp);
+        var p1y = g0.ay + (av ? g0.adir * cp : 0), p2y = g0.by + (bv ? g0.bdir * cp : 0);
         var B = function (t) {
           var u = 1 - t;
           /* tangent points towards B; table A lies the other way */
           var tx = 3 * u * u * (p1x - g0.ax) + 6 * u * t * (p2x - p1x) + 3 * t * t * (g0.bx - p2x);
-          var ty = 6 * u * t * (g0.by - g0.ay);
+          var ty = 3 * u * u * (p1y - g0.ay) + 6 * u * t * (p2y - p1y) + 3 * t * t * (g0.by - p2y);
           var vert = Math.abs(ty) > Math.abs(tx);
           return { x: u * u * u * g0.ax + 3 * u * u * t * p1x + 3 * u * t * t * p2x + t * t * t * g0.bx,
-                   y: u * u * u * g0.ay + 3 * u * u * t * g0.ay + 3 * u * t * t * g0.by + t * t * t * g0.by,
+                   y: u * u * u * g0.ay + 3 * u * u * t * p1y + 3 * u * t * t * p2y + t * t * t * g0.by,
                    orient: vert ? 'v' : 'h', toA: vert ? (ty > 0 ? -1 : 1) : (tx > 0 ? -1 : 1), bare: bare };
         };
-        return { d: this.bezierPath(g0.ax, g0.ay, g0.bx, g0.by, g0.adir, g0.bdir), spots: [B(0.5), B(0.35), B(0.65), B(0.2), B(0.8)] };
+        return { d: 'M ' + g0.ax + ' ' + g0.ay + ' C ' + p1x + ' ' + p1y + ', ' + p2x + ' ' + p2y + ', ' + g0.bx + ' ' + g0.by, spots: [B(0.5), B(0.35), B(0.65), B(0.2), B(0.8)] };
       }
-      var cx = this.channelX(g0, spread, rects);
-      var pts = [{ x: g0.ax, y: g0.ay }, { x: cx, y: g0.by === g0.ay ? g0.ay : g0.ay }, { x: cx, y: g0.by }, { x: g0.bx, y: g0.by }];
-      /* Seats are measured against the label actually drawn: its length along the line plus
-         a reader's margin either side. Both are screen-pixel sizes (hence world units through
-         labelDims), so a run that can carry the pill at one zoom carries it at every zoom. */
-      var L = this.labelDims(bare), Lw = L.w, M = L.m, need = Lw + 2 * M;
-      var spots = [];
-      var seat = function (x, y, orient, toA) { return { x: x, y: y, orient: orient, toA: toA, bare: bare }; };
-      var vlen = Math.abs(g0.by - g0.ay);
-      /* on the vertical run the pill stands upright; toA says which way table A lies */
-      var vToA = g0.ay > g0.by ? 1 : -1;
-      if (vlen >= need) {
-        /* stagger labels that share a channel along the vertical run so they never stack */
-        var lo = Math.min(g0.ay, g0.by) + Lw / 2 + M, hi = Math.max(g0.ay, g0.by) - Lw / 2 - M;
-        var y0 = (g0.ay + g0.by) / 2 + (slot || 0) * (Lw + 1.7 * M);
-        spots.push(seat(cx, Math.max(lo, Math.min(hi, y0)), 'v', vToA));
-        /* then walk the run both ways from the middle: a long channel in a dense picture
-           brushes several cards, and the gap between two of them is where the pill fits */
-        [0.3, 0.7, 0.15, 0.85, 0.4, 0.6, 0.22, 0.78].forEach(function (t) { spots.push(seat(cx, Math.max(lo, Math.min(hi, Math.min(g0.ay, g0.by) + vlen * t)), 'v', vToA)); });
-      }
-      /* Horizontal runs only when the line actually crosses from one side to the other.
-         On a C-shaped hook both cards sit on the same side of the channel, so a left/right
-         arrow there points at the bend, not at a table — which reads as the wrong direction. */
-      var zShape = g0.adir !== g0.bdir;
-      if (zShape) {
-        var hA = Math.abs(cx - g0.ax), hB = Math.abs(g0.bx - cx);
-        [0.5, 0.35, 0.65].forEach(function (t) {
-          if (hA >= need) spots.push(seat(g0.ax + (cx - g0.ax) * t, g0.ay, 'h', g0.ax > cx ? 1 : -1));
-          if (hB >= need) spots.push(seat(cx + (g0.bx - cx) * t, g0.by, 'h', cx > g0.bx ? 1 : -1));
+      var pts = this.relationshipPoints(g0, spread, rects || []);
+      var L = this.labelDims(bare), need = L.w + 2 * L.m, spots = [], short = [];
+      var segments = pts.slice(1).map(function (b, i) { return { a: pts[i], b: b }; });
+      segments.sort(function (a, b) { return Number(b.a.x === b.b.x) - Number(a.a.x === a.b.x); });
+      for (var i = 0; i < segments.length; i++) {
+        var a = segments[i].a, b = segments[i].b, vertical = a.x === b.x;
+        var len = Math.abs(b.x - a.x) + Math.abs(b.y - a.y);
+        if (!len) continue;
+        var toA = vertical ? (a.y > b.y ? 1 : -1) : (a.x > b.x ? 1 : -1);
+        var seats = len >= need ? spots : short;
+        if (len < L.w * 0.6) continue;
+        [0.5, 0.3, 0.7].forEach(function (t) {
+          var margin = Math.min(0.5, (L.w / 2 + L.m) / len);
+          t = Math.max(margin, Math.min(1 - margin, t + (slot || 0) * need / len));
+          seats.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t,
+            orient: vertical ? 'v' : 'h', toA: toA, bare: bare });
         });
       }
-      /* a short vertical run still beats the fallback: the label overhangs the bends a little */
-      if (vlen >= Lw * 0.6 && vlen < need) spots.push(seat(cx, (g0.ay + g0.by) / 2, 'v', vToA));
-      if (!spots.length) spots.push(zShape
-        ? seat(cx, (g0.ay + g0.by) / 2, 'h', g0.ax > g0.bx ? 1 : -1)
-        : seat(cx, (g0.ay + g0.by) / 2, 'v', vToA));
-      return { d: this.orthoPath(pts, 9), spots: spots };
+      if (!spots.length) spots = short;
+      if (!spots.length) {
+        // Even a tiny connection must offer a seat for the bare filter arrow.
+        var longest = segments.slice().sort(function (a, b) {
+          return Math.abs(b.b.x - b.a.x) + Math.abs(b.b.y - b.a.y) - Math.abs(a.b.x - a.a.x) - Math.abs(a.b.y - a.a.y);
+        })[0] || { a: pts[0], b: pts[0] };
+        var v = longest.a.x === longest.b.x;
+        spots.push({ x: (longest.a.x + longest.b.x) / 2, y: (longest.a.y + longest.b.y) / 2,
+          orient: v ? 'v' : 'h', toA: v ? (longest.a.y > longest.b.y ? 1 : -1) : (longest.a.x > longest.b.x ? 1 : -1), bare: bare });
+      }
+      return { d: this.orthoPath(pts, 9), spots: spots, points: pts };
+    },
+    assignRelationshipPorts: function (vis) {
+      var self = this, ports = {};
+      vis.forEach(function (item) {
+        ['a', 'b'].forEach(function (end) {
+          var g0 = item.g0, name = g0[end], direction = g0[end + 'dir'];
+          if (self.cards[name].expanded) return;
+          var axis = g0[end + 'axis'] || (g0.axis === 'v' ? 'v' : 'h');
+          var key = name + '\n' + axis + direction;
+          (ports[key] = ports[key] || []).push({ g0: g0, end: end, axis: axis, otherX: g0[(end === 'a' ? 'b' : 'a') + (axis === 'v' ? 'x' : 'y')] });
+        });
+      });
+      Object.keys(ports).forEach(function (key) {
+        var arr = ports[key];
+        arr.sort(function (a, b) { return a.otherX - b.otherX; });
+        arr.forEach(function (port, i) {
+          var box = self.cardBox(port.g0[port.end]);
+          port.g0[port.end + 'degree'] = arr.length;
+          if (port.axis === 'v') port.g0[port.end + 'x'] = box.x + box.w * (i + 1) / (arr.length + 1);
+          else port.g0[port.end + 'y'] = box.y + box.h * (i + 1) / (arr.length + 1);
+        });
+      });
+    },
+    // Test every segment, including the horizontal approach to a card. Endpoint
+    // cards are obstacles too; only the short outward port stubs enter their gutter.
+    routeClear: function (pts, rects) {
+      for (var i = 1; i < pts.length; i++) {
+        var a = pts[i - 1], b = pts[i];
+        for (var j = 0; j < rects.length; j++) {
+          var r = rects[j];
+          if (a.x === b.x ? a.x > r.x0 && a.x < r.x1 && Math.max(a.y, b.y) > r.y0 && Math.min(a.y, b.y) < r.y1
+              : a.y > r.y0 && a.y < r.y1 && Math.max(a.x, b.x) > r.x0 && Math.min(a.x, b.x) < r.x1) return false;
+        }
+      }
+      return true;
+    },
+    relationshipPoints: function (g0, spread, rects) {
+      var vertical = g0.axis === 'v', av = (g0.aaxis || g0.axis) === 'v', bv = (g0.baxis || g0.axis) === 'v', stub = 22;
+      var a = { x: g0.ax, y: g0.ay }, b = { x: g0.bx, y: g0.by };
+      var sa = { x: a.x + (av ? 0 : g0.adir * stub), y: a.y + (av ? g0.adir * stub : 0) };
+      var sb = { x: b.x + (bv ? 0 : g0.bdir * stub), y: b.y + (bv ? g0.bdir * stub : 0) };
+      var channel = vertical ? (sa.y + sb.y) / 2 + (spread || 0) : this.channelX(g0, spread, rects);
+      var middle = vertical ? [sa, { x: sa.x, y: channel }, { x: sb.x, y: channel }, sb]
+        : [sa, { x: channel, y: sa.y }, { x: channel, y: sb.y }, sb];
+      if (av !== bv) middle = av ? [sa, { x: sa.x, y: sb.y }, sb] : [sa, { x: sb.x, y: sa.y }, sb];
+      if (!this.routeClear(middle, rects)) middle = this.obstacleRoute(sa, sb, rects) || middle;
+      var pts = [a].concat(middle, [b]), clean = [];
+      pts.forEach(function (p) {
+        var last = clean[clean.length - 1];
+        if (last && last.x === p.x && last.y === p.y) return;
+        while (clean.length > 1) {
+          var prev = clean[clean.length - 2]; last = clean[clean.length - 1];
+          if (!((prev.x === last.x && last.x === p.x) || (prev.y === last.y && last.y === p.y))) break;
+          clean.pop();
+        }
+        clean.push(p);
+      });
+      return clean;
+    },
+    // Rectilinear visibility grid, searched only when the simple route is blocked.
+    // Grid rails sit outside the inflated cards, leaving room for rounded corners.
+    obstacleRoute: function (a, b, rects) {
+      var xs = [a.x, b.x], ys = [a.y, b.y], self = this;
+      rects.forEach(function (r) { xs.push(r.x0 - 10, r.x1 + 10); ys.push(r.y0 - 10, r.y1 + 10); });
+      xs = Array.from(new Set(xs)).sort(function (a, b) { return a - b; });
+      ys = Array.from(new Set(ys)).sort(function (a, b) { return a - b; });
+      var width = xs.length, start = ys.indexOf(a.y) * width + xs.indexOf(a.x), goal = ys.indexOf(b.y) * width + xs.indexOf(b.x);
+      var dist = new Map([[start, 0]]), prev = new Map(), heap = [];
+      var point = function (id) { return { x: xs[id % width], y: ys[Math.floor(id / width)] }; };
+      var push = function (id, cost) {
+        var p = point(id), entry = { id: id, cost: cost, score: cost + Math.abs(p.x - b.x) + Math.abs(p.y - b.y) };
+        heap.push(entry); var i = heap.length - 1;
+        while (i > 0) { var parent = (i - 1) >> 1; if (heap[parent].score <= entry.score) break; heap[i] = heap[parent]; i = parent; }
+        heap[i] = entry;
+      };
+      var pop = function () {
+        var first = heap[0], last = heap.pop();
+        if (heap.length) {
+          var i = 0;
+          while (i * 2 + 1 < heap.length) {
+            var child = i * 2 + 1;
+            if (child + 1 < heap.length && heap[child + 1].score < heap[child].score) child++;
+            if (heap[child].score >= last.score) break;
+            heap[i] = heap[child]; i = child;
+          }
+          heap[i] = last;
+        }
+        return first;
+      };
+      push(start, 0);
+      while (heap.length) {
+        var current = pop(), id = current.id;
+        if (current.cost !== dist.get(id)) continue;
+        if (id === goal) {
+          var result = [point(id)];
+          while (prev.has(id)) { id = prev.get(id); result.push(point(id)); }
+          return result.reverse();
+        }
+        var x = id % width, y = Math.floor(id / width), neighbors = [];
+        if (x) neighbors.push(id - 1); if (x + 1 < width) neighbors.push(id + 1);
+        if (y) neighbors.push(id - width); if (y + 1 < ys.length) neighbors.push(id + width);
+        neighbors.forEach(function (next) {
+          var p = point(id), q = point(next);
+          if (!self.routeClear([p, q], rects)) return;
+          var cost = current.cost + Math.abs(p.x - q.x) + Math.abs(p.y - q.y);
+          if (dist.has(next) && dist.get(next) <= cost) return;
+          dist.set(next, cost); prev.set(next, id); push(next, cost);
+        });
+      }
+      return null; // Overlapping cards can leave an endpoint with no free exit.
     },
     /* Visible card rectangles in world space, slightly inflated. */
     cardRects: function () {
@@ -1179,16 +1295,23 @@
         item.g0 = self.routeOf(r); item.spread = 0; item.slot = 0;
         vis.push(item);
       });
+      this.assignRelationshipPorts(vis);
       if (this.lineStyle !== 'curve') {
         var buckets = {};
         vis.forEach(function (item) {
-          var key = Math.round(self.channelX(item.g0, 0) / 28);
+          if (item.g0.axis === 'mixed') return;
+          var key = item.g0.axis === 'v' ? 'v:' + Math.round((item.g0.ay + item.g0.by) / 56) : 'h:' + Math.round(self.channelX(item.g0, 0) / 28);
           (buckets[key] = buckets[key] || []).push(item);
         });
         Object.keys(buckets).forEach(function (k) {
           var arr = buckets[k]; if (arr.length < 2) return;
-          arr.sort(function (A, B) { return (A.g0.ay + A.g0.by) - (B.g0.ay + B.g0.by); });
-          arr.forEach(function (item, i) { item.spread = (i - (arr.length - 1) / 2) * 14; item.slot = i - (arr.length - 1) / 2; });
+          arr.sort(function (A, B) { return A.g0.axis === 'v'
+            ? Math.abs(A.g0.ax - A.g0.bx) - Math.abs(B.g0.ax - B.g0.bx)
+            : (A.g0.ay + A.g0.by) - (B.g0.ay + B.g0.by); });
+          arr.forEach(function (item, i) {
+            var g0 = item.g0, sign = g0.axis === 'v' ? -(g0.adegree >= g0.bdegree ? g0.adir : g0.bdir) : 1;
+            item.spread = sign * (i - (arr.length - 1) / 2) * 14; item.slot = i - (arr.length - 1) / 2;
+          });
         });
       }
       var rects = this.cardRects();

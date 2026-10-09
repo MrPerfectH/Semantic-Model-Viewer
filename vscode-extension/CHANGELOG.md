@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route straight relationship lines around table cards, choosing each collapsed card’s connection side from its position and proportions, with separate ordered ports. Expanded cards keep their column anchors.
+
 - Keep measures, columns and tables whose names contain an apostrophe (`measure 'Owner''s Total'`). They were silently dropped before.
 - Stop the hosted demo from probing for the local app, which logged a 404 in the browser console.
 
