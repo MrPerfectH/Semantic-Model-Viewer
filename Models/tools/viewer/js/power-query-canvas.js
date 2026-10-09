@@ -25,9 +25,9 @@
     var edgeLayer = svg('g'), cycleLayer = el('div', 'pqc-cycles'), nodeLayer = el('div', 'pqc-nodes');
     edgesSvg.appendChild(edgeLayer); world.appendChild(cycleLayer); world.appendChild(edgesSvg); world.appendChild(nodeLayer); surface.appendChild(world); root.appendChild(surface);
     var legend = el('div', 'pqc-legend'); legend.appendChild(el('span', 'pqc-solid-key', 'Query input → consumer')); legend.appendChild(el('span', 'pqc-parameter-key', 'Parameter → consumer')); root.appendChild(legend);
-    var map = el('div', 'pqc-minimap'), mapLabel = el('div', 'pqc-map-label'), mapSvg = svg('svg', { role: 'img', 'aria-label': 'Whole-model overview; hidden queries muted' });
-    var mapNodes = svg('g'), mapViewport = svg('rect', { class: 'pqc-map-viewport', 'pointer-events': 'none' });
-    mapSvg.appendChild(mapNodes); mapSvg.appendChild(mapViewport); map.appendChild(mapLabel); map.appendChild(mapSvg); root.appendChild(map); host.appendChild(root);
+    var map = el('div', 'pqc-minimap'), mapLabel = el('div', 'pqc-map-label'), mapSvg = svg('svg', { role: 'img', 'aria-label': 'Visible query canvas overview' });
+    var mapEdges = svg('g'), mapNodes = svg('g'), mapViewport = svg('rect', { class: 'pqc-map-viewport', 'pointer-events': 'none' });
+    mapSvg.appendChild(mapEdges); mapSvg.appendChild(mapNodes); mapSvg.appendChild(mapViewport); map.appendChild(mapLabel); map.appendChild(mapSvg); root.appendChild(map); host.appendChild(root);
     function current(gen) { return alive && context && generation === gen && !suspended; }
     function emit(name, payload) { if (current(payload.generation) && typeof options[name] === 'function') options[name](payload); }
     function shown(id) { return nodes.has(id) && (!visible || visible.has(id)); }
@@ -95,11 +95,12 @@
       updateGeometry();
     }
     function drawMap() {
-      mapNodes.replaceChildren(); miniElements.clear(); var b = bounds(false);
-      map.hidden = !b; legend.hidden = !context || !nodes.size; if (!b) return;
-      mapLabel.textContent = ids().length + ' visible / ' + nodes.size + ' objects';
+      mapNodes.replaceChildren(); mapEdges.replaceChildren(); miniElements.clear(); var b = bounds(true);
+      map.hidden = !context; mapSvg.style.display = b ? '' : 'none'; legend.hidden = !b;
+      mapLabel.textContent = ids().length + ' visible objects'; if (!b) return;
       mapSvg.setAttribute('viewBox', [b.x - 28, b.y - 28, b.w + 56, b.h + 56].join(' '));
-      positions.forEach(function (p, id) { var rect = svg('rect', { x: p.x, y: p.y, width: W, height: H, rx: 12, class: 'pqc-map-node' + (!shown(id) ? ' pqc-map-hidden' : '') + (id === selected ? ' pqc-map-selected' : '') }); if (shown(id)) rect.dataset.mapId = id; mapNodes.appendChild(rect); miniElements.set(id, rect); });
+      context.graph.edges.forEach(function (edge) { if (!shown(edge.inputId) || !shown(edge.consumerId)) return; var a = positions.get(edge.inputId), z = positions.get(edge.consumerId); mapEdges.appendChild(svg('line', { x1: a.x + W / 2, y1: a.y + H / 2, x2: z.x + W / 2, y2: z.y + H / 2, class: 'pqc-map-edge', 'data-map-edge-id': edge.id })); });
+      positions.forEach(function (p, id) { if (!shown(id)) return; var rect = svg('rect', { x: p.x, y: p.y, width: W, height: H, rx: 12, class: 'pqc-map-node' + (id === selected ? ' pqc-map-selected' : '') }); rect.dataset.mapId = id; mapNodes.appendChild(rect); miniElements.set(id, rect); });
       updateMapViewport();
     }
     function updateMapViewport() { mapViewport.setAttribute('x', -view.x / view.k); mapViewport.setAttribute('y', -view.y / view.k); mapViewport.setAttribute('width', size.w / view.k); mapViewport.setAttribute('height', size.h / view.k); }
@@ -144,6 +145,38 @@
       if (k === view.k && x >= 24 && y >= 24 && x + W * k <= size.w - 24 && y + H * k <= size.h - 24) return true;
       view = { x: size.w / 2 - (p.x + W / 2) * k, y: size.h / 2 - (p.y + H / 2) * k, k: k }; pendingFit = false; transform(true); return true;
     }
+    function center(id, config) {
+      if (!alive || !context || suspended || !shown(id)) return false;
+      size = measure(); if (!size.w || !size.h) return false;
+      var p = positions.get(id), k = config && config.readable ? Math.max(0.85, view.k) : view.k;
+      view = { x: size.w / 2 - (p.x + W / 2) * k, y: size.h / 2 - (p.y + H / 2) * k, k: k }; pendingFit = false; transform(true); return true;
+    }
+    function placeAdded(id, config) {
+      if (!alive || !context || suspended || !nodes.has(id)) return false; config = config || {};
+      var point = config.position;
+      if (point !== undefined && (!point || !Number.isFinite(point.x) || !Number.isFinite(point.y))) return false;
+      if (!point) {
+        size = measure(); if (!size.w || !size.h) return false;
+        var occupied = Array.from(config.visibleIds || ids()).filter(function (key) { return key !== id && nodes.has(key); }), anchor = occupied.includes(config.anchorId) && positions.get(config.anchorId);
+        var base = anchor ? { x: anchor.x + W + 48, y: anchor.y } : { x: (size.w / 2 - view.x) / view.k - W / 2, y: (size.h / 2 - view.y) / view.k - H / 2 };
+        function free(p) { return occupied.every(function (key) { var o = positions.get(key); return p.x + W + 24 <= o.x || o.x + W + 24 <= p.x || p.y + H + 24 <= o.y || o.y + H + 24 <= p.y; }); }
+        function fits(p) { return p.x * view.k + view.x >= 16 && p.y * view.k + view.y >= 16 && (p.x + W) * view.k + view.x <= size.w - 16 && (p.y + H) * view.k + view.y <= size.h - 16; }
+        var nearby = anchor ? [base, { x: anchor.x, y: anchor.y + H + 30 }, { x: anchor.x, y: anchor.y - H - 30 }, { x: anchor.x - W - 48, y: anchor.y }] : [base];
+        point = nearby.find(function (p) { return free(p) && fits(p); });
+        var fallback = nearby.find(free), maxVisibleRing = Math.min(32, Math.ceil(Math.max(size.w / view.k / (W + 48), size.h / view.k / (H + 30))) + 1);
+        // Search nearby grid rings. A finite occupied registry guarantees a
+        // free location; only this newly-added member is ever relocated.
+        for (var ring = 1; !point; ring++) {
+          var candidates = [];
+          for (var offset = -ring; offset <= ring; offset++) { candidates.push({ x: base.x + offset * (W + 48), y: base.y - ring * (H + 30) }, { x: base.x + offset * (W + 48), y: base.y + ring * (H + 30) }); }
+          for (var vertical = -ring + 1; vertical < ring; vertical++) { candidates.push({ x: base.x - ring * (W + 48), y: base.y + vertical * (H + 30) }, { x: base.x + ring * (W + 48), y: base.y + vertical * (H + 30) }); }
+          if (!fallback) fallback = candidates.find(free);
+          point = candidates.find(function (p) { return free(p) && fits(p); });
+          if (!point && ring >= maxVisibleRing && fallback) point = fallback;
+        }
+      }
+      positions.set(id, { x: point.x, y: point.y }); updateGeometry(); return { x: point.x, y: point.y };
+    }
     function focusNode(id) {
       if (!alive || suspended || !shown(id)) return false; roving = id;
       elements.forEach(function (e, key) { e.tabIndex = shown(key) && key === roving ? 0 : -1; }); elements.get(id).focus({ preventScroll: true }); return true;
@@ -153,7 +186,7 @@
       if (frame) win.cancelAnimationFrame(frame); frame = 0; drag = null; pinch = null; pointers.clear();
       context = null; generation = undefined; positions.clear(); nodes.clear(); elements.clear(); miniElements.clear(); groups = []; edgeElements = [];
       selected = roving = matches = visible = focusIds = null; pendingFit = false; view = { x: 0, y: 0, k: 1 };
-      nodeLayer.replaceChildren(); edgeLayer.replaceChildren(); cycleLayer.replaceChildren(); mapNodes.replaceChildren(); root.hidden = true; transform(false);
+      nodeLayer.replaceChildren(); edgeLayer.replaceChildren(); cycleLayer.replaceChildren(); mapNodes.replaceChildren(); mapEdges.replaceChildren(); root.hidden = true; transform(false);
     }
     function setContext(next) {
       if (!alive) return; var fresh = !context || !next || next.generation !== generation;
@@ -240,7 +273,7 @@
     function suspend(value) { if (!alive) return; suspended = !!value; root.hidden = suspended || !context; pointers.clear(); drag = pinch = null; if (!suspended) resize(); }
     function destroy() { if (!alive) return; clear(); alive = false; if (observer) observer.disconnect(); removers.forEach(function (off) { off(); }); removers = []; options = {}; root.remove(); }
     setContext(options.context || null);
-    return { setContext: setContext, setSelection: setSelection, setMatches: setMatches, setFocusIds: setFocusIds, arrange: arrange, setVisibleIds: setVisibleIds, reveal: reveal, fit: fit, zoomBy: zoomBy, getViewport: getViewport, setViewport: setViewport, focusNode: focusNode, captureLayout: captureLayout, restoreLayout: restoreLayout, suspend: suspend, destroy: destroy };
+    return { setContext: setContext, setSelection: setSelection, setMatches: setMatches, setFocusIds: setFocusIds, arrange: arrange, placeAdded: placeAdded, setVisibleIds: setVisibleIds, reveal: reveal, center: center, fit: fit, zoomBy: zoomBy, getViewport: getViewport, setViewport: setViewport, focusNode: focusNode, captureLayout: captureLayout, restoreLayout: restoreLayout, suspend: suspend, destroy: destroy };
   }
   g.PowerQueryCanvas = { version: 2, mount: mount };
 })(window);

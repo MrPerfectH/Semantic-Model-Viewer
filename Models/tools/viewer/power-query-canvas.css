@@ -18,8 +18,8 @@
 .pqc-legend{position:absolute;bottom:16px;left:16px;display:flex;flex-wrap:wrap;gap:14px;font:10px/16px 'IBM Plex Sans',sans-serif;color:#76849a;pointer-events:none;max-width:calc(100% - 250px)}
 .pqc-legend span:before{content:'';display:inline-block;width:17px;border-top:2px solid #8896aa;vertical-align:middle;margin-right:6px}.pqc-parameter-key:before{border-top-style:dashed!important;border-color:#9673bf!important}
 .pqc-minimap{position:absolute;right:16px;bottom:16px;box-sizing:border-box;width:212px;padding:6px;background:#ffffffed;border:1px solid #dce3ee;box-shadow:0 3px 12px #2639570d;border-radius:9px;overflow:hidden}
-.pqc-map-label{margin:2px 5px 3px;color:#8290a7;font:600 8px/12px 'IBM Plex Sans',sans-serif;letter-spacing:1px}.pqc-minimap svg{display:block;width:200px;max-width:100%;height:112px}
-.pqc-map-node{fill:#adbdd5;cursor:pointer}.pqc-map-hidden{fill:#dfe5ed;opacity:.35;cursor:default}.pqc-map-selected{fill:#3970dc}.pqc-map-viewport{fill:#2563eb12;stroke:#5685e6;stroke-width:1;vector-effect:non-scaling-stroke}
+.pqc-map-label{margin:2px 5px 3px;color:#8290a7;font:600 11px/16px 'IBM Plex Sans',sans-serif;letter-spacing:.1px}.pqc-minimap svg{display:block;width:200px;max-width:100%;height:112px}
+.pqc-map-node{fill:#adbdd5;cursor:pointer}.pqc-map-edge{stroke:#8896aa;stroke-width:1;vector-effect:non-scaling-stroke;pointer-events:none}.pqc-map-selected{fill:#3970dc}.pqc-map-viewport{fill:#2563eb12;stroke:#5685e6;stroke-width:1;vector-effect:non-scaling-stroke}
 .pqc-names-only .wui-card-head{height:100%;align-items:center}.pqc-names-only .pqc-node-subtitle,.pqc-names-only .wui-card-chip,.pqc-names-only .pqc-status-badge{display:none}.pqc-names-only .wui-card-meta{position:absolute;right:6px;bottom:4px;border:0;padding:0}.pqc-names-only .pqc-node-badge{display:block}
 @media(max-width:500px){.pqc-minimap{width:152px;right:8px;bottom:8px}.pqc-minimap svg{height:82px}.pqc-map-label{font-size:7px;letter-spacing:.4px}.pqc-legend{max-width:calc(100% - 175px);gap:3px;left:8px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){.pqc *{transition:none!important}}
