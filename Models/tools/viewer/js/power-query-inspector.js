@@ -6,6 +6,7 @@
     options = options || {};
     var doc = host.ownerDocument, win = doc.defaultView || g;
     var context = null, generation, selected = null, opened = false, wrap = false, alive = true, suspended = false;
+    var focusControls = null, focusBox = null, controlsVersion = 0, controlsOff = [], controlEntries = [];
     var epoch = 0, contentVersion = 0, row = null, codeScroll = null, focusEntries = [], contentOff = [], jobs = new Set();
     function el(tag, cls, text) { var e = doc.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
     var root = el('section', 'pqi'); root.setAttribute('aria-label', 'Selected Power Query details'); root.hidden = true; host.appendChild(root);
@@ -13,8 +14,8 @@
     function on(target, name, callback) { target.addEventListener(name, callback); contentOff.push(function () { target.removeEventListener(name, callback); }); }
     function emit(name, payload) { if (alive && context && !suspended && generation === payload.generation && typeof options[name] === 'function') options[name](payload); }
     function cancelRestores() { epoch++; jobs.forEach(function (job) { win.cancelAnimationFrame(job.frame); job.resolve(); }); jobs.clear(); }
-    function clearContent() { contentVersion++; contentOff.forEach(function (off) { off(); }); contentOff = []; focusEntries = []; codeScroll = wrapButton = null; row = null; root.replaceChildren(); }
-    function clear() { cancelRestores(); clearContent(); context = null; generation = undefined; selected = null; opened = wrap = false; root.hidden = true; root.scrollLeft = root.scrollTop = 0; }
+    function clearContent() { clearControlDOM(); focusBox = null; contentVersion++; contentOff.forEach(function (off) { off(); }); contentOff = []; focusEntries = []; codeScroll = wrapButton = null; row = null; root.replaceChildren(); }
+    function clear() { cancelRestores(); clearContent(); context = null; generation = undefined; selected = null; opened = wrap = false; focusControls = null; root.hidden = true; root.scrollLeft = root.scrollTop = 0; }
     function lookup(id) { return context && context.byNodeId && context.byNodeId.get(id); }
     function descriptor(kind, occurrence) { var value = { kind: kind, nodeId: selected }; if (occurrence) { value.at = occurrence.at; value.end = occurrence.end; } return value; }
     function record(element, kind, occurrence) { var d = descriptor(kind, occurrence); focusEntries.push({ element: element, descriptor: d }); return element; }
@@ -22,7 +23,7 @@
     function applyFocus(d) {
       if (!alive || !context || suspended || !opened || !d || d.nodeId !== selected) return false;
       var entry = focusEntries.find(function (v) { return sameFocus(v.descriptor, d); }); if (!entry) return false;
-      entry.element.focus({ preventScroll: true }); return true;
+      var details = entry.element.closest('details'); if (details) details.open = true; entry.element.focus({ preventScroll: true }); return true;
     }
     function focus(d) { cancelRestores(); return applyFocus(d); }
     function captureViewState() {
@@ -49,6 +50,47 @@
     }
     var wrapButton = null;
     function updateWrapLabel() { if (wrapButton) { wrapButton.textContent = wrap ? 'Unwrap lines' : 'Wrap lines'; wrapButton.setAttribute('aria-pressed', String(wrap)); } }
+    function clearControlDOM() {
+      controlsVersion++; controlsOff.forEach(function (off) { off(); }); controlsOff = [];
+      focusEntries = focusEntries.filter(function (entry) { return !controlEntries.includes(entry); }); controlEntries = [];
+      if (focusBox) focusBox.replaceChildren();
+    }
+    function renderFocusControls() {
+      if (!focusBox || !row) return; var saved = captureViewState().focus, priorDetails = focusBox.querySelector('details'), wasOpen = !!(priorDetails && priorDetails.open); clearControlDOM();
+      var settings = focusControls || { mode: 'dim', direction: 'connected', depth: 1, relatedCount: 0, missingCount: 0, removableCount: 0 };
+      var gen = generation, id = selected, version = controlsVersion;
+      function listen(e, event, fn) { e.addEventListener(event, fn); controlsOff.push(function () { e.removeEventListener(event, fn); }); }
+      function control(e, kind) { record(e, kind); controlEntries.push(focusEntries[focusEntries.length - 1]); return e; }
+      function valid() { return current(gen, id) && version === controlsVersion; }
+      function change(values) { if (valid()) emit('onFocusChange', Object.assign({ generation: gen, nodeId: id, mode: settings.mode, direction: settings.direction, depth: settings.depth }, values)); }
+      focusBox.appendChild(el('h3', '', 'Canvas focus'));
+      var modes = el('div', 'ex-focus-options'); modes.setAttribute('role', 'group'); modes.setAttribute('aria-label', 'Unrelated queries');
+      [['dim', 'Dim unrelated'], ['hide', 'Hide unrelated']].forEach(function (pair) { var b = control(g.WorkspaceUI.button(doc, { text: pair[1] }), 'focus-' + pair[0]); b.setAttribute('aria-pressed', String(settings.mode === pair[0])); listen(b, 'click', function () { change({ mode: pair[0] }); }); modes.appendChild(b); }); focusBox.appendChild(modes);
+      var details = el('details', 'pqi-reference-details'); details.open = wasOpen; details.appendChild(el('summary', '', 'Explore query references')); focusBox.appendChild(details);
+      details.appendChild(el('p', 'ex-muted', 'Follows resolved query references. Static uncertainty remains; hidden objects stay in this layout.'));
+      function selector(kind, label, choices, value, toValue) {
+        var e = control(el('select'), kind); e.setAttribute('aria-label', label); choices.forEach(function (pair) { var option = el('option', '', pair[1]); option.value = pair[0]; e.appendChild(option); }); e.value = String(value === Infinity ? 'all' : value); listen(e, 'change', function () { var values = {}; values[kind === 'focus-direction' ? 'direction' : 'depth'] = toValue(e.value); change(values); }); details.appendChild(e);
+      }
+      selector('focus-direction', 'Query reference direction', [['inputs','Inputs'],['consumers','Consumers'],['connected','All connected']], settings.direction, function (v) { return v; });
+      selector('focus-depth', 'Query reference distance', [['0','Selected only'],['1','Direct only'],['2','Up to 2 connections'],['all','Direct + indirect']], settings.depth, function (v) { return v === 'all' ? Infinity : Number(v); });
+      details.appendChild(el('p', 'ex-related-count', settings.relatedCount + ' related · ' + settings.missingCount + ' to add'));
+      function action(name, text, disabled) { var b = control(g.WorkspaceUI.button(doc, { text: text }), name); b.disabled = disabled; listen(b, 'click', function () { if (!b.disabled && valid()) emit('onMembershipAction', { generation: gen, nodeId: id, action: name }); }); details.appendChild(b); }
+      action('add-related', 'Add ' + settings.missingCount + ' related to canvas', !settings.missingCount);
+      action('remove-unrelated', 'Remove ' + settings.removableCount + ' unrelated from layout', !settings.removableCount);
+      action('remove-selected', 'Remove this object from layout', false);
+      if (saved && controlEntries.some(function (entry) { return sameFocus(entry.descriptor, saved); })) { if (saved.kind !== 'focus-dim' && saved.kind !== 'focus-hide') details.open = true; applyFocus(saved); }
+    }
+    function setFocusControls(settings) {
+      if (!alive) return;
+      if (!settings) focusControls = null;
+      else {
+        var mode = settings.mode, direction = settings.direction, depth = settings.depth;
+        if (!['dim', 'hide'].includes(mode) || !['inputs', 'consumers', 'connected'].includes(direction) || ![0,1,2,Infinity].includes(depth)) return;
+        function count(v) { return Number.isInteger(v) && v >= 0 ? v : 0; }
+        focusControls = { mode: mode, direction: direction, depth: depth, relatedCount: count(settings.relatedCount), missingCount: count(settings.missingCount), removableCount: count(settings.removableCount) };
+      }
+      renderFocusControls();
+    }
     function close(reason) { if (!alive || !context || !opened || suspended) return; cancelRestores(); opened = false; root.hidden = true; emit('onClose', { generation: generation, reason: reason }); }
     function cosmeticRanges(code) {
       var out = [], re = /\/\/[^\r\n]*|\/\*[\s\S]*?\*\/|#"(?:[^"]|"")*"|"(?:[^"]|"")*"|\b(?:let|in|each|if|then|else|try|otherwise|error|as|is|type|meta|nullable|optional|true|false|null|and|or|not)\b|\b[\p{L}_][\p{L}\p{N}_]*(?:\.[\p{L}_][\p{L}\p{N}_]*)+/gu, match;
@@ -115,16 +157,18 @@
     function render() {
       clearContent(); wrapButton = null; row = lookup(selected); root.hidden = !opened || suspended || !row;
       if (!row) return;
-      var head = el('header', 'pqi-header'), name = el('div'); name.appendChild(el('div', 'pqi-section-label', 'SELECTED QUERY')); name.appendChild(el('h2', 'pqi-title', row.node.label));
+      var head = el('header', 'pqi-header'), name = el('div', 'pqi-heading'); name.appendChild(el('h2', 'pqi-title', row.node.label));
       var closeButton = record(el('button', 'pqi-close', '×'), 'close'); closeButton.type = 'button'; closeButton.setAttribute('aria-label', 'Close query details'); head.appendChild(name); head.appendChild(closeButton); root.appendChild(head);
       var gen = generation, id = selected; on(closeButton, 'click', function () { if (current(gen, id)) close('close'); });
-      root.appendChild(el('p', 'pqi-subtitle', row.node.subtitle));
-      var counts = el('div', 'pqi-counts'); counts.appendChild(el('span', '', (row.inputIds || []).length + ' inputs')); counts.appendChild(el('span', '', (row.consumerIds || []).length + ' consumers')); root.appendChild(counts);
+      var chrome = row.chrome || {}; head.style.background = chrome.headerTint || '#f8fafc'; if (chrome.fact) name.style.color = '#fff'; name.appendChild(el('p', 'pqi-subtitle', chrome.subtitle || row.node.subtitle));
+      var counts = el('div', 'pqi-counts'); counts.appendChild(el('span', '', (row.inputIds || []).length + ' inputs')); counts.appendChild(el('span', '', (row.consumerIds || []).length + ' consumers')); head.appendChild(counts);
+      focusBox = el('section', 'ex-related pqi-focus'); focusBox.setAttribute('aria-label', 'Explore related queries'); root.appendChild(focusBox); renderFocusControls();
+      var provenanceBox = el('details', 'pqi-provenance'); provenanceBox.appendChild(el('summary', '', 'Metadata and provenance')); root.appendChild(provenanceBox);
       var metadata = el('dl', 'pqi-metadata');
-      [['Kind', row.classification || row.node.kind], ['Type', row.type], ['Basis', provenance(row.basis)]].forEach(function (pair) { if (!pair[1]) return; metadata.appendChild(el('dt', '', pair[0])); metadata.appendChild(el('dd', '', pair[1])); }); root.appendChild(metadata);
+      [['Kind', row.classification || row.node.kind], ['Type', row.type], ['Basis', provenance(row.basis)]].forEach(function (pair) { if (!pair[1]) return; metadata.appendChild(el('dt', '', pair[0])); metadata.appendChild(el('dd', '', pair[1])); }); provenanceBox.appendChild(metadata);
       renderIssues(row.issues, root);
       if (row.code === null || typeof row.code !== 'string') root.appendChild(el('p', 'pqi-neutral', row.state === 'non-m' ? 'This source is not M.' : row.state === 'no-partitions' ? 'Partition metadata was not supplied.' : 'M source metadata is unavailable.'));
-      else renderCode(row.code, row.occurrences, root);
+      else { var card = el('section', 'pqi-code-card mv-dax-card'); root.appendChild(card); renderCode(row.code, row.occurrences, card); }
       if (!(row.inputIds || []).length && !(row.consumerIds || []).length) root.appendChild(el('p', 'pqi-empty-reference', 'No query references resolved.'));
     }
     function select(id, config) {
@@ -143,7 +187,7 @@
     function suspend(value) { if (!alive) return; cancelRestores(); suspended = !!value; root.hidden = suspended || !opened || !row; }
     function destroy() { if (!alive) return; clear(); alive = false; root.removeEventListener('keydown', keydown); options = {}; root.remove(); }
     setContext(options.context || null);
-    return { setContext: setContext, select: select, captureViewState: captureViewState, restoreViewState: restoreViewState, focus: focus, suspend: suspend, destroy: destroy };
+    return { setContext: setContext, select: select, setFocusControls: setFocusControls, captureViewState: captureViewState, restoreViewState: restoreViewState, focus: focus, suspend: suspend, destroy: destroy };
   }
   g.PowerQueryInspector = { version: 2, mount: mount };
 })(window);

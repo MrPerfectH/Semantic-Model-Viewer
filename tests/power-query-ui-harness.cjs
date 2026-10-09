@@ -30,7 +30,7 @@ function harness(file) {
   }
   doc.createElement=tag=>new Element(tag);doc.createElementNS=(_,tag)=>new Element(tag);doc.body=new Element('body');
   const win=new Element('window');Object.assign(win,{console,Map,Set,Promise,Number,Math,Array,Error,JSON,navigator:{clipboard:{writeText:()=>Promise.resolve()}},requestAnimationFrame(fn){const id=++seq;frames.set(id,fn);return id;},cancelAnimationFrame(id){frames.delete(id);},ResizeObserver:class {constructor(fn){this.fn=fn;observers.push(this);}observe(){}disconnect(){this.off=true;}}});
-  win.window=win;win.document=doc;doc.defaultView=win;vm.createContext(win);vm.runInContext(fs.readFileSync(path.join(__dirname,'../Models/tools/viewer/js',file),'utf8'),win,{filename:file});
+  win.window=win;win.document=doc;doc.defaultView=win;vm.createContext(win);vm.runInContext(fs.readFileSync(path.join(__dirname,'../Models/tools/viewer/js/workspace-ui.js'),'utf8'),win,{filename:'workspace-ui.js'});vm.runInContext(fs.readFileSync(path.join(__dirname,'../Models/tools/viewer/js',file),'utf8'),win,{filename:file});
   const host=doc.createElement('div');host.tabIndex=0;doc.body.appendChild(host);
   function runFrame(){const queue=[...frames.values()];frames.clear();queue.forEach(fn=>fn());}
   function flush(){for(let n=0;frames.size&&n<10;n++)runFrame();if(frames.size)throw Error('RAF failed to settle');}

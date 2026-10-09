@@ -3,11 +3,11 @@
  * No analysis, source loading, shell state, history or persistence here. */
 (function (g) {
   'use strict';
-  var W = 220, H = 78, GAP_X = 100, GAP_Y = 30, serial = 0;
+  var W = 252, H = 96, GAP_X = 100, GAP_Y = 30, serial = 0;
   function mount(host, options) {
     options = options || {};
     var doc = host.ownerDocument, win = doc.defaultView || g;
-    var alive = true, context = null, generation, selected = null, matches = null, visible = null;
+    var alive = true, context = null, generation, selected = null, matches = null, visible = null, focusIds = null;
     var positions = new Map(), nodes = new Map(), elements = new Map(), groups = [], layoutGenerations = new WeakMap();
     var view = { x: 0, y: 0, k: 1 }, size = { w: 0, h: 0 }, roving = null;
     var suspended = false, pendingFit = false, frame = 0, drag = null, pinch = null;
@@ -39,16 +39,17 @@
     }
     // Layout consumes supplied cycle components. It does not analyze M or infer
     // new edges. Collapsed component ranks put inputs left of their consumers.
-    function layout() {
+    function layout(subset) {
+      var layoutNodes = subset ? new Map(Array.from(nodes).filter(function (entry) { return subset.has(entry[0]); })) : nodes;
       var units = [], byNode = new Map(), cycleKeys = new Set();
       (context.graph.issues || []).forEach(function (issue) {
         if (issue.kind !== 'cycle' || !issue.componentIds) return;
-        var members = issue.componentIds.filter(function (id) { return nodes.has(id); }).slice().sort(), key = JSON.stringify(members);
+        var members = issue.componentIds.filter(function (id) { return layoutNodes.has(id); }).slice().sort(), key = JSON.stringify(members);
         if (!members.length || cycleKeys.has(key)) return; cycleKeys.add(key);
         var unit = { members: members, cycle: true, incoming: new Set(), outgoing: new Set(), rank: 0 };
         units.push(unit); members.forEach(function (id) { byNode.set(id, unit); });
       });
-      nodes.forEach(function (_, id) { if (!byNode.has(id)) { var unit = { members: [id], cycle: false, incoming: new Set(), outgoing: new Set(), rank: 0 }; units.push(unit); byNode.set(id, unit); } });
+      layoutNodes.forEach(function (_, id) { if (!byNode.has(id)) { var unit = { members: [id], cycle: false, incoming: new Set(), outgoing: new Set(), rank: 0 }; units.push(unit); byNode.set(id, unit); } });
       var incident = new Set();
       context.graph.edges.forEach(function (edge) { var a = byNode.get(edge.inputId), b = byNode.get(edge.consumerId); if (!a || !b) return; incident.add(a); incident.add(b); if (a !== b) { a.outgoing.add(b); b.incoming.add(a); } });
       var sourceOrder = new Map(Array.from(nodes.keys()).map(function (id, index) { return [id, index]; }));
@@ -89,8 +90,8 @@
     }
     function applyVisibility() {
       var shownIds = ids(); if (!shown(roving)) roving = shownIds[0] || null;
-      elements.forEach(function (e, id) { e.hidden = !shown(id); e.tabIndex = shown(id) && id === roving ? 0 : -1; e.classList.toggle('pqc-dim', !!matches && !matches.has(id)); e.classList.toggle('pqc-selected', id === selected); e.setAttribute('aria-pressed', String(id === selected)); });
-      edgeElements.forEach(function (entry) { entry.group.style.display = shown(entry.edge.inputId) && shown(entry.edge.consumerId) ? '' : 'none'; var related = selected === entry.edge.inputId || selected === entry.edge.consumerId; entry.group.classList.toggle('pqc-related', related); entry.group.classList.toggle('pqc-edge-dim', !!matches && !matches.has(entry.edge.inputId) && !matches.has(entry.edge.consumerId)); });
+      elements.forEach(function (e, id) { e.hidden = !shown(id); e.tabIndex = shown(id) && id === roving ? 0 : -1; e.classList.toggle('pqc-dim', (!!matches && !matches.has(id)) || (!!focusIds && !focusIds.has(id))); e.classList.toggle('pqc-focus-dim', !!focusIds && !focusIds.has(id)); e.classList.toggle('pqc-selected', id === selected); e.setAttribute('aria-pressed', String(id === selected)); });
+      edgeElements.forEach(function (entry) { entry.group.style.display = shown(entry.edge.inputId) && shown(entry.edge.consumerId) ? '' : 'none'; var related = selected === entry.edge.inputId || selected === entry.edge.consumerId; entry.group.classList.toggle('pqc-related', related); entry.group.classList.toggle('pqc-edge-dim', (!!matches && !matches.has(entry.edge.inputId) && !matches.has(entry.edge.consumerId)) || (!!focusIds && (!focusIds.has(entry.edge.inputId) || !focusIds.has(entry.edge.consumerId)))); });
       updateGeometry();
     }
     function drawMap() {
@@ -107,7 +108,7 @@
       root.classList.toggle('pqc-names-only', view.k < 0.65);
       // Compact name chips keep ordinary overviews legible. At very large-model
       // scales the overview is shape-only; search/reveal restores readable detail.
-      var font = view.k >= 0.25 ? Math.max(13, 11 / view.k) : 13;
+      var font = view.k >= 0.25 ? Math.max(13.5, 11 / view.k) : 13.5;
       if (Math.abs(font - titleSize) > 0.05) { titleSize = font; elements.forEach(function (e) { var title = e.querySelector('.pqc-node-title'); title.style.fontSize = font + 'px'; title.style.lineHeight = (font * 1.3) + 'px'; }); }
       surface.style.backgroundPosition = view.x + 'px ' + view.y + 'px'; updateMapViewport();
       if (notify && context) emit('onViewport', { generation: generation, viewport: getViewport() });
@@ -151,7 +152,7 @@
     function clear() {
       if (frame) win.cancelAnimationFrame(frame); frame = 0; drag = null; pinch = null; pointers.clear();
       context = null; generation = undefined; positions.clear(); nodes.clear(); elements.clear(); miniElements.clear(); groups = []; edgeElements = [];
-      selected = roving = matches = visible = null; pendingFit = false; view = { x: 0, y: 0, k: 1 };
+      selected = roving = matches = visible = focusIds = null; pendingFit = false; view = { x: 0, y: 0, k: 1 };
       nodeLayer.replaceChildren(); edgeLayer.replaceChildren(); cycleLayer.replaceChildren(); mapNodes.replaceChildren(); root.hidden = true; transform(false);
     }
     function setContext(next) {
@@ -163,12 +164,13 @@
       if (!nodes.has(selected)) selected = null;
       nodeLayer.replaceChildren(); elements.clear(); titleSize = 0; edgeLayer.replaceChildren(); edgeElements = [];
       nodes.forEach(function (n) {
-        var button = el('button', 'pqc-node pqc-kind-' + n.kind); button.type = 'button'; button.dataset.nodeId = n.id; button.title = n.label + ' · ' + n.subtitle;
-        button.setAttribute('aria-label', n.label + ' · ' + n.subtitle); var title = el('span', 'pqc-node-title', n.label), subtitle = el('span', 'pqc-node-subtitle', n.subtitle);
-        button.appendChild(title); button.appendChild(subtitle);
-        var row = next.byNodeId && next.byNodeId.get(n.id), cycle = (row && row.issues || next.graph.issues || []).some(function (i) { return i.kind === 'cycle' && i.consumerId === n.id; });
-        if (cycle) button.appendChild(el('span', 'pqc-node-badge', 'Cycle'));
-        else if (n.state !== 'available') button.appendChild(el('span', 'pqc-node-badge pqc-status-badge', n.state === 'no-partitions' ? 'Metadata unavailable' : n.state === 'non-m' ? 'Non-M' : 'Source unavailable'));
+        var row = next.byNodeId && next.byNodeId.get(n.id), chrome = row && row.chrome || {};
+        var parts = g.WorkspaceUI.createCardChrome(doc, Object.assign({ label: n.label, subtitle: n.subtitle, badge: n.kind === 'parameter' ? 'P' : n.kind === 'function' ? 'F' : 'Q', chips: [{ value: (row && row.inputIds || []).length, label: 'inputs' }, { value: (row && row.consumerIds || []).length, label: 'consumers' }] }, chrome));
+        var button = parts.card; button.classList.add('pqc-node'); button.classList.add('pqc-kind-' + n.kind); button.setAttribute('role', 'button'); button.dataset.nodeId = n.id; button.title = n.label + ' · ' + n.subtitle;
+        button.setAttribute('aria-label', n.label + ' · ' + n.subtitle); parts.title.classList.add('pqc-node-title'); parts.subtitle.classList.add('pqc-node-subtitle');
+        var cycle = (row && row.issues || next.graph.issues || []).some(function (i) { return i.kind === 'cycle' && i.consumerId === n.id; });
+        if (cycle) parts.meta.appendChild(el('span', 'pqc-node-badge', 'Cycle'));
+        else if (n.state !== 'available') parts.meta.appendChild(el('span', 'pqc-node-badge pqc-status-badge', n.state === 'no-partitions' ? 'Metadata unavailable' : n.state === 'non-m' ? 'Non-M' : 'Source unavailable'));
         nodeLayer.appendChild(button); elements.set(n.id, button);
       });
       next.graph.edges.forEach(function (edge) {
@@ -181,6 +183,11 @@
     }
     function setSelection(id) { if (!alive) return; selected = id !== null && nodes.has(id) ? id : null; applyVisibility(); }
     function setMatches(set) { if (!alive) return; matches = set === null ? null : new Set(set); applyVisibility(); }
+    function setFocusIds(set) { if (!alive) return; focusIds = set === null ? null : new Set(set); applyVisibility(); }
+    function arrange(set) {
+      if (!alive || !context) return false; var subset = new Set(Array.from(set || ids()).filter(shown)); if (!subset.size) return false;
+      subset.forEach(function (id) { positions.delete(id); }); layout(subset); groups = []; var keys = new Set(); (context.graph.issues || []).forEach(function (i) { if (i.kind === 'cycle' && i.componentIds) { var key = JSON.stringify(i.componentIds); if (!keys.has(key)) { keys.add(key); groups.push(i.componentIds.filter(function (id) { return nodes.has(id); })); } } }); updateGeometry(); return true;
+    }
     function setVisibleIds(set) { if (!alive) return; visible = set === null ? null : new Set(set); applyVisibility(); }
     function captureLayout() { var copy = new Map(); positions.forEach(function (p, id) { copy.set(id, { x: p.x, y: p.y }); }); layoutGenerations.set(copy, generation); return copy; }
     function restoreLayout(layoutMap) { if (!alive || !context || !layoutMap || (layoutGenerations.has(layoutMap) && layoutGenerations.get(layoutMap) !== generation)) return; layoutMap.forEach(function (p, id) { if (nodes.has(id) && p && Number.isFinite(p.x) && Number.isFinite(p.y)) positions.set(id, { x: p.x, y: p.y }); }); updateGeometry(); }
@@ -233,7 +240,7 @@
     function suspend(value) { if (!alive) return; suspended = !!value; root.hidden = suspended || !context; pointers.clear(); drag = pinch = null; if (!suspended) resize(); }
     function destroy() { if (!alive) return; clear(); alive = false; if (observer) observer.disconnect(); removers.forEach(function (off) { off(); }); removers = []; options = {}; root.remove(); }
     setContext(options.context || null);
-    return { setContext: setContext, setSelection: setSelection, setMatches: setMatches, setVisibleIds: setVisibleIds, reveal: reveal, fit: fit, zoomBy: zoomBy, getViewport: getViewport, setViewport: setViewport, focusNode: focusNode, captureLayout: captureLayout, restoreLayout: restoreLayout, suspend: suspend, destroy: destroy };
+    return { setContext: setContext, setSelection: setSelection, setMatches: setMatches, setFocusIds: setFocusIds, arrange: arrange, setVisibleIds: setVisibleIds, reveal: reveal, fit: fit, zoomBy: zoomBy, getViewport: getViewport, setViewport: setViewport, focusNode: focusNode, captureLayout: captureLayout, restoreLayout: restoreLayout, suspend: suspend, destroy: destroy };
   }
   g.PowerQueryCanvas = { version: 2, mount: mount };
 })(window);
