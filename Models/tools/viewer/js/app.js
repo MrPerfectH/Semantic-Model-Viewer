@@ -694,7 +694,7 @@
         if (m === 'matrix') self.restoreMatrix(self._matrixWorkspace);
         if (m === 'graph') {
           self.canvas.applyHighlight();
-          if (self.snapshotMode && self._tableViewport) { self.canvas.view = Object.assign({}, self._tableViewport); self.canvas.updateTransform(); }
+          if ((self.snapshotMode || was === 'power-query') && self._tableViewport) { self.canvas.view = Object.assign({}, self._tableViewport); self.canvas.updateTransform(); }
           else self.canvas.fitView();
         }
       });
