@@ -1,0 +1,13 @@
+# Preserved failures and boundaries
+
+- **Product P2:** fresh frozen `hidden-lock-frozen/receipt.json`; no hidden-lock explanation. Earlier same observation retained in `selection-lock/hidden-lock.json` and screenshot. Current review BLOCKER.
+- Initial selection script captured state before activating/focusing the navigation control; expected focus/null and inspectorY0 differed from legitimate source-control focus/Y410.5. Corrected new setup captures at the trusted Enter activation boundary; final `lock-history-trusted` passes full equality. Intermediate malformed JS quoting and Blank focus-preparation failures remain in their original receipts/scripts.
+- Initial new contrast oracle requested dark text; actual fact uses white text on a dark Tables-style header, matching the read contract. Corrected oracle records actual high-contrast combination and opacity. The compressed user wording remains a visual acceptance boundary, not an invented color defect.
+- Initial new compact oracle imposed85% on explicit Arrange compact. Contract imposes no85% floor there (automatic long-flow floor remains strict). Actual84.335% compact result retained; corrected compact checks Fit/no reposition, tight positions, hidden positions and exact Undo. No automatic-frame assertion weakened.
+- Initial frozen adaptations acted on a detached distance selector after direction rebuilt controls. Fresh live-query preparation fixes only entry; initial failures preserved. Corrected actual52/51/85% strict title tests pass.
+- T3 toolbar observations: `Close display settings` timed out15000ms, later actual close own-hit at1041,347,206x32 succeeded; later Display click and Right select timed out15000ms; Escape succeeded. Exact original pointer target absent. No causal attribution or blanket toolbar PASS; not reproduced as a stable new production finding. These are manual ledger notes from tool results, not reconstructed raw host traces.
+- Browser copy checks record the raw argument passed to clipboard API; do not claim system clipboard paste. Synthetic source only.
+- Cache observation: `smv_models_v1`49,227chars contains synthetic raw-M sentinel; sourceEvidence absent. Existing cache behavior is separate from export privacy. No absolute no-M-storage claim.
+- Generic Node22 suite, original/adapted hashes, canonical/media/31cache-key/VSIX byte audit remain pending an exposed non-Mac route. Owner reports/proof remain labelled owner evidence.
+- T3 normal UI remained preferred/available. Chrome zoom/offline work was explicitly authorized capability fallback, headless isolated synthetic profiles; it is not T3-unavailable proof or native VS Code installation acceptance.
+- Native/user-fit/A10 remain open. No old failures or receipts were deleted/restamped.

@@ -1,0 +1,8 @@
+{
+  "candidate": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7",
+  "boundary": "Explicitly requested unchanged geometry oracle in authorized native browser; original hash verification pending non-Mac",
+  "checks": [
+    "Arrange Undo restores viewport layout and displayed zoom"
+  ],
+  "failures": []
+}

@@ -1,0 +1,454 @@
+{
+  "name": "Independent r10 lock and provider boundaries",
+  "model": {
+    "tables": [
+      {
+        "name": "Report",
+        "columns": [
+          {
+            "name": "Amount",
+            "dataType": "int64",
+            "sourceColumn": "Amount"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "int64",
+            "sourceColumn": "Quantity"
+          },
+          {
+            "name": "CustomerKey",
+            "dataType": "int64",
+            "sourceColumn": "CustomerKey"
+          },
+          {
+            "name": "ProductKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductKey"
+          },
+          {
+            "name": "DateKey",
+            "dataType": "int64",
+            "sourceColumn": "DateKey"
+          },
+          {
+            "name": "Cost",
+            "dataType": "int64",
+            "sourceColumn": "Cost"
+          },
+          {
+            "name": "Discount",
+            "dataType": "int64",
+            "sourceColumn": "Discount"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Base Amount",
+            "expression": "SUM(Report[Amount])"
+          },
+          {
+            "name": "Analyzed Total",
+            "expression": "VAR v = [Base Amount] RETURN DIVIDE(v,2,0)"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Report",
+            "source": {
+              "type": "m",
+              "expression": "let Source = FinalOutput in Source"
+            },
+            "queryGroup": "Results"
+          }
+        ]
+      },
+      {
+        "name": "Lookup",
+        "columns": [
+          {
+            "name": "Key",
+            "dataType": "int64",
+            "sourceColumn": "Key"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Lookup",
+            "source": {
+              "type": "m",
+              "expression": "42"
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "SyntheticSemanticOnly",
+        "fromTable": "Report",
+        "fromColumn": "Amount",
+        "toTable": "Lookup",
+        "toColumn": "Key"
+      }
+    ],
+    "expressions": [
+      {
+        "name": "Server",
+        "kind": "m",
+        "expression": "\"PQ_FLOW_PRIVATE_SENTINEL\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
+        "queryGroup": "Inputs"
+      },
+      {
+        "name": "Raw West",
+        "kind": "m",
+        "expression": "let Source = Server in Source",
+        "queryGroup": "Inputs"
+      },
+      {
+        "name": "Raw East",
+        "kind": "m",
+        "expression": "let Source = Server in Source",
+        "queryGroup": "Inputs"
+      },
+      {
+        "name": "Prepared",
+        "kind": "m",
+        "expression": "let Source = #\"Raw West\" in Source",
+        "queryGroup": "Steps"
+      },
+      {
+        "name": "Merged Query",
+        "kind": "m",
+        "expression": "let Left = Prepared, Right = #\"Raw East\" in Table.Combine({Left, Right})",
+        "queryGroup": "Steps"
+      },
+      {
+        "name": "FinalOutput",
+        "kind": "m",
+        "expression": "let\r\n  emoji = \"😀\",\r\n  first = #\"Merged Query\",\r\n  again = #\"Merged Query\",\r\n  pad0 = \"Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 \",\r\n  pad1 = \"Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 \",\r\n  pad2 = \"Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 \",\r\n  pad3 = \"Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 \",\r\n  pad4 = \"Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 \",\r\n  pad5 = \"Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 \",\r\n  pad6 = \"Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 \",\r\n  pad7 = \"Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 \",\r\n  pad8 = \"Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 \",\r\n  pad9 = \"Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 \",\r\n  pad10 = \"Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 \",\r\n  pad11 = \"Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 \",\r\n  pad12 = \"Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 \",\r\n  pad13 = \"Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 \",\r\n  pad14 = \"Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 \",\r\n  pad15 = \"Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 \",\r\n  pad16 = \"Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 \",\r\n  pad17 = \"Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 \",\r\n  pad18 = \"Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 \",\r\n  pad19 = \"Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 \",\r\n  pad20 = \"Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 \",\r\n  pad21 = \"Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 \",\r\n  pad22 = \"Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 \",\r\n  pad23 = \"Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 \",\r\n  pad24 = \"Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 \",\r\n  pad25 = \"Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 \",\r\n  pad26 = \"Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 \",\r\n  pad27 = \"Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 \",\r\n  pad28 = \"Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 \",\r\n  pad29 = \"Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 \",\r\n  pad30 = \"Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 \",\r\n  pad31 = \"Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 \",\r\n  pad32 = \"Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 \",\r\n  pad33 = \"Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 \",\r\n  pad34 = \"Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 \",\r\n  pad35 = \"Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 \",\r\n  result = first\r\nin result",
+        "queryGroup": "Results"
+      },
+      {
+        "name": "Downstream",
+        "kind": "m",
+        "expression": "let Source = FinalOutput in Source",
+        "queryGroup": "Results"
+      },
+      {
+        "name": "CoConsumer",
+        "kind": "m",
+        "expression": "let Source = #\"Raw West\" in Source",
+        "queryGroup": "Steps"
+      },
+      {
+        "name": "Standalone",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "CycleA",
+        "kind": "m",
+        "expression": "let x = CycleB in x"
+      },
+      {
+        "name": "CycleB",
+        "kind": "m",
+        "expression": "let x = CycleA in x"
+      },
+      {
+        "name": "Direct0",
+        "kind": "m",
+        "expression": "PowerPlatform.Dataflows(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})"
+      },
+      {
+        "name": "Local0",
+        "kind": "m",
+        "expression": "let #\"PowerPlatform.Dataflows\"=(x)=>x in #\"PowerPlatform.Dataflows\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function0",
+        "kind": "m",
+        "expression": "(#\"PowerPlatform.Dataflows\") => #\"PowerPlatform.Dataflows\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct1",
+        "kind": "m",
+        "expression": "PowerBI.Dataflows(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})"
+      },
+      {
+        "name": "Local1",
+        "kind": "m",
+        "expression": "let #\"PowerBI.Dataflows\"=(x)=>x in #\"PowerBI.Dataflows\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function1",
+        "kind": "m",
+        "expression": "(#\"PowerBI.Dataflows\") => #\"PowerBI.Dataflows\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct2",
+        "kind": "m",
+        "expression": "Databricks.Catalogs(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})"
+      },
+      {
+        "name": "Local2",
+        "kind": "m",
+        "expression": "let #\"Databricks.Catalogs\"=(x)=>x in #\"Databricks.Catalogs\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function2",
+        "kind": "m",
+        "expression": "(#\"Databricks.Catalogs\") => #\"Databricks.Catalogs\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct3",
+        "kind": "m",
+        "expression": "Databricks.Contents(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})"
+      },
+      {
+        "name": "Local3",
+        "kind": "m",
+        "expression": "let #\"Databricks.Contents\"=(x)=>x in #\"Databricks.Contents\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function3",
+        "kind": "m",
+        "expression": "(#\"Databricks.Contents\") => #\"Databricks.Contents\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct4",
+        "kind": "m",
+        "expression": "Sql.Database(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})"
+      },
+      {
+        "name": "Local4",
+        "kind": "m",
+        "expression": "let #\"Sql.Database\"=(x)=>x in #\"Sql.Database\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function4",
+        "kind": "m",
+        "expression": "(#\"Sql.Database\") => #\"Sql.Database\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct5",
+        "kind": "m",
+        "expression": "Sql.Databases(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})"
+      },
+      {
+        "name": "Local5",
+        "kind": "m",
+        "expression": "let #\"Sql.Databases\"=(x)=>x in #\"Sql.Databases\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function5",
+        "kind": "m",
+        "expression": "(#\"Sql.Databases\") => #\"Sql.Databases\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct6",
+        "kind": "m",
+        "expression": "Snowflake.Databases(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})"
+      },
+      {
+        "name": "Local6",
+        "kind": "m",
+        "expression": "let #\"Snowflake.Databases\"=(x)=>x in #\"Snowflake.Databases\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function6",
+        "kind": "m",
+        "expression": "(#\"Snowflake.Databases\") => #\"Snowflake.Databases\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct7",
+        "kind": "m",
+        "expression": "OData.Feed(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})"
+      },
+      {
+        "name": "Local7",
+        "kind": "m",
+        "expression": "let #\"OData.Feed\"=(x)=>x in #\"OData.Feed\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function7",
+        "kind": "m",
+        "expression": "(#\"OData.Feed\") => #\"OData.Feed\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct8",
+        "kind": "m",
+        "expression": "AzureStorage.DataLake(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})"
+      },
+      {
+        "name": "Local8",
+        "kind": "m",
+        "expression": "let #\"AzureStorage.DataLake\"=(x)=>x in #\"AzureStorage.DataLake\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function8",
+        "kind": "m",
+        "expression": "(#\"AzureStorage.DataLake\") => #\"AzureStorage.DataLake\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct9",
+        "kind": "m",
+        "expression": "Excel.Workbook(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})"
+      },
+      {
+        "name": "Local9",
+        "kind": "m",
+        "expression": "let #\"Excel.Workbook\"=(x)=>x in #\"Excel.Workbook\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function9",
+        "kind": "m",
+        "expression": "(#\"Excel.Workbook\") => #\"Excel.Workbook\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct10",
+        "kind": "m",
+        "expression": "Web.Contents(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})"
+      },
+      {
+        "name": "Local10",
+        "kind": "m",
+        "expression": "let #\"Web.Contents\"=(x)=>x in #\"Web.Contents\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function10",
+        "kind": "m",
+        "expression": "(#\"Web.Contents\") => #\"Web.Contents\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct11",
+        "kind": "m",
+        "expression": "File.Contents(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})"
+      },
+      {
+        "name": "Local11",
+        "kind": "m",
+        "expression": "let #\"File.Contents\"=(x)=>x in #\"File.Contents\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function11",
+        "kind": "m",
+        "expression": "(#\"File.Contents\") => #\"File.Contents\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct12",
+        "kind": "m",
+        "expression": "Table.FromRows({{1}}, {\"A\"})"
+      },
+      {
+        "name": "Local12",
+        "kind": "m",
+        "expression": "let #\"Table.FromRows\"=(x)=>x in #\"Table.FromRows\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function12",
+        "kind": "m",
+        "expression": "(#\"Table.FromRows\") => #\"Table.FromRows\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "Direct13",
+        "kind": "m",
+        "expression": "#table({\"A\"}, {{1}})"
+      },
+      {
+        "name": "Local13",
+        "kind": "m",
+        "expression": "let #\"#table\"=(x)=>x in #\"#table\"(\"R10_PROVIDER_PRIVATE_LOCAL\")"
+      },
+      {
+        "name": "Function13",
+        "kind": "m",
+        "expression": "(#\"#table\") => #\"#table\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")"
+      },
+      {
+        "name": "RepeatedQuoted",
+        "kind": "m",
+        "expression": "let emoji=\"😀\", a=#\"Sql.Database\"(\"R10_PROVIDER_PRIVATE_A\",\"d\"), b=#\"Sql.Database\"(\"R10_PROVIDER_PRIVATE_B\",\"d\") in {a,b}\r\n"
+      },
+      {
+        "name": "Mixed",
+        "kind": "m",
+        "expression": "{Sql.Database(\"R10_PROVIDER_PRIVATE_SQL\",\"d\"), Databricks.Catalogs(\"R10_PROVIDER_PRIVATE_DBX\",\"w\")}"
+      },
+      {
+        "name": "TransitiveOnly",
+        "kind": "m",
+        "expression": "Direct4"
+      },
+      {
+        "name": "Uncalled",
+        "kind": "m",
+        "expression": "Sql.Database"
+      },
+      {
+        "name": "AliasCall",
+        "kind": "m",
+        "expression": "let f=Sql.Database in f(\"s\",\"d\")"
+      },
+      {
+        "name": "FieldCall",
+        "kind": "m",
+        "expression": "let r=[#\"Sql.Database\"=(x)=>x] in r[Sql.Database](\"x\")"
+      },
+      {
+        "name": "ItemCall",
+        "kind": "m",
+        "expression": "Sql.Database{0}(\"x\")"
+      },
+      {
+        "name": "StringComment",
+        "kind": "m",
+        "expression": "let txt=\"Sql.Database()\", x=1 /* Databricks.Catalogs() */ in x"
+      },
+      {
+        "name": "UnknownCall",
+        "kind": "m",
+        "expression": "Unknown.Provider(\"R10_PROVIDER_PRIVATE_UNKNOWN\")"
+      },
+      {
+        "name": "DynamicCall",
+        "kind": "m",
+        "expression": "Expression.Evaluate(\"Sql.Database(1,2)\", #shared)"
+      },
+      {
+        "name": "Incomplete",
+        "kind": "m",
+        "expression": "let x=Sql.Database(\"s\",\"d\") in ("
+      },
+      {
+        "name": "UnsupportedGeneratedEnterData",
+        "kind": "m",
+        "expression": "Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText(\"AAAA\", BinaryEncoding.Base64), Compression.Deflate)), let _t=((type nullable text) meta [Serialized.Text=true]) in type table [A=_t])"
+      },
+      {
+        "name": "BuiltinTwelve",
+        "kind": "m",
+        "expression": "{Table.TransformColumnTypes, Int64.Type, Byte.Type, Int8.Type, Int16.Type, Int32.Type, Single.Type, Double.Type, Decimal.Type, Currency.Type, Percentage.Type, Guid.Type}"
+      },
+      {
+        "name": "ConditionalCall",
+        "kind": "m",
+        "expression": "if false then Sql.Database(\"R10_PROVIDER_PRIVATE_UNUSED\",\"d\") else 1"
+      }
+    ],
+    "queryGroups": [
+      {
+        "name": "Inputs",
+        "folder": "Landing/SQL"
+      },
+      {
+        "name": "Steps",
+        "folder": "Transform/Steps"
+      },
+      {
+        "name": "Results",
+        "folder": "Curated/Outputs"
+      }
+    ]
+  }
+}

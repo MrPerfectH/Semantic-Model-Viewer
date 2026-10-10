@@ -1,0 +1,168 @@
+{
+  "root": "[\"expression\",\"\",\"Standalone\"]",
+  "selected": "[\"partition\",\"Report\",\"Report\"]",
+  "fact": true,
+  "k": 0.03,
+  "opacity": "1",
+  "title": {
+    "color": "rgb(255, 255, 255)",
+    "font": 13.5,
+    "rect": {
+      "x": 329.739990234375,
+      "y": 223.8300018310547,
+      "width": 5.46002197265625,
+      "height": 0.5264129638671875,
+      "top": 223.8300018310547,
+      "right": 335.20001220703125,
+      "bottom": 224.35641479492188,
+      "left": 329.739990234375
+    }
+  },
+  "subtitle": {
+    "font": 11,
+    "rect": {
+      "x": 329.739990234375,
+      "y": 224.4464111328125,
+      "width": 5.46002197265625,
+      "height": 0.461944580078125,
+      "top": 224.4464111328125,
+      "right": 335.20001220703125,
+      "bottom": 224.90835571289062,
+      "left": 329.739990234375
+    }
+  },
+  "header": "rgb(29, 35, 48)",
+  "inspectorTitle": "rgb(255, 255, 255)",
+  "dim": [
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65",
+    "0.65"
+  ],
+  "edges": [
+    {
+      "width": "1.8px",
+      "vector": "non-scaling-stroke",
+      "opacity": "0.55"
+    },
+    {
+      "width": "1.8px",
+      "vector": "non-scaling-stroke",
+      "opacity": "0.55"
+    },
+    {
+      "width": "1.8px",
+      "vector": "non-scaling-stroke",
+      "opacity": "0.55"
+    },
+    {
+      "width": "1.8px",
+      "vector": "non-scaling-stroke",
+      "opacity": "0.55"
+    },
+    {
+      "width": "1.8px",
+      "vector": "non-scaling-stroke",
+      "opacity": "0.55"
+    },
+    {
+      "width": "1.8px",
+      "vector": "non-scaling-stroke",
+      "opacity": "0.55"
+    },
+    {
+      "width": "1.8px",
+      "vector": "non-scaling-stroke",
+      "opacity": "0.55"
+    },
+    {
+      "width": "1.8px",
+      "vector": "non-scaling-stroke",
+      "opacity": "0.55"
+    },
+    {
+      "width": "1.8px",
+      "vector": "non-scaling-stroke",
+      "opacity": "0.55"
+    },
+    {
+      "width": "1.8px",
+      "vector": "non-scaling-stroke",
+      "opacity": "0.55"
+    },
+    {
+      "width": "1.8px",
+      "vector": "non-scaling-stroke",
+      "opacity": "0.55"
+    },
+    {
+      "width": "1.8px",
+      "vector": "non-scaling-stroke",
+      "opacity": "0.55"
+    }
+  ],
+  "hit": "[\"partition\",\"Report\",\"Report\"]"
+}

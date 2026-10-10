@@ -1,0 +1,30 @@
+{
+  "candidate": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7",
+  "startedAt": "2026-10-10T11:47:06.086Z",
+  "boundary": "explicitly authorized narrow capability fallback while T3 available; fresh isolated Chrome; not native VS Code",
+  "cases": [],
+  "checks": [
+    {
+      "name": "Trusted rapid Back separator pointer focus and ArrowLeft ownership",
+      "status": "pass"
+    }
+  ],
+  "failures": [
+    {
+      "name": "200% framing actions and later wheel 1280",
+      "error": "AssertionError [ERR_ASSERTION]: Hide readable\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round10-input-ownership.browser.cjs:52:228\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round10-input-ownership.browser.cjs:15:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round10-input-ownership.browser.cjs:49:34"
+    },
+    {
+      "name": "200% framing actions and later wheel 1440",
+      "error": "AssertionError [ERR_ASSERTION]: Hide readable\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round10-input-ownership.browser.cjs:52:228\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round10-input-ownership.browser.cjs:15:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round10-input-ownership.browser.cjs:49:34"
+    }
+  ],
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "endedAt": "2026-10-10T11:47:10.559Z"
+}

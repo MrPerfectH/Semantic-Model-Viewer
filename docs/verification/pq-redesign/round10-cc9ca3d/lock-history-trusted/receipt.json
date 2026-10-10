@@ -1,0 +1,7 @@
+{
+  "candidate": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7",
+  "checks": [
+    "unlocked follows selection; trusted lock/unlock preserves view; direct neighbor Back; reset and Blank Undo"
+  ],
+  "failures": []
+}

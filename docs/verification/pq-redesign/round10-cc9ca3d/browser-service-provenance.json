@@ -1,0 +1,207 @@
+{
+  "candidate": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7",
+  "runtimeReported": "209c226c62a431522650104ded8011a73e8391f3",
+  "assets": [
+    {
+      "asset": "index.html",
+      "gitBlob": "c197b37136e1daad299f6d614621e2de9d3a1217",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/index.html",
+      "ownerReportedSHA256": "f9f6373320cd0ed112034e2120803151edec8f1fc08e3cf40827590572f0d1b3"
+    },
+    {
+      "asset": "measures.css",
+      "gitBlob": "8b4f39533a1289388ed7574627d807f47f9519b6",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/measures.css",
+      "ownerReportedSHA256": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86"
+    },
+    {
+      "asset": "power-query-lineage.css",
+      "gitBlob": "5bdfa9bf78495a7ae8a4a95c0ac7b178fe64c4f4",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/power-query-lineage.css",
+      "ownerReportedSHA256": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b"
+    },
+    {
+      "asset": "power-query.css",
+      "gitBlob": "f6af945272354215724d294f172c884e492dbd69",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/power-query.css",
+      "ownerReportedSHA256": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee"
+    },
+    {
+      "asset": "power-query-canvas.css",
+      "gitBlob": "9eb66ea9edd93ab2d5bd13c9be90756882aeea95",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/power-query-canvas.css",
+      "ownerReportedSHA256": "d5a04586c5d10457674231444d0bdb16b3089aa68820b91349cfe37639e2cc20"
+    },
+    {
+      "asset": "power-query-inspector.css",
+      "gitBlob": "5114f095f82997c8159c03f7d1241e525cc86e8b",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/power-query-inspector.css",
+      "ownerReportedSHA256": "cf4a86b4d7e6ca66b5275a02ca43dcc28b69e04263f653c5784a301cfd307cca"
+    },
+    {
+      "asset": "explorer.css",
+      "gitBlob": "62b1075822d52cf4cc2b04dcd02cf98166113429",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/explorer.css",
+      "ownerReportedSHA256": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011"
+    },
+    {
+      "asset": "power-query-workspace.css",
+      "gitBlob": "370eaf5808011aad926796a9c7a6ba4fde7707e1",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/power-query-workspace.css",
+      "ownerReportedSHA256": "8f69cb0d2d52e998482141a4bbc65685426cf827ecd0272eeacf6a2ce400e10d"
+    },
+    {
+      "asset": "js/util.js",
+      "gitBlob": "d1a0830f9fa432f4505b710f0ee3e53626649f61",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/util.js",
+      "ownerReportedSHA256": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960"
+    },
+    {
+      "asset": "js/host-vscode.js",
+      "gitBlob": "e0d4a8dd27c0e0db3f9523be40bf670d6ffcd9da",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/host-vscode.js",
+      "ownerReportedSHA256": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb"
+    },
+    {
+      "asset": "js/rules.js",
+      "gitBlob": "f0d2436b6515eafe7f241d4e6e5f8debebb2faca",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/rules.js",
+      "ownerReportedSHA256": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad"
+    },
+    {
+      "asset": "js/workspace-ui.js",
+      "gitBlob": "d8959f58bc2890155d8a9d00bee4173c45ccd447",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/workspace-ui.js",
+      "ownerReportedSHA256": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43"
+    },
+    {
+      "asset": "js/power-query-lineage.js",
+      "gitBlob": "3efe3a50d8f12e3ab7bfae57fe64c501c034e62d",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/power-query-lineage.js",
+      "ownerReportedSHA256": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1"
+    },
+    {
+      "asset": "js/tmdl-parser.js",
+      "gitBlob": "946b515eb0d1d682ab6e5bb49a0142d82cf4283e",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/tmdl-parser.js",
+      "ownerReportedSHA256": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399"
+    },
+    {
+      "asset": "js/power-query-inspector.js",
+      "gitBlob": "63b83bac530c441e0af95546d66d8c74fa59f6a9",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/power-query-inspector.js",
+      "ownerReportedSHA256": "7cd72f22ad9819317fcad0a4f9dab7f1f5e5d268be7d223ef68bce2b727020e2"
+    },
+    {
+      "asset": "js/matrix.js",
+      "gitBlob": "92eb8a534539739e11e46a3be901d2e1789057bc",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/matrix.js",
+      "ownerReportedSHA256": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1"
+    },
+    {
+      "asset": "js/sidebar.js",
+      "gitBlob": "edbfca72ab4a7486274d470078627936679c4aa2",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/sidebar.js",
+      "ownerReportedSHA256": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4"
+    },
+    {
+      "asset": "js/dax-format.js",
+      "gitBlob": "59d1a2085a67f1bf373cf94516f87a77e955fad1",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/dax-format.js",
+      "ownerReportedSHA256": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8"
+    },
+    {
+      "asset": "js/power-query-canvas.js",
+      "gitBlob": "3f79cece83d5f44bae6a91dfe0a8648ce64e029b",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/power-query-canvas.js",
+      "ownerReportedSHA256": "d6faebb8d4fed43265e7abb4d9f2cfe7b4f993a34ae19bb56ea63bd913e25685"
+    },
+    {
+      "asset": "js/roles.js",
+      "gitBlob": "93c95e4ea352c8887db8de12a8a7021e8995e10d",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/roles.js",
+      "ownerReportedSHA256": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1"
+    },
+    {
+      "asset": "js/layouts.js",
+      "gitBlob": "0f8f76d28e053878ac015ef30de5314d9aa37880",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/layouts.js",
+      "ownerReportedSHA256": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1"
+    },
+    {
+      "asset": "js/topbar.js",
+      "gitBlob": "f96c40dbcab1a66de8bcb974345af4ca6c37cb60",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/topbar.js",
+      "ownerReportedSHA256": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9"
+    },
+    {
+      "asset": "js/relationships.js",
+      "gitBlob": "387498e521588a5b80c17a3ab01e0d29a7aa5042",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/relationships.js",
+      "ownerReportedSHA256": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5"
+    },
+    {
+      "asset": "js/snapshot.js",
+      "gitBlob": "eef514c19edea2f2e83218210020b4039467bb7a",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/snapshot.js",
+      "ownerReportedSHA256": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c"
+    },
+    {
+      "asset": "js/canvas.js",
+      "gitBlob": "33987b3c18d900a6ee55598bb3cda97ee2cd493a",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/canvas.js",
+      "ownerReportedSHA256": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787"
+    },
+    {
+      "asset": "js/power-query.js",
+      "gitBlob": "7296a0b7fcb1bd8ba25ec8b30eb08bdff64ba6da",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/power-query.js",
+      "ownerReportedSHA256": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f"
+    },
+    {
+      "asset": "js/measures.js",
+      "gitBlob": "8088a249566760465ffab20ebb0a72bb112914e0",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/measures.js",
+      "ownerReportedSHA256": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179"
+    },
+    {
+      "asset": "js/explorer.js",
+      "gitBlob": "8a9eaeb7bc7f51ad1885540dc28370e412e4418c",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/explorer.js",
+      "ownerReportedSHA256": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0"
+    },
+    {
+      "asset": "js/usage-adapter.js",
+      "gitBlob": "de26bfa5c41ac312d8be65fe9684921dfd36a5d5",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/usage-adapter.js",
+      "ownerReportedSHA256": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428"
+    },
+    {
+      "asset": "js/power-query-dependencies.js",
+      "gitBlob": "770fb73a90c1108dcfa689c2ee238209b194cd50",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/power-query-dependencies.js",
+      "ownerReportedSHA256": "27a8d4c15bfdd297b5a9ac88de3119b62033b69c0fe9690fc76810182df6d7c2"
+    },
+    {
+      "asset": "js/app.js",
+      "gitBlob": "f91d388ab5d869839c4b3adcd664fb76cc884289",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/app.js",
+      "ownerReportedSHA256": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a"
+    },
+    {
+      "asset": "js/power-query-graph-model.js",
+      "gitBlob": "36866a20f1511c7a76dd9a99175d3a4fbfc207fa",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/power-query-graph-model.js",
+      "ownerReportedSHA256": "317e10635857a8026513a499ff99ba8a3e39c4099266369b9d6d932a33ffd650"
+    },
+    {
+      "asset": "js/power-query-workspace.js",
+      "gitBlob": "00a20bf38f9a5e78075307924e2429af58072b5c",
+      "source": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7:Models/tools/viewer/js/power-query-workspace.js",
+      "ownerReportedSHA256": "96502a1a97b9bfc151a988c64cad72c2c8febf7e129608af60d47b7ed7fcb7c9"
+    }
+  ],
+  "method": "Git show exact revision allowlisted runtime paths only; copied for authorized local native browser tests",
+  "genericHashCanonicalMediaPackageAudit": "PENDING Linux/Windows routing prerequisite",
+  "port": 54103
+}
