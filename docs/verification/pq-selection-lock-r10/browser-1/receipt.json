@@ -1,0 +1,14 @@
+{
+  "boundary": "T3 live preview used first; isolated Chrome for true zoom and trusted keyboard audit; synthetic fixture only",
+  "checks": [],
+  "failures": [
+    "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'rgb(31, 36, 48)'\n- 'rgb(255, 255, 255)'\n       ^\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/tests/pq-selection-lock-r10.browser.cjs:26:241"
+  ],
+  "assets": {
+    "index.html": "c8d7611627afe9d6963eb631dd1864968f616b242859021af7920bf03bb1750c",
+    "js/power-query-workspace.js": "7312867915395da7b277355c1a7f3bdc297ef5651fcd812757ef33f263c9f78d",
+    "js/power-query-dependencies.js": "27a8d4c15bfdd297b5a9ac88de3119b62033b69c0fe9690fc76810182df6d7c2",
+    "js/power-query-canvas.js": "dc6db8fe5d0ce14d619d35ffbe94bb45c669af66d8921c5e88042b76aec9c4ce",
+    "power-query-canvas.css": "f480228df550eb755ace880df56119673819872dc830184557b46df072c79070"
+  }
+}

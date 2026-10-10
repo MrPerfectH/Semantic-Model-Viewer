@@ -1,0 +1,39 @@
+{
+  "name": "Independent PQ redesign a3-results",
+  "model": {
+    "tables": [],
+    "expressions": [
+      {
+        "name": "Q1",
+        "kind": "m",
+        "expression": "#table({\"ID\"}, {})"
+      },
+      {
+        "name": "Q2",
+        "kind": "m",
+        "expression": "#table({\"ID\"}, {})"
+      },
+      {
+        "name": "Q3",
+        "kind": "m",
+        "expression": "#table({\"ID\"}, {})"
+      },
+      {
+        "name": "MergeResult",
+        "kind": "m",
+        "expression": "Table.NestedJoin(Q1, {\"ID\"}, Q2, {\"ID\"}, \"Joined\")"
+      },
+      {
+        "name": "AppendResult",
+        "kind": "m",
+        "expression": "Table.Combine({MergeResult, Q3})"
+      },
+      {
+        "name": "Disconnected",
+        "kind": "m",
+        "expression": "42"
+      }
+    ],
+    "relationships": []
+  }
+}

@@ -1,0 +1,7 @@
+CASE 1280-1
+{
+  "checks": [],
+  "failures": [
+    "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'rgb(31, 36, 48)'\n- 'rgb(255, 255, 255)'\n       ^\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/tests/pq-selection-lock-r10.browser.cjs:26:241"
+  ]
+}
