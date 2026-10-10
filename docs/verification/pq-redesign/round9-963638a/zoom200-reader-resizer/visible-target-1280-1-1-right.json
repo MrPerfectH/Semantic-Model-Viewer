@@ -1,0 +1,15 @@
+{
+  "rect": {
+    "x": 771.78125,
+    "y": 134,
+    "width": 89.21875,
+    "height": 32,
+    "top": 134,
+    "right": 861,
+    "bottom": 166,
+    "left": 771.78125
+  },
+  "hit": "Trace this query",
+  "same": true,
+  "scroll": 0
+}

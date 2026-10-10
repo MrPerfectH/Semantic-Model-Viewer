@@ -1,0 +1,245 @@
+{
+  "candidate": "963638aeb2d124460709374004ddcf0799268ada",
+  "bytes": 775882,
+  "sha256": "c2e906a2d028aec04485492b90c7a6671456a793fd08919128fdb367fc4450fd",
+  "actualT3Download": "9545c65b-a238-4a38-bf95-d6bbb1a75ed6",
+  "payload": {
+    "format": "semantic-model-viewer",
+    "version": 1,
+    "name": "Independent r9 selection and standard classification",
+    "createdAt": "2026-10-10T10:45:05.602Z",
+    "model": {
+      "name": "Independent r9 selection and standard classification",
+      "tables": [
+        {
+          "name": "Report",
+          "domain": "Measures",
+          "role": "measures",
+          "baseRole": "measures",
+          "autoRole": "measures",
+          "roleVia": "structural",
+          "columns": [
+            {
+              "name": "Amount",
+              "dataType": "int64",
+              "hidden": false,
+              "isCalc": false,
+              "isKey": false,
+              "rel": true
+            }
+          ],
+          "measures": [
+            {
+              "name": "Base Amount",
+              "dax": "SUM(Report[Amount])",
+              "fmt": "",
+              "folder": ""
+            },
+            {
+              "name": "Analyzed Total",
+              "dax": "VAR v = [Base Amount] RETURN DIVIDE(v,2,0)",
+              "fmt": "",
+              "folder": ""
+            }
+          ],
+          "colCount": 1,
+          "measureCount": 2,
+          "source": {
+            "kind": "other"
+          }
+        },
+        {
+          "name": "Lookup",
+          "domain": "Other",
+          "role": "dim",
+          "baseRole": "dim",
+          "autoRole": "dim",
+          "roleVia": 6,
+          "columns": [
+            {
+              "name": "Key",
+              "dataType": "int64",
+              "hidden": false,
+              "isCalc": false,
+              "isKey": false,
+              "rel": true
+            }
+          ],
+          "measures": [],
+          "colCount": 1,
+          "measureCount": 0,
+          "source": {
+            "kind": "other"
+          }
+        }
+      ],
+      "relationships": [
+        {
+          "from": "Report",
+          "to": "Lookup",
+          "fromCol": "Amount",
+          "toCol": "Key",
+          "fromCard": "many",
+          "toCard": "one",
+          "both": false,
+          "inactive": false
+        }
+      ]
+    },
+    "usage": null,
+    "settings": {
+      "roleRules": [
+        {
+          "role": "fact",
+          "name": "(^|[._])(fact|fct)_",
+          "sides": "",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "dim",
+          "name": "(^|[._])dim_",
+          "sides": "",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "helper",
+          "name": "",
+          "sides": "none",
+          "measures": "",
+          "kind": "manual"
+        },
+        {
+          "role": "helper",
+          "name": "",
+          "sides": "none",
+          "measures": "",
+          "kind": "calculated"
+        },
+        {
+          "role": "standalone",
+          "name": "",
+          "sides": "none",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "fact",
+          "name": "",
+          "sides": "many",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "dim",
+          "name": "",
+          "sides": "one",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "fact",
+          "name": "",
+          "sides": "mostlyMany",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "dim",
+          "name": "",
+          "sides": "mostlyOne",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "dim",
+          "name": "",
+          "sides": "",
+          "measures": "",
+          "kind": ""
+        }
+      ]
+    },
+    "workspace": {
+      "viewMode": "power-query",
+      "tableView": {
+        "version": 2,
+        "name": "Snapshot starting view",
+        "pos": {
+          "Report": {
+            "x": 0,
+            "y": 0
+          },
+          "Lookup": {
+            "x": -152.49999999999184,
+            "y": 9.901471797005426
+          }
+        },
+        "view": {
+          "x": 137,
+          "y": 93,
+          "k": 0.9
+        },
+        "focus": {
+          "selected": "Report",
+          "isolate": false,
+          "depth": 1,
+          "pinned": [],
+          "locked": null
+        },
+        "display": {
+          "detail": "auto",
+          "lines": "ortho",
+          "color": "domain",
+          "expanded": []
+        },
+        "tables": [
+          "Report"
+        ]
+      },
+      "presets": [],
+      "matrix": {
+        "scrollLeft": 0,
+        "scrollTop": 0
+      },
+      "explorer": {
+        "query": "",
+        "filter": "all",
+        "direction": "connected",
+        "depth": "direct",
+        "includeInactive": true,
+        "mapHidden": false
+      },
+      "domains": null
+    },
+    "measures": {
+      "version": 1,
+      "selectedMeasure": "Analyzed Total",
+      "comparisonMeasure": null,
+      "extraMeasures": [],
+      "library": {
+        "query": "",
+        "visibility": "all",
+        "homeTable": "",
+        "openFolders": [],
+        "width": 296
+      },
+      "preferences": {
+        "mode": "split",
+        "split": "beside",
+        "besideShare": 0.55,
+        "belowShare": 0.52,
+        "orientation": "lr",
+        "wrap": true
+      },
+      "graph": {
+        "zoom": 0.7130177514792899,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "autoFit": false
+      }
+    }
+  },
+  "rawMExcluded": true
+}

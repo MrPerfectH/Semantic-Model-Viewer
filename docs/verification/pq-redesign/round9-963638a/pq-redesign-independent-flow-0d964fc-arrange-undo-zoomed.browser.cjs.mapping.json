@@ -1,0 +1,9 @@
+{
+  "actualCandidate": "963638aeb2d124460709374004ddcf0799268ada",
+  "script": "pq-redesign-independent-flow-0d964fc-arrange-undo-zoomed.browser.cjs",
+  "scriptSHA256": "ef4481e55e6b407f885f30f6e0744eed7dcc227b5d05462d9f89e7ddd89585d5",
+  "scriptBytesIdenticalToA652736": true,
+  "semanticAssertionsUnchanged": true,
+  "onlySubstitution": "Exact Git source-preflight revisions; mirror mapping/served files contain963. Raw legacy candidate literals do not identify current execution.",
+  "calls": []
+}
