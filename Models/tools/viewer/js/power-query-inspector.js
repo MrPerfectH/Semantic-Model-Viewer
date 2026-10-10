@@ -223,7 +223,7 @@
       var uncertainty = [], other = [];
       (issues || []).forEach(function (issue) { if (issue.kind === 'analysis-notice') return; (issue.kind === 'analysis-uncertainty' ? uncertainty : other).push(issue); });
       other.forEach(function (issue) { var severity = ['metadata-warning', 'duplicate-identity', 'no-reference-range', 'presentation-diagnostic'].includes(issue.kind) ? 'pqi-review' : issue.kind === 'cycle' ? 'pqi-cycle-note' : 'pqi-neutral'; parent.appendChild(el('p', severity, issue.message)); });
-      if (uncertainty.length) { var details = el('details', 'pqi-analysis-details'); details.appendChild(el('summary', '', 'Static analysis details · ' + uncertainty.length)); uncertainty.forEach(function (issue) { details.appendChild(el('p', '', issue.message)); }); parent.appendChild(details); }
+      if (uncertainty.length) { var details = el('details', 'pqi-analysis-details'); details.appendChild(el('summary', '', 'Links the viewer could not confirm · ' + uncertainty.length)); details.appendChild(el('p', '', 'The viewer reads M text; it does not run queries. Names below could not be linked with confidence. This does not by itself mean your query is broken.'));  uncertainty.forEach(function (issue) { details.appendChild(el('p', '', issue.message)); }); parent.appendChild(details); }
     }
     function render() {
       clearContent(); wrapButton = null; row = lookup(selected); root.hidden = !opened || suspended || !row;

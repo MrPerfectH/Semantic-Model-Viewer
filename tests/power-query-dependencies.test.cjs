@@ -75,10 +75,24 @@ test('render provides safe clickable code navigation and visible uncertainty in 
 test('missing/non-M targets remain navigable and every result retains partial status',()=>{
  const root=node('Root','Missing & Native'),metadata={nodes:[root,node('Missing',null,{state:'missing'}),node('Native',null,{state:'non-m'})]};
  Object.freeze(metadata.nodes);metadata.nodes.forEach(Object.freeze);Object.freeze(metadata);
- const r=plain(api().analyze(root,metadata));assert.deepEqual(r.dependencies.map(d=>d.id),['Missing','Native']);assert.equal(r.partial,true);assert.match(r.uncertainty.join('\n'),/absence of an edge/);
+ const r=plain(api().analyze(root,metadata));assert.deepEqual(r.dependencies.map(d=>d.id),['Missing','Native']);assert.equal(r.partial,true);assert.match(r.uncertainty.join('\n'),/no arrow does not mean no dependency/);
 });
 test('render exposes cycles and replaces the old host contents on navigation',()=>{
  const doc={createElement(tag){return {tag,textContent:'',children:[],ownerDocument:doc,appendChild(e){this.children.push(e);},replaceChildren(){this.children=[];},addEventListener(){}};}},host=doc.createElement('section'),a=api(),metadata={nodes:[node('A','B'),node('B','A')]};
  a.render(host,{selected:metadata.nodes[0],metadata,openCode(){}});assert.ok(host.children.some(e=>e.textContent==='Cycle detected among metadata references: A → B'));
  a.render(host,{selected:node('Empty'),metadata:{nodes:[]},openCode(){}});assert.equal(host.children.some(e=>e.tag==='button'),false);assert.equal(host.children.filter(e=>e.tag==='h3').length,1);
+});
+
+// Exact language symbols are a separate informational result, after lexical/model resolution.
+test('documented M names do not masquerade as missing queries; unknown model names remain explicit',()=>{
+ const r=analyze('Table.TransformColumnTypes(Upstream, {{"n", Int64.Type}}) & Missing.Model & Ghost');
+ assert.deepEqual(r.standardLibrary,['Table.TransformColumnTypes','Int64.Type']);assert.deepEqual(r.dependencies.map(d=>d.name),['Upstream']);
+ assert(!r.uncertainty.some(s=>/Table.TransformColumnTypes|Int64.Type/.test(s)));assert(r.uncertainty.some(s=>s.includes('Missing.Model')));assert(r.uncertainty.some(s=>s.includes('Ghost')));assert.equal(r.partial,true);
+ assert.deepEqual(analyze('table.TransformColumnTypes(1)').standardLibrary,[],'case-sensitive names only');
+ assert.deepEqual(analyze('let Int64.Type = 1 in Int64.Type').standardLibrary,[],'local scope wins');
+ assert.deepEqual(deps('Int64.Type',['Int64.Type']),['Int64.Type'],'model name wins');
+ const a=api(),root=node('Root','Int64.Type'),dup={nodes:[root,node('Int64.Type'),node('Int64.Type','2',{id:'other'})]},d=plain(a.analyze(root,dup));
+ assert.deepEqual(d.standardLibrary,[]);assert.deepEqual(d.dependencies,[]);assert(d.uncertainty.some(s=>s.includes('Ambiguous reference')));
+ const dynamic=analyze('Expression.Evaluate("Int64.Type", #shared) & Int64.Type');assert(dynamic.uncertainty.some(s=>s.includes('Dynamic/environment')));assert.deepEqual(dynamic.dependencies,[]);
+ assert.deepEqual(analyze('Int64.Type ]').standardLibrary,[],'failed parse claims no recognized occurrence');
 });

@@ -42,6 +42,7 @@
       checkpoint();
       var consumerId=nodes[index].id,result=g.PowerQueryDependencies.analyze(n,metadata);
       var warnings=result.uncertainty||[];
+      if(result.standardLibrary&&result.standardLibrary.length)issues.push({consumerId:consumerId,kind:'standard-library',message:'Standard M functions and types: '+result.standardLibrary.join(', ')+'. These are language names, not missing model queries.'});
       // The analyzer's final entry is its documented generic static-analysis notice.
       if(warnings.length){notice=warnings[warnings.length-1];warnings.slice(0,-1).forEach(function(message){issues.push({consumerId:consumerId,kind:'analysis-uncertainty',message:message});});}
       if(counts.get(n.id)!==1){progress(index+1,false);return;}

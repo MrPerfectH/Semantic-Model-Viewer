@@ -2,6 +2,9 @@
  * Public API v1 for #37:
  * analyze(node, metadata) -> {dependencies:[{id,name,at}], references:[{id,name,at,end}],
  *                             uncertainty:[string], partial:true}
+ * Additive standardLibrary:[string] lists recognized documented names after local
+ * and model resolution. These are informational, never model edges or proof of
+ * execution. Unknown names and all dynamic/ambiguous cases remain uncertainty.
  * References contain every resolved explicit identifier occurrence, using UTF-16
  * source offsets (end-exclusive). Synthetic implicit-field '_' has no code link.
  * graph(metadata) -> {nodes:[{node,result}], edges:[{from,to,name,at}], cycles:[[id,...]],
@@ -12,9 +15,14 @@
  */
 (function(g){
   'use strict';
-  var notice='Partial static inspection; absence of an edge does not prove absence of a dependency.';
+  var notice='Links come from reading M text, without running queries. Some links may be missing; no arrow does not mean no dependency.';
+  // Exact, case-sensitive documented language names only. Model/local bindings
+  // take precedence. This small catalog does not classify arbitrary dotted names.
+  // https://learn.microsoft.com/en-us/powerquery-m/table-transformcolumntypes
+  // https://learn.microsoft.com/en-us/powerquery-m/type-conversion
+  var standardNames=new Set(['Table.TransformColumnTypes','Int64.Type','Byte.Type','Int8.Type','Int16.Type','Int32.Type','Single.Type','Double.Type','Decimal.Type','Currency.Type','Percentage.Type','Guid.Type']);
   function analyze(node,metadata){
-    var uncertainty=[],dependencies=[],references=[],ts=[],pos=0,steps=0;
+    var uncertainty=[],standardLibrary=[],dependencies=[],references=[],ts=[],pos=0,steps=0;
     function warn(s){if(!uncertainty.includes(s))uncertainty.push(s);}
     function fail(s){throw new Error(s);}
     if(!node||node.state!=='available'||typeof node.code!=='string')return {dependencies:[],references:[],uncertainty:['M metadata is missing or not M.',notice],partial:true};
@@ -96,22 +104,23 @@
       var names=new Map(),ids=new Map();(metadata.nodes||[]).forEach(function(n){var name=n.kind==='partition'?n.table:n.name;if(!names.has(name))names.set(name,[]);names.get(name).push(n);ids.set(n.id,(ids.get(n.id)||0)+1);});
       function visit(a,scope){
         if(a.ref){var t=a.ref,n=t.v,local=scope.get(n);if(local){if(local==='initializing'&&!a.inclusive)warn('Exclusive self-reference during initialization: '+n);return;}
-          if(['Expression.Evaluate','Record.Field','Record.FieldOrDefault','#shared','#sections'].includes(n))warn('Dynamic/environment reference: '+n+'; targets cannot be established statically.');
+          if(['Expression.Evaluate','Record.Field','Record.FieldOrDefault','#shared','#sections'].includes(n))warn('Dynamic/environment reference: '+n+'; this can choose a query at run time, so reading the code cannot identify every target.');
           var found=names.get(n)||[];
           if(found.length===1&&ids.get(found[0].id)===1){
             if(!dependencies.some(function(d){return d.id===found[0].id;}))dependencies.push({id:found[0].id,name:n,at:t.at});
             if(t.kind==='id')references.push({id:found[0].id,name:n,at:t.at,end:t.end});
           }
-          else if(found.length)warn('Ambiguous reference: '+n+' (duplicate identity/name or multiple partitions).');
-          else warn('Unresolved '+(n.includes('.')?'library/external symbol: ':'reference: ')+n);return;
+          else if(found.length)warn('Ambiguous reference: '+n+'. More than one model object matches (duplicate name/identity or multiple partitions); no target was chosen.');
+          else if(standardNames.has(n)){if(!standardLibrary.includes(n))standardLibrary.push(n);}
+          else warn('Unresolved name: '+n+'. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize.');return;
         }
         if(a.bindings){var env=new Map(scope),seen=new Set();a.bindings.forEach(function(b){if(seen.has(b.name))warn('Duplicate local binding: '+b.name);seen.add(b.name);env.set(b.name,'local');});a.bindings.forEach(function(b){var init=new Map(env);init.set(b.name,'initializing');visit(b.value,init);});if(a.body)visit(a.body,env);return;}
         if(a.params){var fn=new Map(scope);a.params.forEach(function(p){fn.set(p,'local');});visit(a.body,fn);return;}
         (a.items||[]).forEach(function(x){visit(x,scope);});
       }
       visit(ast,new Map());
-    }catch(e){warn('Analysis incomplete: '+e.message);dependencies=[];references=[];}
-    warn(notice);return {dependencies:dependencies,references:references,uncertainty:uncertainty,partial:true};
+    }catch(e){warn('Analysis incomplete: '+e.message);dependencies=[];references=[];standardLibrary=[];}
+    warn(notice);return {dependencies:dependencies,references:references,standardLibrary:standardLibrary,uncertainty:uncertainty,partial:true};
   }
   function graph(metadata){
     var nodes=(metadata.nodes||[]).map(function(n){return {node:n,result:analyze(n,metadata)};}),edges=[],uncertainty=[],byId=new Map();

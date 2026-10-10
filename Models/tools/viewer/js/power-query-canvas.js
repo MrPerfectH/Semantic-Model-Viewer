@@ -185,8 +185,10 @@
     function center(id, config) {
       if (!alive || !context || suspended || !shown(id)) return false;
       size = measure(); if (!size.w || !size.h) return false;
-      var p = positions.get(id), k = config && config.readable ? Math.max(0.85, view.k) : view.k;
-      view = { x: size.w / 2 - (p.x + W / 2) * k, y: size.h / 2 - (p.y + H / 2) * k, k: k }; pendingFit = false; transform(true); return true;
+      var p = positions.get(id), k = config && config.readable ? Math.max(0.85, view.k) : view.k, frame = config && config.frame;
+      var x = size.w / 2, y = size.h / 2;
+      if (frame && [frame.x, frame.y, frame.width, frame.height].every(Number.isFinite) && frame.width > 0 && frame.height > 0) { x = frame.x + frame.width / 2; y = frame.y + frame.height / 2; }
+      view = { x: x - (p.x + W / 2) * k, y: y - (p.y + H / 2) * k, k: k }; pendingFit = false; transform(true); return true;
     }
     function placeAdded(id, config) {
       if (!alive || !context || suspended || !nodes.has(id)) return false; config = config || {};
@@ -304,7 +306,8 @@
       if (!alive || !context || suspended) return; var next = measure(); if (!next.w || !next.h) return;
       if (pendingFit) { size = next; fit(); return; }
       if (next.w === size.w && next.h === size.h) return;
-      if (size.w && size.h) { view.x += (next.w - size.w) / 2; view.y += (next.h - size.h) / 2; }
+      // Inspector docking/resizing must not pan an inspected diagram.
+      // Framing belongs to explicit Center/Fit/reveal actions only.
       size = next; transform(true);
     }
     var observer = typeof win.ResizeObserver === 'function' ? new win.ResizeObserver(resize) : null; if (observer) observer.observe(surface); else on(win, 'resize', resize);

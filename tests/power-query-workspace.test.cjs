@@ -130,3 +130,13 @@ test('uninterrupted Back retains full restore and exact below-dock scroll; owner
   w.inspector.restoreViewState=async(state,claim)=>{assert.equal(claim(),true);assert.equal(listeners.size,0);assert.deepEqual(state,original.inspectorView);};
   await w.back();assert.equal(w.body.scrollTop,83.5);assert.equal(w.selectedId,original.selectedId);assert.equal(listeners.size,0);assert(events.some(e=>e[0]==='viewport'));
 });
+
+test('ordinary inspection preserves pan/zoom and scroll while deliberate follow still reveals; Back restores root',async()=>{
+ const {w,events}=stateHarness();let view={x:-99,y:43,k:.39};w.canvas.getViewport=()=>({...view});w.canvas.setViewport=v=>{view={...v};};w.body={scrollLeft:3,scrollTop:123};w.flowRootId='B';
+ const before=w.captureNavigation();w.navigate('A',true,{preserveView:true});assert.deepEqual(view,before.viewport);assert.equal(w.body.scrollTop,123);assert.equal(w.flowRootId,'B');assert(!events.some(e=>e[0]==='reveal'));
+ await w.back();assert.equal(w.selectedId,'B');assert.deepEqual(view,before.viewport);events.length=0;w.navigate('A',true);assert(events.some(e=>e[0]==='reveal'));
+});
+test('dock preference persists source-free geometry and survives model invalidation',()=>{
+ const saved=[],g=harness({localStorage:{setItem:(k,v)=>saved.push([k,JSON.parse(v)])}}),w=Object.create(g.PowerQueryWorkspace.prototype);Object.assign(w,{width:440,height:320,dock(){}});w.setDockPreference('bottom');assert.deepEqual(saved,[['smv.pq.inspector.v1',{dock:'bottom',width:440,height:320}]]);w.setDockPreference('invalid');assert.equal(saved.length,1);
+ const j=jobHarness();j.w.dockPreference='bottom';j.w.width=440;j.w.height=320;j.w.invalidate();assert.equal(j.w.dockPreference,'bottom');assert.equal(j.w.width,440);assert.equal(j.w.height,320);
+});
