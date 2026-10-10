@@ -1,0 +1,8 @@
+{
+  "candidate": "0d964fc97273cca8626e3cc4e9b39f73620b7e24",
+  "step": "52-node chain imported normally, FinalChain selected and Hide unrelated clicked; Arrange/Fit not verified in T3",
+  "first": "Preview automation click timed out after 15000ms.",
+  "second": "No preview automation host is available for click in environment 64860a54-e847-4302-8536-4d81fdc2be6e. Preview tools run in a T3 Code desktop app that is open and connected to this environment; a headless server has no browser of its own. Do not retry. To check a page, use a headless browser from the shell, such as Playwright, or curl, or ask the user to open this thread in the T3 Code desktop app.",
+  "harnessFollowOn": "TypeError: Cannot read properties of undefined (reading 'value') after the unavailable evaluate result",
+  "action": "No further T3 browser actions; complete long-chain scope in isolated Chrome permitted by explicit unavailable. Earlier Chrome zoom/offline scopes were separately authorized capability fallbacks while T3 available."
+}

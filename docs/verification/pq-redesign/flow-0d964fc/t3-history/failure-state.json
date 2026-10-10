@@ -1,0 +1,37 @@
+{
+  "membership": [
+    "[\"expression\",\"\",\"FinalOutput\"]",
+    "[\"expression\",\"\",\"Raw West\"]"
+  ],
+  "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+  "focusMode": "dim",
+  "direction": "inputs",
+  "depth": null,
+  "listFacet": "all",
+  "groupFilter": "all",
+  "generation": 3,
+  "selectedId": "[\"expression\",\"\",\"Raw West\"]",
+  "inspectorOpen": true,
+  "viewport": {
+    "x": -54.5,
+    "y": -129.2,
+    "k": 0.85
+  },
+  "inspectorView": {
+    "codeX": 0,
+    "codeY": 0,
+    "inspectorX": 0,
+    "inspectorY": 24,
+    "wrap": false,
+    "focus": {
+      "kind": "add-related",
+      "nodeId": "[\"expression\",\"\",\"Raw West\"]"
+    },
+    "disclosures": {
+      "provenance": false
+    },
+    "expanded": false
+  },
+  "category": "all",
+  "query": ""
+}

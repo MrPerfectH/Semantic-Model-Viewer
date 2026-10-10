@@ -1,0 +1,822 @@
+{
+  "before": {
+    "nav": {
+      "membership": [
+        "[\"partition\",\"Report\",\"Report\"]",
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        "[\"expression\",\"\",\"Standalone\"]",
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "focusMode": "hide",
+      "direction": "inputs",
+      "depth": null,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 3,
+      "selectedId": "[\"expression\",\"\",\"Raw West\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": -103.80000000000001,
+        "y": 256.7,
+        "k": 0.85
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": true,
+        "focus": null,
+        "disclosures": {
+          "provenance": false
+        },
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    },
+    "visible": [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Server\"]"
+    ],
+    "map": [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Server\"]"
+    ],
+    "root": [
+      "[\"expression\",\"\",\"FinalOutput\"]"
+    ],
+    "branch": [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Raw West\"]"
+    ],
+    "branchEdges": [
+      null,
+      null,
+      null
+    ],
+    "status": "Inspecting: Raw West",
+    "barHidden": false,
+    "layout": [
+      [
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        {
+          "x": 704,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Downstream\"]",
+        {
+          "x": 1760,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        {
+          "x": 1408,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Merged Query\"]",
+        {
+          "x": 1056,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Prepared\"]",
+        {
+          "x": 704,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw East\"]",
+        {
+          "x": 352,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Standalone\"]",
+        {
+          "x": 294,
+          "y": 454
+        }
+      ],
+      [
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        {
+          "x": 0,
+          "y": 454
+        }
+      ],
+      [
+        "[\"partition\",\"Report\",\"Report\"]",
+        {
+          "x": 1760,
+          "y": 0
+        }
+      ]
+    ],
+    "history": 11,
+    "undo": 0,
+    "selected": "[\"expression\",\"\",\"Raw West\"]",
+    "flow": "[\"expression\",\"\",\"FinalOutput\"]",
+    "direction": "inputs",
+    "depth": null,
+    "graph": [
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        "[\"expression\",\"\",\"CycleA\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"partition\",\"Report\",\"Report\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Merged Query\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Prepared\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw East\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]"
+      ]
+    ],
+    "details": [
+      {
+        "cls": "pqi-provenance",
+        "open": false
+      }
+    ],
+    "scroll": {
+      "height": 954,
+      "client": 644,
+      "top": 0
+    },
+    "buttons": [
+      {
+        "text": "Inspect target",
+        "disabled": false,
+        "r": {
+          "x": 616.84375,
+          "y": 134,
+          "width": 80.734375,
+          "height": 32,
+          "top": 134,
+          "right": 697.578125,
+          "bottom": 166,
+          "left": 616.84375
+        }
+      },
+      {
+        "text": "Trace this query",
+        "disabled": false,
+        "r": {
+          "x": 703.578125,
+          "y": 134,
+          "width": 89.21875,
+          "height": 32,
+          "top": 134,
+          "right": 792.796875,
+          "bottom": 166,
+          "left": 703.578125
+        }
+      },
+      {
+        "text": "Clear flow",
+        "disabled": false,
+        "r": {
+          "x": 798.796875,
+          "y": 134,
+          "width": 62.203125,
+          "height": 32,
+          "top": 134,
+          "right": 861,
+          "bottom": 166,
+          "left": 798.796875
+        }
+      }
+    ]
+  },
+  "reroot": {
+    "nav": {
+      "membership": [
+        "[\"partition\",\"Report\",\"Report\"]",
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        "[\"expression\",\"\",\"Standalone\"]",
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"Raw West\"]",
+      "focusMode": "hide",
+      "direction": "inputs",
+      "depth": null,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 3,
+      "selectedId": "[\"expression\",\"\",\"Raw West\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": 47.80696202531644,
+        "y": 212.01898734177215,
+        "k": 0.8433544303797469
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": true,
+        "focus": null,
+        "disclosures": {
+          "provenance": false
+        },
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    },
+    "visible": [
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Server\"]"
+    ],
+    "map": [
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Server\"]"
+    ],
+    "root": [
+      "[\"expression\",\"\",\"Raw West\"]"
+    ],
+    "branch": [],
+    "branchEdges": [],
+    "status": "Inputs → target → consumers",
+    "barHidden": false,
+    "layout": [
+      [
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        {
+          "x": 704,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Downstream\"]",
+        {
+          "x": 1760,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        {
+          "x": 1408,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Merged Query\"]",
+        {
+          "x": 1056,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Prepared\"]",
+        {
+          "x": 704,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw East\"]",
+        {
+          "x": 352,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Standalone\"]",
+        {
+          "x": 294,
+          "y": 454
+        }
+      ],
+      [
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        {
+          "x": 0,
+          "y": 454
+        }
+      ],
+      [
+        "[\"partition\",\"Report\",\"Report\"]",
+        {
+          "x": 1760,
+          "y": 0
+        }
+      ]
+    ],
+    "history": 12,
+    "undo": 0,
+    "selected": "[\"expression\",\"\",\"Raw West\"]",
+    "flow": "[\"expression\",\"\",\"Raw West\"]",
+    "direction": "inputs",
+    "depth": null,
+    "graph": [
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        "[\"expression\",\"\",\"CycleA\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"partition\",\"Report\",\"Report\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Merged Query\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Prepared\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw East\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]"
+      ]
+    ],
+    "details": [
+      {
+        "cls": "pqi-provenance",
+        "open": false
+      }
+    ],
+    "scroll": {
+      "height": 954,
+      "client": 644,
+      "top": 0
+    },
+    "buttons": [
+      {
+        "text": "Inspect target",
+        "disabled": false,
+        "r": {
+          "x": 616.84375,
+          "y": 134,
+          "width": 80.734375,
+          "height": 32,
+          "top": 134,
+          "right": 697.578125,
+          "bottom": 166,
+          "left": 616.84375
+        }
+      },
+      {
+        "text": "Trace this query",
+        "disabled": true,
+        "r": {
+          "x": 703.578125,
+          "y": 134,
+          "width": 89.21875,
+          "height": 32,
+          "top": 134,
+          "right": 792.796875,
+          "bottom": 166,
+          "left": 703.578125
+        }
+      },
+      {
+        "text": "Clear flow",
+        "disabled": false,
+        "r": {
+          "x": 798.796875,
+          "y": 134,
+          "width": 62.203125,
+          "height": 32,
+          "top": 134,
+          "right": 861,
+          "bottom": 166,
+          "left": 798.796875
+        }
+      }
+    ]
+  },
+  "back": {
+    "nav": {
+      "membership": [
+        "[\"partition\",\"Report\",\"Report\"]",
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        "[\"expression\",\"\",\"Standalone\"]",
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "focusMode": "hide",
+      "direction": "inputs",
+      "depth": null,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 3,
+      "selectedId": "[\"expression\",\"\",\"Raw West\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": -103.80000000000001,
+        "y": 256.7,
+        "k": 0.85
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": true,
+        "focus": null,
+        "disclosures": {
+          "provenance": false
+        },
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    },
+    "visible": [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Server\"]"
+    ],
+    "map": [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Server\"]"
+    ],
+    "root": [
+      "[\"expression\",\"\",\"FinalOutput\"]"
+    ],
+    "branch": [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Raw West\"]"
+    ],
+    "branchEdges": [
+      null,
+      null,
+      null
+    ],
+    "status": "Inspecting: Raw West",
+    "barHidden": false,
+    "layout": [
+      [
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        {
+          "x": 704,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Downstream\"]",
+        {
+          "x": 1760,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        {
+          "x": 1408,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Merged Query\"]",
+        {
+          "x": 1056,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Prepared\"]",
+        {
+          "x": 704,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw East\"]",
+        {
+          "x": 352,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Standalone\"]",
+        {
+          "x": 294,
+          "y": 454
+        }
+      ],
+      [
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        {
+          "x": 0,
+          "y": 454
+        }
+      ],
+      [
+        "[\"partition\",\"Report\",\"Report\"]",
+        {
+          "x": 1760,
+          "y": 0
+        }
+      ]
+    ],
+    "history": 11,
+    "undo": 0,
+    "selected": "[\"expression\",\"\",\"Raw West\"]",
+    "flow": "[\"expression\",\"\",\"FinalOutput\"]",
+    "direction": "inputs",
+    "depth": null,
+    "graph": [
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        "[\"expression\",\"\",\"CycleA\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"partition\",\"Report\",\"Report\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Merged Query\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Prepared\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw East\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]"
+      ]
+    ],
+    "details": [
+      {
+        "cls": "pqi-provenance",
+        "open": false
+      }
+    ],
+    "scroll": {
+      "height": 954,
+      "client": 644,
+      "top": 0
+    },
+    "buttons": [
+      {
+        "text": "Inspect target",
+        "disabled": false,
+        "r": {
+          "x": 616.84375,
+          "y": 134,
+          "width": 80.734375,
+          "height": 32,
+          "top": 134,
+          "right": 697.578125,
+          "bottom": 166,
+          "left": 616.84375
+        }
+      },
+      {
+        "text": "Trace this query",
+        "disabled": false,
+        "r": {
+          "x": 703.578125,
+          "y": 134,
+          "width": 89.21875,
+          "height": 32,
+          "top": 134,
+          "right": 792.796875,
+          "bottom": 166,
+          "left": 703.578125
+        }
+      },
+      {
+        "text": "Clear flow",
+        "disabled": false,
+        "r": {
+          "x": 798.796875,
+          "y": 134,
+          "width": 62.203125,
+          "height": 32,
+          "top": 134,
+          "right": 861,
+          "bottom": 166,
+          "left": 798.796875
+        }
+      }
+    ]
+  }
+}

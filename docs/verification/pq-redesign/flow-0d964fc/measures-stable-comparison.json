@@ -1,0 +1,6 @@
+{
+  "selected": "Analyzed Total",
+  "comparison": "Base Amount",
+  "heading": "Analyzed Total",
+  "text": "ANALYZING MEASURE\nAnalyzed Total\nReport\n1 direct upstream\n0 direct downstream\nSplit view\nDAX\nDependencies\nDAX beside graph\nDAX below graph\nDependency flow\n\nUpstream → analyzed measure → downstream\n\nLeft → right\nTop → bottom\nBottom → top\n−\n71%\n+\nFit all\nCenter\nReset\nAnalyzed Total\nBase Amount\n● Upstream\n● Downstream\n2 measures · 2 shown · 0 collapsed · 1 visible links\nClick to compare · Enter to analyze\nDAX workspace\n\nRead the formula. Compare the logic.\n\nWrap lines\nANALYZED MEASURE\nAnalyzed Total\nReport\nInline measures\nOriginal\nLong lines\nShort lines\nCopy DAX\nVAR v = [Base Amount]\nRETURN\n    DIVIDE ( v, 2, 0 )\nCOMPARING · UPSTREAM\nBase Amount\nReport\nCopy DAX\nAnalyze this measure\nClear\nSUM ( Report[Amount] )"
+}
