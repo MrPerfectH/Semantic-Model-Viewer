@@ -1,0 +1,55 @@
+{
+  "available": true,
+  "visible": false,
+  "tabId": "tab_7_a0d1d832-9389-42c1-bd1c-8b8de950c5a2",
+  "url": "http://127.0.0.1:54093/",
+  "title": "Semantic Model Viewer",
+  "loading": false,
+  "control": {
+    "owner": "agent",
+    "ownedByCaller": true,
+    "generation": 0
+  },
+  "dialog": null,
+  "viewportSetting": {
+    "_tag": "freeform",
+    "width": 760,
+    "height": 800
+  },
+  "viewport": {
+    "width": 760,
+    "height": 800
+  },
+  "fileChooser": null,
+  "downloads": [
+    {
+      "fileName": "Independent stable flow 0d964fc snapshot 2026-10-10.html",
+      "path": "/Users/przemek.harazny/.t3/userdata/server-browser/downloads/23a5ce9eebdf64fdc73743d6def78b6d594f6c48f8bf4e69bfb244b5190e11a5/f3dcecf9-5452-47c2-955c-0356e316a6a6",
+      "sizeBytes": 769824,
+      "url": "blob:http://127.0.0.1:54093/ad57bcb7-cdc8-4c3a-a777-11cc03c54524",
+      "completedAt": "2026-10-10T09:27:31.346Z"
+    }
+  ],
+  "tabs": [
+    {
+      "tabId": "tab_7_a0d1d832-9389-42c1-bd1c-8b8de950c5a2",
+      "url": "http://127.0.0.1:54093/",
+      "owner": "agent",
+      "ownedByCaller": true,
+      "visible": false,
+      "profileId": "incognito"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "default",
+      "name": "Default"
+    },
+    {
+      "id": "incognito",
+      "name": "Incognito",
+      "incognito": true
+    }
+  ],
+  "defaultProfileId": "default"
+}
