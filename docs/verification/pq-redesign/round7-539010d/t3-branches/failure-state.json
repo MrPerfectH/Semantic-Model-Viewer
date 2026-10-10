@@ -1,0 +1,45 @@
+{
+  "membership": [
+    "[\"partition\",\"Report\",\"Report\"]",
+    "[\"partition\",\"Lookup\",\"Lookup\"]",
+    "[\"expression\",\"\",\"Server\"]",
+    "[\"expression\",\"\",\"Raw West\"]",
+    "[\"expression\",\"\",\"Raw East\"]",
+    "[\"expression\",\"\",\"Prepared\"]",
+    "[\"expression\",\"\",\"Merged Query\"]",
+    "[\"expression\",\"\",\"FinalOutput\"]",
+    "[\"expression\",\"\",\"Downstream\"]",
+    "[\"expression\",\"\",\"CoConsumer\"]",
+    "[\"expression\",\"\",\"Standalone\"]",
+    "[\"expression\",\"\",\"CycleA\"]",
+    "[\"expression\",\"\",\"CycleB\"]"
+  ],
+  "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+  "focusMode": "dim",
+  "direction": "inputs",
+  "depth": null,
+  "listFacet": "all",
+  "groupFilter": "all",
+  "generation": 11,
+  "selectedId": "[\"expression\",\"\",\"FinalOutput\"]",
+  "inspectorOpen": true,
+  "viewport": {
+    "x": -1001.3999999999999,
+    "y": 199.45,
+    "k": 0.85
+  },
+  "inspectorView": {
+    "codeX": 0,
+    "codeY": 0,
+    "inspectorX": 0,
+    "inspectorY": 0,
+    "wrap": true,
+    "focus": null,
+    "disclosures": {
+      "provenance": false
+    },
+    "expanded": false
+  },
+  "category": "disconnected",
+  "query": ""
+}

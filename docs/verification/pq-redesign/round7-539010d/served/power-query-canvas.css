@@ -1,0 +1,27 @@
+.pqc{position:relative;width:100%;height:100%;min-height:0;overflow:hidden;color:#27364d;font:13px 'IBM Plex Sans',system-ui,sans-serif;background:#f7f9fc}
+.pqc[hidden],.pqc [hidden]{display:none!important}
+.pqc-surface{position:absolute;inset:0;overflow:hidden;outline:none;touch-action:none;background-image:radial-gradient(#dce3ee 1px,transparent 1px);background-size:22px 22px;cursor:grab}
+.pqc-surface:focus-visible{box-shadow:inset 0 0 0 2px #2563eb}.pqc-dragging{cursor:grabbing}
+.pqc-world{position:absolute;left:0;top:0;width:0;height:0;transform-origin:0 0}
+.pqc-edges{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;pointer-events:none}
+.pqc-edge-line{fill:none;stroke:#8896aa;stroke-width:1.4;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.pqc-edge-hit{fill:none;stroke:transparent;stroke-width:14;vector-effect:non-scaling-stroke;pointer-events:stroke;cursor:pointer}
+.pqc-parameter-edge .pqc-edge-line{stroke:#9673bf;stroke-dasharray:6 4}.pqc-related .pqc-edge-line{stroke:#2563eb;stroke-width:1.8}.pqc-edge-dim{opacity:.1}
+.pqc-node{left:0;top:0;box-sizing:border-box;height:96px;text-align:left;cursor:grab;outline:none}
+.pqc-node .wui-card-head{height:58px;box-sizing:border-box}.pqc-node-title,.pqc-node-subtitle{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;max-width:100%}
+.pqc-node:hover{box-shadow:0 2px 5px #14203210,0 5px 16px #14203217!important}
+.pqc-kind-table-status{border-style:dashed!important}.pqc-selected{border-color:#2563eb!important;box-shadow:0 0 0 2px #2563eb,0 4px 12px #14203212!important}
+.pqc-node:focus-visible{outline:3px solid #2563eb;outline-offset:4px}.pqc-dim{opacity:.2}.pqc-selected.pqc-dim{opacity:.6}
+.pqc-node-badge{margin-left:auto;white-space:nowrap;background:#edf1f8;color:#657591;border-radius:4px;padding:2px 4px;font:8px/12px 'IBM Plex Sans',sans-serif}.pqc-status-badge{font-size:7px}
+.pqc-cycle-group{position:absolute;pointer-events:none;border:1px dashed #bac5e2;border-radius:13px;background:#eaf0fc66;box-sizing:border-box}
+.pqc-cycle-group>span{position:absolute;top:6px;left:13px;color:#687aa3;font:10px/14px 'IBM Plex Sans',sans-serif}
+.pqc-legend{position:absolute;bottom:16px;left:16px;display:flex;flex-wrap:wrap;gap:14px;font:10px/16px 'IBM Plex Sans',sans-serif;color:#76849a;pointer-events:none;max-width:calc(100% - 250px)}
+.pqc-legend span:before{content:'';display:inline-block;width:17px;border-top:2px solid #8896aa;vertical-align:middle;margin-right:6px}.pqc-parameter-key:before{border-top-style:dashed!important;border-color:#9673bf!important}
+.pqc-minimap{position:absolute;right:16px;bottom:16px;box-sizing:border-box;width:212px;padding:6px;background:#ffffffed;border:1px solid #dce3ee;box-shadow:0 3px 12px #2639570d;border-radius:9px;overflow:hidden}
+.pqc-map-label{margin:2px 5px 3px;color:#8290a7;font:600 11px/16px 'IBM Plex Sans',sans-serif;letter-spacing:.1px}.pqc-minimap svg{display:block;width:200px;max-width:100%;height:112px}
+.pqc-map-node{fill:#adbdd5;cursor:pointer}.pqc-map-edge{stroke:#8896aa;stroke-width:1;vector-effect:non-scaling-stroke;pointer-events:none}.pqc-map-selected{fill:#3970dc}.pqc-map-viewport{fill:#2563eb12;stroke:#5685e6;stroke-width:1;vector-effect:non-scaling-stroke}
+.pqc-names-only .wui-card-head{height:100%;align-items:center}.pqc-names-only .pqc-node-subtitle,.pqc-names-only .wui-card-chip,.pqc-names-only .pqc-status-badge{display:none}.pqc-names-only .wui-card-meta{position:absolute;right:6px;bottom:4px;border:0;padding:0}.pqc-names-only .pqc-node-badge{display:block}
+@media(max-width:500px){.pqc-minimap{width:152px;right:8px;bottom:8px}.pqc-minimap svg{height:82px}.pqc-map-label{font-size:7px;letter-spacing:.4px}.pqc-legend{max-width:calc(100% - 175px);gap:3px;left:8px;font-size:9px}}
+@media(prefers-reduced-motion:reduce){.pqc *{transition:none!important}}
+
+.pqc-flow-root{outline:3px solid #7455a2;outline-offset:5px}.pqc-branch{border-color:#366bc4!important}.pqc-branch-edge .pqc-edge-line{stroke:#2057b2;stroke-width:3}.pqc-legend{bottom:auto;top:12px;max-width:calc(100% - 24px)}
