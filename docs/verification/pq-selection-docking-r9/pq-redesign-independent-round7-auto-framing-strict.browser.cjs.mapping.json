@@ -1,0 +1,138 @@
+{
+  "actual": "2e3839a3d2728c96450f7b849205ea0055e4e558",
+  "semanticAssertionsUnchanged": true,
+  "calls": [
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/measures.css",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/measures.css"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/power-query-lineage.css",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/power-query-lineage.css"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/power-query.css",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/power-query.css"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/power-query-canvas.css",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/power-query-canvas.css"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/index.html",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/index.html"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/power-query-inspector.css",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/power-query-inspector.css"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/explorer.css",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/explorer.css"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/power-query-workspace.css",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/power-query-workspace.css"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/util.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/util.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/host-vscode.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/host-vscode.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/rules.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/rules.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/workspace-ui.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/workspace-ui.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/power-query-lineage.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/power-query-lineage.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/tmdl-parser.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/tmdl-parser.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/power-query-inspector.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/power-query-inspector.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/matrix.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/matrix.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/sidebar.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/sidebar.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/dax-format.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/dax-format.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/power-query-canvas.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/power-query-canvas.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/roles.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/roles.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/layouts.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/layouts.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/topbar.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/topbar.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/relationships.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/relationships.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/snapshot.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/snapshot.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/canvas.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/canvas.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/power-query.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/power-query.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/measures.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/measures.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/explorer.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/explorer.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/usage-adapter.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/usage-adapter.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/power-query-dependencies.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/power-query-dependencies.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/app.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/app.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/power-query-graph-model.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/power-query-graph-model.js"
+    },
+    {
+      "requested": "539010d01f086298e2a8de614ecd73757737a416:Models/tools/viewer/js/power-query-workspace.js",
+      "mapped": "2e3839a3d2728c96450f7b849205ea0055e4e558:Models/tools/viewer/js/power-query-workspace.js"
+    }
+  ]
+}

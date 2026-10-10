@@ -1,0 +1,403 @@
+{
+  "title": {
+    "view": {
+      "x": -15184.8,
+      "y": 49.2,
+      "k": 0.85
+    },
+    "label": "85%",
+    "root": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "selected": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "registry": 52,
+    "edges": 51,
+    "visible": 52,
+    "title": {
+      "x": 387.025390625,
+      "y": 191.0500030517578,
+      "width": 159.375,
+      "height": 14.914840698242188,
+      "top": 191.0500030517578,
+      "right": 546.400390625,
+      "bottom": 205.96484375,
+      "left": 387.025390625
+    },
+    "hit": "<svg role=\"img\" aria-label=\"Visible query canvas overview\" viewBox=\"-28 -28 18260 152\"><g><line x1=\"17726\" y1=\"48\" x2=\"18078\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step49\\&quot;]&quot;,&quot;[\\&quot;partition\\&quot;,\\&quot;FinalChain\\&quot;,\\&quot;FinalChain\\&quot;]&quot;]\"></line><line x1=\"126\" y1=\"48\" x2=\"478\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Parameter\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step00\\&quot;]&quot;]\"></line><line x1=\"478\" y1=\"48\" x2=\"830\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step00\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step01\\&quot;]&quot;]\"></line><line x1=\"830\" y1=\"48\" x2=\"1182\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step01\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step02\\&quot;]&quot;]\"></line><line x1=\"1182\" y1=\"48\" x2=\"1534\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step02\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step03\\&quot;]&quot;]\"></line><line x1=\"1534\" y1=\"48\" x2=\"1886\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step03\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step04\\&quot;]&quot;]\"></line><line x1=\"1886\" y1=\"48\" x2=\"2238\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step04\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step05\\&quot;]&quot;]\"></line><line x1=\"2238\" y1=\"48\" x2=\"2590\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step05\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step06\\&quot;]&quot;]\"></line><line x1=\"2590\" y1=\"48\" x2=\"2942\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step06\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step07\\&quot;]&quot;]\"></line><line x1=\"2942\" y1=\"48\" x2=\"3294\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step07\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step08\\&quot;]&quot;]\"></line><line x1=\"3294\" y1=\"48\" x2=\"3646\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step08\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step09\\&quot;]&quot;]\"></line><line x1=\"3646\" y1=\"48\" x2=\"3998\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step09\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step10\\&quot;]&quot;]\"></line><line x1=\"3998\" y1=\"48\" x2=\"4350\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step10\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step11\\&quot;]&quot;]\"></line><line x1=\"4350\" y1=\"48\" x2=\"4702\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step11\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step12\\&quot;]&quot;]\"></line><line x1=\"4702\" y1=\"48\" x2=\"5054\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step12\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step13\\&quot;]&quot;]\"></line><line x1=\"5054\" y1=\"48\" x2=\"5406\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step13\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step14\\&quot;]&quot;]\"></line><line x1=\"5406\" y1=\"48\" x2=\"5758\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step14\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step15\\&quot;]&quot;]\"></line><line x1=\"5758\" y1=\"48\" x2=\"6110\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step15\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step16\\&quot;]&quot;]\"></line><line x1=\"6110\" y1=\"48\" x2=\"6462\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step16\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step17\\&quot;]&quot;]\"></line><line x1=\"6462\" y1=\"48\" x2=\"6814\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step17\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step18\\&quot;]&quot;]\"></line><line x1=\"6814\" y1=\"48\" x2=\"7166\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step18\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step19\\&quot;]&quot;]\"></line><line x1=\"7166\" y1=\"48\" x2=\"7518\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step19\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step20\\&quot;]&quot;]\"></line><line x1=\"7518\" y1=\"48\" x2=\"7870\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step20\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step21\\&quot;]&quot;]\"></line><line x1=\"7870\" y1=\"48\" x2=\"8222\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step21\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step22\\&quot;]&quot;]\"></line><line x1=\"8222\" y1=\"48\" x2=\"8574\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step22\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step23\\&quot;]&quot;]\"></line><line x1=\"8574\" y1=\"48\" x2=\"8926\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step23\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step24\\&quot;]&quot;]\"></line><line x1=\"8926\" y1=\"48\" x2=\"9278\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step24\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step25\\&quot;]&quot;]\"></line><line x1=\"9278\" y1=\"48\" x2=\"9630\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step25\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step26\\&quot;]&quot;]\"></line><line x1=\"9630\" y1=\"48\" x2=\"9982\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step26\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step27\\&quot;]&quot;]\"></line><line x1=\"9982\" y1=\"48\" x2=\"10334\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step27\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step28\\&quot;]&quot;]\"></line><line x1=\"10334\" y1=\"48\" x2=\"10686\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step28\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step29\\&quot;]&quot;]\"></line><line x1=\"10686\" y1=\"48\" x2=\"11038\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step29\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step30\\&quot;]&quot;]\"></line><line x1=\"11038\" y1=\"48\" x2=\"11390\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step30\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step31\\&quot;]&quot;]\"></line><line x1=\"11390\" y1=\"48\" x2=\"11742\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step31\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step32\\&quot;]&quot;]\"></line><line x1=\"11742\" y1=\"48\" x2=\"12094\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step32\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step33\\&quot;]&quot;]\"></line><line x1=\"12094\" y1=\"48\" x2=\"12446\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step33\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step34\\&quot;]&quot;]\"></line><line x1=\"12446\" y1=\"48\" x2=\"12798\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step34\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step35\\&quot;]&quot;]\"></line><line x1=\"12798\" y1=\"48\" x2=\"13150\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step35\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step36\\&quot;]&quot;]\"></line><line x1=\"13150\" y1=\"48\" x2=\"13502\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step36\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step37\\&quot;]&quot;]\"></line><line x1=\"13502\" y1=\"48\" x2=\"13854\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step37\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step38\\&quot;]&quot;]\"></line><line x1=\"13854\" y1=\"48\" x2=\"14206\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step38\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step39\\&quot;]&quot;]\"></line><line x1=\"14206\" y1=\"48\" x2=\"14558\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step39\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step40\\&quot;]&quot;]\"></line><line x1=\"14558\" y1=\"48\" x2=\"14910\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step40\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step41\\&quot;]&quot;]\"></line><line x1=\"14910\" y1=\"48\" x2=\"15262\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step41\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step42\\&quot;]&quot;]\"></line><line x1=\"15262\" y1=\"48\" x2=\"15614\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step42\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step43\\&quot;]&quot;]\"></line><line x1=\"15614\" y1=\"48\" x2=\"15966\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step43\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step44\\&quot;]&quot;]\"></line><line x1=\"15966\" y1=\"48\" x2=\"16318\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step44\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step45\\&quot;]&quot;]\"></line><line x1=\"16318\" y1=\"48\" x2=\"16670\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step45\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step46\\&quot;]&quot;]\"></line><line x1=\"16670\" y1=\"48\" x2=\"17022\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step46\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step47\\&quot;]&quot;]\"></line><line x1=\"17022\" y1=\"48\" x2=\"17374\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step47\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step48\\&quot;]&quot;]\"></line><line x1=\"17374\" y1=\"48\" x2=\"17726\" y2=\"48\" class=\"pqc-map-edge\" data-map-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step48\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Step49\\&quot;]&quot;]\"></line></g><g><rect x=\"17952\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node pqc-map-selected\" data-map-id=\"[&quot;partition&quot;,&quot;FinalChain&quot;,&quot;FinalChain&quot;]\"></rect><rect x=\"0\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Parameter&quot;]\"></rect><rect x=\"352\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step00&quot;]\"></rect><rect x=\"704\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step01&quot;]\"></rect><rect x=\"1056\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step02&quot;]\"></rect><rect x=\"1408\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step03&quot;]\"></rect><rect x=\"1760\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step04&quot;]\"></rect><rect x=\"2112\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step05&quot;]\"></rect><rect x=\"2464\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step06&quot;]\"></rect><rect x=\"2816\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step07&quot;]\"></rect><rect x=\"3168\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step08&quot;]\"></rect><rect x=\"3520\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step09&quot;]\"></rect><rect x=\"3872\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step10&quot;]\"></rect><rect x=\"4224\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step11&quot;]\"></rect><rect x=\"4576\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step12&quot;]\"></rect><rect x=\"4928\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step13&quot;]\"></rect><rect x=\"5280\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step14&quot;]\"></rect><rect x=\"5632\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step15&quot;]\"></rect><rect x=\"5984\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step16&quot;]\"></rect><rect x=\"6336\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step17&quot;]\"></rect><rect x=\"6688\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step18&quot;]\"></rect><rect x=\"7040\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step19&quot;]\"></rect><rect x=\"7392\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step20&quot;]\"></rect><rect x=\"7744\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step21&quot;]\"></rect><rect x=\"8096\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step22&quot;]\"></rect><rect x=\"8448\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step23&quot;]\"></rect><rect x=\"8800\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step24&quot;]\"></rect><rect x=\"9152\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step25&quot;]\"></rect><rect x=\"9504\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step26&quot;]\"></rect><rect x=\"9856\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step27&quot;]\"></rect><rect x=\"10208\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step28&quot;]\"></rect><rect x=\"10560\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step29&quot;]\"></rect><rect x=\"10912\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step30&quot;]\"></rect><rect x=\"11264\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step31&quot;]\"></rect><rect x=\"11616\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step32&quot;]\"></rect><rect x=\"11968\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step33&quot;]\"></rect><rect x=\"12320\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step34&quot;]\"></rect><rect x=\"12672\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step35&quot;]\"></rect><rect x=\"13024\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step36&quot;]\"></rect><rect x=\"13376\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step37&quot;]\"></rect><rect x=\"13728\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step38&quot;]\"></rect><rect x=\"14080\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step39&quot;]\"></rect><rect x=\"14432\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step40&quot;]\"></rect><rect x=\"14784\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step41&quot;]\"></rect><rect x=\"15136\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step42&quot;]\"></rect><rect x=\"15488\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step43&quot;]\"></rect><rect x=\"15840\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step44&quot;]\"></rect><rect x=\"16192\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step45&quot;]\"></rect><rect x=\"16544\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step46&quot;]\"></rect><rect x=\"16896\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step47&quot;]\"></rect><rect x=\"17248\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step48&quot;]\"></rect><rect x=\"17600\" y=\"0\" width=\"252\" height=\"96\" rx=\"12\" class=\"pqc-map-node\" data-map-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Step49&quot;]\"></rect></g><rect class=\"pqc-map-viewport\" pointer-events=\"none\" x=\"17864.470588235294\" y=\"-57.88235294117648\" width=\"427.05882352941177\" height=\"211.76470588235296\"></rect></svg>",
+    "own": false,
+    "map": {
+      "x": 455,
+      "y": 149.5,
+      "width": 160,
+      "height": 147,
+      "top": 149.5,
+      "right": 615,
+      "bottom": 296.5,
+      "left": 455
+    },
+    "nav": {
+      "x": 286,
+      "y": 222.5,
+      "width": 327,
+      "height": 72,
+      "top": 222.5,
+      "right": 613,
+      "bottom": 294.5,
+      "left": 286
+    },
+    "canvas": {
+      "x": 268,
+      "y": 132.5,
+      "width": 363,
+      "height": 180,
+      "top": 132.5,
+      "right": 631,
+      "bottom": 312.5,
+      "left": 268
+    },
+    "bodyY": 238,
+    "flowButtons": [
+      {
+        "text": "Inspect target",
+        "r": {
+          "x": 280,
+          "y": -28.5,
+          "width": 80.734375,
+          "height": 32,
+          "top": -28.5,
+          "right": 360.734375,
+          "bottom": 3.5,
+          "left": 280
+        }
+      },
+      {
+        "text": "Trace this query",
+        "r": {
+          "x": 366.734375,
+          "y": -28.5,
+          "width": 89.21875,
+          "height": 32,
+          "top": -28.5,
+          "right": 455.953125,
+          "bottom": 3.5,
+          "left": 366.734375
+        }
+      },
+      {
+        "text": "Frame related flow",
+        "r": {
+          "x": 461.953125,
+          "y": -28.5,
+          "width": 102.28125,
+          "height": 32,
+          "top": -28.5,
+          "right": 564.234375,
+          "bottom": 3.5,
+          "left": 461.953125
+        }
+      },
+      {
+        "text": "Clear flow",
+        "r": {
+          "x": 280,
+          "y": 9.5,
+          "width": 62.203125,
+          "height": 32,
+          "top": 9.5,
+          "right": 342.203125,
+          "bottom": 41.5,
+          "left": 280
+        }
+      },
+      {
+        "text": "← Follow input Step49",
+        "r": {
+          "x": 280,
+          "y": 47.5,
+          "width": 119.46875,
+          "height": 32,
+          "top": 47.5,
+          "right": 399.46875,
+          "bottom": 79.5,
+          "left": 280
+        }
+      }
+    ]
+  },
+  "actual": {
+    "innerWidth": 640,
+    "innerHeight": 500,
+    "outerWidth": 1280,
+    "outerHeight": 1087,
+    "dpr": 2,
+    "below": true,
+    "width": 400,
+    "height": 400,
+    "inspectorOpen": true,
+    "selectedId": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "inspector": {
+      "x": 268,
+      "y": 319.5,
+      "width": 363,
+      "height": 400,
+      "top": 319.5,
+      "right": 631,
+      "bottom": 719.5,
+      "left": 268
+    },
+    "separator": {
+      "x": 268,
+      "y": 312.5,
+      "width": 363,
+      "height": 7,
+      "top": 312.5,
+      "right": 631,
+      "bottom": 319.5,
+      "left": 268
+    },
+    "surface": {
+      "x": 268,
+      "y": 132.5,
+      "width": 363,
+      "height": 180,
+      "top": 132.5,
+      "right": 631,
+      "bottom": 312.5,
+      "left": 268
+    },
+    "aria": {
+      "orientation": "horizontal",
+      "value": "400"
+    },
+    "hit": {
+      "tag": "DIV",
+      "cls": "pqw-resizer",
+      "html": "<div class=\"pqw-resizer\" role=\"separator\" tabindex=\"0\" aria-label=\"Resize Power Query inspector\" aria-orientation=\"horizontal\" aria-valuemin=\"300\" aria-valuemax=\"650\" aria-valuenow=\"400\" aria-valuetext=\"Height 400 pixels\"></div>"
+    },
+    "visualViewport": {
+      "offsetLeft": 0,
+      "offsetTop": 0,
+      "pageLeft": 0,
+      "pageTop": 0,
+      "width": 640,
+      "height": 500,
+      "scale": 1
+    },
+    "scroll": {
+      "windowX": 0,
+      "windowY": 0,
+      "documentX": 0,
+      "documentY": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "pqBodyX": 0,
+      "pqBodyY": 238,
+      "inspectorHostY": 0,
+      "inspectorRootY": 0
+    },
+    "active": {
+      "tag": "BUTTON",
+      "cls": "ex-button"
+    },
+    "pointer": [
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": "",
+          "aria": null,
+          "text": "Import model (TMDL / BIM)"
+        },
+        "clientX": 193,
+        "clientY": 218.5,
+        "pageX": 193,
+        "pageY": 218.5,
+        "screenX": 408,
+        "screenY": 546,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 111.30000001192093
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": "",
+          "aria": null,
+          "text": "Import model (TMDL / BIM)"
+        },
+        "clientX": 193,
+        "clientY": 218.5,
+        "pageX": 193,
+        "pageY": 218.5,
+        "screenX": 408,
+        "screenY": 546,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 111.7000000178814
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Add model"
+        },
+        "clientX": 474.9375,
+        "clientY": 358.671875,
+        "pageX": 474.9375,
+        "pageY": 358.671875,
+        "screenX": 971.875,
+        "screenY": 826.34375,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 178.40000000596046
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Add model"
+        },
+        "clientX": 474.9375,
+        "clientY": 358.671875,
+        "pageX": 474.9375,
+        "pageY": 358.671875,
+        "screenX": 971.875,
+        "screenY": 826.34375,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 178.80000001192093
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Power Query"
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 344.7000000178814
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Power Query"
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 345.30000001192093
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-table-name pqw-library-row",
+          "id": "",
+          "aria": null,
+          "text": "FinalChainm · FinalChain"
+        },
+        "clientX": 109.8984375,
+        "clientY": 412.44921875,
+        "pageX": 109.8984375,
+        "pageY": 412.44921875,
+        "screenX": 241.796875,
+        "screenY": 933.8984375,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 461.30000001192093
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-table-name pqw-library-row",
+          "id": "",
+          "aria": null,
+          "text": "FinalChainm · FinalChain"
+        },
+        "clientX": 109.8984375,
+        "clientY": 412.44921875,
+        "pageX": 109.8984375,
+        "pageY": 412.44921875,
+        "screenX": 241.796875,
+        "screenY": 933.8984375,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 461.7000000178814
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-button",
+          "id": "",
+          "aria": null,
+          "text": "Hide unrelated"
+        },
+        "clientX": 527,
+        "clientY": 452.2421875,
+        "pageX": 527,
+        "pageY": 452.2421875,
+        "screenX": 1076,
+        "screenY": 1013.484375,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 561.4000000059605
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-button",
+          "id": "",
+          "aria": null,
+          "text": "Hide unrelated"
+        },
+        "clientX": 527,
+        "clientY": 452.2421875,
+        "pageX": 527,
+        "pageY": 452.2421875,
+        "screenX": 1076,
+        "screenY": 1013.484375,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 562
+      }
+    ]
+  }
+}

@@ -1,0 +1,651 @@
+{
+  "runtimeCommit": "2e3839a3d2728c96450f7b849205ea0055e4e558",
+  "previewTab": "tab_2_5b9f7ea5-7bd4-49cf-b4ff-936dd4885a10",
+  "selection": {
+    "before": {
+      "viewport": {
+        "x": 42.45098039215691,
+        "y": 136.53431372549022,
+        "k": 0.46078431372549017
+      },
+      "layout": [
+        [
+          "[\"partition\",\"Report\",\"Report\"]",
+          {
+            "x": 1760,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Server\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Raw West\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Raw East\"]",
+          {
+            "x": 352,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Prepared\"]",
+          {
+            "x": 704,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Merged Query\"]",
+          {
+            "x": 1056,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"FinalOutput\"]",
+          {
+            "x": 1408,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Downstream\"]",
+          {
+            "x": 1760,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CoConsumer\"]",
+          {
+            "x": 704,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CycleA\"]",
+          {
+            "x": 0,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CycleB\"]",
+          {
+            "x": 0,
+            "y": 252
+          }
+        ],
+        [
+          "[\"partition\",\"Lookup\",\"Lookup\"]",
+          {
+            "x": 0,
+            "y": 454
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Standalone\"]",
+          {
+            "x": 294,
+            "y": 454
+          }
+        ]
+      ],
+      "body": {
+        "x": 0,
+        "y": 0
+      },
+      "selected": null,
+      "root": null
+    },
+    "after": {
+      "viewport": {
+        "x": 42.45098039215691,
+        "y": 136.53431372549022,
+        "k": 0.46078431372549017
+      },
+      "layout": [
+        [
+          "[\"partition\",\"Report\",\"Report\"]",
+          {
+            "x": 1760,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Server\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Raw West\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Raw East\"]",
+          {
+            "x": 352,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Prepared\"]",
+          {
+            "x": 704,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Merged Query\"]",
+          {
+            "x": 1056,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"FinalOutput\"]",
+          {
+            "x": 1408,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Downstream\"]",
+          {
+            "x": 1760,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CoConsumer\"]",
+          {
+            "x": 704,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CycleA\"]",
+          {
+            "x": 0,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CycleB\"]",
+          {
+            "x": 0,
+            "y": 252
+          }
+        ],
+        [
+          "[\"partition\",\"Lookup\",\"Lookup\"]",
+          {
+            "x": 0,
+            "y": 454
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Standalone\"]",
+          {
+            "x": 294,
+            "y": 454
+          }
+        ]
+      ],
+      "body": {
+        "x": 0,
+        "y": 0
+      },
+      "selected": "[\"expression\",\"\",\"Prepared\"]",
+      "root": "[\"expression\",\"\",\"Prepared\"]"
+    },
+    "input": [
+      {
+        "trusted": true,
+        "text": "Prepared"
+      }
+    ]
+  },
+  "bottom": {
+    "pref": "bottom",
+    "below": true,
+    "state": {
+      "viewport": {
+        "x": -199.5,
+        "y": 14.200000000000003,
+        "k": 0.85
+      },
+      "layout": [
+        [
+          "[\"partition\",\"Report\",\"Report\"]",
+          {
+            "x": 1760,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Server\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Raw West\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Raw East\"]",
+          {
+            "x": 352,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Prepared\"]",
+          {
+            "x": 704,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Merged Query\"]",
+          {
+            "x": 1056,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"FinalOutput\"]",
+          {
+            "x": 1408,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Downstream\"]",
+          {
+            "x": 1760,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CoConsumer\"]",
+          {
+            "x": 704,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CycleA\"]",
+          {
+            "x": 0,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CycleB\"]",
+          {
+            "x": 0,
+            "y": 252
+          }
+        ],
+        [
+          "[\"partition\",\"Lookup\",\"Lookup\"]",
+          {
+            "x": 0,
+            "y": 454
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Standalone\"]",
+          {
+            "x": 294,
+            "y": 454
+          }
+        ]
+      ],
+      "body": {
+        "x": 0,
+        "y": 0
+      },
+      "selected": "[\"expression\",\"\",\"Prepared\"]",
+      "root": "[\"expression\",\"\",\"Prepared\"]"
+    },
+    "panel": {
+      "x": 268,
+      "y": 427.5,
+      "width": 1012,
+      "height": 400,
+      "top": 427.5,
+      "right": 1280,
+      "bottom": 827.5,
+      "left": 268
+    },
+    "separator": {
+      "x": 268,
+      "y": 420.5,
+      "width": 1012,
+      "height": 7,
+      "top": 420.5,
+      "right": 1280,
+      "bottom": 427.5,
+      "left": 268
+    },
+    "title": {
+      "x": 702.1749877929688,
+      "y": 264.04998779296875,
+      "width": 168.72503662109375,
+      "height": 14.91485595703125,
+      "top": 264.04998779296875,
+      "right": 870.9000244140625,
+      "bottom": 278.96484375,
+      "left": 702.1749877929688
+    },
+    "own": true,
+    "saved": "{\"dock\":\"bottom\",\"width\":400,\"height\":400}"
+  },
+  "ordinaryDifferentCard": {
+    "before": {
+      "view": {
+        "x": -103.80000000000001,
+        "y": 117.45,
+        "k": 0.85
+      },
+      "layout": [
+        [
+          "[\"partition\",\"Report\",\"Report\"]",
+          {
+            "x": 1760,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Server\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Raw West\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Raw East\"]",
+          {
+            "x": 352,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Prepared\"]",
+          {
+            "x": 704,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Merged Query\"]",
+          {
+            "x": 1056,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"FinalOutput\"]",
+          {
+            "x": 1408,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Downstream\"]",
+          {
+            "x": 1760,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CoConsumer\"]",
+          {
+            "x": 704,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CycleA\"]",
+          {
+            "x": 0,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CycleB\"]",
+          {
+            "x": 0,
+            "y": 252
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"LanguageProbe\"]",
+          {
+            "x": 704,
+            "y": 252
+          }
+        ],
+        [
+          "[\"partition\",\"Lookup\",\"Lookup\"]",
+          {
+            "x": 0,
+            "y": 454
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Standalone\"]",
+          {
+            "x": 294,
+            "y": 454
+          }
+        ]
+      ],
+      "root": "[\"expression\",\"\",\"LanguageProbe\"]",
+      "selected": "[\"expression\",\"\",\"Raw West\"]",
+      "body": 0
+    },
+    "after": {
+      "view": {
+        "x": -103.80000000000001,
+        "y": 117.45,
+        "k": 0.85
+      },
+      "layout": [
+        [
+          "[\"partition\",\"Report\",\"Report\"]",
+          {
+            "x": 1760,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Server\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Raw West\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Raw East\"]",
+          {
+            "x": 352,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Prepared\"]",
+          {
+            "x": 704,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Merged Query\"]",
+          {
+            "x": 1056,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"FinalOutput\"]",
+          {
+            "x": 1408,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Downstream\"]",
+          {
+            "x": 1760,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CoConsumer\"]",
+          {
+            "x": 704,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CycleA\"]",
+          {
+            "x": 0,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"CycleB\"]",
+          {
+            "x": 0,
+            "y": 252
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"LanguageProbe\"]",
+          {
+            "x": 704,
+            "y": 252
+          }
+        ],
+        [
+          "[\"partition\",\"Lookup\",\"Lookup\"]",
+          {
+            "x": 0,
+            "y": 454
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Standalone\"]",
+          {
+            "x": 294,
+            "y": 454
+          }
+        ]
+      ],
+      "root": "[\"expression\",\"\",\"LanguageProbe\"]",
+      "selected": "[\"expression\",\"\",\"Raw East\"]",
+      "body": 0
+    },
+    "sameView": true,
+    "samePositions": true
+  },
+  "language": {
+    "name": "LanguageProbe",
+    "issues": [
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "standard-library",
+        "message": "Standard M functions and types: Table.TransformColumnTypes, Int64.Type. These are language names, not missing model queries."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: MissingQuery. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: Unknown.Library. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Dynamic/environment reference: Expression.Evaluate; this can choose a query at run time, so reading the code cannot identify every target."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: Expression.Evaluate. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Dynamic/environment reference: #shared; this can choose a query at run time, so reading the code cannot identify every target."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: #shared. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      }
+    ],
+    "inputs": [
+      "[\"expression\",\"\",\"Raw West\"]"
+    ],
+    "source": "Table.TransformColumnTypes(#\"Raw West\", {{\"Amount\", Int64.Type}}) & MissingQuery & Unknown.Library(1) & Expression.Evaluate(\"ChosenAtRuntime\", #shared)",
+    "displayed": "Links the viewer could not confirm · 6The viewer reads M text; it does not run queries. Names below could not be linked with confidence. This does not by itself mean your query is broken.Unresolved name: MissingQuery. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize.Unresolved name: Unknown.Library. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize.Dynamic/environment reference: Expression.Evaluate; this can choose a query at run time, so reading the code cannot identify every target.Unresolved name: Expression.Evaluate. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize.Dynamic/environment reference: #shared; this can choose a query at run time, so reading the code cannot identify every target.Unresolved name: #shared. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+  },
+  "download": [
+    {
+      "fileName": "Independent stable flow 0d964fc snapshot 2026-10-10.html",
+      "path": "/Users/przemek.harazny/.t3/userdata/server-browser/downloads/fc08a7fa57006f92b68888d65bad1187056dab4e5c0388596756253c896e2c5c/93456c24-a9b1-4ded-b43f-a925fe962a8d",
+      "sizeBytes": 775806,
+      "url": "blob:http://localhost:8945/99561a6a-a531-4c74-b5e7-b9feb8dae2f2",
+      "completedAt": "2026-10-10T10:26:01.625Z"
+    }
+  ],
+  "readerScript": {
+    "path": "tests/pq-redesign-independent-round8-reader.scenarios.cjs",
+    "unchanged": true,
+    "historicalCandidateLiteral": "12ae2e9149590fde8a3292d22ce1d27c11a2aae4",
+    "actualSource": "package-runtime-proof.json"
+  },
+  "displayTimeoutCause": "Save snapshot success toast covered Display button; elementFromPoint hit Dismiss message. Dismissed via trusted preview_click, then native select and Center succeeded."
+}

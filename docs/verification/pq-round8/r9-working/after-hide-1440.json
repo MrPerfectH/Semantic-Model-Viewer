@@ -1,0 +1,403 @@
+{
+  "title": {
+    "view": {
+      "x": -15144.8,
+      "y": 49.2,
+      "k": 0.85
+    },
+    "label": "85%",
+    "root": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "selected": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "registry": 52,
+    "edges": 51,
+    "visible": 52,
+    "title": {
+      "x": 427.025390625,
+      "y": 191.0500030517578,
+      "width": 159.375,
+      "height": 14.914840698242188,
+      "top": 191.0500030517578,
+      "right": 586.400390625,
+      "bottom": 205.96484375,
+      "left": 427.025390625
+    },
+    "hit": "<div class=\"wui-card-title pqc-node-title\" title=\"FinalChain\" style=\"font: 600 13.5px / 17.55px &quot;IBM Plex Sans&quot;, sans-serif; letter-spacing: -0.2px; color: rgb(31, 36, 48);\">FinalChain</div>",
+    "own": true,
+    "map": {
+      "x": 535,
+      "y": 149.5,
+      "width": 160,
+      "height": 147,
+      "top": 149.5,
+      "right": 695,
+      "bottom": 296.5,
+      "left": 535
+    },
+    "nav": {
+      "x": 286,
+      "y": 254.5,
+      "width": 390.9140625,
+      "height": 40,
+      "top": 254.5,
+      "right": 676.9140625,
+      "bottom": 294.5,
+      "left": 286
+    },
+    "canvas": {
+      "x": 268,
+      "y": 132.5,
+      "width": 443,
+      "height": 180,
+      "top": 132.5,
+      "right": 711,
+      "bottom": 312.5,
+      "left": 268
+    },
+    "bodyY": 215.5,
+    "flowButtons": [
+      {
+        "text": "Inspect target",
+        "r": {
+          "x": 618.265625,
+          "y": -28.5,
+          "width": 80.734375,
+          "height": 32,
+          "top": -28.5,
+          "right": 699,
+          "bottom": 3.5,
+          "left": 618.265625
+        }
+      },
+      {
+        "text": "Trace this query",
+        "r": {
+          "x": 280,
+          "y": 9.5,
+          "width": 89.21875,
+          "height": 32,
+          "top": 9.5,
+          "right": 369.21875,
+          "bottom": 41.5,
+          "left": 280
+        }
+      },
+      {
+        "text": "Frame related flow",
+        "r": {
+          "x": 375.21875,
+          "y": 9.5,
+          "width": 102.28125,
+          "height": 32,
+          "top": 9.5,
+          "right": 477.5,
+          "bottom": 41.5,
+          "left": 375.21875
+        }
+      },
+      {
+        "text": "Clear flow",
+        "r": {
+          "x": 483.5,
+          "y": 9.5,
+          "width": 62.203125,
+          "height": 32,
+          "top": 9.5,
+          "right": 545.703125,
+          "bottom": 41.5,
+          "left": 483.5
+        }
+      },
+      {
+        "text": "← Follow input Step49",
+        "r": {
+          "x": 280,
+          "y": 47.5,
+          "width": 119.46875,
+          "height": 32,
+          "top": 47.5,
+          "right": 399.46875,
+          "bottom": 79.5,
+          "left": 280
+        }
+      }
+    ]
+  },
+  "actual": {
+    "innerWidth": 720,
+    "innerHeight": 500,
+    "outerWidth": 1440,
+    "outerHeight": 1087,
+    "dpr": 2,
+    "below": true,
+    "width": 400,
+    "height": 400,
+    "inspectorOpen": true,
+    "selectedId": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "inspector": {
+      "x": 268,
+      "y": 319.5,
+      "width": 443,
+      "height": 400,
+      "top": 319.5,
+      "right": 711,
+      "bottom": 719.5,
+      "left": 268
+    },
+    "separator": {
+      "x": 268,
+      "y": 312.5,
+      "width": 443,
+      "height": 7,
+      "top": 312.5,
+      "right": 711,
+      "bottom": 319.5,
+      "left": 268
+    },
+    "surface": {
+      "x": 268,
+      "y": 132.5,
+      "width": 443,
+      "height": 180,
+      "top": 132.5,
+      "right": 711,
+      "bottom": 312.5,
+      "left": 268
+    },
+    "aria": {
+      "orientation": "horizontal",
+      "value": "400"
+    },
+    "hit": {
+      "tag": "DIV",
+      "cls": "pqw-resizer",
+      "html": "<div class=\"pqw-resizer\" role=\"separator\" tabindex=\"0\" aria-label=\"Resize Power Query inspector\" aria-orientation=\"horizontal\" aria-valuemin=\"300\" aria-valuemax=\"650\" aria-valuenow=\"400\" aria-valuetext=\"Height 400 pixels\"></div>"
+    },
+    "visualViewport": {
+      "offsetLeft": 0,
+      "offsetTop": 0,
+      "pageLeft": 0,
+      "pageTop": 0,
+      "width": 720,
+      "height": 500,
+      "scale": 1
+    },
+    "scroll": {
+      "windowX": 0,
+      "windowY": 0,
+      "documentX": 0,
+      "documentY": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "pqBodyX": 0,
+      "pqBodyY": 215.5,
+      "inspectorHostY": 0,
+      "inspectorRootY": 0
+    },
+    "active": {
+      "tag": "BUTTON",
+      "cls": "ex-button"
+    },
+    "pointer": [
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-button ex-primary",
+          "id": "",
+          "aria": null,
+          "text": "Open model"
+        },
+        "clientX": 660.70703125,
+        "clientY": 28,
+        "pageX": 660.70703125,
+        "pageY": 28,
+        "screenX": 1343.4140625,
+        "screenY": 165,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 131
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-button ex-primary",
+          "id": "",
+          "aria": null,
+          "text": "Open model"
+        },
+        "clientX": 660.70703125,
+        "clientY": 28,
+        "pageX": 660.70703125,
+        "pageY": 28,
+        "screenX": 1343.4140625,
+        "screenY": 165,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 131.5
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Update model"
+        },
+        "clientX": 505.94140625,
+        "clientY": 338.7265625,
+        "pageX": 505.94140625,
+        "pageY": 338.7265625,
+        "screenX": 1033.8828125,
+        "screenY": 786.453125,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 197.69999998807907
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Update model"
+        },
+        "clientX": 505.94140625,
+        "clientY": 338.7265625,
+        "pageX": 505.94140625,
+        "pageY": 338.7265625,
+        "screenX": 1033.8828125,
+        "screenY": 786.453125,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 198.39999997615814
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Power Query"
+        },
+        "clientX": 362.796875,
+        "clientY": 77,
+        "pageX": 362.796875,
+        "pageY": 77,
+        "screenX": 747.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 230.59999999403954
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Power Query"
+        },
+        "clientX": 362.796875,
+        "clientY": 77,
+        "pageX": 362.796875,
+        "pageY": 77,
+        "screenX": 747.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 231
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-table-name pqw-library-row",
+          "id": "",
+          "aria": null,
+          "text": "FinalChainm · FinalChain"
+        },
+        "clientX": 109.8984375,
+        "clientY": 412.44921875,
+        "pageX": 109.8984375,
+        "pageY": 412.44921875,
+        "screenX": 241.796875,
+        "screenY": 933.8984375,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 347.2999999821186
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-table-name pqw-library-row",
+          "id": "",
+          "aria": null,
+          "text": "FinalChainm · FinalChain"
+        },
+        "clientX": 109.8984375,
+        "clientY": 412.44921875,
+        "pageX": 109.8984375,
+        "pageY": 412.44921875,
+        "screenX": 241.796875,
+        "screenY": 933.8984375,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 347.69999998807907
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-button",
+          "id": "",
+          "aria": null,
+          "text": "Hide unrelated"
+        },
+        "clientX": 587,
+        "clientY": 452.2421875,
+        "pageX": 587,
+        "pageY": 452.2421875,
+        "screenX": 1196,
+        "screenY": 1013.484375,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 448
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-button",
+          "id": "",
+          "aria": null,
+          "text": "Hide unrelated"
+        },
+        "clientX": 587,
+        "clientY": 452.2421875,
+        "pageX": 587,
+        "pageY": 452.2421875,
+        "screenX": 1196,
+        "screenY": 1013.484375,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 448.59999999403954
+      }
+    ]
+  }
+}

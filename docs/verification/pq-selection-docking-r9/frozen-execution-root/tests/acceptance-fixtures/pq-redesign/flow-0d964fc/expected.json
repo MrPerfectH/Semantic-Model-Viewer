@@ -1,0 +1,91 @@
+{
+  "edges": [
+    [
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw East\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Prepared\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Merged Query\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"FinalOutput\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Downstream\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"CycleA\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"partition\",\"Report\",\"Report\"]"
+    ]
+  ],
+  "finalRoot": "[\"partition\",\"Report\",\"Report\"]",
+  "ancestors": [
+    "[\"expression\",\"\",\"Server\"]",
+    "[\"expression\",\"\",\"Raw West\"]",
+    "[\"expression\",\"\",\"Raw East\"]",
+    "[\"expression\",\"\",\"Prepared\"]",
+    "[\"expression\",\"\",\"Merged Query\"]",
+    "[\"expression\",\"\",\"FinalOutput\"]",
+    "[\"partition\",\"Report\",\"Report\"]"
+  ],
+  "rawWestBranch": [
+    "[\"expression\",\"\",\"Raw West\"]",
+    "[\"expression\",\"\",\"Prepared\"]",
+    "[\"expression\",\"\",\"Merged Query\"]",
+    "[\"expression\",\"\",\"FinalOutput\"]",
+    "[\"partition\",\"Report\",\"Report\"]"
+  ],
+  "excludedFromRawWestBranch": [
+    "[\"expression\",\"\",\"Raw East\"]",
+    "[\"expression\",\"\",\"Server\"]",
+    "[\"expression\",\"\",\"CoConsumer\"]",
+    "[\"expression\",\"\",\"Downstream\"]"
+  ],
+  "directTargetInputs": [
+    "[\"partition\",\"Report\",\"Report\"]",
+    "[\"expression\",\"\",\"FinalOutput\"]"
+  ],
+  "disconnected": [
+    "[\"expression\",\"\",\"Standalone\"]",
+    "[\"partition\",\"Lookup\",\"Lookup\"]"
+  ],
+  "exactRanges": [
+    {
+      "at": 32,
+      "end": 47,
+      "target": "[\"expression\",\"\",\"Merged Query\"]"
+    },
+    {
+      "at": 60,
+      "end": 75,
+      "target": "[\"expression\",\"\",\"Merged Query\"]"
+    }
+  ]
+}
