@@ -56,3 +56,29 @@ test('group filtering uses exact metadata and persists opaquely through Back and
 test('new membership requests placement once, preserves other members and explicit drop coordinates',()=>{const {w}=stateHarness();w.ensureState();w.membership.delete('A');w.visible=new Set(['B']);const calls=[];w.canvas.placeAdded=(id,p)=>calls.push({id,...p});w.add('A',{x:55,y:66});assert.equal(calls.length,1);assert.equal(calls[0].anchorId,'B');assert.deepEqual(calls[0].position,{x:55,y:66});w.navigate('A',false);assert.equal(calls.length,1);});
 test('Center selected dispatches genuine center only for a current visible selection',()=>{const {w}=stateHarness();w.visible=new Set(['B']);let call=null;w.canvas.center=(id,p)=>{call={id,p};return true;};assert.equal(w.centerSelected(),true);assert.equal(call.id,'B');assert.equal(call.p.readable,true);w.visible.clear();call=null;assert.equal(w.centerSelected(),false);assert.equal(call,null);});
 test('group-only metadata changes invalidate captured workspace identity',()=>{const g=harness(),m=model([row('A')]),i=g.PowerQueryWorkspaceInternals,c=i.capture(m);m.powerQuery.nodes[0].groupPath='Private/Nested';assert.equal(i.same(c,m),false);});
+
+test('flow branch follows only directed resolved paths, excludes merge siblings and terminates cycles',()=>{
+ const g=harness(),rows=[row('P'),row('Raw','P'),row('Clean','Raw'),row('Lookup'),row('Merge','Table.Combine({Clean, Lookup})'),row('Final','Merge'),row('Side','Raw'),row('CycleA','CycleB'),row('CycleB','CycleA'),row('Alone')];
+ const c=g.PowerQueryWorkspaceInternals.contextFor(g.PowerQueryGraphModel.build(model(rows),{generation:1}),rows,1),branch=g.PowerQueryWorkspaceInternals.flowBranch;
+ assert.deepEqual([...branch(c,'Final','P')].sort(),['Clean','Final','Merge','P','Raw']);
+ assert.deepEqual([...branch(c,'P','Final')].sort(),['Clean','Final','Merge','P','Raw']);
+ assert.equal(branch(c,'Final','Side').size,0);assert.equal(branch(c,'Final','Alone').size,0);
+ assert.deepEqual([...branch(c,'CycleA','CycleB')].sort(),['CycleA','CycleB']);
+ assert.equal(branch(c,'Final','Final').size,0);
+});
+test('inspecting a reference retains flow root and direction; Back and layout Undo restore root independently',async()=>{
+ const {w}=stateHarness();w.flowRootId='B';w.direction='inputs';w.depth=Infinity;w.focusMode='hide';
+ w.navigate('A',true);assert.equal(w.flowRootId,'B');assert.equal(w.direction,'inputs');assert.equal(w.depth,Infinity);
+ w.traceSelected();assert.equal(w.flowRootId,'A');assert.equal(w.direction,'consumers');
+ await w.back();assert.equal(w.flowRootId,'B');assert.equal(w.selectedId,'A');assert.equal(w.direction,'inputs');
+ w.blank();assert.equal(w.flowRootId,null);await w.undo();assert.equal(w.flowRootId,'B');assert.equal(w.selectedId,'A');
+ w.clearFlow();assert.equal(w.flowRootId,null);await w.back();assert.equal(w.flowRootId,'B');
+ w.showAll();assert.equal(w.flowRootId,null);await w.undo();assert.equal(w.flowRootId,'B');
+ w.remove('B');assert.equal(w.flowRootId,null);await w.undo();assert.equal(w.flowRootId,'B');
+});
+test('first query establishes an all-depth flow and new generation clears it',()=>{
+ const {w}=stateHarness();w.navigate('B',true);assert.equal(w.flowRootId,'B');assert.equal(w.depth,Infinity);assert.equal(w.direction,'inputs');
+ const job=jobHarness();job.w.flowRootId='Secret';job.w.invalidate();assert.equal(job.w.flowRootId,null);
+});
+test('Arrange enables Undo immediately even when it was previously disabled',()=>{const {w}=stateHarness();w.undoButton={disabled:true};w.canvas.arrange=()=>{};w.visible=new Set(['A','B']);w.arrange();assert.equal(w.undoButton.disabled,false);assert.equal(w.layoutHistory.length,1);});
+test('adding the first object to a blank layout establishes its flow target',()=>{const {w}=stateHarness();w.blank();w.add('B');assert.equal(w.flowRootId,'B');assert.equal(w.direction,'inputs');assert.equal(w.depth,Infinity);});

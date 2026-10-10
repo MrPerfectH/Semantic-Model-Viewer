@@ -7,7 +7,7 @@
   function mount(host, options) {
     options = options || {};
     var doc = host.ownerDocument, win = doc.defaultView || g;
-    var alive = true, context = null, generation, selected = null, matches = null, visible = null, focusIds = null;
+    var alive = true, context = null, generation, selected = null, matches = null, visible = null, focusIds = null, flowRoot = null, branchIds = new Set();
     var positions = new Map(), nodes = new Map(), elements = new Map(), groups = [], layoutGenerations = new WeakMap();
     var view = { x: 0, y: 0, k: 1 }, size = { w: 0, h: 0 }, roving = null;
     var suspended = false, pendingFit = false, frame = 0, drag = null, pinch = null;
@@ -127,8 +127,8 @@
     }
     function applyVisibility() {
       var shownIds = ids(); if (!shown(roving)) roving = shownIds[0] || null;
-      elements.forEach(function (e, id) { e.hidden = !shown(id); e.tabIndex = shown(id) && id === roving ? 0 : -1; e.classList.toggle('pqc-dim', (!!matches && !matches.has(id)) || (!!focusIds && !focusIds.has(id))); e.classList.toggle('pqc-focus-dim', !!focusIds && !focusIds.has(id)); e.classList.toggle('pqc-selected', id === selected); e.setAttribute('aria-pressed', String(id === selected)); });
-      edgeElements.forEach(function (entry) { entry.group.style.display = shown(entry.edge.inputId) && shown(entry.edge.consumerId) ? '' : 'none'; var related = selected === entry.edge.inputId || selected === entry.edge.consumerId; entry.group.classList.toggle('pqc-related', related); entry.group.classList.toggle('pqc-edge-dim', (!!matches && !matches.has(entry.edge.inputId) && !matches.has(entry.edge.consumerId)) || (!!focusIds && (!focusIds.has(entry.edge.inputId) || !focusIds.has(entry.edge.consumerId)))); });
+      elements.forEach(function (e, id) { e.hidden = !shown(id); e.tabIndex = shown(id) && id === roving ? 0 : -1; e.classList.toggle('pqc-dim', (!!matches && !matches.has(id)) || (!!focusIds && !focusIds.has(id))); e.classList.toggle('pqc-focus-dim', !!focusIds && !focusIds.has(id)); e.classList.toggle('pqc-selected', id === selected); e.classList.toggle('pqc-flow-root', id === flowRoot); e.classList.toggle('pqc-branch', branchIds.has(id)); e.setAttribute('aria-pressed', String(id === selected)); });
+      edgeElements.forEach(function (entry) { entry.group.style.display = shown(entry.edge.inputId) && shown(entry.edge.consumerId) ? '' : 'none'; var related = selected === entry.edge.inputId || selected === entry.edge.consumerId; entry.group.classList.toggle('pqc-related', related); entry.group.classList.toggle('pqc-branch-edge', branchIds.has(entry.edge.inputId) && branchIds.has(entry.edge.consumerId)); entry.group.classList.toggle('pqc-edge-dim', (!!matches && !matches.has(entry.edge.inputId) && !matches.has(entry.edge.consumerId)) || (!!focusIds && (!focusIds.has(entry.edge.inputId) || !focusIds.has(entry.edge.consumerId)))); });
       updateGeometry();
     }
     function drawMap() {
@@ -222,7 +222,7 @@
     function clear() {
       if (frame) win.cancelAnimationFrame(frame); frame = 0; drag = null; pinch = null; pointers.clear();
       context = null; generation = undefined; positions.clear(); nodes.clear(); elements.clear(); miniElements.clear(); groups = []; edgeElements = [];
-      selected = roving = matches = visible = focusIds = null; pendingFit = false; view = { x: 0, y: 0, k: 1 };
+      selected = roving = matches = visible = focusIds = flowRoot = null; branchIds = new Set(); pendingFit = false; view = { x: 0, y: 0, k: 1 };
       nodeLayer.replaceChildren(); edgeLayer.replaceChildren(); cycleLayer.replaceChildren(); mapNodes.replaceChildren(); mapEdges.replaceChildren(); root.hidden = true; transform(false);
     }
     function setContext(next) {
@@ -253,6 +253,7 @@
     }
     function setSelection(id) { if (!alive) return; selected = id !== null && nodes.has(id) ? id : null; applyVisibility(); }
     function setMatches(set) { if (!alive) return; matches = set === null ? null : new Set(set); applyVisibility(); }
+    function setFlow(rootId,branch) { if (!alive) return; flowRoot = nodes.has(rootId) ? rootId : null; branchIds = new Set(Array.from(branch || []).filter(function(id){return nodes.has(id);})); applyVisibility(); }
     function setFocusIds(set) { if (!alive) return; focusIds = set === null ? null : new Set(set); applyVisibility(); }
     function arrange(set) {
       if (!alive || !context) return false; var subset = new Set(Array.from(set || ids()).filter(shown)); if (!subset.size) return false;
@@ -310,7 +311,7 @@
     function suspend(value) { if (!alive) return; suspended = !!value; root.hidden = suspended || !context; pointers.clear(); drag = pinch = null; if (!suspended) resize(); }
     function destroy() { if (!alive) return; clear(); alive = false; if (observer) observer.disconnect(); removers.forEach(function (off) { off(); }); removers = []; options = {}; root.remove(); }
     setContext(options.context || null);
-    return { setContext: setContext, setSelection: setSelection, setMatches: setMatches, setFocusIds: setFocusIds, arrange: arrange, placeAdded: placeAdded, setVisibleIds: setVisibleIds, reveal: reveal, center: center, fit: fit, zoomBy: zoomBy, getViewport: getViewport, setViewport: setViewport, focusNode: focusNode, captureLayout: captureLayout, restoreLayout: restoreLayout, suspend: suspend, destroy: destroy };
+    return { setContext: setContext, setSelection: setSelection, setMatches: setMatches, setFocusIds: setFocusIds, setFlow: setFlow, arrange: arrange, placeAdded: placeAdded, setVisibleIds: setVisibleIds, reveal: reveal, center: center, fit: fit, zoomBy: zoomBy, getViewport: getViewport, setViewport: setViewport, focusNode: focusNode, captureLayout: captureLayout, restoreLayout: restoreLayout, suspend: suspend, destroy: destroy };
   }
   g.PowerQueryCanvas = { version: 2, mount: mount };
 })(window);

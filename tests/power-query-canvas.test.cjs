@@ -125,3 +125,12 @@ test('reciprocal edges have independent 14px hit corridors in every orientation 
     for(let i=1;i<p.length;i++)assert.equal(p[i][0]===p[i-1][0]?p[i][0]>400&&p[i][0]<652&&Math.max(p[i][1],p[i-1][1])>0&&Math.min(p[i][1],p[i-1][1])<96:p[i][1]>0&&p[i][1]<96&&Math.max(p[i][0],p[i-1][0])>400&&Math.min(p[i][0],p[i-1][0])<652,false);
   }
 });
+
+test('flow target and inspected branch are independent of selection and never mutate routes or positions',()=>{
+ const s=setup(),before=[...s.canvas.captureLayout()],paths=s.host.querySelectorAll('.pqc-edge-line').map(e=>e.getAttribute('d'));
+ s.canvas.setFlow('id-3',new Set(['id-0','id-1','id-3']));s.canvas.setSelection('id-0');
+ assert.equal(s.node('id-3').classList.contains('pqc-flow-root'),true);assert.equal(s.node('id-0').classList.contains('pqc-selected'),true);
+ assert.equal(s.host.querySelectorAll('.pqc-branch-edge').length,2);assert.deepEqual([...s.canvas.captureLayout()],before);assert.deepEqual(s.host.querySelectorAll('.pqc-edge-line').map(e=>e.getAttribute('d')),paths);
+ s.canvas.setFlow(null,new Set());assert.equal(s.host.querySelectorAll('.pqc-flow-root').length,0);assert.equal(s.host.querySelectorAll('.pqc-branch-edge').length,0);
+ s.canvas.setFlow('id-3',new Set(['id-0']));s.canvas.setContext(context(2));assert.equal(s.host.querySelectorAll('.pqc-flow-root').length,0);
+});

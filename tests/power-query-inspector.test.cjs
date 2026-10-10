@@ -150,3 +150,12 @@ test('full-query entry precedes all focus controls and source without duplicatin
   assert.equal(s.doc.activeElement,entry);assert.equal(s.code(),source);assert.equal(s.inspector.captureViewState().expanded,false);
   s.ctx.byNodeId.get('id-4').code=null;s.inspector.select('id-4',{open:true});assert.equal(s.host.querySelector('.pqi-reader-launcher'),null);
 });
+
+test('direct input and consumer buttons emit supplied IDs without requiring or inventing source ranges',()=>{
+ const h=harness('power-query-inspector.js'),c=context(),events=[],inspector=h.win.PowerQueryInspector.mount(h.host,{context:c,onInspectRelated:p=>events.push(p)});
+ inspector.select('id-1',{open:true});const buttons=h.host.querySelectorAll('.pqi-neighbor');assert.equal(buttons.length,2);
+ buttons[0].fire('click');buttons[1].fire('click');assert.deepEqual(events.map(e=>e.targetId),['id-0','id-3']);assert.ok(events.every(e=>e.sourceId==='id-1'&&e.generation===1&&!e.occurrence));
+ inspector.select('id-3',{open:true});buttons[0].fire('click');assert.equal(events.length,2);
+ inspector.setContext(context(2));buttons[1].fire('click');assert.equal(events.length,2);
+ inspector.select('id-1',{open:true});assert.equal(h.host.querySelector('.pqi-open-query').getAttribute('aria-label'),'Open full query');
+});

@@ -37,3 +37,5 @@
 .pqi-reader-hint{display:block;margin-top:6px;font-size:11px;color:#677a96}
 .pqi-reader .pqi-code-scroll{font-size:14px;line-height:1.7}.pqi-reader .pqi-line-number{line-height:23.8px}.pqi-reader .pqi-source-line{min-height:23.8px}
 .pqi-reader-header{border-bottom:0}.pqi-reader-header .pqi-button{flex-shrink:0}
+
+.pqi-neighbors{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;gap:16px;flex-wrap:wrap}.pqi-neighbor-group{flex:1 1 130px;min-width:0;max-height:180px;overflow:auto}.pqi-neighbor-group h3{font-size:11px;margin:0 0 5px;color:#52637c}.pqi-neighbor{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:4px 0;text-align:left}.pqi-neighbors .pqi-neutral{font-size:11px}

@@ -447,3 +447,18 @@ See [metadata limitations](docs/power-query-contract.md), the
 [presentation contract](docs/power-query-redesign/interface-contract-v2.md), and
 [filter policy](docs/power-query-redesign/filter-addendum.md). Original verification
 remains historical; redesigned UI acceptance is recorded separately.
+
+### Following a Power Query flow
+
+Choose a query, parameter or table to set a flow target. Inspecting an M reference,
+canvas card, or an **Inputs / Consumers** button keeps that target fixed. The purple
+outline marks the target; stronger blue links trace the inspected branch using only
+resolved M references. These are separate from semantic model relationships.
+
+Use **Hide unrelated** to see the flow, **Trace this query** to choose the inspected
+query as the new target, or **Inspect target** to return to its M. Direction and
+distance apply to the target. **Back** restores navigation, filters and reader state;
+**Undo** restores layout edits. **Clear flow** returns to selection focus; **Show all**
+also restores the complete layout membership. Arrange remains input → consumer and
+preserves positions until explicitly invoked. Static analysis is partial; cycles and
+uncertainty remain visible. No M is executed or included in default shared snapshots.

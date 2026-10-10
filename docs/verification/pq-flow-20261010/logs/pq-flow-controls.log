@@ -1,0 +1,16 @@
+{"ready":true,"browser":"154.0.8037.99","node":"v22.23.3"}
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 0
+
+    at eval (eval at <anonymous> (/private/tmp/pq-flow-run.cjs:14:27), <anonymous>:5:175)
+    at async check (eval at <anonymous> (/private/tmp/pq-flow-run.cjs:14:27), <anonymous>:1:59)
+    at async eval (eval at <anonymous> (/private/tmp/pq-flow-run.cjs:14:27), <anonymous>:5:1)
+    at async /private/tmp/pq-flow-run.cjs:14:21 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

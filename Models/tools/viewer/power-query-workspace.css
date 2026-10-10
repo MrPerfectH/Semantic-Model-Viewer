@@ -25,3 +25,5 @@
 
 .pqw-library>input,.pqw-library>.ex-library-heading,.pqw-library>.ex-segments,.pqw-library>.ex-facets,.pqw-library>.ex-library-footer,.pqw-library>.pqw-reset{flex-shrink:0}.pqw-library{overflow:auto}.pqw-list{flex:1 0 120px;min-height:120px}.pqw-library .ex-library-footer{padding:9px 16px}
 .pqw-library .ex-facets{flex-direction:column}.pqw-library .ex-facets select{width:100%;min-width:0}
+
+.pqw-flow{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:8px 12px;background:#f0f5ff;border-bottom:1px solid #d5e0f4;font-size:11px;flex-shrink:0}.pqw-flow>strong{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#274c87}.pqw-flow-status{flex:1 1 180px;overflow-wrap:anywhere;color:#52637c}.pqw-flow button{font-size:10px;padding:4px 7px}.pqw-flow>strong:before{content:'◎ ';color:#7455a2}

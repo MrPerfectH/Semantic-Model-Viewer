@@ -94,17 +94,17 @@
       function control(e, kind) { record(e, kind); controlEntries.push(focusEntries[focusEntries.length - 1]); return e; }
       function valid() { return current(gen, id) && version === controlsVersion; }
       function change(values) { if (valid()) emit('onFocusChange', Object.assign({ generation: gen, nodeId: id, mode: settings.mode, direction: settings.direction, depth: settings.depth }, values)); }
-      focusBox.appendChild(el('h3', '', 'Canvas focus'));
+      focusBox.appendChild(el('h3', '', settings.rootLabel ? 'Flow focus · ' + settings.rootLabel : 'Canvas focus'));
       var modes = el('div', 'ex-focus-options'); modes.setAttribute('role', 'group'); modes.setAttribute('aria-label', 'Unrelated queries');
       [['dim', 'Dim unrelated'], ['hide', 'Hide unrelated']].forEach(function (pair) { var b = control(g.WorkspaceUI.button(doc, { text: pair[1] }), 'focus-' + pair[0]); b.setAttribute('aria-pressed', String(settings.mode === pair[0])); listen(b, 'click', function () { change({ mode: pair[0] }); }); modes.appendChild(b); }); focusBox.appendChild(modes);
       var details = el('div', 'pqi-reference-options'); focusBox.appendChild(details);
-      details.appendChild(el('p', 'ex-muted', 'Follows resolved query references. Static uncertainty remains; hidden objects stay in this layout.'));
+      details.appendChild(el('p', 'ex-muted', 'Follows resolved M references, not semantic relationships. Focus stays on the flow target while you inspect other queries.'));
       function selector(kind, label, choices, value, toValue) {
         var e = control(el('select'), kind); e.setAttribute('aria-label', label); choices.forEach(function (pair) { var option = el('option', '', pair[1]); option.value = pair[0]; e.appendChild(option); }); e.value = String(value === Infinity ? 'all' : value); listen(e, 'change', function () { var values = {}; values[kind === 'focus-direction' ? 'direction' : 'depth'] = toValue(e.value); change(values); }); var labelElement = el('label', 'pqi-option-label', label); labelElement.appendChild(e); details.appendChild(labelElement);
       }
       selector('focus-direction', 'Query reference direction', [['inputs','Inputs'],['consumers','Consumers'],['connected','All connected']], settings.direction, function (v) { return v; });
       selector('focus-depth', 'Query reference distance', [['0','Selected only'],['1','Direct only'],['2','Up to 2 connections'],['all','Direct + indirect']], settings.depth, function (v) { return v === 'all' ? Infinity : Number(v); });
-      details.appendChild(el('p', 'ex-related-count', settings.relatedCount + ' related · ' + settings.missingCount + ' to add'));
+      details.appendChild(el('p', 'ex-related-count', settings.relatedCount + (settings.rootLabel ? ' objects in flow · ' : ' related · ') + settings.missingCount + ' to add'));
       function action(name, text, disabled) { var b = control(g.WorkspaceUI.button(doc, { text: text }), name); b.disabled = disabled; listen(b, 'click', function () { if (!b.disabled && valid()) emit('onMembershipAction', { generation: gen, nodeId: id, action: name }); }); details.appendChild(b); }
       action('add-related', 'Add ' + settings.missingCount + ' related to canvas', !settings.missingCount);
       action('remove-unrelated', 'Remove ' + settings.removableCount + ' unrelated from layout', !settings.removableCount);
@@ -118,7 +118,7 @@
         var mode = settings.mode, direction = settings.direction, depth = settings.depth;
         if (!['dim', 'hide'].includes(mode) || !['inputs', 'consumers', 'connected'].includes(direction) || ![0,1,2,Infinity].includes(depth)) return;
         function count(v) { return Number.isInteger(v) && v >= 0 ? v : 0; }
-        focusControls = { mode: mode, direction: direction, depth: depth, relatedCount: count(settings.relatedCount), missingCount: count(settings.missingCount), removableCount: count(settings.removableCount) };
+        focusControls = { mode: mode, direction: direction, depth: depth, relatedCount: count(settings.relatedCount), missingCount: count(settings.missingCount), removableCount: count(settings.removableCount), rootLabel: typeof settings.rootLabel === 'string' ? settings.rootLabel : null };
       }
       renderFocusControls();
     }
@@ -176,7 +176,7 @@
       var copy = record(el('button', 'pqi-button', 'Copy M'), 'copy'); copy.type = 'button'; copy.setAttribute('aria-label', 'Copy exact M source');
       wrapButton = record(el('button', 'pqi-button'), 'wrap'); wrapButton.type = 'button'; updateWrapLabel();
       var status = el('span', 'pqi-copy-status'); status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite');
-      expandButton = record(el('button', 'pqi-button pqi-open-query', 'Open full query'), 'expand'); expandButton.type = 'button'; expandButton.setAttribute('aria-haspopup', 'dialog');
+      expandButton = record(el('button', 'pqi-button pqi-open-query', 'Open full query'), 'expand'); expandButton.type = 'button'; expandButton.setAttribute('aria-label', 'Open full query'); expandButton.setAttribute('aria-haspopup', 'dialog');
       readerLauncher.appendChild(expandButton);
       readerLauncher.appendChild(el('span', 'pqi-reader-hint', 'M source · ' + source.split(/\r\n|\r|\n/).length + ' lines · opens in a wide reader'));
       bar.appendChild(caption); bar.appendChild(copy); bar.appendChild(wrapButton); parent.appendChild(bar); parent.appendChild(status);
@@ -230,11 +230,17 @@
       if (!row) return;
       var head = el('header', 'pqi-header'), name = el('div', 'pqi-heading'); name.appendChild(el('h2', 'pqi-title', row.node.label));
       var closeButton = record(el('button', 'pqi-close', '×'), 'close'); closeButton.type = 'button'; closeButton.setAttribute('aria-label', 'Close query details'); head.appendChild(name); head.appendChild(closeButton); root.appendChild(head);
-      var gen = generation, id = selected; on(closeButton, 'click', function () { if (current(gen, id)) close('close'); });
+      var gen = generation, id = selected, renderVersion = contentVersion; on(closeButton, 'click', function () { if (current(gen, id)) close('close'); });
       var chrome = row.chrome || {}; head.style.background = chrome.headerTint || '#f8fafc'; if (chrome.fact) name.style.color = '#fff'; name.appendChild(el('p', 'pqi-subtitle', chrome.subtitle || row.node.subtitle));
       var counts = el('div', 'pqi-counts'); counts.appendChild(el('span', '', (row.inputIds || []).length + ' inputs')); counts.appendChild(el('span', '', (row.consumerIds || []).length + ' consumers')); head.appendChild(counts);
       if (typeof row.code === 'string') { readerLauncher = el('div', 'pqi-reader-launcher'); root.appendChild(readerLauncher); }
-      focusBox = el('section', 'ex-related pqi-focus'); focusBox.setAttribute('aria-label', 'Explore related queries'); root.appendChild(focusBox); renderFocusControls();
+      var links=el('section','pqi-neighbors');links.setAttribute('aria-label','Direct query references');root.appendChild(links);
+      [['inputIds','Inputs'],['consumerIds','Consumers']].forEach(function(pair){
+        var ids=Array.from(new Set(row[pair[0]]||[])),group=el('div','pqi-neighbor-group');group.appendChild(el('h3','',pair[1]+' · '+ids.length));links.appendChild(group);
+        if(!ids.length)group.appendChild(el('span','pqi-neutral','None resolved'));
+        ids.forEach(function(targetId){var target=lookup(targetId);if(!target)return;var b=record(el('button','ex-button pqi-neighbor',target.node.label),'related-'+targetId);b.type='button';b.setAttribute('aria-label','Inspect '+pair[1].toLowerCase().slice(0,-1)+' '+target.node.label);b.title=target.node.subtitle;group.appendChild(b);on(b,'click',function(){if(current(gen,id)&&contentVersion===renderVersion)emit('onInspectRelated',{generation:gen,sourceId:id,targetId:targetId});});});
+      });
+      focusBox = el('section' , 'ex-related pqi-focus'); focusBox.setAttribute('aria-label', 'Explore related queries'); root.appendChild(focusBox); renderFocusControls();
       var provenanceBox = el('details', 'pqi-provenance'); provenanceBox.appendChild(el('summary', '', 'Metadata and provenance')); root.appendChild(provenanceBox);
       var metadata = el('dl', 'pqi-metadata');
       [['Kind', row.classification || row.node.kind], ['Type', row.type], ['Basis', provenance(row.basis)]].forEach(function (pair) { if (!pair[1]) return; metadata.appendChild(el('dt', '', pair[0])); metadata.appendChild(el('dd', '', pair[1])); }); provenanceBox.appendChild(metadata);

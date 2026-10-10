@@ -23,3 +23,5 @@
 .pqc-names-only .wui-card-head{height:100%;align-items:center}.pqc-names-only .pqc-node-subtitle,.pqc-names-only .wui-card-chip,.pqc-names-only .pqc-status-badge{display:none}.pqc-names-only .wui-card-meta{position:absolute;right:6px;bottom:4px;border:0;padding:0}.pqc-names-only .pqc-node-badge{display:block}
 @media(max-width:500px){.pqc-minimap{width:152px;right:8px;bottom:8px}.pqc-minimap svg{height:82px}.pqc-map-label{font-size:7px;letter-spacing:.4px}.pqc-legend{max-width:calc(100% - 175px);gap:3px;left:8px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){.pqc *{transition:none!important}}
+
+.pqc-flow-root{outline:3px solid #7455a2;outline-offset:5px}.pqc-branch{border-color:#366bc4!important}.pqc-branch-edge .pqc-edge-line{stroke:#2057b2;stroke-width:3}.pqc-legend{bottom:auto;top:12px;max-width:calc(100% - 24px)}

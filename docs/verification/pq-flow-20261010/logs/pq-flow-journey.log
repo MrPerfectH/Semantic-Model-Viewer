@@ -1,0 +1,13 @@
+{"ready":true,"browser":"154.0.8037.99","node":"v22.23.3"}
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: 'Open full query', exact: true })[22m
+
+    at click (/private/tmp/pq-flow-run.cjs:9:69)
+    at eval (<anonymous>:4:7)
+    at async /private/tmp/pq-flow-run.cjs:14:21 {
+  log: [
+    "  - waiting for getByRole('button', { name: 'Open full query', exact: true })"
+  ],
+  name: 'TimeoutError'
+}

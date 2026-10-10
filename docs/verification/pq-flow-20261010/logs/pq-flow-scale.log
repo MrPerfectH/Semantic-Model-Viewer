@@ -1,0 +1,2 @@
+{"ready":true,"browser":"154.0.8037.99","node":"v22.23.3"}
+{"ok":true,"result":{"browser":"154.0.8037.99","node":"v22.23.3","objects":1000,"parameterConsumers":250,"reachable":301,"chainObjects":52,"openMs":300,"selectMs":493,"modelReset":true,"offlineRequests":["file:///Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/docs/verification/pq-flow-20261010/flow-snapshot.html"],"excludedMarkers":true,"errors":[]}}
