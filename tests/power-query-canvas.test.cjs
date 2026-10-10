@@ -144,3 +144,8 @@ test('explicit center is repeatable in the clipped visible canvas frame',()=>{
  const view=plain(s.canvas.getViewport()),p=s.canvas.captureLayout().get('id-1');assert.equal(view.x+(p.x+126)*view.k,255);assert.equal(view.y+(p.y+48)*view.k,190);
  s.canvas.center('id-1',{readable:true,frame});assert.deepEqual(plain(s.canvas.getViewport()),view);
 });
+test('two far-origin visible nodes compact explicitly while Fit and Undo layout preserve every hidden position',()=>{
+ const s=setup(),far=s.canvas.captureLayout();far.set('id-0',{x:-9000,y:-20000});far.set('id-1',{x:10000,y:19000});s.canvas.restoreLayout(far);s.canvas.setVisibleIds(new Set(['id-0','id-1']));const original=s.canvas.captureLayout();s.canvas.fit();assert.deepEqual(plain([...s.canvas.captureLayout()].sort()),plain([...original].sort()));
+ s.canvas.arrange(new Set(['id-0','id-1']));const compact=s.canvas.captureLayout();assert.equal(compact.get('id-0').y,compact.get('id-1').y);assert.equal(compact.get('id-1').x-compact.get('id-0').x,352);for(const id of ['id-2','id-3','id-4','id-5'])assert.deepEqual(plain(compact.get(id)),plain(original.get(id)));
+ s.canvas.fit();assert(s.canvas.getViewport().k>=.6);s.canvas.restoreLayout(original);assert.deepEqual(plain([...s.canvas.captureLayout()].sort()),plain([...original].sort()));
+});

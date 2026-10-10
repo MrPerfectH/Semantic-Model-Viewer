@@ -166,3 +166,8 @@ test('declined restoration ownership preserves newer focus, scroll and disclosur
   s.runFrame();copy.focus();s.code().scrollTop=41;s.root().scrollTop=23;s.flush();await pending;
   assert.equal(s.doc.activeElement,copy);assert.equal(s.code().scrollTop,41);assert.equal(s.root().scrollTop,23);assert.equal(s.code().classList.contains('pqi-wrap'),true);
 });
+test('focus lock exposes pressed state and selected identity, rejects detached and stale controls',()=>{
+ const s=setup(),actions=[];s.inspector.destroy();s.inspector=s.win.PowerQueryInspector.mount(s.host,{context:s.ctx,onToggleLock:e=>actions.push(e)});s.inspector.select('id-1',{open:true});
+ const settings={mode:'dim',direction:'connected',depth:1,locked:false};s.inspector.setFocusControls(settings);const lock=s.host.querySelector('.pqi-lock');assert.equal(lock.getAttribute('aria-pressed'),'false');assert.match(lock.getAttribute('aria-label'),/^Lock focus on /);lock.fire('click');assert.deepEqual(plain(actions[0]),{generation:1,nodeId:'id-1'});
+ s.inspector.setFocusControls({...settings,locked:true,rootLabel:'Pinned root'});const unlock=s.host.querySelector('.pqi-lock');assert.equal(unlock.getAttribute('aria-pressed'),'true');assert.equal(unlock.getAttribute('aria-label'),'Unlock query focus');lock.fire('click');assert.equal(actions.length,1);s.inspector.select('id-3',{open:true});unlock.fire('click');assert.equal(actions.length,1);s.inspector.setContext(null);unlock.fire('click');assert.equal(actions.length,1);
+});

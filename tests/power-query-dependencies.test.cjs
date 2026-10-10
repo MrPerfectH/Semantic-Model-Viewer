@@ -96,3 +96,13 @@ test('documented M names do not masquerade as missing queries; unknown model nam
  const dynamic=analyze('Expression.Evaluate("Int64.Type", #shared) & Int64.Type');assert(dynamic.uncertainty.some(s=>s.includes('Dynamic/environment')));assert.deepEqual(dynamic.dependencies,[]);
  assert.deepEqual(analyze('Int64.Type ]').standardLibrary,[],'failed parse claims no recognized occurrence');
 });
+
+test('source evidence uses exact direct calls with lexical and model precedence and no argument disclosure',()=>{
+ const e=code=>analyze(code,[]).sourceEvidence||[];
+ assert.equal(e('PowerPlatform.Dataflows(null)')[0].provider,'Dataflow');assert.equal(e('Databricks.Catalogs("secret-host", "secret-path")')[0].provider,'Databricks');
+ assert.equal(e('Table.FromRows({{1}}, {"x"})')[0].provider,'Inline table');assert.equal(e('#table({"x"}, {{1}})')[0].provider,'Inline table');
+ for(const code of ['"Sql.Database()"','/* Sql.Database() */ 1','Sql.Database','sql.Database("x","y")','let Sql.Database=(x,y)=>1 in Sql.Database("x","y")','(Sql.Database)=>Sql.Database("x","y")','Sql.Database[Fake]()','Sql.Database{0}()','Unknown.Connector()','let x = Sql.Database("x","y") in'])assert.deepEqual(e(code),[],code);
+ const api0=api(),root=node('Root','Sql.Database("secret", "db")');
+ for(const peers of [[node('Sql.Database')],[node('Sql.Database'),node('Sql.Database')],[{...node('Other'),id:'collision'}, {...node('Sql.Database'),id:'collision'}]])assert.deepEqual(plain(api0.analyze(root,{nodes:[root,...peers]})).sourceEvidence,[]);
+ const result=analyze('"😀" & Sql.Database("secret-host", "secret-path")',[]);assert.equal(result.sourceEvidence[0].at,7);assert.equal(result.sourceEvidence[0].end,19);assert(!JSON.stringify(result.sourceEvidence).includes('secret'));
+});

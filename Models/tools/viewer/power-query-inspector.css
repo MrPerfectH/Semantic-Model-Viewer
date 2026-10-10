@@ -39,3 +39,7 @@
 .pqi-reader-header{border-bottom:0}.pqi-reader-header .pqi-button{flex-shrink:0}
 
 .pqi-neighbors{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;gap:16px;flex-wrap:wrap}.pqi-neighbor-group{flex:1 1 130px;min-width:0;max-height:180px;overflow:auto}.pqi-neighbor-group h3{font-size:11px;margin:0 0 5px;color:#52637c}.pqi-neighbor{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:4px 0;text-align:left}.pqi-neighbors .pqi-neutral{font-size:11px}
+
+.pqi-source-provider{margin:0;padding:8px 14px;background:#f5f7fb;font-weight:600;font-size:12px}.pqi-focus>.ex-button{margin-bottom:8px}
+
+.pqi-focus{position:relative}.pqi .pqi-focus h3{padding-right:44px}.pqi .pqi-focus>.pqi-lock{position:absolute;right:16px;top:10px;width:34px;height:34px;padding:3px;font-size:18px}.pqi-fact .pqi-subtitle{color:#e0e6ef}

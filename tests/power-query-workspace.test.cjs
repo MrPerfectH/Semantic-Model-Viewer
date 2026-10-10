@@ -76,12 +76,12 @@ test('inspecting a reference retains flow root and direction; Back and layout Un
  w.showAll();assert.equal(w.flowRootId,null);await w.undo();assert.equal(w.flowRootId,'B');
  w.remove('B');assert.equal(w.flowRootId,null);await w.undo();assert.equal(w.flowRootId,'B');
 });
-test('first query establishes an all-depth flow and new generation clears it',()=>{
- const {w}=stateHarness();w.navigate('B',true);assert.equal(w.flowRootId,'B');assert.equal(w.depth,Infinity);assert.equal(w.direction,'inputs');
+test('ordinary first query remains unlocked and new generation clears explicit lock',()=>{
+ const {w}=stateHarness();w.navigate('B',true);assert.equal(w.flowRootId||null,null);assert.equal(w.depth,1);assert.equal(w.direction,'connected');
  const job=jobHarness();job.w.flowRootId='Secret';job.w.invalidate();assert.equal(job.w.flowRootId,null);
 });
 test('Arrange enables Undo immediately even when it was previously disabled',()=>{const {w}=stateHarness();w.undoButton={disabled:true};w.canvas.arrange=()=>{};w.visible=new Set(['A','B']);w.arrange();assert.equal(w.undoButton.disabled,false);assert.equal(w.layoutHistory.length,1);});
-test('adding the first object to a blank layout establishes its flow target',()=>{const {w}=stateHarness();w.blank();w.add('B');assert.equal(w.flowRootId,'B');assert.equal(w.direction,'inputs');assert.equal(w.depth,Infinity);});
+test('adding the first object to a blank layout keeps focus unlocked',()=>{const {w}=stateHarness();w.blank();w.add('B');assert.equal(w.flowRootId,null);assert.equal(w.direction,'connected');assert.equal(w.depth,1);});
 
 test('silent restoration refreshes displayed zoom from accepted canvas state, for every shell restore path',async()=>{
  const {w}=stateHarness();let view={x:25,y:-80,k:.85};w.zoom={textContent:'85%'};w.canvas.getViewport=()=>({...view});w.canvas.setViewport=v=>{view={...v};};
@@ -139,4 +139,19 @@ test('ordinary inspection preserves pan/zoom and scroll while deliberate follow 
 test('dock preference persists source-free geometry and survives model invalidation',()=>{
  const saved=[],g=harness({localStorage:{setItem:(k,v)=>saved.push([k,JSON.parse(v)])}}),w=Object.create(g.PowerQueryWorkspace.prototype);Object.assign(w,{width:440,height:320,dock(){}});w.setDockPreference('bottom');assert.deepEqual(saved,[['smv.pq.inspector.v1',{dock:'bottom',width:440,height:320}]]);w.setDockPreference('invalid');assert.equal(saved.length,1);
  const j=jobHarness();j.w.dockPreference='bottom';j.w.width=440;j.w.height=320;j.w.invalidate();assert.equal(j.w.dockPreference,'bottom');assert.equal(j.w.width,440);assert.equal(j.w.height,320);
+});
+
+test('explicit lock follows selection on unlock; Back restores root and viewport; stale toggle is rejected',async()=>{
+ const {w,events}=stateHarness();w.ensureState();w.navigate('A',false,{preserveView:true});assert.equal(w.flowRootId||null,null);
+ w.toggleFocusLock();assert.equal(w.flowRootId,'A');w.navigate('Alone',false,{preserveView:true});assert.equal(w.flowRootId,'A');assert.equal(w.selectedId,'Alone');
+ w.resetFilters();assert.equal(w.flowRootId,'A');w.toggleFocusLock();assert.equal(w.flowRootId,null);assert.equal(w.selectedId,'Alone');
+ await w.back();assert.equal(w.flowRootId,'A');assert.equal(w.selectedId,'Alone');
+ w.app.model=model([row('Replacement')]);w.reset=()=>{};const count=w.history.length;w.toggleFocusLock();assert.equal(w.history.length,count);assert.equal(w.flowRootId,'A');
+});
+test('model status and source provider are independent conservative evidence axes',()=>{
+ const g=harness(),rows=[row('Dataflow','PowerPlatform.Dataflows(null)'),row('Lake','Databricks.Catalogs("synthetic", "path")'),row('Manual','Table.FromRows({{1}}, {"x"})'),row('Loaded','Sql.Database("synthetic", "db")',{kind:'partition',table:'Sales'}),row('P','1',{classification:'parameter'}),row('LooksLikeDatabricks','1'),row('Intermediate','Dataflow'),row('Mixed','{Sql.Database("s","d"), Databricks.Catalogs("s","p")}')];
+ const c=g.PowerQueryWorkspaceInternals.contextFor(g.PowerQueryGraphModel.build(model(rows),{generation:1}),rows,1);
+ const d=id=>c.byNodeId.get(id).presentation;
+ assert.equal(d('Dataflow').provider,'Dataflow');assert.equal(d('Lake').provider,'Databricks');assert.equal(d('Manual').kind,'Inline table');assert.equal(d('Loaded').status,'Model table');assert.equal(d('Loaded').provider,'SQL Server');assert.equal(d('P').kind,'Parameter');assert.equal(d('LooksLikeDatabricks').provider,'Unknown');assert.equal(d('Intermediate').kind,'Intermediate query');assert.equal(d('Intermediate').provider,'Unknown');assert.equal(d('Mixed').provider,'Mixed');
+ const app={model:{byName:{Sales:{role:'fact'}}},tableColor:()=> '#27aec2',isFact:()=>true};const chrome=g.PowerQueryWorkspaceInternals.chromeFor(rows[3],c.byNodeId.get('Loaded').node,app);assert.equal(chrome.headerTint,'#1d2330');assert.equal(chrome.badge,'FACT');
 });

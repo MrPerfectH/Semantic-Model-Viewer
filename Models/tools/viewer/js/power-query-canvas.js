@@ -147,7 +147,7 @@
       // Compact name chips keep ordinary overviews legible. At very large-model
       // scales the overview is shape-only; search/reveal restores readable detail.
       var font = view.k >= 0.25 ? Math.max(13.5, 11 / view.k) : 13.5;
-      if (Math.abs(font - titleSize) > 0.05) { titleSize = font; elements.forEach(function (e) { var title = e.querySelector('.pqc-node-title'); title.style.fontSize = font + 'px'; title.style.lineHeight = (font * 1.3) + 'px'; }); }
+      if (Math.abs(font - titleSize) > 0.05) { titleSize = font; elements.forEach(function (e) { var title = e.querySelector('.pqc-node-title'); title.style.fontSize = font + 'px'; title.style.lineHeight = (font * 1.3) + 'px';var detail=e.querySelector('.pqc-node-subtitle');detail.style.fontSize=Math.max(11,8.5/view.k)+'px';var source=e.querySelector('.pqc-source');if(source)source.style.fontSize=Math.max(11,8/view.k)+'px'; }); }
       surface.style.backgroundPosition = view.x + 'px ' + view.y + 'px'; updateMapViewport();
       if (notify && context) emit('onViewport', { generation: generation, viewport: getViewport() });
     }
@@ -238,8 +238,12 @@
       nodes.forEach(function (n) {
         var row = next.byNodeId && next.byNodeId.get(n.id), chrome = row && row.chrome || {};
         var parts = g.WorkspaceUI.createCardChrome(doc, Object.assign({ label: n.label, subtitle: n.subtitle, badge: n.kind === 'parameter' ? 'P' : n.kind === 'function' ? 'F' : 'Q', chips: [{ value: (row && row.inputIds || []).length, label: 'inputs' }, { value: (row && row.consumerIds || []).length, label: 'consumers' }] }, chrome));
-        var button = parts.card; button.classList.add('pqc-node'); button.classList.add('pqc-kind-' + n.kind); button.setAttribute('role', 'button'); button.dataset.nodeId = n.id; button.title = n.label + ' · ' + n.subtitle;
-        button.setAttribute('aria-label', n.label + ' · ' + n.subtitle); parts.title.classList.add('pqc-node-title'); parts.subtitle.classList.add('pqc-node-subtitle');
+        var button = parts.card; button.classList.add('pqc-node');if(chrome.fact)button.classList.add('pqc-fact'); button.classList.add('pqc-kind-' + n.kind); button.setAttribute('role', 'button'); button.dataset.nodeId = n.id; button.title = n.label + ' · ' + (chrome.subtitle || n.subtitle) + (row && row.presentation ? ' · Source: ' + row.presentation.provider + '. ' + row.presentation.sourceBasis : '');
+        button.setAttribute('aria-label', button.title); parts.title.classList.add('pqc-node-title'); parts.subtitle.classList.add('pqc-node-subtitle');
+        if (row && row.presentation) {
+          var source = el('span', 'pqc-source', row.presentation.providerIcon + ' ' + row.presentation.provider);
+          source.title = row.presentation.sourceBasis; source.style.color = row.presentation.providerColor; parts.meta.replaceChildren(source);
+        }
         var cycle = (row && row.issues || next.graph.issues || []).some(function (i) { return i.kind === 'cycle' && i.consumerId === n.id; });
         if (cycle) parts.meta.appendChild(el('span', 'pqc-node-badge', 'Cycle'));
         else if (n.state !== 'available') parts.meta.appendChild(el('span', 'pqc-node-badge pqc-status-badge', n.state === 'no-partitions' ? 'Metadata unavailable' : n.state === 'non-m' ? 'Non-M' : 'Source unavailable'));

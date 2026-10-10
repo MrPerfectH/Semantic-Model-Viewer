@@ -41,6 +41,7 @@
     source.forEach(function(n,index){
       checkpoint();
       var consumerId=nodes[index].id,result=g.PowerQueryDependencies.analyze(n,metadata);
+      nodes[index].sourceEvidence=(result.sourceEvidence||[]).map(function(e){return {name:e.name,provider:e.provider,at:e.at,end:e.end};});
       var warnings=result.uncertainty||[];
       if(result.standardLibrary&&result.standardLibrary.length)issues.push({consumerId:consumerId,kind:'standard-library',message:'Standard M functions and types: '+result.standardLibrary.join(', ')+'. These are language names, not missing model queries.'});
       // The analyzer's final entry is its documented generic static-analysis notice.

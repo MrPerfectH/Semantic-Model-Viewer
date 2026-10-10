@@ -21,8 +21,20 @@
   // https://learn.microsoft.com/en-us/powerquery-m/table-transformcolumntypes
   // https://learn.microsoft.com/en-us/powerquery-m/type-conversion
   var standardNames=new Set(['Table.TransformColumnTypes','Int64.Type','Byte.Type','Int8.Type','Int16.Type','Int32.Type','Single.Type','Double.Type','Decimal.Type','Currency.Type','Percentage.Type','Guid.Type']);
+  // Bounded syntactic evidence: exact direct calls only, after lexical/model
+  // resolution. Arguments are never retained, fetched or evaluated. This is not
+  // execution lineage: calls in dead branches/functions can still appear here.
+  var sourceCalls=new Map([
+    ['PowerPlatform.Dataflows','Dataflow'],['PowerBI.Dataflows','Dataflow'],
+    ['Databricks.Catalogs','Databricks'],['Databricks.Contents','Databricks'],
+    ['Sql.Database','SQL Server'],['Sql.Databases','SQL Server'],
+    ['Snowflake.Databases','Snowflake'],['OData.Feed','OData'],
+    ['AzureStorage.DataLake','Azure Data Lake'],['Excel.Workbook','Excel'],
+    ['Web.Contents','Web'],['File.Contents','File'],
+    ['Table.FromRows','Inline table'],['#table','Inline table']
+  ]);
   function analyze(node,metadata){
-    var uncertainty=[],standardLibrary=[],dependencies=[],references=[],ts=[],pos=0,steps=0;
+    var uncertainty=[],standardLibrary=[],sourceEvidence=[],dependencies=[],references=[],ts=[],pos=0,steps=0;
     function warn(s){if(!uncertainty.includes(s))uncertainty.push(s);}
     function fail(s){throw new Error(s);}
     if(!node||node.state!=='available'||typeof node.code!=='string')return {dependencies:[],references:[],uncertainty:['M metadata is missing or not M.',notice],partial:true};
@@ -63,15 +75,15 @@
       var operators=new Set(['+','-','*','/','&','=','<>','<','>','<=','>=','and','or','meta','??','..']);
       function expr(depth){
         if(++steps>50000||depth>180)fail('Analysis depth/work limit reached');
-        var a=primary(depth+1),items=[a];
+        var a=primary(depth+1),items=[a],direct=true;
         while(pos<ts.length){
-          if(take('(')){var args=[];if(!at(')')){do{args.push(expr(depth+1));}while(take(','));}need(')');items.push(group(args));continue;}
-          if(take('[')){// Selection/projection names are generalized identifiers, never global references.
+          if(take('(')){var callee=items[items.length-1];if(direct&&callee.ref)callee.directCall=true;direct=false;var args=[];if(!at(')')){do{args.push(expr(depth+1));}while(take(','));}need(')');items.push(group(args));continue;}
+          if(take('[')){direct=false;// Selection/projection names are generalized identifiers, never global references.
             var level=1;while(pos<ts.length&&level){if(take('['))level++;else if(take(']'))level--;else {if(ts[pos].kind==='punct'&&!['?',',','.'].includes(ts[pos].v))warn('Unsupported field selector syntax');pos++;}}if(level)fail('Unclosed field selector');take('?');continue;
           }
-          if(take('{')){items.push(expr(depth+1));need('}');take('?');continue;}
-          if(take('as')||take('is')){type();continue;}
-          var t=ts[pos];if(t&&!t.quoted&&operators.has(t.v)){pos++;items.push(primary(depth+1));continue;}break;
+          if(take('{')){direct=false;items.push(expr(depth+1));need('}');take('?');continue;}
+          if(take('as')||take('is')){direct=false;type();continue;}
+          var t=ts[pos];if(t&&!t.quoted&&operators.has(t.v)){pos++;items.push(primary(depth+1));direct=true;continue;}break;
         }
         return group(items);
       }
@@ -111,6 +123,7 @@
             if(t.kind==='id')references.push({id:found[0].id,name:n,at:t.at,end:t.end});
           }
           else if(found.length)warn('Ambiguous reference: '+n+'. More than one model object matches (duplicate name/identity or multiple partitions); no target was chosen.');
+          else if(a.directCall&&sourceCalls.has(n)){sourceEvidence.push({name:n,provider:sourceCalls.get(n),at:t.at,end:t.end});}
           else if(standardNames.has(n)){if(!standardLibrary.includes(n))standardLibrary.push(n);}
           else warn('Unresolved name: '+n+'. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize.');return;
         }
@@ -119,8 +132,8 @@
         (a.items||[]).forEach(function(x){visit(x,scope);});
       }
       visit(ast,new Map());
-    }catch(e){warn('Analysis incomplete: '+e.message);dependencies=[];references=[];standardLibrary=[];}
-    warn(notice);return {dependencies:dependencies,references:references,standardLibrary:standardLibrary,uncertainty:uncertainty,partial:true};
+    }catch(e){warn('Analysis incomplete: '+e.message);dependencies=[];references=[];standardLibrary=[];sourceEvidence=[];}
+    warn(notice);return {dependencies:dependencies,references:references,standardLibrary:standardLibrary,sourceEvidence:sourceEvidence,uncertainty:uncertainty,partial:true};
   }
   function graph(metadata){
     var nodes=(metadata.nodes||[]).map(function(n){return {node:n,result:analyze(n,metadata)};}),edges=[],uncertainty=[],byId=new Map();
