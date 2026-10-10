@@ -35,4 +35,4 @@
 .pqc-selected{opacity:1;transition:box-shadow .15s,border-color .15s!important}
 
 /* At overview scale retain two readable lines; provider remains in the tooltip and inspector. */
-.pqc-names-only .wui-card-meta{display:none}
+.pqc-names-only .wui-card-meta{display:none!important}

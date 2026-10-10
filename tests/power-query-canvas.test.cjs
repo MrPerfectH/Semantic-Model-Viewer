@@ -149,3 +149,6 @@ test('two far-origin visible nodes compact explicitly while Fit and Undo layout 
  s.canvas.arrange(new Set(['id-0','id-1']));const compact=s.canvas.captureLayout();assert.equal(compact.get('id-0').y,compact.get('id-1').y);assert.equal(compact.get('id-1').x-compact.get('id-0').x,352);for(const id of ['id-2','id-3','id-4','id-5'])assert.deepEqual(plain(compact.get(id)),plain(original.get(id)));
  s.canvas.fit();assert(s.canvas.getViewport().k>=.6);s.canvas.restoreLayout(original);assert.deepEqual(plain([...s.canvas.captureLayout()].sort()),plain([...original].sort()));
 });
+test('secondary typography resets after tiny overview even when title font stays at its minimum',()=>{
+ const s=setup(),subtitle=s.node('id-1').querySelector('.pqc-node-subtitle');s.canvas.setViewport({x:0,y:0,k:.47});assert(parseFloat(subtitle.style.fontSize)>11);s.canvas.setViewport({x:0,y:0,k:.08});assert.equal(parseFloat(subtitle.style.fontSize),11);s.canvas.setViewport({x:0,y:0,k:.85});assert.equal(parseFloat(subtitle.style.fontSize),11);
+});

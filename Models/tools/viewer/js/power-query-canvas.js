@@ -11,7 +11,7 @@
     var positions = new Map(), nodes = new Map(), elements = new Map(), groups = [], layoutGenerations = new WeakMap();
     var view = { x: 0, y: 0, k: 1 }, size = { w: 0, h: 0 }, roving = null;
     var suspended = false, pendingFit = false, frame = 0, drag = null, pinch = null;
-    var pointers = new Map(), removers = [], edgeElements = [], miniElements = new Map(), titleSize = 0;
+    var pointers = new Map(), removers = [], edgeElements = [], miniElements = new Map(), titleSize = 0, detailSize = 0;
     var markerId = 'pqc-arrow-' + (++serial);
     function el(tag, cls, text) { var e = doc.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
     function svg(tag, attrs) { var e = doc.createElementNS('http://www.w3.org/2000/svg', tag); Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); }); return e; }
@@ -146,8 +146,8 @@
       root.classList.toggle('pqc-names-only', view.k < 0.65);
       // Compact name chips keep ordinary overviews legible. At very large-model
       // scales the overview is shape-only; search/reveal restores readable detail.
-      var font = view.k >= 0.25 ? Math.max(13.5, 11 / view.k) : 13.5;
-      if (Math.abs(font - titleSize) > 0.05) { titleSize = font; elements.forEach(function (e) { var title = e.querySelector('.pqc-node-title'); title.style.fontSize = font + 'px'; title.style.lineHeight = (font * 1.3) + 'px';var detail=e.querySelector('.pqc-node-subtitle');detail.style.fontSize=Math.max(11,8.5/view.k)+'px';var source=e.querySelector('.pqc-source');if(source)source.style.fontSize=Math.max(11,8/view.k)+'px'; }); }
+      var font = view.k >= 0.25 ? Math.max(13.5, 11 / view.k) : 13.5, detailFont = view.k >= 0.25 ? Math.max(11, 8.5 / view.k) : 11;
+      if (Math.abs(font - titleSize) > 0.05 || Math.abs(detailFont - detailSize) > 0.05) { titleSize = font;detailSize = detailFont; elements.forEach(function (e) { var title = e.querySelector('.pqc-node-title'); title.style.fontSize = font + 'px'; title.style.lineHeight = (font * 1.3) + 'px';var detail=e.querySelector('.pqc-node-subtitle');detail.style.fontSize=detailFont+'px';var source=e.querySelector('.pqc-source');if(source)source.style.fontSize=(view.k>=0.25?Math.max(11,8/view.k):11)+'px'; }); }
       surface.style.backgroundPosition = view.x + 'px ' + view.y + 'px'; updateMapViewport();
       if (notify && context) emit('onViewport', { generation: generation, viewport: getViewport() });
     }
@@ -234,7 +234,7 @@
       nodes = new Map(next.graph.nodes.map(function (n) { return [n.id, n]; }));
       positions.forEach(function (_, id) { if (!nodes.has(id)) positions.delete(id); }); layout();
       if (!nodes.has(selected)) selected = null;
-      nodeLayer.replaceChildren(); elements.clear(); titleSize = 0; edgeLayer.replaceChildren(); edgeElements = [];
+      nodeLayer.replaceChildren(); elements.clear(); titleSize = detailSize = 0; edgeLayer.replaceChildren(); edgeElements = [];
       nodes.forEach(function (n) {
         var row = next.byNodeId && next.byNodeId.get(n.id), chrome = row && row.chrome || {};
         var parts = g.WorkspaceUI.createCardChrome(doc, Object.assign({ label: n.label, subtitle: n.subtitle, badge: n.kind === 'parameter' ? 'P' : n.kind === 'function' ? 'F' : 'Q', chips: [{ value: (row && row.inputIds || []).length, label: 'inputs' }, { value: (row && row.consumerIds || []).length, label: 'consumers' }] }, chrome));
