@@ -159,3 +159,10 @@ test('direct input and consumer buttons emit supplied IDs without requiring or i
  inspector.setContext(context(2));buttons[1].fire('click');assert.equal(events.length,2);
  inspector.select('id-1',{open:true});assert.equal(h.host.querySelector('.pqi-open-query').getAttribute('aria-label'),'Open full query');
 });
+
+test('declined restoration ownership preserves newer focus, scroll and disclosures',async()=>{
+  const s=setup();const copy=s.host.querySelectorAll('button').find(n=>n.textContent==='Copy M');
+  const pending=s.inspector.restoreViewState({codeY:999,inspectorY:888,wrap:false,focus:{kind:'close',nodeId:'id-1'}},()=>false);
+  s.runFrame();copy.focus();s.code().scrollTop=41;s.root().scrollTop=23;s.flush();await pending;
+  assert.equal(s.doc.activeElement,copy);assert.equal(s.code().scrollTop,41);assert.equal(s.root().scrollTop,23);assert.equal(s.code().classList.contains('pqi-wrap'),true);
+});

@@ -48,7 +48,7 @@
       return { codeX: codeScroll ? codeScroll.scrollLeft : 0, codeY: codeScroll ? codeScroll.scrollTop : 0, inspectorX: root.scrollLeft, inspectorY: root.scrollTop, wrap: wrap, focus: active ? Object.assign({}, active.descriptor) : null, disclosures: captureDisclosures(), expanded: expanded };
     }
     function scrollValue(v) { return Number.isFinite(v) ? Math.max(0, v) : 0; }
-    function restoreViewState(state) {
+    function restoreViewState(state, claimRestore) {
       cancelRestores(); if (!state || !alive || !context || !opened || suspended) return Promise.resolve();
       var gen = generation, id = selected, version = epoch;
       // Retain values/descriptors only, never a prior DOM element or source row.
@@ -59,7 +59,7 @@
           if (!current(gen, id) || epoch !== version) { jobs.delete(job); resolve(); return; }
           job.frame = win.requestAnimationFrame(function () {
             jobs.delete(job);
-            if (current(gen, id) && epoch === version) {
+            if (current(gen, id) && epoch === version && (!claimRestore || claimRestore())) {
               restoreDisclosures(value.disclosures); setExpanded(value.expanded, false);
               // Native dialog autofocus may synchronously navigate/reset too.
               if (!current(gen, id) || epoch !== version) { resolve(); return; }

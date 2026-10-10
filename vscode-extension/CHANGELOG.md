@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Power Query framing exposes selected titles at browser zoom in below-docked layouts. Back and Undo yield pending focus restoration to newer input and retain workspace scroll.
+
 - Inspect read-only Power Query partition M and shared queries, parameters and functions.
 - Explore all Power Query objects in a peer model workspace with input-to-consumer
   references, exact source navigation, Back history, connectivity filters and minimap.

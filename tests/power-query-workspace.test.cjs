@@ -97,3 +97,36 @@ test('long flow auto framing keeps all membership/positions and centers the sele
  const {w}=stateHarness();w.ensureState();w.visible=new Set(['A','B','Alone']);let centered,view={x:0,y:0,k:.03};w.canvas.getViewport=()=>view;w.canvas.center=(id,opts)=>{centered={id,opts};view={x:100,y:50,k:.85};};const membership=[...w.membership];w.fitLayout();assert.equal(centered.id,'B');assert.equal(centered.opts.readable,true);assert.deepEqual([...w.membership],membership);view={x:0,y:0,k:.03};w.selectedId=null;w.fitLayout();assert.equal(centered.id,'B');
  centered=null;view={x:0,y:0,k:.32};w.fitLayout();assert.equal(centered,null);
 });
+
+test('automatic framing exposes the title inside actual zoomed viewport without changing canvas coordinates',()=>{
+  const {w}=stateHarness();let scroll=645.5;const view=w.canvas.getViewport();
+  w.body={get scrollTop(){return scroll;},set scrollTop(v){scroll=Math.max(0,v);},getBoundingClientRect(){return {top:48,bottom:495};}};
+  w.host={ownerDocument:{defaultView:{innerHeight:543,visualViewport:{offsetTop:0,height:543}}}};
+  w.toolbar={getBoundingClientRect(){return {bottom:190};}};
+  const title={getBoundingClientRect(){return {top:511.05-scroll,bottom:525.965-scroll,height:14.915};}};
+  w.canvasHost.querySelectorAll=()=>[{dataset:{nodeId:'B'},querySelector:()=>title}];
+  w.exposeTitle('B');assert.equal(title.getBoundingClientRect().top,202);assert.deepEqual(w.canvas.getViewport(),view);
+  const settled=scroll;w.exposeTitle('B');assert.equal(scroll,settled,'already-visible target must not jump');
+  scroll=0;w.exposeTitle('B');assert.equal(title.getBoundingClientRect().bottom,483,'bottom clipping respects the visible scroll-container boundary');
+});
+
+test('pending Back and Undo yield inspector focus and late viewport writes to newer input',async()=>{
+  for(const operation of ['back','undo'])for(const type of ['focusin','pointerdown','keydown','wheel']){
+    const {w,events}=stateHarness(),listeners=new Map();let finish,claim;
+    w.host={ownerDocument:{addEventListener(t,f){listeners.set(t,f);},removeEventListener(t,f){if(listeners.get(t)===f)listeners.delete(t);}}};
+    w.navigate('A',false);if(operation==='undo'){w.saveLayout();w.selectedId='Alone';}
+    w.inspector.restoreViewState=(state,owner)=>{claim=owner;return new Promise(r=>finish=r);};
+    const pending=w[operation]();listeners.get(type)();events.length=0;
+    assert.equal(claim(),false);finish();await pending;
+    assert.equal(events.length,0,operation+' must not refocus or reapply the old viewport after '+type);
+    assert.equal(listeners.size,0);
+  }
+});
+
+test('uninterrupted Back retains full restore and exact below-dock scroll; ownership listeners are released',async()=>{
+  const {w,events}=stateHarness(),listeners=new Map();w.body={scrollLeft:0,scrollTop:83.5};
+  w.host={ownerDocument:{addEventListener(t,f){listeners.set(t,f);},removeEventListener(t,f){if(listeners.get(t)===f)listeners.delete(t);}}};
+  const original=w.captureNavigation();w.navigate('A',false);w.body.scrollTop=320;
+  w.inspector.restoreViewState=async(state,claim)=>{assert.equal(claim(),true);assert.equal(listeners.size,0);assert.deepEqual(state,original.inspectorView);};
+  await w.back();assert.equal(w.body.scrollTop,83.5);assert.equal(w.selectedId,original.selectedId);assert.equal(listeners.size,0);assert(events.some(e=>e[0]==='viewport'));
+});
