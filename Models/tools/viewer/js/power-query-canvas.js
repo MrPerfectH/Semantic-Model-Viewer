@@ -18,7 +18,7 @@
     function on(target, name, fn, opts) { target.addEventListener(name, fn, opts); removers.push(function () { target.removeEventListener(name, fn, opts); }); }
     var root = el('div', 'pqc'), surface = el('div', 'pqc-surface'), world = el('div', 'pqc-world');
     root.setAttribute('aria-label', 'Power Query input to consumer canvas'); root.setAttribute('role', 'group');
-    surface.tabIndex = 0; surface.setAttribute('aria-label', 'Query canvas. Arrow keys pan; F fits; plus and minus zoom.');
+    surface.tabIndex = 0; surface.setAttribute('aria-label', 'Query canvas. Arrow keys pan; F fits the overview; plus and minus zoom.');
     var edgesSvg = svg('svg', { class: 'pqc-edges', 'aria-label': 'Resolved query references' });
     var defs = svg('defs'), marker = svg('marker', { id: markerId, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 8, markerHeight: 8, markerUnits: 'userSpaceOnUse', orient: 'auto' });
     marker.appendChild(svg('path', { d: 'M 3 1 L 8 5 L 3 9', fill: 'none', stroke: 'context-stroke', 'stroke-width': 1.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' })); defs.appendChild(marker); edgesSvg.appendChild(defs);

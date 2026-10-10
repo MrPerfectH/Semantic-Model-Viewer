@@ -1,0 +1,10 @@
+{
+  "node": "v22.23.3",
+  "browser": "154.0.8037.99",
+  "baseline": false,
+  "checks": [
+    "Arrange Undo exact viewport/layout/root/displayed zoom",
+    "52 exact objects: readable default/Arrange; deliberate overview; all 51 inputs followed to Parameter and 51 consumers to FinalChain; target return; Back/Reset/Blank Undo exact viewport and label"
+  ],
+  "failures": []
+}

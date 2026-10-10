@@ -82,3 +82,18 @@ test('first query establishes an all-depth flow and new generation clears it',()
 });
 test('Arrange enables Undo immediately even when it was previously disabled',()=>{const {w}=stateHarness();w.undoButton={disabled:true};w.canvas.arrange=()=>{};w.visible=new Set(['A','B']);w.arrange();assert.equal(w.undoButton.disabled,false);assert.equal(w.layoutHistory.length,1);});
 test('adding the first object to a blank layout establishes its flow target',()=>{const {w}=stateHarness();w.blank();w.add('B');assert.equal(w.flowRootId,'B');assert.equal(w.direction,'inputs');assert.equal(w.depth,Infinity);});
+
+test('silent restoration refreshes displayed zoom from accepted canvas state, for every shell restore path',async()=>{
+ const {w}=stateHarness();let view={x:25,y:-80,k:.85};w.zoom={textContent:'85%'};w.canvas.getViewport=()=>({...view});w.canvas.setViewport=v=>{view={...v};};
+ w.saveLayout();view={x:0,y:0,k:.31575829383886256};w.zoom.textContent='32%';await w.undo();assert.equal(view.k,.85);assert.equal(w.zoom.textContent,'85%');
+ w.navigate('A',true);view={x:2,y:3,k:.03};w.zoom.textContent='3%';await w.back();assert.equal(view.k,.85);assert.equal(w.zoom.textContent,'85%');
+ w.zoom.textContent='3%';w.resetFilters();assert.equal(w.zoom.textContent,'85%');
+ w.canvas.setViewport=()=>false;w.restoreViewport({x:0,y:0,k:.4});assert.equal(w.zoom.textContent,'85%');
+});
+test('late Undo restoration cannot replace a newer navigation zoom or label',async()=>{
+ const {w}=stateHarness();let view={x:0,y:0,k:.85},done;w.zoom={textContent:'85%'};w.canvas.getViewport=()=>({...view});w.canvas.setViewport=v=>{view={...v};};w.saveLayout();w.inspector.restoreViewState=()=>new Promise(r=>{done=r;});const pending=w.undo();w.navigate('A',false);view={x:20,y:30,k:1.2};w.syncViewportChrome();done();await pending;assert.equal(view.k,1.2);assert.equal(w.zoom.textContent,'120%');
+});
+test('long flow auto framing keeps all membership/positions and centers the selected or supplied terminal node',()=>{
+ const {w}=stateHarness();w.ensureState();w.visible=new Set(['A','B','Alone']);let centered,view={x:0,y:0,k:.03};w.canvas.getViewport=()=>view;w.canvas.center=(id,opts)=>{centered={id,opts};view={x:100,y:50,k:.85};};const membership=[...w.membership];w.fitLayout();assert.equal(centered.id,'B');assert.equal(centered.opts.readable,true);assert.deepEqual([...w.membership],membership);view={x:0,y:0,k:.03};w.selectedId=null;w.fitLayout();assert.equal(centered.id,'B');
+ centered=null;view={x:0,y:0,k:.32};w.fitLayout();assert.equal(centered,null);
+});
