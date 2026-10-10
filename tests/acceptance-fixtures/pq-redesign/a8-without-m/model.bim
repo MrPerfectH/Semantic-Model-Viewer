@@ -1,0 +1,14 @@
+{
+  "name": "Independent PQ redesign a8-without-m",
+  "model": {
+    "tables": [
+      {
+        "name": "SameTable",
+        "columns": [],
+        "partitions": []
+      }
+    ],
+    "expressions": [],
+    "relationships": []
+  }
+}

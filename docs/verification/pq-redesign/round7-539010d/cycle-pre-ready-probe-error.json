@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Preview automation evaluate failed: TypeError: Cannot read properties of null (reading 'byNodeId')\n    at <anonymous>:1:225\n    at <anonymous>:1:676"
+    }
+  ],
+  "isError": true
+}

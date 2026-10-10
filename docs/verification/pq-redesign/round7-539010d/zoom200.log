@@ -1,0 +1,22 @@
+{
+  "out": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/round7-539010d/zoom200",
+  "passed": 2,
+  "failures": [
+    {
+      "name": "Actual resize transition 1280 step0 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: Trace button actually visible above other controls\n\nfalse !== true\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom.browser.cjs:58:487\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom.browser.cjs:47:45"
+    },
+    {
+      "name": "Actual resize transition 1280 step2 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: Trace button actually visible above other controls\n\nfalse !== true\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom.browser.cjs:58:487\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom.browser.cjs:47:45"
+    },
+    {
+      "name": "Actual resize transition 1440 step0 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: Trace button actually visible above other controls\n\nfalse !== true\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom.browser.cjs:58:487\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom.browser.cjs:47:45"
+    },
+    {
+      "name": "Actual resize transition 1440 step2 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: Trace button actually visible above other controls\n\nfalse !== true\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom.browser.cjs:58:487\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom.browser.cjs:47:45"
+    }
+  ]
+}

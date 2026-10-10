@@ -1,0 +1,366 @@
+{
+  "candidate": "2a1b646c46ac1c88bd7822fd5831f1a29ee88f5c",
+  "node": "v22.23.3",
+  "package": "/tmp/pq-round8-0.3.3.vsix",
+  "sha256": "511c7f98e3202c8f5f2c98c15e74786565e05a0dcdcd20dfc741c3c969e2590d",
+  "bytes": 253236,
+  "assets": [
+    {
+      "asset": "explorer.css",
+      "sha256": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011",
+      "bytes": 14350,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "index.html",
+      "sha256": "059c5d3a84443e983510490ed35c152ffb66037fa6b5c7fba529d578ef296e63",
+      "bytes": 6844,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/app.js",
+      "sha256": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a",
+      "bytes": 79235,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/canvas.js",
+      "sha256": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787",
+      "bytes": 113321,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/dax-format.js",
+      "sha256": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8",
+      "bytes": 18659,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/explorer.js",
+      "sha256": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0",
+      "bytes": 36750,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/host-vscode.js",
+      "sha256": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb",
+      "bytes": 5220,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/layouts.js",
+      "sha256": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1",
+      "bytes": 67455,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/matrix.js",
+      "sha256": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1",
+      "bytes": 9560,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/measures.js",
+      "sha256": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179",
+      "bytes": 93980,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/power-query-canvas.js",
+      "sha256": "ecadeba59190a31a1124fe2033d7bb8af3a9c23a8c0c32c76109a6e5f2f28726",
+      "bytes": 33376,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/power-query-dependencies.js",
+      "sha256": "44e2b21a9287e5e7569f9d70d02fe8ce2b6c19815d24fcf88ae53a0994ba72c6",
+      "bytes": 12773,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/power-query-graph-model.js",
+      "sha256": "8c48f7ada3e7725e22ffb63835412105255054148d537722ada89efb53caaeaa",
+      "bytes": 6368,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/power-query-inspector.js",
+      "sha256": "ae9963583ff1f0b9b280292cd112ebc55c274620055942f036c0d9cd3ab3e77d",
+      "bytes": 28244,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/power-query-lineage.js",
+      "sha256": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1",
+      "bytes": 10472,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/power-query-workspace.js",
+      "sha256": "c9b5025302a4bb2f713d4e75ae8ae4b0f2ac44abd314ebad97f21d541d40fc51",
+      "bytes": 48449,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/power-query.js",
+      "sha256": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f",
+      "bytes": 8661,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/relationships.js",
+      "sha256": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5",
+      "bytes": 4847,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/roles.js",
+      "sha256": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1",
+      "bytes": 7657,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/rules.js",
+      "sha256": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad",
+      "bytes": 7610,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/sidebar.js",
+      "sha256": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4",
+      "bytes": 22525,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/snapshot.js",
+      "sha256": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c",
+      "bytes": 12521,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/tmdl-parser.js",
+      "sha256": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399",
+      "bytes": 27971,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/topbar.js",
+      "sha256": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9",
+      "bytes": 36001,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/usage-adapter.js",
+      "sha256": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428",
+      "bytes": 3298,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/util.js",
+      "sha256": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960",
+      "bytes": 8761,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "js/workspace-ui.js",
+      "sha256": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43",
+      "bytes": 3688,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "measures.css",
+      "sha256": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86",
+      "bytes": 15377,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "power-query-canvas.css",
+      "sha256": "80017a35953eed80c98dcd186a81607105569f50024b8346e51d8fd38715f020",
+      "bytes": 4071,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "power-query-inspector.css",
+      "sha256": "948395db366b55550575357ab62de473340b3b6b878b8291adf32e7513ad3c4b",
+      "bytes": 7842,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "power-query-lineage.css",
+      "sha256": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b",
+      "bytes": 1741,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "power-query-workspace.css",
+      "sha256": "583f789d8cccae5d8ce593c1d2a08b03ea391b9c1ca49f04e1dcbc500946294b",
+      "bytes": 5378,
+      "sourceGitHttpMediaPackageEqual": true
+    },
+    {
+      "asset": "power-query.css",
+      "sha256": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee",
+      "bytes": 1754,
+      "sourceGitHttpMediaPackageEqual": true
+    }
+  ],
+  "cache": [
+    {
+      "asset": "power-query.css",
+      "hash": "4ff48db438",
+      "valid": true
+    },
+    {
+      "asset": "power-query-canvas.css",
+      "hash": "80017a3595",
+      "valid": true
+    },
+    {
+      "asset": "power-query-inspector.css",
+      "hash": "948395db36",
+      "valid": true
+    },
+    {
+      "asset": "power-query-workspace.css",
+      "hash": "583f789d8c",
+      "valid": true
+    },
+    {
+      "asset": "power-query-lineage.css",
+      "hash": "3fa4fd3345",
+      "valid": true
+    },
+    {
+      "asset": "explorer.css",
+      "hash": "5699d561e3",
+      "valid": true
+    },
+    {
+      "asset": "measures.css",
+      "hash": "020a7d7d4e",
+      "valid": true
+    },
+    {
+      "asset": "js/util.js",
+      "hash": "b233a5ee4c",
+      "valid": true
+    },
+    {
+      "asset": "js/snapshot.js",
+      "hash": "b63823ca6c",
+      "valid": true
+    },
+    {
+      "asset": "js/roles.js",
+      "hash": "2cf4e6cfdc",
+      "valid": true
+    },
+    {
+      "asset": "js/usage-adapter.js",
+      "hash": "47ad9159c1",
+      "valid": true
+    },
+    {
+      "asset": "js/tmdl-parser.js",
+      "hash": "0e97ff4704",
+      "valid": true
+    },
+    {
+      "asset": "js/workspace-ui.js",
+      "hash": "d88454c851",
+      "valid": true
+    },
+    {
+      "asset": "js/canvas.js",
+      "hash": "fe9d193349",
+      "valid": true
+    },
+    {
+      "asset": "js/layouts.js",
+      "hash": "1875b73e7b",
+      "valid": true
+    },
+    {
+      "asset": "js/matrix.js",
+      "hash": "a3c83262cb",
+      "valid": true
+    },
+    {
+      "asset": "js/dax-format.js",
+      "hash": "478f9a6c45",
+      "valid": true
+    },
+    {
+      "asset": "js/measures.js",
+      "hash": "773398f354",
+      "valid": true
+    },
+    {
+      "asset": "js/power-query-dependencies.js",
+      "hash": "44e2b21a92",
+      "valid": true
+    },
+    {
+      "asset": "js/power-query-graph-model.js",
+      "hash": "8c48f7ada3",
+      "valid": true
+    },
+    {
+      "asset": "js/power-query-lineage.js",
+      "hash": "487522c796",
+      "valid": true
+    },
+    {
+      "asset": "js/power-query.js",
+      "hash": "cecb795556",
+      "valid": true
+    },
+    {
+      "asset": "js/power-query-canvas.js",
+      "hash": "ecadeba591",
+      "valid": true
+    },
+    {
+      "asset": "js/power-query-inspector.js",
+      "hash": "ae9963583f",
+      "valid": true
+    },
+    {
+      "asset": "js/power-query-workspace.js",
+      "hash": "c9b5025302",
+      "valid": true
+    },
+    {
+      "asset": "js/sidebar.js",
+      "hash": "13fab92f5e",
+      "valid": true
+    },
+    {
+      "asset": "js/topbar.js",
+      "hash": "c5789195be",
+      "valid": true
+    },
+    {
+      "asset": "js/rules.js",
+      "hash": "dc35541371",
+      "valid": true
+    },
+    {
+      "asset": "js/relationships.js",
+      "hash": "7f17713638",
+      "valid": true
+    },
+    {
+      "asset": "js/explorer.js",
+      "hash": "6bfdf4472d",
+      "valid": true
+    },
+    {
+      "asset": "js/app.js",
+      "hash": "dbc5683c97",
+      "valid": true
+    }
+  ],
+  "fileCount": 45,
+  "version": "0.3.3"
+}

@@ -1,0 +1,28 @@
+{
+  "navigation": null,
+  "phase": "idle",
+  "generation": 2,
+  "selected": null,
+  "code": "",
+  "visible": [],
+  "dimmed": [],
+  "layout": [],
+  "history": [],
+  "undo": 0,
+  "sets": null,
+  "library": [],
+  "banner": "",
+  "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+  "mapCount": 0,
+  "map": "",
+  "focus": {
+    "tag": "BODY",
+    "cls": ""
+  },
+  "options": [
+    "All",
+    "Connected",
+    "Disconnected"
+  ]
+}
+

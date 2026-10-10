@@ -1,0 +1,10 @@
+{
+  "kind": "parent-provided historical failures, not independent acceptance",
+  "sourcePaths": [
+    "/tmp/pq-v2-zoom-orientations.log",
+    "/tmp/pq-v2-zoom-orientations-diagnostic.log",
+    "/tmp/pq-v2-zoom-orientations-fixed.log",
+    "/tmp/pq-v2-zoom-dock-orientations.cjs"
+  ],
+  "independentDiagnosis": "../parent-overlay-diagnosis/picker-overlay-causal.json"
+}

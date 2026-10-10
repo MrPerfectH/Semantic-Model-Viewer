@@ -1,0 +1,157 @@
+[
+  {
+    "path": "power-query.css",
+    "hash": "4ff48db438",
+    "sha256": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee"
+  },
+  {
+    "path": "power-query-canvas.css",
+    "hash": "80017a3595",
+    "sha256": "80017a35953eed80c98dcd186a81607105569f50024b8346e51d8fd38715f020"
+  },
+  {
+    "path": "power-query-inspector.css",
+    "hash": "948395db36",
+    "sha256": "948395db366b55550575357ab62de473340b3b6b878b8291adf32e7513ad3c4b"
+  },
+  {
+    "path": "power-query-workspace.css",
+    "hash": "40c8cc004c",
+    "sha256": "40c8cc004cd02eabb06bc961b2ff572fea71a11902cccb329283424d5c600361"
+  },
+  {
+    "path": "power-query-lineage.css",
+    "hash": "3fa4fd3345",
+    "sha256": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b"
+  },
+  {
+    "path": "explorer.css",
+    "hash": "5699d561e3",
+    "sha256": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011"
+  },
+  {
+    "path": "measures.css",
+    "hash": "020a7d7d4e",
+    "sha256": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86"
+  },
+  {
+    "path": "js/util.js",
+    "hash": "b233a5ee4c",
+    "sha256": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960"
+  },
+  {
+    "path": "js/snapshot.js",
+    "hash": "b63823ca6c",
+    "sha256": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c"
+  },
+  {
+    "path": "js/roles.js",
+    "hash": "2cf4e6cfdc",
+    "sha256": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1"
+  },
+  {
+    "path": "js/usage-adapter.js",
+    "hash": "47ad9159c1",
+    "sha256": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428"
+  },
+  {
+    "path": "js/tmdl-parser.js",
+    "hash": "0e97ff4704",
+    "sha256": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399"
+  },
+  {
+    "path": "js/workspace-ui.js",
+    "hash": "d88454c851",
+    "sha256": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43"
+  },
+  {
+    "path": "js/canvas.js",
+    "hash": "fe9d193349",
+    "sha256": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787"
+  },
+  {
+    "path": "js/layouts.js",
+    "hash": "1875b73e7b",
+    "sha256": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1"
+  },
+  {
+    "path": "js/matrix.js",
+    "hash": "a3c83262cb",
+    "sha256": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1"
+  },
+  {
+    "path": "js/dax-format.js",
+    "hash": "478f9a6c45",
+    "sha256": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8"
+  },
+  {
+    "path": "js/measures.js",
+    "hash": "773398f354",
+    "sha256": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179"
+  },
+  {
+    "path": "js/power-query-dependencies.js",
+    "hash": "44e2b21a92",
+    "sha256": "44e2b21a9287e5e7569f9d70d02fe8ce2b6c19815d24fcf88ae53a0994ba72c6"
+  },
+  {
+    "path": "js/power-query-graph-model.js",
+    "hash": "8c48f7ada3",
+    "sha256": "8c48f7ada3e7725e22ffb63835412105255054148d537722ada89efb53caaeaa"
+  },
+  {
+    "path": "js/power-query-lineage.js",
+    "hash": "487522c796",
+    "sha256": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1"
+  },
+  {
+    "path": "js/power-query.js",
+    "hash": "cecb795556",
+    "sha256": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f"
+  },
+  {
+    "path": "js/power-query-canvas.js",
+    "hash": "fe9988ed74",
+    "sha256": "fe9988ed74f6ff6f4cd0b75ee438d439165dfe072d665c20864ee93094f7d640"
+  },
+  {
+    "path": "js/power-query-inspector.js",
+    "hash": "4f59024b18",
+    "sha256": "4f59024b1820769bf43c6836bc845ac6982fc3a5b0e729d40ea2c374ec20cc92"
+  },
+  {
+    "path": "js/power-query-workspace.js",
+    "hash": "6ed1f75d68",
+    "sha256": "6ed1f75d68968f062c6894873994bea163000ebd674d8e31b4bedeb84fe673d1"
+  },
+  {
+    "path": "js/sidebar.js",
+    "hash": "13fab92f5e",
+    "sha256": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4"
+  },
+  {
+    "path": "js/topbar.js",
+    "hash": "c5789195be",
+    "sha256": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9"
+  },
+  {
+    "path": "js/rules.js",
+    "hash": "dc35541371",
+    "sha256": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad"
+  },
+  {
+    "path": "js/relationships.js",
+    "hash": "7f17713638",
+    "sha256": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5"
+  },
+  {
+    "path": "js/explorer.js",
+    "hash": "6bfdf4472d",
+    "sha256": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0"
+  },
+  {
+    "path": "js/app.js",
+    "hash": "dbc5683c97",
+    "sha256": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a"
+  }
+]

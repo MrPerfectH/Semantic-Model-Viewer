@@ -1,0 +1,244 @@
+{
+  "entryMs": 79.23175000000083,
+  "searchMs": 33.69929199999933,
+  "states": {
+    "all": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "all",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "1 visible / 1 total objects · 1 library results",
+      "banner": "",
+      "code": "",
+      "viewport": {
+        "x": 472.5,
+        "y": 308.5,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 1,
+      "visible": [
+        "[\"expression\",\"\",\"UnsafeText\"]"
+      ],
+      "library": [
+        "UnsafeText · query"
+      ],
+      "map": "1 visible / 1 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"expression\",\"\",\"UnsafeText\"]",
+            "metadataId": "[\"expression\",\"\",\"UnsafeText\"]",
+            "label": "UnsafeText",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          }
+        ],
+        "edges": [],
+        "issues": [
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 29,
+        "analysisProgress": {
+          "analyzed": 1,
+          "total": 1,
+          "complete": true,
+          "generation": 29
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"expression\",\"\",\"UnsafeText\"]"
+        ],
+        "connected": [],
+        "disconnected": [
+          "[\"expression\",\"\",\"UnsafeText\"]"
+        ]
+      }
+    },
+    "connected": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "connected",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "0 visible / 1 total objects · 0 library results",
+      "banner": "",
+      "code": "",
+      "viewport": {
+        "x": 472.5,
+        "y": 308.5,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 1,
+      "visible": [],
+      "library": [],
+      "map": "0 visible / 1 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"expression\",\"\",\"UnsafeText\"]",
+            "metadataId": "[\"expression\",\"\",\"UnsafeText\"]",
+            "label": "UnsafeText",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          }
+        ],
+        "edges": [],
+        "issues": [
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 29,
+        "analysisProgress": {
+          "analyzed": 1,
+          "total": 1,
+          "complete": true,
+          "generation": 29
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"expression\",\"\",\"UnsafeText\"]"
+        ],
+        "connected": [],
+        "disconnected": [
+          "[\"expression\",\"\",\"UnsafeText\"]"
+        ]
+      }
+    },
+    "disconnected": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "disconnected",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "1 visible / 1 total objects · 1 library results",
+      "banner": "Zero resolved incident references. Static uncertainty remains; disconnected does not prove independence.",
+      "code": "",
+      "viewport": {
+        "x": 472.5,
+        "y": 286.25,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 1,
+      "visible": [
+        "[\"expression\",\"\",\"UnsafeText\"]"
+      ],
+      "library": [
+        "UnsafeText · query"
+      ],
+      "map": "1 visible / 1 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"expression\",\"\",\"UnsafeText\"]",
+            "metadataId": "[\"expression\",\"\",\"UnsafeText\"]",
+            "label": "UnsafeText",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          }
+        ],
+        "edges": [],
+        "issues": [
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 29,
+        "analysisProgress": {
+          "analyzed": 1,
+          "total": 1,
+          "complete": true,
+          "generation": 29
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"expression\",\"\",\"UnsafeText\"]"
+        ],
+        "connected": [],
+        "disconnected": [
+          "[\"expression\",\"\",\"UnsafeText\"]"
+        ]
+      }
+    }
+  },
+  "target": {
+    "id": "[\"expression\",\"\",\"UnsafeText\"]",
+    "rect": {
+      "x": 692.5,
+      "y": 473,
+      "width": 275,
+      "height": 97.5,
+      "top": 473,
+      "right": 967.5,
+      "bottom": 570.5,
+      "left": 692.5
+    },
+    "canvas": {
+      "x": 220,
+      "y": 164.5,
+      "width": 813,
+      "height": 804.5,
+      "top": 164.5,
+      "right": 1033,
+      "bottom": 969,
+      "left": 220
+    },
+    "view": {
+      "x": 472.5,
+      "y": 308.5,
+      "k": 1.25
+    }
+  },
+  "longTasks": []
+}

@@ -1,0 +1,14 @@
+{
+  "out": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/round7-539010d/zoom200-chain-title",
+  "passed": 0,
+  "failures": [
+    {
+      "name": "Actual resize transition 1280 step0 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n400 !== 440\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom-chain.browser.cjs:61:85\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom-chain.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom-chain.browser.cjs:47:41"
+    },
+    {
+      "name": "Actual resize transition 1440 step0 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n400 !== 440\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom-chain.browser.cjs:61:85\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom-chain.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-round7-zoom-chain.browser.cjs:47:41"
+    }
+  ]
+}

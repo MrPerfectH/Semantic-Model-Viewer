@@ -1,0 +1,13 @@
+✔ BIM independently authored inventory, exact text and states (1.848917ms)
+✔ TMDL independently authored inventory, exact text and states (2.509833ms)
+✔ independent scope/lexical/dynamic oracle and cycles (3.75625ms)
+✔ snapshot analytical allowlist excludes all acceptance raw-code sentinels (0.248458ms)
+✔ replacement metadata contains no previous query identities (0.400375ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44.2145

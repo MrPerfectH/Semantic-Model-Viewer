@@ -1,0 +1,1447 @@
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/power-query-workspace.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/power-query-inspector.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /power-query-workspace.css?v=135e4e2233 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/measures.js?v=773398f354 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:35] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:35] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:36] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:36] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:36] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:36] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:36] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:36] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:36] "GET /icons/favicon-32.png HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:36] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:36] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:36] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:36] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:36] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:37] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /power-query-workspace.css?v=135e4e2233 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:37] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:37] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /power-query-workspace.css?v=135e4e2233 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:38] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /power-query-workspace.css?v=135e4e2233 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:20:39] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /power-query-workspace.css?v=135e4e2233 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:42] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/measures.js?v=773398f354 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:21:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:21:43] "GET /icons/favicon-32.png HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /power-query-workspace.css?v=135e4e2233 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:21:44] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/power-query-workspace.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/power-query-inspector.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/measures.js?v=773398f354 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:23] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:23] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /icons/favicon-32.png HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:24] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:25] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:26] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:27] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/measures.js?v=773398f354 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:44] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:44] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:22:45] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:22:45] "GET /icons/favicon-32.png HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/measures.js?v=773398f354 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:18] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:18] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /icons/favicon-32.png HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:19] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/measures.js?v=773398f354 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:42] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:42] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:43] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:43] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:43] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:43] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:43] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:43] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:43] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:43] "GET /icons/favicon-32.png HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:44] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:23:46] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/measures.js?v=773398f354 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:12] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:12] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /icons/favicon-32.png HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:13] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:15] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:17] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:17] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:17] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:17] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:17] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:17] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:18] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:24:20] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/measures.js?v=773398f354 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:46] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:46] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:47] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /icons/favicon-32.png HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:47] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:25:48] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/measures.js?v=773398f354 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:26:23] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:26:23] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /icons/favicon-32.png HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:26:24] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /explorer.css HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/app.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/canvas.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/dax-format.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/explorer.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/host-vscode.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/layouts.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/matrix.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/measures.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/power-query-canvas.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/power-query-dependencies.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/power-query-graph-model.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/power-query-inspector.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/power-query-lineage.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/power-query-workspace.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/power-query.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/relationships.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/roles.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/rules.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/sidebar.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/snapshot.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/tmdl-parser.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/topbar.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/usage-adapter.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/util.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /js/workspace-ui.js HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /measures.css HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /power-query-canvas.css HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /power-query-inspector.css HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /power-query-lineage.css HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /power-query-workspace.css HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:28:35] "GET /power-query.css HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/measures.js?v=773398f354 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:31] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:31] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:32] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:32] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:32] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:32] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:32] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:32] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:32] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:32] "GET /icons/favicon-32.png HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:32] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:32] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:32] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:32] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:32] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:32] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:32] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:32] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:33] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:34] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /api/ping HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] code 404, message File not found
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /manifest.webmanifest HTTP/1.1" 404 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/util.js?v=b233a5ee4c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/snapshot.js?v=b63823ca6c HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/roles.js?v=2cf4e6cfdc HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/usage-adapter.js?v=47ad9159c1 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/tmdl-parser.js?v=0e97ff4704 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/workspace-ui.js?v=d88454c851 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/canvas.js?v=fe9d193349 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/layouts.js?v=1875b73e7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/dax-format.js?v=478f9a6c45 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/matrix.js?v=a3c83262cb HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/measures.js?v=773398f354 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/power-query-dependencies.js?v=19933c40ce HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/power-query-graph-model.js?v=b67342f490 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/power-query-canvas.js?v=d7d573822b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/power-query-inspector.js?v=256e107be2 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/power-query-workspace.js?v=c27ea4ff7b HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/power-query-lineage.js?v=487522c796 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/power-query.js?v=cecb795556 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/topbar.js?v=c5789195be HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/sidebar.js?v=13fab92f5e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/rules.js?v=dc35541371 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/relationships.js?v=7f17713638 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/explorer.js?v=6bfdf4472d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /js/app.js?v=dbc5683c97 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /explorer.css?v=5699d561e3 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /power-query.css?v=4ff48db438 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /measures.css?v=020a7d7d4e HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /power-query-canvas.css?v=80017a3595 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /power-query-inspector.css?v=948395db36 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /power-query-lineage.css?v=3fa4fd3345 HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /power-query-workspace.css?v=8f69cb0d2d HTTP/1.1" 304 -
+127.0.0.1 - - [10/Oct/2026 12:29:35] "GET /index.html HTTP/1.1" 304 -
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+  File "/opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py", line 235, in serve_forever
+    ready = selector.select(poll_interval)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/lib/python3.14/selectors.py", line 398, in select
+    fd_event_list = self._selector.poll(timeout)
+KeyboardInterrupt

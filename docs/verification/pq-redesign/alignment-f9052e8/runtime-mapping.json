@@ -1,0 +1,172 @@
+{
+  "candidate": "f9052e8f269cd097f687eb7a9428b7b105a2803d",
+  "worktreeHead": "d8f6e9ec0c7d75636e41deaf19cff253fbe329d3",
+  "mapping": "Exact33 runtime assets only; no full checkout equivalence; source models untouched",
+  "assets": [
+    {
+      "runtimePath": "explorer.css",
+      "sha256": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011",
+      "gitBlob": "62b1075822d52cf4cc2b04dcd02cf98166113429"
+    },
+    {
+      "runtimePath": "index.html",
+      "sha256": "8ff4a8511839d9cce49e28d3e89bd79923e36ad495274952a49a403ec10ba57e",
+      "gitBlob": "a1d723411eeab1ae8d55310c15709a4141b60edf"
+    },
+    {
+      "runtimePath": "js/app.js",
+      "sha256": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a",
+      "gitBlob": "f91d388ab5d869839c4b3adcd664fb76cc884289"
+    },
+    {
+      "runtimePath": "js/canvas.js",
+      "sha256": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787",
+      "gitBlob": "33987b3c18d900a6ee55598bb3cda97ee2cd493a"
+    },
+    {
+      "runtimePath": "js/dax-format.js",
+      "sha256": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8",
+      "gitBlob": "59d1a2085a67f1bf373cf94516f87a77e955fad1"
+    },
+    {
+      "runtimePath": "js/explorer.js",
+      "sha256": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0",
+      "gitBlob": "8a9eaeb7bc7f51ad1885540dc28370e412e4418c"
+    },
+    {
+      "runtimePath": "js/host-vscode.js",
+      "sha256": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb",
+      "gitBlob": "e0d4a8dd27c0e0db3f9523be40bf670d6ffcd9da"
+    },
+    {
+      "runtimePath": "js/layouts.js",
+      "sha256": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1",
+      "gitBlob": "0f8f76d28e053878ac015ef30de5314d9aa37880"
+    },
+    {
+      "runtimePath": "js/matrix.js",
+      "sha256": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1",
+      "gitBlob": "92eb8a534539739e11e46a3be901d2e1789057bc"
+    },
+    {
+      "runtimePath": "js/measures.js",
+      "sha256": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179",
+      "gitBlob": "8088a249566760465ffab20ebb0a72bb112914e0"
+    },
+    {
+      "runtimePath": "js/power-query-canvas.js",
+      "sha256": "6b6d7b9797d3bd10bc7767cc4b140aabba0271574ba00450fe4b8022f258098c",
+      "gitBlob": "d8ec47a6bd67d1fe848ac31e4d2def49090451fc"
+    },
+    {
+      "runtimePath": "js/power-query-dependencies.js",
+      "sha256": "44e2b21a9287e5e7569f9d70d02fe8ce2b6c19815d24fcf88ae53a0994ba72c6",
+      "gitBlob": "9559c0b2265794211e0276df79fa79c24cfce2f5"
+    },
+    {
+      "runtimePath": "js/power-query-graph-model.js",
+      "sha256": "8c48f7ada3e7725e22ffb63835412105255054148d537722ada89efb53caaeaa",
+      "gitBlob": "5ae6f05c451cb4bbca5e45f91858f9655f1aaf0f"
+    },
+    {
+      "runtimePath": "js/power-query-inspector.js",
+      "sha256": "0c140684c68cff60322154bca698012fabccc628fd733700c06d07bf9c086f9e",
+      "gitBlob": "67a9b34f006312363180db234e6795a3c61915b8"
+    },
+    {
+      "runtimePath": "js/power-query-lineage.js",
+      "sha256": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1",
+      "gitBlob": "3efe3a50d8f12e3ab7bfae57fe64c501c034e62d"
+    },
+    {
+      "runtimePath": "js/power-query-workspace.js",
+      "sha256": "dcda51371f13a35bd64a88171d0c4894dcc2d834df4b73ad187517164e1091e6",
+      "gitBlob": "f12b375a615e2d7f877c7ae8f6a2ba02031fcad3"
+    },
+    {
+      "runtimePath": "js/power-query.js",
+      "sha256": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f",
+      "gitBlob": "7296a0b7fcb1bd8ba25ec8b30eb08bdff64ba6da"
+    },
+    {
+      "runtimePath": "js/relationships.js",
+      "sha256": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5",
+      "gitBlob": "387498e521588a5b80c17a3ab01e0d29a7aa5042"
+    },
+    {
+      "runtimePath": "js/roles.js",
+      "sha256": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1",
+      "gitBlob": "93c95e4ea352c8887db8de12a8a7021e8995e10d"
+    },
+    {
+      "runtimePath": "js/rules.js",
+      "sha256": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad",
+      "gitBlob": "f0d2436b6515eafe7f241d4e6e5f8debebb2faca"
+    },
+    {
+      "runtimePath": "js/sidebar.js",
+      "sha256": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4",
+      "gitBlob": "edbfca72ab4a7486274d470078627936679c4aa2"
+    },
+    {
+      "runtimePath": "js/snapshot.js",
+      "sha256": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c",
+      "gitBlob": "eef514c19edea2f2e83218210020b4039467bb7a"
+    },
+    {
+      "runtimePath": "js/tmdl-parser.js",
+      "sha256": "60514e5155090555f6bab24bd6c3acb5226a62de93660da59c7d3882e3dbadc6",
+      "gitBlob": "c01e4a68c5b37991e66fcff7cc0895ccdd256a86"
+    },
+    {
+      "runtimePath": "js/topbar.js",
+      "sha256": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9",
+      "gitBlob": "f96c40dbcab1a66de8bcb974345af4ca6c37cb60"
+    },
+    {
+      "runtimePath": "js/usage-adapter.js",
+      "sha256": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428",
+      "gitBlob": "de26bfa5c41ac312d8be65fe9684921dfd36a5d5"
+    },
+    {
+      "runtimePath": "js/util.js",
+      "sha256": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960",
+      "gitBlob": "d1a0830f9fa432f4505b710f0ee3e53626649f61"
+    },
+    {
+      "runtimePath": "js/workspace-ui.js",
+      "sha256": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43",
+      "gitBlob": "d8959f58bc2890155d8a9d00bee4173c45ccd447"
+    },
+    {
+      "runtimePath": "measures.css",
+      "sha256": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86",
+      "gitBlob": "8b4f39533a1289388ed7574627d807f47f9519b6"
+    },
+    {
+      "runtimePath": "power-query-canvas.css",
+      "sha256": "4f0af571a91ae709249c929f0b85eb7e97bbe85ea397afd722faf7348bf660a8",
+      "gitBlob": "a51b3126e7286a1f3665252ec2746a14648b34f4"
+    },
+    {
+      "runtimePath": "power-query-inspector.css",
+      "sha256": "e5fc5dfebbbb9e66d06adb202211315a8eaf7481061a99e462741e8310f23354",
+      "gitBlob": "dd9764d09023db895bccaedb752780fc69c71327"
+    },
+    {
+      "runtimePath": "power-query-lineage.css",
+      "sha256": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b",
+      "gitBlob": "5bdfa9bf78495a7ae8a4a95c0ac7b178fe64c4f4"
+    },
+    {
+      "runtimePath": "power-query-workspace.css",
+      "sha256": "6a5ee9b1a7614ded1fe82a7184bfd274da850e0f3d3e70acc1a65c86a234d4e6",
+      "gitBlob": "e65cf7a16478b68480db2189bc9fc0ff38611ec9"
+    },
+    {
+      "runtimePath": "power-query.css",
+      "sha256": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee",
+      "gitBlob": "f6af945272354215724d294f172c884e492dbd69"
+    }
+  ]
+}

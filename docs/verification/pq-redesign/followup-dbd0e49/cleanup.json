@@ -1,0 +1,20 @@
+{
+  "t3Tab": "tab_2j_9fb37a1a-9d5e-4eca-a366-3aa050ab491f",
+  "t3Closed": true,
+  "serversStopped": [
+    {
+      "port": 54087,
+      "pid": 208
+    },
+    {
+      "port": 54088,
+      "pid": 9708
+    },
+    {
+      "port": 54088,
+      "pid": 13551
+    }
+  ],
+  "chrome": "Every test transport awaited profile process exit and removed its synthetic temporary profile in finally",
+  "watchers": "none"
+}

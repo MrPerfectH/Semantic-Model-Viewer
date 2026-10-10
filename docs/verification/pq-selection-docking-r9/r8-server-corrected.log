@@ -1,0 +1,10 @@
+{
+  "out": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/docs/verification/pq-round8/r9-server-corrected",
+  "passed": 2,
+  "failures": [
+    {
+      "name": "Actual resize transition 1280 step0 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: Hide must automatically expose its selected title\n\nfalse !== true\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/tests/pq-round8.browser.cjs:63:329\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/tests/pq-round8.browser.cjs:15:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/tests/pq-round8.browser.cjs:55:41"
+    }
+  ]
+}

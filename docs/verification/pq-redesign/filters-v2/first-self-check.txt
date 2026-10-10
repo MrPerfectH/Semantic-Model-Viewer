@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: filter addendum artifacts are reproducible and preserve explicit expected incidence sets
+ok 1 - filter addendum artifacts are reproducible and preserve explicit expected incidence sets
+  ---
+  duration_ms: 5.921958
+  type: 'test'
+  ...
+# Subtest: all-disconnected same SQL and semantic relationship is All6 Connected0 Disconnected6
+ok 2 - all-disconnected same SQL and semantic relationship is All6 Connected0 Disconnected6
+  ---
+  duration_ms: 0.612291
+  type: 'test'
+  ...
+# Subtest: parameter fanout counts unique incident objects, not arrow count or inbound-only dependencies
+ok 3 - parameter fanout counts unique incident objects, not arrow count or inbound-only dependencies
+  ---
+  duration_ms: 1.31675
+  type: 'test'
+  ...
+# Subtest: cycles, duplicate rows, unavailable inputs, status objects and unused parameter have deliberate categories
+ok 4 - cycles, duplicate rows, unavailable inputs, status objects and unused parameter have deliberate categories
+  ---
+  duration_ms: 0.124708
+  type: 'test'
+  ...
+# Subtest: 300/301/350/1000 category totals do not truncate; same-ID replacement changes category membership
+ok 5 - 300/301/350/1000 category totals do not truncate; same-ID replacement changes category membership
+  ---
+  duration_ms: 0.068042
+  type: 'test'
+  ...
+# Subtest: state oracle rejects search-derived graph, category counts after search, stale filter/search and invented independence
+ok 6 - state oracle rejects search-derived graph, category counts after search, stale filter/search and invented independence
+  ---
+  duration_ms: 1.693208
+  type: 'test'
+  ...
+# Subtest: hidden methods and explicit empty category are separate from empty model
+ok 7 - hidden methods and explicit empty category are separate from empty model
+  ---
+  duration_ms: 0.1455
+  type: 'test'
+  ...
+# Subtest: combined hidden-selection, Show all, reference/library navigation, Back and Reset workflows reject violations
+ok 8 - combined hidden-selection, Show all, reference/library navigation, Back and Reset workflows reject violations
+  ---
+  duration_ms: 13.554709
+  type: 'test'
+  ...
+# Subtest: atomic ready oracle accepts pending links without progressive edges, rejects early category finalization
+ok 9 - atomic ready oracle accepts pending links without progressive edges, rejects early category finalization
+  ---
+  duration_ms: 3.737917
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 79.543416

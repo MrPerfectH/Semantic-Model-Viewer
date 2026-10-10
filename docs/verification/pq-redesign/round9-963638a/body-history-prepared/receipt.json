@@ -1,0 +1,7 @@
+{
+  "candidate": "963638aeb2d124460709374004ddcf0799268ada",
+  "checks": [],
+  "failures": [
+    "Error: nonzero prepared body {\"a\":77.5,\"b\":123}\n    at eq (eval at <anonymous> (exec_main.mjs:3:152), <anonymous>:1:518)\n    at eval (eval at <anonymous> (exec_main.mjs:3:152), <anonymous>:4:383)\n    at async exec_main.mjs:3:146"
+  ]
+}

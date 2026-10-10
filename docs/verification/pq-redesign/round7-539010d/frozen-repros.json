@@ -1,0 +1,18 @@
+[
+  {
+    "path": "tests/pq-redesign-independent-flow-0d964fc-arrange-undo-zoomed.browser.cjs",
+    "sha256": "ef4481e55e6b407f885f30f6e0744eed7dcc227b5d05462d9f89e7ddd89585d5"
+  },
+  {
+    "path": "tests/pq-redesign-independent-round7-auto-framing-strict.browser.cjs",
+    "sha256": "cb9ab0bcd4ded0757c5ee9c4a93f0ad7347dd12f7679f9cb4d872dbfaa5d15a3"
+  },
+  {
+    "path": "tests/pq-redesign-independent-round7-chain-focus-diagnostic.browser.cjs",
+    "sha256": "e4b760cd1dfe97a301d34921f2d4608fad23ab2ad4e9f42507721e5a0e775dde"
+  },
+  {
+    "path": "tests/acceptance-fixtures/pq-redesign/flow-0d964fc/chain52.bim",
+    "sha256": "f98449aa57f725fbe138e7e4702e98b96c9350be91bea82b86201655d57d1d53"
+  }
+]

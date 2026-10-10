@@ -1,0 +1,916 @@
+{
+  "name": "1440-1-right",
+  "zoom": {
+    "innerWidth": 1440,
+    "outerWidth": 1440,
+    "dpr": 1,
+    "visualViewport": {
+      "width": 1440,
+      "height": 1000,
+      "scale": 1
+    }
+  },
+  "before": {
+    "viewport": {
+      "x": -323.5,
+      "y": 227.45,
+      "k": 1.13
+    },
+    "layout": [
+      [
+        "[\"partition\",\"Report\",\"Report\"]",
+        {
+          "x": 1760,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw East\"]",
+        {
+          "x": 352,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Prepared\"]",
+        {
+          "x": 704,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Merged Query\"]",
+        {
+          "x": 1056,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        {
+          "x": 1408,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Downstream\"]",
+        {
+          "x": 1760,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        {
+          "x": 704,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        {
+          "x": 0,
+          "y": 454
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Standalone\"]",
+        {
+          "x": 294,
+          "y": 454
+        }
+      ]
+    ],
+    "body": [
+      0,
+      0
+    ],
+    "page": [
+      0,
+      0
+    ],
+    "root": "[\"expression\",\"\",\"Prepared\"]",
+    "selected": "[\"expression\",\"\",\"Prepared\"]",
+    "below": false,
+    "pref": "right",
+    "width": 435,
+    "height": 505,
+    "actual": {
+      "x": 1005,
+      "y": 126,
+      "width": 435,
+      "height": 844,
+      "top": 126,
+      "right": 1440,
+      "bottom": 970,
+      "left": 1005
+    },
+    "aria": {
+      "orientation": "vertical",
+      "value": "435"
+    },
+    "code": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": true,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    }
+  },
+  "dispatchBefore": {
+    "viewport": {
+      "x": -323.5,
+      "y": 227.45,
+      "k": 1.13
+    },
+    "layout": [
+      [
+        "[\"partition\",\"Report\",\"Report\"]",
+        {
+          "x": 1760,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw East\"]",
+        {
+          "x": 352,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Prepared\"]",
+        {
+          "x": 704,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Merged Query\"]",
+        {
+          "x": 1056,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        {
+          "x": 1408,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Downstream\"]",
+        {
+          "x": 1760,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        {
+          "x": 704,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        {
+          "x": 0,
+          "y": 454
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Standalone\"]",
+        {
+          "x": 294,
+          "y": 454
+        }
+      ]
+    ],
+    "body": [
+      0,
+      0
+    ],
+    "page": [
+      0,
+      0
+    ],
+    "root": "[\"expression\",\"\",\"Prepared\"]",
+    "selected": "[\"expression\",\"\",\"Prepared\"]",
+    "below": false,
+    "pref": "right",
+    "width": 435,
+    "height": 505,
+    "actual": {
+      "x": 1005,
+      "y": 126,
+      "width": 435,
+      "height": 844,
+      "top": 126,
+      "right": 1440,
+      "bottom": 970,
+      "left": 1005
+    },
+    "aria": {
+      "orientation": "vertical",
+      "value": "435"
+    },
+    "code": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": true,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    }
+  },
+  "selected": {
+    "viewport": {
+      "x": -323.5,
+      "y": 227.45,
+      "k": 1.13
+    },
+    "layout": [
+      [
+        "[\"partition\",\"Report\",\"Report\"]",
+        {
+          "x": 1760,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw East\"]",
+        {
+          "x": 352,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Prepared\"]",
+        {
+          "x": 704,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Merged Query\"]",
+        {
+          "x": 1056,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        {
+          "x": 1408,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Downstream\"]",
+        {
+          "x": 1760,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        {
+          "x": 704,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        {
+          "x": 0,
+          "y": 454
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Standalone\"]",
+        {
+          "x": 294,
+          "y": 454
+        }
+      ]
+    ],
+    "body": [
+      0,
+      0
+    ],
+    "page": [
+      0,
+      0
+    ],
+    "root": "[\"expression\",\"\",\"Prepared\"]",
+    "selected": "[\"expression\",\"\",\"Raw West\"]",
+    "below": false,
+    "pref": "right",
+    "width": 435,
+    "height": 505,
+    "actual": {
+      "x": 1005,
+      "y": 126,
+      "width": 435,
+      "height": 844,
+      "top": 126,
+      "right": 1440,
+      "bottom": 970,
+      "left": 1005
+    },
+    "aria": {
+      "orientation": "vertical",
+      "value": "435"
+    },
+    "code": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": true,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    }
+  },
+  "keyboard": {
+    "viewport": {
+      "x": -175.14,
+      "y": 223.01,
+      "k": 1.13
+    },
+    "layout": [
+      [
+        "[\"partition\",\"Report\",\"Report\"]",
+        {
+          "x": 1760,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw East\"]",
+        {
+          "x": 352,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Prepared\"]",
+        {
+          "x": 704,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Merged Query\"]",
+        {
+          "x": 1056,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        {
+          "x": 1408,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Downstream\"]",
+        {
+          "x": 1760,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        {
+          "x": 704,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        {
+          "x": 0,
+          "y": 454
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Standalone\"]",
+        {
+          "x": 294,
+          "y": 454
+        }
+      ]
+    ],
+    "body": [
+      0,
+      0
+    ],
+    "page": [
+      0,
+      0
+    ],
+    "root": "[\"expression\",\"\",\"Prepared\"]",
+    "selected": "[\"expression\",\"\",\"Raw West\"]",
+    "below": false,
+    "pref": "right",
+    "width": 455,
+    "height": 505,
+    "actual": {
+      "x": 985,
+      "y": 126,
+      "width": 455,
+      "height": 844,
+      "top": 126,
+      "right": 1440,
+      "bottom": 970,
+      "left": 985
+    },
+    "aria": {
+      "orientation": "vertical",
+      "value": "455"
+    },
+    "code": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": true,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    }
+  },
+  "pointer": {
+    "viewport": {
+      "x": -175.14,
+      "y": 223.01,
+      "k": 1.13
+    },
+    "layout": [
+      [
+        "[\"partition\",\"Report\",\"Report\"]",
+        {
+          "x": 1760,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw East\"]",
+        {
+          "x": 352,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Prepared\"]",
+        {
+          "x": 704,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Merged Query\"]",
+        {
+          "x": 1056,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        {
+          "x": 1408,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Downstream\"]",
+        {
+          "x": 1760,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        {
+          "x": 704,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        {
+          "x": 0,
+          "y": 454
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Standalone\"]",
+        {
+          "x": 294,
+          "y": 454
+        }
+      ]
+    ],
+    "body": [
+      0,
+      0
+    ],
+    "page": [
+      0,
+      0
+    ],
+    "root": "[\"expression\",\"\",\"Prepared\"]",
+    "selected": "[\"expression\",\"\",\"Raw West\"]",
+    "below": false,
+    "pref": "right",
+    "width": 470,
+    "height": 505,
+    "actual": {
+      "x": 970,
+      "y": 126,
+      "width": 470,
+      "height": 844,
+      "top": 126,
+      "right": 1440,
+      "bottom": 970,
+      "left": 970
+    },
+    "aria": {
+      "orientation": "vertical",
+      "value": "470"
+    },
+    "code": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": true,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    }
+  },
+  "final": {
+    "viewport": {
+      "x": -192.64,
+      "y": 204.01,
+      "k": 1.13
+    },
+    "layout": [
+      [
+        "[\"partition\",\"Report\",\"Report\"]",
+        {
+          "x": 1760,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw West\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Raw East\"]",
+        {
+          "x": 352,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Prepared\"]",
+        {
+          "x": 704,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Merged Query\"]",
+        {
+          "x": 1056,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        {
+          "x": 1408,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Downstream\"]",
+        {
+          "x": 1760,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        {
+          "x": 704,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleA\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"CycleB\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        {
+          "x": 0,
+          "y": 454
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Standalone\"]",
+        {
+          "x": 294,
+          "y": 454
+        }
+      ]
+    ],
+    "body": [
+      0,
+      0
+    ],
+    "page": [
+      0,
+      0
+    ],
+    "root": "[\"expression\",\"\",\"Prepared\"]",
+    "selected": "[\"expression\",\"\",\"Raw West\"]",
+    "below": false,
+    "pref": "right",
+    "width": 470,
+    "height": 505,
+    "actual": {
+      "x": 970,
+      "y": 126,
+      "width": 470,
+      "height": 844,
+      "top": 126,
+      "right": 1440,
+      "bottom": 970,
+      "left": 970
+    },
+    "aria": {
+      "orientation": "vertical",
+      "value": "470"
+    },
+    "code": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": true,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    }
+  },
+  "hit": {
+    "rect": {
+      "x": 520.0150146484375,
+      "y": 494.94000244140625,
+      "width": 224.30499267578125,
+      "height": 19.82794189453125,
+      "top": 494.94000244140625,
+      "right": 744.3200073242188,
+      "bottom": 514.7679443359375,
+      "left": 520.0150146484375
+    },
+    "own": true
+  },
+  "trusted": [
+    {
+      "trusted": true,
+      "target": ""
+    },
+    {
+      "trusted": true,
+      "target": "ex-button"
+    },
+    {
+      "trusted": true,
+      "target": "ex-button"
+    },
+    {
+      "trusted": true,
+      "target": "ex-button"
+    },
+    {
+      "trusted": true,
+      "target": "ex-button"
+    },
+    {
+      "trusted": true,
+      "target": ""
+    },
+    {
+      "trusted": true,
+      "target": "ex-button"
+    },
+    {
+      "trusted": true,
+      "target": "wui-card-title pqc-node-title"
+    },
+    {
+      "trusted": true,
+      "target": "pqw-resizer"
+    },
+    {
+      "trusted": true,
+      "target": "pqw-resizer"
+    },
+    {
+      "trusted": true,
+      "target": "pqi-button pqi-open-query"
+    },
+    {
+      "trusted": true,
+      "target": "ex-button"
+    }
+  ]
+}

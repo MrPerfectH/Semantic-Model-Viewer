@@ -1,0 +1,21 @@
+{
+  "candidate": "234dfae6b5588364ef49d559b72a3235204655d0",
+  "localHead": "a8191f98c625c1c02c04229e2b812fba9333ffdf",
+  "tree": "618695dd0258e396fdf359700b6717686db2bf83",
+  "method": "Restarted candidate serve.py on8938, registered T3 preview actual Browse folder import, table/partition selection and Copy M. Temporarily wrap clipboard.writeText to capture exact argument while forwarding to original method; restored after capture. OS clipboard readback remains denied; argument hash is not OS readback.",
+  "rawCRLF": 19,
+  "rawSHA256": "dd5e5fc71672c14dfab54484d5a195ca48caf7da43a8b7030cd2f794948da21a",
+  "metadataSHA256": "0ca26d7ff5746665d15af9014936598df9e4374eb7d766dffa2858d9f99fec42",
+  "renderSHA256": "0ca26d7ff5746665d15af9014936598df9e4374eb7d766dffa2858d9f99fec42",
+  "clipboardArgumentSHA256": "0ca26d7ff5746665d15af9014936598df9e4374eb7d766dffa2858d9f99fec42",
+  "metadataBytes": 86,
+  "renderEqual": true,
+  "copyArgumentEqual": true,
+  "copyStatus": "Copied",
+  "model": "PQ38",
+  "viewport": [
+    1280,
+    800
+  ],
+  "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.8037.92 Safari/537.36"
+}

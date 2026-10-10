@@ -1,0 +1,26 @@
+[
+  {
+    "path": "docs/verification/pq-redesign/followup-dbd0e49/node-mapped/tests/power-query-workspace.test.cjs",
+    "gitBlob": "c3175824496e62a6e5abb3ca136c2d72822c9456"
+  },
+  {
+    "path": "docs/verification/pq-redesign/followup-dbd0e49/node-mapped/tests/power-query-workspace-ui.test.cjs",
+    "gitBlob": "4595d5c1fa6a2f077baa272d2bd2701a1f445f2a"
+  },
+  {
+    "path": "docs/verification/pq-redesign/followup-dbd0e49/node-mapped/tests/power-query.test.cjs",
+    "gitBlob": "a2e2faac51afe3234b835f4bf63224c49dcc51d8"
+  },
+  {
+    "path": "docs/verification/pq-redesign/followup-dbd0e49/node-mapped/tests/power-query-ui-harness.cjs",
+    "gitBlob": "02b05007825e17b035df100cf4afaee0739ff4a1"
+  },
+  {
+    "path": "docs/verification/pq-redesign/followup-dbd0e49/node-mapped/tests/power-query-canvas.test.cjs",
+    "gitBlob": "578371bf4a234c45f5db7e97c99b7cc6c602777a"
+  },
+  {
+    "path": "docs/verification/pq-redesign/followup-dbd0e49/node-mapped/tests/power-query-inspector.test.cjs",
+    "gitBlob": "2cf3e8929564286bbaa98651375238849d011ed4"
+  }
+]

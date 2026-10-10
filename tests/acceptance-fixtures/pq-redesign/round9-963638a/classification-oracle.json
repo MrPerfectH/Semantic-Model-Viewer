@@ -1,0 +1,8 @@
+{
+ "exactAllowlist":["Table.TransformColumnTypes","Int64.Type","Byte.Type","Int8.Type","Int16.Type","Int32.Type","Single.Type","Double.Type","Decimal.Type","Currency.Type","Percentage.Type","Guid.Type"],
+ "unknownNames":["table.TransformColumnTypes","Table.TransformColumnTypesX","Int64.TypeX","int64.Type","Table.SelectRows","Unknown.Library","Number.Type"],
+ "standardCode":"let t = Table.TransformColumnTypes(Raw, {{\"Value\", Int64.Type}}) in t",
+ "quotedShadowCode":"let emoji = \"😀\", a = #\"Int64.Type\", b = #\"Int64.Type\", f = (#\"Int64.Type\") => #\"Int64.Type\" in {a,b,f(1)}\r\n",
+ "unknownDynamicCode":"{Table.TransformColumnTypes(Raw,{}), Int64.Type, MissingQuery, Unknown.Library(1), Expression.Evaluate(\"Hidden\", #shared), Record.Field(#sections, \"x\")}",
+ "sources":["https://learn.microsoft.com/en-us/powerquery-m/table-transformcolumntypes","https://learn.microsoft.com/en-us/powerquery-m/type-conversion"]
+}

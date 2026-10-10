@@ -1,0 +1,24 @@
+{
+  "transport": "T3 available; not an unavailable fallback",
+  "before": {
+    "cssWidth": 1280,
+    "dpr": 2,
+    "scale": 1
+  },
+  "afterMetaPlus": {
+    "cssWidth": 1280,
+    "dpr": 2,
+    "scale": 1
+  },
+  "afterControlPlus": {
+    "cssWidth": 1280,
+    "dpr": 2,
+    "scale": 1
+  },
+  "catalogMissing": [
+    "native browser zoom setting",
+    "network offline emulation",
+    "pointer delta input"
+  ],
+  "authorization": "Explicit coordinator authorization in this thread, narrow isolated Chrome for real zoom and downloaded snapshot offline only"
+}

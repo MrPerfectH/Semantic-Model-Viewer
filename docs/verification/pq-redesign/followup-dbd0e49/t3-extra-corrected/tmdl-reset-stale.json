@@ -1,0 +1,629 @@
+{
+  "reset": {
+    "nav": {
+      "membership": [
+        "[\"expression\",\"\",\"In\"]",
+        "[\"expression\",\"\",\"Plain\"]",
+        "[\"expression\",\"\",\"Loose\"]",
+        "[\"partition\",\"T\",\"P\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 11,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 128.5,
+        "y": 108.25,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": true,
+        "focus": null,
+        "disclosures": {},
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "layout": [
+      [
+        "[\"expression\",\"\",\"In\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Loose\"]",
+        {
+          "x": 294,
+          "y": 174
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Plain\"]",
+        {
+          "x": 0,
+          "y": 174
+        }
+      ],
+      [
+        "[\"partition\",\"T\",\"P\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ]
+    ],
+    "visible": [
+      "[\"expression\",\"\",\"In\"]",
+      "[\"expression\",\"\",\"Loose\"]",
+      "[\"expression\",\"\",\"Plain\"]",
+      "[\"partition\",\"T\",\"P\"]"
+    ],
+    "map": [
+      "[\"expression\",\"\",\"In\"]",
+      "[\"expression\",\"\",\"Loose\"]",
+      "[\"expression\",\"\",\"Plain\"]",
+      "[\"partition\",\"T\",\"P\"]"
+    ],
+    "mapEdges": [
+      "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"In\\\"]\",\"[\\\"partition\\\",\\\"T\\\",\\\"P\\\"]\"]"
+    ],
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"In\\\"]\",\"[\\\"partition\\\",\\\"T\\\",\\\"P\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"In\"]",
+        "consumerId": "[\"partition\",\"T\",\"P\"]"
+      }
+    ],
+    "mapBox": "-28 -28 660 326",
+    "mapDisplay": "",
+    "mapRects": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 252,
+        "h": 96
+      },
+      {
+        "x": 352,
+        "y": 0,
+        "w": 252,
+        "h": 96
+      },
+      {
+        "x": 0,
+        "y": 174,
+        "w": 252,
+        "h": 96
+      },
+      {
+        "x": 294,
+        "y": 174,
+        "w": 252,
+        "h": 96
+      }
+    ],
+    "registry": 4,
+    "host": {
+      "x": 268,
+      "y": 126,
+      "width": 1012,
+      "height": 644,
+      "top": 126,
+      "right": 1280,
+      "bottom": 770,
+      "left": 268
+    },
+    "cards": [
+      {
+        "id": "[\"expression\",\"\",\"In\"]",
+        "r": {
+          "x": 396.5,
+          "y": 234.25,
+          "width": 315,
+          "height": 120,
+          "top": 234.25,
+          "right": 711.5,
+          "bottom": 354.25,
+          "left": 396.5
+        }
+      },
+      {
+        "id": "[\"expression\",\"\",\"Plain\"]",
+        "r": {
+          "x": 396.5,
+          "y": 451.75,
+          "width": 315,
+          "height": 120,
+          "top": 451.75,
+          "right": 711.5,
+          "bottom": 571.75,
+          "left": 396.5
+        }
+      },
+      {
+        "id": "[\"expression\",\"\",\"Loose\"]",
+        "r": {
+          "x": 764,
+          "y": 451.75,
+          "width": 315,
+          "height": 120,
+          "top": 451.75,
+          "right": 1079,
+          "bottom": 571.75,
+          "left": 764
+        }
+      },
+      {
+        "id": "[\"partition\",\"T\",\"P\"]",
+        "r": {
+          "x": 836.5,
+          "y": 234.25,
+          "width": 315,
+          "height": 120,
+          "top": 234.25,
+          "right": 1151.5,
+          "bottom": 354.25,
+          "left": 836.5
+        }
+      }
+    ],
+    "library": [
+      "In",
+      "Plain",
+      "Loose",
+      "T"
+    ],
+    "groups": [
+      [
+        "all",
+        "All groups (4)"
+      ],
+      [
+        "group:Raw/Nested",
+        "Raw/Nested (2)"
+      ],
+      [
+        "group:UnresolvedDefinition",
+        "UnresolvedDefinition (1)"
+      ],
+      [
+        "unassigned",
+        "Unassigned (1)"
+      ]
+    ],
+    "counts": [
+      "All (4)",
+      "Connected (2)",
+      "Disconnected (2)"
+    ],
+    "center": {
+      "disabled": true,
+      "title": "Select a visible canvas object to center."
+    },
+    "code": "",
+    "reader": false,
+    "focus": {
+      "cls": "",
+      "text": "\n\n  groups1 tables · 0 relationshipsTablesMeasuresPower QueryDomainsMatrixLocal "
+    },
+    "banner": ""
+  },
+  "nested": {
+    "nav": {
+      "membership": [
+        "[\"expression\",\"\",\"In\"]",
+        "[\"expression\",\"\",\"Plain\"]",
+        "[\"expression\",\"\",\"Loose\"]",
+        "[\"partition\",\"T\",\"P\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "groupFilter": "group:Raw/Nested",
+      "generation": 11,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 128.5,
+        "y": 108.25,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": true,
+        "focus": null,
+        "disclosures": {},
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "layout": [
+      [
+        "[\"expression\",\"\",\"In\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Loose\"]",
+        {
+          "x": 294,
+          "y": 174
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Plain\"]",
+        {
+          "x": 0,
+          "y": 174
+        }
+      ],
+      [
+        "[\"partition\",\"T\",\"P\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ]
+    ],
+    "visible": [
+      "[\"expression\",\"\",\"In\"]",
+      "[\"partition\",\"T\",\"P\"]"
+    ],
+    "map": [
+      "[\"expression\",\"\",\"In\"]",
+      "[\"partition\",\"T\",\"P\"]"
+    ],
+    "mapEdges": [
+      "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"In\\\"]\",\"[\\\"partition\\\",\\\"T\\\",\\\"P\\\"]\"]"
+    ],
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"In\\\"]\",\"[\\\"partition\\\",\\\"T\\\",\\\"P\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"In\"]",
+        "consumerId": "[\"partition\",\"T\",\"P\"]"
+      }
+    ],
+    "mapBox": "-28 -28 660 152",
+    "mapDisplay": "",
+    "mapRects": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 252,
+        "h": 96
+      },
+      {
+        "x": 352,
+        "y": 0,
+        "w": 252,
+        "h": 96
+      }
+    ],
+    "registry": 4,
+    "host": {
+      "x": 268,
+      "y": 126,
+      "width": 1012,
+      "height": 644,
+      "top": 126,
+      "right": 1280,
+      "bottom": 770,
+      "left": 268
+    },
+    "cards": [
+      {
+        "id": "[\"expression\",\"\",\"In\"]",
+        "r": {
+          "x": 396.5,
+          "y": 234.25,
+          "width": 315,
+          "height": 120,
+          "top": 234.25,
+          "right": 711.5,
+          "bottom": 354.25,
+          "left": 396.5
+        }
+      },
+      {
+        "id": "[\"partition\",\"T\",\"P\"]",
+        "r": {
+          "x": 836.5,
+          "y": 234.25,
+          "width": 315,
+          "height": 120,
+          "top": 234.25,
+          "right": 1151.5,
+          "bottom": 354.25,
+          "left": 836.5
+        }
+      }
+    ],
+    "library": [
+      "In",
+      "T"
+    ],
+    "groups": [
+      [
+        "all",
+        "All groups (4)"
+      ],
+      [
+        "group:Raw/Nested",
+        "Raw/Nested (2)"
+      ],
+      [
+        "group:UnresolvedDefinition",
+        "UnresolvedDefinition (1)"
+      ],
+      [
+        "unassigned",
+        "Unassigned (1)"
+      ]
+    ],
+    "counts": [
+      "All (4)",
+      "Connected (2)",
+      "Disconnected (2)"
+    ],
+    "center": {
+      "disabled": true,
+      "title": "Select a visible canvas object to center."
+    },
+    "code": "",
+    "reader": false,
+    "focus": {
+      "cls": "",
+      "text": "\n\n  groups1 tables · 0 relationshipsTablesMeasuresPower QueryDomainsMatrixLocal "
+    },
+    "banner": ""
+  },
+  "metadata": {
+    "nav": {
+      "membership": [
+        "[\"expression\",\"\",\"In\"]",
+        "[\"expression\",\"\",\"Plain\"]",
+        "[\"expression\",\"\",\"Loose\"]",
+        "[\"partition\",\"T\",\"P\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 13,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 128.5,
+        "y": 108.25,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": true,
+        "focus": null,
+        "disclosures": {},
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "layout": [
+      [
+        "[\"expression\",\"\",\"In\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Loose\"]",
+        {
+          "x": 294,
+          "y": 174
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Plain\"]",
+        {
+          "x": 0,
+          "y": 174
+        }
+      ],
+      [
+        "[\"partition\",\"T\",\"P\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ]
+    ],
+    "visible": [
+      "[\"expression\",\"\",\"In\"]",
+      "[\"expression\",\"\",\"Loose\"]",
+      "[\"expression\",\"\",\"Plain\"]",
+      "[\"partition\",\"T\",\"P\"]"
+    ],
+    "map": [
+      "[\"expression\",\"\",\"In\"]",
+      "[\"expression\",\"\",\"Loose\"]",
+      "[\"expression\",\"\",\"Plain\"]",
+      "[\"partition\",\"T\",\"P\"]"
+    ],
+    "mapEdges": [
+      "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"In\\\"]\",\"[\\\"partition\\\",\\\"T\\\",\\\"P\\\"]\"]"
+    ],
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"In\\\"]\",\"[\\\"partition\\\",\\\"T\\\",\\\"P\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"In\"]",
+        "consumerId": "[\"partition\",\"T\",\"P\"]"
+      }
+    ],
+    "mapBox": "-28 -28 660 326",
+    "mapDisplay": "",
+    "mapRects": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 252,
+        "h": 96
+      },
+      {
+        "x": 352,
+        "y": 0,
+        "w": 252,
+        "h": 96
+      },
+      {
+        "x": 0,
+        "y": 174,
+        "w": 252,
+        "h": 96
+      },
+      {
+        "x": 294,
+        "y": 174,
+        "w": 252,
+        "h": 96
+      }
+    ],
+    "registry": 4,
+    "host": {
+      "x": 268,
+      "y": 126,
+      "width": 1012,
+      "height": 644,
+      "top": 126,
+      "right": 1280,
+      "bottom": 770,
+      "left": 268
+    },
+    "cards": [
+      {
+        "id": "[\"expression\",\"\",\"In\"]",
+        "r": {
+          "x": 396.5,
+          "y": 234.25,
+          "width": 315,
+          "height": 120,
+          "top": 234.25,
+          "right": 711.5,
+          "bottom": 354.25,
+          "left": 396.5
+        }
+      },
+      {
+        "id": "[\"expression\",\"\",\"Plain\"]",
+        "r": {
+          "x": 396.5,
+          "y": 451.75,
+          "width": 315,
+          "height": 120,
+          "top": 451.75,
+          "right": 711.5,
+          "bottom": 571.75,
+          "left": 396.5
+        }
+      },
+      {
+        "id": "[\"expression\",\"\",\"Loose\"]",
+        "r": {
+          "x": 764,
+          "y": 451.75,
+          "width": 315,
+          "height": 120,
+          "top": 451.75,
+          "right": 1079,
+          "bottom": 571.75,
+          "left": 764
+        }
+      },
+      {
+        "id": "[\"partition\",\"T\",\"P\"]",
+        "r": {
+          "x": 836.5,
+          "y": 234.25,
+          "width": 315,
+          "height": 120,
+          "top": 234.25,
+          "right": 1151.5,
+          "bottom": 354.25,
+          "left": 836.5
+        }
+      }
+    ],
+    "library": [
+      "In",
+      "Plain",
+      "Loose",
+      "T"
+    ],
+    "groups": [
+      [
+        "all",
+        "All groups (4)"
+      ],
+      [
+        "group:Changed/Exact",
+        "Changed/Exact (1)"
+      ],
+      [
+        "group:Raw/Nested",
+        "Raw/Nested (2)"
+      ],
+      [
+        "unassigned",
+        "Unassigned (1)"
+      ]
+    ],
+    "counts": [
+      "All (4)",
+      "Connected (2)",
+      "Disconnected (2)"
+    ],
+    "center": {
+      "disabled": true,
+      "title": "Select a visible canvas object to center."
+    },
+    "code": "",
+    "reader": false,
+    "focus": {
+      "cls": "",
+      "text": "\n\n  groups1 tables · 0 relationshipsTablesMeasuresPower QueryDomainsMatrixLocal "
+    },
+    "banner": ""
+  },
+  "stale": {
+    "selected": null,
+    "group": "all",
+    "history": [],
+    "code": 0,
+    "reader": 0,
+    "nodes": 0
+  }
+}

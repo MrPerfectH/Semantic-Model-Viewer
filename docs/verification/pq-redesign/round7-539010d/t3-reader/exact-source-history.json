@@ -1,0 +1,206 @@
+[
+  {
+    "before": {
+      "membership": [
+        "[\"partition\",\"Report\",\"Report\"]",
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        "[\"expression\",\"\",\"Standalone\"]",
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "focusMode": "hide",
+      "direction": "inputs",
+      "depth": null,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 7,
+      "selectedId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": -1001.3999999999999,
+        "y": 223.95,
+        "k": 0.85
+      },
+      "inspectorView": {
+        "codeX": 120,
+        "codeY": 90,
+        "inspectorX": 0,
+        "inspectorY": 162,
+        "wrap": false,
+        "focus": {
+          "kind": "reference",
+          "nodeId": "[\"expression\",\"\",\"FinalOutput\"]",
+          "at": 32,
+          "end": 47
+        },
+        "disclosures": {
+          "provenance": true
+        },
+        "expanded": true
+      },
+      "category": "all",
+      "query": ""
+    },
+    "after": {
+      "membership": [
+        "[\"partition\",\"Report\",\"Report\"]",
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        "[\"expression\",\"\",\"Standalone\"]",
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "focusMode": "hide",
+      "direction": "inputs",
+      "depth": null,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 7,
+      "selectedId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": -1001.3999999999999,
+        "y": 223.95,
+        "k": 0.85
+      },
+      "inspectorView": {
+        "codeX": 120,
+        "codeY": 90,
+        "inspectorX": 0,
+        "inspectorY": 162,
+        "wrap": false,
+        "focus": {
+          "kind": "reference",
+          "nodeId": "[\"expression\",\"\",\"FinalOutput\"]",
+          "at": 32,
+          "end": 47
+        },
+        "disclosures": {
+          "provenance": true
+        },
+        "expanded": true
+      },
+      "category": "all",
+      "query": ""
+    }
+  },
+  {
+    "before": {
+      "membership": [
+        "[\"partition\",\"Report\",\"Report\"]",
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        "[\"expression\",\"\",\"Standalone\"]",
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "focusMode": "hide",
+      "direction": "inputs",
+      "depth": null,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 7,
+      "selectedId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": -1001.3999999999999,
+        "y": 223.95,
+        "k": 0.85
+      },
+      "inspectorView": {
+        "codeX": 120,
+        "codeY": 90,
+        "inspectorX": 0,
+        "inspectorY": 162,
+        "wrap": false,
+        "focus": {
+          "kind": "reference",
+          "nodeId": "[\"expression\",\"\",\"FinalOutput\"]",
+          "at": 60,
+          "end": 75
+        },
+        "disclosures": {
+          "provenance": true
+        },
+        "expanded": true
+      },
+      "category": "all",
+      "query": ""
+    },
+    "after": {
+      "membership": [
+        "[\"partition\",\"Report\",\"Report\"]",
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        "[\"expression\",\"\",\"Standalone\"]",
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "focusMode": "hide",
+      "direction": "inputs",
+      "depth": null,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 7,
+      "selectedId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": -1001.3999999999999,
+        "y": 223.95,
+        "k": 0.85
+      },
+      "inspectorView": {
+        "codeX": 120,
+        "codeY": 90,
+        "inspectorX": 0,
+        "inspectorY": 162,
+        "wrap": false,
+        "focus": {
+          "kind": "reference",
+          "nodeId": "[\"expression\",\"\",\"FinalOutput\"]",
+          "at": 60,
+          "end": 75
+        },
+        "disclosures": {
+          "provenance": true
+        },
+        "expanded": true
+      },
+      "category": "all",
+      "query": ""
+    }
+  }
+]

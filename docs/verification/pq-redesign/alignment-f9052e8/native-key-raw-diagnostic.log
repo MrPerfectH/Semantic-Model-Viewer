@@ -1,0 +1,5 @@
+[
+  { native: 38, focused: true, value: 'C' },
+  { native: null, focused: true, value: 'C' },
+  { native: 126, focused: true, value: 'C' }
+]

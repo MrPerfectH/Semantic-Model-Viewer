@@ -1,0 +1,1473 @@
+[
+  {
+    "id": "six-entry",
+    "state": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "all",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "6 visible / 6 total objects · 6 library results",
+      "banner": "",
+      "code": "",
+      "viewport": {
+        "x": 145,
+        "y": 241,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 6,
+      "visible": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "library": [
+        "Sales · m · Main",
+        "Customer · m · Main",
+        "Product · m · Main",
+        "Calendar · m · Main",
+        "Rates · m · Main",
+        "Budget · m · Main"
+      ],
+      "map": "6 visible / 6 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"partition\",\"Sales\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Sales\",\"Main\"]",
+            "label": "Sales",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Sales",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Customer\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Customer\",\"Main\"]",
+            "label": "Customer",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Customer",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Product\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Product\",\"Main\"]",
+            "label": "Product",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Product",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Calendar\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Calendar\",\"Main\"]",
+            "label": "Calendar",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Calendar",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Rates\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Rates\",\"Main\"]",
+            "label": "Rates",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Rates",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Budget\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Budget\",\"Main\"]",
+            "label": "Budget",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Budget",
+            "partition": "Main",
+            "state": "available"
+          }
+        ],
+        "edges": [],
+        "issues": [
+          {
+            "consumerId": "[\"partition\",\"Sales\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Customer\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Product\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Calendar\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Rates\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Budget\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 5,
+        "analysisProgress": {
+          "analyzed": 6,
+          "total": 6,
+          "complete": true,
+          "generation": 5
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ],
+        "connected": [],
+        "disconnected": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ]
+      }
+    },
+    "raw": {
+      "layout": [
+        [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Customer\",\"Main\"]",
+          {
+            "x": 262,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Product\",\"Main\"]",
+          {
+            "x": 524,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          {
+            "x": 0,
+            "y": 108
+          }
+        ],
+        [
+          "[\"partition\",\"Rates\",\"Main\"]",
+          {
+            "x": 262,
+            "y": 108
+          }
+        ],
+        [
+          "[\"partition\",\"Budget\",\"Main\"]",
+          {
+            "x": 524,
+            "y": 108
+          }
+        ]
+      ],
+      "generation": 5,
+      "builds": 2,
+      "sameContext": true,
+      "fitCalls": 0,
+      "dimmed": [],
+      "libraryIds": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "mutedIds": [],
+      "focus": null,
+      "options": [
+        "All (6)",
+        "Connected (0)",
+        "Disconnected (6)"
+      ]
+    }
+  },
+  {
+    "id": "six-connected-empty",
+    "state": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "connected",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "0 visible / 6 total objects · 0 library results",
+      "banner": "",
+      "code": "",
+      "viewport": {
+        "x": 145,
+        "y": 241,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 6,
+      "visible": [],
+      "library": [],
+      "map": "0 visible / 6 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"partition\",\"Sales\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Sales\",\"Main\"]",
+            "label": "Sales",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Sales",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Customer\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Customer\",\"Main\"]",
+            "label": "Customer",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Customer",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Product\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Product\",\"Main\"]",
+            "label": "Product",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Product",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Calendar\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Calendar\",\"Main\"]",
+            "label": "Calendar",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Calendar",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Rates\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Rates\",\"Main\"]",
+            "label": "Rates",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Rates",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Budget\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Budget\",\"Main\"]",
+            "label": "Budget",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Budget",
+            "partition": "Main",
+            "state": "available"
+          }
+        ],
+        "edges": [],
+        "issues": [
+          {
+            "consumerId": "[\"partition\",\"Sales\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Customer\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Product\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Calendar\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Rates\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Budget\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 5,
+        "analysisProgress": {
+          "analyzed": 6,
+          "total": 6,
+          "complete": true,
+          "generation": 5
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ],
+        "connected": [],
+        "disconnected": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ]
+      }
+    },
+    "raw": {
+      "layout": [
+        [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Customer\",\"Main\"]",
+          {
+            "x": 262,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Product\",\"Main\"]",
+          {
+            "x": 524,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          {
+            "x": 0,
+            "y": 108
+          }
+        ],
+        [
+          "[\"partition\",\"Rates\",\"Main\"]",
+          {
+            "x": 262,
+            "y": 108
+          }
+        ],
+        [
+          "[\"partition\",\"Budget\",\"Main\"]",
+          {
+            "x": 524,
+            "y": 108
+          }
+        ]
+      ],
+      "generation": 5,
+      "builds": 2,
+      "sameContext": true,
+      "fitCalls": 0,
+      "dimmed": [],
+      "libraryIds": [],
+      "mutedIds": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "focus": null,
+      "options": [
+        "All (6)",
+        "Connected (0)",
+        "Disconnected (6)"
+      ]
+    }
+  },
+  {
+    "id": "six-disconnected",
+    "state": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "disconnected",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "6 visible / 6 total objects · 6 library results",
+      "banner": "Zero resolved incident references. Static uncertainty remains; disconnected does not prove independence.",
+      "code": "",
+      "viewport": {
+        "x": 145,
+        "y": 218.75,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 6,
+      "visible": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "library": [
+        "Sales · m · Main",
+        "Customer · m · Main",
+        "Product · m · Main",
+        "Calendar · m · Main",
+        "Rates · m · Main",
+        "Budget · m · Main"
+      ],
+      "map": "6 visible / 6 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"partition\",\"Sales\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Sales\",\"Main\"]",
+            "label": "Sales",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Sales",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Customer\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Customer\",\"Main\"]",
+            "label": "Customer",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Customer",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Product\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Product\",\"Main\"]",
+            "label": "Product",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Product",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Calendar\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Calendar\",\"Main\"]",
+            "label": "Calendar",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Calendar",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Rates\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Rates\",\"Main\"]",
+            "label": "Rates",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Rates",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Budget\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Budget\",\"Main\"]",
+            "label": "Budget",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Budget",
+            "partition": "Main",
+            "state": "available"
+          }
+        ],
+        "edges": [],
+        "issues": [
+          {
+            "consumerId": "[\"partition\",\"Sales\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Customer\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Product\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Calendar\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Rates\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Budget\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 5,
+        "analysisProgress": {
+          "analyzed": 6,
+          "total": 6,
+          "complete": true,
+          "generation": 5
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ],
+        "connected": [],
+        "disconnected": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ]
+      }
+    },
+    "raw": {
+      "layout": [
+        [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Customer\",\"Main\"]",
+          {
+            "x": 262,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Product\",\"Main\"]",
+          {
+            "x": 524,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          {
+            "x": 0,
+            "y": 108
+          }
+        ],
+        [
+          "[\"partition\",\"Rates\",\"Main\"]",
+          {
+            "x": 262,
+            "y": 108
+          }
+        ],
+        [
+          "[\"partition\",\"Budget\",\"Main\"]",
+          {
+            "x": 524,
+            "y": 108
+          }
+        ]
+      ],
+      "generation": 5,
+      "builds": 2,
+      "sameContext": true,
+      "fitCalls": 0,
+      "dimmed": [],
+      "libraryIds": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "mutedIds": [],
+      "focus": null,
+      "options": [
+        "All (6)",
+        "Connected (0)",
+        "Disconnected (6)"
+      ]
+    }
+  },
+  {
+    "id": "six-search-sales",
+    "state": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "disconnected",
+      "query": "Sales",
+      "selectedId": "[\"partition\",\"Sales\",\"Main\"]",
+      "inspectorOpen": true,
+      "count": "6 visible / 6 total objects · 1 library results · Search: Sales",
+      "banner": "Zero resolved incident references. Static uncertainty remains; disconnected does not prove independence.",
+      "code": "let Source = Sql.Database(\"same-sql.pq-redesign.invalid\", \"SameDB\"), Result = Source{[Schema=\"dbo\", Item=\"Sales\"]}[Data] in Result",
+      "viewport": {
+        "x": 145,
+        "y": 218.75,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [
+        {
+          "generation": 5,
+          "selectedId": null,
+          "inspectorOpen": false,
+          "viewport": {
+            "x": 145,
+            "y": 218.75,
+            "k": 1.25
+          },
+          "inspectorView": {
+            "codeX": 0,
+            "codeY": 0,
+            "inspectorX": 0,
+            "inspectorY": 0,
+            "wrap": false,
+            "focus": null
+          },
+          "category": "disconnected",
+          "query": "Sales"
+        }
+      ],
+      "domNodes": 6,
+      "visible": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "library": [
+        "Sales · m · Main"
+      ],
+      "map": "6 visible / 6 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"partition\",\"Sales\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Sales\",\"Main\"]",
+            "label": "Sales",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Sales",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Customer\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Customer\",\"Main\"]",
+            "label": "Customer",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Customer",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Product\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Product\",\"Main\"]",
+            "label": "Product",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Product",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Calendar\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Calendar\",\"Main\"]",
+            "label": "Calendar",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Calendar",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Rates\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Rates\",\"Main\"]",
+            "label": "Rates",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Rates",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Budget\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Budget\",\"Main\"]",
+            "label": "Budget",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Budget",
+            "partition": "Main",
+            "state": "available"
+          }
+        ],
+        "edges": [],
+        "issues": [
+          {
+            "consumerId": "[\"partition\",\"Sales\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Customer\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Product\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Calendar\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Rates\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Budget\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 5,
+        "analysisProgress": {
+          "analyzed": 6,
+          "total": 6,
+          "complete": true,
+          "generation": 5
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ],
+        "connected": [],
+        "disconnected": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ]
+      }
+    },
+    "raw": {
+      "layout": [
+        [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Customer\",\"Main\"]",
+          {
+            "x": 262,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Product\",\"Main\"]",
+          {
+            "x": 524,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          {
+            "x": 0,
+            "y": 108
+          }
+        ],
+        [
+          "[\"partition\",\"Rates\",\"Main\"]",
+          {
+            "x": 262,
+            "y": 108
+          }
+        ],
+        [
+          "[\"partition\",\"Budget\",\"Main\"]",
+          {
+            "x": 524,
+            "y": 108
+          }
+        ]
+      ],
+      "generation": 5,
+      "builds": 2,
+      "sameContext": true,
+      "fitCalls": 0,
+      "dimmed": [
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "libraryIds": [
+        "[\"partition\",\"Sales\",\"Main\"]"
+      ],
+      "mutedIds": [],
+      "focus": "[\"partition\",\"Sales\",\"Main\"]",
+      "options": [
+        "All (6)",
+        "Connected (0)",
+        "Disconnected (6)"
+      ]
+    }
+  },
+  {
+    "id": "six-hide-selected",
+    "state": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "connected",
+      "query": "Sales",
+      "selectedId": "[\"partition\",\"Sales\",\"Main\"]",
+      "inspectorOpen": true,
+      "count": "0 visible / 6 total objects · 0 library results · Search: Sales",
+      "banner": "Selected object hidden by filter. Inspector retained.Show all",
+      "code": "let Source = Sql.Database(\"same-sql.pq-redesign.invalid\", \"SameDB\"), Result = Source{[Schema=\"dbo\", Item=\"Sales\"]}[Data] in Result",
+      "viewport": {
+        "x": 145,
+        "y": 215.75,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [
+        {
+          "generation": 5,
+          "selectedId": null,
+          "inspectorOpen": false,
+          "viewport": {
+            "x": 145,
+            "y": 218.75,
+            "k": 1.25
+          },
+          "inspectorView": {
+            "codeX": 0,
+            "codeY": 0,
+            "inspectorX": 0,
+            "inspectorY": 0,
+            "wrap": false,
+            "focus": null
+          },
+          "category": "disconnected",
+          "query": "Sales"
+        }
+      ],
+      "domNodes": 6,
+      "visible": [],
+      "library": [],
+      "map": "0 visible / 6 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"partition\",\"Sales\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Sales\",\"Main\"]",
+            "label": "Sales",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Sales",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Customer\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Customer\",\"Main\"]",
+            "label": "Customer",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Customer",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Product\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Product\",\"Main\"]",
+            "label": "Product",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Product",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Calendar\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Calendar\",\"Main\"]",
+            "label": "Calendar",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Calendar",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Rates\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Rates\",\"Main\"]",
+            "label": "Rates",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Rates",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Budget\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Budget\",\"Main\"]",
+            "label": "Budget",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Budget",
+            "partition": "Main",
+            "state": "available"
+          }
+        ],
+        "edges": [],
+        "issues": [
+          {
+            "consumerId": "[\"partition\",\"Sales\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Customer\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Product\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Calendar\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Rates\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Budget\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 5,
+        "analysisProgress": {
+          "analyzed": 6,
+          "total": 6,
+          "complete": true,
+          "generation": 5
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ],
+        "connected": [],
+        "disconnected": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ]
+      }
+    },
+    "raw": {
+      "layout": [
+        [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Customer\",\"Main\"]",
+          {
+            "x": 262,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Product\",\"Main\"]",
+          {
+            "x": 524,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          {
+            "x": 0,
+            "y": 108
+          }
+        ],
+        [
+          "[\"partition\",\"Rates\",\"Main\"]",
+          {
+            "x": 262,
+            "y": 108
+          }
+        ],
+        [
+          "[\"partition\",\"Budget\",\"Main\"]",
+          {
+            "x": 524,
+            "y": 108
+          }
+        ]
+      ],
+      "generation": 5,
+      "builds": 2,
+      "sameContext": true,
+      "fitCalls": 0,
+      "dimmed": [],
+      "libraryIds": [],
+      "mutedIds": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "focus": null,
+      "options": [
+        "All (6)",
+        "Connected (0)",
+        "Disconnected (6)"
+      ]
+    }
+  },
+  {
+    "id": "six-show-all",
+    "state": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "all",
+      "query": "",
+      "selectedId": "[\"partition\",\"Sales\",\"Main\"]",
+      "inspectorOpen": true,
+      "count": "6 visible / 6 total objects · 6 library results",
+      "banner": "",
+      "code": "let Source = Sql.Database(\"same-sql.pq-redesign.invalid\", \"SameDB\"), Result = Source{[Schema=\"dbo\", Item=\"Sales\"]}[Data] in Result",
+      "viewport": {
+        "x": 145,
+        "y": 215.75,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [
+        {
+          "generation": 5,
+          "selectedId": null,
+          "inspectorOpen": false,
+          "viewport": {
+            "x": 145,
+            "y": 218.75,
+            "k": 1.25
+          },
+          "inspectorView": {
+            "codeX": 0,
+            "codeY": 0,
+            "inspectorX": 0,
+            "inspectorY": 0,
+            "wrap": false,
+            "focus": null
+          },
+          "category": "disconnected",
+          "query": "Sales"
+        }
+      ],
+      "domNodes": 6,
+      "visible": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "library": [
+        "Sales · m · Main",
+        "Customer · m · Main",
+        "Product · m · Main",
+        "Calendar · m · Main",
+        "Rates · m · Main",
+        "Budget · m · Main"
+      ],
+      "map": "6 visible / 6 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"partition\",\"Sales\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Sales\",\"Main\"]",
+            "label": "Sales",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Sales",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Customer\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Customer\",\"Main\"]",
+            "label": "Customer",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Customer",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Product\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Product\",\"Main\"]",
+            "label": "Product",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Product",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Calendar\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Calendar\",\"Main\"]",
+            "label": "Calendar",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Calendar",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Rates\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Rates\",\"Main\"]",
+            "label": "Rates",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Rates",
+            "partition": "Main",
+            "state": "available"
+          },
+          {
+            "id": "[\"partition\",\"Budget\",\"Main\"]",
+            "metadataId": "[\"partition\",\"Budget\",\"Main\"]",
+            "label": "Budget",
+            "subtitle": "m · Main",
+            "kind": "partition",
+            "table": "Budget",
+            "partition": "Main",
+            "state": "available"
+          }
+        ],
+        "edges": [],
+        "issues": [
+          {
+            "consumerId": "[\"partition\",\"Sales\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Customer\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Product\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Calendar\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Rates\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"partition\",\"Budget\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 5,
+        "analysisProgress": {
+          "analyzed": 6,
+          "total": 6,
+          "complete": true,
+          "generation": 5
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ],
+        "connected": [],
+        "disconnected": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ]
+      }
+    },
+    "raw": {
+      "layout": [
+        [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Customer\",\"Main\"]",
+          {
+            "x": 262,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Product\",\"Main\"]",
+          {
+            "x": 524,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          {
+            "x": 0,
+            "y": 108
+          }
+        ],
+        [
+          "[\"partition\",\"Rates\",\"Main\"]",
+          {
+            "x": 262,
+            "y": 108
+          }
+        ],
+        [
+          "[\"partition\",\"Budget\",\"Main\"]",
+          {
+            "x": 524,
+            "y": 108
+          }
+        ]
+      ],
+      "generation": 5,
+      "builds": 2,
+      "sameContext": true,
+      "fitCalls": 0,
+      "dimmed": [],
+      "libraryIds": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "mutedIds": [],
+      "focus": "[\"partition\",\"Sales\",\"Main\"]",
+      "options": [
+        "All (6)",
+        "Connected (0)",
+        "Disconnected (6)"
+      ]
+    }
+  }
+]

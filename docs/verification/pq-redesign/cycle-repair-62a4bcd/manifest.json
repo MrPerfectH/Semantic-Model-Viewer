@@ -1,0 +1,320 @@
+{
+  "candidate": "62a4bcd30673449d4a0d3bf85365e4e9e83aaabf",
+  "verdict": "SCOPED PASS: strict reciprocal cycle hit identity",
+  "entries": [
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/REVIEW.md",
+      "bytes": 7680,
+      "sha256": "f87d0249445238717b52acbf2fe445005e5d3d9d3dc4f9552f8c4e23752068eb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/cache-proof.json",
+      "bytes": 4797,
+      "sha256": "ebc5c8a8e3206d81cef221b2703ab4ec5f7dcbeb514c8bb89327eb44aa1c2943"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/cleanup.json",
+      "bytes": 293,
+      "sha256": "b4f222344108bd794f2788a9bfd0bf9af1f151e81e866dac6a8e765a567bceaa"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/frozen-replay/receipt.json",
+      "bytes": 611,
+      "sha256": "0ac76bf63597dacabb5bcf8fc1588d9d9279d3ec0e5cf0f8d9ba03404ef42935"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/frozen-replay-chunked/identity-oracle.json",
+      "bytes": 480,
+      "sha256": "fcfe38fe5467a94e8b2ef78208afc39bc785e28be44022a23155c72b14176b0c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/frozen-replay-chunked/observed.json",
+      "bytes": 109553,
+      "sha256": "5d208b285f7070833756047a7139b6864f4af9c294ba932fb9c49a00e0dca5c9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/frozen-replay-chunked/receipt.json",
+      "bytes": 313,
+      "sha256": "d87662d6f8699f21b3840f7e8d6e3bd64bc6e41aee54305fcfef88f177d01f9b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/frozen-replay-chunked/semantic-clicks.json",
+      "bytes": 786,
+      "sha256": "90d5c605ddbf6f0a6ac6ee1396e7db94a355af77a572f757e920b0c517765f70"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/frozen-replay-ready/receipt.json",
+      "bytes": 611,
+      "sha256": "0fe1f74611cab8ce2947f1062e7bebb89a9d672465574d3aff52006b7e447dea"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/frozen-replay-unobstructed/receipt.json",
+      "bytes": 632,
+      "sha256": "53018b03ff3135b648f94a1d4d60e930e01765657e0c2c2a29aeb64634554edf"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/independent-assertions.json",
+      "bytes": 4227,
+      "sha256": "c9195d5b61214e3cf149bf61e3f9dbe2892f528116a7364c20ad0644ec3c879f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/index-cache.diff",
+      "bytes": 713,
+      "sha256": "b0ecabefac71fff00faab5430c4b36ffec19cfda523252a62dcc520f0b26f3b6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/node-mapped/Models/tools/viewer",
+      "symlink": "../../../served"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/node-mapped/tests/power-query-canvas.test.cjs",
+      "bytes": 22492,
+      "sha256": "736516cc62bf2f614d21aed860e9130b87e164666f4bbbd688f5ef4dd966c77a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/node-mapped/tests/power-query-inspector.test.cjs",
+      "bytes": 23359,
+      "sha256": "611d0b1c6f3e0225b91ba9fa2e26d6bab43bc3a2f5c5729ddd820bfcf9ecc1e6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/node-mapped/tests/power-query-ui-harness.cjs",
+      "bytes": 6323,
+      "sha256": "880d35bc2dd75ad70dc843729ebf55deb355db7067b6562a1a9c0c9802d25a95"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/node22-targeted.log",
+      "bytes": 10697,
+      "sha256": "6037b3dea1aaa0bd9eb2032755744c18dcce0ca36140f089f6b3fa5fb5cbfcac"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/owner-REVIEW.md",
+      "bytes": 6038,
+      "sha256": "c040685cd48c075e183ab54011ae02b615bc46ef7a74533776842be91ba637ee"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/owner-runtime-package-proof.json",
+      "bytes": 14366,
+      "sha256": "e63029d3819a992ae0c5e4add50f99603d1d15d78af408a9028eb2194f08431b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/owner-t3-receipt.json",
+      "bytes": 119315,
+      "sha256": "a66d2fab277ebacab3b0ab0e9fb01c7d9334c3fedc9f3e87cb9012199e364fee"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/package-proof.json",
+      "bytes": 1978,
+      "sha256": "c576674fc1309c94c5db878a3151ab81107715a65a0197fbec58b7fa7e0639e8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/reciprocal-obstacle.png",
+      "bytes": 114558,
+      "sha256": "7eb92d41f1997b6879361e59e4a11c383aa2d84a6a64e0291e82e411ac4f6057"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/repaired-diagonal.png",
+      "bytes": 120364,
+      "sha256": "f6c53a49dee6581edbe20ba0d277ed0a8c0dc82c84a129742d1738d337975a93"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/runtime-mapping.json",
+      "bytes": 7949,
+      "sha256": "73d42f0313d5e7d772ddd4f4a0ddf77cbb290804ae897283b251aa72972684f1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/explorer.css",
+      "bytes": 14350,
+      "sha256": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/index.html",
+      "bytes": 6844,
+      "sha256": "a088561062a16a6ce8452dfa329d6fe4a920dfe3b89bc4c3e5c0f52918fa1655"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/app.js",
+      "bytes": 79235,
+      "sha256": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/canvas.js",
+      "bytes": 113321,
+      "sha256": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/dax-format.js",
+      "bytes": 18659,
+      "sha256": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/explorer.js",
+      "bytes": 36750,
+      "sha256": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/host-vscode.js",
+      "bytes": 5220,
+      "sha256": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/layouts.js",
+      "bytes": 67455,
+      "sha256": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/matrix.js",
+      "bytes": 9560,
+      "sha256": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/measures.js",
+      "bytes": 93980,
+      "sha256": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/power-query-canvas.js",
+      "bytes": 32824,
+      "sha256": "d2846aa0338e052e3ade5da6a0c42e48e8af34cc147900995e0e0a21b020632f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/power-query-dependencies.js",
+      "bytes": 12773,
+      "sha256": "44e2b21a9287e5e7569f9d70d02fe8ce2b6c19815d24fcf88ae53a0994ba72c6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/power-query-graph-model.js",
+      "bytes": 6368,
+      "sha256": "8c48f7ada3e7725e22ffb63835412105255054148d537722ada89efb53caaeaa"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/power-query-inspector.js",
+      "bytes": 26917,
+      "sha256": "f099183cd669f78281d4cbf4b5fe404eb7f3a57837e842ee03af96c3a5aeaae1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/power-query-lineage.js",
+      "bytes": 10472,
+      "sha256": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/power-query-workspace.js",
+      "bytes": 38746,
+      "sha256": "dfba8d99f897e408324e34a8b026eae3614a45d8f43d95567fe178f12a3736f3"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/power-query.js",
+      "bytes": 8661,
+      "sha256": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/relationships.js",
+      "bytes": 4847,
+      "sha256": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/roles.js",
+      "bytes": 7657,
+      "sha256": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/rules.js",
+      "bytes": 7610,
+      "sha256": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/sidebar.js",
+      "bytes": 22525,
+      "sha256": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/snapshot.js",
+      "bytes": 12521,
+      "sha256": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/tmdl-parser.js",
+      "bytes": 27971,
+      "sha256": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/topbar.js",
+      "bytes": 36001,
+      "sha256": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/usage-adapter.js",
+      "bytes": 3298,
+      "sha256": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/util.js",
+      "bytes": 8761,
+      "sha256": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/js/workspace-ui.js",
+      "bytes": 3688,
+      "sha256": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/measures.css",
+      "bytes": 15377,
+      "sha256": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/power-query-canvas.css",
+      "bytes": 3843,
+      "sha256": "0bec3d167bf31dc4cd9438b94ae9d1a3e3f6f652081d21e47040c20a8b3b47a4"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/power-query-inspector.css",
+      "bytes": 7416,
+      "sha256": "e16cbd178512eddfe32c02d9061a1535a57d8fd8d32e2fdb485f0f57aa479cac"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/power-query-lineage.css",
+      "bytes": 1741,
+      "sha256": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/power-query-workspace.css",
+      "bytes": 4368,
+      "sha256": "89f1b4d65871a5d3253baac75687c5b1e8b519da7aa9689396ab4140f7575fae"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/served/power-query.css",
+      "bytes": 1754,
+      "sha256": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/startup-picker-blocked.png",
+      "bytes": 81907,
+      "sha256": "36472144cb2f3ac5c2b0d99edd0a6a029194103b6e4368cebbcdb1680a4bb09f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/supplementary/minimal-regression.json",
+      "bytes": 387,
+      "sha256": "ef3acf355adbdaaae6e7caadf591ccf3d4be1c38b18f1f35ed2456c4ae272e79"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/supplementary/receipt.json",
+      "bytes": 349,
+      "sha256": "891c690853adfcbf75d1650178770d6017d67dd1d7681c1375fcf7217ce5e1cb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/cycle-repair-62a4bcd/supplementary/routing.json",
+      "bytes": 42591,
+      "sha256": "737911f9ba746fa4d80aa3cad7cc07068af7cdb11bc470e393a491f11417fdbf"
+    },
+    {
+      "path": "tests/pq-redesign-independent-cycle-chunk-transport.cjs",
+      "bytes": 1056,
+      "sha256": "573047b4eda226905ae94cf0592b5a07d9bd0c62a7486f4684aa8dbdfe6b5ff6"
+    },
+    {
+      "path": "tests/pq-redesign-independent-cycle-repair-62a4bcd.scenarios.cjs",
+      "bytes": 7253,
+      "sha256": "1a2c746fa21cae439e88e2831d758a96dfe340b825583ce060165706d4a6e45b"
+    }
+  ]
+}

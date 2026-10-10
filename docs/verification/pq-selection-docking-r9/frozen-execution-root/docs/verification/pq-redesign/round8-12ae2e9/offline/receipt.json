@@ -1,0 +1,13 @@
+{
+  "candidate": "12ae2e9149590fde8a3292d22ce1d27c11a2aae4",
+  "boundary": "Explicit capability fallback while T3 available; isolated headless Chrome, network offline; not installed/native",
+  "checks": [
+    "actual downloaded snapshot opens with network offline",
+    "embedded WorkspaceUI helper available",
+    "Measures original/long/short formatting",
+    "PQ honestly unavailable without raw M",
+    "actual offline re-export remains private"
+  ],
+  "failures": [],
+  "snapshotSHA256": "488911a5f4a30cf0f65bbe3ef0c03cd3384910a97dde7c9e4e49ee221add034e"
+}

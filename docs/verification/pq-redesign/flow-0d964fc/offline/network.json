@@ -1,0 +1,32 @@
+[
+  {
+    "method": "Network.requestWillBeSent",
+    "params": {
+      "requestId": "88E453C613C8C53E866007C66CC73A37",
+      "loaderId": "88E453C613C8C53E866007C66CC73A37",
+      "documentURL": "file:///Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/flow-0d964fc/privacy/downloaded.html",
+      "request": {
+        "url": "file:///Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/flow-0d964fc/privacy/downloaded.html",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"macOS\""
+        },
+        "mixedContentType": "none",
+        "initialPriority": "VeryHigh",
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "isSameSite": true
+      },
+      "timestamp": 253450.626874,
+      "wallTime": 1791621613.251913,
+      "initiator": {
+        "type": "other"
+      },
+      "redirectHasExtraInfo": false,
+      "type": "Document",
+      "frameId": "AA4A7BE7454E38AB09D2673FAC302315",
+      "hasUserGesture": false
+    }
+  }
+]

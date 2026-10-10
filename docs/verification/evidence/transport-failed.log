@@ -1,0 +1,55 @@
+{
+  "route": "http://127.0.0.1:8938/api/model?path=%2FUsers%2Fprzemek.harazny%2F.t3%2Fworktrees%2FSemantic-Model-Viewer%2Ffeat-pq-verification%2Ftests%2Ffixtures%2Fpq38%2FPQ38.SemanticModel",
+  "rawEqual": false,
+  "codeEqual": false,
+  "rawSHA256": "dd5e5fc71672c14dfab54484d5a195ca48caf7da43a8b7030cd2f794948da21a",
+  "transportSHA256": "b3b07cf9ed23d4e22ecce56b9ace9a80a1afd8684e378e662de576e3adbe137b",
+  "expectedCodeSHA256": "0ca26d7ff5746665d15af9014936598df9e4374eb7d766dffa2858d9f99fec42",
+  "actualCodeSHA256": "3e7f7dcc5089a5cd14b281a220d9e36d5b7c11b9b8c45b471c5604daaf51066c",
+  "rawCRLF": 19,
+  "transportCRLF": 0,
+  "expectedCodeBytes": 86,
+  "actualCodeBytes": 82
+}
+service response must preserve exact fixture text
++ actual - expected
+
++ "table 'Acceptance Sales'\n" +
++   '\tcolumn Amount\n' +
++   '\t\tdataType: int64\n' +
++   "\tpartition 'Main ''quoted''' = m\n" +
++   '\t\tsource = ```\n' +
++   '\t\t\tlet\n' +
++   '\t\t\t  Source = #"Base Query",\n' +
++   '\t\t\t  Text = "PQ_RAW_ONLY_38 ""quoted"" λ"  \n' +
++   '\t\t\tin Source\n' +
++   '\t\t\t\n' +
++   '\t\t\t```\n' +
++   '\tpartition Other = m\n' +
++   '\t\tsource =\n' +
++   '\t\t\tlet\n' +
++   '\t\t\t  x = Scalar\n' +
++   '\t\t\tin x\n' +
++   '\tpartition Calculated = calculated\n' +
++   '\t\tsource = 1\n' +
++   '\tpartition Missing = m\n'
+- "table 'Acceptance Sales'\r\n" +
+-   '\tcolumn Amount\r\n' +
+-   '\t\tdataType: int64\r\n' +
+-   "\tpartition 'Main ''quoted''' = m\r\n" +
+-   '\t\tsource = ```\r\n' +
+-   '\t\t\tlet\r\n' +
+-   '\t\t\t  Source = #"Base Query",\r\n' +
+-   '\t\t\t  Text = "PQ_RAW_ONLY_38 ""quoted"" λ"  \r\n' +
+-   '\t\t\tin Source\r\n' +
+-   '\t\t\t\r\n' +
+-   '\t\t\t```\r\n' +
+-   '\tpartition Other = m\r\n' +
+-   '\t\tsource =\r\n' +
+-   '\t\t\tlet\r\n' +
+-   '\t\t\t  x = Scalar\r\n' +
+-   '\t\t\tin x\r\n' +
+-   '\tpartition Calculated = calculated\r\n' +
+-   '\t\tsource = 1\r\n' +
+-   '\tpartition Missing = m\r\n'
+

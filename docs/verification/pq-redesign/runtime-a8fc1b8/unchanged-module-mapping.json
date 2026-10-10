@@ -1,0 +1,12 @@
+{
+  "fromCandidate": "d3d8360e4ee6e003d187f34118099e4327dd91cd",
+  "toCandidate": "a8fc1b85de05a269bcb019932f86eb3bbf78d19a",
+  "byteIdenticalTrackedModules": [
+    "Models/tools/viewer/js/power-query-dependencies.js",
+    "Models/tools/viewer/js/power-query-graph-model.js",
+    "Models/tools/viewer/js/power-query-canvas.js",
+    "Models/tools/viewer/js/power-query-inspector.js",
+    "Models/tools/viewer/js/snapshot.js"
+  ],
+  "scope": "Earlier independent browser evidence is named explicitly; no PR36-38 verdict reused. Changed shell assets retested."
+}

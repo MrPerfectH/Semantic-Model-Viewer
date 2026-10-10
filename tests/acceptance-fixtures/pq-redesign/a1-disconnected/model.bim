@@ -1,0 +1,125 @@
+{
+  "name": "Independent PQ redesign a1-disconnected",
+  "model": {
+    "tables": [
+      {
+        "name": "Sales",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Main",
+            "source": {
+              "type": "m",
+              "expression": "let Source = Sql.Database(\"same-sql.pq-redesign.invalid\", \"SameDB\"), Result = Source{[Schema=\"dbo\", Item=\"Sales\"]}[Data] in Result"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Customer",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Main",
+            "source": {
+              "type": "m",
+              "expression": "let Source = Sql.Database(\"same-sql.pq-redesign.invalid\", \"SameDB\"), Result = Source{[Schema=\"dbo\", Item=\"Customer\"]}[Data] in Result"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Product",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Main",
+            "source": {
+              "type": "m",
+              "expression": "let Source = Sql.Database(\"same-sql.pq-redesign.invalid\", \"SameDB\"), Result = Source{[Schema=\"dbo\", Item=\"Product\"]}[Data] in Result"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Calendar",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Main",
+            "source": {
+              "type": "m",
+              "expression": "let Source = Sql.Database(\"same-sql.pq-redesign.invalid\", \"SameDB\"), Result = Source{[Schema=\"dbo\", Item=\"Calendar\"]}[Data] in Result"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Rates",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Main",
+            "source": {
+              "type": "m",
+              "expression": "let Source = Sql.Database(\"same-sql.pq-redesign.invalid\", \"SameDB\"), Result = Source{[Schema=\"dbo\", Item=\"Rates\"]}[Data] in Result"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Budget",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Main",
+            "source": {
+              "type": "m",
+              "expression": "let Source = Sql.Database(\"same-sql.pq-redesign.invalid\", \"SameDB\"), Result = Source{[Schema=\"dbo\", Item=\"Budget\"]}[Data] in Result"
+            }
+          }
+        ]
+      }
+    ],
+    "expressions": [],
+    "relationships": [
+      {
+        "name": "SemanticOnly",
+        "fromTable": "Sales",
+        "fromColumn": "ID",
+        "toTable": "Customer",
+        "toColumn": "ID"
+      }
+    ]
+  }
+}

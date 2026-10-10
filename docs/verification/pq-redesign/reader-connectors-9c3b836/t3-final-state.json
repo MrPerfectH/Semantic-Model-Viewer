@@ -1,0 +1,104 @@
+{
+  "url": "http://localhost:54089/",
+  "title": "Semantic Model Viewer",
+  "loading": false,
+  "visibleText": "Independent wide reader and routes\n1 tables · 0 relationships\nTables\nMeasures\nPower Query\nDomains\nMatrix\nLocal analysis\nSave snapshot\nRefresh\nGet the app\nOpen model\nSaved Independent followup groups snapshot 2026-10-09.html\n×\nPower Query\n\n10 objects in this model\n\n3 on canvas\nAll objects\nOn canvas\nAvailable\nAll (10)\nConnected (7)\nDisconnected (3)\nAll groups (10)\nCurated/Results/Nested (4)\nDeclaredOnly (1)\nLanding/SQL (2)\nUnassigned (3)\nReset filters\nSyntheticSales\nm · SyntheticSales · Curated/Results/Nested\n+\nSales Raw\nquery · Landing/SQL\n+\nQuote\"Query\nquery\n+\nServer\nparameter · DeclaredOnly\n+\nOccurrenceProbe\nquery · Curated/Results/Nested\n+\nFarA\nquery · Landing/SQL\n+\nFarB\nquery\n+\nCycleA\nquery · Curated/Results/Nested\n−\nCycleB\nquery · Curated/Results/Nested\n−\nSelfLoop\nquery\n−\nAdd with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.\nCycle · 2\nCycle · 1\nQ\nCycleA\nquery\n1 inputs\n1 consumers\nCycle\nQ\nCycleB\nquery\n1 inputs\n1 consumers\nCycle\nQ\nSelfLoop\nquery\n1 inputs\n1 consumers\nCycle\nQuery input → consumer\nParameter → consumer\n3 visible objects\n−\n125%\n+\nFit\nCenter selected\nQuery canvas\n3 / 10 objects\nQueries\nBack\nBlank layout\nShow all\nUndo\nArrange\nDisplay\nMetadata inspected. Static analysis remains partial.",
+  "interactiveElements": [],
+  "consoleEntries": [
+    {
+      "level": "error",
+      "text": "A bad HTTP response code (404) was received when fetching the script.",
+      "timestamp": "2026-10-09T14:42:35.062Z"
+    },
+    {
+      "level": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (File not found)",
+      "timestamp": "2026-10-09T14:42:35.100Z"
+    }
+  ],
+  "networkEntries": [
+    {
+      "url": "http://localhost:54089/js/app.js?v=dbc5683c97",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-10-09T14:48:39.917Z"
+    },
+    {
+      "url": "http://localhost:54089/explorer.css?v=5699d561e3",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-10-09T14:48:39.917Z"
+    },
+    {
+      "url": "http://localhost:54089/measures.css?v=020a7d7d4e",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-10-09T14:48:39.917Z"
+    },
+    {
+      "url": "http://localhost:54089/power-query.css?v=4ff48db438",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-10-09T14:48:39.917Z"
+    },
+    {
+      "url": "http://localhost:54089/power-query-canvas.css?v=0bec3d167b",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-10-09T14:48:39.918Z"
+    },
+    {
+      "url": "http://localhost:54089/power-query-inspector.css?v=e16cbd1785",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-10-09T14:48:39.918Z"
+    },
+    {
+      "url": "http://localhost:54089/power-query-workspace.css?v=89f1b4d658",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-10-09T14:48:39.918Z"
+    },
+    {
+      "url": "http://localhost:54089/power-query-lineage.css?v=3fa4fd3345",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-10-09T14:48:39.918Z"
+    },
+    {
+      "url": "http://localhost:54089/index.html",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-10-09T14:48:39.920Z"
+    },
+    {
+      "url": "blob:http://localhost:54089/b8c09366-62f6-4ec1-a412-716de84c9616",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-10-09T14:48:39.928Z"
+    }
+  ],
+  "actionTimeline": [],
+  "screenshot": {
+    "mimeType": "image/png",
+    "width": 1280,
+    "height": 800
+  },
+  "accessibilityTree": "- generic [ref=t3-0eda39c7-hl-e2] [box=0,0,1440,900]:\n  - banner [ref=t3-0eda39c7-hl-e3] [box=0,0,1440,64]:\n    - generic [ref=t3-0eda39c7-hl-e959] [box=20,14,254,36]:\n      - img [ref=t3-0eda39c7-hl-e961] [box=30,24,15,15]\n      - button \"Independent wide reader and routes 1 tables · 0 relationships\" [ref=t3-0eda39c7-hl-e965] [cursor=pointer] [box=64,14,210,36]:\n        - strong [ref=t3-0eda39c7-hl-e966] [box=64,14,210,19]: Independent wide reader and routes\n        - generic [ref=t3-0eda39c7-hl-e967] [box=64,35,210,15]: 1 tables · 0 relationships\n    - navigation \"Analysis views\" [ref=t3-0eda39c7-hl-e968] [box=409,11,422,42]:\n      - button \"Tables\" [ref=t3-0eda39c7-hl-e969] [cursor=pointer] [box=413,15,68,34]\n      - button \"Measures\" [ref=t3-0eda39c7-hl-e970] [cursor=pointer] [box=483,15,86,34]\n      - button \"Power Query\" [ref=t3-0eda39c7-hl-e971] [cursor=pointer] [box=570,15,103,34]\n      - button \"Domains\" [ref=t3-0eda39c7-hl-e972] [cursor=pointer] [box=676,15,81,34]\n      - button \"Matrix\" [ref=t3-0eda39c7-hl-e973] [cursor=pointer] [box=759,15,68,34]\n    - generic [ref=t3-0eda39c7-hl-e974] [box=965,16,455,32]:\n      - generic \"Model parsing and analysis run in your browser.\" [ref=t3-0eda39c7-hl-e975] [box=965,24,68,15]: Local analysis\n      - button \"Save snapshot\" [ref=t3-0eda39c7-hl-e976] [cursor=pointer] [box=1047,16,104,32]\n      - button \"Refresh\" [ref=t3-0eda39c7-hl-e977] [cursor=pointer] [box=1159,16,66,32]\n      - link \"Get the app\" [ref=t3-0eda39c7-hl-e978] [cursor=pointer] [box=1233,16,88,32]:\n        - /url: https://github.com/MrPerfectH/Semantic-Model-Viewer#install-2-minutes\n      - button \"Open model\" [ref=t3-0eda39c7-hl-e979] [cursor=pointer] [box=1329,16,91,32]\n    - status [ref=t3-0eda39c7-hl-e980] [box=1015,72,405,45]:\n      - generic [ref=t3-0eda39c7-hl-e981] [box=1030,85,345,18]: Saved Independent followup groups snapshot 2026-10-09.html\n      - button \"Dismiss message\" [ref=t3-0eda39c7-hl-e982] [cursor=pointer] [box=1390,85,15,19]: ×\n  - region \"Power Query workspace\" [ref=t3-0eda39c7-hl-e108] [box=0,64,1440,836]:\n    - generic [ref=t3-0eda39c7-hl-e109] [box=0,64,1440,806]:\n      - complementary \"Power Query objects\" [ref=t3-0eda39c7-hl-e110] [box=0,64,268,806]:\n        - generic [ref=t3-0eda39c7-hl-e111] [box=0,64,267,85]:\n          - generic [ref=t3-0eda39c7-hl-e112] [box=16,86,118,47]:\n            - heading \"Power Query\" [level=2] [ref=t3-0eda39c7-hl-e113] [box=16,86,118,26]\n            - paragraph [ref=t3-0eda39c7-hl-e114] [box=16,117,118,17]: 10 objects in this model\n          - generic [ref=t3-0eda39c7-hl-e115] [box=184,97,67,25]: 3 on canvas\n        - searchbox \"Search Power Query objects\" [ref=t3-0eda39c7-hl-e116] [box=14,149,239,36]\n        - generic \"Power Query library filter\" [ref=t3-0eda39c7-hl-e117] [box=14,197,239,33]:\n          - button \"All objects\" [pressed] [ref=t3-0eda39c7-hl-e118] [cursor=pointer] [box=17,200,76,27]\n          - button \"On canvas\" [ref=t3-0eda39c7-hl-e119] [cursor=pointer] [box=95,200,76,27]\n          - button \"Available\" [ref=t3-0eda39c7-hl-e120] [cursor=pointer] [box=174,200,76,27]\n        - generic [ref=t3-0eda39c7-hl-e121] [box=14,242,239,43]:\n          - combobox \"Power Query connectivity filter\" [ref=t3-0eda39c7-hl-e122] [box=14,242,239,19]:\n            - option \"All (10)\" [selected] [box=0,0,0,0]\n            - option \"Connected (7)\" [box=0,0,0,0]\n            - option \"Disconnected (3)\" [box=0,0,0,0]\n          - combobox \"Power Query group filter\" [ref=t3-0eda39c7-hl-e123] [box=14,267,239,19]:\n            - option \"All groups (10)\" [selected] [box=0,0,0,0]\n            - option \"Curated/Results/Nested (4)\" [box=0,0,0,0]\n            - option \"DeclaredOnly (1)\" [box=0,0,0,0]\n            - option \"Landing/SQL (2)\" [box=0,0,0,0]\n            - option \"Unassigned (3)\" [box=0,0,0,0]\n        - button \"Reset filters\" [ref=t3-0eda39c7-hl-e124] [cursor=pointer] [box=14,297,90,32]\n        - generic [ref=t3-0eda39c7-hl-e125] [box=0,339,267,461]:\n          - generic [ref=t3-0eda39c7-hl-e1084] [box=8,341,251,53]:\n            - button \"SyntheticSales m · SyntheticSales · Curated/Results/Nested\" [ref=t3-0eda39c7-hl-e1085] [box=8,341,222,53]:\n              - generic [ref=t3-0eda39c7-hl-e1087] [box=31,351,190,33]:\n                - strong [ref=t3-0eda39c7-hl-e1088] [box=31,351,190,17]: SyntheticSales\n                - generic [ref=t3-0eda39c7-hl-e1089] [box=31,371,190,13]: m · SyntheticSales · Curated/Results/Nested\n            - button \"Add SyntheticSales to canvas\" [ref=t3-0eda39c7-hl-e1090] [cursor=pointer] [box=233,353,22,28]: +\n          - generic [ref=t3-0eda39c7-hl-e1091] [box=8,396,251,53]:\n            - button \"Sales Raw query · Landing/SQL\" [ref=t3-0eda39c7-hl-e1092] [box=8,396,222,53]:\n              - generic [ref=t3-0eda39c7-hl-e1094] [box=31,406,91,33]:\n                - strong [ref=t3-0eda39c7-hl-e1095] [box=31,406,91,17]: Sales Raw\n                - generic [ref=t3-0eda39c7-hl-e1096] [box=31,426,91,13]: query · Landing/SQL\n            - button \"Add Sales Raw to canvas\" [ref=t3-0eda39c7-hl-e1097] [cursor=pointer] [box=233,408,22,28]: +\n          - generic [ref=t3-0eda39c7-hl-e1098] [box=8,451,251,53]:\n            - button \"Quote\\\"Query query\" [ref=t3-0eda39c7-hl-e1099] [box=8,451,222,53]:\n              - generic [ref=t3-0eda39c7-hl-e1101] [box=31,461,71,33]:\n                - strong [ref=t3-0eda39c7-hl-e1102] [box=31,461,71,17]: Quote\"Query\n                - generic [ref=t3-0eda39c7-hl-e1103] [box=31,481,71,13]: query\n            - button \"Add Quote\\\"Query to canvas\" [ref=t3-0eda39c7-hl-e1104] [cursor=pointer] [box=233,463,22,28]: +\n          - generic [ref=t3-0eda39c7-hl-e1105] [box=8,506,251,53]:\n            - button \"Server parameter · DeclaredOnly\" [ref=t3-0eda39c7-hl-e1106] [box=8,506,222,53]:\n              - generic [ref=t3-0eda39c7-hl-e1108] [box=31,516,116,33]:\n                - strong [ref=t3-0eda39c7-hl-e1109] [box=31,516,116,17]: Server\n                - generic [ref=t3-0eda39c7-hl-e1110] [box=31,536,116,13]: parameter · DeclaredOnly\n            - button \"Add Server to canvas\" [ref=t3-0eda39c7-hl-e1111] [cursor=pointer] [box=233,518,22,28]: +\n          - generic [ref=t3-0eda39c7-hl-e1112] [box=8,561,251,53]:\n            - button \"OccurrenceProbe query · Curated/Results/Nested\" [ref=t3-0eda39c7-hl-e1113] [box=8,561,222,53]:\n              - generic [ref=t3-0eda39c7-hl-e1115] [box=31,571,142,33]:\n                - strong [ref=t3-0eda39c7-hl-e1116] [box=31,571,142,17]: OccurrenceProbe\n                - generic [ref=t3-0eda39c7-hl-e1117] [box=31,591,142,13]: query · Curated/Results/Nested\n            - button \"Add OccurrenceProbe to canvas\" [ref=t3-0eda39c7-hl-e1118] [cursor=pointer] [box=233,573,22,28]: +\n          - generic [ref=t3-0eda39c7-hl-e1119] [box=8,615,251,53]:\n            - button \"FarA query · Landing/SQL\" [ref=t3-0eda39c7-hl-e1120] [box=8,615,222,53]:\n              - generic [ref=t3-0eda39c7-hl-e1122] [box=31,625,91,33]:\n                - strong [ref=t3-0eda39c7-hl-e1123] [box=31,625,91,17]: FarA\n                - generic [ref=t3-0eda39c7-hl-e1124] [box=31,646,91,13]: query · Landing/SQL\n            - button \"Add FarA to canvas\" [ref=t3-0eda39c7-hl-e1125] [cursor=pointer] [box=233,628,22,28]: +\n          - generic [ref=t3-0eda39c7-hl-e1126] [box=8,670,251,53]:\n            - button \"FarB query\" [ref=t3-0eda39c7-hl-e1127] [box=8,670,222,53]:\n              - generic [ref=t3-0eda39c7-hl-e1129] [box=31,680,26,33]:\n                - strong [ref=t3-0eda39c7-hl-e1130] [box=31,680,26,17]: FarB\n                - generic [ref=t3-0eda39c7-hl-e1131] [box=31,701,26,13]: query\n            - button \"Add FarB to canvas\" [ref=t3-0eda39c7-hl-e1132] [cursor=pointer] [box=233,683,22,28]: +\n          - generic [ref=t3-0eda39c7-hl-e1133] [box=8,725,251,53]:\n            - button \"CycleA query · Curated/Results/Nested\" [ref=t3-0eda39c7-hl-e1134] [box=8,725,222,53]:\n              - generic [ref=t3-0eda39c7-hl-e1136] [box=31,735,142,33]:\n                - strong [ref=t3-0eda39c7-hl-e1137] [box=31,735,142,17]: CycleA\n                - generic [ref=t3-0eda39c7-hl-e1138] [box=31,756,142,13]: query · Curated/Results/Nested\n            - button \"Remove CycleA from layout\" [ref=t3-0eda39c7-hl-e1139] [cursor=pointer] [box=233,738,22,28]: −\n          - generic [ref=t3-0eda39c7-hl-e1140] [box=8,780,251,53]:\n            - button \"CycleB query · Curated/Results/Nested\" [ref=t3-0eda39c7-hl-e1141] [box=8,780,222,53]:\n              - generic [ref=t3-0eda39c7-hl-e1143] [box=31,790,142,33]:\n                - strong [ref=t3-0eda39c7-hl-e1144] [box=31,790,142,17]: CycleB\n                - generic [ref=t3-0eda39c7-hl-e1145] [box=31,811,142,13]: query · Curated/Results/Nested\n            - button \"Remove CycleB from layout\" [ref=t3-0eda39c7-hl-e1146] [cursor=pointer] [box=233,793,22,28]: −\n          - generic [ref=t3-0eda39c7-hl-e1147] [box=8,835,251,53]:\n            - button \"SelfLoop query\" [ref=t3-0eda39c7-hl-e1148] [box=8,835,222,53]:\n              - generic [ref=t3-0eda39c7-hl-e1150] [box=31,845,48,33]:\n                - strong [ref=t3-0eda39c7-hl-e1151] [box=31,845,48,17]: SelfLoop\n                - generic [ref=t3-0eda39c7-hl-e1152] [box=31,865,48,13]: query\n            - button \"Remove SelfLoop from layout\" [ref=t3-0eda39c7-hl-e1153] [cursor=pointer] [box=233,848,22,28]: −\n        - generic [ref=t3-0eda39c7-hl-e196] [box=0,800,267,70]: Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.\n      - generic [ref=t3-0eda39c7-hl-e197] [box=268,64,1172,806]:\n        - generic \"Power Query model workspace\" [ref=t3-0eda39c7-hl-e198] [box=268,126,1172,744]:\n          - group \"Power Query input to consumer canvas\" [ref=t3-0eda39c7-hl-e199] [box=268,126,1172,744]:\n            - generic \"Query canvas. Arrow keys pan; F fits; plus and minus zoom.\" [ref=t3-0eda39c7-hl-e200] [box=268,126,1172,744]:\n              - generic [box=415,206,0,0]:\n                - generic [box=415,206,0,0]:\n                  - generic [box=398,168,350,550]:\n                    - generic [box=415,177,48,18]: Cycle · 2\n                  - generic [box=960,356,350,175]:\n                    - generic [box=978,364,48,18]: Cycle · 1\n                - img \"Resolved query references\" [box=415,206,1,1]:\n                  - generic [box=558,326,763,255]:\n                    - generic \"CycleB is referenced by CycleA\" [box=558,326,0,255]\n                    - generic \"CycleA is referenced by CycleB\" [box=588,326,0,255]\n                    - generic \"SelfLoop is referenced by SelfLoop\" [box=1135,366,185,88]\n                - generic [box=415,206,0,0]:\n                  - button \"CycleA · query\" [pressed] [ref=t3-0eda39c7-hl-e1155] [box=415,206,315,120]:\n                    - generic [ref=t3-0eda39c7-hl-e1156] [box=417,207,313,73]:\n                      - generic \"query\" [ref=t3-0eda39c7-hl-e1157] [box=437,221,19,21]: Q\n                      - generic [ref=t3-0eda39c7-hl-e1158] [box=467,219,248,43]:\n                        - generic \"CycleA\" [ref=t3-0eda39c7-hl-e1159] [box=467,219,248,22]\n                        - generic \"query\" [ref=t3-0eda39c7-hl-e1160] [box=467,245,248,18]\n                    - generic [ref=t3-0eda39c7-hl-e1161] [box=417,279,313,48]:\n                      - generic [ref=t3-0eda39c7-hl-e1162] [box=437,292,78,23]: 1 inputs\n                      - generic [ref=t3-0eda39c7-hl-e1163] [box=522,292,100,23]: 1 consumers\n                      - generic [ref=t3-0eda39c7-hl-e1164] [box=681,293,34,20]: Cycle\n                  - button \"CycleB · query\" [ref=t3-0eda39c7-hl-e1165] [box=415,581,315,120]:\n                    - generic [ref=t3-0eda39c7-hl-e1166] [box=417,582,313,73]:\n                      - generic \"query\" [ref=t3-0eda39c7-hl-e1167] [box=437,596,19,21]: Q\n                      - generic [ref=t3-0eda39c7-hl-e1168] [box=467,594,248,43]:\n                        - generic \"CycleB\" [ref=t3-0eda39c7-hl-e1169] [box=467,594,248,22]\n                        - generic \"query\" [ref=t3-0eda39c7-hl-e1170] [box=467,620,248,18]\n                    - generic [ref=t3-0eda39c7-hl-e1171] [box=417,654,313,48]:\n                      - generic [ref=t3-0eda39c7-hl-e1172] [box=437,667,78,23]: 1 inputs\n                      - generic [ref=t3-0eda39c7-hl-e1173] [box=522,667,100,23]: 1 consumers\n                      - generic [ref=t3-0eda39c7-hl-e1174] [box=681,668,34,20]: Cycle\n                  - button \"SelfLoop · query\" [ref=t3-0eda39c7-hl-e1175] [box=978,393,315,120]:\n                    - generic [ref=t3-0eda39c7-hl-e1176] [box=979,394,313,73]:\n                      - generic \"query\" [ref=t3-0eda39c7-hl-e1177] [box=999,408,19,21]: Q\n                      - generic [ref=t3-0eda39c7-hl-e1178] [box=1030,407,248,43]:\n                        - generic \"SelfLoop\" [ref=t3-0eda39c7-hl-e1179] [box=1030,407,248,22]\n                        - generic \"query\" [ref=t3-0eda39c7-hl-e1180] [box=1030,432,248,18]\n                    - generic [ref=t3-0eda39c7-hl-e1181] [box=979,467,313,48]:\n                      - generic [ref=t3-0eda39c7-hl-e1182] [box=999,479,78,23]: 1 inputs\n                      - generic [ref=t3-0eda39c7-hl-e1183] [box=1084,479,100,23]: 1 consumers\n                      - generic [ref=t3-0eda39c7-hl-e1184] [box=1243,481,34,20]: Cycle\n            - generic [box=284,838,278,16]:\n              - generic [box=284,838,135,16]: Query input → consumer\n              - generic [box=433,838,130,16]: Parameter → consumer\n            - generic [ref=t3-0eda39c7-hl-e297] [box=1212,707,212,147]:\n              - generic [ref=t3-0eda39c7-hl-e298] [box=1224,716,188,16]: 3 visible objects\n              - img \"Visible query canvas overview\" [ref=t3-0eda39c7-hl-e299] [box=1219,735,198,112]\n        - generic [ref=t3-0eda39c7-hl-e312] [box=286,812,256,40]:\n          - button \"Zoom out Power Query\" [ref=t3-0eda39c7-hl-e313] [cursor=pointer] [box=291,817,27,30]: −\n          - generic [ref=t3-0eda39c7-hl-e314] [box=320,825,43,15]: 125%\n          - button \"Zoom in Power Query\" [ref=t3-0eda39c7-hl-e315] [cursor=pointer] [box=365,817,27,30]: +\n          - button \"Fit Power Query layout\" [ref=t3-0eda39c7-hl-e316] [cursor=pointer] [box=394,817,34,30]: Fit\n          - button \"Center selected\" [ref=t3-0eda39c7-hl-e317] [cursor=pointer] [box=431,817,106,30]\n      - text: ↗\n    - generic [ref=t3-0eda39c7-hl-e595] [box=268,64,1172,62]:\n      - generic [ref=t3-0eda39c7-hl-e596] [box=286,76,95,38]:\n        - strong [ref=t3-0eda39c7-hl-e597] [box=286,76,95,20]: Query canvas\n        - generic [ref=t3-0eda39c7-hl-e598] [box=286,98,95,15]: 3 / 10 objects\n      - button \"Queries\" [expanded] [ref=t3-0eda39c7-hl-e599] [cursor=pointer] [box=397,79,63,32]\n      - button \"Back\" [disabled] [ref=t3-0eda39c7-hl-e600] [box=467,79,47,32]\n      - button \"Blank layout\" [ref=t3-0eda39c7-hl-e601] [cursor=pointer] [box=521,79,88,32]\n      - button \"Show all\" [ref=t3-0eda39c7-hl-e602] [cursor=pointer] [box=616,79,67,32]\n      - button \"Undo\" [disabled] [ref=t3-0eda39c7-hl-e603] [box=690,79,49,32]\n      - button \"Arrange\" [ref=t3-0eda39c7-hl-e604] [cursor=pointer] [box=1287,79,64,32]\n      - button \"Display\" [ref=t3-0eda39c7-hl-e606] [cursor=pointer] [box=1357,79,65,32]\n    - status [ref=t3-0eda39c7-hl-e607] [box=268,870,1172,30]: Metadata inspected. Static analysis remains partial.",
+  "omitted": [
+    "160 older network entries",
+    "10 older action timeline entries",
+    "40 of 40 actionTimeline",
+    "30 of 40 networkEntries"
+  ]
+}

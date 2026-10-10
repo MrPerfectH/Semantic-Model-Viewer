@@ -1,0 +1,10 @@
+{
+  "result": "PASS",
+  "source": "cycle-fallback.json",
+  "nodes": 52,
+  "edges": 52,
+  "noTerminals": true,
+  "firstVisibleOwnHit": true,
+  "selectionRootNull": true,
+  "zoom": 0.85
+}

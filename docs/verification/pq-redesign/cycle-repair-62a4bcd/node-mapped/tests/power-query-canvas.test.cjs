@@ -1,0 +1,127 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const {harness,context,plain}=require('./power-query-ui-harness.cjs');
+function setup(ctx=context()) { const h=harness('power-query-canvas.js'),events={select:[],viewport:[],edge:[]}; const canvas=h.win.PowerQueryCanvas.mount(h.host,{context:ctx,onSelect:e=>events.select.push(e),onViewport:e=>events.viewport.push(e),onEdge:e=>events.edge.push(e)}); return {...h,canvas,ctx,events,node:id=>h.host.querySelectorAll('.pqc-node').find(e=>e.dataset.nodeId===id)}; }
+test('entire registry is initially laid out including disconnected/status/duplicate display IDs',()=>{const c=context();c.graph.nodes[4].state='no-partitions';c.graph.nodes[4].kind='table-status';c.graph.nodes[4].metadataId=null;c.graph.nodes[5].metadataId=c.graph.nodes[3].metadataId;const s=setup(c);assert.equal(s.host.querySelectorAll('.pqc-node').length,6);assert.equal(s.host.querySelectorAll('.pqc-node').filter(n=>!n.hidden).length,6);assert.equal(s.canvas.captureLayout().size,6);const layout=s.canvas.captureLayout();assert.ok(layout.get('id-0').x<layout.get('id-1').x);assert.ok(layout.get('id-1').x<layout.get('id-3').x);assert.equal(s.host.querySelectorAll('.pqc-parameter-edge').length,1);assert.match(s.host.querySelector('.pqc-map-label').textContent,/6 visible objects/);});
+test('zero-edge model is complete and supplied cycle components are grouped',()=>{const c=context();c.graph.edges=[];const s=setup(c);assert.equal(s.host.querySelectorAll('.pqc-edge').length,0);assert.equal(s.canvas.captureLayout().size,6);c.graph.edges=[{id:'cycle',inputId:'id-0',consumerId:'id-1',referenceOccurrences:[]},{id:'return',inputId:'id-1',consumerId:'id-0',referenceOccurrences:[]}];c.graph.issues=['id-0','id-1'].map(id=>({consumerId:id,kind:'cycle',componentIds:['id-0','id-1']}));s.canvas.setContext(c);assert.equal(s.host.querySelectorAll('.pqc-cycle-group').length,1);assert.match(s.host.querySelector('.pqc-cycle-group').textContent,/Cycle · 2/);});
+test('visibility is silent induced-edge projection; matches only dim; hidden selection/minimap remain explicit',()=>{const s=setup(),layout=[...s.canvas.captureLayout()],original=JSON.stringify(s.ctx.graph);s.canvas.setSelection('id-1');s.canvas.setViewport({x:13,y:21,k:.6});s.events.viewport=[];s.canvas.setVisibleIds(new Set(['id-0','id-4']));s.canvas.setMatches(new Set(['id-4']));assert.equal(s.node('id-1').hidden,true);assert.equal(s.node('id-1').getAttribute('aria-pressed'),'true');assert.equal(s.node('id-0').classList.contains('pqc-dim'),true);assert.equal(s.node('id-0').hidden,false);assert.equal(s.host.querySelectorAll('.pqc-edge').every(e=>e.style.display==='none'),true);assert.deepEqual(s.host.querySelectorAll('.pqc-map-node').map(e=>e.dataset.mapId),['id-0','id-4']);assert.equal(s.host.querySelectorAll('.pqc-map-edge').length,0);assert.equal(s.canvas.reveal('id-1',{readable:true}),false);assert.equal(s.canvas.focusNode('id-1'),false);assert.deepEqual(plain(s.canvas.getViewport()),{x:13,y:21,k:.6});assert.equal(s.events.select.length,0);assert.equal(s.events.viewport.length,0);s.canvas.setVisibleIds(null);s.canvas.setMatches(null);assert.equal(s.node('id-1').hidden,false);assert.deepEqual([...s.canvas.captureLayout()],layout);assert.equal(JSON.stringify(s.ctx.graph),original);});
+test('empty projection does not discard complete model or auto-fit',()=>{const s=setup();const v=plain(s.canvas.getViewport());s.canvas.setVisibleIds(new Set());assert.equal(s.host.querySelectorAll('.pqc-node').every(e=>e.hidden),true);assert.match(s.host.querySelector('.pqc-map-label').textContent,/0 visible objects/);assert.equal(s.canvas.fit(),false);assert.deepEqual(plain(s.canvas.getViewport()),v);s.canvas.setVisibleIds(null);assert.equal(s.canvas.captureLayout().size,6);});
+test('pan threshold distinguishes blank click from drag; node drag is layout only',()=>{const s=setup();s.canvas.setViewport({x:0,y:0,k:1});const surface=s.host.querySelector('.pqc-surface');surface.fire('pointerdown',{clientX:100,clientY:100});surface.fire('pointermove',{clientX:104,clientY:100});surface.fire('pointerup',{clientX:104,clientY:100});assert.equal(s.events.select[0].origin,'blank');s.events.select=[];surface.fire('pointerdown',{clientX:100,clientY:100});surface.fire('pointermove',{clientX:120,clientY:110});surface.fire('pointerup');assert.equal(s.events.select.length,0);assert.deepEqual(plain(s.canvas.getViewport()),{x:20,y:10,k:1});const before=plain(s.canvas.captureLayout().get('id-0'));s.node('id-0').fire('pointerdown',{clientX:100,clientY:100});s.node('id-0').fire('pointermove',{clientX:130,clientY:120});s.node('id-0').fire('pointerup');s.flush();assert.deepEqual(plain(s.canvas.captureLayout().get('id-0')),{x:before.x+30,y:before.y+20});assert.equal(s.events.select.length,0);});
+test('wheel/pinch keep gesture anchor fixed and have finite positive scale',()=>{const s=setup();s.canvas.setViewport({x:20,y:30,k:.5});const surface=s.host.querySelector('.pqc-surface'),before=s.canvas.getViewport(),anchor={x:300,y:250};surface.fire('wheel',{clientX:anchor.x,clientY:anchor.y,deltaY:-100});const after=s.canvas.getViewport();assert.ok(after.k>before.k);assert.ok(Math.abs((anchor.x-before.x)/before.k-(anchor.x-after.x)/after.k)<1e-9);surface.fire('pointerdown',{pointerId:1,pointerType:'touch',clientX:100,clientY:100});surface.fire('pointerdown',{pointerId:2,pointerType:'touch',clientX:200,clientY:100});const start=s.canvas.getViewport();surface.fire('pointermove',{pointerId:2,pointerType:'touch',clientX:300,clientY:100});assert.equal(s.canvas.getViewport().k,start.k*2);surface.fire('pointerup',{pointerId:1});surface.fire('pointerup',{pointerId:2});assert.equal(s.events.select.length,0);});
+test('provided-host keyboard fallback pans; node arrows rove/Enter selects; input shortcuts ignored',()=>{const s=setup();s.canvas.setViewport({x:0,y:0,k:1});s.host.focus();s.host.fire('keydown',{key:'ArrowRight'});assert.equal(s.canvas.getViewport().x,-40);s.canvas.focusNode('id-0');s.node('id-0').fire('keydown',{key:'ArrowRight'});assert.equal(s.doc.activeElement,s.node('id-1'));s.node('id-1').fire('keydown',{key:'Enter'});assert.deepEqual(plain(s.events.select.at(-1)),{generation:1,nodeId:'id-1',origin:'keyboard'});const input=s.doc.createElement('input');s.host.appendChild(input);const v=plain(s.canvas.getViewport());input.fire('keydown',{key:'f'});assert.deepEqual(plain(s.canvas.getViewport()),v);assert.equal(s.host.querySelectorAll('.pqc-node').filter(e=>e.tabIndex===0).length,1);});
+test('queued resize after explicit Back viewport restore cannot translate or notify',()=>{const s=setup();s.box.width=700;s.box.height=500;s.events.viewport=[];s.canvas.setViewport({x:111,y:-29,k:.77});s.resize();assert.deepEqual(plain(s.canvas.getViewport()),{x:111,y:-29,k:.77});assert.equal(s.events.viewport.length,0);s.box.width=800;s.resize();assert.equal(s.canvas.getViewport().x,161);assert.equal(s.canvas.getViewport().k,.77);});
+test('edge callback uses host CSS anchor and full stable edge ID',()=>{const s=setup();const hit=s.host.querySelector('.pqc-edge-hit');hit.fire('click',{clientX:420,clientY:123});assert.deepEqual(plain(s.events.edge[0]),{generation:1,edgeId:'edge-0-1',anchor:{x:420,y:123}});});
+test('layout captures cannot restore into another generation with coincident IDs',()=>{const s=setup();s.canvas.restoreLayout(new Map([['id-4',{x:9000,y:9000}]]));const saved=s.canvas.captureLayout();s.canvas.setContext(context(2));const initial=[...s.canvas.captureLayout()];s.canvas.restoreLayout(saved);assert.deepEqual([...s.canvas.captureLayout()],initial);});
+test('same-generation updates/layout restores preserve view; generation/null clears filters and old gestures',()=>{const s=setup();s.canvas.setViewport({x:10,y:20,k:.7});s.canvas.restoreLayout(new Map([['id-4',{x:2000,y:100}]]));s.canvas.setContext({...s.ctx});assert.deepEqual(plain(s.canvas.getViewport()),{x:10,y:20,k:.7});assert.equal(s.canvas.captureLayout().get('id-4').x,2000);const old=s.node('id-1');old.fire('pointerdown');s.canvas.setVisibleIds(new Set(['id-4']));s.canvas.setContext(context(2));old.fire('pointerup');assert.equal(s.events.select.length,0);assert.equal(s.host.querySelectorAll('.pqc-node').filter(e=>!e.hidden).length,6);s.canvas.setContext(null);assert.equal(s.host.querySelectorAll('.pqc-node').length,0);assert.equal(s.canvas.captureLayout().size,0);s.canvas.destroy();s.canvas.destroy();assert.equal(s.host.children.length,0);});
+test('300/301/350/1000 registries and parameter fanout retain last object without caps',()=>{for(const count of [300,301,350,1000]){const c=context(1,count);c.graph.edges=Array.from({length:Math.min(250,count-1)},(_,i)=>({id:'fan-'+i,inputId:'id-0',consumerId:'id-'+(i+1),referenceOccurrences:[]}));const s=setup(c);assert.equal(s.canvas.captureLayout().size,count);assert.equal(s.host.querySelectorAll('.pqc-edge').length,250);s.canvas.setMatches(new Set(['id-'+(count-1)]));assert.equal(s.node('id-'+(count-1)).hidden,false);assert.equal(s.canvas.reveal('id-'+(count-1),{readable:true}),true);assert.equal(s.canvas.focusNode('id-'+(count-1)),true);assert.ok(s.canvas.getViewport().k>=.85);s.canvas.destroy();}});
+test('search and focus dim independently without hiding membership or mutating registry',()=>{const s=setup(),before=JSON.stringify(s.ctx.graph),layout=[...s.canvas.captureLayout()];s.canvas.setFocusIds(new Set(['id-0','id-1']));s.canvas.setMatches(new Set(['id-1','id-4']));assert.equal(s.node('id-0').classList.contains('pqc-dim'),true);assert.equal(s.node('id-1').classList.contains('pqc-dim'),false);assert.equal(s.node('id-4').classList.contains('pqc-dim'),true);s.canvas.setMatches(null);assert.equal(s.node('id-4').classList.contains('pqc-dim'),true);s.canvas.setFocusIds(null);assert.equal(s.node('id-4').classList.contains('pqc-dim'),false);assert.equal(s.host.querySelectorAll('.pqc-node').filter(e=>!e.hidden).length,6);assert.deepEqual([...s.canvas.captureLayout()],layout);assert.equal(JSON.stringify(s.ctx.graph),before);s.canvas.setFocusIds(new Set(['id-0']));s.canvas.setContext(context(2));assert.equal(s.node('id-4').classList.contains('pqc-dim'),false);});
+test('explicit Arrange touches only visible requested positions and is silent, registry preserving and undoable',()=>{const s=setup(),v={x:123,y:71,k:.67};s.canvas.restoreLayout(new Map([['id-0',{x:4000,y:4000}],['id-1',{x:5000,y:5000}],['id-4',{x:7000,y:7000}]]));const saved=s.canvas.captureLayout(),graph=JSON.stringify(s.ctx.graph);s.canvas.setViewport(v);s.canvas.setVisibleIds(new Set(['id-0','id-1']));s.events.viewport=[];assert.equal(s.canvas.arrange(new Set(['id-0','id-1','id-4'])),true);const after=s.canvas.captureLayout();assert.ok(after.get('id-0').x<after.get('id-1').x);assert.equal(after.get('id-4').x,7000);assert.deepEqual(plain(s.canvas.getViewport()),v);assert.equal(s.events.viewport.length,0);assert.equal(s.events.select.length,0);assert.equal(JSON.stringify(s.ctx.graph),graph);assert.equal(after.size,6);s.canvas.restoreLayout(saved);assert.deepEqual([...s.canvas.captureLayout()].sort(),[...saved].sort());});
+test('minimap nodes, induced edges and bounds use only rendered IDs; empty stays honest and registry survives',()=>{
+  const s=setup();s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',{x:400,y:0}],['id-4',{x:50000,y:-50000}]]));
+  s.canvas.setVisibleIds(new Set(['id-0','id-1']));
+  assert.deepEqual(s.host.querySelectorAll('.pqc-map-node').map(n=>n.dataset.mapId),['id-0','id-1']);
+  assert.deepEqual(s.host.querySelectorAll('.pqc-map-edge').map(n=>n.dataset.mapEdgeId),['edge-0-1']);
+  const map=s.host.querySelector('.pqc-minimap').querySelector('svg');assert.equal(map.getAttribute('viewBox'),'-28 -28 708 152');
+  s.canvas.setVisibleIds(new Set());assert.equal(s.host.querySelectorAll('.pqc-map-node').length,0);assert.equal(s.host.querySelectorAll('.pqc-map-edge').length,0);assert.equal(map.style.display,'none');
+  assert.equal(s.host.querySelector('.pqc-map-label').textContent,'0 visible objects');assert.equal(s.canvas.captureLayout().size,6);
+  s.canvas.setVisibleIds(null);assert.equal(s.host.querySelectorAll('.pqc-map-node').length,6);assert.equal(map.style.display,'');
+});
+test('Center genuinely centers already-visible nodes at pan/zoom and side/below/resized host bounds',()=>{
+  const s=setup();s.canvas.restoreLayout(new Map([['id-1',{x:20000,y:-17000}]]));
+  for(const [width,height,k] of [[1000,700,.3],[620,620,1.3],[640,220,2],[750,480,.85]]){
+    s.box.width=width;s.box.height=height;s.canvas.setViewport({x:13,y:77,k});assert.equal(s.canvas.center('id-1',{readable:true}),true);
+    const v=s.canvas.getViewport(),p=s.canvas.captureLayout().get('id-1');assert.equal((p.x+126)*v.k+v.x,width/2);assert.equal((p.y+48)*v.k+v.y,height/2);assert.ok(v.k>=.85);
+    s.canvas.setViewport({x:v.x+10,y:v.y+10,k:v.k});s.canvas.center('id-1',{readable:true});assert.deepEqual(plain(s.canvas.getViewport()),plain(v));
+    s.resize();assert.deepEqual(plain(s.canvas.getViewport()),plain(v));
+  }
+  const prior=plain(s.canvas.getViewport());s.canvas.setVisibleIds(new Set(['id-0']));assert.equal(s.canvas.center('id-1'),false);assert.equal(s.canvas.reveal('id-1'),false);assert.deepEqual(plain(s.canvas.getViewport()),prior);
+  s.canvas.setVisibleIds(null);assert.equal(s.canvas.center('id-1'),true);assert.equal(s.canvas.center('missing'),false);
+});
+test('blank/add repositions far-away new members near current view collision-free, preserves other manual positions and Undo',()=>{
+  const s=setup();s.canvas.restoreLayout(new Map([['id-0',{x:20000,y:-20000}],['id-1',{x:-24000,y:30000}]]));
+  const saved=s.canvas.captureLayout(),before=plain(s.canvas.getViewport()),graph=JSON.stringify(s.ctx.graph);s.canvas.setVisibleIds(new Set());s.events.viewport=[];
+  const visible=new Set(),first=s.canvas.placeAdded('id-0',{visibleIds:visible});visible.add('id-0');s.canvas.setVisibleIds(visible);
+  const second=s.canvas.placeAdded('id-1',{visibleIds:visible,anchorId:'id-0'});visible.add('id-1');s.canvas.setVisibleIds(visible);
+  assert.ok(first&&second);assert.ok(Math.abs(second.x-first.x)<=600);assert.ok(first.x+252<=second.x||second.x+252<=first.x||first.y+96<=second.y||second.y+96<=first.y);
+  const after=s.canvas.captureLayout();for(const [id,p] of saved)if(!visible.has(id))assert.deepEqual(plain(after.get(id)),plain(p));
+  assert.deepEqual(plain(s.canvas.getViewport()),before);assert.equal(s.events.viewport.length,0);assert.equal(s.events.select.length,0);assert.equal(JSON.stringify(s.ctx.graph),graph);
+  s.canvas.restoreLayout(saved);assert.deepEqual([...s.canvas.captureLayout()], [...saved]);
+  const explicit=s.canvas.placeAdded('id-1',{visibleIds:visible,position:{x:123.5,y:-42.75}});assert.deepEqual(plain(explicit),{x:123.5,y:-42.75});
+  assert.equal(s.canvas.placeAdded('missing'),false);assert.equal(s.canvas.placeAdded('id-1',{position:{x:NaN,y:1}}),false);
+});
+test('narrow side canvas prefers a visible vertical neighbor; collisions preserve the manual anchor',()=>{
+  const s=setup();s.box.width=605;s.box.height=620;s.canvas.setViewport({x:0,y:0,k:.85});
+  const anchor={x:(605/2)/.85-126,y:(620/2)/.85-48};s.canvas.restoreLayout(new Map([['id-0',anchor]]));
+  const before=s.canvas.captureLayout();const p=s.canvas.placeAdded('id-1',{visibleIds:new Set(['id-0']),anchorId:'id-0'});
+  assert.equal(p.x,anchor.x);assert.ok(Math.abs(p.y-anchor.y)>=126);assert.ok((p.y+96)*.85<=604);assert.deepEqual(plain(s.canvas.captureLayout().get('id-0')),anchor);
+  s.canvas.setVisibleIds(new Set(['id-0','id-1']));s.canvas.reveal('id-1',{readable:true});
+  const v=s.canvas.getViewport();for(const id of ['id-0','id-1']){const q=s.canvas.captureLayout().get(id);assert.ok(q.x*v.k+v.x>=0);assert.ok((q.x+252)*v.k+v.x<=605);assert.ok(q.y*v.k+v.y>=0);assert.ok((q.y+96)*v.k+v.y<=620);}
+  s.canvas.restoreLayout(new Map([['id-1',{x:anchor.x+300,y:anchor.y}],['id-2',{x:anchor.x,y:anchor.y+126}]]));
+  const next=s.canvas.placeAdded('id-3',{visibleIds:new Set(['id-0','id-1','id-2']),anchorId:'id-0'});assert.equal(next.x,anchor.x);assert.equal(next.y,anchor.y-126);
+  assert.deepEqual(plain(s.canvas.captureLayout().get('id-0')),plain(before.get('id-0')));
+});
+test('straight routes retain input-to-consumer endpoints after reversal, stacking and self cycles; hit path follows geometry',()=>{
+  const c=context();c.graph.edges=[{id:'forward',inputId:'id-0',consumerId:'id-1',referenceOccurrences:[]},{id:'reverse',inputId:'id-1',consumerId:'id-0',referenceOccurrences:[]},{id:'self',inputId:'id-0',consumerId:'id-0',referenceOccurrences:[]}];
+  const s=setup(c);s.canvas.setVisibleIds(new Set(['id-0','id-1']));
+  const points=line=>[...line.getAttribute('d').matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]);
+  for(const b of [{x:450,y:170},{x:-450,y:170},{x:0,y:170}]){
+    s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',b]]));
+    const lines=s.host.querySelectorAll('.pqc-edge-line'),hits=s.host.querySelectorAll('.pqc-edge-hit');
+    lines.forEach((line,i)=>{assert.doesNotMatch(line.getAttribute('d'),/[CQAZ]/);assert.equal(line.getAttribute('d'),hits[i].getAttribute('d'));const p=points(line);for(let j=1;j<p.length;j++)assert.ok(p[j][0]===p[j-1][0]||p[j][1]===p[j-1][1]);});
+    const forward=points(lines[0]),reverse=points(lines[1]);
+    function boundary(p,r){return ((p[0]===r.x||p[0]===r.x+252)&&p[1]>=r.y&&p[1]<=r.y+96)||((p[1]===r.y||p[1]===r.y+96)&&p[0]>=r.x&&p[0]<=r.x+252);}
+    assert.ok(boundary(forward[0],{x:0,y:0}));assert.ok(boundary(forward.at(-1),b));assert.ok(boundary(reverse[0],b));assert.ok(boundary(reverse.at(-1),{x:0,y:0}));
+    assert.notEqual(lines[0].getAttribute('d'),lines[1].getAttribute('d'));
+  }
+  const marker=s.host.querySelector('marker');assert.equal(marker.getAttribute('markerUnits'),'userSpaceOnUse');assert.equal(marker.querySelector('path').getAttribute('fill'),'none');
+});
+test('straight long links detour around visible intervening cards and simplify when the obstacle is hidden',()=>{
+  const c=context();c.graph.edges=[{id:'long',inputId:'id-0',consumerId:'id-1',referenceOccurrences:[]}];const s=setup(c);
+  s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',{x:800,y:0}],['id-2',{x:400,y:0}]]));s.canvas.setVisibleIds(new Set(['id-0','id-1','id-2']));
+  const line=s.host.querySelector('.pqc-edge-line'),detour=line.getAttribute('d');assert.match(detour,/,(-18|114)/);
+  const pts=[...detour.matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]);
+  for(let i=1;i<pts.length;i++){const a=pts[i-1],b=pts[i];assert.equal(a[0]===b[0]?a[0]>400&&a[0]<652&&Math.max(a[1],b[1])>0&&Math.min(a[1],b[1])<96:a[1]>0&&a[1]<96&&Math.max(a[0],b[0])>400&&Math.min(a[0],b[0])<652,false);}
+  s.canvas.setVisibleIds(new Set(['id-0','id-1']));assert.notEqual(line.getAttribute('d'),detour);assert.equal([...line.getAttribute('d').matchAll(/[ML]-?[\d.]+,(-?[\d.]+)/g)].every(m=>+m[1]===48),true);
+});
+
+test('reciprocal edges have independent 14px hit corridors in every orientation and after the reported drag',()=>{
+  const c=context();c.graph.edges=[{id:'B-to-A',inputId:'id-1',consumerId:'id-0',referenceOccurrences:[]},{id:'A-to-B',inputId:'id-0',consumerId:'id-1',referenceOccurrences:[]}];
+  const s=setup(c),graph=JSON.stringify(c.graph);s.canvas.setVisibleIds(new Set(['id-0','id-1']));s.canvas.setViewport({x:0,y:0,k:1});
+  const points=d=>[...d.matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]);
+  const distance=(p,a,b)=>Math.hypot(p[0]-Math.max(Math.min(a[0],b[0]),Math.min(Math.max(a[0],b[0]),p[0])),p[1]-Math.max(Math.min(a[1],b[1]),Math.min(Math.max(a[1],b[1]),p[1])));
+  function verify(label){
+    const lines=s.host.querySelectorAll('.pqc-edge-line'),hits=s.host.querySelectorAll('.pqc-edge-hit'),routes=lines.map(l=>points(l.getAttribute('d')));
+    assert.notDeepEqual(routes[0],routes[1].slice().reverse(),label+' must not retrace the other direction');
+    routes.forEach((route,i)=>{
+      assert.equal(lines[i].getAttribute('d'),hits[i].getAttribute('d'));
+      const other=routes[1-i];let exclusive=0;
+      for(let j=1;j<route.length;j++){
+        const a=route[j-1],b=route[j];assert.ok(a[0]===b[0]||a[1]===b[1]);
+        if(Math.hypot(b[0]-a[0],b[1]-a[1])<30)continue;
+        const midpoint=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+        if(other.slice(1).every((p,k)=>distance(midpoint,other[k],p)>14))exclusive++;
+      }
+      assert.ok(exclusive>0,label+' independently hittable '+c.graph.edges[i].id);
+      hits[i].fire('click',{clientX:300,clientY:200});assert.equal(s.events.edge.at(-1).edgeId,c.graph.edges[i].id);
+    });
+    assert.equal(JSON.stringify(c.graph),graph);
+  }
+  for(const b of [{x:581.456005859375,y:395.031982421875},{x:600,y:0},{x:-600,y:0},{x:0,y:300},{x:0,y:-300},{x:160,y:400},{x:-160,y:-400},{x:-600,y:350}]){
+    const layout=new Map([['id-0',{x:0,y:0}],['id-1',b]]);s.canvas.restoreLayout(layout);verify(JSON.stringify(b));assert.deepEqual(plain(s.canvas.captureLayout().get('id-1')),b);
+  }
+  s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',{x:0,y:300}]]));verify('before drag');
+  s.node('id-1').fire('pointerdown',{clientX:100,clientY:350});s.node('id-1').fire('pointermove',{clientX:681.456005859375,clientY:445.031982421875});s.node('id-1').fire('pointerup');s.flush();
+  assert.deepEqual(plain(s.canvas.captureLayout().get('id-1')),{x:581.456005859375,y:395.031982421875});verify('after exact drag');
+  // Reversing DOM paint order cannot be the repair: each route stays identical.
+  const paths=new Map(s.host.querySelectorAll('.pqc-edge-hit').map(e=>[e.dataset.edgeId,e.getAttribute('d')]));
+  s.canvas.setContext({...c,graph:{...c.graph,edges:c.graph.edges.slice().reverse()}});
+  s.host.querySelectorAll('.pqc-edge-hit').forEach(e=>assert.equal(e.getAttribute('d'),paths.get(e.dataset.edgeId)));
+  s.canvas.setContext(c);
+  // Reciprocal detours also retain separate corridors around a visible card.
+  s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',{x:800,y:0}],['id-2',{x:400,y:0}]]));
+  s.canvas.setVisibleIds(new Set(['id-0','id-1','id-2']));verify('reciprocal obstacle detours');
+  for(const line of s.host.querySelectorAll('.pqc-edge-line')){
+    const p=points(line.getAttribute('d'));assert.equal(p.length,6);
+    for(let i=1;i<p.length;i++)assert.equal(p[i][0]===p[i-1][0]?p[i][0]>400&&p[i][0]<652&&Math.max(p[i][1],p[i-1][1])>0&&Math.min(p[i][1],p[i-1][1])<96:p[i][1]>0&&p[i][1]<96&&Math.max(p[i][0],p[i-1][0])>400&&Math.min(p[i][0],p[i-1][0])<652,false);
+  }
+});

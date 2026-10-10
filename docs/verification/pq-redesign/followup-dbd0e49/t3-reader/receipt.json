@@ -1,0 +1,13 @@
+{
+  "candidate": "dbd0e49dc7470db58865d6e0d8d77824d58335dc",
+  "transport": "T3 collaborative preview",
+  "startedAt": "2026-10-09T13:37:52.090Z",
+  "checks": [
+    {
+      "name": "reader-exact-focus-history",
+      "status": "pass"
+    }
+  ],
+  "failures": [],
+  "endedAt": "2026-10-09T13:37:54.118Z"
+}

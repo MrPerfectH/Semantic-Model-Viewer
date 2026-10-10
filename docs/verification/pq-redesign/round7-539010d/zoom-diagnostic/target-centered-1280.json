@@ -1,0 +1,14 @@
+{
+  "rect": {
+    "x": 366.734375,
+    "y": 209.5,
+    "width": 89.21875,
+    "height": 32,
+    "top": 209.5,
+    "right": 455.953125,
+    "bottom": 241.5,
+    "left": 366.734375
+  },
+  "hit": "<button type=\"button\" class=\"ex-button\" aria-label=\"Trace this query\">Trace this query</button>",
+  "bodyY": 0
+}

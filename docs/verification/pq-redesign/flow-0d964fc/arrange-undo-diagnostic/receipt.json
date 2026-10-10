@@ -1,0 +1,8 @@
+{
+  "candidate": "0d964fc97273cca8626e3cc4e9b39f73620b7e24",
+  "boundary": "T3 explicit unavailable / Do not retry; isolated Chrome targeted Arrange Undo displayed-zoom reproduction",
+  "checks": [],
+  "failures": [
+    "Error: {\"exceptionId\":1,\"text\":\"Uncaught\",\"lineNumber\":0,\"columnNumber\":136,\"scriptId\":\"36\",\"stackTrace\":{\"callFrames\":[{\"functionName\":\"\",\"scriptId\":\"36\",\"url\":\"\",\"lineNumber\":0,\"columnNumber\":142},{\"functionName\":\"\",\"scriptId\":\"36\",\"url\":\"\",\"lineNumber\":0,\"columnNumber\":307}]},\"exception\":{\"type\":\"object\",\"subtype\":\"error\",\"className\":\"Error\",\"description\":\"Error: Missing click target\\n    at <anonymous>:1:143\\n    at <anonymous>:1:308\",\"objectId\":\"9137251047244759083.2.2\"}}\n    at evaluate (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:14:153)\n    at async Object.click (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:18:12)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-arrange-undo.browser.cjs:6:1059"
+  ]
+}

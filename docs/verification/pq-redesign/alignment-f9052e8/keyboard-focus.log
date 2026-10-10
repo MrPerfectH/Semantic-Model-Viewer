@@ -1,0 +1,13 @@
+{
+  "candidate": "f9052e8f269cd097f687eb7a9428b7b105a2803d",
+  "transport": "authorized fresh isolated Chrome CDP fallback",
+  "startedAt": "2026-10-09T10:43:39.447Z",
+  "checks": [],
+  "failures": [
+    {
+      "name": "keyboard-focus",
+      "error": "Error: equal\nactual [\"[\\\"expression\\\",\\\"\\\",\\\"Q1\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Q2\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"MergeResult\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"AppendResult\\\"]\"]\nexpected [\"[\\\"expression\\\",\\\"\\\",\\\"MergeResult\\\"]\"]\n    at eq (eval at <anonymous> (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-alignment-f905.browser.cjs:24:22), <anonymous>:10:77)\n    at eval (eval at <anonymous> (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-alignment-f905.browser.cjs:24:22), <anonymous>:70:290)\n    at async check (eval at <anonymous> (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-alignment-f905.browser.cjs:24:22), <anonymous>:25:84)\n    at async eval (eval at <anonymous> (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-alignment-f905.browser.cjs:24:22), <anonymous>:68:1)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-alignment-f905.browser.cjs:24:16"
+    }
+  ],
+  "endedAt": "2026-10-09T10:43:40.060Z"
+}

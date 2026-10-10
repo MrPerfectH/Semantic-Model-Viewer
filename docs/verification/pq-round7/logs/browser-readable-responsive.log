@@ -1,0 +1,12 @@
+{
+  "node": "v22.23.3",
+  "browser": "154.0.8037.99",
+  "baseline": false,
+  "checks": [
+    "Arrange Undo exact viewport/layout/root/displayed zoom",
+    "Multi-input chooser follows exact supplied branch and preserves positions/root"
+  ],
+  "failures": [
+    "AssertionError [ERR_ASSERTION]: Selected title must be hit-test visible, not covered by navigation\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/t3-bea3fe03/tests/pq-round7.browser.cjs:11:2866"
+  ]
+}

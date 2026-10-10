@@ -1,0 +1,19 @@
+✔ new corpus is reproducible without any production imports (3.625791ms)
+✔ every authored dependency has an exact occurrence oracle; no expected edge is inferred by scanning names (1.831625ms)
+✔ A1 independently has six same-source queries, a semantic relationship and zero expected edges (0.099417ms)
+✔ A2 five parameter arrows; A3 four result arrows; A6 exact boundary totals and >200 fanout (0.570583ms)
+✔ A4 literal UTF-16 oracle protects repeated/escaped refs and CRLF bytes (0.78525ms)
+✔ A7 contains intentional duplicate IDs, ambiguity, cycles, unavailable metadata; A8 reuses identities (0.111ms)
+✔ graph oracle rejects invented SQL/relationship edges, reversal, missing inventory and duplicate UI IDs (0.37125ms)
+✔ A4/A5/A6/A8 evidence oracles fail closed on missing or stale observations (0.327625ms)
+✔ A9 privacy oracle rejects exports of M, altered raw text, XSS and source requests (0.162375ms)
+✔ candidate gate rejects absent/short/exact rejected baseline SHA (0.163542ms)
+✔ browser receipt validator rejects synthetic/absent provenance before any acceptance (0.899208ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46.747375

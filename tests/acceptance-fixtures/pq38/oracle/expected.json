@@ -1,0 +1,36 @@
+{
+  "main": "let\r\n  Source = #\"Base Query\",\r\n  Text = \"PQ_RAW_ONLY_38 \"\"quoted\"\" λ\"  \r\nin Source\r\n",
+  "other": "let\n  x = Scalar\nin x",
+  "shared": {
+    "Base Query": "let Source = CycleA in Source",
+    "CycleA": "CycleB",
+    "CycleB": "CycleA",
+    "pRegion": "\"PQ_CREDENTIAL_ONLY_38\" meta [IsParameterQuery=true]",
+    "Scalar": "42",
+    "Function": "(SharedValue as number) => SharedValue + 1",
+    "SharedValue": "7",
+    "Shadow": "let SharedValue = 1 in SharedValue",
+    "Lexical": "let x = #\"Base Query\", s = \"SharedValue\" /* CycleA */ in x",
+    "Dynamic": "Expression.Evaluate(\"Base Query\", #shared)",
+    "Missing": "AbsentQuery",
+    "UnsafeText": "\"</script> PQ_SHARED_ONLY_38 https://pq-private-38.invalid/\""
+  },
+  "edges": {
+    "Base Query": [
+      "CycleA"
+    ],
+    "CycleA": [
+      "CycleB"
+    ],
+    "CycleB": [
+      "CycleA"
+    ],
+    "Function": [],
+    "Shadow": [],
+    "Lexical": [
+      "Base Query"
+    ],
+    "Missing": [],
+    "Dynamic": []
+  }
+}

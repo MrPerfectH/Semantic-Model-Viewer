@@ -1,0 +1,270 @@
+{
+  "reached": {
+    "body": {
+      "x": 0,
+      "y": 229,
+      "width": 640,
+      "height": 240,
+      "top": 229,
+      "right": 640,
+      "bottom": 469,
+      "left": 0
+    },
+    "bodyScroll": 93,
+    "inspector": {
+      "x": 0,
+      "y": 373,
+      "width": 631,
+      "height": 96,
+      "top": 373,
+      "right": 631,
+      "bottom": 469,
+      "left": 0
+    },
+    "rootScroll": 161.5,
+    "hostScroll": 0,
+    "code": {
+      "x": 20,
+      "y": 478,
+      "width": 582,
+      "height": 325,
+      "top": 478,
+      "right": 602,
+      "bottom": 803,
+      "left": 20
+    },
+    "wrap": "pqi-code-scroll pqi-wrap",
+    "resizer": {
+      "x": 0,
+      "y": 366,
+      "width": 631,
+      "height": 7,
+      "top": 366,
+      "right": 631,
+      "bottom": 373,
+      "left": 0
+    },
+    "size": 400
+  },
+  "resized": {
+    "size": 440,
+    "rect": {
+      "x": 0,
+      "y": 373,
+      "width": 631,
+      "height": 96,
+      "top": 373,
+      "right": 631,
+      "bottom": 469,
+      "left": 0
+    }
+  },
+  "hit": {
+    "target": "<div class=\"pqw-resizer\" role=\"separator\" tabindex=\"0\" aria-label=\"Resize Power Query inspector\" aria-orientation=\"horizontal\" aria-valuemin=\"300\" aria-valuemax=\"650\" aria-valuenow=\"400\"></div>",
+    "ancestors": [
+      "pqw-resizer",
+      "pqw-body pqw-below",
+      "pqw",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "rect": {
+      "x": 0,
+      "y": 366,
+      "width": 631,
+      "height": 7,
+      "top": 366,
+      "right": 631,
+      "bottom": 373,
+      "left": 0
+    }
+  },
+  "afterClick": {
+    "phase": "ready",
+    "message": "Metadata inspected. Static analysis remains partial.",
+    "category": "all",
+    "query": "",
+    "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "inspectorOpen": true,
+    "count": "4 visible / 4 total objects · 4 library results",
+    "banner": "",
+    "code": "let\r\n  Emoji = \"😀\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n",
+    "viewport": {
+      "x": -135,
+      "y": 81.85,
+      "k": 0.85
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 161.5,
+      "wrap": true,
+      "focus": null
+    },
+    "history": [
+      {
+        "generation": 3,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 95.95808383233535,
+          "y": 46.299401197604794,
+          "k": 0.5149700598802395
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null
+        },
+        "category": "all",
+        "query": ""
+      }
+    ],
+    "domNodes": 4,
+    "visible": [
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "library": [
+      "Sales Raw · query",
+      "Quote\"Query · query",
+      "Server · parameter",
+      "OccurrenceProbe · query"
+    ],
+    "map": "4 visible / 4 objects",
+    "graph": {
+      "nodes": [
+        {
+          "id": "[\"expression\",\"\",\"Sales Raw\"]",
+          "metadataId": "[\"expression\",\"\",\"Sales Raw\"]",
+          "label": "Sales Raw",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "metadataId": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "label": "Quote\"Query",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Server\"]",
+          "metadataId": "[\"expression\",\"\",\"Server\"]",
+          "label": "Server",
+          "subtitle": "parameter",
+          "kind": "parameter",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "metadataId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "label": "OccurrenceProbe",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        }
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Sales Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Sales Raw\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Sales Raw\"]",
+              "name": "Sales Raw",
+              "at": 32,
+              "end": 44
+            },
+            {
+              "id": "[\"expression\",\"\",\"Sales Raw\"]",
+              "name": "Sales Raw",
+              "at": 57,
+              "end": 69
+            },
+            {
+              "id": "[\"expression\",\"\",\"Sales Raw\"]",
+              "name": "Sales Raw",
+              "at": 118,
+              "end": 136
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Quote\\\\\\\"Query\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+              "name": "Quote\"Query",
+              "at": 84,
+              "end": 99
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Server\"]",
+              "name": "Server",
+              "at": 153,
+              "end": 159
+            }
+          ]
+        }
+      ],
+      "issues": [
+        {
+          "consumerId": null,
+          "kind": "analysis-notice",
+          "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+        }
+      ],
+      "generation": 3,
+      "analysisProgress": {
+        "analyzed": 4,
+        "total": 4,
+        "complete": true,
+        "generation": 3
+      }
+    },
+    "sets": {
+      "all": [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]"
+      ],
+      "disconnected": []
+    }
+  }
+}

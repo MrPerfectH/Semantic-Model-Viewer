@@ -1,0 +1,4 @@
+{
+  "expression": "window.__restoreWorkerHook&&__restoreWorkerHook()",
+  "error": "Error: {\"code\":-32603,\"message\":\"Internal error\"}"
+}

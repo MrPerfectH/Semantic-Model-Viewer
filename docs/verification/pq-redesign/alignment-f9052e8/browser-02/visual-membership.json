@@ -1,0 +1,1284 @@
+{
+  "table": {
+    "view": {
+      "k": 1.25,
+      "x": 183.5,
+      "y": 177.375
+    },
+    "pos": {
+      "SyntheticSales": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "selected": "SyntheticSales",
+    "marked": [],
+    "rail": {
+      "x": 0,
+      "y": 64,
+      "width": 268,
+      "height": 736,
+      "top": 64,
+      "right": 268,
+      "bottom": 800,
+      "left": 0
+    },
+    "color": "#d363e3"
+  },
+  "style": {
+    "rail": {
+      "x": 0,
+      "y": 64,
+      "width": 268,
+      "height": 706,
+      "top": 64,
+      "right": 268,
+      "bottom": 770,
+      "left": 0
+    },
+    "toolbar": {
+      "x": 268,
+      "y": 64,
+      "width": 1012,
+      "height": 62,
+      "top": 64,
+      "right": 1280,
+      "bottom": 126,
+      "left": 268
+    },
+    "body": {
+      "x": 0,
+      "y": 64,
+      "width": 1280,
+      "height": 706,
+      "top": 64,
+      "right": 1280,
+      "bottom": 770,
+      "left": 0
+    },
+    "color": "#d363e3",
+    "header": "rgba(211, 99, 227, 0.1)",
+    "width": "252px",
+    "font": "\"IBM Plex Sans\", sans-serif"
+  },
+  "initial": {
+    "navigation": {
+      "membership": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "generation": 3,
+      "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": -107.45729537366549,
+        "y": 280.83274021352315,
+        "k": 0.8576512455516014
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "generation": 3,
+    "selected": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "code": "let\r\n  Emoji = \"😀\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n",
+    "visible": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "dimmed": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]"
+    ],
+    "layout": [
+      [
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        {
+          "x": 0,
+          "y": 426
+        }
+      ]
+    ],
+    "history": [
+      {
+        "membership": [
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        ],
+        "focusMode": "dim",
+        "direction": "connected",
+        "depth": 1,
+        "listFacet": "all",
+        "generation": 3,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 246.98932384341634,
+          "y": 53.15302491103202,
+          "k": 0.8576512455516014
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null
+        },
+        "category": "all",
+        "query": ""
+      }
+    ],
+    "undo": 0,
+    "registry": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "edges": [
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ]
+    ],
+    "sets": {
+      "all": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]"
+      ],
+      "disconnected": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]"
+      ]
+    },
+    "library": [
+      "SyntheticSales",
+      "Sales Raw",
+      "Quote\"Query",
+      "Server",
+      "OccurrenceProbe"
+    ],
+    "banner": "",
+    "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+    "mapCount": 5,
+    "map": "5 visible / 5 objects",
+    "focus": {
+      "tag": "DIV",
+      "cls": "wui-card pqc-node pqc-kind-query pqc-selected",
+      "id": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    },
+    "options": [
+      "All (5)",
+      "Connected (4)",
+      "Disconnected (1)"
+    ]
+  },
+  "hidden": {
+    "navigation": {
+      "membership": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "focusMode": "hide",
+      "direction": "connected",
+      "depth": 0,
+      "listFacet": "all",
+      "generation": 3,
+      "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": -295,
+        "y": 217,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": {
+          "kind": "focus-hide",
+          "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        }
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "generation": 3,
+    "selected": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "code": "let\r\n  Emoji = \"😀\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n",
+    "visible": [
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "dimmed": [],
+    "layout": [
+      [
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        {
+          "x": 0,
+          "y": 426
+        }
+      ]
+    ],
+    "history": [
+      {
+        "membership": [
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        ],
+        "focusMode": "dim",
+        "direction": "connected",
+        "depth": 1,
+        "listFacet": "all",
+        "generation": 3,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 246.98932384341634,
+          "y": 53.15302491103202,
+          "k": 0.8576512455516014
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null
+        },
+        "category": "all",
+        "query": ""
+      }
+    ],
+    "undo": 0,
+    "registry": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "edges": [
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ]
+    ],
+    "sets": {
+      "all": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]"
+      ],
+      "disconnected": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]"
+      ]
+    },
+    "library": [
+      "SyntheticSales",
+      "Sales Raw",
+      "Quote\"Query",
+      "Server",
+      "OccurrenceProbe"
+    ],
+    "banner": "",
+    "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+    "mapCount": 5,
+    "map": "1 visible / 5 objects",
+    "focus": {
+      "tag": "BUTTON",
+      "cls": "ex-button"
+    },
+    "options": [
+      "All (5)",
+      "Connected (4)",
+      "Disconnected (1)"
+    ]
+  },
+  "removed": {
+    "navigation": {
+      "membership": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 0,
+      "listFacet": "all",
+      "generation": 3,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": -91.5,
+        "y": 217,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "generation": 3,
+    "selected": null,
+    "code": "",
+    "visible": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]"
+    ],
+    "dimmed": [],
+    "layout": [
+      [
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        {
+          "x": 0,
+          "y": 426
+        }
+      ]
+    ],
+    "history": [
+      {
+        "membership": [
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        ],
+        "focusMode": "dim",
+        "direction": "connected",
+        "depth": 1,
+        "listFacet": "all",
+        "generation": 3,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 246.98932384341634,
+          "y": 53.15302491103202,
+          "k": 0.8576512455516014
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null
+        },
+        "category": "all",
+        "query": ""
+      }
+    ],
+    "undo": 1,
+    "registry": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "edges": [
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ]
+    ],
+    "sets": {
+      "all": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]"
+      ],
+      "disconnected": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]"
+      ]
+    },
+    "library": [
+      "SyntheticSales",
+      "Sales Raw",
+      "Quote\"Query",
+      "Server",
+      "OccurrenceProbe"
+    ],
+    "banner": "",
+    "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+    "mapCount": 5,
+    "map": "4 visible / 5 objects",
+    "focus": {
+      "tag": "INPUT",
+      "cls": ""
+    },
+    "options": [
+      "All (5)",
+      "Connected (4)",
+      "Disconnected (1)"
+    ]
+  },
+  "blank": {
+    "navigation": {
+      "membership": [],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 0,
+      "listFacet": "all",
+      "generation": 3,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": -91.5,
+        "y": 217,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "generation": 3,
+    "selected": null,
+    "code": "",
+    "visible": [],
+    "dimmed": [],
+    "layout": [
+      [
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        {
+          "x": 0,
+          "y": 426
+        }
+      ]
+    ],
+    "history": [
+      {
+        "membership": [
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        ],
+        "focusMode": "dim",
+        "direction": "connected",
+        "depth": 1,
+        "listFacet": "all",
+        "generation": 3,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 246.98932384341634,
+          "y": 53.15302491103202,
+          "k": 0.8576512455516014
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null
+        },
+        "category": "all",
+        "query": ""
+      }
+    ],
+    "undo": 3,
+    "registry": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "edges": [
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ]
+    ],
+    "sets": {
+      "all": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]"
+      ],
+      "disconnected": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]"
+      ]
+    },
+    "library": [
+      "SyntheticSales",
+      "Sales Raw",
+      "Quote\"Query",
+      "Server",
+      "OccurrenceProbe"
+    ],
+    "banner": "",
+    "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+    "mapCount": 5,
+    "map": "0 visible / 5 objects",
+    "focus": {
+      "tag": "BUTTON",
+      "cls": "ex-button"
+    },
+    "options": [
+      "All (5)",
+      "Connected (4)",
+      "Disconnected (1)"
+    ]
+  },
+  "undone": {
+    "navigation": {
+      "membership": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 0,
+      "listFacet": "all",
+      "generation": 3,
+      "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": -295,
+        "y": 217,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "generation": 3,
+    "selected": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "code": "let\r\n  Emoji = \"😀\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n",
+    "visible": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "dimmed": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]"
+    ],
+    "layout": [
+      [
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        {
+          "x": 0,
+          "y": 426
+        }
+      ]
+    ],
+    "history": [
+      {
+        "membership": [
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        ],
+        "focusMode": "dim",
+        "direction": "connected",
+        "depth": 1,
+        "listFacet": "all",
+        "generation": 3,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 246.98932384341634,
+          "y": 53.15302491103202,
+          "k": 0.8576512455516014
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null
+        },
+        "category": "all",
+        "query": ""
+      }
+    ],
+    "undo": 2,
+    "registry": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "edges": [
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ]
+    ],
+    "sets": {
+      "all": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]"
+      ],
+      "disconnected": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]"
+      ]
+    },
+    "library": [
+      "SyntheticSales",
+      "Sales Raw",
+      "Quote\"Query",
+      "Server",
+      "OccurrenceProbe"
+    ],
+    "banner": "",
+    "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+    "mapCount": 5,
+    "map": "5 visible / 5 objects",
+    "focus": {
+      "tag": "BUTTON",
+      "cls": "ex-button"
+    },
+    "options": [
+      "All (5)",
+      "Connected (4)",
+      "Disconnected (1)"
+    ]
+  },
+  "arranged": {
+    "navigation": {
+      "membership": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "focusMode": "hide",
+      "direction": "inputs",
+      "depth": 1,
+      "listFacet": "all",
+      "generation": 3,
+      "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": 47.80696202531644,
+        "y": 130.25632911392404,
+        "k": 0.8433544303797469
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "generation": 3,
+    "selected": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "code": "let\r\n  Emoji = \"😀\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n",
+    "visible": [
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "dimmed": [],
+    "layout": [
+      [
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        {
+          "x": 0,
+          "y": 426
+        }
+      ]
+    ],
+    "history": [
+      {
+        "membership": [
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        ],
+        "focusMode": "dim",
+        "direction": "connected",
+        "depth": 1,
+        "listFacet": "all",
+        "generation": 3,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 246.98932384341634,
+          "y": 53.15302491103202,
+          "k": 0.8576512455516014
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null
+        },
+        "category": "all",
+        "query": ""
+      }
+    ],
+    "undo": 3,
+    "registry": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "edges": [
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ]
+    ],
+    "sets": {
+      "all": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]"
+      ],
+      "disconnected": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]"
+      ]
+    },
+    "library": [
+      "SyntheticSales",
+      "Sales Raw",
+      "Quote\"Query",
+      "Server",
+      "OccurrenceProbe"
+    ],
+    "banner": "",
+    "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+    "mapCount": 5,
+    "map": "4 visible / 5 objects",
+    "focus": {
+      "tag": "BUTTON",
+      "cls": "ex-button"
+    },
+    "options": [
+      "All (5)",
+      "Connected (4)",
+      "Disconnected (1)"
+    ]
+  },
+  "all": {
+    "navigation": {
+      "membership": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "inputs",
+      "depth": 1,
+      "listFacet": "all",
+      "generation": 3,
+      "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": -103.80000000000001,
+        "y": 281.2,
+        "k": 0.85
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "generation": 3,
+    "selected": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "code": "let\r\n  Emoji = \"😀\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n",
+    "visible": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "dimmed": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]"
+    ],
+    "layout": [
+      [
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        {
+          "x": 0,
+          "y": 426
+        }
+      ]
+    ],
+    "history": [
+      {
+        "membership": [
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        ],
+        "focusMode": "dim",
+        "direction": "connected",
+        "depth": 1,
+        "listFacet": "all",
+        "generation": 3,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 246.98932384341634,
+          "y": 53.15302491103202,
+          "k": 0.8576512455516014
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null
+        },
+        "category": "all",
+        "query": ""
+      }
+    ],
+    "undo": 3,
+    "registry": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "edges": [
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ]
+    ],
+    "sets": {
+      "all": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]"
+      ],
+      "disconnected": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]"
+      ]
+    },
+    "library": [
+      "SyntheticSales",
+      "Sales Raw",
+      "Quote\"Query",
+      "Server",
+      "OccurrenceProbe"
+    ],
+    "banner": "",
+    "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+    "mapCount": 5,
+    "map": "5 visible / 5 objects",
+    "focus": {
+      "tag": "DIV",
+      "cls": "wui-card pqc-node pqc-kind-query pqc-selected",
+      "id": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    },
+    "options": [
+      "All (5)",
+      "Connected (4)",
+      "Disconnected (1)"
+    ]
+  }
+}

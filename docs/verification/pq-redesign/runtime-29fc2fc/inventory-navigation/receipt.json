@@ -1,0 +1,170 @@
+{
+  "candidate": "29fc2fc6d745140a6e60723c46e8fa21076fd1f6",
+  "startedAt": "2026-10-09T09:17:00.140Z",
+  "boundary": "fresh authorized CDP Chrome registered app, not installed/native",
+  "cases": [
+    {
+      "name": "a1-disconnected",
+      "entryMs": 80.09629199999972,
+      "searchMs": 33.21033299999999
+    },
+    {
+      "name": "a2-parameter",
+      "entryMs": 89.32158299999992,
+      "searchMs": 34.90920899999992
+    },
+    {
+      "name": "a3-results",
+      "entryMs": 81.21375000000035,
+      "searchMs": 33.68437500000027
+    },
+    {
+      "name": "a4-occurrences",
+      "entryMs": 81.5555830000003,
+      "searchMs": 33.55020800000011
+    },
+    {
+      "name": "a6-disconnected-300",
+      "entryMs": 81.4752499999995,
+      "searchMs": 33.58249999999953
+    },
+    {
+      "name": "a6-disconnected-301",
+      "entryMs": 81.45145899999989,
+      "searchMs": 34.51574999999957
+    },
+    {
+      "name": "a6-disconnected-350",
+      "entryMs": 80.66354200000023,
+      "searchMs": 33.92120799999975
+    },
+    {
+      "name": "a6-disconnected-1000",
+      "entryMs": 131.31854199999998,
+      "searchMs": 33.86729099999957
+    },
+    {
+      "name": "a6-fanout-250",
+      "entryMs": 81.54583399999956,
+      "searchMs": 33.2749160000003
+    },
+    {
+      "name": "a7-uncertainty",
+      "entryMs": 79.65983300000062,
+      "searchMs": 33.241541000000325
+    },
+    {
+      "name": "a8-reset-a",
+      "entryMs": 81.36791699999958,
+      "searchMs": 33.53441699999985
+    },
+    {
+      "name": "a8-reset-b",
+      "entryMs": 80.56237499999952,
+      "searchMs": 33.675624999999854
+    },
+    {
+      "name": "a8-without-m",
+      "entryMs": 80.0796250000003,
+      "searchMs": 33.07795799999985
+    },
+    {
+      "name": "a9-privacy",
+      "entryMs": 79.23175000000083,
+      "searchMs": 33.69929199999933
+    },
+    {
+      "name": "v2-unavailable-incidence",
+      "entryMs": 80.45987500000047,
+      "searchMs": 32.96287499999926
+    },
+    {
+      "name": "v2-same-ids-no-edge",
+      "entryMs": 95.28383300000132,
+      "searchMs": 33.316915999999765
+    }
+  ],
+  "checks": [
+    {
+      "name": "inventory/category a1-disconnected",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a2-parameter",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a3-results",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a4-occurrences",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a6-disconnected-300",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a6-disconnected-301",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a6-disconnected-350",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a6-disconnected-1000",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a6-fanout-250",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a7-uncertainty",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a8-reset-a",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a8-reset-b",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a8-without-m",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a9-privacy",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category v2-unavailable-incidence",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category v2-same-ids-no-edge",
+      "status": "pass"
+    },
+    {
+      "name": "A3 frozen hidden-selection/reference/Back/reset workflow",
+      "status": "pass"
+    },
+    {
+      "name": "A4 exact source, all five occurrence links, trusted Enter and Back",
+      "status": "pass"
+    }
+  ],
+  "failures": [],
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "endedAt": "2026-10-09T09:17:12.169Z"
+}

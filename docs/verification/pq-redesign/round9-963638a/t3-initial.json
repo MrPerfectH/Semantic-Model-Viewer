@@ -1,0 +1,300 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"url\":\"http://127.0.0.1:54093/\"}"
+    },
+    {
+      "type": "text",
+      "text": "{\"url\":\"http://127.0.0.1:54093/\",\"title\":\"Semantic Model Viewer\",\"loading\":false,\"visibleText\":\"Choose a model\\n0 tables · 0 relationships\\nMODELS\\nContoso Retail\\nbuilt-in\\nREPO\\nConnect repo folder…\\nImport model (TMDL / BIM)\\nTables\\nMeasures\\nPower Query\\nDomains\\nMatrix\\nLocal analysis\\nSave snapshot\\nPNG\\nGet the app\\nOpen model\\nTables\\n\\n0 in this model\\n\\n0 on canvas\\nAll tables\\nOn canvas\\nAvailable\\nNo matching tables\\n\\nTry another name or change the filters.\\n\\nAdd with + or drag onto the canvas. Save view keeps your arrangement and focus in this browser.\\nModel canvas\\n0 / 0 tables\\nBlank layout\\nShow all\\nUndo\\nArrange\\nSave view\\nSaved views\\nDisplay\\nSEMANTIC MODEL VIEWER\\nNo model selected.\\n\\nOpen the built-in sample, import a model, or connect a repo folder to get started.\\n\\nChoose a model\\n−\\n100%\\n+\\nFit\\nDrag tables onto the canvas · click a table to explore its relationships · shift+drag to select several\",\"interactiveElements\":[],\"consoleEntries\":[{\"level\":\"error\",\"text\":\"A bad HTTP response code (404) was received when fetching the script.\",\"timestamp\":\"2026-10-10T10:38:33.124Z\"},{\"level\":\"error\",\"text\":\"Failed to load resource: the server responded with a status of 404 (File not found)\",\"timestamp\":\"2026-10-10T10:38:33.137Z\"}],\"networkEntries\":[{\"url\":\"http://127.0.0.1:54093/\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.523Z\"},{\"url\":\"http://127.0.0.1:54093/power-query-inspector.css?v=948395db36\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.532Z\"},{\"url\":\"http://127.0.0.1:54093/power-query-canvas.css?v=80017a3595\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.533Z\"},{\"url\":\"http://127.0.0.1:54093/power-query-workspace.css?v=8f69cb0d2d\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.533Z\"},{\"url\":\"http://127.0.0.1:54093/power-query-lineage.css?v=3fa4fd3345\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.533Z\"},{\"url\":\"http://127.0.0.1:54093/power-query.css?v=4ff48db438\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.533Z\"},{\"url\":\"http://127.0.0.1:54093/explorer.css?v=5699d561e3\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.533Z\"},{\"url\":\"http://127.0.0.1:54093/measures.css?v=020a7d7d4e\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.533Z\"},{\"url\":\"http://127.0.0.1:54093/js/util.js?v=b233a5ee4c\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.537Z\"},{\"url\":\"http://127.0.0.1:54093/js/roles.js?v=2cf4e6cfdc\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.537Z\"},{\"url\":\"http://127.0.0.1:54093/js/snapshot.js?v=b63823ca6c\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.537Z\"},{\"url\":\"http://127.0.0.1:54093/js/usage-adapter.js?v=47ad9159c1\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.537Z\"},{\"url\":\"http://127.0.0.1:54093/js/tmdl-parser.js?v=0e97ff4704\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.537Z\"},{\"url\":\"http://127.0.0.1:54093/js/workspace-ui.js?v=d88454c851\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.537Z\"},{\"url\":\"http://127.0.0.1:54093/js/canvas.js?v=fe9d193349\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.537Z\"},{\"url\":\"http://127.0.0.1:54093/js/dax-format.js?v=478f9a6c45\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.538Z\"},{\"url\":\"http://127.0.0.1:54093/js/layouts.js?v=1875b73e7b\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.539Z\"},{\"url\":\"http://127.0.0.1:54093/js/matrix.js?v=a3c83262cb\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.539Z\"},{\"url\":\"http://127.0.0.1:54093/js/measures.js?v=773398f354\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.539Z\"},{\"url\":\"http://127.0.0.1:54093/js/power-query-graph-model.js?v=b67342f490\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.539Z\"},{\"url\":\"http://127.0.0.1:54093/js/power-query-dependencies.js?v=19933c40ce\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.540Z\"},{\"url\":\"http://127.0.0.1:54093/js/power-query-lineage.js?v=487522c796\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.540Z\"},{\"url\":\"http://127.0.0.1:54093/js/power-query.js?v=cecb795556\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.540Z\"},{\"url\":\"http://127.0.0.1:54093/js/power-query-canvas.js?v=d7d573822b\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.540Z\"},{\"url\":\"http://127.0.0.1:54093/js/power-query-inspector.js?v=256e107be2\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.540Z\"},{\"url\":\"http://127.0.0.1:54093/js/sidebar.js?v=13fab92f5e\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.541Z\"},{\"url\":\"http://127.0.0.1:54093/js/power-query-workspace.js?v=c27ea4ff7b\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.541Z\"},{\"url\":\"http://127.0.0.1:54093/js/topbar.js?v=c5789195be\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.541Z\"},{\"url\":\"http://127.0.0.1:54093/js/rules.js?v=dc35541371\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.542Z\"},{\"url\":\"http://127.0.0.1:54093/js/relationships.js?v=7f17713638\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.542Z\"},{\"url\":\"http://127.0.0.1:54093/js/explorer.js?v=6bfdf4472d\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.542Z\"},{\"url\":\"http://127.0.0.1:54093/js/app.js?v=dbc5683c97\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:32.543Z\"},{\"url\":\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:33.099Z\"},{\"url\":\"http://127.0.0.1:54093/api/ping\",\"method\":\"GET\",\"status\":404,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:33.137Z\"},{\"url\":\"https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgsAXHNk.woff2\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:33.658Z\"},{\"url\":\"https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q131nj-o.woff2\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:33.776Z\"},{\"url\":\"https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYbSB4Zh.woff2\",\"method\":\"GET\",\"status\":200,\"failed\":false,\"timestamp\":\"2026-10-10T10:38:33.892Z\"}],\"actionTimeline\":[],\"screenshot\":{\"mimeType\":\"image/png\",\"width\":1280,\"height\":800},\"accessibilityTree\":\"- generic [ref=t3-0743d6aa-s-e2] [box=0,0,1280,800]:\\n  - banner [ref=t3-0743d6aa-s-e3] [box=0,0,1280,64]:\\n    - generic [ref=t3-0743d6aa-s-e4] [box=20,14,220,36]:\\n      - img [ref=t3-0743d6aa-s-e6] [box=30,24,15,15]\\n      - button \\\"Choose a model 0 tables · 0 relationships\\\" [expanded] [ref=t3-0743d6aa-s-e10] [cursor=pointer] [box=64,14,122,36]:\\n        - strong [ref=t3-0743d6aa-s-e11] [box=64,14,122,19]: Choose a model\\n        - generic [ref=t3-0743d6aa-s-e12] [box=64,35,122,15]: 0 tables · 0 relationships\\n      - generic [ref=t3-0743d6aa-s-e14] [box=54,58,290,186]:\\n        - generic [ref=t3-0743d6aa-s-e15] [box=61,65,276,25]: Models\\n        - button \\\"Contoso Retail built-in\\\" [ref=t3-0743d6aa-s-e17] [cursor=pointer] [box=61,89,276,44]:\\n          - img [ref=t3-0743d6aa-s-e19] [box=71,106,11,11]\\n          - generic [ref=t3-0743d6aa-s-e21] [box=93,96,236,30]:\\n            - generic [ref=t3-0743d6aa-s-e22] [box=93,96,236,17]: Contoso Retail\\n            - generic [ref=t3-0743d6aa-s-e23] [box=93,114,236,13]: built-in\\n        - generic [ref=t3-0743d6aa-s-e25] [box=61,144,276,24]:\\n          - generic [ref=t3-0743d6aa-s-e26] [box=70,151,29,13]: Repo\\n          - generic \\\"Connected repo folder\\\" [box=105,157,223,0]\\n        - button \\\"Connect repo folder…\\\" [ref=t3-0743d6aa-s-e27] [cursor=pointer] [box=61,168,276,29]:\\n          - img [ref=t3-0743d6aa-s-e28] [box=70,176,13,13]\\n          - text: Connect repo folder…\\n        - button \\\"Import model (TMDL / BIM)\\\" [ref=t3-0743d6aa-s-e31] [cursor=pointer] [box=61,208,276,29]:\\n          - img [ref=t3-0743d6aa-s-e32] [box=70,216,13,13]\\n          - text: Import model (TMDL / BIM)\\n    - navigation \\\"Analysis views\\\" [ref=t3-0743d6aa-s-e34] [box=321,11,422,42]:\\n      - button \\\"Tables\\\" [ref=t3-0743d6aa-s-e35] [cursor=pointer] [box=325,15,68,34]\\n      - button \\\"Measures\\\" [ref=t3-0743d6aa-s-e36] [cursor=pointer] [box=395,15,86,34]\\n      - button \\\"Power Query\\\" [ref=t3-0743d6aa-s-e37] [cursor=pointer] [box=482,15,103,34]\\n      - button \\\"Domains\\\" [ref=t3-0743d6aa-s-e38] [cursor=pointer] [box=588,15,81,34]\\n      - button \\\"Matrix\\\" [ref=t3-0743d6aa-s-e39] [cursor=pointer] [box=671,15,68,34]\\n    - generic [ref=t3-0743d6aa-s-e40] [box=823,16,437,32]:\\n      - generic \\\"Model parsing and analysis run in your browser.\\\" [ref=t3-0743d6aa-s-e41] [box=823,24,68,15]: Local analysis\\n      - button \\\"Save snapshot\\\" [ref=t3-0743d6aa-s-e42] [cursor=pointer] [box=905,16,104,32]\\n      - button \\\"PNG\\\" [ref=t3-0743d6aa-s-e43] [cursor=pointer] [box=1017,16,49,32]\\n      - link \\\"Get the app\\\" [ref=t3-0743d6aa-s-e44] [cursor=pointer] [box=1073,16,88,32]:\\n        - /url: https://github.com/MrPerfectH/Semantic-Model-Viewer#install-2-minutes\\n      - button \\\"Open model\\\" [ref=t3-0743d6aa-s-e45] [cursor=pointer] [box=1169,16,91,32]\\n  - generic [ref=t3-0743d6aa-s-e46] [box=0,64,1280,736]:\\n    - generic [ref=t3-0743d6aa-s-e47] [box=268,126,1012,644]:\\n      - generic [box=268,126,0,0]:\\n        - img [box=268,126,1,1]\\n    - complementary \\\"Model table library\\\" [ref=t3-0743d6aa-s-e48] [box=0,64,268,736]:\\n      - generic [ref=t3-0743d6aa-s-e49] [box=0,64,267,80]:\\n        - generic [ref=t3-0743d6aa-s-e50] [box=16,86,73,42]:\\n          - heading \\\"Tables\\\" [level=2] [ref=t3-0743d6aa-s-e51] [box=16,86,73,22]\\n          - paragraph [ref=t3-0743d6aa-s-e52] [box=16,113,73,15]: 0 in this model\\n        - generic [ref=t3-0743d6aa-s-e53] [box=184,96,67,23]: 0 on canvas\\n      - searchbox \\\"Search table library\\\" [ref=t3-0743d6aa-s-e54] [box=14,144,239,36]\\n      - generic \\\"Table library filter\\\" [ref=t3-0743d6aa-s-e55] [box=14,192,239,33]:\\n        - button \\\"All tables\\\" [pressed] [ref=t3-0743d6aa-s-e56] [cursor=pointer] [box=17,195,76,27]\\n        - button \\\"On canvas\\\" [ref=t3-0743d6aa-s-e57] [cursor=pointer] [box=95,195,76,27]\\n        - button \\\"Available\\\" [ref=t3-0743d6aa-s-e58] [cursor=pointer] [box=174,195,76,27]\\n      - generic [ref=t3-0743d6aa-s-e60] [box=8,237,251,106]:\\n        - strong [ref=t3-0743d6aa-s-e61] [box=20,262,109,16]: No matching tables\\n        - paragraph [ref=t3-0743d6aa-s-e62] [box=20,290,227,16]: Try another name or change the filters.\\n      - generic [ref=t3-0743d6aa-s-e63] [box=0,739,267,61]: Add with + or drag onto the canvas. Save view keeps your arrangement and focus in this browser.\\n    - generic [ref=t3-0743d6aa-s-e64] [box=268,64,1012,62]:\\n      - generic [ref=t3-0743d6aa-s-e65] [box=286,78,110,33]:\\n        - strong [ref=t3-0743d6aa-s-e66] [box=286,78,110,17]: Model canvas\\n        - generic [ref=t3-0743d6aa-s-e67] [box=286,98,110,13]: 0 / 0 tables\\n      - button \\\"Blank layout\\\" [ref=t3-0743d6aa-s-e68] [cursor=pointer] [box=412,79,92,32]\\n      - button \\\"Show all\\\" [ref=t3-0743d6aa-s-e69] [cursor=pointer] [box=511,79,71,32]\\n      - button \\\"Undo\\\" [disabled] [ref=t3-0743d6aa-s-e70] [box=589,79,53,32]\\n      - button \\\"Arrange\\\" [ref=t3-0743d6aa-s-e71] [cursor=pointer] [box=938,79,68,32]\\n      - button \\\"Save view\\\" [ref=t3-0743d6aa-s-e72] [cursor=pointer] [box=1013,79,79,32]\\n      - button \\\"Saved views\\\" [ref=t3-0743d6aa-s-e74] [cursor=pointer] [box=1099,79,92,32]\\n      - button \\\"Display\\\" [ref=t3-0743d6aa-s-e76] [cursor=pointer] [box=1197,79,65,32]\\n    - generic [ref=t3-0743d6aa-s-e77] [box=579,323,390,210]:\\n      - text: SEMANTIC MODEL VIEWER\\n      - heading \\\"No model selected.\\\" [level=1] [ref=t3-0743d6aa-s-e78] [box=579,360,390,45]\\n      - paragraph [ref=t3-0743d6aa-s-e79] [box=579,417,390,50]: Open the built-in sample, import a model, or connect a repo folder to get started.\\n      - button \\\"Choose a model\\\" [ref=t3-0743d6aa-s-e80] [cursor=pointer] [box=706,492,137,41]\\n    - generic \\\"Canvas navigation\\\" [ref=t3-0743d6aa-s-e81] [box=286,712,148,40]:\\n      - button \\\"−\\\" [ref=t3-0743d6aa-s-e82] [cursor=pointer] [box=291,717,27,30]\\n      - generic [ref=t3-0743d6aa-s-e83] [box=320,725,43,15]: 100%\\n      - button \\\"+\\\" [ref=t3-0743d6aa-s-e84] [cursor=pointer] [box=365,717,27,30]\\n      - button \\\"Fit\\\" [ref=t3-0743d6aa-s-e85] [cursor=pointer] [box=394,717,34,30]\\n    - status [ref=t3-0743d6aa-s-e86] [box=268,770,1012,30]: Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several\\n    - text: ◎\"}"
+    }
+  ],
+  "structuredContent": {
+    "url": "http://127.0.0.1:54093/",
+    "title": "Semantic Model Viewer",
+    "loading": false,
+    "visibleText": "Choose a model\n0 tables · 0 relationships\nMODELS\nContoso Retail\nbuilt-in\nREPO\nConnect repo folder…\nImport model (TMDL / BIM)\nTables\nMeasures\nPower Query\nDomains\nMatrix\nLocal analysis\nSave snapshot\nPNG\nGet the app\nOpen model\nTables\n\n0 in this model\n\n0 on canvas\nAll tables\nOn canvas\nAvailable\nNo matching tables\n\nTry another name or change the filters.\n\nAdd with + or drag onto the canvas. Save view keeps your arrangement and focus in this browser.\nModel canvas\n0 / 0 tables\nBlank layout\nShow all\nUndo\nArrange\nSave view\nSaved views\nDisplay\nSEMANTIC MODEL VIEWER\nNo model selected.\n\nOpen the built-in sample, import a model, or connect a repo folder to get started.\n\nChoose a model\n−\n100%\n+\nFit\nDrag tables onto the canvas · click a table to explore its relationships · shift+drag to select several",
+    "interactiveElements": [],
+    "consoleEntries": [
+      {
+        "level": "error",
+        "text": "A bad HTTP response code (404) was received when fetching the script.",
+        "timestamp": "2026-10-10T10:38:33.124Z"
+      },
+      {
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "timestamp": "2026-10-10T10:38:33.137Z"
+      }
+    ],
+    "networkEntries": [
+      {
+        "url": "http://127.0.0.1:54093/",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.523Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/power-query-inspector.css?v=948395db36",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.532Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/power-query-canvas.css?v=80017a3595",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.533Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/power-query-workspace.css?v=8f69cb0d2d",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.533Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/power-query-lineage.css?v=3fa4fd3345",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.533Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/power-query.css?v=4ff48db438",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.533Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/explorer.css?v=5699d561e3",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.533Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/measures.css?v=020a7d7d4e",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.533Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/util.js?v=b233a5ee4c",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.537Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/roles.js?v=2cf4e6cfdc",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.537Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/snapshot.js?v=b63823ca6c",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.537Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/usage-adapter.js?v=47ad9159c1",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.537Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/tmdl-parser.js?v=0e97ff4704",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.537Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/workspace-ui.js?v=d88454c851",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.537Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/canvas.js?v=fe9d193349",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.537Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/dax-format.js?v=478f9a6c45",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.538Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/layouts.js?v=1875b73e7b",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.539Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/matrix.js?v=a3c83262cb",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.539Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/measures.js?v=773398f354",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.539Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/power-query-graph-model.js?v=b67342f490",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.539Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/power-query-dependencies.js?v=19933c40ce",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.540Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/power-query-lineage.js?v=487522c796",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.540Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/power-query.js?v=cecb795556",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.540Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/power-query-canvas.js?v=d7d573822b",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.540Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/power-query-inspector.js?v=256e107be2",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.540Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/sidebar.js?v=13fab92f5e",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.541Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/power-query-workspace.js?v=c27ea4ff7b",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.541Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/topbar.js?v=c5789195be",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.541Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/rules.js?v=dc35541371",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.542Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/relationships.js?v=7f17713638",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.542Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/explorer.js?v=6bfdf4472d",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.542Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/js/app.js?v=dbc5683c97",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:32.543Z"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:33.099Z"
+      },
+      {
+        "url": "http://127.0.0.1:54093/api/ping",
+        "method": "GET",
+        "status": 404,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:33.137Z"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgsAXHNk.woff2",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:33.658Z"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q131nj-o.woff2",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:33.776Z"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYbSB4Zh.woff2",
+        "method": "GET",
+        "status": 200,
+        "failed": false,
+        "timestamp": "2026-10-10T10:38:33.892Z"
+      }
+    ],
+    "actionTimeline": [],
+    "screenshot": {
+      "mimeType": "image/png",
+      "width": 1280,
+      "height": 800
+    },
+    "accessibilityTree": "- generic [ref=t3-0743d6aa-s-e2] [box=0,0,1280,800]:\n  - banner [ref=t3-0743d6aa-s-e3] [box=0,0,1280,64]:\n    - generic [ref=t3-0743d6aa-s-e4] [box=20,14,220,36]:\n      - img [ref=t3-0743d6aa-s-e6] [box=30,24,15,15]\n      - button \"Choose a model 0 tables · 0 relationships\" [expanded] [ref=t3-0743d6aa-s-e10] [cursor=pointer] [box=64,14,122,36]:\n        - strong [ref=t3-0743d6aa-s-e11] [box=64,14,122,19]: Choose a model\n        - generic [ref=t3-0743d6aa-s-e12] [box=64,35,122,15]: 0 tables · 0 relationships\n      - generic [ref=t3-0743d6aa-s-e14] [box=54,58,290,186]:\n        - generic [ref=t3-0743d6aa-s-e15] [box=61,65,276,25]: Models\n        - button \"Contoso Retail built-in\" [ref=t3-0743d6aa-s-e17] [cursor=pointer] [box=61,89,276,44]:\n          - img [ref=t3-0743d6aa-s-e19] [box=71,106,11,11]\n          - generic [ref=t3-0743d6aa-s-e21] [box=93,96,236,30]:\n            - generic [ref=t3-0743d6aa-s-e22] [box=93,96,236,17]: Contoso Retail\n            - generic [ref=t3-0743d6aa-s-e23] [box=93,114,236,13]: built-in\n        - generic [ref=t3-0743d6aa-s-e25] [box=61,144,276,24]:\n          - generic [ref=t3-0743d6aa-s-e26] [box=70,151,29,13]: Repo\n          - generic \"Connected repo folder\" [box=105,157,223,0]\n        - button \"Connect repo folder…\" [ref=t3-0743d6aa-s-e27] [cursor=pointer] [box=61,168,276,29]:\n          - img [ref=t3-0743d6aa-s-e28] [box=70,176,13,13]\n          - text: Connect repo folder…\n        - button \"Import model (TMDL / BIM)\" [ref=t3-0743d6aa-s-e31] [cursor=pointer] [box=61,208,276,29]:\n          - img [ref=t3-0743d6aa-s-e32] [box=70,216,13,13]\n          - text: Import model (TMDL / BIM)\n    - navigation \"Analysis views\" [ref=t3-0743d6aa-s-e34] [box=321,11,422,42]:\n      - button \"Tables\" [ref=t3-0743d6aa-s-e35] [cursor=pointer] [box=325,15,68,34]\n      - button \"Measures\" [ref=t3-0743d6aa-s-e36] [cursor=pointer] [box=395,15,86,34]\n      - button \"Power Query\" [ref=t3-0743d6aa-s-e37] [cursor=pointer] [box=482,15,103,34]\n      - button \"Domains\" [ref=t3-0743d6aa-s-e38] [cursor=pointer] [box=588,15,81,34]\n      - button \"Matrix\" [ref=t3-0743d6aa-s-e39] [cursor=pointer] [box=671,15,68,34]\n    - generic [ref=t3-0743d6aa-s-e40] [box=823,16,437,32]:\n      - generic \"Model parsing and analysis run in your browser.\" [ref=t3-0743d6aa-s-e41] [box=823,24,68,15]: Local analysis\n      - button \"Save snapshot\" [ref=t3-0743d6aa-s-e42] [cursor=pointer] [box=905,16,104,32]\n      - button \"PNG\" [ref=t3-0743d6aa-s-e43] [cursor=pointer] [box=1017,16,49,32]\n      - link \"Get the app\" [ref=t3-0743d6aa-s-e44] [cursor=pointer] [box=1073,16,88,32]:\n        - /url: https://github.com/MrPerfectH/Semantic-Model-Viewer#install-2-minutes\n      - button \"Open model\" [ref=t3-0743d6aa-s-e45] [cursor=pointer] [box=1169,16,91,32]\n  - generic [ref=t3-0743d6aa-s-e46] [box=0,64,1280,736]:\n    - generic [ref=t3-0743d6aa-s-e47] [box=268,126,1012,644]:\n      - generic [box=268,126,0,0]:\n        - img [box=268,126,1,1]\n    - complementary \"Model table library\" [ref=t3-0743d6aa-s-e48] [box=0,64,268,736]:\n      - generic [ref=t3-0743d6aa-s-e49] [box=0,64,267,80]:\n        - generic [ref=t3-0743d6aa-s-e50] [box=16,86,73,42]:\n          - heading \"Tables\" [level=2] [ref=t3-0743d6aa-s-e51] [box=16,86,73,22]\n          - paragraph [ref=t3-0743d6aa-s-e52] [box=16,113,73,15]: 0 in this model\n        - generic [ref=t3-0743d6aa-s-e53] [box=184,96,67,23]: 0 on canvas\n      - searchbox \"Search table library\" [ref=t3-0743d6aa-s-e54] [box=14,144,239,36]\n      - generic \"Table library filter\" [ref=t3-0743d6aa-s-e55] [box=14,192,239,33]:\n        - button \"All tables\" [pressed] [ref=t3-0743d6aa-s-e56] [cursor=pointer] [box=17,195,76,27]\n        - button \"On canvas\" [ref=t3-0743d6aa-s-e57] [cursor=pointer] [box=95,195,76,27]\n        - button \"Available\" [ref=t3-0743d6aa-s-e58] [cursor=pointer] [box=174,195,76,27]\n      - generic [ref=t3-0743d6aa-s-e60] [box=8,237,251,106]:\n        - strong [ref=t3-0743d6aa-s-e61] [box=20,262,109,16]: No matching tables\n        - paragraph [ref=t3-0743d6aa-s-e62] [box=20,290,227,16]: Try another name or change the filters.\n      - generic [ref=t3-0743d6aa-s-e63] [box=0,739,267,61]: Add with + or drag onto the canvas. Save view keeps your arrangement and focus in this browser.\n    - generic [ref=t3-0743d6aa-s-e64] [box=268,64,1012,62]:\n      - generic [ref=t3-0743d6aa-s-e65] [box=286,78,110,33]:\n        - strong [ref=t3-0743d6aa-s-e66] [box=286,78,110,17]: Model canvas\n        - generic [ref=t3-0743d6aa-s-e67] [box=286,98,110,13]: 0 / 0 tables\n      - button \"Blank layout\" [ref=t3-0743d6aa-s-e68] [cursor=pointer] [box=412,79,92,32]\n      - button \"Show all\" [ref=t3-0743d6aa-s-e69] [cursor=pointer] [box=511,79,71,32]\n      - button \"Undo\" [disabled] [ref=t3-0743d6aa-s-e70] [box=589,79,53,32]\n      - button \"Arrange\" [ref=t3-0743d6aa-s-e71] [cursor=pointer] [box=938,79,68,32]\n      - button \"Save view\" [ref=t3-0743d6aa-s-e72] [cursor=pointer] [box=1013,79,79,32]\n      - button \"Saved views\" [ref=t3-0743d6aa-s-e74] [cursor=pointer] [box=1099,79,92,32]\n      - button \"Display\" [ref=t3-0743d6aa-s-e76] [cursor=pointer] [box=1197,79,65,32]\n    - generic [ref=t3-0743d6aa-s-e77] [box=579,323,390,210]:\n      - text: SEMANTIC MODEL VIEWER\n      - heading \"No model selected.\" [level=1] [ref=t3-0743d6aa-s-e78] [box=579,360,390,45]\n      - paragraph [ref=t3-0743d6aa-s-e79] [box=579,417,390,50]: Open the built-in sample, import a model, or connect a repo folder to get started.\n      - button \"Choose a model\" [ref=t3-0743d6aa-s-e80] [cursor=pointer] [box=706,492,137,41]\n    - generic \"Canvas navigation\" [ref=t3-0743d6aa-s-e81] [box=286,712,148,40]:\n      - button \"−\" [ref=t3-0743d6aa-s-e82] [cursor=pointer] [box=291,717,27,30]\n      - generic [ref=t3-0743d6aa-s-e83] [box=320,725,43,15]: 100%\n      - button \"+\" [ref=t3-0743d6aa-s-e84] [cursor=pointer] [box=365,717,27,30]\n      - button \"Fit\" [ref=t3-0743d6aa-s-e85] [cursor=pointer] [box=394,717,34,30]\n    - status [ref=t3-0743d6aa-s-e86] [box=268,770,1012,30]: Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several\n    - text: ◎"
+  },
+  "isError": false
+}

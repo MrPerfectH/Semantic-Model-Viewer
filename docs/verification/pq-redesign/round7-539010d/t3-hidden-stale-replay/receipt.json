@@ -1,0 +1,7 @@
+{
+  "candidate": "539010d01f086298e2a8de614ecd73757737a416",
+  "checks": [
+    "hidden Follow clears/Back restores full state; Reset viewport; stale source and generation Follow rejected"
+  ],
+  "failures": []
+}

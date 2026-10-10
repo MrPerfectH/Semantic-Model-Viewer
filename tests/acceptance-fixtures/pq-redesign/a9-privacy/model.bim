@@ -1,0 +1,14 @@
+{
+  "name": "Independent PQ redesign a9-privacy",
+  "model": {
+    "tables": [],
+    "expressions": [
+      {
+        "name": "UnsafeText",
+        "kind": "m",
+        "expression": "\"</script><img src=\"\"https://pq-redesign.invalid/x\"\" onerror=\"\"globalThis.PQ_XSS_EXECUTED=1\"\"><svg onload=\"\"globalThis.PQ_XSS_EXECUTED=2\"\"> PQ_REDESIGN_RAW_ONLY\""
+      }
+    ],
+    "relationships": []
+  }
+}

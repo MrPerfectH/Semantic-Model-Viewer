@@ -1,0 +1,62 @@
+{
+  "name": "Independent PQ filter unavailable inputs",
+  "model": {
+    "tables": [
+      {
+        "name": "MissingInput",
+        "columns": [],
+        "partitions": [
+          {
+            "name": "Main"
+          }
+        ]
+      },
+      {
+        "name": "NonMInput",
+        "columns": [],
+        "partitions": [
+          {
+            "name": "Main",
+            "source": {
+              "type": "calculated",
+              "expression": "ROW(\"ID\",1)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "NoPartitions",
+        "columns": [],
+        "partitions": []
+      }
+    ],
+    "expressions": [
+      {
+        "name": "MissingConsumer",
+        "kind": "m",
+        "expression": "MissingInput"
+      },
+      {
+        "name": "NonMConsumer",
+        "kind": "m",
+        "expression": "NonMInput"
+      },
+      {
+        "name": "StandaloneSQL",
+        "kind": "m",
+        "expression": "Sql.Database(\"same-sql.pq-redesign.invalid\",\"SameDB\")"
+      },
+      {
+        "name": "UnusedParameter",
+        "kind": "m",
+        "expression": "\"PQ_FILTER_UNUSED_ONLY\" meta [IsParameterQuery=true]"
+      },
+      {
+        "name": "DynamicOnly",
+        "kind": "m",
+        "expression": "Expression.Evaluate(\"MissingInput\", #shared)"
+      }
+    ],
+    "relationships": []
+  }
+}

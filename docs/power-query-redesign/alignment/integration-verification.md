@@ -1,0 +1,16 @@
+# Tables alignment integration verification
+
+Runtime candidate: `f9052e8f269cd097f687eb7a9428b7b105a2803d`.
+Ordered owned commits: shell `0a4fe2d833545acf8990f1b68a60262dd101286c`, UI pick `fc18edf0b21191aa6995286687736a7c0bb4124d` (original `92aae77139edee0e0ccf80c31021ed5fa642fd4f`), registration/geometry `f9052e8`.
+
+Fresh supported Node22 full regression: **385/385**, exit 0, `/tmp/pq-alignment-f9052e8-node22.log`. Canonical generated-media equality: **33 runtime assets**. Clean checkout and diff check passed.
+
+Integration-owned registered Chrome fallback journey: **5/5 groups**, zero runtime exceptions, `/tmp/pq-align-f9052e8/receipt.json`; runner `tests/pq-tables-alignment.browser.cjs`. Covers actual Tables screenshot and selection/marks/layout/viewport roundtrip, membership +/- and keyboard activation, selected-only Hide/Dim, Blank/Undo/Show all, hidden selection/reference/Back/Reset/Escape, complete 1000-node inventory and 250-consumer fanout, and true Chrome zoom 2→1 at 1280/1440 outer widths. Measured DPR2 and 640/720 CSS widths, actual separator targets, keyboard +20 and trusted pointer +40 allocation, ARIA equality. Screenshots include `01-tables.png`, `02-pq.png`, scale and zoom captures. This is integration evidence, not independent review, native installed acceptance or user A10.
+
+T3 preview explicitly lost its automation host after reconnect; the explicit error is preserved. No further T3 retry was made. Existing authorized fallback was used. UI owner's pre-final synthetic 16/16 receipt and failed native Chrome zoom attempt are historical evidence, not final registered acceptance.
+
+Preserved failures: `/tmp/pq-align-registered-ui` (Back viewport comparison and failed 200% pointer allocation), `/tmp/pq-align-causal-geometry` (pointer target/rect/DPR/scroll/visualViewport and navigation receipt), and earlier shell harness logs. Causal geometry showed picker=false and pointer hitting `.pqw-message`, with the library covering most of the workspace. Later-loaded `.ex-library` overrode equal-specificity PQ positioning. Scoped `.pqw .pqw-library` repairs the shell ownership conflict. Back restores its viewport after final filter/banner DOM updates; a focused regression models queued resize after that final layout. Browser capture now waits for settled filter layout before taking the oracle, rather than comparing against a pre-observer viewport. Historical receipts remain untouched.
+
+VSIX `/tmp/pq-alignment-f9052e8.vsix`: 45 files, SHA256 `d4ab750a071442d0ce3633c79b648574a026d31b1bb7df3c076031ad28e001af`. WorkspaceUI leaf present; fixtures/docs/evidence excluded. Initial package command failed because local vsce was absent; `/tmp/pq-alignment-f9052e8-package.log` retained. Explicit versioned npm-exec vsce 4.0.0 packaging succeeded, `/tmp/pq-alignment-f9052e8-package-tool.log`.
+
+Graph/dependency semantics unchanged. Exact-source, CRLF, copy arguments, generation/late-worker and snapshot privacy remain covered by full regression; this new journey does not independently repeat every old browser oracle. Parent must release exact candidate to existing reviewer for proportionate new-UX acceptance, including remaining exact-source/privacy/crosslink checks. Native blank and user A10 remain OPEN. PR40 remote unchanged; no push, merge or release.

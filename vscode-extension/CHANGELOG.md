@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Power Query framing exposes selected titles at browser zoom in below-docked layouts. Back and Undo yield pending focus restoration to newer input and retain workspace scroll.
+
+- Inspect read-only Power Query partition M and shared queries, parameters and functions.
+- Explore all Power Query objects in a peer model workspace with input-to-consumer
+  references, exact source navigation, Back history, connectivity filters and minimap.
+- Build static analysis in a cancellable background worker; disclose uncertainty,
+  cycles and unavailable metadata without claiming complete lineage.
+- Keep raw M excluded from shared snapshots; no M evaluation or source-data reads.
 - Inline measures in the DAX view: the analyzed measure shows its DAX with every referenced measure replaced by that measure's DAX, one colour per level. Fold any inlined measure or nested call with the arrows in the left margin. Switch between SQLBI-style long and short lines, view the result as plain text, and copy it as DAX or as an `EVALUATE ROW` query.
 - Drop the TMDL ``` fences from multi-line measure expressions, including in models imported earlier.
 - Let the DAX card fill the panel; the referenced columns list sits at the bottom.

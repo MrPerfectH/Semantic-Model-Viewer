@@ -1,0 +1,18 @@
+{
+  "results": [
+    "Tables: add/select, Show all, Blank/Undo, Arrange, library filters/search",
+    "Measures: DAX reference compares without changing analyzed root; Clear; modes, orientation, zoom, Fit and Center",
+    "PQ: direction/depth operate on stable Sales flow target",
+    "PQ: category/group/search/Available/On canvas/Reset preserve root, viewport and M",
+    "PQ: remove/add related, layout membership and independent Undo",
+    "PQ: Blank/Undo and Show all/Undo preserve target and exact layout",
+    "PQ: Trace this query and Clear flow are reversible using Back",
+    "PQ: zoom, Center, Fit, Arrange/Undo and visible-only overview",
+    "PQ: Display overview toggle and close, Queries rail toggle",
+    "PQ: inspector resize by keyboard; expanded exact query/escape; close/reopen and keyboard neighbor/Back",
+    "PQ: inspection outside flow stays explicit; cycles remain reciprocal and disconnected remains uncertain",
+    "PQ: Tables roundtrip and Open table keep semantic relationships separate",
+    "PQ: 1280x800 and narrow responsive docking with reader"
+  ],
+  "errors": []
+}

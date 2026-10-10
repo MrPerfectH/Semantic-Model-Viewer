@@ -1,0 +1,1158 @@
+{
+  "candidate": "12ae2e9149590fde8a3292d22ce1d27c11a2aae4",
+  "files": [
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/REVIEW.md",
+      "bytes": 12468,
+      "sha256": "0e4ffc9f60a866dcf0442bccd2df6e66d2c02001c87c8eaeaada19b7d0b3ddc7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/cleanup.json",
+      "bytes": 192,
+      "sha256": "b7b9c654067d8cfd417eb82f7337e2e209670a9dac91382838a89c17dbf83752"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-arrange-undo.log",
+      "bytes": 285,
+      "sha256": "061b5d3250974ab1e3de76d51410581291f07094232e6c012e716be89311b0fb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/flow-0d964fc/arrange-undo-zoomed/network.json",
+      "bytes": 216753,
+      "sha256": "70ee2221732a13e17dc21b2d391a4418321ff24769a051d6d019e7df8331061b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/flow-0d964fc/arrange-undo-zoomed/observed.json",
+      "bytes": 5633,
+      "sha256": "32909dc7f75cd91481aeadb939f873e4db19a6c623e09c6212b34e179af70dfd"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/flow-0d964fc/arrange-undo-zoomed/receipt.json",
+      "bytes": 285,
+      "sha256": "061b5d3250974ab1e3de76d51410581291f07094232e6c012e716be89311b0fb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/flow-0d964fc/arrange-undo-zoomed/undone.png",
+      "bytes": 152513,
+      "sha256": "e72119bd03415f5e0e9a14d36c8be322d7b6463e232f8151f02d9cba857c619e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/mapping.json",
+      "bytes": 9086,
+      "sha256": "7adbca2157b4d6f945516527d2b3dd0e22a3bc4fcd08bba9c4cca83ef56873d7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/served",
+      "symlink": "../../../../../served"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/zoom200-auto-framing-strict/actual-browser-setting-1.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/zoom200-auto-framing-strict/actual-browser-setting-2.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/zoom200-auto-framing-strict/actual-browser-setting-3.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/zoom200-auto-framing-strict/actual-browser-setting-4.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/zoom200-auto-framing-strict/automatic-framing-1280.json",
+      "bytes": 10058,
+      "sha256": "4c4c7fc7ec56d6ebfffc29113618ce5da7212839d85aa3914c24aa309cfbc63e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/zoom200-auto-framing-strict/automatic-framing-1280.png",
+      "bytes": 120936,
+      "sha256": "07511793c4411c1d26297787b7897b92c6fab87943a74b78de8ddf8c84881a1b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/zoom200-auto-framing-strict/automatic-framing-1440.json",
+      "bytes": 10126,
+      "sha256": "c65270ff2eb8a73ec65374cd3ff7f6749a77572e848ffd791ddfac3f1c11a227"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/zoom200-auto-framing-strict/automatic-framing-1440.png",
+      "bytes": 126997,
+      "sha256": "bc0f69d0fc920fa0f8bf3911a8f067ac5ba74bafdb4c08ecf8d8dc73fe5761d9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/zoom200-auto-framing-strict/before-additional.json",
+      "bytes": 50506,
+      "sha256": "a78d5c44cb22d1df611001d4b1b07fa6a27bc9064534de6e26b67934401a573b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/zoom200-auto-framing-strict/network.json",
+      "bytes": 710928,
+      "sha256": "58965236706e2733f5d4ce43e92f112d743fb3ec55ea006a52526a7f52183c06"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/docs/verification/pq-redesign/round7-539010d/zoom200-auto-framing-strict/receipt.json",
+      "bytes": 841,
+      "sha256": "35ada431a1456665f946c1df92e0fc7267b427450def314625b59e544e66ad34"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/tests/acceptance-fixtures",
+      "symlink": "../../../../../../tests/acceptance-fixtures"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/tests/pq-redesign-independent-filters-v2.oracle.cjs",
+      "bytes": 8791,
+      "sha256": "75dee4f6ae26920ae8a25cb4d7139b55eb24c5a3639026f9d8b06b77aa7b6bcb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/tests/pq-redesign-independent-flow-0d964fc-arrange-undo-zoomed.browser.cjs",
+      "bytes": 3355,
+      "sha256": "ef4481e55e6b407f885f30f6e0744eed7dcc227b5d05462d9f89e7ddd89585d5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/tests/pq-redesign-independent-oracles.cjs",
+      "bytes": 5973,
+      "sha256": "14d36cddfee371121d525d7dd59c68d4f9b821603ec7fda930a6276c6c845830"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/tests/pq-redesign-independent-round7-auto-framing-strict.browser.cjs",
+      "bytes": 11729,
+      "sha256": "cb9ab0bcd4ded0757c5ee9c4a93f0ad7347dd12f7679f9cb4d872dbfaa5d15a3"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-execution-root/tests/pq-redesign-independent-runtime-transport.cjs",
+      "bytes": 3734,
+      "sha256": "bd661ff1ad92c045094a95cd7450aa6c53798142e22bbda846ed84cdcc34c17a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-provenance.json",
+      "bytes": 1180,
+      "sha256": "b6be4ef763013f32b72d27aa8d85c7b007877f822ccbd086fb2dae88d6fa4f91"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-remapping-receipt.json",
+      "bytes": 7435,
+      "sha256": "c304aaa0e9b63db3e2437143c6ed7b273de52382c82adc07d39e1857c7267421"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/frozen-strict.log",
+      "bytes": 285,
+      "sha256": "621d2902ab9acd6c50c05f3017f6eef093d837e1850eb271269b3ab708c4be31"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/http-runtime-audit.json",
+      "bytes": 4866,
+      "sha256": "a216589ecea413d32df0d1c423c27870e8dd20a1e022203811239e72c3602446"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/input-ownership.log",
+      "bytes": 961,
+      "sha256": "22e192803ca7c937212105439fef503fb1d9ef5dae1bf2250ecc20726d30953d"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/mapping.json",
+      "bytes": 9086,
+      "sha256": "7adbca2157b4d6f945516527d2b3dd0e22a3bc4fcd08bba9c4cca83ef56873d7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/Models/tools/viewer",
+      "symlink": "../../../served"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/app.test.cjs",
+      "bytes": 29924,
+      "sha256": "ac6e35160220037484db1793f7b9595e2be471ba4ac93b3efbeec7330ecadd2a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/canvas-interactions.test.cjs",
+      "bytes": 14260,
+      "sha256": "d0f21cc60f9732d5bfb0a5946ee64a4e29af97b464fe591f0ac049892b8007ee"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/cli.test.cjs",
+      "bytes": 6312,
+      "sha256": "1e32f2cfc25b183f6cbf65148cfec91d26a3af1ca0efa279506b382773ed5909"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/dax-format.test.cjs",
+      "bytes": 5979,
+      "sha256": "49564dea560ed21a4d248e56a464ae5f63e4e0c3bde7ed1545fb00157a5cec45"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/extension-host.test.cjs",
+      "bytes": 17131,
+      "sha256": "32fb8e5de360744a55b10b9697f31ffb7cc626ef12cc9c8658c04b86246ac35b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/extension-viewer.test.cjs",
+      "bytes": 18290,
+      "sha256": "207253a31127341de864dfcd7f2da5cdf6775b638acd0c75543103abdefe7f4a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/extension.test.js",
+      "bytes": 13702,
+      "sha256": "1939fcdd8fe1244750510ba8668b23794568148daa1d6ac9876239d3e5537a8a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/layouts.test.cjs",
+      "bytes": 40957,
+      "sha256": "a9472f312a3d23458c69455e8dfa0663c297d237ea7abfe2d109ea2c0995be37"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/mac-launcher.test.cjs",
+      "bytes": 3103,
+      "sha256": "b1bf5d1fac8d955a99b15deb634fcde6ead430ed870dd374591858eab2b1d2a4"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/measures.test.cjs",
+      "bytes": 26385,
+      "sha256": "3008353fc444ce606c855f7b231ad36fc6e15591e9cbb6cb60b5a19b0de8f377"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/power-query-canvas.test.cjs",
+      "bytes": 23497,
+      "sha256": "96f5e6a27fe9a97e17ad3ddd807a9c7b2fe17792b3b9680d05e92c91a6f1b3e0"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/power-query-dependencies.test.cjs",
+      "bytes": 7496,
+      "sha256": "f15dc4dd318acfb594a5da240087b85a47c90a15712e68a44840d3b25995742c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/power-query-graph-model.test.cjs",
+      "bytes": 10760,
+      "sha256": "c1fbde0a5f99ee7f9400d03424177d8898f5e30f3254c3dacf1400d078733d27"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/power-query-inspector.test.cjs",
+      "bytes": 24877,
+      "sha256": "fdab49c99665dd877f882798606d855dfd206051a5b0e9c4be29ed0af1cbb65a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/power-query-lineage.test.cjs",
+      "bytes": 7852,
+      "sha256": "4870b5b6205fcc9957c46fff93911382b6a9a583f7d06fb4246c007bb687ff64"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/power-query-reference-ranges.test.cjs",
+      "bytes": 4367,
+      "sha256": "0d8ab95161724a5dd1628d4fb8e3e848a8d816ff16aa2b38f5e31df8ffd77c1e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/power-query-ui-harness.cjs",
+      "bytes": 6323,
+      "sha256": "880d35bc2dd75ad70dc843729ebf55deb355db7067b6562a1a9c0c9802d25a95"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/power-query-workspace-ui.test.cjs",
+      "bytes": 1009,
+      "sha256": "0974d420665ecf7049f77da87c47d16d84741b918a1a9fa19d876a984c3bde09"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/power-query-workspace.test.cjs",
+      "bytes": 25359,
+      "sha256": "5a97771ea68ec8e490090bffae0b04fa1fdc3001eb39576b48a01380cc0c73e6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/power-query.test.cjs",
+      "bytes": 7147,
+      "sha256": "68b7d7baea7356fbcdbd7a436d98a3c61a643fb147c480801402f6f1740d608c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/pq-followup.scenarios.cjs",
+      "bytes": 7835,
+      "sha256": "87a1b9483293a93472f62f765c52ea2602b4004491b978ea2c5e7e85fd664b82"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/pq38-acceptance.test.cjs",
+      "bytes": 3112,
+      "sha256": "ae7d6e0568171036e8a93e1c0f93398500f4767882aaf5aba4794d7be8ddbee5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/pq38-performance-expression.js",
+      "bytes": 1456,
+      "sha256": "576f639d3bb0f66a00129b8a590cafab854a98673ee2792f7c16baac6b963641"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/pq38-transport.cjs",
+      "bytes": 1937,
+      "sha256": "984f4990f693ff070df2a0e455e480d32ce8a47d32b2f6c02a7794d5281b992e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/serve.test.cjs",
+      "bytes": 10045,
+      "sha256": "c75e9cba199be910cf7c41da7be033cd13a0e57b0e6f87e922b0dc4d634143aa"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/snapshot-app.test.cjs",
+      "bytes": 14855,
+      "sha256": "36b349c6145a6c9aa810b07f2e1e876218b676722b04d6a0bfec7bfff5edd5fd"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/snapshot.test.cjs",
+      "bytes": 14539,
+      "sha256": "facc59326d429b1739a2596207a83a2c360dc2c7590996efe144ee8471f2c0e5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/tmdl-parser.test.cjs",
+      "bytes": 7754,
+      "sha256": "822a35169df250696454a1c8712f45fd980af7ac22e006139a8aa8b05df839cb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/usage-adapter.test.js",
+      "bytes": 2719,
+      "sha256": "59b7a10954740bc2892f20e307f2d40df0254a808fdf6ae109b7bccdec4b103f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/view-quality.test.cjs",
+      "bytes": 14614,
+      "sha256": "9ad4184e85bbaf0a537b5b0d787977c989714123ed50d9515b47dae61810fc9b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node-mapped/tests/vscode-mock.js",
+      "bytes": 8306,
+      "sha256": "3970d16eabb847ae098b37517490074ef7975e9ca262ad529ecd4f3756b85937"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/node22-targeted.log",
+      "bytes": 20560,
+      "sha256": "fa9f71d96d16b9b2e6a2eeedef3e7c06bba0325e1ec7cd8a7ce18cf5d416f2c5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/offline/measures.json",
+      "bytes": 265,
+      "sha256": "2945de2e044e2638713b938197250e1cd882d5ec437d12bb10e0de565a3d2177"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/offline/network-summary.json",
+      "bytes": 321,
+      "sha256": "7e906101dc36560548dd00ad0b5801fd4ae7b8d654bfb420511fe18a74783dbe"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/offline/network.json",
+      "bytes": 1276,
+      "sha256": "8eacf1bbe12120383b6714dbbd87332e88f53ce2d9ee91a1ff05a91cf03bbec7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/offline/offline.png",
+      "bytes": 70583,
+      "sha256": "5b49a5ee6c14d9b824f67446c055792bac5bebb5ab02a1fb5d6ed5f36b4f2121"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/offline/pq-unavailable.json",
+      "bytes": 200,
+      "sha256": "3e98d7d0d27d61767f71313817ffb658dabf9fe1f1dead043ae662ec78062469"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/offline/re-export/Independent stable flow 0d964fc snapshot 2026-10-10.html",
+      "bytes": 769824,
+      "sha256": "40d167304647e2677ff666ab76b0a3126b4398718323ed4043b05fb7444fc040"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/offline/re-export-proof.json",
+      "bytes": 5472,
+      "sha256": "3eb175f6d01c7a3407833992b30683f47beab493438782a26a6732ed1ecdef67"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/offline/receipt.json",
+      "bytes": 562,
+      "sha256": "165409886320714fc63078b813f328c30b7b51f671b34965234090bbda1d3429"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/offline.log",
+      "bytes": 562,
+      "sha256": "165409886320714fc63078b813f328c30b7b51f671b34965234090bbda1d3429"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/owner-REVIEW.md",
+      "bytes": 8230,
+      "sha256": "4460d9354d271efac680ecba75dc89bf322b2e7c234cfce5a8692972d17549f5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/owner-package-proof.json",
+      "bytes": 9926,
+      "sha256": "c68907a836ed47ee24963f820798d93cae72c596668f90f77d5967a19c94287c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/package-audit.json",
+      "bytes": 1942,
+      "sha256": "efdcf0257464b538a2ca1333600a5da04a67c6b8fee925e32abf6bc3b8e9de55"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/privacy/download-status.json",
+      "bytes": 1356,
+      "sha256": "1c493b4ec9ca7200ad346efda4c11cd91493d5fbf54ee752bb0cafc89c7ea303"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/privacy/downloaded.html",
+      "bytes": 769824,
+      "sha256": "900433866fcecbe71ba0cc3626a1d05d508d640382ffcb650713c45f52ad043b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/privacy/proof.json",
+      "bytes": 5659,
+      "sha256": "c68c8fbf23f69f4fb8035cb95e095900da67040e44b7d05a408679692c821216"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/explorer.css",
+      "bytes": 14350,
+      "sha256": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/index.html",
+      "bytes": 6844,
+      "sha256": "059c5d3a84443e983510490ed35c152ffb66037fa6b5c7fba529d578ef296e63"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/app.js",
+      "bytes": 79235,
+      "sha256": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/canvas.js",
+      "bytes": 113321,
+      "sha256": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/dax-format.js",
+      "bytes": 18659,
+      "sha256": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/explorer.js",
+      "bytes": 36750,
+      "sha256": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/host-vscode.js",
+      "bytes": 5220,
+      "sha256": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/layouts.js",
+      "bytes": 67455,
+      "sha256": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/matrix.js",
+      "bytes": 9560,
+      "sha256": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/measures.js",
+      "bytes": 93980,
+      "sha256": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/power-query-canvas.js",
+      "bytes": 33376,
+      "sha256": "ecadeba59190a31a1124fe2033d7bb8af3a9c23a8c0c32c76109a6e5f2f28726"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/power-query-dependencies.js",
+      "bytes": 12773,
+      "sha256": "44e2b21a9287e5e7569f9d70d02fe8ce2b6c19815d24fcf88ae53a0994ba72c6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/power-query-graph-model.js",
+      "bytes": 6368,
+      "sha256": "8c48f7ada3e7725e22ffb63835412105255054148d537722ada89efb53caaeaa"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/power-query-inspector.js",
+      "bytes": 28244,
+      "sha256": "ae9963583ff1f0b9b280292cd112ebc55c274620055942f036c0d9cd3ab3e77d"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/power-query-lineage.js",
+      "bytes": 10472,
+      "sha256": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/power-query-workspace.js",
+      "bytes": 48449,
+      "sha256": "c9b5025302a4bb2f713d4e75ae8ae4b0f2ac44abd314ebad97f21d541d40fc51"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/power-query.js",
+      "bytes": 8661,
+      "sha256": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/relationships.js",
+      "bytes": 4847,
+      "sha256": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/roles.js",
+      "bytes": 7657,
+      "sha256": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/rules.js",
+      "bytes": 7610,
+      "sha256": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/sidebar.js",
+      "bytes": 22525,
+      "sha256": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/snapshot.js",
+      "bytes": 12521,
+      "sha256": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/tmdl-parser.js",
+      "bytes": 27971,
+      "sha256": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/topbar.js",
+      "bytes": 36001,
+      "sha256": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/usage-adapter.js",
+      "bytes": 3298,
+      "sha256": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/util.js",
+      "bytes": 8761,
+      "sha256": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/js/workspace-ui.js",
+      "bytes": 3688,
+      "sha256": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/measures.css",
+      "bytes": 15377,
+      "sha256": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/power-query-canvas.css",
+      "bytes": 4071,
+      "sha256": "80017a35953eed80c98dcd186a81607105569f50024b8346e51d8fd38715f020"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/power-query-inspector.css",
+      "bytes": 7842,
+      "sha256": "948395db366b55550575357ab62de473340b3b6b878b8291adf32e7513ad3c4b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/power-query-lineage.css",
+      "bytes": 1741,
+      "sha256": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/power-query-workspace.css",
+      "bytes": 5378,
+      "sha256": "583f789d8cccae5d8ce593c1d2a08b03ea391b9c1ca49f04e1dcbc500946294b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/served/power-query.css",
+      "bytes": 1754,
+      "sha256": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-body-history/full-back.json",
+      "bytes": 4273,
+      "sha256": "d0af3719fec09432f67228b481a45d7b3e2b484e2ef38f5aded9b375a3b28e42"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-body-history/full-undo.json",
+      "bytes": 3992,
+      "sha256": "de63937acc1ea20f745a3b1a4bf511deffd1e0140a8b9d46a9da4ea5c90a7525"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-body-history/legacy-one-argument.json",
+      "bytes": 663,
+      "sha256": "368b795c4469858f21c9d68d07933b75f7e410ada42e5a70fb90bd701835485c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-body-history/receipt.json",
+      "bytes": 283,
+      "sha256": "72672beedfa70b7d6466401bdab0aa429c3878e8d037aacb7df335d37b2f376c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/arranged.json",
+      "bytes": 46137,
+      "sha256": "3c812a2adb4df085a0adbf6e7d077241ce6854e94cba7dbb19e42bffafd7364b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/explicit-overview.png",
+      "bytes": 140635,
+      "sha256": "1efb0074ef266e11464d6e148eeb65f546bb4ee34ca9fe67bce67c755f316f48"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/hops-through-0.json",
+      "bytes": 3854,
+      "sha256": "1ff56645275f9cdbb565eae2e7edf2c8652b4e7ca69c2b5f81188dc694150456"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/hops-through-17.json",
+      "bytes": 65590,
+      "sha256": "0f117a393b0863ba1982752911c7602a85822c057cbbd3379b5bc64f5fce74cf"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/hops-through-34.json",
+      "bytes": 65614,
+      "sha256": "438116f3d349aaad444cf30edfb096513b305b6f737e6d4f01788fc0345577a9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/hops-through-51.json",
+      "bytes": 65875,
+      "sha256": "eccd35f008b4f39b3391f4ba24463cfa030c4fb3e9a9e8dfc521192786c35c15"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/hops-through-68.json",
+      "bytes": 65821,
+      "sha256": "201126e4cdf5faca824c78de821ae0ce278f3d7648e8c07cc5c56160423635cf"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/hops-through-85.json",
+      "bytes": 65679,
+      "sha256": "a2117684c8d9ae00ec19efb451291213e6dcffc648f871992407afb2cef1dc33"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/hops102.json",
+      "bytes": 394227,
+      "sha256": "a566df38789f9ef0abba35aa6600a5d2f243e6319f9af09a415f2cab2d575e03"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/initial-readable.png",
+      "bytes": 97977,
+      "sha256": "5ba071965ff42622e0ddcc2bbca767ede21f1d9c9223ad7da37e793ea34aca4e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/initial.json",
+      "bytes": 45934,
+      "sha256": "fdffd0a68bfea13cca69523e2d5e0abda6d38147ef9acbedfe2e7127b927ce64"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/overview.json",
+      "bytes": 49619,
+      "sha256": "dbb475e562f01c2c062edf4031b15db25aeb7618772bdffae8a806e1352cc685"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/readable-return.json",
+      "bytes": 46137,
+      "sha256": "3c812a2adb4df085a0adbf6e7d077241ce6854e94cba7dbb19e42bffafd7364b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/readable-return.png",
+      "bytes": 148166,
+      "sha256": "58aed0752c0e267936bda848721dab327cbacde7c97d144002d76a47f63dd453"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-chain/receipt.json",
+      "bytes": 393,
+      "sha256": "8b78d823cbaab372df7d2900df9235ccea8e07af656137ca1ddf980599b928d3"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-core/controls.json",
+      "bytes": 20973,
+      "sha256": "18c399d28f2d33eb4d91f91e5b65ff27bb8912c55509d3a6c4eeed58010dc312"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-core/flow-history.json",
+      "bytes": 21006,
+      "sha256": "2cdcaf7b50999e9863b10664c6e5e0a7bb58b153580d2cfd0225ba7db4552ab9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-core/flow-target-branches.json",
+      "bytes": 34913,
+      "sha256": "03762c958498b28407349d554a97f6810a9d144c88794553fc33a09b732c63a3"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-core/receipt.json",
+      "bytes": 375,
+      "sha256": "6ffabca726e6701ca32fd166c5ea299de7a72ab8749c12ba744fdebc5f854d29"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-core/stable-final-flow.png",
+      "bytes": 157695,
+      "sha256": "31693e20d0092dab7228503a4f1596fea02b682bbc7f50c50759b3b1d9fae9f2"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-hidden-stale-replay/generation-stale.json",
+      "bytes": 127,
+      "sha256": "18f3cfb354cc2d8faedd1c1d84657df08e8b57e1f8d0fd6c1aefb5b8f2ec125a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-hidden-stale-replay/hidden-follow-back.json",
+      "bytes": 3032,
+      "sha256": "44562b5ef6022d51e66231f44d8af45677aab6f15595ffb195f0e00b43189a3c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-hidden-stale-replay/receipt.json",
+      "bytes": 212,
+      "sha256": "3419372402de1cd7ba14ea76321168de9cdb17d6c4593a7f4c4212e898e6b434"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-lifecycle/lifecycle.json",
+      "bytes": 3187,
+      "sha256": "9e2b99a9792d9c19c466d08c848e2814db64c8e2769219965a11cfc4d67b12cc"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-lifecycle/receipt.json",
+      "bytes": 406,
+      "sha256": "77b90d821046398e7a34aa02f2e3a7231f0ed7f0773f68b85eb8804456202800"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-lifecycle/tables-measures.json",
+      "bytes": 937,
+      "sha256": "e9b35c064b3287c12a6987c40be2ba4ea35b5450f150f7f4454bbe9e8e2e1aa2"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-reader/exact-source-history.json",
+      "bytes": 6337,
+      "sha256": "148712bafad4dd4c0f67bbf437d0c5b049af550c5a2879ffb117f8438b8bc2c4"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-reader/receipt.json",
+      "bytes": 267,
+      "sha256": "af5f27e896f1001dde9649527b1f9bc10c2b07dd4a23c4bfc9fd72136cb8e59e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/t3-reader/stale-related.json",
+      "bytes": 2654,
+      "sha256": "9536e9268c1ba431d5f5ead7ea7186b14f3ec924d21612d62906f77b230be428"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/actions-1280.json",
+      "bytes": 152188,
+      "sha256": "ad0c793016954872596abb9fd8bd506867f1e2ddfe4c54d739c43e7551af5b0a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/actions-1280.png",
+      "bytes": 120606,
+      "sha256": "b7792a999731597c9e7fee9474e1da70bdf5cd2709488c0a936da2f5f357e1fd"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/actions-1440.json",
+      "bytes": 152773,
+      "sha256": "2999690d187b7b24813fa3a31e0e1ff390da21b135c2bc3b62fbd194f87d92c6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/actions-1440.png",
+      "bytes": 126277,
+      "sha256": "04559e8919aa159976ae509f7f118ccbea56edb6d76af6e9da3b227b42fd8389"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/actual-browser-setting-1.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/actual-browser-setting-2.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/actual-browser-setting-3.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/network.json",
+      "bytes": 664474,
+      "sha256": "1dd4ecba0d44a79eecbd8d4107bbc3f1003a45d073054ead768e7ae73cc72324"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/receipt.json",
+      "bytes": 961,
+      "sha256": "22e192803ca7c937212105439fef503fb1d9ef5dae1bf2250ecc20726d30953d"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/trusted-focus.json",
+      "bytes": 634817,
+      "sha256": "0b3ae08e320ac7915ed421a9ee7921afd6941f3f3fbc7ac3868a12c5f87320bd"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/trusted-focus.png",
+      "bytes": 167038,
+      "sha256": "de5cebb13d22bb74bae5816f4d9d61229a531ca313b0750fd08609d794fb33d5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/wheel-1280.json",
+      "bytes": 31481,
+      "sha256": "adb6cdb87ac6b65c4cefd707df73bf803c6f322a303d9b8e5c789130c6e1713a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-input-ownership/wheel-1440.json",
+      "bytes": 31826,
+      "sha256": "15c1d78bfc0bc5f11c916f5c01d2de70d6001501f2b4b8392eb7ce4d12437770"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom-reader.log",
+      "bytes": 213,
+      "sha256": "2a8dfe7a7cd96a3b231308cba01c4a42dd800f3b9ccef3ebe978f15fe4dd1324"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/actual-browser-setting-1.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/actual-browser-setting-2.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/actual-browser-setting-3.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/actual-browser-setting-4.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/actual-browser-setting-5.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/actual-browser-setting-6.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/actual-browser-setting-7.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/actual-browser-setting-8.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/before-additional.json",
+      "bytes": 35690,
+      "sha256": "8c00c3f461200af3c6f4456ca003ec0d1833c5cb09b0a148291fe4cf203c0d06"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/cached-model-1280.json",
+      "bytes": 35,
+      "sha256": "37c55395d183847428a78dc0c63796ed2825af009cf63b4087b64b70ee3708c6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/cached-model-1440.json",
+      "bytes": 35,
+      "sha256": "37c55395d183847428a78dc0c63796ed2825af009cf63b4087b64b70ee3708c6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/expanded-reader-1280-0-2.png",
+      "bytes": 165203,
+      "sha256": "496e63fd2de4ccd9e29db30c1f631fff3759da1c97271a0f683e43944d14a26a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/expanded-reader-1280-1-1.png",
+      "bytes": 299012,
+      "sha256": "eeda008e0224e125b36d672adacc83a6e2d3214d58f73a811829cc62dc937ceb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/expanded-reader-1280-2-2.png",
+      "bytes": 165203,
+      "sha256": "496e63fd2de4ccd9e29db30c1f631fff3759da1c97271a0f683e43944d14a26a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/expanded-reader-1440-0-2.png",
+      "bytes": 172045,
+      "sha256": "f0e1937305289c9f1ce06f25baeabeceb83ece01302c4e3bf1156afc3252310e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/expanded-reader-1440-1-1.png",
+      "bytes": 270087,
+      "sha256": "cee77425e784e0b2dc185e45ae9fc309c78b5c01c7731bd17b25627813f8dc9b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/expanded-reader-1440-2-2.png",
+      "bytes": 172045,
+      "sha256": "f0e1937305289c9f1ce06f25baeabeceb83ece01302c4e3bf1156afc3252310e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/flow-1280-0-2.json",
+      "bytes": 1492,
+      "sha256": "92343af15732554737c05b6bf4e6570d554b1028da40aa9b92b88c4c7defda81"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/flow-1280-1-1.json",
+      "bytes": 1458,
+      "sha256": "7293037ad0c2398b65c9a9d45cd59966eedb7c9cd016344dd726bafc38690ca8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/flow-1280-2-2.json",
+      "bytes": 1492,
+      "sha256": "92343af15732554737c05b6bf4e6570d554b1028da40aa9b92b88c4c7defda81"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/flow-1440-0-2.json",
+      "bytes": 1484,
+      "sha256": "e797cec8322c86da4e84e25ec5ef8e90d65bc9879076c77232d6c8b92e64a8be"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/flow-1440-1-1.json",
+      "bytes": 1459,
+      "sha256": "560d792e8eb25bdc7535d7766aefb70aa69e368281027adbda9b657b109b6828"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/flow-1440-2-2.json",
+      "bytes": 1484,
+      "sha256": "e797cec8322c86da4e84e25ec5ef8e90d65bc9879076c77232d6c8b92e64a8be"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/network.json",
+      "bytes": 1372882,
+      "sha256": "c4a19b1f9abdbdd8f7868d671914cc409744462850f06d63efbdc9430bcf7868"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/reader-1280-0-2.json",
+      "bytes": 36802,
+      "sha256": "660d865083fd1d15581cabfe4fdc70918994eb5c3279296a2cf6088877dbca1f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/reader-1280-1-1.json",
+      "bytes": 36806,
+      "sha256": "a1b7930d006bd97e86b6a495570fe22cb6f0f1865810f327ef36e521dcd9a531"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/reader-1280-2-2.json",
+      "bytes": 36802,
+      "sha256": "660d865083fd1d15581cabfe4fdc70918994eb5c3279296a2cf6088877dbca1f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/reader-1440-0-2.json",
+      "bytes": 36802,
+      "sha256": "b46df45f4b0bc7ed9f994143387c4934f152c9ff96043f76ee38c7e005d9a7aa"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/reader-1440-1-1.json",
+      "bytes": 36806,
+      "sha256": "69bf567ee00fab574f9603ee4f6d3ab6e4de1caf865a3ce948f1192d6c980893"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/reader-1440-2-2.json",
+      "bytes": 36802,
+      "sha256": "b46df45f4b0bc7ed9f994143387c4934f152c9ff96043f76ee38c7e005d9a7aa"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/reader-closed-1280-0-2.png",
+      "bytes": 138891,
+      "sha256": "7aad4e90aef6f39ca92dc3503340b9f24db51e5b784ec1728f9fefaf71c57197"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/reader-closed-1280-1-1.png",
+      "bytes": 175957,
+      "sha256": "323958098e129348884c143a3509f19bd6142b817fa8da3a32130f64260ca35b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/reader-closed-1280-2-2.png",
+      "bytes": 138886,
+      "sha256": "092bdd9fc837b9dbbfad02830329515970c84defc6c43bd58200a70baaa701b3"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/reader-closed-1440-0-2.png",
+      "bytes": 138370,
+      "sha256": "8dd5812587bcd1a96d685d19f9f26549128e9f11b1db997b4fd9a88c3dee0427"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/reader-closed-1440-1-1.png",
+      "bytes": 180447,
+      "sha256": "e4c79f28dcf3dd24bb71f77fb1fe3a72f3f8ae7db297621077b33746cc631545"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/reader-closed-1440-2-2.png",
+      "bytes": 138370,
+      "sha256": "8dd5812587bcd1a96d685d19f9f26549128e9f11b1db997b4fd9a88c3dee0427"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/receipt.json",
+      "bytes": 1221,
+      "sha256": "afe8a212ecb607e0975269d0441869fea6399c9113837863036b77002206e673"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/transition-1280-0-2.json",
+      "bytes": 43699,
+      "sha256": "6dc5d42b7dc700a840b3f5fc3f46e7ad42a796294f72fefac05e7230b406b7f5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/transition-1280-0-2.png",
+      "bytes": 138508,
+      "sha256": "6b8768e8cd99631058982f04192dfec8af023c4599066032a42c762d1aaa073b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/transition-1280-1-1.json",
+      "bytes": 36044,
+      "sha256": "b49fe8b164058f4ee57fe7eec21d285bd3be8f9f6eb54d17d5a80390c6a49281"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/transition-1280-1-1.png",
+      "bytes": 175871,
+      "sha256": "0b32901882b44b00b07bbd592f3403aa9a37e8b69f39dcba414b81a0cdea60a4"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/transition-1280-2-2.json",
+      "bytes": 44290,
+      "sha256": "9ea17f0e2f0ad0472322d428e2bdab4a92ea422dffb885a02b927906da08fab6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/transition-1280-2-2.png",
+      "bytes": 138504,
+      "sha256": "077108ff05dc6f70386eaf253d487b4e338f089710baac32e6d2093e63f0e979"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/transition-1440-0-2.json",
+      "bytes": 44194,
+      "sha256": "c56386491c618414892799c79aa47302c6264ceead3a22344655844004604c4f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/transition-1440-0-2.png",
+      "bytes": 137983,
+      "sha256": "b63894bf1ab58037d66238abe0b6b5a3260267c17b17ac10e04204a89540639d"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/transition-1440-1-1.json",
+      "bytes": 35950,
+      "sha256": "7eadc1c0689c61cad0c82e1e2c2d6ca632369dab518ef1b36edcd5fdd7996072"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/transition-1440-1-1.png",
+      "bytes": 180381,
+      "sha256": "5f5466cb6698b4787033f7d6b1eabd69dd7304953c6186153c3a457371e39b3b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/transition-1440-2-2.json",
+      "bytes": 44181,
+      "sha256": "a5ab0e3856054c377ff78b3083450895972823c8af3d05f8de8910e59ebadf97"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/transition-1440-2-2.png",
+      "bytes": 137983,
+      "sha256": "b63894bf1ab58037d66238abe0b6b5a3260267c17b17ac10e04204a89540639d"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/trusted-flow-target-1280-0-2.json",
+      "bytes": 84,
+      "sha256": "841161e0b308c90f0eb02c226036afb7cae4affcddf1276522035eb0947c36b9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/trusted-flow-target-1280-1-1.json",
+      "bytes": 81,
+      "sha256": "fdbfa164a731ca19bf19e5a970f8d6c060e9de399c39a2e3fa5806d3480cac47"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/trusted-flow-target-1280-2-2.json",
+      "bytes": 84,
+      "sha256": "841161e0b308c90f0eb02c226036afb7cae4affcddf1276522035eb0947c36b9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/trusted-flow-target-1440-0-2.json",
+      "bytes": 83,
+      "sha256": "9a6b0073125d7cf4a290bb36812913aa09043c48a6e48ff3f75e3759ab0e81e7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/trusted-flow-target-1440-1-1.json",
+      "bytes": 81,
+      "sha256": "ccd713f99d9fbd2d6061b47642f2773f06779e88275255c89a7bcb3c8376ecaa"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/trusted-flow-target-1440-2-2.json",
+      "bytes": 83,
+      "sha256": "9a6b0073125d7cf4a290bb36812913aa09043c48a6e48ff3f75e3759ab0e81e7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/visible-target-1280-0-2.json",
+      "bytes": 245,
+      "sha256": "f6bdd95d59e403a455b750ad6f44dd89fbf605d391c1ea60d4813dd40ca2a632"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/visible-target-1280-1-1.json",
+      "bytes": 239,
+      "sha256": "fe691de46b40e75235e8b3334a65b647f0e41d078b4a3d03904711d0adeab4d6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/visible-target-1280-2-2.json",
+      "bytes": 245,
+      "sha256": "f6bdd95d59e403a455b750ad6f44dd89fbf605d391c1ea60d4813dd40ca2a632"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/visible-target-1440-0-2.json",
+      "bytes": 224,
+      "sha256": "4b84ff3825abbd8fc47d59561e7350be15aa3aa970a916e4f2c60ec0a6dad165"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/visible-target-1440-1-1.json",
+      "bytes": 239,
+      "sha256": "32b8d88b454e09ddb2d0e968d7cbbf2cf2f9fffcb1b04539c80f118ed4299d10"
+    },
+    {
+      "path": "docs/verification/pq-redesign/round8-12ae2e9/zoom200-reader-resizer/visible-target-1440-2-2.json",
+      "bytes": 224,
+      "sha256": "4b84ff3825abbd8fc47d59561e7350be15aa3aa970a916e4f2c60ec0a6dad165"
+    },
+    {
+      "path": "tests/pq-redesign-independent-round8-body-history.scenarios.cjs",
+      "bytes": 3657,
+      "sha256": "96ef19dfdc332f3ceb2bec3a8ce40f031955343c5a9e585f7eae974d3a81a68e"
+    },
+    {
+      "path": "tests/pq-redesign-independent-round8-chain.scenarios.cjs",
+      "bytes": 6313,
+      "sha256": "f6d4b28f1ab5183666fba527e1f93dfc99f46bafebee0efc77558a32b8c56a96"
+    },
+    {
+      "path": "tests/pq-redesign-independent-round8-core.scenarios.cjs",
+      "bytes": 9242,
+      "sha256": "c620ddd6941c8bca5bb2719f9382ac089279f4f25fb02821f6ff4f8791804917"
+    },
+    {
+      "path": "tests/pq-redesign-independent-round8-frozen-mapping.preload.cjs",
+      "bytes": 2050,
+      "sha256": "7eba33bc5da8f203d23bbc94eb74c344c067a0f9a2e1e6b98a597b5dfd4bc57c"
+    },
+    {
+      "path": "tests/pq-redesign-independent-round8-hidden-stale-replay.scenarios.cjs",
+      "bytes": 3408,
+      "sha256": "5fefda9c665435e131fd5b1d4961f949ccccb678bb8f7dd3191c6c4f6c63c429"
+    },
+    {
+      "path": "tests/pq-redesign-independent-round8-input-ownership.browser.cjs",
+      "bytes": 14810,
+      "sha256": "ec78547fde106950c34ea38371a60a782878067e0d40b6c71202d60bd846e388"
+    },
+    {
+      "path": "tests/pq-redesign-independent-round8-lifecycle.scenarios.cjs",
+      "bytes": 9214,
+      "sha256": "23c6841446b14541ee88a3bdc22716083a8835c83592dc1b9575e06b2bed2f06"
+    },
+    {
+      "path": "tests/pq-redesign-independent-round8-offline.browser.cjs",
+      "bytes": 4695,
+      "sha256": "92cfa227bbd5ea03c3894ae86168acacbc1f5d434a9532a7e49d6f0a6f5badf3"
+    },
+    {
+      "path": "tests/pq-redesign-independent-round8-reader.scenarios.cjs",
+      "bytes": 4116,
+      "sha256": "73f1a6e24a2f21cd20921fdca4ee070e85e24fd954416e958a73a87eb482a6f5"
+    },
+    {
+      "path": "tests/pq-redesign-independent-round8-zoom-reader.browser.cjs",
+      "bytes": 16265,
+      "sha256": "8f326f642697306c13d5f005f913443c8789972facc372403a0994598cae5514"
+    }
+  ],
+  "excludes": "this manifest only"
+}

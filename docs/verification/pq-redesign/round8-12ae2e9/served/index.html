@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Semantic Model Viewer</title>
+<meta name="description" content="Explore Power BI semantic models: tables, relationships and measure dependency flow. Runs locally, so your models never leave your machine.">
+<link rel="canonical" href="https://mrperfecth.github.io/Semantic-Model-Viewer/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Semantic Model Viewer">
+<meta property="og:title" content="Semantic Model Viewer">
+<meta property="og:description" content="Explore Power BI semantic models: tables, relationships and measure dependency flow. Runs locally, so your models never leave your machine.">
+<meta property="og:url" content="https://mrperfecth.github.io/Semantic-Model-Viewer/">
+<meta property="og:image" content="https://mrperfecth.github.io/Semantic-Model-Viewer/icons/social-preview.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Semantic Model Viewer showing the tables and relationships of a Power BI semantic model on one canvas">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Semantic Model Viewer">
+<meta name="twitter:description" content="Explore Power BI semantic models: tables, relationships and measure dependency flow. Runs locally, so your models never leave your machine.">
+<meta name="twitter:image" content="https://mrperfecth.github.io/Semantic-Model-Viewer/icons/social-preview.png">
+<meta name="twitter:image:alt" content="Semantic Model Viewer showing the tables and relationships of a Power BI semantic model on one canvas">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#4f46e5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;background:#f4f5f7;font-family:'IBM Plex Sans',system-ui,sans-serif;}
+  a{color:#2563eb;} a:hover{color:#1d4ed8;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:#c7ccd4;border-radius:6px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  button{font-family:'IBM Plex Sans',sans-serif;}
+  /* style-hover equivalents from the prototype */
+  .hv-f1f3f6:hover{background:#f1f3f6;}
+  .hv-f5f7f9:hover{background:#f5f7f9;}
+  .hv-eef4ff:hover{background:#eef4ff;}
+  .hv-eef2f7:hover{background:#eef2f7;}
+  .hv-f0f2f5:hover{background:#f0f2f5;}
+  .hv-del:hover{background:#fdecec;color:#dc2626;}
+  .hv-trace:hover{background:#f1eafc;}
+  .hv-blue-b:hover{border-color:#bcd2f7;}
+  .hv-blue-bc:hover{border-color:#93b8f5;color:#2563eb;}
+  .hv-grey-bc:hover{border-color:#aeb8c6;color:#2b3140;}
+  .hv-card:hover{border-color:#bcd2f7;background:#f8faff;}
+  .hv-bright:hover{filter:brightness(.96);}
+  .hv-dark:hover{color:#1f2430;}
+  .hv-up:hover{border-color:#c4b5fd;color:#6d28d9;}
+  .hv-dn:hover{border-color:#93b8f5;color:#2563eb;}
+  .hv-resize:hover{background:#c8d6ee;}
+  .hv-warn:hover{background:#faf1da;}
+</style>
+<link rel="stylesheet" href="./power-query.css?v=4ff48db438">
+<link rel="stylesheet" href="./power-query-canvas.css?v=80017a3595">
+<link rel="stylesheet" href="./power-query-inspector.css?v=948395db36">
+<link rel="stylesheet" href="./power-query-workspace.css?v=583f789d8c">
+<link rel="stylesheet" href="./power-query-lineage.css?v=3fa4fd3345">
+<link rel="stylesheet" href="./explorer.css?v=5699d561e3">
+<link rel="stylesheet" href="./measures.css?v=020a7d7d4e">
+</head>
+<body>
+<div id="root" style="position:fixed;inset:0;display:flex;flex-direction:column;background:#f4f5f7;color:#1f2430;overflow:hidden;">
+  <header id="topbar" style="flex:none;display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;min-height:56px;padding:8px 18px;background:#ffffff;border-bottom:1px solid #e3e6ea;z-index:40;box-shadow:0 1px 2px rgba(20,30,50,.04);"></header>
+  <div id="main" style="flex:1;position:relative;min-height:0;overflow:hidden;">
+    <div id="canvas" style="position:absolute;inset:0;overflow:hidden;cursor:grab;background-color:#f4f5f7;background-image:radial-gradient(#d9dde3 1.1px,transparent 1.1px);background-size:26px 26px;"></div>
+    <aside id="table-library" aria-label="Model table library" hidden></aside>
+    <div id="workspace-toolbar" data-canvas-overlay hidden></div>
+    <div id="canvas-empty" hidden></div>
+    <div id="canvas-navigation" data-canvas-overlay aria-label="Canvas navigation" hidden></div>
+    <div id="model-minimap" data-canvas-overlay hidden></div>
+    <div id="workspace-status" role="status" aria-live="polite" hidden></div>
+    <div id="legend"></div>
+    <div id="hint"></div>
+    <div id="matrix"></div>
+    <div id="measures"></div>
+    <div id="drawer"></div>
+    <section id="power-query-workspace" aria-label="Power Query workspace" hidden></section>
+    <div id="modal"></div>
+    <div id="rolesetup"></div>
+  </div>
+</div>
+<script src="./js/util.js?v=b233a5ee4c"></script>
+<script src="./js/snapshot.js?v=b63823ca6c"></script>
+<script src="./js/roles.js?v=2cf4e6cfdc"></script>
+<script src="./js/usage-adapter.js?v=47ad9159c1"></script>
+<script src="./js/tmdl-parser.js?v=0e97ff4704"></script>
+<script src="./js/workspace-ui.js?v=d88454c851"></script>
+<script src="./js/canvas.js?v=fe9d193349"></script>
+<script src="./js/layouts.js?v=1875b73e7b"></script>
+<script src="./js/matrix.js?v=a3c83262cb"></script>
+<script src="./js/dax-format.js?v=478f9a6c45"></script>
+<script src="./js/measures.js?v=773398f354"></script>
+<script src="./js/power-query-dependencies.js?v=44e2b21a92"></script>
+<script src="./js/power-query-graph-model.js?v=8c48f7ada3"></script>
+<script src="./js/power-query-lineage.js?v=487522c796"></script>
+<script src="./js/power-query.js?v=cecb795556"></script>
+<script src="./js/power-query-canvas.js?v=ecadeba591"></script>
+<script src="./js/power-query-inspector.js?v=ae9963583f"></script>
+<script src="./js/power-query-workspace.js?v=c9b5025302"></script>
+<script src="./js/sidebar.js?v=13fab92f5e"></script>
+<script src="./js/topbar.js?v=c5789195be"></script>
+<script src="./js/rules.js?v=dc35541371"></script>
+<script src="./js/relationships.js?v=7f17713638"></script>
+<script src="./js/explorer.js?v=6bfdf4472d"></script>
+<script src="./js/app.js?v=dbc5683c97"></script>
+</body>
+</html>

@@ -1,0 +1,389 @@
+{
+  "title": {
+    "view": {
+      "x": -15184.8,
+      "y": 169.2,
+      "k": 0.85
+    },
+    "label": "85%",
+    "root": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "selected": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "registry": 52,
+    "edges": 51,
+    "visible": 52,
+    "title": {
+      "x": 387.025390625,
+      "y": -134.4499969482422,
+      "width": 159.375,
+      "height": 14.914840698242188,
+      "top": -134.4499969482422,
+      "right": 546.400390625,
+      "bottom": -119.53515625,
+      "left": 387.025390625
+    },
+    "own": false,
+    "map": {
+      "x": 455,
+      "y": -56,
+      "width": 160,
+      "height": 147,
+      "top": -56,
+      "right": 615,
+      "bottom": 91,
+      "left": 455
+    },
+    "nav": {
+      "x": 286,
+      "y": 17,
+      "width": 327,
+      "height": 72,
+      "top": 17,
+      "right": 613,
+      "bottom": 89,
+      "left": 286
+    },
+    "canvas": {
+      "x": 268,
+      "y": -313,
+      "width": 363,
+      "height": 420,
+      "top": -313,
+      "right": 631,
+      "bottom": 107,
+      "left": 268
+    },
+    "bodyY": 645.5,
+    "flowButtons": [
+      {
+        "text": "Inspect target",
+        "r": {
+          "x": 280,
+          "y": -436,
+          "width": 80.734375,
+          "height": 32,
+          "top": -436,
+          "right": 360.734375,
+          "bottom": -404,
+          "left": 280
+        }
+      },
+      {
+        "text": "Trace this query",
+        "r": {
+          "x": 366.734375,
+          "y": -436,
+          "width": 89.21875,
+          "height": 32,
+          "top": -436,
+          "right": 455.953125,
+          "bottom": -404,
+          "left": 366.734375
+        }
+      },
+      {
+        "text": "Clear flow",
+        "r": {
+          "x": 461.953125,
+          "y": -436,
+          "width": 62.203125,
+          "height": 32,
+          "top": -436,
+          "right": 524.15625,
+          "bottom": -404,
+          "left": 461.953125
+        }
+      },
+      {
+        "text": "← Follow input Step49",
+        "r": {
+          "x": 280,
+          "y": -398,
+          "width": 119.46875,
+          "height": 32,
+          "top": -398,
+          "right": 399.46875,
+          "bottom": -366,
+          "left": 280
+        }
+      }
+    ]
+  },
+  "actual": {
+    "innerWidth": 640,
+    "innerHeight": 500,
+    "outerWidth": 1280,
+    "outerHeight": 1087,
+    "dpr": 2,
+    "below": true,
+    "width": 400,
+    "height": 400,
+    "inspectorOpen": true,
+    "selectedId": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "inspector": {
+      "x": 268,
+      "y": 114,
+      "width": 363,
+      "height": 400,
+      "top": 114,
+      "right": 631,
+      "bottom": 514,
+      "left": 268
+    },
+    "separator": {
+      "x": 268,
+      "y": 107,
+      "width": 363,
+      "height": 7,
+      "top": 107,
+      "right": 631,
+      "bottom": 114,
+      "left": 268
+    },
+    "surface": {
+      "x": 268,
+      "y": -313,
+      "width": 363,
+      "height": 420,
+      "top": -313,
+      "right": 631,
+      "bottom": 107,
+      "left": 268
+    },
+    "aria": {
+      "orientation": "horizontal",
+      "value": "400"
+    },
+    "hit": {
+      "tag": "DIV",
+      "cls": "pqw-resizer",
+      "html": "<div class=\"pqw-resizer\" role=\"separator\" tabindex=\"0\" aria-label=\"Resize Power Query inspector\" aria-orientation=\"horizontal\" aria-valuemin=\"300\" aria-valuemax=\"650\" aria-valuenow=\"400\"></div>"
+    },
+    "visualViewport": {
+      "offsetLeft": 0,
+      "offsetTop": 0,
+      "pageLeft": 0,
+      "pageTop": 0,
+      "width": 640,
+      "height": 500,
+      "scale": 1
+    },
+    "scroll": {
+      "windowX": 0,
+      "windowY": 0,
+      "documentX": 0,
+      "documentY": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "pqBodyX": 0,
+      "pqBodyY": 645.5,
+      "inspectorHostY": 0,
+      "inspectorRootY": 0
+    },
+    "active": {
+      "tag": "BUTTON",
+      "cls": "ex-button"
+    },
+    "pointer": [
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": "",
+          "aria": null,
+          "text": "Import model (TMDL / BIM)"
+        },
+        "clientX": 193,
+        "clientY": 218.5,
+        "pageX": 193,
+        "pageY": 218.5,
+        "screenX": 408,
+        "screenY": 546,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 115
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": "",
+          "aria": null,
+          "text": "Import model (TMDL / BIM)"
+        },
+        "clientX": 193,
+        "clientY": 218.5,
+        "pageX": 193,
+        "pageY": 218.5,
+        "screenX": 408,
+        "screenY": 546,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 115.5
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Add model"
+        },
+        "clientX": 474.9375,
+        "clientY": 358.671875,
+        "pageX": 474.9375,
+        "pageY": 358.671875,
+        "screenX": 971.875,
+        "screenY": 826.34375,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 182.5
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Add model"
+        },
+        "clientX": 474.9375,
+        "clientY": 358.671875,
+        "pageX": 474.9375,
+        "pageY": 358.671875,
+        "screenX": 971.875,
+        "screenY": 826.34375,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 183
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Power Query"
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 348.19999998807907
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Power Query"
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 348.69999998807907
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-table-name pqw-library-row",
+          "id": "",
+          "aria": null,
+          "text": "FinalChainm · FinalChain"
+        },
+        "clientX": 109.8984375,
+        "clientY": 412.44921875,
+        "pageX": 109.8984375,
+        "pageY": 412.44921875,
+        "screenX": 241.796875,
+        "screenY": 933.8984375,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 464.89999997615814
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-table-name pqw-library-row",
+          "id": "",
+          "aria": null,
+          "text": "FinalChainm · FinalChain"
+        },
+        "clientX": 109.8984375,
+        "clientY": 412.44921875,
+        "pageX": 109.8984375,
+        "pageY": 412.44921875,
+        "screenX": 241.796875,
+        "screenY": 933.8984375,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 465.39999997615814
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-button",
+          "id": "",
+          "aria": null,
+          "text": "Hide unrelated"
+        },
+        "clientX": 527,
+        "clientY": 452.2421875,
+        "pageX": 527,
+        "pageY": 452.2421875,
+        "screenX": 1076,
+        "screenY": 1013.484375,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 549.1999999880791
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-button",
+          "id": "",
+          "aria": null,
+          "text": "Hide unrelated"
+        },
+        "clientX": 527,
+        "clientY": 452.2421875,
+        "pageX": 527,
+        "pageY": 452.2421875,
+        "screenX": 1076,
+        "screenY": 1013.484375,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 549.7999999821186
+      }
+    ]
+  }
+}

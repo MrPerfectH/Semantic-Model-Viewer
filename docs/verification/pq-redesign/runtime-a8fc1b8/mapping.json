@@ -1,0 +1,10 @@
+{
+  "candidate": "a8fc1b85de05a269bcb019932f86eb3bbf78d19a",
+  "localHead": "f429399a88ce656f530c2bde0cc90264cdb2ee8c",
+  "identicalTree": "cf27bc2c79ef6bd007f98983f576a968c79972ea",
+  "orderedPrerequisite": [
+    "a8fc1b85de05a269bcb019932f86eb3bbf78d19a"
+  ],
+  "previousCandidate": "29fc2fc6d745140a6e60723c46e8fa21076fd1f6",
+  "port": 60017
+}

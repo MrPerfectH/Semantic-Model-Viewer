@@ -1,0 +1,102 @@
+{
+  "before": {
+    "membership": [
+      "[\"partition\",\"Report\",\"Report\"]",
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Downstream\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      "[\"expression\",\"\",\"Standalone\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"LanguageProbe\"]"
+    ],
+    "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "focusMode": "dim",
+    "direction": "inputs",
+    "depth": null,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 3,
+    "selectedId": "[\"expression\",\"\",\"Standalone\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": 137,
+      "y": 93,
+      "k": 0.46
+    },
+    "bodyScroll": {
+      "x": 0,
+      "y": 0
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    },
+    "category": "all",
+    "query": ""
+  },
+  "after": {
+    "membership": [
+      "[\"partition\",\"Report\",\"Report\"]",
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Downstream\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      "[\"expression\",\"\",\"Standalone\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"LanguageProbe\"]"
+    ],
+    "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "focusMode": "dim",
+    "direction": "inputs",
+    "depth": null,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 3,
+    "selectedId": "[\"expression\",\"\",\"Standalone\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": 137,
+      "y": 93,
+      "k": 0.46
+    },
+    "bodyScroll": {
+      "x": 0,
+      "y": 0
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    },
+    "category": "all",
+    "query": ""
+  }
+}

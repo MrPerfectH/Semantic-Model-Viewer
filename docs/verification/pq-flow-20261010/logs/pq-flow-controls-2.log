@@ -1,0 +1,43 @@
+{"ready":true,"browser":"154.0.8037.99","node":"v22.23.3"}
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: 'Undo', exact: true })[22m
+[2m    - locator resolved to <button disabled type="button" class="ex-button" aria-label="Undo">Undo</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not enabled[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not enabled[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    58 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is not enabled[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+    at click (/private/tmp/pq-flow-run.cjs:9:69)
+    at eval (<anonymous>:12:676)
+    at async check (<anonymous>:1:59)
+    at async eval (<anonymous>:12:1)
+    at async /private/tmp/pq-flow-run.cjs:14:21 {
+  log: [
+    "  - waiting for getByRole('button', { name: 'Undo', exact: true })",
+    '    - locator resolved to <button disabled type="button" class="ex-button" aria-label="Undo">Undo</button>',
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is not enabled',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is not enabled',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    58 × waiting for element to be visible, enabled and stable',
+    '       - element is not enabled',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}

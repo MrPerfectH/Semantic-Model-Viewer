@@ -1,0 +1,83 @@
+{"ready":true,"browser":"154.0.8037.99","node":"v22.23.3"}
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    [
++     '["partition","Returns","Returns"]',
+-     '["partition","Sales","Sales"]',
+      {
++       x: 704,
+-       x: 1408,
+        y: 0
+      }
+    ],
+    [
++     '["expression","","Cycle A"]',
+-     '["partition","Returns","Returns"]',
+      {
++       x: 0,
++       y: 252
++     }
++   ],
++   [
++     '["expression","","Cycle B"]',
++     {
++       x: 0,
++       y: 378
++     }
++   ],
++   [
++     '["expression","","Standalone"]',
++     {
++       x: 0,
++       y: 580
++     }
++   ],
++   [
++     '["partition","Sales","Sales"]',
++     {
++       x: 1408,
+-       x: 704,
+        y: 0
+      }
+    ],
+    [
+      '["expression","","Environment"]',
+...
+    ],
+-   [
+-     '["expression","","Cycle A"]',
+-     {
+-       x: 0,
+-       y: 252
+-     }
+-   ],
+-   [
+-     '["expression","","Cycle B"]',
+-     {
+-       x: 0,
+-       y: 378
+-     }
+-   ],
+-   [
+-     '["expression","","Standalone"]',
+-     {
+-       x: 0,
+-       y: 580
+-     }
+-   ]
+  ]
+
+    at eval (eval at <anonymous> (/private/tmp/pq-flow-run.cjs:14:27), <anonymous>:12:697)
+    at async check (eval at <anonymous> (/private/tmp/pq-flow-run.cjs:14:27), <anonymous>:1:59)
+    at async eval (eval at <anonymous> (/private/tmp/pq-flow-run.cjs:14:27), <anonymous>:12:1)
+    at async /private/tmp/pq-flow-run.cjs:14:21 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [Array],
+  expected: [Array],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}

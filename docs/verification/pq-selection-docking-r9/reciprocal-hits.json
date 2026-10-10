@@ -1,0 +1,22 @@
+[
+  {
+    "path": "M114,252 L114,225 L114,225 L114,222",
+    "label": null,
+    "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+    "point": {
+      "x": 555.5,
+      "y": 530.5
+    },
+    "opened": "CycleB is referenced by CycleA"
+  },
+  {
+    "path": "M138,222 L138,249 L138,249 L138,252",
+    "label": null,
+    "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+    "point": {
+      "x": 585.5,
+      "y": 500.5
+    },
+    "opened": "CycleA is referenced by CycleB"
+  }
+]

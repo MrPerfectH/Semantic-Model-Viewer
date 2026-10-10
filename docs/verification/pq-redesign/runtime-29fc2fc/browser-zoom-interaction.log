@@ -1,0 +1,14 @@
+{
+  "out": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/runtime-29fc2fc/browser-zoom-interaction",
+  "passed": 0,
+  "failures": [
+    {
+      "name": "A5 actual browser 1280 at 200%",
+      "error": "AssertionError [ERR_ASSERTION]: Below-docked resize increases usable inspector height\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:60:14\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:46:27"
+    },
+    {
+      "name": "A5 actual browser 1440 at 200%",
+      "error": "AssertionError [ERR_ASSERTION]: Pointer resizer must not close inspector\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:59:14\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:46:27"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "candidate": "510d67c9c78832f0741bebd1bc6d27bad8e7fab7",
+  "source": {
+    "index.html": "0669e26ca931439d6b0b1021f542b43b57e0c5718c31ea147bb94af12cec4c4e",
+    "js/power-query-workspace.js": "c27ea4ff7b830af3b9d14cdb84929da06ae5e406f7ef1ac692d8b6198e09e995",
+    "js/power-query-inspector.js": "256e107be2cee26773c1305291769ebafa3166e6e673a89fb9ea5ff89306876b"
+  },
+  "node": "v22.23.3",
+  "startedAt": "2026-10-10T10:22:22.931Z",
+  "boundary": "explicitly authorized narrow capability fallback while T3 available; fresh isolated Chrome; not native VS Code",
+  "cases": [],
+  "checks": [
+    {
+      "name": "Actual resize transition 1280 step0 zoom2",
+      "status": "pass"
+    },
+    {
+      "name": "Actual resize transition 1440 step0 zoom2",
+      "status": "pass"
+    },
+    {
+      "name": "Trusted rapid Back to separator owns focus; settled Back retains exact view",
+      "status": "pass"
+    }
+  ],
+  "failures": [],
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "endedAt": "2026-10-10T10:22:28.950Z"
+}

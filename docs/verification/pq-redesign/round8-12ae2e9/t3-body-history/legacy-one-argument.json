@@ -1,0 +1,36 @@
+{
+  "expected": {
+    "codeX": 120,
+    "codeY": 90,
+    "inspectorX": 0,
+    "inspectorY": 200,
+    "wrap": false,
+    "focus": {
+      "kind": "reference",
+      "nodeId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "at": 32,
+      "end": 47
+    },
+    "disclosures": {
+      "provenance": true
+    },
+    "expanded": true
+  },
+  "actual": {
+    "codeX": 120,
+    "codeY": 90,
+    "inspectorX": 0,
+    "inspectorY": 200,
+    "wrap": false,
+    "focus": {
+      "kind": "reference",
+      "nodeId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "at": 32,
+      "end": 47
+    },
+    "disclosures": {
+      "provenance": true
+    },
+    "expanded": true
+  }
+}

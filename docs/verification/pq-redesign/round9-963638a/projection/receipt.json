@@ -1,0 +1,8 @@
+{
+  "candidate": "963638aeb2d124460709374004ddcf0799268ada",
+  "checks": [
+    "trusted background drag then actual zoom controls and library selection preserves panned46 view",
+    "explicit group exact projected map and induced edges; empty map; Blank Undo; persistent dock after actual different model import"
+  ],
+  "failures": []
+}

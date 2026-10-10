@@ -1,0 +1,27 @@
+{
+  "navigation": null,
+  "phase": "cancelled",
+  "generation": 6,
+  "selected": null,
+  "code": "",
+  "visible": [],
+  "dimmed": [],
+  "layout": [],
+  "history": [],
+  "undo": 0,
+  "sets": null,
+  "library": [],
+  "banner": "",
+  "note": "Zero resolved incident references; static uncertainty remains. Disconnected does not prove independence.",
+  "mapCount": 0,
+  "map": "6 visible / 6 objects",
+  "focus": {
+    "tag": "BODY",
+    "cls": ""
+  },
+  "options": [
+    "All",
+    "Connected",
+    "Disconnected"
+  ]
+}

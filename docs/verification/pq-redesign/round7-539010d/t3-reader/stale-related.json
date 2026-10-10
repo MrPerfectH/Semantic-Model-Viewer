@@ -1,0 +1,92 @@
+{
+  "before": {
+    "membership": [
+      "[\"partition\",\"Report\",\"Report\"]",
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Downstream\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      "[\"expression\",\"\",\"Standalone\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]"
+    ],
+    "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "focusMode": "hide",
+    "direction": "inputs",
+    "depth": null,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 7,
+    "selectedId": "[\"expression\",\"\",\"Standalone\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": -54.5,
+      "y": -142.95,
+      "k": 0.85
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    },
+    "category": "all",
+    "query": ""
+  },
+  "after": {
+    "membership": [
+      "[\"partition\",\"Report\",\"Report\"]",
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Downstream\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      "[\"expression\",\"\",\"Standalone\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]"
+    ],
+    "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "focusMode": "hide",
+    "direction": "inputs",
+    "depth": null,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 7,
+    "selectedId": "[\"expression\",\"\",\"Standalone\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": -54.5,
+      "y": -142.95,
+      "k": 0.85
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    },
+    "category": "all",
+    "query": ""
+  }
+}

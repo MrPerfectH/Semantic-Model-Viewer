@@ -1,0 +1,62 @@
+{
+  "reached": {
+    "body": {
+      "x": 0,
+      "y": 229,
+      "width": 640,
+      "height": 240,
+      "top": 229,
+      "right": 640,
+      "bottom": 469,
+      "left": 0
+    },
+    "bodyScroll": 93,
+    "inspector": {
+      "x": 0,
+      "y": 373,
+      "width": 631,
+      "height": 96,
+      "top": 373,
+      "right": 631,
+      "bottom": 469,
+      "left": 0
+    },
+    "rootScroll": 161.5,
+    "hostScroll": 0,
+    "code": {
+      "x": 20,
+      "y": 478,
+      "width": 582,
+      "height": 325,
+      "top": 478,
+      "right": 602,
+      "bottom": 803,
+      "left": 20
+    },
+    "wrap": "pqi-code-scroll pqi-wrap",
+    "resizer": {
+      "x": 0,
+      "y": 366,
+      "width": 631,
+      "height": 7,
+      "top": 366,
+      "right": 631,
+      "bottom": 373,
+      "left": 0
+    },
+    "size": 400
+  },
+  "resized": {
+    "size": 440,
+    "rect": {
+      "x": 0,
+      "y": 373,
+      "width": 631,
+      "height": 96,
+      "top": 373,
+      "right": 631,
+      "bottom": 469,
+      "left": 0
+    }
+  }
+}

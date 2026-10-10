@@ -1,0 +1,152 @@
+{
+  "beforeArrange": {
+    "membership": [
+      "[\"partition\",\"Report\",\"Report\"]",
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Downstream\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      "[\"expression\",\"\",\"Standalone\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"LanguageProbe\"]"
+    ],
+    "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "focusMode": "dim",
+    "direction": "inputs",
+    "depth": null,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 3,
+    "selectedId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": 123,
+      "y": 87,
+      "k": 1.3
+    },
+    "bodyScroll": {
+      "x": 0,
+      "y": 141
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null,
+      "disclosures": {
+        "provenance": true
+      },
+      "expanded": false
+    },
+    "category": "all",
+    "query": ""
+  },
+  "arranged": {
+    "membership": [
+      "[\"partition\",\"Report\",\"Report\"]",
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Downstream\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      "[\"expression\",\"\",\"Standalone\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"LanguageProbe\"]"
+    ],
+    "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "focusMode": "dim",
+    "direction": "inputs",
+    "depth": null,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 3,
+    "selectedId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": -797.8999999999999,
+      "y": 49.2,
+      "k": 0.85
+    },
+    "bodyScroll": {
+      "x": 0,
+      "y": 141
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null,
+      "disclosures": {
+        "provenance": true
+      },
+      "expanded": false
+    },
+    "category": "all",
+    "query": ""
+  },
+  "undone": {
+    "membership": [
+      "[\"partition\",\"Report\",\"Report\"]",
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Downstream\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      "[\"expression\",\"\",\"Standalone\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"LanguageProbe\"]"
+    ],
+    "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "focusMode": "dim",
+    "direction": "inputs",
+    "depth": null,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 3,
+    "selectedId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": 123,
+      "y": 87,
+      "k": 1.3
+    },
+    "bodyScroll": {
+      "x": 0,
+      "y": 141
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null,
+      "disclosures": {
+        "provenance": true
+      },
+      "expanded": false
+    },
+    "category": "all",
+    "query": ""
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "phase": "ready",
+  "code": 0,
+  "nodes": 0,
+  "message": "Power Query metadata is unavailable here. Raw M is excluded from shared snapshots; open the original TMDL or model.bim to inspect it."
+}

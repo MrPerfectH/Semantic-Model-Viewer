@@ -1,0 +1,105 @@
+{
+  "entry": {
+    "chrome": {
+      "color": "#8896aa",
+      "headerTint": "rgba(136,150,170,0.1)",
+      "badge": "Q",
+      "badgeTitle": "query",
+      "subtitle": "query",
+      "fact": false
+    },
+    "node": {
+      "id": "[\"expression\",\"\",\"LanguageProbe\"]",
+      "metadataId": "[\"expression\",\"\",\"LanguageProbe\"]",
+      "label": "LanguageProbe",
+      "subtitle": "query",
+      "kind": "query",
+      "table": null,
+      "partition": null,
+      "state": "available"
+    },
+    "metadataRow": {
+      "id": "[\"expression\",\"\",\"LanguageProbe\"]",
+      "kind": "expression",
+      "table": null,
+      "name": "LanguageProbe",
+      "type": "m",
+      "code": "let T = Table.TransformColumnTypes(#\"Raw West\", {{\"Value\", Int64.Type}}), U = Unknown.Library(MissingQuery), D = Expression.Evaluate(\"Hidden\", #shared) in T",
+      "classification": "query",
+      "basis": "inferred from syntax",
+      "state": "available",
+      "queryGroup": null,
+      "groupPath": null
+    },
+    "code": "let T = Table.TransformColumnTypes(#\"Raw West\", {{\"Value\", Int64.Type}}), U = Unknown.Library(MissingQuery), D = Expression.Evaluate(\"Hidden\", #shared) in T",
+    "classification": "query",
+    "basis": "inferred from syntax",
+    "type": "m",
+    "state": "available",
+    "occurrences": [
+      {
+        "targetId": "[\"expression\",\"\",\"Raw West\"]",
+        "name": "Raw West",
+        "at": 35,
+        "end": 46
+      }
+    ],
+    "issues": [
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "standard-library",
+        "message": "Standard M functions and types: Table.TransformColumnTypes, Int64.Type. These are language names, not missing model queries."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: Unknown.Library. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: MissingQuery. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Dynamic/environment reference: Expression.Evaluate; this can choose a query at run time, so reading the code cannot identify every target."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: Expression.Evaluate. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Dynamic/environment reference: #shared; this can choose a query at run time, so reading the code cannot identify every target."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: #shared. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      }
+    ],
+    "inputIds": [
+      "[\"expression\",\"\",\"Raw West\"]"
+    ],
+    "consumerIds": []
+  },
+  "inspector": "LanguageProbequery×1 inputs0 consumersOpen full queryM source · 1 lines · opens in a wide readerInputs · 1Raw WestConsumers · 0None resolvedFlow focus · FinalOutputDim unrelatedHide unrelatedFollows resolved M references, not semantic relationships. Focus stays on the flow target while you inspect other queries.Query reference directionInputsConsumersAll connectedQuery reference distanceSelected onlyDirect onlyUp to 2 connectionsDirect + indirect6 objects in flow · 0 to addAdd 0 related to canvasRemove 8 unrelated from layoutRemove this object from layoutMetadata and provenanceKindqueryTypemBasisinferred from syntaxStandard M functions and types: Table.TransformColumnTypes, Int64.Type. These are language names, not missing model queries.Links the viewer could not confirm · 6The viewer reads M text; it does not run queries. Names below could not be linked with confidence. This does not by itself mean your query is broken.Unresolved name: Unknown.Library. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize.Unresolved name: MissingQuery. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize.Dynamic/environment reference: Expression.Evaluate; this can choose a query at run time, so reading the code cannot identify every target.Unresolved name: Expression.Evaluate. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize.Dynamic/environment reference: #shared; this can choose a query at run time, so reading the code cannot identify every target.Unresolved name: #shared. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize.M · READ ONLYCopy MUnwrap lines1let T = Table.TransformColumnTypes(#\"Raw West\", {{\"Value\", Int64.Type}}), U = Unknown.Library(MissingQuery), D = Expression.Evaluate(\"Hidden\", #shared) in TLanguageProbe · M sourceClose expanded reader",
+  "edges": [
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"LanguageProbe\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"Raw West\"]",
+      "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]",
+      "referenceOccurrences": [
+        {
+          "id": "[\"expression\",\"\",\"Raw West\"]",
+          "name": "Raw West",
+          "at": 35,
+          "end": 46
+        }
+      ]
+    }
+  ]
+}

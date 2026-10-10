@@ -1,0 +1,11 @@
+{
+  "original": [
+    "VAR total=[Base Amount] RETURN DIVIDE(total,2,0)"
+  ],
+  "long": [
+    "VAR total = [Base Amount]\nRETURN\n    DIVIDE ( total, 2, 0 )"
+  ],
+  "short": [
+    "VAR total = [Base Amount]\nRETURN\n▾\n    DIVIDE (\n        total,\n        2,\n        0\n    )"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "tab": "tab_3_a0d1d832-9389-42c1-bd1c-8b8de950c5a2",
+  "previewClose": "T3 returned success",
+  "servers": [
+    {
+      "pid": 44422,
+      "port": 54092,
+      "action": "SIGTERM exact owned server",
+      "absenceVerified": true
+    },
+    {
+      "pid": 51321,
+      "port": 54093,
+      "action": "SIGTERM exact owned server",
+      "absenceVerified": true
+    }
+  ],
+  "chrome": "All scoped scripts completed and closed temporary profiles in finally",
+  "native": "not operated"
+}

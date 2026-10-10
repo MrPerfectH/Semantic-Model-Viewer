@@ -1,0 +1,35 @@
+{
+  "head": "510d67c9c78832f0741bebd1bc6d27bad8e7fab7",
+  "assets": {
+    "index.html": {
+      "source": "059c5d3a84443e983510490ed35c152ffb66037fa6b5c7fba529d578ef296e63",
+      "served": "059c5d3a84443e983510490ed35c152ffb66037fa6b5c7fba529d578ef296e63",
+      "equal": true
+    },
+    "js/power-query-workspace.js": {
+      "source": "c9b5025302a4bb2f713d4e75ae8ae4b0f2ac44abd314ebad97f21d541d40fc51",
+      "served": "c9b5025302a4bb2f713d4e75ae8ae4b0f2ac44abd314ebad97f21d541d40fc51",
+      "equal": true
+    },
+    "js/power-query-canvas.js": {
+      "source": "ecadeba59190a31a1124fe2033d7bb8af3a9c23a8c0c32c76109a6e5f2f28726",
+      "served": "ecadeba59190a31a1124fe2033d7bb8af3a9c23a8c0c32c76109a6e5f2f28726",
+      "equal": true
+    },
+    "js/power-query-inspector.js": {
+      "source": "ae9963583ff1f0b9b280292cd112ebc55c274620055942f036c0d9cd3ab3e77d",
+      "served": "ae9963583ff1f0b9b280292cd112ebc55c274620055942f036c0d9cd3ab3e77d",
+      "equal": true
+    },
+    "js/power-query-dependencies.js": {
+      "source": "44e2b21a9287e5e7569f9d70d02fe8ce2b6c19815d24fcf88ae53a0994ba72c6",
+      "served": "44e2b21a9287e5e7569f9d70d02fe8ce2b6c19815d24fcf88ae53a0994ba72c6",
+      "equal": true
+    },
+    "power-query-workspace.css": {
+      "source": "583f789d8cccae5d8ce593c1d2a08b03ea391b9c1ca49f04e1dcbc500946294b",
+      "served": "583f789d8cccae5d8ce593c1d2a08b03ea391b9c1ca49f04e1dcbc500946294b",
+      "equal": true
+    }
+  }
+}

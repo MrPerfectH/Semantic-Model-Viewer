@@ -1,0 +1,1992 @@
+{
+  "state": {
+    "phase": "ready",
+    "message": "Metadata inspected. Static analysis remains partial.",
+    "category": "all",
+    "query": "",
+    "selectedId": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "inspectorOpen": true,
+    "count": "52 / 52 objects",
+    "banner": "",
+    "code": "let Source = Step49 in Source",
+    "viewport": {
+      "x": -14983.8,
+      "y": 323.95,
+      "k": 0.85
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": true,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    },
+    "history": [
+      {
+        "membership": [
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          "[\"expression\",\"\",\"Parameter\"]",
+          "[\"expression\",\"\",\"Step00\"]",
+          "[\"expression\",\"\",\"Step01\"]",
+          "[\"expression\",\"\",\"Step02\"]",
+          "[\"expression\",\"\",\"Step03\"]",
+          "[\"expression\",\"\",\"Step04\"]",
+          "[\"expression\",\"\",\"Step05\"]",
+          "[\"expression\",\"\",\"Step06\"]",
+          "[\"expression\",\"\",\"Step07\"]",
+          "[\"expression\",\"\",\"Step08\"]",
+          "[\"expression\",\"\",\"Step09\"]",
+          "[\"expression\",\"\",\"Step10\"]",
+          "[\"expression\",\"\",\"Step11\"]",
+          "[\"expression\",\"\",\"Step12\"]",
+          "[\"expression\",\"\",\"Step13\"]",
+          "[\"expression\",\"\",\"Step14\"]",
+          "[\"expression\",\"\",\"Step15\"]",
+          "[\"expression\",\"\",\"Step16\"]",
+          "[\"expression\",\"\",\"Step17\"]",
+          "[\"expression\",\"\",\"Step18\"]",
+          "[\"expression\",\"\",\"Step19\"]",
+          "[\"expression\",\"\",\"Step20\"]",
+          "[\"expression\",\"\",\"Step21\"]",
+          "[\"expression\",\"\",\"Step22\"]",
+          "[\"expression\",\"\",\"Step23\"]",
+          "[\"expression\",\"\",\"Step24\"]",
+          "[\"expression\",\"\",\"Step25\"]",
+          "[\"expression\",\"\",\"Step26\"]",
+          "[\"expression\",\"\",\"Step27\"]",
+          "[\"expression\",\"\",\"Step28\"]",
+          "[\"expression\",\"\",\"Step29\"]",
+          "[\"expression\",\"\",\"Step30\"]",
+          "[\"expression\",\"\",\"Step31\"]",
+          "[\"expression\",\"\",\"Step32\"]",
+          "[\"expression\",\"\",\"Step33\"]",
+          "[\"expression\",\"\",\"Step34\"]",
+          "[\"expression\",\"\",\"Step35\"]",
+          "[\"expression\",\"\",\"Step36\"]",
+          "[\"expression\",\"\",\"Step37\"]",
+          "[\"expression\",\"\",\"Step38\"]",
+          "[\"expression\",\"\",\"Step39\"]",
+          "[\"expression\",\"\",\"Step40\"]",
+          "[\"expression\",\"\",\"Step41\"]",
+          "[\"expression\",\"\",\"Step42\"]",
+          "[\"expression\",\"\",\"Step43\"]",
+          "[\"expression\",\"\",\"Step44\"]",
+          "[\"expression\",\"\",\"Step45\"]",
+          "[\"expression\",\"\",\"Step46\"]",
+          "[\"expression\",\"\",\"Step47\"]",
+          "[\"expression\",\"\",\"Step48\"]",
+          "[\"expression\",\"\",\"Step49\"]"
+        ],
+        "flowRootId": null,
+        "focusMode": "dim",
+        "direction": "connected",
+        "depth": 1,
+        "listFacet": "all",
+        "groupFilter": "all",
+        "generation": 3,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": -14780.3,
+          "y": 367.45,
+          "k": 0.85
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": true,
+          "focus": null,
+          "disclosures": {},
+          "expanded": false
+        },
+        "category": "all",
+        "query": ""
+      }
+    ],
+    "domNodes": 52,
+    "visible": [
+      "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+      "[\"expression\",\"\",\"Parameter\"]",
+      "[\"expression\",\"\",\"Step00\"]",
+      "[\"expression\",\"\",\"Step01\"]",
+      "[\"expression\",\"\",\"Step02\"]",
+      "[\"expression\",\"\",\"Step03\"]",
+      "[\"expression\",\"\",\"Step04\"]",
+      "[\"expression\",\"\",\"Step05\"]",
+      "[\"expression\",\"\",\"Step06\"]",
+      "[\"expression\",\"\",\"Step07\"]",
+      "[\"expression\",\"\",\"Step08\"]",
+      "[\"expression\",\"\",\"Step09\"]",
+      "[\"expression\",\"\",\"Step10\"]",
+      "[\"expression\",\"\",\"Step11\"]",
+      "[\"expression\",\"\",\"Step12\"]",
+      "[\"expression\",\"\",\"Step13\"]",
+      "[\"expression\",\"\",\"Step14\"]",
+      "[\"expression\",\"\",\"Step15\"]",
+      "[\"expression\",\"\",\"Step16\"]",
+      "[\"expression\",\"\",\"Step17\"]",
+      "[\"expression\",\"\",\"Step18\"]",
+      "[\"expression\",\"\",\"Step19\"]",
+      "[\"expression\",\"\",\"Step20\"]",
+      "[\"expression\",\"\",\"Step21\"]",
+      "[\"expression\",\"\",\"Step22\"]",
+      "[\"expression\",\"\",\"Step23\"]",
+      "[\"expression\",\"\",\"Step24\"]",
+      "[\"expression\",\"\",\"Step25\"]",
+      "[\"expression\",\"\",\"Step26\"]",
+      "[\"expression\",\"\",\"Step27\"]",
+      "[\"expression\",\"\",\"Step28\"]",
+      "[\"expression\",\"\",\"Step29\"]",
+      "[\"expression\",\"\",\"Step30\"]",
+      "[\"expression\",\"\",\"Step31\"]",
+      "[\"expression\",\"\",\"Step32\"]",
+      "[\"expression\",\"\",\"Step33\"]",
+      "[\"expression\",\"\",\"Step34\"]",
+      "[\"expression\",\"\",\"Step35\"]",
+      "[\"expression\",\"\",\"Step36\"]",
+      "[\"expression\",\"\",\"Step37\"]",
+      "[\"expression\",\"\",\"Step38\"]",
+      "[\"expression\",\"\",\"Step39\"]",
+      "[\"expression\",\"\",\"Step40\"]",
+      "[\"expression\",\"\",\"Step41\"]",
+      "[\"expression\",\"\",\"Step42\"]",
+      "[\"expression\",\"\",\"Step43\"]",
+      "[\"expression\",\"\",\"Step44\"]",
+      "[\"expression\",\"\",\"Step45\"]",
+      "[\"expression\",\"\",\"Step46\"]",
+      "[\"expression\",\"\",\"Step47\"]",
+      "[\"expression\",\"\",\"Step48\"]",
+      "[\"expression\",\"\",\"Step49\"]"
+    ],
+    "library": [
+      "FinalChainm · FinalChain",
+      "−",
+      "Parameterparameter",
+      "−",
+      "Step00query",
+      "−",
+      "Step01query",
+      "−",
+      "Step02query",
+      "−",
+      "Step03query",
+      "−",
+      "Step04query",
+      "−",
+      "Step05query",
+      "−",
+      "Step06query",
+      "−",
+      "Step07query",
+      "−",
+      "Step08query",
+      "−",
+      "Step09query",
+      "−",
+      "Step10query",
+      "−",
+      "Step11query",
+      "−",
+      "Step12query",
+      "−",
+      "Step13query",
+      "−",
+      "Step14query",
+      "−",
+      "Step15query",
+      "−",
+      "Step16query",
+      "−",
+      "Step17query",
+      "−",
+      "Step18query",
+      "−",
+      "Step19query",
+      "−",
+      "Step20query",
+      "−",
+      "Step21query",
+      "−",
+      "Step22query",
+      "−",
+      "Step23query",
+      "−",
+      "Step24query",
+      "−",
+      "Step25query",
+      "−",
+      "Step26query",
+      "−",
+      "Step27query",
+      "−",
+      "Step28query",
+      "−",
+      "Step29query",
+      "−",
+      "Step30query",
+      "−",
+      "Step31query",
+      "−",
+      "Step32query",
+      "−",
+      "Step33query",
+      "−",
+      "Step34query",
+      "−",
+      "Step35query",
+      "−",
+      "Step36query",
+      "−",
+      "Step37query",
+      "−",
+      "Step38query",
+      "−",
+      "Step39query",
+      "−",
+      "Step40query",
+      "−",
+      "Step41query",
+      "−",
+      "Step42query",
+      "−",
+      "Step43query",
+      "−",
+      "Step44query",
+      "−",
+      "Step45query",
+      "−",
+      "Step46query",
+      "−",
+      "Step47query",
+      "−",
+      "Step48query",
+      "−",
+      "Step49query",
+      "−"
+    ],
+    "map": "52 visible objects",
+    "graph": {
+      "nodes": [
+        {
+          "id": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          "metadataId": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          "label": "FinalChain",
+          "subtitle": "m · FinalChain",
+          "kind": "partition",
+          "table": "FinalChain",
+          "partition": "FinalChain",
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Parameter\"]",
+          "metadataId": "[\"expression\",\"\",\"Parameter\"]",
+          "label": "Parameter",
+          "subtitle": "parameter",
+          "kind": "parameter",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step00\"]",
+          "metadataId": "[\"expression\",\"\",\"Step00\"]",
+          "label": "Step00",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step01\"]",
+          "metadataId": "[\"expression\",\"\",\"Step01\"]",
+          "label": "Step01",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step02\"]",
+          "metadataId": "[\"expression\",\"\",\"Step02\"]",
+          "label": "Step02",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step03\"]",
+          "metadataId": "[\"expression\",\"\",\"Step03\"]",
+          "label": "Step03",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step04\"]",
+          "metadataId": "[\"expression\",\"\",\"Step04\"]",
+          "label": "Step04",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step05\"]",
+          "metadataId": "[\"expression\",\"\",\"Step05\"]",
+          "label": "Step05",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step06\"]",
+          "metadataId": "[\"expression\",\"\",\"Step06\"]",
+          "label": "Step06",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step07\"]",
+          "metadataId": "[\"expression\",\"\",\"Step07\"]",
+          "label": "Step07",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step08\"]",
+          "metadataId": "[\"expression\",\"\",\"Step08\"]",
+          "label": "Step08",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step09\"]",
+          "metadataId": "[\"expression\",\"\",\"Step09\"]",
+          "label": "Step09",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step10\"]",
+          "metadataId": "[\"expression\",\"\",\"Step10\"]",
+          "label": "Step10",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step11\"]",
+          "metadataId": "[\"expression\",\"\",\"Step11\"]",
+          "label": "Step11",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step12\"]",
+          "metadataId": "[\"expression\",\"\",\"Step12\"]",
+          "label": "Step12",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step13\"]",
+          "metadataId": "[\"expression\",\"\",\"Step13\"]",
+          "label": "Step13",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step14\"]",
+          "metadataId": "[\"expression\",\"\",\"Step14\"]",
+          "label": "Step14",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step15\"]",
+          "metadataId": "[\"expression\",\"\",\"Step15\"]",
+          "label": "Step15",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step16\"]",
+          "metadataId": "[\"expression\",\"\",\"Step16\"]",
+          "label": "Step16",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step17\"]",
+          "metadataId": "[\"expression\",\"\",\"Step17\"]",
+          "label": "Step17",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step18\"]",
+          "metadataId": "[\"expression\",\"\",\"Step18\"]",
+          "label": "Step18",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step19\"]",
+          "metadataId": "[\"expression\",\"\",\"Step19\"]",
+          "label": "Step19",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step20\"]",
+          "metadataId": "[\"expression\",\"\",\"Step20\"]",
+          "label": "Step20",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step21\"]",
+          "metadataId": "[\"expression\",\"\",\"Step21\"]",
+          "label": "Step21",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step22\"]",
+          "metadataId": "[\"expression\",\"\",\"Step22\"]",
+          "label": "Step22",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step23\"]",
+          "metadataId": "[\"expression\",\"\",\"Step23\"]",
+          "label": "Step23",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step24\"]",
+          "metadataId": "[\"expression\",\"\",\"Step24\"]",
+          "label": "Step24",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step25\"]",
+          "metadataId": "[\"expression\",\"\",\"Step25\"]",
+          "label": "Step25",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step26\"]",
+          "metadataId": "[\"expression\",\"\",\"Step26\"]",
+          "label": "Step26",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step27\"]",
+          "metadataId": "[\"expression\",\"\",\"Step27\"]",
+          "label": "Step27",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step28\"]",
+          "metadataId": "[\"expression\",\"\",\"Step28\"]",
+          "label": "Step28",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step29\"]",
+          "metadataId": "[\"expression\",\"\",\"Step29\"]",
+          "label": "Step29",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step30\"]",
+          "metadataId": "[\"expression\",\"\",\"Step30\"]",
+          "label": "Step30",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step31\"]",
+          "metadataId": "[\"expression\",\"\",\"Step31\"]",
+          "label": "Step31",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step32\"]",
+          "metadataId": "[\"expression\",\"\",\"Step32\"]",
+          "label": "Step32",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step33\"]",
+          "metadataId": "[\"expression\",\"\",\"Step33\"]",
+          "label": "Step33",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step34\"]",
+          "metadataId": "[\"expression\",\"\",\"Step34\"]",
+          "label": "Step34",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step35\"]",
+          "metadataId": "[\"expression\",\"\",\"Step35\"]",
+          "label": "Step35",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step36\"]",
+          "metadataId": "[\"expression\",\"\",\"Step36\"]",
+          "label": "Step36",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step37\"]",
+          "metadataId": "[\"expression\",\"\",\"Step37\"]",
+          "label": "Step37",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step38\"]",
+          "metadataId": "[\"expression\",\"\",\"Step38\"]",
+          "label": "Step38",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step39\"]",
+          "metadataId": "[\"expression\",\"\",\"Step39\"]",
+          "label": "Step39",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step40\"]",
+          "metadataId": "[\"expression\",\"\",\"Step40\"]",
+          "label": "Step40",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step41\"]",
+          "metadataId": "[\"expression\",\"\",\"Step41\"]",
+          "label": "Step41",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step42\"]",
+          "metadataId": "[\"expression\",\"\",\"Step42\"]",
+          "label": "Step42",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step43\"]",
+          "metadataId": "[\"expression\",\"\",\"Step43\"]",
+          "label": "Step43",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step44\"]",
+          "metadataId": "[\"expression\",\"\",\"Step44\"]",
+          "label": "Step44",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step45\"]",
+          "metadataId": "[\"expression\",\"\",\"Step45\"]",
+          "label": "Step45",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step46\"]",
+          "metadataId": "[\"expression\",\"\",\"Step46\"]",
+          "label": "Step46",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step47\"]",
+          "metadataId": "[\"expression\",\"\",\"Step47\"]",
+          "label": "Step47",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step48\"]",
+          "metadataId": "[\"expression\",\"\",\"Step48\"]",
+          "label": "Step48",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Step49\"]",
+          "metadataId": "[\"expression\",\"\",\"Step49\"]",
+          "label": "Step49",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        }
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step49\\\"]\",\"[\\\"partition\\\",\\\"FinalChain\\\",\\\"FinalChain\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step49\"]",
+          "consumerId": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step49\"]",
+              "name": "Step49",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Parameter\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step00\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Parameter\"]",
+          "consumerId": "[\"expression\",\"\",\"Step00\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Parameter\"]",
+              "name": "Parameter",
+              "at": 13,
+              "end": 22
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step00\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step01\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step00\"]",
+          "consumerId": "[\"expression\",\"\",\"Step01\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step00\"]",
+              "name": "Step00",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step01\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step02\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step01\"]",
+          "consumerId": "[\"expression\",\"\",\"Step02\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step01\"]",
+              "name": "Step01",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step02\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step03\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step02\"]",
+          "consumerId": "[\"expression\",\"\",\"Step03\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step02\"]",
+              "name": "Step02",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step03\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step04\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step03\"]",
+          "consumerId": "[\"expression\",\"\",\"Step04\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step03\"]",
+              "name": "Step03",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step04\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step05\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step04\"]",
+          "consumerId": "[\"expression\",\"\",\"Step05\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step04\"]",
+              "name": "Step04",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step05\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step06\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step05\"]",
+          "consumerId": "[\"expression\",\"\",\"Step06\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step05\"]",
+              "name": "Step05",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step06\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step07\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step06\"]",
+          "consumerId": "[\"expression\",\"\",\"Step07\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step06\"]",
+              "name": "Step06",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step07\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step08\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step07\"]",
+          "consumerId": "[\"expression\",\"\",\"Step08\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step07\"]",
+              "name": "Step07",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step08\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step09\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step08\"]",
+          "consumerId": "[\"expression\",\"\",\"Step09\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step08\"]",
+              "name": "Step08",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step09\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step10\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step09\"]",
+          "consumerId": "[\"expression\",\"\",\"Step10\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step09\"]",
+              "name": "Step09",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step10\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step11\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step10\"]",
+          "consumerId": "[\"expression\",\"\",\"Step11\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step10\"]",
+              "name": "Step10",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step11\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step12\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step11\"]",
+          "consumerId": "[\"expression\",\"\",\"Step12\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step11\"]",
+              "name": "Step11",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step12\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step13\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step12\"]",
+          "consumerId": "[\"expression\",\"\",\"Step13\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step12\"]",
+              "name": "Step12",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step13\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step14\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step13\"]",
+          "consumerId": "[\"expression\",\"\",\"Step14\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step13\"]",
+              "name": "Step13",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step14\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step15\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step14\"]",
+          "consumerId": "[\"expression\",\"\",\"Step15\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step14\"]",
+              "name": "Step14",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step15\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step16\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step15\"]",
+          "consumerId": "[\"expression\",\"\",\"Step16\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step15\"]",
+              "name": "Step15",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step16\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step17\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step16\"]",
+          "consumerId": "[\"expression\",\"\",\"Step17\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step16\"]",
+              "name": "Step16",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step17\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step18\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step17\"]",
+          "consumerId": "[\"expression\",\"\",\"Step18\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step17\"]",
+              "name": "Step17",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step18\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step19\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step18\"]",
+          "consumerId": "[\"expression\",\"\",\"Step19\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step18\"]",
+              "name": "Step18",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step19\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step20\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step19\"]",
+          "consumerId": "[\"expression\",\"\",\"Step20\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step19\"]",
+              "name": "Step19",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step20\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step21\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step20\"]",
+          "consumerId": "[\"expression\",\"\",\"Step21\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step20\"]",
+              "name": "Step20",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step21\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step22\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step21\"]",
+          "consumerId": "[\"expression\",\"\",\"Step22\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step21\"]",
+              "name": "Step21",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step22\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step23\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step22\"]",
+          "consumerId": "[\"expression\",\"\",\"Step23\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step22\"]",
+              "name": "Step22",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step23\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step24\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step23\"]",
+          "consumerId": "[\"expression\",\"\",\"Step24\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step23\"]",
+              "name": "Step23",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step24\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step25\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step24\"]",
+          "consumerId": "[\"expression\",\"\",\"Step25\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step24\"]",
+              "name": "Step24",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step25\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step26\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step25\"]",
+          "consumerId": "[\"expression\",\"\",\"Step26\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step25\"]",
+              "name": "Step25",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step26\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step27\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step26\"]",
+          "consumerId": "[\"expression\",\"\",\"Step27\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step26\"]",
+              "name": "Step26",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step27\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step28\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step27\"]",
+          "consumerId": "[\"expression\",\"\",\"Step28\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step27\"]",
+              "name": "Step27",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step28\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step29\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step28\"]",
+          "consumerId": "[\"expression\",\"\",\"Step29\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step28\"]",
+              "name": "Step28",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step29\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step30\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step29\"]",
+          "consumerId": "[\"expression\",\"\",\"Step30\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step29\"]",
+              "name": "Step29",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step30\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step31\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step30\"]",
+          "consumerId": "[\"expression\",\"\",\"Step31\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step30\"]",
+              "name": "Step30",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step31\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step32\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step31\"]",
+          "consumerId": "[\"expression\",\"\",\"Step32\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step31\"]",
+              "name": "Step31",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step32\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step33\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step32\"]",
+          "consumerId": "[\"expression\",\"\",\"Step33\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step32\"]",
+              "name": "Step32",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step33\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step34\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step33\"]",
+          "consumerId": "[\"expression\",\"\",\"Step34\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step33\"]",
+              "name": "Step33",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step34\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step35\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step34\"]",
+          "consumerId": "[\"expression\",\"\",\"Step35\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step34\"]",
+              "name": "Step34",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step35\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step36\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step35\"]",
+          "consumerId": "[\"expression\",\"\",\"Step36\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step35\"]",
+              "name": "Step35",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step36\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step37\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step36\"]",
+          "consumerId": "[\"expression\",\"\",\"Step37\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step36\"]",
+              "name": "Step36",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step37\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step38\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step37\"]",
+          "consumerId": "[\"expression\",\"\",\"Step38\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step37\"]",
+              "name": "Step37",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step38\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step39\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step38\"]",
+          "consumerId": "[\"expression\",\"\",\"Step39\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step38\"]",
+              "name": "Step38",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step39\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step40\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step39\"]",
+          "consumerId": "[\"expression\",\"\",\"Step40\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step39\"]",
+              "name": "Step39",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step40\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step41\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step40\"]",
+          "consumerId": "[\"expression\",\"\",\"Step41\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step40\"]",
+              "name": "Step40",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step41\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step42\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step41\"]",
+          "consumerId": "[\"expression\",\"\",\"Step42\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step41\"]",
+              "name": "Step41",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step42\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step43\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step42\"]",
+          "consumerId": "[\"expression\",\"\",\"Step43\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step42\"]",
+              "name": "Step42",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step43\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step44\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step43\"]",
+          "consumerId": "[\"expression\",\"\",\"Step44\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step43\"]",
+              "name": "Step43",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step44\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step45\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step44\"]",
+          "consumerId": "[\"expression\",\"\",\"Step45\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step44\"]",
+              "name": "Step44",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step45\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step46\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step45\"]",
+          "consumerId": "[\"expression\",\"\",\"Step46\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step45\"]",
+              "name": "Step45",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step46\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step47\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step46\"]",
+          "consumerId": "[\"expression\",\"\",\"Step47\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step46\"]",
+              "name": "Step46",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step47\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step48\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step47\"]",
+          "consumerId": "[\"expression\",\"\",\"Step48\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step47\"]",
+              "name": "Step47",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Step48\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Step49\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Step48\"]",
+          "consumerId": "[\"expression\",\"\",\"Step49\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Step48\"]",
+              "name": "Step48",
+              "at": 13,
+              "end": 19
+            }
+          ]
+        }
+      ],
+      "issues": [
+        {
+          "consumerId": null,
+          "kind": "analysis-notice",
+          "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+        }
+      ],
+      "generation": 3,
+      "analysisProgress": {
+        "analyzed": 52,
+        "total": 52,
+        "complete": true,
+        "generation": 3
+      }
+    },
+    "sets": {
+      "all": [
+        "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+        "[\"expression\",\"\",\"Parameter\"]",
+        "[\"expression\",\"\",\"Step00\"]",
+        "[\"expression\",\"\",\"Step01\"]",
+        "[\"expression\",\"\",\"Step02\"]",
+        "[\"expression\",\"\",\"Step03\"]",
+        "[\"expression\",\"\",\"Step04\"]",
+        "[\"expression\",\"\",\"Step05\"]",
+        "[\"expression\",\"\",\"Step06\"]",
+        "[\"expression\",\"\",\"Step07\"]",
+        "[\"expression\",\"\",\"Step08\"]",
+        "[\"expression\",\"\",\"Step09\"]",
+        "[\"expression\",\"\",\"Step10\"]",
+        "[\"expression\",\"\",\"Step11\"]",
+        "[\"expression\",\"\",\"Step12\"]",
+        "[\"expression\",\"\",\"Step13\"]",
+        "[\"expression\",\"\",\"Step14\"]",
+        "[\"expression\",\"\",\"Step15\"]",
+        "[\"expression\",\"\",\"Step16\"]",
+        "[\"expression\",\"\",\"Step17\"]",
+        "[\"expression\",\"\",\"Step18\"]",
+        "[\"expression\",\"\",\"Step19\"]",
+        "[\"expression\",\"\",\"Step20\"]",
+        "[\"expression\",\"\",\"Step21\"]",
+        "[\"expression\",\"\",\"Step22\"]",
+        "[\"expression\",\"\",\"Step23\"]",
+        "[\"expression\",\"\",\"Step24\"]",
+        "[\"expression\",\"\",\"Step25\"]",
+        "[\"expression\",\"\",\"Step26\"]",
+        "[\"expression\",\"\",\"Step27\"]",
+        "[\"expression\",\"\",\"Step28\"]",
+        "[\"expression\",\"\",\"Step29\"]",
+        "[\"expression\",\"\",\"Step30\"]",
+        "[\"expression\",\"\",\"Step31\"]",
+        "[\"expression\",\"\",\"Step32\"]",
+        "[\"expression\",\"\",\"Step33\"]",
+        "[\"expression\",\"\",\"Step34\"]",
+        "[\"expression\",\"\",\"Step35\"]",
+        "[\"expression\",\"\",\"Step36\"]",
+        "[\"expression\",\"\",\"Step37\"]",
+        "[\"expression\",\"\",\"Step38\"]",
+        "[\"expression\",\"\",\"Step39\"]",
+        "[\"expression\",\"\",\"Step40\"]",
+        "[\"expression\",\"\",\"Step41\"]",
+        "[\"expression\",\"\",\"Step42\"]",
+        "[\"expression\",\"\",\"Step43\"]",
+        "[\"expression\",\"\",\"Step44\"]",
+        "[\"expression\",\"\",\"Step45\"]",
+        "[\"expression\",\"\",\"Step46\"]",
+        "[\"expression\",\"\",\"Step47\"]",
+        "[\"expression\",\"\",\"Step48\"]",
+        "[\"expression\",\"\",\"Step49\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"Step49\"]",
+        "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+        "[\"expression\",\"\",\"Parameter\"]",
+        "[\"expression\",\"\",\"Step00\"]",
+        "[\"expression\",\"\",\"Step01\"]",
+        "[\"expression\",\"\",\"Step02\"]",
+        "[\"expression\",\"\",\"Step03\"]",
+        "[\"expression\",\"\",\"Step04\"]",
+        "[\"expression\",\"\",\"Step05\"]",
+        "[\"expression\",\"\",\"Step06\"]",
+        "[\"expression\",\"\",\"Step07\"]",
+        "[\"expression\",\"\",\"Step08\"]",
+        "[\"expression\",\"\",\"Step09\"]",
+        "[\"expression\",\"\",\"Step10\"]",
+        "[\"expression\",\"\",\"Step11\"]",
+        "[\"expression\",\"\",\"Step12\"]",
+        "[\"expression\",\"\",\"Step13\"]",
+        "[\"expression\",\"\",\"Step14\"]",
+        "[\"expression\",\"\",\"Step15\"]",
+        "[\"expression\",\"\",\"Step16\"]",
+        "[\"expression\",\"\",\"Step17\"]",
+        "[\"expression\",\"\",\"Step18\"]",
+        "[\"expression\",\"\",\"Step19\"]",
+        "[\"expression\",\"\",\"Step20\"]",
+        "[\"expression\",\"\",\"Step21\"]",
+        "[\"expression\",\"\",\"Step22\"]",
+        "[\"expression\",\"\",\"Step23\"]",
+        "[\"expression\",\"\",\"Step24\"]",
+        "[\"expression\",\"\",\"Step25\"]",
+        "[\"expression\",\"\",\"Step26\"]",
+        "[\"expression\",\"\",\"Step27\"]",
+        "[\"expression\",\"\",\"Step28\"]",
+        "[\"expression\",\"\",\"Step29\"]",
+        "[\"expression\",\"\",\"Step30\"]",
+        "[\"expression\",\"\",\"Step31\"]",
+        "[\"expression\",\"\",\"Step32\"]",
+        "[\"expression\",\"\",\"Step33\"]",
+        "[\"expression\",\"\",\"Step34\"]",
+        "[\"expression\",\"\",\"Step35\"]",
+        "[\"expression\",\"\",\"Step36\"]",
+        "[\"expression\",\"\",\"Step37\"]",
+        "[\"expression\",\"\",\"Step38\"]",
+        "[\"expression\",\"\",\"Step39\"]",
+        "[\"expression\",\"\",\"Step40\"]",
+        "[\"expression\",\"\",\"Step41\"]",
+        "[\"expression\",\"\",\"Step42\"]",
+        "[\"expression\",\"\",\"Step43\"]",
+        "[\"expression\",\"\",\"Step44\"]",
+        "[\"expression\",\"\",\"Step45\"]",
+        "[\"expression\",\"\",\"Step46\"]",
+        "[\"expression\",\"\",\"Step47\"]",
+        "[\"expression\",\"\",\"Step48\"]"
+      ],
+      "disconnected": []
+    }
+  },
+  "pointer": [
+    {
+      "type": "pointerdown",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-button ex-primary",
+        "id": "",
+        "aria": null,
+        "text": "Open model"
+      },
+      "clientX": 1374.703125,
+      "clientY": 31.5,
+      "pageX": 1374.703125,
+      "pageY": 31.5,
+      "screenX": 1396.703125,
+      "screenY": 140.5,
+      "isTrusted": true,
+      "buttons": 1,
+      "pointerId": 1,
+      "time": 102.19999998807907
+    },
+    {
+      "type": "pointerup",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-button ex-primary",
+        "id": "",
+        "aria": null,
+        "text": "Open model"
+      },
+      "clientX": 1374.703125,
+      "clientY": 31.5,
+      "pageX": 1374.703125,
+      "pageY": 31.5,
+      "screenX": 1396.703125,
+      "screenY": 140.5,
+      "isTrusted": true,
+      "buttons": 0,
+      "pointerId": 1,
+      "time": 102.59999999403954
+    },
+    {
+      "type": "pointerdown",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "",
+        "id": "",
+        "aria": null,
+        "text": "Update model"
+      },
+      "clientX": 865.9375,
+      "clientY": 587.234375,
+      "pageX": 865.9375,
+      "pageY": 587.234375,
+      "screenX": 887.9375,
+      "screenY": 696.234375,
+      "isTrusted": true,
+      "buttons": 1,
+      "pointerId": 1,
+      "time": 168.90000000596046
+    },
+    {
+      "type": "pointerup",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "",
+        "id": "",
+        "aria": null,
+        "text": "Update model"
+      },
+      "clientX": 865.9375,
+      "clientY": 587.234375,
+      "pageX": 865.9375,
+      "pageY": 587.234375,
+      "screenX": 887.9375,
+      "screenY": 696.234375,
+      "isTrusted": true,
+      "buttons": 0,
+      "pointerId": 1,
+      "time": 169.30000001192093
+    },
+    {
+      "type": "pointerdown",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "",
+        "id": "",
+        "aria": null,
+        "text": "Power Query"
+      },
+      "clientX": 576.9453125,
+      "clientY": 31.5,
+      "pageX": 576.9453125,
+      "pageY": 31.5,
+      "screenX": 598.9453125,
+      "screenY": 140.5,
+      "isTrusted": true,
+      "buttons": 1,
+      "pointerId": 1,
+      "time": 202.09999999403954
+    },
+    {
+      "type": "pointerup",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "",
+        "id": "",
+        "aria": null,
+        "text": "Power Query"
+      },
+      "clientX": 576.9453125,
+      "clientY": 31.5,
+      "pageX": 576.9453125,
+      "pageY": 31.5,
+      "screenX": 598.9453125,
+      "screenY": 140.5,
+      "isTrusted": true,
+      "buttons": 0,
+      "pointerId": 1,
+      "time": 202.5
+    },
+    {
+      "type": "pointerdown",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-table-name pqw-library-row",
+        "id": "",
+        "aria": null,
+        "text": "FinalChainm · FinalChain"
+      },
+      "clientX": 114.3984375,
+      "clientY": 366.6953125,
+      "pageX": 114.3984375,
+      "pageY": 366.6953125,
+      "screenX": 136.3984375,
+      "screenY": 475.6953125,
+      "isTrusted": true,
+      "buttons": 1,
+      "pointerId": 1,
+      "time": 319.30000001192093
+    },
+    {
+      "type": "pointerup",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-table-name pqw-library-row",
+        "id": "",
+        "aria": null,
+        "text": "FinalChainm · FinalChain"
+      },
+      "clientX": 114.3984375,
+      "clientY": 366.6953125,
+      "pageX": 114.3984375,
+      "pageY": 366.6953125,
+      "screenX": 136.3984375,
+      "screenY": 475.6953125,
+      "isTrusted": true,
+      "buttons": 0,
+      "pointerId": 1,
+      "time": 319.69999998807907
+    },
+    {
+      "type": "pointerdown",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-button",
+        "id": "",
+        "aria": null,
+        "text": "Hide unrelated"
+      },
+      "clientX": 1326.75,
+      "clientY": 464.234375,
+      "pageX": 1326.75,
+      "pageY": 464.234375,
+      "screenX": 1348.75,
+      "screenY": 573.234375,
+      "isTrusted": true,
+      "buttons": 1,
+      "pointerId": 1,
+      "time": 402.59999999403954
+    },
+    {
+      "type": "pointerup",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-button",
+        "id": "",
+        "aria": null,
+        "text": "Hide unrelated"
+      },
+      "clientX": 1326.75,
+      "clientY": 464.234375,
+      "pageX": 1326.75,
+      "pageY": 464.234375,
+      "screenX": 1348.75,
+      "screenY": 573.234375,
+      "isTrusted": true,
+      "buttons": 0,
+      "pointerId": 1,
+      "time": 402.90000000596046
+    },
+    {
+      "type": "pointerdown",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-button",
+        "id": "",
+        "aria": "Follow input Step49",
+        "text": "← Follow input Step49"
+      },
+      "clientX": 339.734375,
+      "clientY": 188,
+      "pageX": 339.734375,
+      "pageY": 188,
+      "screenX": 361.734375,
+      "screenY": 297,
+      "isTrusted": true,
+      "buttons": 1,
+      "pointerId": 1,
+      "time": 468.69999998807907
+    },
+    {
+      "type": "pointerup",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-button",
+        "id": "",
+        "aria": "Follow input Step49",
+        "text": "← Follow input Step49"
+      },
+      "clientX": 339.734375,
+      "clientY": 188,
+      "pageX": 339.734375,
+      "pageY": 188,
+      "screenX": 361.734375,
+      "screenY": 297,
+      "isTrusted": true,
+      "buttons": 0,
+      "pointerId": 1,
+      "time": 469.09999999403954
+    },
+    {
+      "type": "pointerdown",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-button",
+        "id": "",
+        "aria": "Back",
+        "text": "Back"
+      },
+      "clientX": 490.109375,
+      "clientY": 94.5,
+      "pageX": 490.109375,
+      "pageY": 94.5,
+      "screenX": 512.109375,
+      "screenY": 203.5,
+      "isTrusted": true,
+      "buttons": 1,
+      "pointerId": 1,
+      "time": 536.4000000059605
+    },
+    {
+      "type": "pointerup",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-button",
+        "id": "",
+        "aria": "Back",
+        "text": "Back"
+      },
+      "clientX": 490.109375,
+      "clientY": 94.5,
+      "pageX": 490.109375,
+      "pageY": 94.5,
+      "screenX": 512.109375,
+      "screenY": 203.5,
+      "isTrusted": true,
+      "buttons": 0,
+      "pointerId": 1,
+      "time": 536.6999999880791
+    },
+    {
+      "type": "pointerdown",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-button",
+        "id": "",
+        "aria": "Follow input Step49",
+        "text": "← Follow input Step49"
+      },
+      "clientX": 339.734375,
+      "clientY": 188,
+      "pageX": 339.734375,
+      "pageY": 188,
+      "screenX": 361.734375,
+      "screenY": 297,
+      "isTrusted": true,
+      "buttons": 1,
+      "pointerId": 1,
+      "time": 602
+    },
+    {
+      "type": "pointerup",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-button",
+        "id": "",
+        "aria": "Follow input Step49",
+        "text": "← Follow input Step49"
+      },
+      "clientX": 339.734375,
+      "clientY": 188,
+      "pageX": 339.734375,
+      "pageY": 188,
+      "screenX": 361.734375,
+      "screenY": 297,
+      "isTrusted": true,
+      "buttons": 0,
+      "pointerId": 1,
+      "time": 602.4000000059605
+    },
+    {
+      "type": "pointerdown",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-button",
+        "id": "",
+        "aria": "Back",
+        "text": "Back"
+      },
+      "clientX": 490.109375,
+      "clientY": 94.5,
+      "pageX": 490.109375,
+      "pageY": 94.5,
+      "screenX": 512.109375,
+      "screenY": 203.5,
+      "isTrusted": true,
+      "buttons": 1,
+      "pointerId": 1,
+      "time": 635.6999999880791
+    },
+    {
+      "type": "pointerup",
+      "target": {
+        "tag": "BUTTON",
+        "cls": "ex-button",
+        "id": "",
+        "aria": "Back",
+        "text": "Back"
+      },
+      "clientX": 490.109375,
+      "clientY": 94.5,
+      "pageX": 490.109375,
+      "pageY": 94.5,
+      "screenX": 512.109375,
+      "screenY": 203.5,
+      "isTrusted": true,
+      "buttons": 0,
+      "pointerId": 1,
+      "time": 635.9000000059605
+    },
+    {
+      "type": "pointerdown",
+      "target": {
+        "tag": "DIV",
+        "cls": "pqw-resizer",
+        "id": "",
+        "aria": "Resize Power Query inspector",
+        "text": ""
+      },
+      "clientX": 1036.5,
+      "clientY": 548,
+      "pageX": 1036.5,
+      "pageY": 548,
+      "screenX": 1058.5,
+      "screenY": 657,
+      "isTrusted": true,
+      "buttons": 1,
+      "pointerId": 1,
+      "time": 641.5
+    },
+    {
+      "type": "pointerup",
+      "target": {
+        "tag": "DIV",
+        "cls": "pqw-resizer",
+        "id": "",
+        "aria": "Resize Power Query inspector",
+        "text": ""
+      },
+      "clientX": 1036.5,
+      "clientY": 548,
+      "pageX": 1036.5,
+      "pageY": 548,
+      "screenX": 1058.5,
+      "screenY": 657,
+      "isTrusted": true,
+      "buttons": 0,
+      "pointerId": 1,
+      "time": 642.5999999940395
+    }
+  ]
+}

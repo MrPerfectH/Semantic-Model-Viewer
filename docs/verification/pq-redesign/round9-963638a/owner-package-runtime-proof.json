@@ -1,0 +1,502 @@
+{
+  "runtimeCommit": "2e3839a3d2728c96450f7b849205ea0055e4e558",
+  "assets": [
+    {
+      "asset": "explorer.css",
+      "hashes": {
+        "git": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011",
+        "source": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011",
+        "media": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011",
+        "http8945": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011",
+        "http54093": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011",
+        "vsix": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011"
+      }
+    },
+    {
+      "asset": "index.html",
+      "hashes": {
+        "git": "0669e26ca931439d6b0b1021f542b43b57e0c5718c31ea147bb94af12cec4c4e",
+        "source": "0669e26ca931439d6b0b1021f542b43b57e0c5718c31ea147bb94af12cec4c4e",
+        "media": "0669e26ca931439d6b0b1021f542b43b57e0c5718c31ea147bb94af12cec4c4e",
+        "http8945": "0669e26ca931439d6b0b1021f542b43b57e0c5718c31ea147bb94af12cec4c4e",
+        "http54093": "0669e26ca931439d6b0b1021f542b43b57e0c5718c31ea147bb94af12cec4c4e",
+        "vsix": "0669e26ca931439d6b0b1021f542b43b57e0c5718c31ea147bb94af12cec4c4e"
+      }
+    },
+    {
+      "asset": "js/app.js",
+      "hashes": {
+        "git": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a",
+        "source": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a",
+        "media": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a",
+        "http8945": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a",
+        "http54093": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a",
+        "vsix": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a"
+      }
+    },
+    {
+      "asset": "js/canvas.js",
+      "hashes": {
+        "git": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787",
+        "source": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787",
+        "media": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787",
+        "http8945": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787",
+        "http54093": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787",
+        "vsix": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787"
+      }
+    },
+    {
+      "asset": "js/dax-format.js",
+      "hashes": {
+        "git": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8",
+        "source": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8",
+        "media": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8",
+        "http8945": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8",
+        "http54093": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8",
+        "vsix": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8"
+      }
+    },
+    {
+      "asset": "js/explorer.js",
+      "hashes": {
+        "git": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0",
+        "source": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0",
+        "media": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0",
+        "http8945": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0",
+        "http54093": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0",
+        "vsix": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0"
+      }
+    },
+    {
+      "asset": "js/host-vscode.js",
+      "hashes": {
+        "git": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb",
+        "source": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb",
+        "media": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb",
+        "http8945": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb",
+        "http54093": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb",
+        "vsix": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb"
+      }
+    },
+    {
+      "asset": "js/layouts.js",
+      "hashes": {
+        "git": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1",
+        "source": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1",
+        "media": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1",
+        "http8945": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1",
+        "http54093": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1",
+        "vsix": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1"
+      }
+    },
+    {
+      "asset": "js/matrix.js",
+      "hashes": {
+        "git": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1",
+        "source": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1",
+        "media": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1",
+        "http8945": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1",
+        "http54093": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1",
+        "vsix": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1"
+      }
+    },
+    {
+      "asset": "js/measures.js",
+      "hashes": {
+        "git": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179",
+        "source": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179",
+        "media": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179",
+        "http8945": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179",
+        "http54093": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179",
+        "vsix": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179"
+      }
+    },
+    {
+      "asset": "js/power-query-canvas.js",
+      "hashes": {
+        "git": "d7d573822b21b987da6eea9d588479aae51dec46f4138c0a7b82bbd75664c28d",
+        "source": "d7d573822b21b987da6eea9d588479aae51dec46f4138c0a7b82bbd75664c28d",
+        "media": "d7d573822b21b987da6eea9d588479aae51dec46f4138c0a7b82bbd75664c28d",
+        "http8945": "d7d573822b21b987da6eea9d588479aae51dec46f4138c0a7b82bbd75664c28d",
+        "http54093": "d7d573822b21b987da6eea9d588479aae51dec46f4138c0a7b82bbd75664c28d",
+        "vsix": "d7d573822b21b987da6eea9d588479aae51dec46f4138c0a7b82bbd75664c28d"
+      }
+    },
+    {
+      "asset": "js/power-query-dependencies.js",
+      "hashes": {
+        "git": "19933c40ce9b51e7cd9ac6b7ab0e4eb86e65d3bf3dcf5bea7701ccef5fc50d39",
+        "source": "19933c40ce9b51e7cd9ac6b7ab0e4eb86e65d3bf3dcf5bea7701ccef5fc50d39",
+        "media": "19933c40ce9b51e7cd9ac6b7ab0e4eb86e65d3bf3dcf5bea7701ccef5fc50d39",
+        "http8945": "19933c40ce9b51e7cd9ac6b7ab0e4eb86e65d3bf3dcf5bea7701ccef5fc50d39",
+        "http54093": "19933c40ce9b51e7cd9ac6b7ab0e4eb86e65d3bf3dcf5bea7701ccef5fc50d39",
+        "vsix": "19933c40ce9b51e7cd9ac6b7ab0e4eb86e65d3bf3dcf5bea7701ccef5fc50d39"
+      }
+    },
+    {
+      "asset": "js/power-query-graph-model.js",
+      "hashes": {
+        "git": "b67342f49036fa91e9980d0ea7e0ab9b302bf8aa932dc0a236abea8af7567f67",
+        "source": "b67342f49036fa91e9980d0ea7e0ab9b302bf8aa932dc0a236abea8af7567f67",
+        "media": "b67342f49036fa91e9980d0ea7e0ab9b302bf8aa932dc0a236abea8af7567f67",
+        "http8945": "b67342f49036fa91e9980d0ea7e0ab9b302bf8aa932dc0a236abea8af7567f67",
+        "http54093": "b67342f49036fa91e9980d0ea7e0ab9b302bf8aa932dc0a236abea8af7567f67",
+        "vsix": "b67342f49036fa91e9980d0ea7e0ab9b302bf8aa932dc0a236abea8af7567f67"
+      }
+    },
+    {
+      "asset": "js/power-query-inspector.js",
+      "hashes": {
+        "git": "256e107be2cee26773c1305291769ebafa3166e6e673a89fb9ea5ff89306876b",
+        "source": "256e107be2cee26773c1305291769ebafa3166e6e673a89fb9ea5ff89306876b",
+        "media": "256e107be2cee26773c1305291769ebafa3166e6e673a89fb9ea5ff89306876b",
+        "http8945": "256e107be2cee26773c1305291769ebafa3166e6e673a89fb9ea5ff89306876b",
+        "http54093": "256e107be2cee26773c1305291769ebafa3166e6e673a89fb9ea5ff89306876b",
+        "vsix": "256e107be2cee26773c1305291769ebafa3166e6e673a89fb9ea5ff89306876b"
+      }
+    },
+    {
+      "asset": "js/power-query-lineage.js",
+      "hashes": {
+        "git": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1",
+        "source": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1",
+        "media": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1",
+        "http8945": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1",
+        "http54093": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1",
+        "vsix": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1"
+      }
+    },
+    {
+      "asset": "js/power-query-workspace.js",
+      "hashes": {
+        "git": "c27ea4ff7b830af3b9d14cdb84929da06ae5e406f7ef1ac692d8b6198e09e995",
+        "source": "c27ea4ff7b830af3b9d14cdb84929da06ae5e406f7ef1ac692d8b6198e09e995",
+        "media": "c27ea4ff7b830af3b9d14cdb84929da06ae5e406f7ef1ac692d8b6198e09e995",
+        "http8945": "c27ea4ff7b830af3b9d14cdb84929da06ae5e406f7ef1ac692d8b6198e09e995",
+        "http54093": "c27ea4ff7b830af3b9d14cdb84929da06ae5e406f7ef1ac692d8b6198e09e995",
+        "vsix": "c27ea4ff7b830af3b9d14cdb84929da06ae5e406f7ef1ac692d8b6198e09e995"
+      }
+    },
+    {
+      "asset": "js/power-query.js",
+      "hashes": {
+        "git": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f",
+        "source": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f",
+        "media": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f",
+        "http8945": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f",
+        "http54093": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f",
+        "vsix": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f"
+      }
+    },
+    {
+      "asset": "js/relationships.js",
+      "hashes": {
+        "git": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5",
+        "source": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5",
+        "media": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5",
+        "http8945": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5",
+        "http54093": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5",
+        "vsix": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5"
+      }
+    },
+    {
+      "asset": "js/roles.js",
+      "hashes": {
+        "git": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1",
+        "source": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1",
+        "media": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1",
+        "http8945": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1",
+        "http54093": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1",
+        "vsix": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1"
+      }
+    },
+    {
+      "asset": "js/rules.js",
+      "hashes": {
+        "git": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad",
+        "source": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad",
+        "media": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad",
+        "http8945": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad",
+        "http54093": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad",
+        "vsix": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad"
+      }
+    },
+    {
+      "asset": "js/sidebar.js",
+      "hashes": {
+        "git": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4",
+        "source": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4",
+        "media": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4",
+        "http8945": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4",
+        "http54093": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4",
+        "vsix": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4"
+      }
+    },
+    {
+      "asset": "js/snapshot.js",
+      "hashes": {
+        "git": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c",
+        "source": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c",
+        "media": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c",
+        "http8945": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c",
+        "http54093": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c",
+        "vsix": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c"
+      }
+    },
+    {
+      "asset": "js/tmdl-parser.js",
+      "hashes": {
+        "git": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399",
+        "source": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399",
+        "media": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399",
+        "http8945": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399",
+        "http54093": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399",
+        "vsix": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399"
+      }
+    },
+    {
+      "asset": "js/topbar.js",
+      "hashes": {
+        "git": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9",
+        "source": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9",
+        "media": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9",
+        "http8945": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9",
+        "http54093": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9",
+        "vsix": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9"
+      }
+    },
+    {
+      "asset": "js/usage-adapter.js",
+      "hashes": {
+        "git": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428",
+        "source": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428",
+        "media": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428",
+        "http8945": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428",
+        "http54093": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428",
+        "vsix": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428"
+      }
+    },
+    {
+      "asset": "js/util.js",
+      "hashes": {
+        "git": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960",
+        "source": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960",
+        "media": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960",
+        "http8945": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960",
+        "http54093": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960",
+        "vsix": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960"
+      }
+    },
+    {
+      "asset": "js/workspace-ui.js",
+      "hashes": {
+        "git": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43",
+        "source": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43",
+        "media": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43",
+        "http8945": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43",
+        "http54093": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43",
+        "vsix": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43"
+      }
+    },
+    {
+      "asset": "measures.css",
+      "hashes": {
+        "git": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86",
+        "source": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86",
+        "media": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86",
+        "http8945": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86",
+        "http54093": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86",
+        "vsix": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86"
+      }
+    },
+    {
+      "asset": "power-query-canvas.css",
+      "hashes": {
+        "git": "80017a35953eed80c98dcd186a81607105569f50024b8346e51d8fd38715f020",
+        "source": "80017a35953eed80c98dcd186a81607105569f50024b8346e51d8fd38715f020",
+        "media": "80017a35953eed80c98dcd186a81607105569f50024b8346e51d8fd38715f020",
+        "http8945": "80017a35953eed80c98dcd186a81607105569f50024b8346e51d8fd38715f020",
+        "http54093": "80017a35953eed80c98dcd186a81607105569f50024b8346e51d8fd38715f020",
+        "vsix": "80017a35953eed80c98dcd186a81607105569f50024b8346e51d8fd38715f020"
+      }
+    },
+    {
+      "asset": "power-query-inspector.css",
+      "hashes": {
+        "git": "948395db366b55550575357ab62de473340b3b6b878b8291adf32e7513ad3c4b",
+        "source": "948395db366b55550575357ab62de473340b3b6b878b8291adf32e7513ad3c4b",
+        "media": "948395db366b55550575357ab62de473340b3b6b878b8291adf32e7513ad3c4b",
+        "http8945": "948395db366b55550575357ab62de473340b3b6b878b8291adf32e7513ad3c4b",
+        "http54093": "948395db366b55550575357ab62de473340b3b6b878b8291adf32e7513ad3c4b",
+        "vsix": "948395db366b55550575357ab62de473340b3b6b878b8291adf32e7513ad3c4b"
+      }
+    },
+    {
+      "asset": "power-query-lineage.css",
+      "hashes": {
+        "git": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b",
+        "source": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b",
+        "media": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b",
+        "http8945": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b",
+        "http54093": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b",
+        "vsix": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b"
+      }
+    },
+    {
+      "asset": "power-query-workspace.css",
+      "hashes": {
+        "git": "8f69cb0d2d52e998482141a4bbc65685426cf827ecd0272eeacf6a2ce400e10d",
+        "source": "8f69cb0d2d52e998482141a4bbc65685426cf827ecd0272eeacf6a2ce400e10d",
+        "media": "8f69cb0d2d52e998482141a4bbc65685426cf827ecd0272eeacf6a2ce400e10d",
+        "http8945": "8f69cb0d2d52e998482141a4bbc65685426cf827ecd0272eeacf6a2ce400e10d",
+        "http54093": "8f69cb0d2d52e998482141a4bbc65685426cf827ecd0272eeacf6a2ce400e10d",
+        "vsix": "8f69cb0d2d52e998482141a4bbc65685426cf827ecd0272eeacf6a2ce400e10d"
+      }
+    },
+    {
+      "asset": "power-query.css",
+      "hashes": {
+        "git": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee",
+        "source": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee",
+        "media": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee",
+        "http8945": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee",
+        "http54093": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee",
+        "vsix": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee"
+      }
+    }
+  ],
+  "count": 33,
+  "cacheHashes": [
+    {
+      "asset": "power-query.css",
+      "cacheHash": "4ff48db438"
+    },
+    {
+      "asset": "power-query-canvas.css",
+      "cacheHash": "80017a3595"
+    },
+    {
+      "asset": "power-query-inspector.css",
+      "cacheHash": "948395db36"
+    },
+    {
+      "asset": "power-query-workspace.css",
+      "cacheHash": "8f69cb0d2d"
+    },
+    {
+      "asset": "power-query-lineage.css",
+      "cacheHash": "3fa4fd3345"
+    },
+    {
+      "asset": "explorer.css",
+      "cacheHash": "5699d561e3"
+    },
+    {
+      "asset": "measures.css",
+      "cacheHash": "020a7d7d4e"
+    },
+    {
+      "asset": "js/util.js",
+      "cacheHash": "b233a5ee4c"
+    },
+    {
+      "asset": "js/snapshot.js",
+      "cacheHash": "b63823ca6c"
+    },
+    {
+      "asset": "js/roles.js",
+      "cacheHash": "2cf4e6cfdc"
+    },
+    {
+      "asset": "js/usage-adapter.js",
+      "cacheHash": "47ad9159c1"
+    },
+    {
+      "asset": "js/tmdl-parser.js",
+      "cacheHash": "0e97ff4704"
+    },
+    {
+      "asset": "js/workspace-ui.js",
+      "cacheHash": "d88454c851"
+    },
+    {
+      "asset": "js/canvas.js",
+      "cacheHash": "fe9d193349"
+    },
+    {
+      "asset": "js/layouts.js",
+      "cacheHash": "1875b73e7b"
+    },
+    {
+      "asset": "js/matrix.js",
+      "cacheHash": "a3c83262cb"
+    },
+    {
+      "asset": "js/dax-format.js",
+      "cacheHash": "478f9a6c45"
+    },
+    {
+      "asset": "js/measures.js",
+      "cacheHash": "773398f354"
+    },
+    {
+      "asset": "js/power-query-dependencies.js",
+      "cacheHash": "19933c40ce"
+    },
+    {
+      "asset": "js/power-query-graph-model.js",
+      "cacheHash": "b67342f490"
+    },
+    {
+      "asset": "js/power-query-lineage.js",
+      "cacheHash": "487522c796"
+    },
+    {
+      "asset": "js/power-query.js",
+      "cacheHash": "cecb795556"
+    },
+    {
+      "asset": "js/power-query-canvas.js",
+      "cacheHash": "d7d573822b"
+    },
+    {
+      "asset": "js/power-query-inspector.js",
+      "cacheHash": "256e107be2"
+    },
+    {
+      "asset": "js/power-query-workspace.js",
+      "cacheHash": "c27ea4ff7b"
+    },
+    {
+      "asset": "js/sidebar.js",
+      "cacheHash": "13fab92f5e"
+    },
+    {
+      "asset": "js/topbar.js",
+      "cacheHash": "c5789195be"
+    },
+    {
+      "asset": "js/rules.js",
+      "cacheHash": "dc35541371"
+    },
+    {
+      "asset": "js/relationships.js",
+      "cacheHash": "7f17713638"
+    },
+    {
+      "asset": "js/explorer.js",
+      "cacheHash": "6bfdf4472d"
+    },
+    {
+      "asset": "js/app.js",
+      "cacheHash": "dbc5683c97"
+    }
+  ],
+  "package": {
+    "path": "/tmp/pq-selection-docking-r9-0.3.3.vsix",
+    "sha256": "ecd4256d845147b61c28dfe0d8d4e410fa30640ae0da30590d7eff8c44d7183f",
+    "entries": 45,
+    "runtimeEntries": 33
+  },
+  "historicalFilesUnchanged": 2173
+}

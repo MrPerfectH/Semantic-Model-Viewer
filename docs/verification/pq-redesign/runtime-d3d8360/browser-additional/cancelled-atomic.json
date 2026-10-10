@@ -1,0 +1,92 @@
+{
+  "pending": {
+    "phase": "scheduled",
+    "message": "Inspecting metadata — links pending",
+    "category": "all",
+    "query": "",
+    "selectedId": null,
+    "inspectorOpen": false,
+    "count": "",
+    "banner": "",
+    "code": "",
+    "viewport": {
+      "x": 0,
+      "y": 0,
+      "k": 1
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null
+    },
+    "history": [],
+    "domNodes": 0,
+    "visible": [],
+    "library": [],
+    "map": "1000 visible / 1000 objects",
+    "sets": null
+  },
+  "cancelled": {
+    "phase": "cancelled",
+    "message": "Inspection cancelled. Links are unknown; cancellation does not establish no dependencies.",
+    "category": "all",
+    "query": "",
+    "selectedId": null,
+    "inspectorOpen": false,
+    "count": "",
+    "banner": "",
+    "code": "",
+    "viewport": {
+      "x": 0,
+      "y": 0,
+      "k": 1
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null
+    },
+    "history": [],
+    "domNodes": 0,
+    "visible": [],
+    "library": [],
+    "map": "1000 visible / 1000 objects",
+    "sets": null
+  },
+  "afterRelease": {
+    "phase": "cancelled",
+    "message": "Inspection cancelled. Links are unknown; cancellation does not establish no dependencies.",
+    "category": "all",
+    "query": "",
+    "selectedId": null,
+    "inspectorOpen": false,
+    "count": "",
+    "banner": "",
+    "code": "",
+    "viewport": {
+      "x": 0,
+      "y": 0,
+      "k": 1
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": null
+    },
+    "history": [],
+    "domNodes": 0,
+    "visible": [],
+    "library": [],
+    "map": "1000 visible / 1000 objects",
+    "sets": null
+  }
+}

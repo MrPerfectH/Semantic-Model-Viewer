@@ -1,0 +1,67 @@
+# Power Query workspace redesign integration — 2026-10-09
+
+Scope: user-approved Astra v2 first draft, pq-workspace/2 plus the approved
+[filter addendum](filter-addendum.md). Original PR40 baseline f45f696 and all original
+acceptance/failure evidence remain preserved; they do not establish redesigned UI
+acceptance. User representative-model review and explicit final merge approval remain
+separate gates. No main merge, release, M execution, data fetching or source-model edits.
+
+Graph prerequisite c4d9386 is integrated as ca2aceb; diagnosis documentation 8bbb4d6
+as 358680c. Independent corpus 57056e2 is integrated unchanged as d39c238. UI owner
+retains Canvas/Inspector four modules and dedicated tests; shell owner retains app,
+workspace, host CSP, registration/runtime allowlist, generated sync and integration.
+
+Shell builds graph in a real Blob Worker using canonical dependency/graph source bytes
+loaded through the existing runtime-assets loader (web) or snapshotAssets host bridge
+(VS Code). Worker source never imports connectors or evaluates M. Package CSP adds
+worker-src blob:, preserving nonce script-src and connect-src none. Worker failure or
+unavailability is an explicit error, with no synchronous blocking fallback. Cancellation
+terminates the worker; generation/job/model/metadata/revision/inventory gates reject
+queued progress/ready messages and deferred navigation. Ready graph publication is atomic.
+
+Captured metadata pairs once with initial graph rows by position, checking metadataId;
+no name matching, ID decoding or overwrite by duplicate metadata identity. Exact UTF16
+ranges are validated; overlaps/invalid ranges render plain source with a diagnostic.
+Connectivity counts use the complete resolved incident-edge set before filtering/search.
+History keeps generation-local stable IDs and viewport/inspector state, never raw source
+or DOM refs. Model reset clears source lookup/history/selection/search/filter and module
+DOM even when suspended. PQ state is not added to snapshot/export persistence.
+
+Initial shell-only automated run (before the UI modules are supplied): supported
+Node v22.23.3 via temporary /tmp/pq-graph-native-diagnosis-20261008 runtime; system Node
+is unchanged. Fourteen focused shell checks cover identity/range/duplicate mapping,
+connectivity, exact Back filter/view/scroll, same-generation restore races, canonical
+worker build, cancellation/stale messages and unavailable-worker error. Full Node22
+suite checkpoint 321/321 exit0, no skips: /tmp/pq-v2-shell-commit-node22.log.
+Additive filter corpus c4950e2 is integrated unchanged as 3143109; its historical
+partialEdgesLabeled v1 oracle remains archived and is superseded by atomicReady v2. This is a shell
+checkpoint, NOT registered redesigned browser/package/native acceptance. Historical
+Node24 V8 native GC crash remains preserved and unresolved in graph diagnosis docs.
+
+Next: integrate owned UI commit; register all four assets and sync; fresh full suite,
+registered T3 preview, worker scale/cancel/CSP/privacy/package checks; then exact-SHA
+independent A1–A9 release. A10 remains user-owned. No old acceptance receipt is reused.
+
+## UI registration checkpoint — 2026-10-09
+
+Owned UI ce2760576e57057ecf4354c21be15be35a561ec9 was picked as 4a5e4f6 (eight new owned files only). Both JS modules precede the workspace coordinator; both CSS modules and all four snapshot runtime assets are registered. Local JS/CSS URL cache hashes were refreshed from actual canonical bytes. Generated media is integration-owned and sync verifies 31 assets.
+
+Node22 registered regression passed 342/342, exit0, in /tmp/pq-v2-registered-node22.log. The UI owner's earlier 305-test / 14 ENOENT failure remains preserved at /tmp/pq-ui-node22-20261009.tap; module synthetic evidence is /tmp/pq-ui-owned-20261009/evidence.json and does not establish registered acceptance.
+
+Fresh T3 reload at localhost:8944 restored the synthetic a3-results model and reported the workspace constructor present. Power Query click verification did not complete: an initial locator syntax error was corrected, then the valid role locator timed out and preview_evaluate reported no automation host connected, explicitly instructing not to retry. Browser worker/lifecycle/history/filter/resize/CRLF/Escape retention acceptance remains OPEN, as do installed and independent A1–A9 acceptance. No legacy acceptance reused, no push/merge/release.
+
+## Reset filters viewport repair — 2026-10-09
+
+Independent candidate d3d8360 failed the frozen viewport oracle: banner removal caused ResizeObserver recentering. UI owner confirmed shell ownership and existing silent setViewport measured-size adoption; no UI module changed. Reset filters now captures x/y/k, applies filter/banner DOM, then synchronously restores it only while generation/model/metadata/revision/navigation/selection remain current. No delayed continuation, Fit or reveal can override a later action.
+
+Targeted Node22 coordinator checks: 16/16 (/tmp/pq-v2-reset-focused.log), including observer-size simulation and replacement/navigation rejection. Authorized fallback Chrome at 1280x800 reproduced the pre-fix viewport drift (/tmp/pq-v2-reset-before-1280.log), then verified exact x=-152.5,y=312.55,k=1.3 after 150ms observer settlement, with layout, selection and inspector state retained (/tmp/pq-v2-reset-after-diagnostic.log). Earlier narrow 800px runs did not reproduce the desktop height change and remain preserved. First repaired browser attempt failed runtime asset fetch, explicitly showing unknown links (/tmp/pq-v2-reset-after-1280.log); HTTP diagnostic confirmed served coordinator bytes match canonical SHA256 9eb2eaa74936fc6ad77e9b0e0095765b251b5f17227e8dd6c276dddf6f031099 before the instrumented check passed. No independent acceptance pass claimed; repaired exact candidate must return to reviewer.
+
+## Tables return compatibility repair — 2026-10-09
+
+Independent d3d8360 finding preserved: Tables → Power Query → Tables replaced x137,y93,k0.9 with default fit. The graph return route now restores the existing saved Tables viewport when the prior peer is Power Query, retaining existing snapshot restoration and deliberate fitting on other normal routes. Targeted app checks pass 33/33 (/tmp/pq-v2-tables-route-focused.log), explicitly checking the Measures return still fits. Authorized fallback registered UI verifies the real Tables/PQ/Tables navigation retains exact x137,y93,k0.9 (/tmp/pq-v2-tables-route-browser.log); other distinct registered workflow checks in that log pass. No independent verdict or installed acceptance claimed.
+
+## Docking and resize repair — 2026-10-09
+
+Independent d3/29fc true Chrome200% failures remain reviewer-owned. Shell/UI ownership agreement: shell only; no Canvas/Inspector module edits. Below docking now uses explicit grid rows (canvas minimum220px, separator7px, inspector independently300–650px), scrolls when the viewport cannot contain the minima, and allocates the actual height rather than a percentage under a max-height ceiling. Pointer/keyboard update the orientation-specific value; ARIA now reports that value. The workspace-scoped Canvas root min-height override honors its assigned shell rectangle, and the separator has a dedicated positioned hit layer.
+
+Before repair, true Chrome zoom2 / outer1280 produced640CSS/DPR2 and actual inspector96px despite changing its control value (/tmp/pq-v2-zoom-before.log). Targeted repaired checks verify both outer1280→640CSS and outer1440→720CSS/DPR2: actual height400→440 keyboard→480 pointer; separator hit belongs to shell and Inspector remains open (/tmp/pq-v2-zoom-after-1280.log, /tmp/pq-v2-zoom-after-1440.log). Canvas surface ends above separator. Fresh100% side orientation verifies width400→420 keyboard→460 pointer, actual pointer target separator and ARIA value460 (/tmp/pq-v2-side-diagnostic.log). A combined browser session changing zoom2→1 failed the side pointer assertion; diagnostic logs preserve it (/tmp/pq-v2-zoom-orientations.log, -diagnostic.log, -fixed.log). Fresh separate100% flow passed; those combined-session failures are not erased or claimed resolved. Actual200% independent recheck remains required. Focused coordinator checks pass17/17 (/tmp/pq-v2-zoom-focused.log).

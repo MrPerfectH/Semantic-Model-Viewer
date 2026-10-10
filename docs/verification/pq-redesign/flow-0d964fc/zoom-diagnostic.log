@@ -1,0 +1,14 @@
+{
+  "out": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic",
+  "passed": 0,
+  "failures": [
+    {
+      "name": "Actual resize transition 1280 step0 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: actual pointer Trace must reroot\n+ actual - expected\n\n+ null\n- '[\"expression\",\"\",\"Merged Query\"]'\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom-diagnostic.browser.cjs:58:245\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom-diagnostic.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom-diagnostic.browser.cjs:47:41"
+    },
+    {
+      "name": "Actual resize transition 1440 step0 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: actual pointer Trace must reroot\n+ actual - expected\n\n+ '[\"expression\",\"\",\"FinalOutput\"]'\n- '[\"expression\",\"\",\"Merged Query\"]'\n                     ^\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom-diagnostic.browser.cjs:58:245\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom-diagnostic.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom-diagnostic.browser.cjs:47:41"
+    }
+  ]
+}
