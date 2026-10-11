@@ -1,0 +1,172 @@
+{
+  "candidate": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4",
+  "implementation": "99f605b759a23d159f1f03ce7d0515b2e7eb3a46",
+  "method": "Git blob extraction for Mac-only browser service. No hash/test/package audit.",
+  "assets": [
+    {
+      "asset": "index.html",
+      "gitBlob": "194ecb5d5edbbf8c1e26da08702b6759978fee5b",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/index.html"
+    },
+    {
+      "asset": "measures.css",
+      "gitBlob": "8b4f39533a1289388ed7574627d807f47f9519b6",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/measures.css"
+    },
+    {
+      "asset": "power-query-lineage.css",
+      "gitBlob": "5bdfa9bf78495a7ae8a4a95c0ac7b178fe64c4f4",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/power-query-lineage.css"
+    },
+    {
+      "asset": "power-query.css",
+      "gitBlob": "f6af945272354215724d294f172c884e492dbd69",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/power-query.css"
+    },
+    {
+      "asset": "power-query-canvas.css",
+      "gitBlob": "9eb66ea9edd93ab2d5bd13c9be90756882aeea95",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/power-query-canvas.css"
+    },
+    {
+      "asset": "power-query-inspector.css",
+      "gitBlob": "5114f095f82997c8159c03f7d1241e525cc86e8b",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/power-query-inspector.css"
+    },
+    {
+      "asset": "explorer.css",
+      "gitBlob": "62b1075822d52cf4cc2b04dcd02cf98166113429",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/explorer.css"
+    },
+    {
+      "asset": "power-query-workspace.css",
+      "gitBlob": "370eaf5808011aad926796a9c7a6ba4fde7707e1",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/power-query-workspace.css"
+    },
+    {
+      "asset": "js/util.js",
+      "gitBlob": "d1a0830f9fa432f4505b710f0ee3e53626649f61",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/util.js"
+    },
+    {
+      "asset": "js/host-vscode.js",
+      "gitBlob": "e0d4a8dd27c0e0db3f9523be40bf670d6ffcd9da",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/host-vscode.js"
+    },
+    {
+      "asset": "js/rules.js",
+      "gitBlob": "f0d2436b6515eafe7f241d4e6e5f8debebb2faca",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/rules.js"
+    },
+    {
+      "asset": "js/workspace-ui.js",
+      "gitBlob": "d8959f58bc2890155d8a9d00bee4173c45ccd447",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/workspace-ui.js"
+    },
+    {
+      "asset": "js/power-query-lineage.js",
+      "gitBlob": "3efe3a50d8f12e3ab7bfae57fe64c501c034e62d",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/power-query-lineage.js"
+    },
+    {
+      "asset": "js/tmdl-parser.js",
+      "gitBlob": "946b515eb0d1d682ab6e5bb49a0142d82cf4283e",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/tmdl-parser.js"
+    },
+    {
+      "asset": "js/power-query-inspector.js",
+      "gitBlob": "63b83bac530c441e0af95546d66d8c74fa59f6a9",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/power-query-inspector.js"
+    },
+    {
+      "asset": "js/matrix.js",
+      "gitBlob": "92eb8a534539739e11e46a3be901d2e1789057bc",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/matrix.js"
+    },
+    {
+      "asset": "js/sidebar.js",
+      "gitBlob": "edbfca72ab4a7486274d470078627936679c4aa2",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/sidebar.js"
+    },
+    {
+      "asset": "js/dax-format.js",
+      "gitBlob": "59d1a2085a67f1bf373cf94516f87a77e955fad1",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/dax-format.js"
+    },
+    {
+      "asset": "js/power-query-canvas.js",
+      "gitBlob": "3f79cece83d5f44bae6a91dfe0a8648ce64e029b",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/power-query-canvas.js"
+    },
+    {
+      "asset": "js/roles.js",
+      "gitBlob": "93c95e4ea352c8887db8de12a8a7021e8995e10d",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/roles.js"
+    },
+    {
+      "asset": "js/layouts.js",
+      "gitBlob": "0f8f76d28e053878ac015ef30de5314d9aa37880",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/layouts.js"
+    },
+    {
+      "asset": "js/topbar.js",
+      "gitBlob": "f96c40dbcab1a66de8bcb974345af4ca6c37cb60",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/topbar.js"
+    },
+    {
+      "asset": "js/relationships.js",
+      "gitBlob": "387498e521588a5b80c17a3ab01e0d29a7aa5042",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/relationships.js"
+    },
+    {
+      "asset": "js/snapshot.js",
+      "gitBlob": "eef514c19edea2f2e83218210020b4039467bb7a",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/snapshot.js"
+    },
+    {
+      "asset": "js/canvas.js",
+      "gitBlob": "33987b3c18d900a6ee55598bb3cda97ee2cd493a",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/canvas.js"
+    },
+    {
+      "asset": "js/power-query.js",
+      "gitBlob": "7296a0b7fcb1bd8ba25ec8b30eb08bdff64ba6da",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/power-query.js"
+    },
+    {
+      "asset": "js/measures.js",
+      "gitBlob": "8088a249566760465ffab20ebb0a72bb112914e0",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/measures.js"
+    },
+    {
+      "asset": "js/explorer.js",
+      "gitBlob": "8a9eaeb7bc7f51ad1885540dc28370e412e4418c",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/explorer.js"
+    },
+    {
+      "asset": "js/usage-adapter.js",
+      "gitBlob": "de26bfa5c41ac312d8be65fe9684921dfd36a5d5",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/usage-adapter.js"
+    },
+    {
+      "asset": "js/power-query-dependencies.js",
+      "gitBlob": "770fb73a90c1108dcfa689c2ee238209b194cd50",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/power-query-dependencies.js"
+    },
+    {
+      "asset": "js/app.js",
+      "gitBlob": "f91d388ab5d869839c4b3adcd664fb76cc884289",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/app.js"
+    },
+    {
+      "asset": "js/power-query-graph-model.js",
+      "gitBlob": "36866a20f1511c7a76dd9a99175d3a4fbfc207fa",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/power-query-graph-model.js"
+    },
+    {
+      "asset": "js/power-query-workspace.js",
+      "gitBlob": "7bd65f57a777030fa7f5b662691d76fab9c4e2ae",
+      "source": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4:Models/tools/viewer/js/power-query-workspace.js"
+    }
+  ]
+}
