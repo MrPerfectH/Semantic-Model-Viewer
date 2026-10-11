@@ -4,9 +4,13 @@
 .pqc-surface:focus-visible{box-shadow:inset 0 0 0 2px #2563eb}.pqc-dragging{cursor:grabbing}
 .pqc-world{position:absolute;left:0;top:0;width:0;height:0;transform-origin:0 0}
 .pqc-edges{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;pointer-events:none}
-.pqc-edge-line{fill:none;stroke:#596d8b;stroke-width:1.8;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-.pqc-edge-hit{fill:none;stroke:transparent;stroke-width:14;vector-effect:non-scaling-stroke;pointer-events:stroke;cursor:pointer}
-.pqc-parameter-edge .pqc-edge-line{stroke:#79519f;stroke-dasharray:6 4}.pqc-related .pqc-edge-line{stroke:#2563eb;stroke-width:1.8}.pqc-edge-dim{opacity:.55}
+.pqc-edge{color:#596d8b}
+.pqc-edge-line{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.pqc-edge-underlay{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;opacity:.95;pointer-events:none}
+.pqc-edge-arrow{pointer-events:none}
+.pqc-edge-hit{fill:none;stroke:transparent;stroke-linecap:round;pointer-events:stroke;cursor:pointer}
+.pqc-parameter-edge{color:#79519f}.pqc-related{color:#2563eb}.pqc-edge-dim{opacity:.55}
+.pqc-edge-hover{color:#2563eb}
 .pqc-node{left:0;top:0;box-sizing:border-box;height:96px;text-align:left;cursor:grab;outline:none}
 .pqc-node .wui-card-head{height:58px;box-sizing:border-box}.pqc-node-title,.pqc-node-subtitle{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;max-width:100%}
 .pqc-node:hover{box-shadow:0 2px 5px #14203210,0 5px 16px #14203217!important}
@@ -24,7 +28,7 @@
 @media(max-width:500px){.pqc-minimap{width:152px;right:8px;bottom:8px}.pqc-minimap svg{height:82px}.pqc-map-label{font-size:7px;letter-spacing:.4px}.pqc-legend{max-width:calc(100% - 175px);gap:3px;left:8px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){.pqc *{transition:none!important}}
 
-.pqc-flow-root{outline:3px solid #7455a2;outline-offset:5px}.pqc-branch{border-color:#366bc4!important}.pqc-branch-edge .pqc-edge-line{stroke:#2057b2;stroke-width:3}.pqc-legend{bottom:auto;top:12px;max-width:calc(100% - 24px)}
+.pqc-flow-root{outline:3px solid #7455a2;outline-offset:5px}.pqc-branch{border-color:#366bc4!important}.pqc-branch-edge{color:#2057b2}.pqc-legend{bottom:auto;top:12px;max-width:calc(100% - 24px)}
 
 /* The source provider is a second axis, independent of model role colors. */
 .pqc-source{font:600 11px/16px 'IBM Plex Sans',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

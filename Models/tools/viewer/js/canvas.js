@@ -1271,6 +1271,11 @@
       this.lineStyle = m; store.set('smv-lines', m);
       this.renderLines(); this.app.render(true);
     },
+    /* Drawing-only width policy shared with the Power Query canvas. */
+    edgeStrokeWidth: function (zoom, isSel, active, hop, chip) {
+      var thin = Math.max(1.15, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : 1.15))) / zoom;
+      return Math.max(thin, isSel ? (chip ? 4.4 : 3.4) : (active ? (chip ? 3.4 : 2.6) : (hop ? (chip ? 2.8 : 2) : (chip ? 2.2 : 1.4))));
+    },
     renderLines: function () {
       var self = this;
       if (!this.svg) return;
@@ -1328,8 +1333,7 @@
         var col = isSel ? EDGE.lock : (EDGE[kind] || EDGE.base);
         /* every line has to stay at least a pixel wide on screen, whatever the zoom is;
            the focused ones are drawn heavier so the selection reads at a glance */
-        var thin = Math.max(1.15, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : 1.15))) / self.view.k;
-        var baseW = Math.max(thin, isSel ? (chip ? 4.4 : 3.4) : (active ? (chip ? 3.4 : 2.6) : (hop ? (chip ? 2.8 : 2) : (chip ? 2.2 : 1.4))));
+        var baseW = self.edgeStrokeWidth(self.view.k, isSel, active, hop, chip);
         if (active || hop || isSel) {
           self.svg.appendChild(sv('path', { d: d, fill: 'none', stroke: '#fff', 'stroke-width': baseW * 2.1, 'stroke-linecap': 'round', opacity: 0.95 }));
         }

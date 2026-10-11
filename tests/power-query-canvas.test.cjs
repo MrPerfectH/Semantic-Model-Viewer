@@ -1,6 +1,11 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const {harness,context,plain}=require('./power-query-ui-harness.cjs');
+// Recover the router's corners from Tables' rounded path (Q control points).
+function routePoints(d) {
+  const commands=[...d.matchAll(/([MLQ])\s+(-?[\d.]+)\s+(-?[\d.]+)(?:\s+(-?[\d.]+)\s+(-?[\d.]+))?/g)];
+  return commands.filter((m,i)=>m[1]!=='L'||i===commands.length-1).map(m=>[+m[2],+m[3]]);
+}
 function setup(ctx=context()) { const h=harness('power-query-canvas.js'),events={select:[],viewport:[],edge:[]}; const canvas=h.win.PowerQueryCanvas.mount(h.host,{context:ctx,onSelect:e=>events.select.push(e),onViewport:e=>events.viewport.push(e),onEdge:e=>events.edge.push(e)}); return {...h,canvas,ctx,events,node:id=>h.host.querySelectorAll('.pqc-node').find(e=>e.dataset.nodeId===id)}; }
 test('entire registry is initially laid out including disconnected/status/duplicate display IDs',()=>{const c=context();c.graph.nodes[4].state='no-partitions';c.graph.nodes[4].kind='table-status';c.graph.nodes[4].metadataId=null;c.graph.nodes[5].metadataId=c.graph.nodes[3].metadataId;const s=setup(c);assert.equal(s.host.querySelectorAll('.pqc-node').length,6);assert.equal(s.host.querySelectorAll('.pqc-node').filter(n=>!n.hidden).length,6);assert.equal(s.canvas.captureLayout().size,6);const layout=s.canvas.captureLayout();assert.ok(layout.get('id-0').x<layout.get('id-1').x);assert.ok(layout.get('id-1').x<layout.get('id-3').x);assert.equal(s.host.querySelectorAll('.pqc-parameter-edge').length,1);assert.match(s.host.querySelector('.pqc-map-label').textContent,/6 visible objects/);});
 test('zero-edge model is complete and supplied cycle components are grouped',()=>{const c=context();c.graph.edges=[];const s=setup(c);assert.equal(s.host.querySelectorAll('.pqc-edge').length,0);assert.equal(s.canvas.captureLayout().size,6);c.graph.edges=[{id:'cycle',inputId:'id-0',consumerId:'id-1',referenceOccurrences:[]},{id:'return',inputId:'id-1',consumerId:'id-0',referenceOccurrences:[]}];c.graph.issues=['id-0','id-1'].map(id=>({consumerId:id,kind:'cycle',componentIds:['id-0','id-1']}));s.canvas.setContext(c);assert.equal(s.host.querySelectorAll('.pqc-cycle-group').length,1);assert.match(s.host.querySelector('.pqc-cycle-group').textContent,/Cycle · 2/);});
@@ -60,34 +65,34 @@ test('narrow side canvas prefers a visible vertical neighbor; collisions preserv
   const next=s.canvas.placeAdded('id-3',{visibleIds:new Set(['id-0','id-1','id-2']),anchorId:'id-0'});assert.equal(next.x,anchor.x);assert.equal(next.y,anchor.y-126);
   assert.deepEqual(plain(s.canvas.captureLayout().get('id-0')),plain(before.get('id-0')));
 });
-test('straight routes retain input-to-consumer endpoints after reversal, stacking and self cycles; hit path follows geometry',()=>{
+test('rounded orthogonal routes retain input-to-consumer endpoints after reversal, stacking and self cycles; hit path follows geometry',()=>{
   const c=context();c.graph.edges=[{id:'forward',inputId:'id-0',consumerId:'id-1',referenceOccurrences:[]},{id:'reverse',inputId:'id-1',consumerId:'id-0',referenceOccurrences:[]},{id:'self',inputId:'id-0',consumerId:'id-0',referenceOccurrences:[]}];
   const s=setup(c);s.canvas.setVisibleIds(new Set(['id-0','id-1']));
-  const points=line=>[...line.getAttribute('d').matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]);
+  const points=line=>routePoints(line.getAttribute('d'));
   for(const b of [{x:450,y:170},{x:-450,y:170},{x:0,y:170}]){
     s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',b]]));
     const lines=s.host.querySelectorAll('.pqc-edge-line'),hits=s.host.querySelectorAll('.pqc-edge-hit');
-    lines.forEach((line,i)=>{assert.doesNotMatch(line.getAttribute('d'),/[CQAZ]/);assert.equal(line.getAttribute('d'),hits[i].getAttribute('d'));const p=points(line);for(let j=1;j<p.length;j++)assert.ok(p[j][0]===p[j-1][0]||p[j][1]===p[j-1][1]);});
+    lines.forEach((line,i)=>{assert.doesNotMatch(line.getAttribute('d'),/[CAZ]/);if(b.x!==0||i===2)assert.match(line.getAttribute('d'),/ Q /);assert.equal(line.getAttribute('d'),hits[i].getAttribute('d'));const p=points(line);for(let j=1;j<p.length;j++)assert.ok(p[j][0]===p[j-1][0]||p[j][1]===p[j-1][1]);});
     const forward=points(lines[0]),reverse=points(lines[1]);
     function boundary(p,r){return ((p[0]===r.x||p[0]===r.x+252)&&p[1]>=r.y&&p[1]<=r.y+96)||((p[1]===r.y||p[1]===r.y+96)&&p[0]>=r.x&&p[0]<=r.x+252);}
     assert.ok(boundary(forward[0],{x:0,y:0}));assert.ok(boundary(forward.at(-1),b));assert.ok(boundary(reverse[0],b));assert.ok(boundary(reverse.at(-1),{x:0,y:0}));
     assert.notEqual(lines[0].getAttribute('d'),lines[1].getAttribute('d'));
   }
-  const marker=s.host.querySelector('marker');assert.equal(marker.getAttribute('markerUnits'),'userSpaceOnUse');assert.equal(marker.querySelector('path').getAttribute('fill'),'none');
+  assert.equal(s.host.querySelector('marker'),null);assert.equal(s.host.querySelectorAll('.pqc-edge-arrow').length,3);
 });
-test('straight long links detour around visible intervening cards and simplify when the obstacle is hidden',()=>{
+test('rounded orthogonal long links detour around visible intervening cards and simplify when the obstacle is hidden',()=>{
   const c=context();c.graph.edges=[{id:'long',inputId:'id-0',consumerId:'id-1',referenceOccurrences:[]}];const s=setup(c);
   s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',{x:800,y:0}],['id-2',{x:400,y:0}]]));s.canvas.setVisibleIds(new Set(['id-0','id-1','id-2']));
-  const line=s.host.querySelector('.pqc-edge-line'),detour=line.getAttribute('d');assert.match(detour,/,(-18|114)/);
-  const pts=[...detour.matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]);
+  const line=s.host.querySelector('.pqc-edge-line'),detour=line.getAttribute('d');assert.match(detour,/ (-18|114)\.0/);
+  const pts=routePoints(detour);
   for(let i=1;i<pts.length;i++){const a=pts[i-1],b=pts[i];assert.equal(a[0]===b[0]?a[0]>400&&a[0]<652&&Math.max(a[1],b[1])>0&&Math.min(a[1],b[1])<96:a[1]>0&&a[1]<96&&Math.max(a[0],b[0])>400&&Math.min(a[0],b[0])<652,false);}
-  s.canvas.setVisibleIds(new Set(['id-0','id-1']));assert.notEqual(line.getAttribute('d'),detour);assert.equal([...line.getAttribute('d').matchAll(/[ML]-?[\d.]+,(-?[\d.]+)/g)].every(m=>+m[1]===48),true);
+  s.canvas.setVisibleIds(new Set(['id-0','id-1']));assert.notEqual(line.getAttribute('d'),detour);assert.deepEqual(routePoints(line.getAttribute('d')),[[252,48],[800,48]]);assert.doesNotMatch(line.getAttribute('d'),/Q/);
 });
 
 test('reciprocal edges have independent 14px hit corridors in every orientation and after the reported drag',()=>{
   const c=context();c.graph.edges=[{id:'B-to-A',inputId:'id-1',consumerId:'id-0',referenceOccurrences:[]},{id:'A-to-B',inputId:'id-0',consumerId:'id-1',referenceOccurrences:[]}];
   const s=setup(c),graph=JSON.stringify(c.graph);s.canvas.setVisibleIds(new Set(['id-0','id-1']));s.canvas.setViewport({x:0,y:0,k:1});
-  const points=d=>[...d.matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]);
+  const points=routePoints;
   const distance=(p,a,b)=>Math.hypot(p[0]-Math.max(Math.min(a[0],b[0]),Math.min(Math.max(a[0],b[0]),p[0])),p[1]-Math.max(Math.min(a[1],b[1]),Math.min(Math.max(a[1],b[1]),p[1])));
   function verify(label){
     const lines=s.host.querySelectorAll('.pqc-edge-line'),hits=s.host.querySelectorAll('.pqc-edge-hit'),routes=lines.map(l=>points(l.getAttribute('d')));
@@ -151,4 +156,107 @@ test('two far-origin visible nodes compact explicitly while Fit and Undo layout 
 });
 test('secondary typography resets after tiny overview even when title font stays at its minimum',()=>{
  const s=setup(),subtitle=s.node('id-1').querySelector('.pqc-node-subtitle');s.canvas.setViewport({x:0,y:0,k:.47});assert(parseFloat(subtitle.style.fontSize)>11);s.canvas.setViewport({x:0,y:0,k:.08});assert.equal(parseFloat(subtitle.style.fontSize),11);s.canvas.setViewport({x:0,y:0,k:.85});assert.equal(parseFloat(subtitle.style.fontSize),11);
+});
+
+test('PQ calls the actual Tables rounded-path, width and open-chevron methods without relationship state',()=>{
+  const h=harness('power-query-canvas.js'),drawing=h.win.GraphCanvas.prototype,calls={orthoPath:0,edgeArrow:0,edgeStrokeWidth:0};
+  for(const name of Object.keys(calls)){const original=drawing[name];drawing[name]=function(...args){calls[name]++;if(name==='edgeArrow'){assert.deepEqual(Object.keys(this).sort(),['ARROW_PX','view']);assert.deepEqual(plain(args[0]),{both:false});}return original.apply(this,args);};}
+  const canvas=h.win.PowerQueryCanvas.mount(h.host,{context:context()});
+  canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',{x:500,y:200}]]));
+  for(const count of Object.values(calls))assert.ok(count>0);
+  assert.equal(h.host.querySelectorAll('marker').length,0);assert.equal(h.host.querySelectorAll('.pqc-edge-arrow').every(a=>a.querySelectorAll('polyline').length===1),true);
+  const line=h.host.querySelector('.pqc-edge-line'),points=routePoints(line.getAttribute('d')).map(([x,y])=>({x,y}));
+  assert.equal(line.getAttribute('d'),drawing.orthoPath(points,9));
+});
+
+test('Tables stroke extraction preserves the previous formula for every state at overview and detail zoom',()=>{
+  const {win}=harness('power-query-canvas.js');
+  for(const k of [.08,.3,.37,.47,.85,1,2])for(const selected of [false,true])for(const active of [false,true])for(const hop of [false,true])for(const chip of [false,true]){
+    const thin=Math.max(1.15,selected?2.6:active?2.1:hop?1.8:1.15)/k;
+    const previous=Math.max(thin,selected?(chip?4.4:3.4):active?(chip?3.4:2.6):hop?(chip?2.8:2):(chip?2.2:1.4));
+    assert.equal(win.GraphCanvas.prototype.edgeStrokeWidth(k,selected,active,hop,chip),previous);
+  }
+});
+
+function arrowGeometry(group){
+  const seat=group.children[0],ink=seat.children[0],points=ink.children[0].getAttribute('points').split(' ').map(p=>p.split(',').map(Number));
+  const center=seat.getAttribute('transform').match(/translate\(([-\d.]+),([-\d.]+)\)/).slice(1).map(Number);
+  return {center,points,stroke:+ink.getAttribute('stroke-width'),fill:ink.getAttribute('fill')};
+}
+function checkArrowClear(a,layout){
+  const pad=a.stroke/2;
+  const xs=a.points.map(p=>p[0]+a.center[0]),ys=a.points.map(p=>p[1]+a.center[1]);
+  for(const r of layout.values())assert.ok(Math.max(...xs)+pad<=r.x||Math.min(...xs)-pad>=r.x+252||Math.max(...ys)+pad<=r.y||Math.min(...ys)-pad>=r.y+96,'arrow including stroke must clear card');
+}
+test('line-seated arrows remain readable at 47/37/30/85/100/200%, point input to consumer in all directions, and preserve state',()=>{
+  const c=context();c.graph.edges=[{id:'forward',inputId:'id-0',consumerId:'id-1'},{id:'reverse',inputId:'id-1',consumerId:'id-0'},{id:'self',inputId:'id-0',consumerId:'id-0'}];
+  const s=setup(c);s.canvas.setVisibleIds(new Set(['id-0','id-1']));
+  const graph=JSON.stringify(c.graph);
+  for(const b of [{x:600,y:0},{x:-600,y:0},{x:0,y:126},{x:0,y:-126},{x:581.456005859375,y:395.031982421875}])for(const k of [.47,.37,.3,.85,1,2])for(const selected of [null,'id-0']){
+    s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',b]]));s.canvas.setSelection(selected);
+    const saved=plain([...s.canvas.captureLayout()]),viewport={x:13,y:-77,k};s.canvas.setViewport(viewport);
+    const lines=s.host.querySelectorAll('.pqc-edge-line'),arrows=s.host.querySelectorAll('.pqc-edge-arrow'),hits=s.host.querySelectorAll('.pqc-edge-hit');
+    for(let i=0;i<arrows.length;i++){
+      assert.equal(arrows[i].querySelectorAll('polyline').length,1,JSON.stringify({b,k,selected,i}));
+      const a=arrowGeometry(arrows[i]),route=routePoints(lines[i].getAttribute('d')),boost=selected?1.15:1;
+      assert.equal(a.fill,'none');assert.ok(Math.abs(a.stroke*k-6*.28*boost)<.02);
+      // Tip and tail preserve Tables' 6px design and sign on the actual straight run.
+      const tip=a.points[1],tail=[(a.points[0][0]+a.points[2][0])/2,(a.points[0][1]+a.points[2][1])/2],dx=tip[0]-tail[0],dy=tip[1]-tail[1];
+      assert.ok(Math.abs(Math.hypot(dx,dy)*k-6*.62*boost)<.21);
+      const segment=route.slice(1).map((p,j)=>[route[j],p]).find(([u,v])=>u[0]===v[0]?Math.abs(a.center[0]-u[0])<.11&&a.center[1]>Math.min(u[1],v[1])&&a.center[1]<Math.max(u[1],v[1]):Math.abs(a.center[1]-u[1])<.11&&a.center[0]>Math.min(u[0],v[0])&&a.center[0]<Math.max(u[0],v[0]));
+      assert.ok(segment,'seat on route');assert.ok(dx*(segment[1][0]-segment[0][0])+dy*(segment[1][1]-segment[0][1])>0,'input -> consumer');
+      checkArrowClear(a,new Map([['a',{x:0,y:0}],['b',b]]));
+      assert.equal(lines[i].getAttribute('d'),hits[i].getAttribute('d'));assert.ok(Math.abs(+hits[i].getAttribute('stroke-width')*k-14)<1e-9);
+      assert.ok(+lines[i].getAttribute('stroke-width')*k>=(selected?2.1:1.15)-1e-9);
+    }
+    assert.deepEqual(plain([...s.canvas.captureLayout()]),saved);assert.deepEqual(plain(s.canvas.getViewport()),viewport);assert.equal(JSON.stringify(c.graph),graph);
+  }
+});
+
+test('detour chevrons clear obstacles at every requested zoom and hover/click stay on each reciprocal path',()=>{
+  const c=context();c.graph.edges=[{id:'forward',inputId:'id-0',consumerId:'id-1'},{id:'reverse',inputId:'id-1',consumerId:'id-0'}];
+  const s=setup(c),layout=new Map([['id-0',{x:0,y:0}],['id-1',{x:800,y:0}],['id-2',{x:400,y:0}]]);
+  s.canvas.restoreLayout(layout);s.canvas.setVisibleIds(new Set(layout.keys()));
+  for(const k of [.47,.37,.3,.85,1,2]){
+    s.canvas.setViewport({x:0,y:0,k});
+    s.host.querySelectorAll('.pqc-edge').forEach((edge,i)=>{
+      const arrow=edge.querySelector('.pqc-edge-arrow'),hit=edge.querySelector('.pqc-edge-hit'),line=edge.querySelector('.pqc-edge-line'),underlay=edge.querySelector('.pqc-edge-underlay');
+      assert.equal(arrow.querySelectorAll('polyline').length,1);checkArrowClear(arrowGeometry(arrow),layout);
+      assert.equal(underlay.getAttribute('d'),hit.getAttribute('d'));assert.equal(underlay.style.display,'none');
+      hit.fire('mouseenter');assert.equal(underlay.style.display,'');assert.equal(line.style.strokeWidth,+line.getAttribute('stroke-width')+1);
+      hit.fire('click',{clientX:300,clientY:200});assert.equal(s.events.edge.at(-1).edgeId,c.graph.edges[i].id);
+      hit.fire('mouseleave');assert.equal(underlay.style.display,'none');assert.equal(line.style.strokeWidth,+line.getAttribute('stroke-width'));
+    });
+  }
+  s.canvas.setSelection('id-1');s.host.querySelectorAll('.pqc-edge-underlay').forEach(u=>assert.equal(u.style.display,''));
+  s.canvas.setMatches(new Set(['id-2']));assert.equal(s.host.querySelectorAll('.pqc-edge-dim').length,2);
+  s.canvas.setVisibleIds(new Set(['id-0']));assert.equal(s.host.querySelectorAll('.pqc-edge').every(e=>e.style.display==='none'),true);assert.equal(s.host.querySelectorAll('polyline').length,0);
+});
+
+function sampledPath(d){
+  const commands=[...d.matchAll(/([MLQ])\s+(-?[\d.]+)\s+(-?[\d.]+)(?:\s+(-?[\d.]+)\s+(-?[\d.]+))?/g)],out=[];let previous;
+  for(const c of commands){const p=[+c[2],+c[3]];if(c[1]==='Q'){const end=[+c[4],+c[5]],start=previous;for(let i=1;i<=32;i++){const t=i/32,u=1-t;out.push([u*u*start[0]+2*u*t*p[0]+t*t*end[0],u*u*start[1]+2*u*t*p[1]+t*t*end[1]]);}previous=end;}else{out.push(p);previous=p;}}
+  return out;
+}
+function segmentDistance(p,a,b){const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((p[0]-a[0])*dx+(p[1]-a[1])*dy)/(dx*dx+dy*dy)||0));return Math.hypot(p[0]-a[0]-t*dx,p[1]-a[1]-t*dy);}
+test('each rounded reciprocal route retains an exclusive clickable area at every requested zoom',()=>{
+  const c=context();c.graph.edges=[{id:'forward',inputId:'id-0',consumerId:'id-1'},{id:'reverse',inputId:'id-1',consumerId:'id-0'}];const s=setup(c);
+  s.canvas.setVisibleIds(new Set(['id-0','id-1']));
+  for(const b of [{x:600,y:0},{x:-600,y:0},{x:0,y:126},{x:0,y:-126},{x:581.456005859375,y:395.031982421875}])for(const k of [.47,.37,.3,.85,1,2]){
+    s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',b]]));s.canvas.setViewport({x:0,y:0,k});
+    const hits=s.host.querySelectorAll('.pqc-edge-hit'),routes=hits.map(h=>sampledPath(h.getAttribute('d')));
+    routes.forEach((route,i)=>{
+      const other=routes[1-i],radius=+hits[1-i].getAttribute('stroke-width')/2;
+      const candidates=route.slice(1).flatMap((p,j)=>[.25,.5,.75].map(t=>[route[j][0]+t*(p[0]-route[j][0]),route[j][1]+t*(p[1]-route[j][1])]));
+      assert.ok(candidates.some(p=>other.slice(1).every((end,j)=>segmentDistance(p,other[j],end)>radius+.05)),JSON.stringify({b,k,i}));
+    });
+  }
+});
+test('rounded detour itself clears the visible obstacle, while parameter dashes keep their screen size',()=>{
+  const s=setup(),layout=new Map([['id-0',{x:0,y:0}],['id-1',{x:800,y:0}],['id-2',{x:400,y:0}]]);s.canvas.restoreLayout(layout);s.canvas.setVisibleIds(new Set(layout.keys()));
+  for(const k of [.47,.37,.3,.85,1,2]){
+    s.canvas.setViewport({x:0,y:0,k});const line=s.host.querySelector('.pqc-edge-line');
+    const dash=line.getAttribute('stroke-dasharray').split(' ').map(Number);assert.ok(Math.abs(dash[0]*k-6)<1e-9);assert.ok(Math.abs(dash[1]*k-4)<1e-9);
+    for(const p of sampledPath(line.getAttribute('d')))assert.ok(p[0]<=400||p[0]>=652||p[1]<=0||p[1]>=96);
+  }
 });

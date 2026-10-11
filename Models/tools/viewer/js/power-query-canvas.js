@@ -3,7 +3,7 @@
  * No analysis, source loading, shell state, history or persistence here. */
 (function (g) {
   'use strict';
-  var W = 252, H = 96, GAP_X = 100, GAP_Y = 30, serial = 0;
+  var W = 252, H = 96, GAP_X = 100, GAP_Y = 30;
   function mount(host, options) {
     options = options || {};
     var doc = host.ownerDocument, win = doc.defaultView || g;
@@ -11,8 +11,10 @@
     var positions = new Map(), nodes = new Map(), elements = new Map(), groups = [], layoutGenerations = new WeakMap();
     var view = { x: 0, y: 0, k: 1 }, size = { w: 0, h: 0 }, roving = null;
     var suspended = false, pendingFit = false, frame = 0, drag = null, pinch = null;
-    var pointers = new Map(), removers = [], edgeElements = [], miniElements = new Map(), titleSize = 0, detailSize = 0;
-    var markerId = 'pqc-arrow-' + (++serial);
+    var pointers = new Map(), removers = [], edgeElements = [], miniElements = new Map(), titleSize = 0, detailSize = 0, edgeZoom = null;
+    // Tables loads before PQ in the viewer and snapshot. Reuse its drawing
+    // methods without constructing a Tables canvas or adopting relationship state.
+    var drawing = g.GraphCanvas.prototype;
     function el(tag, cls, text) { var e = doc.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
     function svg(tag, attrs) { var e = doc.createElementNS('http://www.w3.org/2000/svg', tag); Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); }); return e; }
     function on(target, name, fn, opts) { target.addEventListener(name, fn, opts); removers.push(function () { target.removeEventListener(name, fn, opts); }); }
@@ -20,8 +22,6 @@
     root.setAttribute('aria-label', 'Power Query input to consumer canvas'); root.setAttribute('role', 'group');
     surface.tabIndex = 0; surface.setAttribute('aria-label', 'Query canvas. Arrow keys pan; F fits the overview; plus and minus zoom.');
     var edgesSvg = svg('svg', { class: 'pqc-edges', 'aria-label': 'Resolved query references' });
-    var defs = svg('defs'), marker = svg('marker', { id: markerId, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 8, markerHeight: 8, markerUnits: 'userSpaceOnUse', orient: 'auto' });
-    marker.appendChild(svg('path', { d: 'M 3 1 L 8 5 L 3 9', fill: 'none', stroke: 'context-stroke', 'stroke-width': 1.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' })); defs.appendChild(marker); edgesSvg.appendChild(defs);
     var edgeLayer = svg('g'), cycleLayer = el('div', 'pqc-cycles'), nodeLayer = el('div', 'pqc-nodes');
     edgesSvg.appendChild(edgeLayer); world.appendChild(cycleLayer); world.appendChild(edgesSvg); world.appendChild(nodeLayer); surface.appendChild(world); root.appendChild(surface);
     var legend = el('div', 'pqc-legend'); legend.appendChild(el('span', 'pqc-solid-key', 'Query input → consumer')); legend.appendChild(el('span', 'pqc-parameter-key', 'Parameter → consumer')); root.appendChild(legend);
@@ -69,10 +69,10 @@
     }
     // Orthogonal routes use actual input/consumer ports, even after dragging a
     // consumer to the left. No source analysis or change to graph direction.
-    function edgePath(edge, obstacles, reciprocal) {
-      var a = positions.get(edge.inputId), b = positions.get(edge.consumerId); if (!a || !b) return '';
-      function path(points) { return points.map(function (p, i) { return (i ? 'L' : 'M') + p[0] + ',' + p[1]; }).join(' '); }
-      if (edge.inputId === edge.consumerId) return path([[a.x + W / 2, a.y], [a.x + W / 2, a.y - 22], [a.x + W + 22, a.y - 22], [a.x + W + 22, a.y + H / 2], [a.x + W, a.y + H / 2]]);
+    function edgePoints(edge, obstacles, reciprocal) {
+      var a = positions.get(edge.inputId), b = positions.get(edge.consumerId); if (!a || !b) return [];
+
+      if (edge.inputId === edge.consumerId) return [[a.x + W / 2, a.y], [a.x + W / 2, a.y - 22], [a.x + W + 22, a.y - 22], [a.x + W + 22, a.y + H / 2], [a.x + W, a.y + H / 2]];
       var right = b.x >= a.x + W + 32, left = a.x >= b.x + W + 32, vertical = !right && !left;
       var forward = vertical ? b.y >= a.y : right, sign = forward ? 1 : -1;
       // Opposing references need separate ports AND middle channels. Port-only
@@ -92,7 +92,7 @@
         return false;
       }
       var blockers = obstacles.filter(function (rect) { return blocked(direct, rect); });
-      if (!blockers.length) return path(direct);
+      if (!blockers.length) return direct;
       // Detour around intervening visible cards. Hidden registry members cannot
       // distort the visible route. The common adjacent-card case stays O(nodes).
       var rails = [], dimension = vertical ? W : H, key = vertical ? 'x' : 'y', separation = reciprocal && !forward ? 24 : 0, clearance = 18 + separation;
@@ -103,17 +103,67 @@
       for (var i = 0; i < rails.length; i++) {
         var ca = sa.slice(), cb = sb.slice(); ca[cross] = cb[cross] = rails[i];
         var detour = [start, sa, ca, cb, sb, end];
-        if (!obstacles.some(function (r) { return blocked(detour, r); })) return path(detour);
+        if (!obstacles.some(function (r) { return blocked(detour, r); })) return detour;
       }
       // Manually overlapping cards may leave no clear port. Keep their exact
       // positions and semantic endpoints; never silently rearrange the canvas.
-      return path(direct);
+      return direct;
+    }
+    // Seats are on straight runs, away from rounded corners and visible cards.
+    // The sign is always input -> consumer, never Tables' filter direction.
+    function arrowSeat(points, obstacles, boost) {
+      var extent = drawing.ARROW_PX / Math.max(0.05, view.k) * boost * 0.64;
+      var segments = points.slice(1).map(function (b, i) { var a = points[i]; return { a: a, b: b, length: Math.hypot(b.x - a.x, b.y - a.y), index: i }; });
+      segments.sort(function (a, b) { return b.length - a.length; });
+      for (var i = 0; i < segments.length; i++) {
+        var seg = segments[i], a = seg.a, b = seg.b, vertical = a.x === b.x;
+        var start = extent + (seg.index ? Math.min(9, seg.length / 2) : 0);
+        var end = seg.length - extent - (seg.index < points.length - 2 ? Math.min(9, seg.length / 2) : 0);
+        if (start > end) continue;
+        for (var j = 0; j < 3; j++) {
+          var t = Math.max(start, Math.min(end, seg.length * [0.5, 0.3, 0.7][j])) / seg.length;
+          var x = a.x + (b.x - a.x) * t, y = a.y + (b.y - a.y) * t;
+          if (obstacles.some(function (r) { return x + extent > r.x && x - extent < r.x + W && y + extent > r.y && y - extent < r.y + H; })) continue;
+          return { x: x, y: y, orient: vertical ? 'v' : 'h', toA: vertical ? (b.y > a.y ? 1 : -1) : (b.x > a.x ? 1 : -1) };
+        }
+      }
+      return null; // Overlapping cards can leave no visible run; never put a head under a card.
+    }
+    function drawEdge(entry, obstacles) {
+      var active = entry.group.classList.contains('pqc-related') || entry.group.classList.contains('pqc-branch-edge');
+      var width = drawing.edgeStrokeWidth(view.k, false, active, false, false);
+      entry.line.setAttribute('stroke-width', width);
+      if (entry.group.classList.contains('pqc-parameter-edge')) entry.line.setAttribute('stroke-dasharray', (6 / view.k) + ' ' + (4 / view.k));
+      entry.underlay.setAttribute('stroke-width', width * 2.1);
+      entry.underlay.style.display = active || entry.hovered ? '' : 'none';
+      entry.line.style.strokeWidth = entry.hovered ? width + 1 : width;
+      // Keep the existing 14 screen-pixel hit corridor and its edge identity.
+      entry.hit.setAttribute('stroke-width', 14 / view.k);
+      entry.arrow.replaceChildren();
+      if (!shown(entry.edge.inputId) || !shown(entry.edge.consumerId) || !entry.points) return;
+      var boost = active ? 1.15 : 1, spot = arrowSeat(entry.points, obstacles, boost);
+      if (spot) entry.arrow.appendChild(drawing.edgeArrow.call({ ARROW_PX: drawing.ARROW_PX, view: view }, { both: false }, spot, 'currentColor', 1, boost));
+    }
+    function updateEdgeZoom() {
+      if (edgeZoom === view.k) return; edgeZoom = view.k;
+      var obstacles = ids().map(function (id) { return positions.get(id); });
+      edgeElements.forEach(function (entry) { drawEdge(entry, obstacles); });
     }
     function updateGeometry() {
       elements.forEach(function (e, id) { var p = positions.get(id); e.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)'; });
       var obstacles = ids().map(function (id) { return positions.get(id); });
       var directions = new Set(edgeElements.map(function (entry) { return JSON.stringify([entry.edge.inputId, entry.edge.consumerId]); }));
-      edgeElements.forEach(function (entry) { var reciprocal = directions.has(JSON.stringify([entry.edge.consumerId, entry.edge.inputId])); var d = edgePath(entry.edge, obstacles, reciprocal); entry.line.setAttribute('d', d); entry.hit.setAttribute('d', d); });
+      edgeElements.forEach(function (entry) {
+        var reciprocal = directions.has(JSON.stringify([entry.edge.consumerId, entry.edge.inputId]));
+        var points = edgePoints(entry.edge, obstacles, reciprocal).map(function (p) { return { x: p[0], y: p[1] }; });
+        // Zero-length / collinear router waypoints are not corners or arrow seats.
+        points = points.filter(function (p, i) { return !i || p.x !== points[i - 1].x || p.y !== points[i - 1].y; });
+        points = points.filter(function (p, i) { var a = points[i - 1], b = points[i + 1]; return !a || !b || !((a.x === p.x && p.x === b.x && (p.y - a.y) * (b.y - p.y) >= 0) || (a.y === p.y && p.y === b.y && (p.x - a.x) * (b.x - p.x) >= 0)); });
+        entry.points = points;
+        var d = drawing.orthoPath(points, 9);
+        entry.line.setAttribute('d', d); entry.hit.setAttribute('d', d); entry.underlay.setAttribute('d', d);
+        drawEdge(entry, obstacles);
+      });
       cycleLayer.replaceChildren(); groups.forEach(function (members) {
         var pts = members.filter(shown).map(function (id) { return positions.get(id); }); if (!pts.length) return;
         var x = Math.min.apply(null, pts.map(function (p) { return p.x; })), y = Math.min.apply(null, pts.map(function (p) { return p.y; }));
@@ -144,6 +194,7 @@
     function transform(notify) {
       world.style.transform = 'translate(' + view.x + 'px,' + view.y + 'px) scale(' + view.k + ')';
       root.classList.toggle('pqc-names-only', view.k < 0.65);
+      updateEdgeZoom();
       // Compact name chips keep ordinary overviews legible. At very large-model
       // scales the overview is shape-only; search/reveal restores readable detail.
       var font = view.k >= 0.25 ? Math.max(13.5, 11 / view.k) : 13.5, detailFont = view.k >= 0.25 ? Math.max(11, 8.5 / view.k) : 11;
@@ -252,8 +303,14 @@
       next.graph.edges.forEach(function (edge) {
         if (!nodes.has(edge.inputId) || !nodes.has(edge.consumerId)) return;
         var group = svg('g', { class: 'pqc-edge' + (nodes.get(edge.inputId).kind === 'parameter' ? ' pqc-parameter-edge' : '') });
-        var line = svg('path', { class: 'pqc-edge-line', 'marker-end': 'url(#' + markerId + ')' }), hit = svg('path', { class: 'pqc-edge-hit' }); hit.dataset.edgeId = edge.id;
-        var title = svg('title'); title.textContent = nodes.get(edge.inputId).label + ' is referenced by ' + nodes.get(edge.consumerId).label; group.appendChild(title); group.appendChild(line); group.appendChild(hit); edgeLayer.appendChild(group); edgeElements.push({ edge: edge, group: group, line: line, hit: hit });
+        var underlay = svg('path', { class: 'pqc-edge-underlay' }), line = svg('path', { class: 'pqc-edge-line' }), hit = svg('path', { class: 'pqc-edge-hit' }), arrow = svg('g', { class: 'pqc-edge-arrow' }); hit.dataset.edgeId = edge.id;
+        var title = svg('title'); title.textContent = nodes.get(edge.inputId).label + ' is referenced by ' + nodes.get(edge.consumerId).label;
+        group.appendChild(title); group.appendChild(underlay); group.appendChild(line); group.appendChild(arrow); group.appendChild(hit); edgeLayer.appendChild(group);
+        var entry = { edge: edge, group: group, underlay: underlay, line: line, hit: hit, arrow: arrow, hovered: false }; edgeElements.push(entry);
+        function hover(value) { entry.hovered = value; group.classList.toggle('pqc-edge-hover', value); drawEdge(entry, ids().map(function (id) { return positions.get(id); })); }
+        // These listeners die with their edge DOM on context replacement.
+        hit.addEventListener('mouseenter', function () { hover(true); });
+        hit.addEventListener('mouseleave', function () { hover(false); });
       });
       applyVisibility(); if (fresh) fit(); else transform(false);
     }
