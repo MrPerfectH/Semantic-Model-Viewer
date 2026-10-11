@@ -182,3 +182,12 @@ test('Hide explicitly compacts visible flow and remains undoable; stale Analyze 
  const {w}=stateHarness();let arranged;w.applyFilters=()=>{w.visible=new Set(['B']);};w.canvas.arrange=set=>{arranged=[...set];};w.fitLayout=()=>{};w.setFocus({mode:'hide',direction:'inputs',depth:0});assert.deepEqual(arranged,['B']);assert.equal(w.layoutHistory.length,1);
  w.valid=()=>false;const prior=w.captureNavigation();w.analyzeQuery('A');assert.equal(w.selectedId,prior.selectedId);assert.equal(w.history.length,0);
 });
+
+test('Show all arranges the full inventory when leaving a compact analyzed flow, and Undo restores the flow',async()=>{
+ const {w}=stateHarness();let calls=[];w.canvas.arrange=ids=>calls.push([...ids].sort());w.fitLayout=()=>{};w.applyFilters=()=>{w.visible=new Set(w.membership);};w.chooseQuery('B');calls=[];w.showAll();assert.deepEqual(calls,[['A','Alone','B']]);assert.equal(w.analyzedId,null);await w.undo();assert.equal(w.analyzedId,'B');assert.deepEqual([...w.membership].sort(),['A','B']);
+ w.analyzedId=null;calls=[];w.showAll();assert.equal(calls.length,0,'custom Tables-style arrangements are not silently rearranged');
+});
+
+test('opening a large flow centers a readable target while retaining every directed member',()=>{
+ const {w}=stateHarness();let centered=0;w.applyFilters=()=>{w.visible=new Set(w.membership);};w.canvas.arrange=()=>{};w.fitLayout=()=>{};w.canvas.getViewport=()=>({x:0,y:0,k:.29});w.centerSelected=()=>{centered++;};w.chooseQuery('B');assert.equal(centered,1);assert.deepEqual([...w.membership].sort(),['A','B']);assert.deepEqual([...w.visible].sort(),['A','B']);
+});
