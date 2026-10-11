@@ -211,7 +211,7 @@
         var a = entry.a.stub, b = entry.b.stub, xs = [a.x, b.x], ys = [a.y, b.y];
         function proximity(r) { return Math.max(0, Math.min(a.x, b.x) - r.x - W, r.x - Math.max(a.x, b.x)) + Math.max(0, Math.min(a.y, b.y) - r.y - H, r.y - Math.max(a.y, b.y)); }
         obstacles.slice().sort(function (u, v) { return proximity(u) - proximity(v) || u.x - v.x || u.y - v.y; }).slice(0, 18).forEach(function (r) { xs.push(r.x - clearance, r.x + W + clearance); ys.push(r.y - clearance, r.y + H + clearance); });
-        reserved.forEach(function (s) { if (s.entry === entry) return; if (s.a.x === s.b.x) xs.push(s.a.x - pitch, s.a.x + pitch); else ys.push(s.a.y - pitch, s.a.y + pitch); });
+        reserved.forEach(function (s) { if (s.entry === entry) return; if (s.a.x === s.b.x) xs.push(s.a.x - Math.min(entry.laneGap, s.gap), s.a.x + Math.min(entry.laneGap, s.gap)); else ys.push(s.a.y - Math.min(entry.laneGap, s.gap), s.a.y + Math.min(entry.laneGap, s.gap)); });
         function rails(values, start, end) {
           var others = Array.from(new Set(values)).filter(function (v) { return v !== start && v !== end; });
           others.sort(function (u, v) { return Math.abs(u - start) + Math.abs(u - end) - Math.abs(v - start) - Math.abs(v - end) || u - v; });
@@ -240,6 +240,46 @@
         }
         return null;
       }
+      // Long links can cross several occupied columns. Escape through a free
+      // row/column gutter using independent departure and arrival channels.
+      function bridge(entry) {
+        var vertical = !!entry.a.dy, a = entry.a.point, b = entry.b.point, sa = entry.a.stub, sb = entry.b.stub;
+        function coord(p) { return vertical ? { x: p.y, y: p.x } : p; }
+        function point(x, y) { return vertical ? { x: y, y: x } : { x: x, y: y }; }
+        var u = coord(sa), v = coord(sb), rails = [], launches = [u.x, v.x];
+        obstacles.forEach(function (r) {
+          var x = vertical ? r.y : r.x, y = vertical ? r.x : r.y, width = vertical ? H : W, height = vertical ? W : H;
+          rails.push(y - 12, y + height + 12);
+          launches.push(x - 12, x + width + 12);
+        });
+        reserved.forEach(function (s) {
+          if (s.entry === entry) return;
+          var p = coord(s.a), q = coord(s.b), gap = Math.min(entry.laneGap, s.gap);
+          if (p.x === q.x) launches.push(p.x - gap, p.x + gap);
+          else rails.push(p.y - gap, p.y + gap);
+        });
+        function nearest(values, start, end) { return Array.from(new Set(values)).sort(function (a, b) { return Math.abs(a - start) + Math.abs(a - end) - Math.abs(b - start) - Math.abs(b - end) || a - b; }); }
+        rails = nearest(rails, u.y, v.y);
+        var ax = nearest(launches, u.x, u.x).filter(function (x) { return Math.abs(x - u.x) <= 100; });
+        var bx = nearest(launches, v.x, v.x).filter(function (x) { return Math.abs(x - v.x) <= 100; });
+        for (var i = 0; i < rails.length && edgeChecks < 7000 && edgeWork < 40000; i++) {
+          var rail = rails[i], departures = [], arrivals = [];
+          for (var j = 0; j < ax.length && departures.length < 3 && edgeChecks < 7000 && edgeWork < 40000; j++) {
+            var p = point(ax[j], u.y), q = point(ax[j], rail);
+            if (acceptable([a, sa, p, q], entry)) departures.push([p, q]);
+          }
+          if (!departures.length) continue;
+          for (var j = 0; j < bx.length && arrivals.length < 3 && edgeChecks < 7000 && edgeWork < 40000; j++) {
+            var p = point(bx[j], v.y), q = point(bx[j], rail);
+            if (acceptable([q, p, sb, b], entry)) arrivals.push([q, p]);
+          }
+          for (var j = 0; j < departures.length; j++) for (var k = 0; k < arrivals.length; k++) {
+            var result = acceptable([a, sa].concat(departures[j], arrivals[k], [sb, b]), entry);
+            if (result) return result;
+          }
+        }
+        return null;
+      }
       var missing = 0, crowded = 0;
       visibleEdges.forEach(function (entry) {
         edgeChecks = edgeWork = 0;
@@ -252,11 +292,41 @@
         if (entry.laneGap * view.k < 7.9) entry.routeIssue = 'crowded-ports';
         if (clearSegment(a, sa, entry) && clearSegment(sb, b, entry)) {
           var vertical = !!entry.a.dy, mid = (vertical ? (sa.y + sb.y) / 2 : (sa.x + sb.x) / 2) + (entry.routeIssue === 'crowded-ports' ? port.slot * entry.laneGap : 0);
-          for (var attempt = 0; attempt < 17 && !points && edgeChecks < 8000 && edgeWork <= 50000; attempt++) {
-            var offset = Math.ceil(attempt / 2) * (attempt % 2 ? -entry.laneGap : entry.laneGap), channel = mid + offset;
-            var middle = vertical ? [{ x: sa.x, y: channel }, { x: sb.x, y: channel }] : [{ x: channel, y: sa.y }, { x: channel, y: sb.y }];
-            points = acceptable([a, sa].concat(middle, [sb, b]), entry);
+          // If the endpoint rows face different cards in an intervening
+          // column, no single middle channel can join them. Skip that family
+          // before spending the edge's budget on repeated blocked candidates.
+          function reach(p) {
+            var at = vertical ? p.y : p.x, cross = vertical ? p.x : p.y, low = -Infinity, high = Infinity;
+            var row = vertical ? { x0: p.x, x1: p.x, y0: Math.min(sa.y, sb.y), y1: Math.max(sa.y, sb.y) } : { x0: Math.min(sa.x, sb.x), x1: Math.max(sa.x, sb.x), y0: p.y, y1: p.y };
+            spatialQuery(cardIndex, row).forEach(function (r) {
+              var x = vertical ? r.y : r.x, y = vertical ? r.x : r.y, width = vertical ? H : W, height = vertical ? W : H;
+              if (cross <= y || cross >= y + height) return;
+              if (x + width <= at) low = Math.max(low, x + width);
+              if (x >= at) high = Math.min(high, x);
+            });
+            return [low, high];
           }
+          var ar = reach(sa), br = reach(sb), directPossible = Math.max(ar[0], br[0]) <= Math.min(ar[1], br[1]);
+          for (var compact = 0; compact < 7 && !points; compact++) {
+            // Compact lanes still exceed Tables' 0.1-unit SVG precision;
+            // clearSegment continues rejecting every coincident run.
+            if (!directPossible) { entry.laneGap = Math.min(entry.laneGap, 1); break; }
+            if (compact) entry.laneGap = Math.max(0.5, entry.laneGap / 2);
+            var channels = [mid];
+            for (var offsetIndex = 1; offsetIndex < 17; offsetIndex++) channels.push(mid + Math.ceil(offsetIndex / 2) * (offsetIndex % 2 ? -entry.laneGap : entry.laneGap));
+            nearbySegments({ x0: Math.min(sa.x, sb.x) - pitch, y0: Math.min(sa.y, sb.y) - pitch, x1: Math.max(sa.x, sb.x) + pitch, y1: Math.max(sa.y, sb.y) + pitch }).forEach(function (s) {
+              if (s.entry === entry || (s.a.x === s.b.x) === vertical) return;
+              var coordinate = vertical ? s.a.y : s.a.x, gap = Math.min(entry.laneGap, s.gap);
+              channels.push(coordinate - gap, coordinate + gap);
+            });
+            channels = Array.from(new Set(channels)).sort(function (u, v) { return Math.abs(u - mid) - Math.abs(v - mid) || u - v; });
+            for (var attempt = 0; attempt < channels.length && !points && edgeChecks < 8000 && edgeWork <= 50000; attempt++) {
+              var channel = channels[attempt];
+              var middle = vertical ? [{ x: sa.x, y: channel }, { x: sb.x, y: channel }] : [{ x: channel, y: sa.y }, { x: channel, y: sb.y }];
+              points = acceptable([a, sa].concat(middle, [sb, b]), entry);
+            }
+          }
+          if (entry.laneGap * view.k < 7.9) entry.routeIssue = 'crowded-ports';
           if (!points) {
             var rails = [];
             obstacles.forEach(function (r) { rails.push(vertical ? r.x - clearance : r.y - clearance, vertical ? r.x + W + clearance : r.y + H + clearance); });
@@ -266,6 +336,7 @@
               points = acceptable([a, sa].concat(detour, [sb, b]), entry);
             }
           }
+          if (!points && edgeChecks < 8000 && edgeWork <= 50000) points = bridge(entry);
           if (!points && edgeChecks < 8000 && edgeWork <= 50000) points = search(entry);
         }
         if (!points) { entry.routeIssue = edgeChecks >= 8000 || edgeWork > 50000 ? 'routing-limit' : 'no-clear-route'; missing++; }
@@ -277,7 +348,7 @@
         entry.group.setAttribute('data-route-status', entry.routeIssue || 'routed');
       });
       routeStatus.hidden = !missing && !crowded;
-      routeStatus.textContent = (missing ? missing + ' connections could not be separated. Move cards apart or show fewer objects. ' : '') + (crowded ? crowded + ' connections have crowded ports. Zoom in for more space.' : '');
+      routeStatus.textContent = (missing ? missing + ' connections could not be separated. Move cards apart or show fewer objects. ' : '') + (crowded ? crowded + ' connections have crowded ports or channels. Zoom in or move cards apart for more space.' : '');
       routeStatus.dataset.unrouted = String(missing); routeStatus.dataset.crowded = String(crowded); routeStatus.dataset.checks = String(checks); routeStatus.dataset.work = String(work); routeStatus.dataset.maxEdgeWork = String(maxEdgeWork);
     }
     function renderRoutes(obstacles) {
@@ -477,12 +548,21 @@
         var group = svg('g', { class: 'pqc-edge' + (nodes.get(edge.inputId).kind === 'parameter' ? ' pqc-parameter-edge' : '') });
         var underlay = svg('path', { class: 'pqc-edge-underlay' }), line = svg('path', { class: 'pqc-edge-line' }), hit = svg('path', { class: 'pqc-edge-hit' }), arrow = svg('g', { class: 'pqc-edge-arrow' }); hit.dataset.edgeId = edge.id;
         var title = svg('title'); title.textContent = nodes.get(edge.inputId).label + ' is referenced by ' + nodes.get(edge.consumerId).label;
+        hit.setAttribute('role', 'button'); hit.setAttribute('tabindex', '0'); hit.setAttribute('aria-label', title.textContent);
         group.appendChild(title); group.appendChild(underlay); group.appendChild(line); group.appendChild(arrow); group.appendChild(hit); edgeLayer.appendChild(group);
         var entry = { edge: edge, group: group, underlay: underlay, line: line, hit: hit, arrow: arrow, hovered: false }; edgeElements.push(entry);
         function hover(value) { entry.hovered = value; group.classList.toggle('pqc-edge-hover', value); drawEdge(entry, ids().map(function (id) { return positions.get(id); })); }
         // These listeners die with their edge DOM on context replacement.
         hit.addEventListener('mouseenter', function () { hover(true); });
         hit.addEventListener('mouseleave', function () { hover(false); });
+        hit.addEventListener('focus', function () { hover(true); });
+        hit.addEventListener('blur', function () { hover(false); });
+        hit.addEventListener('keydown', function (e) {
+          if ((e.key !== 'Enter' && e.key !== ' ') || e.altKey || e.metaKey || e.ctrlKey) return;
+          e.preventDefault(); e.stopPropagation();
+          var p = entry.points[Math.floor(entry.points.length / 2)] || positions.get(edge.consumerId);
+          emit('onEdge', { generation: generation, edgeId: edge.id, anchor: { x: p.x * view.k + view.x, y: p.y * view.k + view.y } });
+        });
       });
       applyVisibility(); if (fresh) fit(); else transform(false);
     }
