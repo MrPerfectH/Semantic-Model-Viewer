@@ -171,3 +171,10 @@ test('focus lock exposes pressed state and selected identity, rejects detached a
  const settings={mode:'dim',direction:'connected',depth:1,locked:false};s.inspector.setFocusControls(settings);const lock=s.host.querySelector('.pqi-lock');assert.equal(lock.getAttribute('aria-pressed'),'false');assert.match(lock.getAttribute('aria-label'),/^Lock focus on /);lock.fire('click');assert.deepEqual(plain(actions[0]),{generation:1,nodeId:'id-1'});
  s.inspector.setFocusControls({...settings,locked:true,rootLabel:'Pinned root'});const unlock=s.host.querySelector('.pqi-lock');assert.equal(unlock.getAttribute('aria-pressed'),'true');assert.equal(unlock.getAttribute('aria-label'),'Unlock query focus');lock.fire('click');assert.equal(actions.length,1);s.inspector.select('id-3',{open:true});unlock.fire('click');assert.equal(actions.length,1);s.inspector.setContext(null);unlock.fire('click');assert.equal(actions.length,1);
 });
+
+test('Analyze this query is explicit, source-preserving and rejects stale controls',()=>{
+ const s=setup(),calls=[];s.inspector.destroy();s.inspector=s.win.PowerQueryInspector.mount(s.host,{context:s.ctx,onAnalyze:p=>calls.push(p)});s.inspector.select('id-1',{open:true});
+ s.inspector.setFocusControls({mode:'dim',direction:'connected',depth:Infinity,analyzed:true,rootLabel:'Original query',isAnalyzed:false});
+ const code=s.code(),button=s.host.querySelectorAll('button').find(b=>b.getAttribute('aria-label')==='Analyze this query');assert.ok(button);assert.match(s.root().textContent,/Analyzing · Original query/);code.scrollTop=82;button.fire('click');assert.deepEqual(plain(calls),[{generation:1,nodeId:'id-1'}]);assert.equal(s.code(),code);assert.equal(code.scrollTop,82);
+ s.inspector.select('id-3',{open:true});button.fire('click');assert.equal(calls.length,1);s.inspector.setContext(null);button.fire('click');assert.equal(calls.length,1);
+});

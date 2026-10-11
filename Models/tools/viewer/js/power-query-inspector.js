@@ -94,19 +94,21 @@
       function control(e, kind) { record(e, kind); controlEntries.push(focusEntries[focusEntries.length - 1]); return e; }
       function valid() { return current(gen, id) && version === controlsVersion; }
       function change(values) { if (valid()) emit('onFocusChange', Object.assign({ generation: gen, nodeId: id, mode: settings.mode, direction: settings.direction, depth: settings.depth }, values)); }
-      focusBox.appendChild(el('h3', '', settings.locked ? 'Locked focus · ' + settings.rootLabel : 'Focus follows selection'));
-      var lock = control(g.WorkspaceUI.button(doc, { text: settings.locked ? '🔒' : '🔓', label: settings.locked ? 'Unlock query focus' : 'Lock focus on ' + row.node.label }), 'focus-lock');
+      focusBox.appendChild(el('h3', '', settings.locked ? 'Locked focus · ' + settings.rootLabel : settings.analyzed ? 'Analyzing · ' + settings.rootLabel : 'Canvas focus'));
+      var lock = control(g.WorkspaceUI.button(doc, { text: settings.locked ? '🔒' : '🔓', label: settings.locked ? 'Unlock query focus' : 'Lock focus on ' + (settings.rootLabel || row.node.label) }), 'focus-lock');
       lock.classList.add('pqi-lock');lock.setAttribute('aria-pressed', String(!!settings.locked));
-      lock.title = settings.locked ? 'Release ' + settings.rootLabel + '; focus will follow the selected query.' : 'Keep this query’s connections while inspecting other queries.';
+      lock.title = settings.locked ? 'Release ' + settings.rootLabel + '; library choices can start another flow.' : 'Keep this flow when choosing another query from the library.';
       listen(lock, 'click', function () { if (valid()) emit('onToggleLock', { generation: gen, nodeId: id }); }); focusBox.appendChild(lock);
+      var analyze = control(g.WorkspaceUI.button(doc, {text: settings.isAnalyzed ? 'Rebuild this query’s flow' : 'Analyze this query', label: 'Analyze this query'}), 'analyze-query');
+      listen(analyze, 'click', function () { if(valid()) emit('onAnalyze', {generation:gen,nodeId:id}); }); focusBox.appendChild(analyze);
       var modes = el('div', 'ex-focus-options'); modes.setAttribute('role', 'group'); modes.setAttribute('aria-label', 'Unrelated queries');
       [['dim', 'Dim unrelated'], ['hide', 'Hide unrelated']].forEach(function (pair) { var b = control(g.WorkspaceUI.button(doc, { text: pair[1] }), 'focus-' + pair[0]); b.setAttribute('aria-pressed', String(settings.mode === pair[0])); listen(b, 'click', function () { change({ mode: pair[0] }); }); modes.appendChild(b); }); focusBox.appendChild(modes);
       var details = el('div', 'pqi-reference-options'); focusBox.appendChild(details);
-      details.appendChild(el('p', 'ex-muted', settings.locked ? 'Focus stays on ' + settings.rootLabel + '. Unlock to follow selection. Only resolved M references are shown.' : 'Click another query to follow its connections. Lock to keep this focus. Only resolved M references are shown.'));
+      details.appendChild(el('p', 'ex-muted', settings.locked ? 'Focus stays on ' + settings.rootLabel + '. Unlock to choose another flow from the library. Only resolved M references are shown.' : settings.analyzed ? 'Cards inspect without changing the analyzed flow. Analyze this query to follow a different query. Only resolved M references are shown.' : 'Dim or hide unrelated queries, or analyze this query’s full upstream and downstream flow.'));
       function selector(kind, label, choices, value, toValue) {
         var e = control(el('select'), kind); e.setAttribute('aria-label', label); choices.forEach(function (pair) { var option = el('option', '', pair[1]); option.value = pair[0]; e.appendChild(option); }); e.value = String(value === Infinity ? 'all' : value); listen(e, 'change', function () { var values = {}; values[kind === 'focus-direction' ? 'direction' : 'depth'] = toValue(e.value); change(values); }); var labelElement = el('label', 'pqi-option-label', label); labelElement.appendChild(e); details.appendChild(labelElement);
       }
-      selector('focus-direction', 'Query reference direction', [['inputs','Inputs'],['consumers','Consumers'],['connected','All connected']], settings.direction, function (v) { return v; });
+      selector('focus-direction', 'Query reference direction', [['inputs','Inputs'],['consumers','Consumers'],['connected','Inputs + consumers']], settings.direction, function (v) { return v; });
       selector('focus-depth', 'Query reference distance', [['0','Selected only'],['1','Direct only'],['2','Up to 2 connections'],['all','Direct + indirect']], settings.depth, function (v) { return v === 'all' ? Infinity : Number(v); });
       details.appendChild(el('p', 'ex-related-count', settings.relatedCount + (settings.rootLabel ? ' objects in flow · ' : ' related · ') + settings.missingCount + ' to add'));
       function action(name, text, disabled) { var b = control(g.WorkspaceUI.button(doc, { text: text }), name); b.disabled = disabled; listen(b, 'click', function () { if (!b.disabled && valid()) emit('onMembershipAction', { generation: gen, nodeId: id, action: name }); }); details.appendChild(b); }
@@ -122,7 +124,7 @@
         var mode = settings.mode, direction = settings.direction, depth = settings.depth;
         if (!['dim', 'hide'].includes(mode) || !['inputs', 'consumers', 'connected'].includes(direction) || ![0,1,2,Infinity].includes(depth)) return;
         function count(v) { return Number.isInteger(v) && v >= 0 ? v : 0; }
-        focusControls = { mode: mode, direction: direction, depth: depth, relatedCount: count(settings.relatedCount), missingCount: count(settings.missingCount), removableCount: count(settings.removableCount), locked: !!settings.locked, rootLabel: typeof settings.rootLabel === 'string' ? settings.rootLabel : null };
+        focusControls = { mode: mode, direction: direction, depth: depth, relatedCount: count(settings.relatedCount), missingCount: count(settings.missingCount), removableCount: count(settings.removableCount), locked: !!settings.locked, analyzed: !!settings.analyzed, isAnalyzed: !!settings.isAnalyzed, rootLabel: typeof settings.rootLabel === 'string' ? settings.rootLabel : null };
       }
       renderFocusControls();
     }

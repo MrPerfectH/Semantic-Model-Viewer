@@ -48,7 +48,7 @@ test('remove and blank affect layout only; Undo and Back restore separate state 
  w.blank();assert.equal(w.membership.size,0);assert.equal(w.selectedId,null);assert.equal(w.inspectorOpen,false);assert.equal(w.focusMode,'dim');await w.undo();assert.equal(w.selectedId,'B');assert.equal(w.inspectorOpen,true);assert.equal(w.membership.size,2);assert.equal(w.context.byNodeId.get('B').code,source);assert.equal(w.history.length,0);
 });
 test('layout Undo is bounded and model replacement invalidates either restoration',async()=>{const {w}=stateHarness();w.ensureState();for(let i=0;i<30;i++)w.saveLayout();assert.equal(w.layoutHistory.length,25);w.app.model=model([row('Replacement')]);let reset=0;w.reset=()=>reset++;await w.undo();assert.equal(reset,1);assert.equal(w.selectedId,'B');});
-test('table entry uses exact association and never chooses a multipartition default',()=>{const {w}=stateHarness();let navigated=null;w.navigate=id=>navigated=id;w.context.byNodeId=new Map([['p1',{metadataRow:{kind:'partition',table:'Sales',name:'one'},state:'available'}]]);w.chooseTable('Sales');assert.equal(navigated,'p1');});
+test('table entry uses exact association and never chooses a multipartition default',()=>{const {w}=stateHarness();let navigated=null;w.analyzeQuery=id=>navigated=id;w.context.byNodeId=new Map([['p1',{metadataRow:{kind:'partition',table:'Sales',name:'one'},state:'available'}]]);w.chooseTable('Sales');assert.equal(navigated,'p1');});
 test('Back restores viewport after the final hidden-selection banner layout',async()=>{const {w}=stateHarness();w.category='disconnected';w.navigate('A',true);let height=500,cached=height,view={x:10,y:20,k:1};const expected={...w.history.at(-1).viewport};w.canvas.setViewport=v=>{cached=height;view={...v};};w.applyFilters=()=>{height+=49;};await w.back();if(height!==cached)view.y+=(height-cached)/2;assert.deepEqual(view,expected);});
 
 test('Back finalizes controls before restoring disclosure and scroll state',async()=>{const {w,events}=stateHarness();w.navigate('A',true);events.length=0;await w.back();const at=events.findIndex(e=>e[0]==='restore');assert.ok(at>=0);assert.ok(events.slice(0,at).some(e=>e[0]==='filters'));assert.equal(events.slice(at+1).some(e=>e[0]==='filters'),false);assert.equal(events.at(-1)[0],'viewport');});
@@ -154,4 +154,31 @@ test('model status and source provider are independent conservative evidence axe
  const d=id=>c.byNodeId.get(id).presentation;
  assert.equal(d('Dataflow').provider,'Dataflow');assert.equal(d('Lake').provider,'Databricks');assert.equal(d('Manual').kind,'Inline table');assert.equal(d('Loaded').status,'Model table');assert.equal(d('Loaded').provider,'SQL Server');assert.equal(d('P').kind,'Parameter');assert.equal(d('LooksLikeDatabricks').provider,'Unknown');assert.equal(d('Intermediate').kind,'Intermediate query');assert.equal(d('Intermediate').provider,'Unknown');assert.equal(d('Mixed').provider,'Mixed');
  const app={model:{byName:{Sales:{role:'fact'}}},tableColor:()=> '#27aec2',isFact:()=>true};const chrome=g.PowerQueryWorkspaceInternals.chromeFor(rows[3],c.byNodeId.get('Loaded').node,app);assert.equal(chrome.headerTint,'#1d2330');assert.equal(chrome.badge,'FACT');
+});
+
+test('Measures-style directed flow excludes sibling consumers and merge co-inputs at every depth',()=>{
+ const g=harness(),rows=[row('Source'),row('Shared','Source'),row('Root','Shared'),row('Sibling','Shared'),row('Other'),row('Final','Root & Other'),row('After','Final'),row('Alone')],m=model(rows),c=g.PowerQueryWorkspaceInternals.contextFor(g.PowerQueryGraphModel.build(m,{generation:1}),rows,1),walk=g.PowerQueryWorkspaceInternals.neighborhood;
+ assert.deepEqual([...walk(c,'Root','connected',Infinity)].sort(),['After','Final','Root','Shared','Source']);
+ assert.deepEqual([...walk(c,'Root','connected',1)].sort(),['Final','Root','Shared']);
+ assert.deepEqual([...walk(c,'Root','inputs',Infinity)].sort(),['Root','Shared','Source']);
+ assert.deepEqual([...walk(c,'Root','consumers',Infinity)].sort(),['After','Final','Root']);
+ assert.deepEqual([...walk(c,'Alone','connected',Infinity)],['Alone']);
+});
+test('library analysis compacts only the directed flow; card inspection retains it; Back restores manual layout',async()=>{
+ const {w,events}=stateHarness();let layout=new Map([['A',{x:2000,y:900}],['B',{x:4000,y:300}],['Alone',{x:-300,y:12}]]),view={x:137,y:93,k:.47};
+ w.canvas.captureLayout=()=>new Map([...layout].map(([id,p])=>[id,{...p}]));w.canvas.restoreLayout=p=>{layout=new Map(p);};w.canvas.getViewport=()=>({...view});w.canvas.setViewport=p=>{view={...p};};
+ w.applyFilters=()=>{w.visible=new Set(w.membership);};w.canvas.arrange=ids=>{let i=0;ids.forEach(id=>layout.set(id,{x:i++*400,y:0}));};w.fitLayout=()=>{view={x:10,y:20,k:1};};
+ w.ensureState();const original=[...layout];w.chooseQuery('B');assert.equal(w.analyzedId,'B');assert.equal(w.flowRootId,null);assert.deepEqual([...w.membership].sort(),['A','B']);assert.deepEqual(layout.get('Alone'),{x:-300,y:12});
+ const flowLayout=[...layout],flowView={...view};w.navigate('A',true,{preserveView:true});assert.equal(w.analyzedId,'B');assert.equal(w.selectedId,'A');assert.deepEqual([...layout],flowLayout);assert.deepEqual(view,flowView);
+ await w.back();assert.equal(w.selectedId,'B');assert.equal(w.analyzedId,'B');await w.back();assert.equal(w.analyzedId,null);assert.deepEqual([...layout],original);assert.deepEqual(view,{x:137,y:93,k:.47});
+});
+test('explicit lock keeps analyzed flow across library choices; explicit Analyze changes it; Undo restores membership/root/layout',async()=>{
+ const {w}=stateHarness();let layout=new Map();w.canvas.captureLayout=()=>new Map(layout);w.canvas.restoreLayout=p=>{layout=new Map(p);};w.canvas.arrange=()=>{};w.fitLayout=()=>{};w.applyFilters=()=>{w.visible=new Set(w.membership);};
+ w.chooseQuery('B');w.navigate('A',false,{preserveView:true});w.toggleFocusLock();assert.equal(w.flowRootId,'B');w.chooseQuery('Alone');assert.equal(w.analyzedId,'B');assert.equal(w.flowRootId,'B');assert.equal(w.selectedId,'Alone');
+ w.analyzeQuery('Alone');assert.equal(w.flowRootId,null);assert.equal(w.analyzedId,'Alone');assert.deepEqual([...w.membership],['Alone']);await w.undo();assert.equal(w.analyzedId,'B');assert.equal(w.flowRootId,'B');assert.deepEqual([...w.membership].sort(),['A','Alone','B']);
+ w.remove('B');assert.equal(w.analyzedId,null);assert.equal(w.flowRootId,null);await w.undo();assert.equal(w.analyzedId,'B');w.blank();assert.equal(w.analyzedId,null);await w.undo();assert.equal(w.analyzedId,'B');w.showAll();assert.equal(w.analyzedId,null);
+});
+test('Hide explicitly compacts visible flow and remains undoable; stale Analyze cannot publish',()=>{
+ const {w}=stateHarness();let arranged;w.applyFilters=()=>{w.visible=new Set(['B']);};w.canvas.arrange=set=>{arranged=[...set];};w.fitLayout=()=>{};w.setFocus({mode:'hide',direction:'inputs',depth:0});assert.deepEqual(arranged,['B']);assert.equal(w.layoutHistory.length,1);
+ w.valid=()=>false;const prior=w.captureNavigation();w.analyzeQuery('A');assert.equal(w.selectedId,prior.selectedId);assert.equal(w.history.length,0);
 });
