@@ -28,3 +28,9 @@ Original package SHA256: `7d8547b60538ae96e61f2e2f2a8bdf7469152a9984b9d3c02ec5f3
 Privacy remains scoped: the pre-existing `smv_models_v1` import cache retains raw M. Shared snapshots exclude it. The repair adds no persistence, source evidence, credentials, network access or M execution; existing dock preferences contain only geometry. Full-suite snapshot and source-evidence checks passed, but this is no claim that M is never stored.
 
 No browser jobs or native installation were run. Deterministic DOM tests do not certify browser scroll/layout/accessibility behavior. Separate Mac-only independent replay of the frozen hidden-lock scenario against the integrated exact SHA, native Windows acceptance, and final user acceptance remain open. No push, main merge or release was performed. The feature PR receives a progress comment explicitly distinguishing this local bundle from its remote head.
+
+## Coordinator exact-byte follow-up
+
+On Windows MSI, the coordinator restored only historical fixture checkout files to exact HEAD Git blob bytes after confirming CRLF-only conversion. No tracked fixture, builder, assertion or global Git setting was changed. The original failed full-suite-01.log is preserved externally. A fresh Node22 v22.23.3 full run at 6a06b616b5385de3fd3c3fc1f6b453bb321fbca4 then passed: 627 tests, 622 pass, zero fail, five skip, captured process exit 0 (repair-logs/full-suite-02.log and .status). This includes the transported pending 124-case independent analysis file; do not label it the smaller committed-only suite. Four skips are Mac-only launcher harness cases; the fifth is Windows symlink permission. No security setting was changed. A round9 test-written receipt was saved externally then restored to exact tracked bytes.
+
+Browser frozen gate remains separate and pending; runtime is unchanged from 99f605b. No main merge/release.
