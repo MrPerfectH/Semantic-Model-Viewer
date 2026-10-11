@@ -1,0 +1,110 @@
+{
+  "candidate": "61cf69c6c3574efee590245e5261ec92b2f375bc",
+  "before": {
+    "edges": 77,
+    "missing": 28,
+    "nodes": 84,
+    "parameterRoutes": [
+      {
+        "consumer": "VerticaPath",
+        "detected": true,
+        "drawn": false,
+        "parameter": "ServerName",
+        "status": "no-clear-route"
+      },
+      {
+        "consumer": "VerticaPath",
+        "detected": true,
+        "drawn": false,
+        "parameter": "DBName",
+        "status": "no-clear-route"
+      },
+      {
+        "consumer": "VerticaPath",
+        "detected": true,
+        "drawn": false,
+        "parameter": "SchemaName",
+        "status": "no-clear-route"
+      }
+    ],
+    "relationships": 40,
+    "tables": 38
+  },
+  "after": {
+    "edges": 77,
+    "missing": 0,
+    "nodes": 84,
+    "parameterRoutes": [
+      {
+        "consumer": "VerticaPath",
+        "drawn": true,
+        "parameter": "ServerName",
+        "status": "routed"
+      },
+      {
+        "consumer": "VerticaPath",
+        "drawn": true,
+        "parameter": "DBName",
+        "status": "routed"
+      },
+      {
+        "consumer": "VerticaPath",
+        "drawn": true,
+        "parameter": "SchemaName",
+        "status": "routed"
+      }
+    ],
+    "phase": "ready",
+    "routes": {
+      "crowded-ports": 49,
+      "routed": 28
+    }
+  },
+  "zoom": {
+    "edgesUnchanged": true,
+    "positionsUnchanged": true,
+    "results": [
+      {
+        "edges": 77,
+        "missing": 0,
+        "overlappingRuns": 0,
+        "zoom": 0.36
+      },
+      {
+        "edges": 77,
+        "missing": 0,
+        "overlappingRuns": 0,
+        "zoom": 0.47
+      },
+      {
+        "edges": 77,
+        "missing": 0,
+        "overlappingRuns": 0,
+        "zoom": 0.85
+      },
+      {
+        "edges": 77,
+        "missing": 0,
+        "overlappingRuns": 0,
+        "zoom": 1
+      }
+    ]
+  },
+  "trustedClick": {
+    "heading": "SchemaName is referenced by VerticaPath",
+    "location": "Line 3, column 27",
+    "selectedPreserved": true
+  },
+  "filterRoundtrip": {
+    "hidden": {
+      "nodes": 2,
+      "edges": 1,
+      "missing": 0
+    },
+    "restored": {
+      "nodes": 84,
+      "edges": 77,
+      "missing": 0
+    }
+  }
+}
