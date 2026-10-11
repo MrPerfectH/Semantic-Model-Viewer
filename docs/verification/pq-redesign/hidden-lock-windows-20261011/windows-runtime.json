@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-10-11T13:41:26.112Z",
+  "hostname": "MSI",
+  "platform": "win32",
+  "arch": "x64",
+  "osRelease": "10.0.26200",
+  "osVersion": "Windows 11 Enterprise",
+  "node": "v22.23.3",
+  "execPath": "C:\\Users\\PrzemekHarazny\\pq-r10-windows\\node-v22.23.3-win-x64\\node.exe",
+  "pid": 5144,
+  "ppid": 32336,
+  "cwd": "C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree",
+  "branch": "fix/pq-hidden-lock-windows-20261011",
+  "baseline": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7",
+  "pathFirst": "C:\\Users\\PrzemekHarazny\\pq-r10-windows\\node-v22.23.3-win-x64"
+}

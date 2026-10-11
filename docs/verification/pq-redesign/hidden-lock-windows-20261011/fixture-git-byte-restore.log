@@ -1,0 +1,22 @@
+{
+  "checkoutOnlyGitByteRestores": [
+    "tests\\acceptance-fixtures\\pq-redesign\\a1-disconnected\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a2-parameter\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a3-results\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a4-occurrences\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a6-disconnected-300\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a6-disconnected-301\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a6-disconnected-350\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a6-disconnected-1000\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a6-fanout-250\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a7-uncertainty\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a8-reset-a\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a8-reset-b\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a8-without-m\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\a9-privacy\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\oracle.json",
+    "tests\\acceptance-fixtures\\pq-redesign\\filters-v2\\expected.json",
+    "tests\\acceptance-fixtures\\pq-redesign\\filters-v2\\v2-unavailable-incidence\\model.bim",
+    "tests\\acceptance-fixtures\\pq-redesign\\filters-v2\\v2-same-ids-no-edge\\model.bim"
+  ]
+}
