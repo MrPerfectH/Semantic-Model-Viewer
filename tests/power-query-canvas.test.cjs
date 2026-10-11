@@ -83,7 +83,7 @@ test('rounded orthogonal routes retain input-to-consumer endpoints after reversa
 test('rounded orthogonal long links detour around visible intervening cards and simplify when the obstacle is hidden',()=>{
   const c=context();c.graph.edges=[{id:'long',inputId:'id-0',consumerId:'id-1',referenceOccurrences:[]}];const s=setup(c);
   s.canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',{x:800,y:0}],['id-2',{x:400,y:0}]]));s.canvas.setVisibleIds(new Set(['id-0','id-1','id-2']));
-  const line=s.host.querySelector('.pqc-edge-line'),detour=line.getAttribute('d');assert.match(detour,/ (-18|114)\.0/);
+  const line=s.host.querySelector('.pqc-edge-line'),detour=line.getAttribute('d');assert.ok(routePoints(detour).some(p=>p[1]<=-18||p[1]>=114),'clear detour rail');
   const pts=routePoints(detour);
   for(let i=1;i<pts.length;i++){const a=pts[i-1],b=pts[i];assert.equal(a[0]===b[0]?a[0]>400&&a[0]<652&&Math.max(a[1],b[1])>0&&Math.min(a[1],b[1])<96:a[1]>0&&a[1]<96&&Math.max(a[0],b[0])>400&&Math.min(a[0],b[0])<652,false);}
   s.canvas.setVisibleIds(new Set(['id-0','id-1']));assert.notEqual(line.getAttribute('d'),detour);assert.deepEqual(routePoints(line.getAttribute('d')),[[252,48],[800,48]]);assert.doesNotMatch(line.getAttribute('d'),/Q/);
@@ -162,7 +162,8 @@ test('PQ calls the actual Tables rounded-path, width and open-chevron methods wi
   const h=harness('power-query-canvas.js'),drawing=h.win.GraphCanvas.prototype,calls={orthoPath:0,edgeArrow:0,edgeStrokeWidth:0};
   for(const name of Object.keys(calls)){const original=drawing[name];drawing[name]=function(...args){calls[name]++;if(name==='edgeArrow'){assert.deepEqual(Object.keys(this).sort(),['ARROW_PX','view']);assert.deepEqual(plain(args[0]),{both:false});}return original.apply(this,args);};}
   const canvas=h.win.PowerQueryCanvas.mount(h.host,{context:context()});
-  canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',{x:500,y:200}]]));
+  // Keep the helper-reuse fixture clear of the standalone cards at y=174.
+  canvas.restoreLayout(new Map([['id-0',{x:0,y:0}],['id-1',{x:500,y:-200}]]));
   for(const count of Object.values(calls))assert.ok(count>0);
   assert.equal(h.host.querySelectorAll('marker').length,0);assert.equal(h.host.querySelectorAll('.pqc-edge-arrow').every(a=>a.querySelectorAll('polyline').length===1),true);
   const line=h.host.querySelector('.pqc-edge-line'),points=routePoints(line.getAttribute('d')).map(([x,y])=>({x,y}));

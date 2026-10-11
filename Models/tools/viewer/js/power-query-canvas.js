@@ -25,6 +25,7 @@
     var edgeLayer = svg('g'), cycleLayer = el('div', 'pqc-cycles'), nodeLayer = el('div', 'pqc-nodes');
     edgesSvg.appendChild(edgeLayer); world.appendChild(cycleLayer); world.appendChild(edgesSvg); world.appendChild(nodeLayer); surface.appendChild(world); root.appendChild(surface);
     var legend = el('div', 'pqc-legend'); legend.appendChild(el('span', 'pqc-solid-key', 'Query input → consumer')); legend.appendChild(el('span', 'pqc-parameter-key', 'Parameter → consumer')); root.appendChild(legend);
+    var routeStatus = el('div', 'pqc-route-status'); routeStatus.setAttribute('role', 'status'); routeStatus.hidden = true; root.appendChild(routeStatus);
     var map = el('div', 'pqc-minimap'), mapLabel = el('div', 'pqc-map-label'), mapSvg = svg('svg', { role: 'img', 'aria-label': 'Visible query canvas overview' });
     var mapEdges = svg('g'), mapNodes = svg('g'), mapViewport = svg('rect', { class: 'pqc-map-viewport', 'pointer-events': 'none' });
     mapSvg.appendChild(mapEdges); mapSvg.appendChild(mapNodes); mapSvg.appendChild(mapViewport); map.appendChild(mapLabel); map.appendChild(mapSvg); root.appendChild(map); host.appendChild(root);
@@ -67,47 +68,228 @@
       var y0 = incident.size ? bottom + 48 : 0;
       standalone.forEach(function (u, i) { var id = u.members[0]; if (!positions.has(id)) positions.set(id, { x: (i % cols) * (W + 42), y: y0 + Math.floor(i / cols) * (H + GAP_Y) }); });
     }
-    // Orthogonal routes use actual input/consumer ports, even after dragging a
-    // consumer to the left. No source analysis or change to graph direction.
-    function edgePoints(edge, obstacles, reciprocal) {
-      var a = positions.get(edge.inputId), b = positions.get(edge.consumerId); if (!a || !b) return [];
-
-      if (edge.inputId === edge.consumerId) return [[a.x + W / 2, a.y], [a.x + W / 2, a.y - 22], [a.x + W + 22, a.y - 22], [a.x + W + 22, a.y + H / 2], [a.x + W, a.y + H / 2]];
-      var right = b.x >= a.x + W + 32, left = a.x >= b.x + W + 32, vertical = !right && !left;
-      var forward = vertical ? b.y >= a.y : right, sign = forward ? 1 : -1;
-      // Opposing references need separate ports AND middle channels. Port-only
-      // offsets still share the long middle segment after a diagonal drag.
-      var lane = reciprocal ? sign * 12 : 0;
-      var start = vertical ? [a.x + W / 2 + sign * 12, a.y + (forward ? H : 0)] : [a.x + (right ? W : 0), a.y + H / 2 + lane];
-      var end = vertical ? [b.x + W / 2 + sign * 12, b.y + (forward ? 0 : H)] : [b.x + (right ? 0 : W), b.y + H / 2 + lane];
-      var axis = vertical ? 1 : 0, cross = 1 - axis, channel = (start[axis] + end[axis]) / 2 + lane;
-      var p = start.slice(), q = end.slice(); p[axis] = q[axis] = channel;
-      var direct = [start, p, q, end];
-      function blocked(points, rect) {
-        for (var i = 1; i < points.length; i++) {
-          var u = points[i - 1], v = points[i];
-          if (u[0] === v[0] ? u[0] > rect.x && u[0] < rect.x + W && Math.max(u[1], v[1]) > rect.y && Math.min(u[1], v[1]) < rect.y + H
-            : u[1] > rect.y && u[1] < rect.y + H && Math.max(u[0], v[0]) > rect.x && Math.min(u[0], v[0]) < rect.x + W) return true;
+    // Bounding-volume trees keep ordinary routes local. A long segment occupies
+    // one box, not thousands of grid cells, including at extreme Fit scales.
+    function intersects(a, b) { return a.x0 <= b.x1 && a.x1 >= b.x0 && a.y0 <= b.y1 && a.y1 >= b.y0; }
+    function spatialTree(items) {
+      if (!items.length) return null;
+      var box = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
+      items.forEach(function (p) { box.x0 = Math.min(box.x0, p.x0); box.y0 = Math.min(box.y0, p.y0); box.x1 = Math.max(box.x1, p.x1); box.y1 = Math.max(box.y1, p.y1); });
+      if (items.length <= 8) { box.items = items; return box; }
+      var horizontal = box.x1 - box.x0 >= box.y1 - box.y0;
+      items.sort(function (a, b) { return horizontal ? a.x0 + a.x1 - b.x0 - b.x1 : a.y0 + a.y1 - b.y0 - b.y1; });
+      var middle = Math.floor(items.length / 2); box.left = spatialTree(items.slice(0, middle)); box.right = spatialTree(items.slice(middle)); return box;
+    }
+    function spatialQuery(tree, box, out) {
+      out = out || []; if (!tree || !intersects(tree, box)) return out;
+      if (tree.items) tree.items.forEach(function (item) { if (intersects(item, box)) out.push(item.value); });
+      else { spatialQuery(tree.left, box, out); spatialQuery(tree.right, box, out); } return out;
+    }
+    var cardIndex = null, routeKey = null;
+    // Tables' conventions: ordered side ports, outward stubs, then orthogonal
+    // channels. PQ owns the reservations because its edges flow input -> consumer.
+    function routeEdges(obstacles) {
+      var pitch = Math.max(24, 8 / view.k), clearance = Math.max(18, pitch), buckets = new Map(), reserved = [], checks = 0, work = 0, edgeWork = 0, edgeChecks = 0, maxEdgeWork = 0;
+      cardIndex = spatialTree(obstacles.map(function (r) { return { x0: r.x, y0: r.y, x1: r.x + W, y1: r.y + H, value: r }; }));
+      var visibleEdges = edgeElements.filter(function (e) { return shown(e.edge.inputId) && shown(e.edge.consumerId); }).slice().sort(function (a, b) { return a.edge.id < b.edge.id ? -1 : a.edge.id > b.edge.id ? 1 : 0; });
+      function port(entry, id, side, other) {
+        var p = { entry: entry, id: id, side: side, other: other, box: positions.get(id), gap: pitch };
+        var key = JSON.stringify([id, side]); if (!buckets.has(key)) buckets.set(key, []); buckets.get(key).push(p); return p;
+      }
+      edgeElements.forEach(function (entry) { entry.points = []; entry.routeIssue = null; entry.group.setAttribute('data-route-status', 'hidden'); });
+      visibleEdges.forEach(function (entry) {
+        var edge = entry.edge, a = positions.get(edge.inputId), b = positions.get(edge.consumerId);
+        if (edge.inputId === edge.consumerId) return;
+        var right = b.x >= a.x + W + 32, left = a.x >= b.x + W + 32;
+        var side = right ? 'right' : left ? 'left' : b.y >= a.y ? 'bottom' : 'top';
+        var opposite = { right: 'left', left: 'right', bottom: 'top', top: 'bottom' };
+        entry.a = port(entry, edge.inputId, side, b);
+        entry.b = port(entry, edge.consumerId, opposite[side], a);
+      });
+      visibleEdges.forEach(function (entry) {
+        var edge = entry.edge; if (edge.inputId !== edge.consumerId) return;
+        var box = positions.get(edge.inputId), pairs = [['top', 'right'], ['right', 'bottom'], ['bottom', 'left'], ['left', 'top']];
+        function degree(side) { return (buckets.get(JSON.stringify([edge.inputId, side])) || []).length; }
+        pairs.sort(function (a, b) { return degree(a[0]) + degree(a[1]) - degree(b[0]) - degree(b[1]); });
+        entry.a = port(entry, edge.inputId, pairs[0][0], box); entry.b = port(entry, edge.consumerId, pairs[0][1], box);
+      });
+      buckets.forEach(function (ports) {
+        var vertical = ports[0].side === 'top' || ports[0].side === 'bottom', length = vertical ? W : H;
+        ports.sort(function (a, b) { return (vertical ? a.other.x - b.other.x : a.other.y - b.other.y) || (a.entry.edge.id < b.entry.edge.id ? -1 : a.entry.edge.id > b.entry.edge.id ? 1 : 0); });
+        var step = ports.length > 1 ? Math.min(pitch, (length - 16) / (ports.length - 1)) : pitch;
+        ports.forEach(function (p, i) {
+          var offset = length / 2 + (i - (ports.length - 1) / 2) * step, box = p.box;
+          p.point = { x: box.x + (vertical ? offset : p.side === 'right' ? W : 0), y: box.y + (vertical ? p.side === 'bottom' ? H : 0 : offset) };
+          p.dx = vertical ? 0 : p.side === 'right' ? 1 : -1; p.dy = vertical ? p.side === 'bottom' ? 1 : -1 : 0;
+          p.gap = step; p.slot = i - (ports.length - 1) / 2; p.degree = ports.length; if (step * view.k < 7.9) p.entry.routeIssue = 'crowded-ports';
+          var stub = 22;
+          spatialQuery(cardIndex, { x0: p.point.x - 66, y0: p.point.y - 66, x1: p.point.x + 66, y1: p.point.y + 66 }).forEach(function (r) {
+            if (r === box) return;
+            var cross = vertical ? p.point.x > r.x && p.point.x < r.x + W : p.point.y > r.y && p.point.y < r.y + H;
+            var distance = vertical ? (p.dy > 0 ? r.y - p.point.y : p.point.y - r.y - H) : (p.dx > 0 ? r.x - p.point.x : p.point.x - r.x - W);
+            if (cross && distance >= 0) stub = Math.min(stub, distance / 3);
+          });
+          p.stub = { x: p.point.x + p.dx * stub, y: p.point.y + p.dy * stub };
+          reserved.push({ a: p.point, b: p.stub, entry: p.entry, gap: step });
+        });
+      });
+      function segmentBox(s) { return { x0: Math.min(s.a.x, s.b.x), y0: Math.min(s.a.y, s.b.y), x1: Math.max(s.a.x, s.b.x), y1: Math.max(s.a.y, s.b.y), value: s }; }
+      var stubIndex = spatialTree(reserved.map(segmentBox)), completed = [], pending = [], completedIndex = null;
+      function reserve(segment) {
+        reserved.push(segment); pending.push(segmentBox(segment));
+        if (pending.length === 64) {
+          var tree = spatialTree(pending); completed.push({ x0: tree.x0, y0: tree.y0, x1: tree.x1, y1: tree.y1, value: tree });
+          completedIndex = spatialTree(completed.slice()); pending = [];
         }
-        return false;
       }
-      var blockers = obstacles.filter(function (rect) { return blocked(direct, rect); });
-      if (!blockers.length) return direct;
-      // Detour around intervening visible cards. Hidden registry members cannot
-      // distort the visible route. The common adjacent-card case stays O(nodes).
-      var rails = [], dimension = vertical ? W : H, key = vertical ? 'x' : 'y', separation = reciprocal && !forward ? 24 : 0, clearance = 18 + separation;
-      blockers.forEach(function (r) { rails.push(r[key] - clearance, r[key] + dimension + clearance); });
-      rails.push(Math.min.apply(null, obstacles.map(function (r) { return r[key]; })) - clearance, Math.max.apply(null, obstacles.map(function (r) { return r[key] + dimension; })) + clearance);
-      rails = Array.from(new Set(rails)).sort(function (x, y) { return Math.abs(start[cross] - x) + Math.abs(end[cross] - x) - Math.abs(start[cross] - y) - Math.abs(end[cross] - y); });
-      var sa = start.slice(), sb = end.slice(); sa[axis] += sign * (16 + separation); sb[axis] -= sign * (16 + separation);
-      for (var i = 0; i < rails.length; i++) {
-        var ca = sa.slice(), cb = sb.slice(); ca[cross] = cb[cross] = rails[i];
-        var detour = [start, sa, ca, cb, sb, end];
-        if (!obstacles.some(function (r) { return blocked(detour, r); })) return detour;
+      function nearbySegments(box) {
+        var result = spatialQuery(stubIndex, box);
+        spatialQuery(completedIndex, box).forEach(function (tree) { spatialQuery(tree, box, result); });
+        pending.forEach(function (item) { if (intersects(item, box)) result.push(item.value); }); return result;
       }
-      // Manually overlapping cards may leave no clear port. Keep their exact
-      // positions and semantic endpoints; never silently rearrange the canvas.
-      return direct;
+      function spend() { work++; return ++edgeWork <= 50000; }
+      function clean(points) {
+        var out = [];
+        points.forEach(function (p) {
+          var last = out[out.length - 1]; if (last && last.x === p.x && last.y === p.y) return;
+          while (out.length > 1) {
+            var before = out[out.length - 2]; last = out[out.length - 1];
+            if (!((before.x === last.x && last.x === p.x && (last.y - before.y) * (p.y - last.y) >= 0) || (before.y === last.y && last.y === p.y && (last.x - before.x) * (p.x - last.x) >= 0))) break;
+            out.pop();
+          }
+          out.push(p);
+        }); return out;
+      }
+      function clearSegment(a, b, entry) {
+        checks++; if (++edgeChecks > 8000 || edgeWork > 50000) return false; // Only this edge can exhaust its search.
+        if (a.x === b.x && a.y === b.y) return true;
+        var vertical = a.x === b.x, lo = vertical ? Math.min(a.y, b.y) : Math.min(a.x, b.x), hi = vertical ? Math.max(a.y, b.y) : Math.max(a.x, b.x);
+        var bounds = { x0: Math.min(a.x, b.x), y0: Math.min(a.y, b.y), x1: Math.max(a.x, b.x), y1: Math.max(a.y, b.y) };
+        var nearbyCards = spatialQuery(cardIndex, bounds);
+        for (var i = 0; i < nearbyCards.length; i++) {
+          if (!spend()) return false;
+          var r = nearbyCards[i];
+          if (vertical ? a.x > r.x && a.x < r.x + W && hi > r.y && lo < r.y + H : a.y > r.y && a.y < r.y + H && hi > r.x && lo < r.x + W) return false;
+        }
+        var nearby = nearbySegments({ x0: bounds.x0 - pitch, y0: bounds.y0 - pitch, x1: bounds.x1 + pitch, y1: bounds.y1 + pitch });
+        for (var j = 0; j < nearby.length; j++) {
+          if (!spend()) return false;
+          var s = nearby[j]; if (s.entry === entry || vertical !== (s.a.x === s.b.x)) continue;
+          var overlap = Math.min(hi, vertical ? Math.max(s.a.y, s.b.y) : Math.max(s.a.x, s.b.x)) - Math.max(lo, vertical ? Math.min(s.a.y, s.b.y) : Math.min(s.a.x, s.b.x));
+          var separation = vertical ? Math.abs(a.x - s.a.x) : Math.abs(a.y - s.a.y);
+          if (overlap > 0.01 && separation < Math.min(entry.laneGap, s.gap) - 0.11) return false;
+          // Even crowded ports never permit a coincident positive-length run.
+          if (overlap > 0.01 && separation < 0.11) return false;
+        }
+        return true;
+      }
+      function acceptable(points, entry) {
+        points = clean(points);
+        for (var i = 1; i < points.length; i++) {
+          if (!clearSegment(points[i - 1], points[i], entry)) return null;
+          if (i > 1) { var a = points[i - 2], b = points[i - 1], c = points[i]; if ((b.x - a.x) * (c.x - b.x) + (b.y - a.y) * (c.y - b.y) < 0) return null; }
+        }
+        // Rounded corners must also clear cards: their entire control triangle
+        // fits inside this box, so checking it is conservative and deterministic.
+        for (var corner = 1; corner < points.length - 1; corner++) {
+          var p0 = points[corner - 1], p1 = points[corner], p2 = points[corner + 1];
+          var l1 = Math.hypot(p1.x - p0.x, p1.y - p0.y), l2 = Math.hypot(p2.x - p1.x, p2.y - p1.y), radius = Math.min(9, l1 / 2, l2 / 2);
+          var x0 = p1.x - (p1.x - p0.x) / l1 * radius, y0 = p1.y - (p1.y - p0.y) / l1 * radius;
+          var x2 = p1.x + (p2.x - p1.x) / l2 * radius, y2 = p1.y + (p2.y - p1.y) / l2 * radius;
+          var cornerCards = spatialQuery(cardIndex, { x0: Math.min(x0, p1.x, x2), y0: Math.min(y0, p1.y, y2), x1: Math.max(x0, p1.x, x2), y1: Math.max(y0, p1.y, y2) });
+          for (var j = 0; j < cornerCards.length; j++) {
+            if (!spend()) return null;
+            var box = cornerCards[j];
+            if (Math.max(x0, p1.x, x2) > box.x && Math.min(x0, p1.x, x2) < box.x + W && Math.max(y0, p1.y, y2) > box.y && Math.min(y0, p1.y, y2) < box.y + H) return null;
+          }
+        }
+        return points;
+      }
+      // Bounded visibility grid only after the short channel/detour candidates fail.
+      // Obstacles are never dropped from collision checks, even when rails are capped.
+      function search(entry) {
+        var a = entry.a.stub, b = entry.b.stub, xs = [a.x, b.x], ys = [a.y, b.y];
+        function proximity(r) { return Math.max(0, Math.min(a.x, b.x) - r.x - W, r.x - Math.max(a.x, b.x)) + Math.max(0, Math.min(a.y, b.y) - r.y - H, r.y - Math.max(a.y, b.y)); }
+        obstacles.slice().sort(function (u, v) { return proximity(u) - proximity(v) || u.x - v.x || u.y - v.y; }).slice(0, 18).forEach(function (r) { xs.push(r.x - clearance, r.x + W + clearance); ys.push(r.y - clearance, r.y + H + clearance); });
+        reserved.forEach(function (s) { if (s.entry === entry) return; if (s.a.x === s.b.x) xs.push(s.a.x - pitch, s.a.x + pitch); else ys.push(s.a.y - pitch, s.a.y + pitch); });
+        function rails(values, start, end) {
+          var others = Array.from(new Set(values)).filter(function (v) { return v !== start && v !== end; });
+          others.sort(function (u, v) { return Math.abs(u - start) + Math.abs(u - end) - Math.abs(v - start) - Math.abs(v - end) || u - v; });
+          return Array.from(new Set([start, end].concat(others.slice(0, 46)))).sort(function (u, v) { return u - v; });
+        }
+        xs = rails(xs, a.x, b.x); ys = rails(ys, a.y, b.y);
+        var width = xs.length, start = ys.indexOf(a.y) * width + xs.indexOf(a.x), goal = ys.indexOf(b.y) * width + xs.indexOf(b.x), heap = [], dist = new Map(), prev = new Map();
+        function point(id) { var cell = Math.floor(id / 2); return { x: xs[cell % width], y: ys[Math.floor(cell / width)] }; }
+        function push(id, cost) { var p = point(id), item = { id: id, cost: cost, score: cost + Math.abs(p.x - b.x) + Math.abs(p.y - b.y) }, i = heap.length; heap.push(item); while (i) { var parent = (i - 1) >> 1; if (heap[parent].score <= item.score) break; heap[i] = heap[parent]; i = parent; } heap[i] = item; }
+        function pop() { var first = heap[0], last = heap.pop(); if (heap.length) { var i = 0; while (i * 2 + 1 < heap.length) { var child = i * 2 + 1; if (child + 1 < heap.length && heap[child + 1].score < heap[child].score) child++; if (heap[child].score >= last.score) break; heap[i] = heap[child]; i = child; } heap[i] = last; } return first; }
+        var initial = start * 2 + (entry.a.dx ? 0 : 1); dist.set(initial, 0); push(initial, 0);
+        while (heap.length && edgeChecks < 8000 && edgeWork <= 50000) {
+          var current = pop(), id = current.id, cell = Math.floor(id / 2); if (dist.get(id) !== current.cost) continue;
+          if (cell === goal) { var result = [point(id)]; while (prev.has(id)) { id = prev.get(id); result.push(point(id)); } return acceptable([entry.a.point].concat(result.reverse(), [entry.b.point]), entry); }
+          var x = cell % width, y = Math.floor(cell / width), next = [];
+          if (x) next.push((cell - 1) * 2); if (x + 1 < width) next.push((cell + 1) * 2); if (y) next.push((cell - width) * 2 + 1); if (y + 1 < ys.length) next.push((cell + width) * 2 + 1);
+          for (var n = 0; n < next.length; n++) {
+            var target = next[n], p = point(current.id), q = point(target), dx = q.x - p.x, dy = q.y - p.y;
+            if (cell === start && dx * entry.a.dx + dy * entry.a.dy < 0) continue;
+            if (Math.floor(target / 2) === goal && dx * entry.b.dx + dy * entry.b.dy > 0) continue;
+            if (!clearSegment(p, q, entry)) continue;
+            var cost = current.cost + Math.abs(dx) + Math.abs(dy) + (id % 2 !== target % 2 ? 12 : 0);
+            if (dist.has(target) && dist.get(target) <= cost) continue;
+            dist.set(target, cost); prev.set(target, current.id); push(target, cost);
+          }
+        }
+        return null;
+      }
+      var missing = 0, crowded = 0;
+      visibleEdges.forEach(function (entry) {
+        edgeChecks = edgeWork = 0;
+        var a = entry.a.point, b = entry.b.point, sa = entry.a.stub, sb = entry.b.stub, points = null;
+        // When a side is crowded, divide its available gutter deterministically.
+        // Keep every possible link; report reduced spacing instead of capping edges.
+        var port = entry.a.degree >= entry.b.degree ? entry.a : entry.b;
+        var gap = entry.a.dx ? Math.abs(sb.x - sa.x) : Math.abs(sb.y - sa.y);
+        entry.laneGap = Math.min(pitch, entry.a.gap, entry.b.gap, entry.routeIssue === 'crowded-ports' ? Math.max(0.2, gap / port.degree) : pitch);
+        if (entry.laneGap * view.k < 7.9) entry.routeIssue = 'crowded-ports';
+        if (clearSegment(a, sa, entry) && clearSegment(sb, b, entry)) {
+          var vertical = !!entry.a.dy, mid = (vertical ? (sa.y + sb.y) / 2 : (sa.x + sb.x) / 2) + (entry.routeIssue === 'crowded-ports' ? port.slot * entry.laneGap : 0);
+          for (var attempt = 0; attempt < 17 && !points && edgeChecks < 8000 && edgeWork <= 50000; attempt++) {
+            var offset = Math.ceil(attempt / 2) * (attempt % 2 ? -entry.laneGap : entry.laneGap), channel = mid + offset;
+            var middle = vertical ? [{ x: sa.x, y: channel }, { x: sb.x, y: channel }] : [{ x: channel, y: sa.y }, { x: channel, y: sb.y }];
+            points = acceptable([a, sa].concat(middle, [sb, b]), entry);
+          }
+          if (!points) {
+            var rails = [];
+            obstacles.forEach(function (r) { rails.push(vertical ? r.x - clearance : r.y - clearance, vertical ? r.x + W + clearance : r.y + H + clearance); });
+            rails = Array.from(new Set(rails)); rails.sort(function (u, v) { var av = vertical ? sa.x : sa.y, bv = vertical ? sb.x : sb.y; return Math.abs(av - u) + Math.abs(bv - u) - Math.abs(av - v) - Math.abs(bv - v) || u - v; });
+            for (var j = 0; j < Math.min(24, rails.length) && !points && edgeChecks < 8000 && edgeWork <= 50000; j++) {
+              var rail = rails[j], detour = vertical ? [{ x: rail, y: sa.y }, { x: rail, y: sb.y }] : [{ x: sa.x, y: rail }, { x: sb.x, y: rail }];
+              points = acceptable([a, sa].concat(detour, [sb, b]), entry);
+            }
+          }
+          if (!points && edgeChecks < 8000 && edgeWork <= 50000) points = search(entry);
+        }
+        if (!points) { entry.routeIssue = edgeChecks >= 8000 || edgeWork > 50000 ? 'routing-limit' : 'no-clear-route'; missing++; }
+        else {
+          entry.points = points; if (entry.routeIssue === 'crowded-ports') crowded++;
+          for (var i = 1; i < points.length; i++) reserve({ a: points[i - 1], b: points[i], entry: entry, gap: entry.laneGap });
+        }
+        maxEdgeWork = Math.max(maxEdgeWork, edgeWork);
+        entry.group.setAttribute('data-route-status', entry.routeIssue || 'routed');
+      });
+      routeStatus.hidden = !missing && !crowded;
+      routeStatus.textContent = (missing ? missing + ' connections could not be separated. Move cards apart or show fewer objects. ' : '') + (crowded ? crowded + ' connections have crowded ports. Zoom in for more space.' : '');
+      routeStatus.dataset.unrouted = String(missing); routeStatus.dataset.crowded = String(crowded); routeStatus.dataset.checks = String(checks); routeStatus.dataset.work = String(work); routeStatus.dataset.maxEdgeWork = String(maxEdgeWork);
+    }
+    function renderRoutes(obstacles) {
+      // Selection/search/focus change ink, not routing inputs. Invalidate on any
+      // context replacement; visible positions and zoom cover the remaining inputs.
+      var key = JSON.stringify([view.k, ids().map(function (id) { var p = positions.get(id); return [id, p.x, p.y]; })]);
+      if (key !== routeKey) { routeEdges(obstacles); routeKey = key; }
+      edgeElements.forEach(function (entry) {
+        var d = entry.points.length > 1 ? drawing.orthoPath(entry.points, 9) : '';
+        entry.line.setAttribute('d', d); entry.hit.setAttribute('d', d); entry.underlay.setAttribute('d', d);
+        drawEdge(entry, obstacles);
+      });
     }
     // Seats are on straight runs, away from rounded corners and visible cards.
     // The sign is always input -> consumer, never Tables' filter direction.
@@ -123,7 +305,7 @@
         for (var j = 0; j < 3; j++) {
           var t = Math.max(start, Math.min(end, seg.length * [0.5, 0.3, 0.7][j])) / seg.length;
           var x = a.x + (b.x - a.x) * t, y = a.y + (b.y - a.y) * t;
-          if (obstacles.some(function (r) { return x + extent > r.x && x - extent < r.x + W && y + extent > r.y && y - extent < r.y + H; })) continue;
+          if (spatialQuery(cardIndex, { x0: x - extent, y0: y - extent, x1: x + extent, y1: y + extent }).some(function (r) { return x + extent > r.x && x - extent < r.x + W && y + extent > r.y && y - extent < r.y + H; })) continue;
           return { x: x, y: y, orient: vertical ? 'v' : 'h', toA: vertical ? (b.y > a.y ? 1 : -1) : (b.x > a.x ? 1 : -1) };
         }
       }
@@ -140,30 +322,19 @@
       // Keep the existing 14 screen-pixel hit corridor and its edge identity.
       entry.hit.setAttribute('stroke-width', 14 / view.k);
       entry.arrow.replaceChildren();
-      if (!shown(entry.edge.inputId) || !shown(entry.edge.consumerId) || !entry.points) return;
+      if (!shown(entry.edge.inputId) || !shown(entry.edge.consumerId) || !entry.points || !entry.points.length) return;
       var boost = active ? 1.15 : 1, spot = arrowSeat(entry.points, obstacles, boost);
       if (spot) entry.arrow.appendChild(drawing.edgeArrow.call({ ARROW_PX: drawing.ARROW_PX, view: view }, { both: false }, spot, 'currentColor', 1, boost));
     }
     function updateEdgeZoom() {
       if (edgeZoom === view.k) return; edgeZoom = view.k;
       var obstacles = ids().map(function (id) { return positions.get(id); });
-      edgeElements.forEach(function (entry) { drawEdge(entry, obstacles); });
+      renderRoutes(obstacles);
     }
     function updateGeometry() {
       elements.forEach(function (e, id) { var p = positions.get(id); e.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)'; });
       var obstacles = ids().map(function (id) { return positions.get(id); });
-      var directions = new Set(edgeElements.map(function (entry) { return JSON.stringify([entry.edge.inputId, entry.edge.consumerId]); }));
-      edgeElements.forEach(function (entry) {
-        var reciprocal = directions.has(JSON.stringify([entry.edge.consumerId, entry.edge.inputId]));
-        var points = edgePoints(entry.edge, obstacles, reciprocal).map(function (p) { return { x: p[0], y: p[1] }; });
-        // Zero-length / collinear router waypoints are not corners or arrow seats.
-        points = points.filter(function (p, i) { return !i || p.x !== points[i - 1].x || p.y !== points[i - 1].y; });
-        points = points.filter(function (p, i) { var a = points[i - 1], b = points[i + 1]; return !a || !b || !((a.x === p.x && p.x === b.x && (p.y - a.y) * (b.y - p.y) >= 0) || (a.y === p.y && p.y === b.y && (p.x - a.x) * (b.x - p.x) >= 0)); });
-        entry.points = points;
-        var d = drawing.orthoPath(points, 9);
-        entry.line.setAttribute('d', d); entry.hit.setAttribute('d', d); entry.underlay.setAttribute('d', d);
-        drawEdge(entry, obstacles);
-      });
+      renderRoutes(obstacles);
       cycleLayer.replaceChildren(); groups.forEach(function (members) {
         var pts = members.filter(shown).map(function (id) { return positions.get(id); }); if (!pts.length) return;
         var x = Math.min.apply(null, pts.map(function (p) { return p.x; })), y = Math.min.apply(null, pts.map(function (p) { return p.y; }));
@@ -274,6 +445,7 @@
     function select(id, origin) { if (!shown(id) && id !== null) return; selected = id; applyVisibility(); emit('onSelect', { generation: generation, nodeId: id, origin: origin }); }
     function clear() {
       if (frame) win.cancelAnimationFrame(frame); frame = 0; drag = null; pinch = null; pointers.clear();
+      routeStatus.hidden = true; routeStatus.textContent = ''; cardIndex = null; routeKey = null;
       context = null; generation = undefined; positions.clear(); nodes.clear(); elements.clear(); miniElements.clear(); groups = []; edgeElements = [];
       selected = roving = matches = visible = focusIds = flowRoot = null; branchIds = new Set(); pendingFit = false; view = { x: 0, y: 0, k: 1 };
       nodeLayer.replaceChildren(); edgeLayer.replaceChildren(); cycleLayer.replaceChildren(); mapNodes.replaceChildren(); mapEdges.replaceChildren(); root.hidden = true; transform(false);
@@ -281,7 +453,7 @@
     function setContext(next) {
       if (!alive) return; var fresh = !context || !next || next.generation !== generation;
       if (fresh) clear(); if (!next) return;
-      context = next; generation = next.generation; root.hidden = suspended;
+      context = next; generation = next.generation; root.hidden = suspended; routeKey = null;
       nodes = new Map(next.graph.nodes.map(function (n) { return [n.id, n]; }));
       positions.forEach(function (_, id) { if (!nodes.has(id)) positions.delete(id); }); layout();
       if (!nodes.has(selected)) selected = null;

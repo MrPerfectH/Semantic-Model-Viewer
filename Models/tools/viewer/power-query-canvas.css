@@ -40,3 +40,5 @@
 
 /* At overview scale retain two readable lines; provider remains in the tooltip and inspector. */
 .pqc-names-only .wui-card-meta{display:none!important}
+
+.pqc-route-status{position:absolute;left:12px;top:44px;max-width:calc(100% - 36px);padding:5px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:5px;color:#854d0e;font:11px/1.4 sans-serif;pointer-events:none}
