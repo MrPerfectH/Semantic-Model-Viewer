@@ -1,0 +1,54 @@
+{
+  "candidate": "f6f5837d5d305c17796e7260f35b77767c11a944",
+  "results": [
+    {
+      "k": 0.3,
+      "arrowWidth": 3.719970703125,
+      "arrowHeight": 5.0399932861328125,
+      "screenStroke": 1.149999,
+      "sharedRoundedPaths": true
+    },
+    {
+      "k": 0.37,
+      "arrowWidth": 3.70001220703125,
+      "arrowHeight": 5.0319976806640625,
+      "screenStroke": 1.1500006999999999,
+      "sharedRoundedPaths": true
+    },
+    {
+      "k": 0.47,
+      "arrowWidth": 3.7130126953125,
+      "arrowHeight": 5.07598876953125,
+      "screenStroke": 1.1500007,
+      "sharedRoundedPaths": true
+    },
+    {
+      "k": 0.85,
+      "arrowWidth": 3.6551513671875,
+      "arrowHeight": 5.100006103515625,
+      "screenStroke": 1.19,
+      "sharedRoundedPaths": true
+    },
+    {
+      "k": 1,
+      "arrowWidth": 3.699951171875,
+      "arrowHeight": 5,
+      "screenStroke": 1.4,
+      "sharedRoundedPaths": true
+    },
+    {
+      "k": 2,
+      "arrowWidth": 3.800048828125,
+      "arrowHeight": 5.20001220703125,
+      "screenStroke": 2.8,
+      "sharedRoundedPaths": true
+    }
+  ],
+  "graphUnchanged": true,
+  "positionsUnchanged": true,
+  "reciprocalTrustedClicks": [
+    "CycleB is referenced by CycleA",
+    "CycleA is referenced by CycleB"
+  ],
+  "boundary": "Synthetic importer; numeric layout/zoom setup via public API; actual pointer clicks on both edge hit regions. Close-details role locator timed out once; subsequent edge click succeeded."
+}
