@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.6
+
+- Include the license in the extension package, so the Marketplace page shows it.
+
 ## 0.3.5
 
 - **Power Query lineage.** The new **Power Query** tab shows how queries, parameters, functions and
