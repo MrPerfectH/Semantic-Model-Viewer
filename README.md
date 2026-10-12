@@ -19,6 +19,9 @@ No install needed. The demo opens with a synthetic "Contoso Retail" model alread
 * **Follow a measure through its DAX.** Pick a measure and see everything that feeds it (upstream, purple)
   and everything built on it (downstream, blue), with side-by-side DAX, hidden-measure flags and
   per-measure report usage.
+* **See how Power Query feeds your tables.** Pick a query, parameter or table and follow its inputs
+  and consumers, read its M, and jump from reference to reference. Nothing is run and no source data
+  is read.
 * **Share a single-file offline snapshot.** One HTML file holds the whole model. The recipient needs no
   install and no connection to the model.
 * **Runs locally.** Your models are parsed on your own computer and never leave it.
@@ -410,7 +413,12 @@ Semantic Model Viewer is built and maintained by Przemek Harazny
 ([@MrPerfectH](https://github.com/MrPerfectH)) as a personal open-source project. The demo
 model and its screenshots use only synthetic data.
 
-### Power Query metadata (feature branch)
+### Power Query
+
+![Walkthrough: pick a query, follow its inputs and consumers, read its M and jump to a referenced query](docs/img/power-query.gif)
+
+The built-in sample model has no Power Query metadata, so this tab is empty there. Open a TMDL
+folder or `model.bim` of your own to use it.
 
 Open the **Power Query** workspace next to Tables and Measures. It shows the complete
 available metadata inventory as an input → consumer query graph, including disconnected

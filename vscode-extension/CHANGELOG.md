@@ -2,18 +2,19 @@
 
 ## 0.3.5
 
+- **Power Query lineage.** The new **Power Query** tab shows how queries, parameters, functions and
+  table partitions feed each other, as a flow from input to consumer.
+- Pick any object to read its M in a read-only, line-numbered panel. Click a reference to jump to the
+  query it uses. **Open full query** opens a wide reader and **Copy M** copies the text exactly.
+- Follow the flow upstream (**Inputs**) or downstream (**Used by**). Filter connected or disconnected
+  objects, and use **Back** to return to where you were.
+- Read M statically in a cancellable background worker. Nothing is run and no source data is read.
+  Links the viewer cannot confirm, cycles and missing metadata are shown instead of guessed.
+- Keep raw M out of shared snapshots. Works with TMDL partitions and shared expressions, and with `model.bim`.
 - Remove the Semantic Model Cleaner integration.
 
 ## 0.3.4
 
-- Power Query framing exposes selected titles at browser zoom in below-docked layouts. Back and Undo yield pending focus restoration to newer input and retain workspace scroll.
-
-- Inspect read-only Power Query partition M and shared queries, parameters and functions.
-- Explore all Power Query objects in a peer model workspace with input-to-consumer
-  references, exact source navigation, Back history, connectivity filters and minimap.
-- Build static analysis in a cancellable background worker; disclose uncertainty,
-  cycles and unavailable metadata without claiming complete lineage.
-- Keep raw M excluded from shared snapshots; no M evaluation or source-data reads.
 - Add toolbar toggles on the Tables canvas to hide the table library (left) and the table
   inspector (right), giving the model canvas the full width. The choice is remembered.
 - Inline measures in the DAX view: the analyzed measure shows its DAX with every referenced measure replaced by that measure's DAX, one colour per level. Fold any inlined measure or nested call with the arrows in the left margin. Switch between SQLBI-style long and short lines, view the result as plain text, and copy it as DAX or as an `EVALUATE ROW` query.
