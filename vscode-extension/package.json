@@ -34,18 +34,13 @@
     "commands": [
       {
         "command": "semanticModelViewer.open",
-        "title": "Open Model…",
+        "title": "Open Model\u2026",
         "category": "Semantic Model Viewer",
         "icon": "$(type-hierarchy)"
       },
       {
         "command": "semanticModelViewer.openFolder",
         "title": "Open in Semantic Model Viewer",
-        "category": "Semantic Model Viewer"
-      },
-      {
-        "command": "semanticModelViewer.loadAnalysis",
-        "title": "Load Semantic Model Cleaner Analysis…",
         "category": "Semantic Model Viewer"
       },
       {
@@ -110,30 +105,7 @@
             "type": "string"
           },
           "default": [],
-          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**`. Hidden folders (`.worktrees`, `.pbi`, `.venv`…), `node_modules` and `.git` are always skipped."
-        },
-        "semanticModelViewer.cleaner.command": {
-          "type": "string",
-          "default": "smc",
-          "markdownDescription": "Command used to run [Semantic Model Cleaner](https://github.com/MrPerfectH/Semantic-Model-Cleaner) (`pip install semantic-model-cleaner`). Report-usage badges are only ever shown from its `--format json` output."
-        },
-        "semanticModelViewer.cleaner.reportsPath": {
-          "type": "string",
-          "default": "",
-          "markdownDescription": "Folder searched for `*.Report` folders when the cleaner runs, absolute or relative to the workspace folder. Empty = the workspace folder."
-        },
-        "semanticModelViewer.cleaner.extraArgs": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "description": "Extra arguments appended to the cleaner command line."
-        },
-        "semanticModelViewer.cleaner.autoRun": {
-          "type": "boolean",
-          "default": false,
-          "description": "Run Semantic Model Cleaner automatically whenever a model is opened or refreshed in the viewer."
+          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**`. Hidden folders (`.worktrees`, `.pbi`, `.venv`\u2026), `node_modules` and `.git` are always skipped."
         }
       }
     },
@@ -168,23 +140,11 @@
     "check-viewer": "node scripts/sync-viewer.js --check",
     "vscode:prepublish": "npm run sync-viewer",
     "package": "vsce package",
-    "test": "npm run sync-viewer && npm run check-viewer && node --test --test-concurrency=1 ../tests/*.test.cjs ../tests/extension.test.js ../tests/usage-adapter.test.js ../Models/tools/viewer/tests/*.test.js"
+    "test": "npm run sync-viewer && npm run check-viewer && node --test --test-concurrency=1 ../tests/*.test.cjs ../tests/extension.test.js ../Models/tools/viewer/tests/*.test.js"
   },
   "devDependencies": {
     "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^4.0.0"
   },
-  "icon": "images/icon.png",
-  "capabilities": {
-    "untrustedWorkspaces": {
-      "supported": "limited",
-      "description": "Model browsing is available; running Semantic Model Cleaner requires workspace trust.",
-      "restrictedConfigurations": [
-        "semanticModelViewer.cleaner.command",
-        "semanticModelViewer.cleaner.extraArgs",
-        "semanticModelViewer.cleaner.reportsPath",
-        "semanticModelViewer.cleaner.autoRun"
-      ]
-    }
-  }
+  "icon": "images/icon.png"
 }

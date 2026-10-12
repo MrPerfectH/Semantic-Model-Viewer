@@ -48,7 +48,7 @@ function globToRe(glob) {
 
 function makeVscode(opts) {
   const folders = (opts.folders || []).map((f, i) => ({ uri: Uri.file(f), name: path.basename(f), index: i }));
-  const config = Object.assign({ defaultModel: '', exclude: [], 'cleaner.command': 'smc', 'cleaner.reportsPath': '', 'cleaner.extraArgs': [], 'cleaner.autoRun': false }, opts.config || {});
+  const config = Object.assign({ defaultModel: '', exclude: [] }, opts.config || {});
   const log = opts.log || (() => { });
   const state = new Map();
   const commands = new Map();

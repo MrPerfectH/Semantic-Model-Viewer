@@ -10,7 +10,7 @@ const src = path.resolve(root, '..', 'Models', 'tools', 'viewer');
 const dst = path.join(root, 'media');
 const check = process.argv.includes('--check');
 const required = ['index.html', 'explorer.css', 'measures.css', 'js/app.js',
-  'js/host-vscode.js', 'js/usage-adapter.js', 'js/snapshot.js'];
+  'js/host-vscode.js', 'js/snapshot.js'];
 
 for (const file of required) {
   if (!fs.existsSync(path.join(src, file))) throw new Error('Missing canonical viewer asset: ' + file);

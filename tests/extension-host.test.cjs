@@ -4,7 +4,6 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const cp = require('node:child_process');
 const { makeVscode, install, Uri } = require('./vscode-mock');
 const ROOT = path.resolve(__dirname, '..');
 const EXT = path.join(ROOT, 'vscode-extension');
@@ -23,14 +22,13 @@ function fixtureModels(t) {
 }
 function harness(t, options = {}) {
   const vscode = makeVscode({ folders: [FIX], extensionRoot: EXT, ...options });
-  for (const file of ['panel', 'workspace', 'cleaner']) delete require.cache[require.resolve(path.join(EXT, 'src', file + '.js'))];
+  for (const file of ['panel', 'workspace']) delete require.cache[require.resolve(path.join(EXT, 'src', file + '.js'))];
   const restore = install(vscode);
   const host = require(path.join(EXT, 'src', 'panel.js'));
   const panel = new host.ViewerPanel(vscode.context);
   const workspace = require(path.join(EXT, 'src', 'workspace.js'));
-  const cleaner = require(path.join(EXT, 'src', 'cleaner.js'));
   t.after(() => { panel.dispose(); restore(); });
-  return { vscode, panel, workspace, cleaner, ...host };
+  return { vscode, panel, workspace, ...host };
 }
 async function open(h, index = 0) {
   const models = await h.workspace.findModels();
@@ -39,7 +37,6 @@ async function open(h, index = 0) {
   await webview.receive({ type: 'ready' });
   return { models, webview };
 }
-function fakeExec(t, implementation) { const old = cp.execFile; cp.execFile = implementation; t.after(() => { cp.execFile = old; }); }
 
 test('webview packages canonical CSS and hashed scripts with a fresh nonce and adapter first', async (t) => {
   const h = harness(t);
@@ -72,7 +69,7 @@ test('snapshotAssets returns complete portable assets and pristine template with
   assert.equal(reply.template, fs.readFileSync(path.join(EXT, 'media', 'index.html'), 'utf8'));
   assert.doesNotMatch(reply.template, /host-vscode|vscode-resource|Content-Security-Policy/);
   assert.equal(reply.sources['js/host-vscode.js'], undefined);
-  assert.match(reply.sources['js/usage-adapter.js'], /UsageAdapter/);
+  assert.equal(reply.sources['js/util.js'], fs.readFileSync(path.join(EXT, 'media', 'js', 'util.js'), 'utf8'));
   assert.equal(reply.sources['explorer.css'], fs.readFileSync(path.join(EXT, 'media', 'explorer.css'), 'utf8'));
 });
 
@@ -149,40 +146,11 @@ test('a standalone BIM only permits opening the selected model file', async (t) 
   assert.equal(h.vscode._watchers[0].pattern.pattern, 'model.bim');
 });
 
-test('untrusted workspaces may browse and load analysis files but never execute the cleaner', async (t) => {
-  let executions = 0, choices;
-  fakeExec(t, () => { executions++; throw new Error('must not run'); });
-  const h = harness(t, { trusted: false, config: { 'cleaner.autoRun': true },
-    quickPick: (items) => { choices = items; return items[0]; },
-    openDialog: () => [Uri.file(path.join(FIX, 'cleaner-analysis.json'))] });
-  const { webview, models } = await open(h);
-  assert.ok(webview.posted.find((m) => m.type === 'init').open.files.length);
-  assert.equal(await h.cleaner.runCleaner(models[0]), null);
-  await webview.receive({ type: 'loadAnalysis', id: 6 });
-  assert.ok(webview.posted.find((m) => m.id === 6).data.items.length);
-  assert.deepEqual(choices.map((x) => x.action), ['pick']);
-  assert.equal(executions, 0);
-  assert.ok(h.vscode.window.messages.some(([, message]) => /Trust this workspace/.test(message)));
-});
 
-test('cleaner uses an executable and argument array without a shell, unique outputs and cleanup on every outcome', async (t) => {
-  const h = harness(t, { config: { 'cleaner.command': '/path with spaces/smc', 'cleaner.extraArgs': ['--tag', 'literal; $(not-a-command)'] } });
-  const [entry] = await h.workspace.findModels(); const outputs = [];
-  const a = h.cleaner.buildCommand(entry), b = h.cleaner.buildCommand(entry);
-  assert.notEqual(a.out, b.out);
-  let mode = 'success';
-  fakeExec(t, (command, args, options, callback) => {
-    assert.equal(command, '/path with spaces/smc');
-    assert.equal(options.shell, false);
-    assert.deepEqual(args.slice(-2), ['--tag', 'literal; $(not-a-command)']);
-    const output = args[args.indexOf('-o') + 1]; outputs.push(output);
-    fs.writeFileSync(output, mode === 'success' ? '{"items":[]}' : 'not json');
-    callback(mode === 'execution-error' ? new Error('process failed') : null, '', '');
-  });
-  assert.deepEqual(await h.cleaner.runCleaner(entry), { items: [] });
-  mode = 'bad-json'; assert.equal(await h.cleaner.runCleaner(entry), null);
-  mode = 'execution-error'; assert.equal(await h.cleaner.runCleaner(entry), null);
-  assert.ok(outputs.every((output) => !fs.existsSync(output)), 'temporary output removed on success, parse failure and execution failure');
+test('untrusted workspaces may browse models', async (t) => {
+  const h = harness(t, { trusted: false });
+  const { webview } = await open(h);
+  assert.ok(webview.posted.find((m) => m.type === 'init').open.files.length);
 });
 
 test('ready initialization follows the latest requested model while an older read is pending', async (t) => {
@@ -222,37 +190,6 @@ test('a refresh cannot push stale data after switching models and refreshModel a
   assert.deepEqual(webview.posted.at(-1), { type: 'refreshModel', id: 12, refreshed: true, modelId: models[1].id });
 });
 
-test('analysis picked for a previous model is cancelled and cannot be pushed by the command', async (t) => {
-  let dialog = deferred();
-  const h = harness(t, { folders: [fixtureModels(t)], quickPick: (items) => items.find((item) => item.action === 'pick'), openDialog: () => dialog.promise });
-  const { webview, models } = await open(h);
-  const request = webview.receive({ type: 'loadAnalysis', id: 13 }); await turn();
-  await h.panel.show(models[1]);
-  dialog.resolve([Uri.file(path.join(FIX, 'cleaner-analysis.json'))]); await request;
-  assert.equal(webview.posted.find((m) => m.id === 13).cancelled, true);
-  dialog = deferred(); const command = h.panel.loadAnalysisCommand(); await turn();
-  await h.panel.refresh();
-  dialog.resolve([Uri.file(path.join(FIX, 'cleaner-analysis.json'))]); await command;
-  assert.equal(webview.posted.filter((m) => m.type === 'usage').length, 0);
-  dialog = { promise: Promise.resolve([Uri.file(path.join(FIX, 'cleaner-analysis.json'))]) };
-  await h.panel.loadAnalysisCommand();
-  assert.equal(webview.posted.find((m) => m.type === 'usage').modelId, models[1].id);
-});
-
-test('automatic cleaner usage is tied to the model revision and includes the model identity', async (t) => {
-  const jobs = [];
-  fakeExec(t, (command, args, options, callback) => { jobs.push({ output: args[args.indexOf('-o') + 1], callback }); });
-  const h = harness(t, { config: { 'cleaner.autoRun': true } });
-  const { webview, models } = await open(h);
-  assert.equal(jobs.length, 1);
-  await h.panel.refresh(); assert.equal(jobs.length, 2);
-  for (const [index, job] of jobs.entries()) { fs.writeFileSync(job.output, JSON.stringify({ revision: index })); job.callback(null, '', ''); }
-  await turn();
-  const usage = webview.posted.filter((message) => message.type === 'usage');
-  assert.equal(usage.length, 1);
-  assert.equal(usage[0].data.revision, 1);
-  assert.equal(usage[0].modelId, models[0].id);
-});
 
 test('disposing the panel clears pending watcher refresh and prevents old reads reaching a new panel', async (t) => {
   const h = harness(t); const { webview, models } = await open(h);

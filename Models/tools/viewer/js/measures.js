@@ -638,8 +638,7 @@
       var m = app.msrOf(name); if (!m) return null;
       var rel = this._gRel || {}, dax = (m.dax || '').trim();
       var u = app.msrUse(name);
-      var flags = { hid: !!m.h, hasUse: !!u, useN: u ? u.length : 0, useTip: app.useTip(u),
-        pill: app.statusPill ? app.statusPill(app.msrStatus(name), !!u, false) : null };
+      var flags = { hid: !!m.h, hasUse: !!u, useN: u ? u.length : 0, useTip: app.useTip(u) };
       if (!dax) return Object.assign({ name: name, table: app.model.msrHome[name] || '', toks: [{ isM: false, isT: true, txt: '— no expression —', s: 'color:#9aa1ad;' }] }, flags);
       var style = this._fmt || 'long';
       if (typeof DaxFormat !== 'undefined' && (style !== 'original' || inline)) {
@@ -700,7 +699,6 @@
           key: 'measure:' + item.table + ':' + m.name + ':' + rows.length,
           isFolder: false, name: m.name, table: item.table, selected: on, hid: !!m.h,
           hasUse: !!u, use: u ? u.length : 0, useTip: app.useTip(u),
-          pill: app.statusPill ? app.statusPill(app.msrStatus(m.name), !!u, true) : null,
           meta: deps + ' / ' + consumers,
           tip: m.name + '\n' + item.table + '\nUses ' + deps + ' measures · used by ' + consumers + ' measures',
           depth: depth, click: function () { self.pickMeasure(m.name); }
@@ -831,7 +829,6 @@
         ]));
         if (R.hid) kids.push(el('span', { title: 'Hidden in the model', cls: 'mv-hidden-icon', 'aria-label': 'Hidden', html: U.icon('eyeOff', 12) }));
         if (R.hasUse) kids.push(el('span', { cls: 'mv-usage-badge', title: R.useTip, text: R.use + ' pg' }));
-        if (R.pill) kids.push(el('span', R.pill));
         kids.push(el('span', { cls: 'mv-row-count', text: R.meta, 'aria-hidden': 'true' }));
         var button = el('button', { cls: 'mv-library-row' + (R.isFolder ? ' mv-folder' : '') + (R.selected ? ' is-selected' : ''),
           title: R.tip || R.name, 'aria-label': R.tip || R.name, 'aria-current': R.selected ? 'true' : null,
@@ -907,9 +904,8 @@
       ]);
       if (nCols) metadata.appendChild(el('span', { cls: 'mv-chip', text: nCols + (nCols === 1 ? ' column reference' : ' column references'), title: colGs.map(function (cg) { return cg.t + ': ' + cg.cs.join(', '); }).join('\n') }));
       if (m.h) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'Hidden in model' }));
-      var usage = app.msrUse(sn), status = app.statusPill ? app.statusPill(app.msrStatus(sn), !!usage, false) : null;
+      var usage = app.msrUse(sn);
       if (usage) metadata.appendChild(el('span', { cls: 'mv-chip mv-chip-blue', text: usage.length + (usage.length === 1 ? ' report page' : ' report pages'), title: app.useTip(usage) }));
-      if (status) metadata.appendChild(el('span', status));
       else if (!usage && app._usage) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'No direct report usage', title: 'Not directly referenced in ' + ((app._usageMeta && app._usageMeta.report) || 'the scanned report') + '. It may feed other measures that are used.' }));
       var header = el('header', { cls: 'mv-analysis-header' });
       var heading = el('div', { cls: 'mv-heading-block' }, [el('div', { cls: 'mv-eyebrow', text: 'ANALYZING MEASURE' }), el('h1', { text: sn }), metadata]);
@@ -1384,7 +1380,6 @@
         el('h3', { text: card.name }),
         el('div', { cls: 'mv-dax-card-meta' }, [
           el('span', { text: card.table + (m && m.fmt ? ' · Format: ' + m.fmt : '') }),
-          card.pill ? el('span', Object.assign({}, card.pill, { style: card.pill.style + 'margin-left:8px;' })) : null,
           card.inlined ? el('span', { cls: 'mv-inline-note', text: ' · Inlined ' + card.inlined.count + (card.inlined.count === 1 ? ' measure' : ' measures') +
             (card.inlined.cycles.length ? ' · Circular, kept as reference: ' + card.inlined.cycles.join(', ') : '') +
             (card.inlined.capped ? ' · Too large, some references kept' : '') }) : null

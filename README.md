@@ -133,9 +133,7 @@ snapshot format as the web app. Model files refresh when edited; layouts are sav
 per model in the VS Code workspace.
 
 See [extension installation and development](vscode-extension/README.md). The package
-is built from `Models/tools/viewer`, so there is one maintained viewer. Optional
-Semantic Model Cleaner integration loads report usage from an existing analysis file
-or runs the cleaner in a trusted workspace. The web app and Python data pipeline
+is built from `Models/tools/viewer`, so there is one maintained viewer. The web app and Python data pipeline
 continue to work as before.
 
 ## Share an interactive snapshot
@@ -384,7 +382,7 @@ No installation is needed. With Node.js available:
 
 ```bash
 node vscode-extension/scripts/sync-viewer.js
-node --test tests/*.test.cjs Models/tools/viewer/tests/*.test.js tests/extension.test.js tests/usage-adapter.test.js
+node --test tests/*.test.cjs Models/tools/viewer/tests/*.test.js tests/extension.test.js
 ```
 
 The tests cover relationship traversal, canvas membership/persistence, dependency parsing, model isolation, storage failures, measure controls, matrix behavior and escaped tooltip content. These fixtures do not establish full parser or browser compatibility.

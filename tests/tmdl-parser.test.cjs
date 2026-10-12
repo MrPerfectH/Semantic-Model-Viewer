@@ -15,7 +15,7 @@ function parser() {
   const context = { console };
   context.window = context;
   vm.createContext(context);
-  for (const file of ['util.js', 'snapshot.js', 'roles.js', 'usage-adapter.js', 'tmdl-parser.js']) {
+  for (const file of ['util.js', 'snapshot.js', 'roles.js', 'tmdl-parser.js']) {
     vm.runInContext(fs.readFileSync(path.join(jsDir, file), 'utf8'), context, { filename: file });
   }
   return context.TMDLParser;

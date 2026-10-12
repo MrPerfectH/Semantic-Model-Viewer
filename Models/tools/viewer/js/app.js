@@ -125,7 +125,7 @@
     this.modelKey = 'builtin';
     this.colorBy = 'domain';
     this.model = null;
-    this._usage = null; this._usageMeta = null; this._usageStatus = null; this._usageCols = null;
+    this._usage = null; this._usageMeta = null;
     this._importModel = null; this._importHandle = null;
     this.repoHandle = null; this.repoPath = null; this.repoModels = null; this._repoLive = false;
     this.server = null;   // local app server (scripts/serve.py), detected at boot
@@ -451,7 +451,7 @@
       var self = this;
       this.modelKey = key;
       this.canvas.setLayoutKey(key === 'builtin' ? 'lsa_model_layout_v1' : 'smv_layout_' + (key || 'none'));
-      this._usage = null; this._usageMeta = null; this._usageStatus = null; this._usageCols = null;
+      this._usage = null; this._usageMeta = null;
       if (opts.persist !== false) store.set('smv_current_v1', key);
       this.prepareModel(model);
       this.applyRoles(model, key);
@@ -542,7 +542,7 @@
       model.tables.forEach(function (table) { table.source = table.source || {kind:'other'}; table.domain = table.domain || 'Other'; });
       this.state.viewMode = 'graph';
       this.modelKey = record.id; this.canvas.setLayoutKey('smv_layout_' + record.id);
-      this._usage = null; this._usageMeta = null; this._usageStatus = null; this._usageCols = null;
+      this._usage = null; this._usageMeta = null;
       this.prepareModel(model); this.applyRoles(model, record.id); if(this.powerQueryWorkspace)this.powerQueryWorkspace.reset(); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
       this._tableWorkspace = null; this._tableViewport = null; this._domainWorkspace = null; this._matrixWorkspace = null;
       if (this.explorer) this.explorer.loadModel();
@@ -561,7 +561,6 @@
           self.setViewMode(saved.viewMode);
         }
       });
-      if (record.usage) this.setUsage(record.usage);
     },
     hostChooseModel: async function (id) {
       var request = this._hostRequest = (this._hostRequest || 0) + 1;
@@ -575,34 +574,16 @@
       try { await this.host.listModels(); this.render(true); }
       catch (error) { this.setState({ repoError: error.message }); }
     },
-    hostLoadAnalysis: async function () {
-      var model = this.model;
-      try { var data = await this.host.pickAnalysis(); if (data && this.model === model) this.setUsage(data); }
-      catch (error) { this.setState({ repoError: error.message, showModelMenu: true }); }
-    },
     hostRefreshModel: async function () {
       try { await this.host.refreshModel(); }
       catch (error) { this.setState({ repoError: error.message, showModelMenu: true }); }
     },
-    setUsage: function (data) {
-      if (!data) { this._usage = null; this._usageMeta = null; this._usageStatus = null; this._usageCols = null; }
-      else {
-        var usage = g.UsageAdapter.fromCleaner(data);
-        if (usage.models.length && !usage.models.includes(this.state.modelName)) throw new Error('This analysis belongs to a different model.');
-        this._usage = usage.measures; this._usageMeta = usage; this._usageStatus = usage.status; this._usageCols = usage.columns;
-      }
-      this.measures._railKey = null; this.measures._mainKey = null; this.measures._daxKey = null; this.sidebar._key = null;
-      this.render(true);
-    },
-
     /* ---------- measure helpers shared by views ---------- */
     msrOf: function (name) {
       var M = this.model, h = M && M.msrHome ? M.msrHome[name] : null;
       return h && M.byName[h] ? M.byName[h].measures.find(function (x) { return x.name === name; }) : null;
     },
     msrUse: function (n) { return (this._usage && this._usage[n]) || null; },
-    msrStatus: function (n) { return (this._usageStatus && this._usageStatus[n]) || null; },
-    colStatus: function (t, c) { return (this._usageCols && this._usageCols[t + '|' + c]) || null; },
     useTip: function (u) {
       if (!u) return '';
       var rep = (this._usageMeta && this._usageMeta.report) || 'report';
@@ -612,20 +593,6 @@
         if (e.f) p.push(e.f + ' filter' + (e.f > 1 ? 's' : ''));
         return '• ' + (e.r ? e.r + ' / ' : '') + e.p + ' — ' + p.join(', ');
       }).join('\n');
-    },
-    statusPill: function (rec, hasPages, small) {
-      if (!rec || (rec.status === 'used' && hasPages)) return null;
-      var P = {
-        unused: ['unused', '#b91c1c', '#fdecec', '#f6c9c9', 'Semantic Model Cleaner: not used in any scanned report'],
-        broken: ['broken', '#92400e', '#fef3c7', '#fcd34d', 'Semantic Model Cleaner: broken reference'],
-        indirect: ['indirect', '#5b6472', '#f1f3f6', '#d5dae2', 'Semantic Model Cleaner: used indirectly'],
-        used: ['used', '#166534', '#f0f7f1', '#cde5d2', 'Semantic Model Cleaner: used by the model']
-      }[rec.status] || null;
-      if (!P) return null;
-      return {
-        text: P[0], title: P[4] + (rec.raw ? '\n' + rec.raw : '') + (rec.risk ? '\nremoval risk: ' + rec.risk : ''),
-        style: 'flex:none;font:600 ' + (small ? '8.5px' : '9px') + "/1 'IBM Plex Mono',monospace;color:" + P[1] + ';background:' + P[2] + ';border:1px solid ' + P[3] + ';border-radius:4px;padding:2px ' + (small ? '4px' : '5px') + ';cursor:help;'
-      };
     },
     tipFlags: function (n) {
       var m = this.msrOf(n), u = this.msrUse(n), s = '';
@@ -1282,7 +1249,6 @@
       this.prepareModel(model); if(this.powerQueryWorkspace)this.powerQueryWorkspace.reset(); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
       this._usage = payload.usage && payload.usage.measures || null;
       this._usageMeta = payload.usage && payload.usage.meta || null;
-      this._usageStatus = payload.usage && payload.usage.status || null; this._usageCols = payload.usage && payload.usage.columns || null;
       this.repoHandle = null; this.repoModels = null; this._repoLive = false;
       Object.assign(this.state, { loaded: true, modelName: payload.name || model.name || 'Semantic model snapshot',
         viewMode: 'graph', selected: null, isolate: false, allExpanded: false, showImport: false, showModelMenu: false,

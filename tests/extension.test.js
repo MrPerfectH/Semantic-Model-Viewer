@@ -1,6 +1,6 @@
 /* Exercise the VS Code extension against tests/fixtures with a mocked `vscode` module:
    activation, workspace discovery, the ready/init handshake, opening a model through the
-   webview protocol, storage round trip, cleaner file loading and the generated webview HTML. */
+   webview protocol, storage round trip and the generated webview HTML. */
 'use strict';
 const assert = require('assert');
 const fs = require('fs');
@@ -19,13 +19,12 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
 (async () => {
   const vscode = makeVscode({
     folders: [FIX], extensionRoot: EXT,
-    openDialog: () => [Uri.file(path.join(FIX, 'cleaner-analysis.json'))],
-    quickPick: (items) => items.find((i) => i.action === 'pick') || items[0]
+    quickPick: (items) => items[0]
   });
   const restore = install(vscode);
   const ext = require(path.join(EXT, 'src', 'extension.js'));
   const { panel, tree } = ext.activate(vscode.context);
-  assert.strictEqual(vscode.context.subscriptions.length, 9, 'six commands, tree view, folder listener and panel disposable registered');
+  assert.strictEqual(vscode.context.subscriptions.length, 8, 'five commands, tree view, folder listener and panel disposable registered');
 
   /* --- Activity Bar tree: one row per model, click opens it --- */
   assert.strictEqual(vscode._trees['semanticModelViewer.models'], tree, 'tree provider registered under the view id');
@@ -63,7 +62,7 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
     vscode.workspace.getConfiguration = cfg0;
     assert.deepStrictEqual(excluded.map((m) => m.path), ['Fixture Model.SemanticModel', 'power-query/model.bim'], 'semanticModelViewer.exclude removes the archive while preserving standalone BIM discovery');
   } finally { fs.rmSync(path.join(FIX, 'Archive'), { recursive: true, force: true }); }
-  assert.strictEqual(await ws.modelFromUri(Uri.file(path.join(FIX, 'cleaner-analysis.json'))), null);
+  assert.strictEqual(await ws.modelFromUri(Uri.file(path.join(FIX, 'expected-model.json'))), null);
   assert.strictEqual((await ws.modelFromUri(Uri.file(path.join(FIX, 'Fixture Model.SemanticModel')))).name, 'Fixture Model');
 
   /* --- explicitly opening the TMDL model works in a multi-model workspace --- */
@@ -151,34 +150,6 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   await wv.webview.receive({ type: 'storage', key: 'smv-detail', value: null });
   assert.strictEqual(vscode._state.has('smv:smv-detail'), false, 'null deletes the key');
   assert.deepStrictEqual(panel.storageDump(), { 'smv_layout_ws:Fixture Model.SemanticModel': '{"Fact Sales":{"x":1,"y":2}}' });
-
-  /* --- analysis: pick a file (quick pick chooses the file option) --- */
-  wv.webview.posted.length = 0;
-  await wv.webview.receive({ type: 'loadAnalysis', id: 20 });
-  const la = wv.webview.posted.find((m) => m.id === 20);
-  assert.ok(la.data && la.data.summary && la.data.items.length === 10, 'analysis JSON returned to the webview');
-
-  // the command variant pushes a `usage` message
-  wv.webview.posted.length = 0;
-  await vscode.commands.executeCommand('semanticModelViewer.loadAnalysis');
-  assert.ok(wv.webview.posted.some((m) => m.type === 'usage' && m.data.items.length === 10));
-
-  /* --- cleaner command line --- */
-  const cleaner = require(path.join(EXT, 'src', 'cleaner.js'));
-  const spec = cleaner.buildCommand(models[0]);
-  assert.strictEqual(spec.command, 'smc');
-  assert.deepStrictEqual(spec.args.slice(0, 6), ['--models-path', path.join(FIX, 'Fixture Model.SemanticModel'), '--reports-path', FIX, '--format', 'json']);
-  assert.strictEqual(spec.args[6], '-o');
-  assert.strictEqual(spec.cwd, FIX);
-
-  // a missing cleaner command is reported, not thrown
-  const before = vscode.window.messages.length;
-  const cfgBackup = vscode.workspace.getConfiguration;
-  vscode.workspace.getConfiguration = () => ({ get: (k) => (k === 'cleaner.command' ? 'definitely-not-installed-smc' : cfgBackup().get(k)) });
-  const res = await cleaner.runCleaner(models[0], null);
-  vscode.workspace.getConfiguration = cfgBackup;
-  assert.strictEqual(res, null);
-  assert.ok(vscode.window.messages.slice(before).some((m) => /not found/.test(m[1])), 'ENOENT surfaced as a message');
 
   /* --- refresh + notify + dispose --- */
   wv.webview.posted.length = 0;

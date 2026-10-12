@@ -5,7 +5,7 @@
 Explore Power BI semantic models from local TMDL / PBIP files or `model.bim`. Build a
 working canvas from a table library, inspect relationships and filter direction, and trace
 measure dependencies alongside the complete DAX expression. The viewer needs no Power BI
-Desktop, Fabric connection, or Python. Python is only needed for the optional cleaner tool.
+Desktop, Fabric connection, or Python.
 
 ## What you get
 
@@ -63,31 +63,12 @@ metadata and formulas before sharing: DAX can itself contain sensitive text. Sna
 files make no network requests. The extension package includes no sample business model
 or report-usage dataset.
 
-## Optional report usage from Semantic Model Cleaner
-
-Report-usage information appears only after loading an analysis from
-[Semantic Model Cleaner](https://github.com/MrPerfectH/Semantic-Model-Cleaner). An absent
-analysis does not mean a measure is unused.
-
-With a model open, run **Semantic Model Viewer: Load Semantic Model Cleaner Analysis…**
-and choose an existing cleaner JSON export or run the cleaner locally. To use the latter,
-install `semantic-model-cleaner` in your Python environment and make `smc` available on
-PATH, or configure its full executable path. Automatic runs are disabled by default.
-
-Model browsing is available in Restricted Mode. Running the cleaner requires a trusted
-workspace; its executable, arguments, reports path, and automatic-run setting are restricted
-until workspace trust is granted. Loading an existing analysis does not run a subprocess.
-
 ## Settings
 
 | Setting | Default | Meaning |
 | --- | --- | --- |
 | `semanticModelViewer.defaultModel` | `""` | Model folder or `model.bim` path, absolute or relative to the workspace. |
 | `semanticModelViewer.exclude` | `[]` | Additional model-discovery glob exclusions, such as `**/Archive/**`. Hidden folders and `node_modules` are skipped. |
-| `semanticModelViewer.cleaner.command` | `"smc"` | Local cleaner executable. |
-| `semanticModelViewer.cleaner.reportsPath` | `""` | Reports folder; empty uses the workspace folder. |
-| `semanticModelViewer.cleaner.extraArgs` | `[]` | Additional cleaner command arguments. |
-| `semanticModelViewer.cleaner.autoRun` | `false` | Run the cleaner when a model opens or refreshes. |
 
 The command palette also provides **Refresh Model** and **Refresh Model List**. PNG export
 is unavailable in the VS Code webview; use an interactive HTML snapshot to share a view.
@@ -115,10 +96,10 @@ use **Extensions: Install from VSIX…** and select the generated file.
 
 The canonical viewer is `Models/tools/viewer/` at the repository root. `npm run sync-viewer`
 copies its HTML, CSS, and JavaScript into generated, ignored `vscode-extension/media/`.
-It includes `host-vscode.js`, `usage-adapter.js`, and `snapshot.js`; model JSON, usage JSON,
+It includes `host-vscode.js` and `snapshot.js`; model JSON, usage JSON,
 Python scripts, and fixtures are excluded. `npm run check-viewer` verifies exact runtime
 file contents and rejects missing or unexpected files. `npm test` syncs and checks these
-assets, then runs the shared viewer, extension, and usage-adapter regressions.
+assets, then runs the shared viewer and extension regressions.
 
 The extension host is plain CommonJS in `src/`. Its VS Code adapter connects the shared
 viewer to workspace discovery, model reading, persistence, and export. Edit the canonical

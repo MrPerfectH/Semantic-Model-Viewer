@@ -8,7 +8,7 @@ If an attachment preview shows source text or a static preview, download the fil
 and open it in the browser instead.
 
 Inside VS Code, **Save snapshot** opens the native Save dialog. The exported HTML
-works independently of VS Code and includes any loaded Cleaner usage badges.
+works independently of VS Code and includes any loaded report usage.
 
 ## What travels with the file
 

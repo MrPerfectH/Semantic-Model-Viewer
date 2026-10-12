@@ -1,6 +1,6 @@
 /* Semantic Model Viewer — VS Code extension entry point.
    The webview runs the same viewer as the web version (Models/tools/viewer); this side owns the
-   file system, settings, persistence and the optional Semantic Model Cleaner run. */
+   file system, settings and persistence. */
 'use strict';
 const vscode = require('vscode');
 const { findModels, modelFromUri, resolveDefaultModel } = require('./workspace');
@@ -41,7 +41,6 @@ function activate(context) {
     vscode.commands.registerCommand('semanticModelViewer.open', openCommand),
     vscode.commands.registerCommand('semanticModelViewer.openFolder', openUriCommand),
     vscode.commands.registerCommand('semanticModelViewer.openEntry', (entry) => (entry && entry.uri ? panel.show(entry) : openCommand())),
-    vscode.commands.registerCommand('semanticModelViewer.loadAnalysis', () => panel.loadAnalysisCommand()),
     vscode.commands.registerCommand('semanticModelViewer.refresh', () => panel.refresh()),
     vscode.commands.registerCommand('semanticModelViewer.refreshModels', () => tree.refresh()),
     vscode.window.registerTreeDataProvider('semanticModelViewer.models', tree),
