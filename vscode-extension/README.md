@@ -1,9 +1,33 @@
 # Semantic Model Viewer for VS Code
 
+![Semantic Model Viewer: build a table canvas, follow a measure through its DAX, browse domains and the fact matrix](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/demo.gif)
+
 Explore Power BI semantic models from local TMDL / PBIP files or `model.bim`. Build a
 working canvas from a table library, inspect relationships and filter direction, and trace
 measure dependencies alongside the complete DAX expression. The viewer needs no Power BI
 Desktop, Fabric connection, or Python. Python is only needed for the optional cleaner tool.
+
+## What you get
+
+**Tables.** Start from a blank canvas and add only the tables you care about.
+
+![A canvas of fact and dimension tables with their relationships](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/tables.png)
+
+**Table inspector.** See a table's columns and relationships, and add its related tables by filter direction.
+
+![The table inspector next to the canvas](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/table-inspector.png)
+
+**Measures.** Follow a measure through everything that feeds it and everything built on it, next to its full DAX.
+
+![The dependency flow of a measure](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/measure-flow.png)
+
+**Domains and matrix.** Group tables into domains, and compare every fact table with the tables around it.
+
+![Model domains](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/domains.png)
+
+![The fact relationship matrix](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/matrix.png)
+
+Want to look first? [Try the live demo](https://MrPerfectH.github.io/Semantic-Model-Viewer/) in your browser. It needs no install.
 
 ## Open a model
 
