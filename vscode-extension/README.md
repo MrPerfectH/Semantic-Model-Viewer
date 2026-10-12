@@ -4,8 +4,24 @@
 
 Explore Power BI semantic models from local TMDL / PBIP files or `model.bim`. Build a
 working canvas from a table library, inspect relationships and filter direction, and trace
-measure dependencies alongside the complete DAX expression. The viewer needs no Power BI
-Desktop, Fabric connection, or Python.
+measure dependencies alongside the complete DAX expression, and see how Power Query queries,
+parameters and functions feed each table. The viewer needs no Power BI Desktop, Fabric
+connection, or Python.
+
+## Power Query lineage
+
+See how your queries feed each other. The **Power Query** tab draws parameters, functions, shared queries and every table's partition as a flow from input to consumer.
+
+![Walkthrough: pick a query, follow its inputs and consumers, read its M and jump to a referenced query](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/power-query.gif)
+
+- **Follow the flow.** Pick any query, parameter, function or table. See everything it reads from (**Inputs**) and everything that uses it (**Used by**).
+- **Read the M.** A read-only panel shows the code with line numbers. Click a reference inside the code to jump to the query it uses. **Open full query** gives a wide reader, and **Copy M** copies the text exactly.
+- **Stay oriented.** Search, filter connected or disconnected objects, and use **Back** to return to where you were.
+- **Nothing runs.** Links come from reading the M text only. No query is executed and no source data is read. Links the viewer cannot confirm are listed, not guessed. Raw M stays out of shared snapshots.
+
+![Inputs of a query: two parameters and a source query flow into Stage Sales](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/power-query-flow.png)
+
+![The M of a query, with its inputs and consumers beside it](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/power-query-inspector.png)
 
 ## What you get
 
@@ -50,6 +66,8 @@ their model.
   the canvas toolbar when you want the full width for the diagram.
 - **Measures:** search the library, inspect dependencies and dependents, and compare the
   graph with full DAX in graph, split, or DAX views.
+- **Power Query:** follow queries, parameters, functions and table partitions from input to
+  consumer, and read their M next to the flow.
 - **Domains:** inspect model groups and expand their member tables.
 - **Matrix:** compare fact tables with their related tables.
 - **Save snapshot:** create one self-contained HTML file containing the complete model
