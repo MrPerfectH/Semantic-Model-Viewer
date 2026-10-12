@@ -32,12 +32,10 @@
     });
     var columns = t.columns.map(function (c) {
       var isRel = c.rel, hid = c.hidden, ty = app.shortType(c.dataType);
-      var status = app.colStatus ? app.colStatus(t.name, c.name) : null;
       var ckey = 'col|' + c.name, copen = !!(app.state.calcOpen || {})[ckey];
       return {
         name: c.name, type: ty, isCalc: !!c.isCalc, dax: c.dax || '', open: copen,
         toggle: function () { app.setState({ calcOpen: Object.assign({}, app.state.calcOpen, (function (o) { o[ckey] = !copen; return o; })({})) }); },
-        pill: status && status.status !== 'used' && app.statusPill ? app.statusPill(status, false, true) : null,
         rowStyle: 'display:flex;align-items:center;gap:10px;padding:5px 16px;' + (isRel ? ('background:' + tint('#f59e0b', 0.07) + ';') : ''),
         dotStyle: isRel ? 'width:7px;height:7px;border-radius:50%;background:#f59e0b;flex:none;'
           : (hid ? 'width:7px;height:7px;border-radius:50%;border:1.5px solid #cbd0d8;flex:none;box-sizing:border-box;'
@@ -54,7 +52,6 @@
       return {
         name: m.name, folder: m.folder || '', hasFolder: !!m.folder,
         hid: !!m.h, hasUse: !!u, use: u ? u.length : 0, useTip: app.useTip(u),
-        pill: app.statusPill ? app.statusPill(app.msrStatus(m.name), !!u, true) : null,
         open: open, dax: (m.dax || '').trim() || '—',
         caretStyle: 'flex:none;display:flex;transition:transform .15s;transform:rotate(' + (open ? '90deg' : '0deg') + ');margin-top:1px;',
         toggle: function () { app.setState({ expandedMeasure: open ? null : m.name }); },
@@ -263,7 +260,6 @@
           title: m.useTip, text: m.use + ' pg',
           style: "flex:none;font:600 8.5px/1 'IBM Plex Mono',monospace;color:#2563eb;background:#f2f7ff;border:1px solid #d4e3fb;border-radius:4px;padding:2px 4px;cursor:help;"
         }));
-        if (m.pill) kids.push(el('span', m.pill));
         var wrap = el('div', {}, el('button', {
           cls: 'hv-f5f7f9', onClick: m.toggle,
           style: 'display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:5px 16px;border:none;background:transparent;cursor:pointer;'
@@ -289,7 +285,6 @@
         el('span', { style: c.dotStyle }),
         el('span', { style: "flex:1;min-width:0;font-size:12.5px;font-family:'IBM Plex Mono',monospace;color:" + c.nameColor + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', text: c.name }),
         c.dax ? fxBadge('Calculated column — click to read the DAX') : null,
-        c.pill ? el('span', c.pill) : null,
         el('span', { style: c.typeStyle, text: c.type })
       ];
       if (!c.dax) { body.appendChild(el('div', { cls: 'hv-f0f2f5', style: c.rowStyle }, rowKids)); return; }

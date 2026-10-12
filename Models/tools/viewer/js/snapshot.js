@@ -3,7 +3,7 @@
 (function (g) {
   'use strict';
   var FORMAT = 'semantic-model-viewer', VERSION = 1;
-  var FILES = ['js/util.js', 'js/snapshot.js', 'js/usage-adapter.js', 'js/roles.js', 'js/tmdl-parser.js', 'js/workspace-ui.js', 'js/canvas.js', 'js/layouts.js',
+  var FILES = ['js/util.js', 'js/snapshot.js', 'js/roles.js', 'js/tmdl-parser.js', 'js/workspace-ui.js', 'js/canvas.js', 'js/layouts.js',
     'js/matrix.js', 'js/dax-format.js', 'js/measures.js', 'js/power-query-dependencies.js', 'js/power-query-graph-model.js', 'js/power-query-canvas.js', 'js/power-query-inspector.js', 'js/power-query-workspace.js', 'js/power-query-lineage.js', 'js/power-query.js', 'js/sidebar.js', 'js/topbar.js', 'js/rules.js', 'js/relationships.js', 'js/explorer.js', 'js/app.js', 'explorer.css', 'measures.css', 'power-query.css', 'power-query-canvas.css', 'power-query-inspector.css', 'power-query-workspace.css', 'power-query-lineage.css'];
   var CSP = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
   function clone(value) { return value == null ? null : JSON.parse(JSON.stringify(value)); }
@@ -35,13 +35,7 @@
     Object.keys(app._usage).forEach(function(name){
       Object.defineProperty(measures,name,{value:(Array.isArray(app._usage[name])?app._usage[name]:[]).map(function(row){return pick(row,['p','v','f','r']);}),enumerable:true,writable:true,configurable:true});
     });
-    function statuses(records) {
-      var out = {};
-      Object.keys(records || {}).forEach(function (name) { Object.defineProperty(out,name,{value:pick(records[name], ['status','raw','risk']),enumerable:true,writable:true,configurable:true}); });
-      return out;
-    }
-    return { measures: measures, meta: pick(app._usageMeta,['source','report','model','pageCount','scanned']),
-      status: statuses(app._usageStatus), columns: statuses(app._usageCols) };
+    return { measures: measures, meta: pick(app._usageMeta,['report','model','pageCount','scanned']) };
   }
   function capture(app) {
     if (!app.model || !Array.isArray(app.model.tables)) throw new Error('Open a model before saving a snapshot.');

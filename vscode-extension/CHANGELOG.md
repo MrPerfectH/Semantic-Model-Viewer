@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.5
+
+- Remove the Semantic Model Cleaner integration.
+
 ## 0.3.4
 
 - Power Query framing exposes selected titles at browser zoom in below-docked layouts. Back and Undo yield pending focus restoration to newer input and retain workspace scroll.

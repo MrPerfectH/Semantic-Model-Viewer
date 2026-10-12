@@ -33,7 +33,7 @@ You need Node.js 22. From the repo root:
 
 ```bash
 node vscode-extension/scripts/sync-viewer.js
-node --test tests/*.test.cjs Models/tools/viewer/tests/*.test.js tests/extension.test.js tests/usage-adapter.test.js
+node --test tests/*.test.cjs Models/tools/viewer/tests/*.test.js tests/extension.test.js
 ```
 
 CI runs the same checks through `npm test` in `vscode-extension/`. To run them that way:

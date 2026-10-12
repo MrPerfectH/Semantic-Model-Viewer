@@ -32,16 +32,9 @@ function model(name = 'First model') {
     { name: 'Calendar', domain: 'Core', columns: [{ name: 'Date', dataType: 'dateTime' }], measures: [], source: { kind: 'db' } }
   ], relationships: [{ from: 'Sales', fromCol: 'Date', to: 'Calendar', toCol: 'Date', fromCard: 'many', toCard: 'one' }] };
 }
-function record(id = 'workspace:first', name = 'First model', usage) {
+function record(id = 'workspace:first', name = 'First model') {
   return { modelId: id, name, path: '/workspace/' + name + '.SemanticModel',
-    files: [{ name: 'model.json', text: JSON.stringify(model(name)) }], usage };
-}
-function analysis(name = 'First model') {
-  return { summary: { models: [name], reports: ['Overview'], not_used: 1 }, items: [
-    { type: 'Measure', sourceKind: 'model', name: 'Base', table: 'Sales', status: 'USED', usages: [{ report: 'Overview', page: 'Sales', context: 'Visual' }] },
-    { type: 'Measure', sourceKind: 'model', name: 'Derived', table: 'Sales', status: 'NOT USED', usages: [] },
-    { type: 'Column', name: 'Amount', table: 'Sales', status: 'INDIRECT', usages: [] }
-  ] };
+    files: [{ name: 'model.json', text: JSON.stringify(model(name)) }] };
 }
 function assets() {
   const template = fs.readFileSync(path.join(viewerDir, 'index.html'), 'utf8'), sources = {};
@@ -70,7 +63,7 @@ function harness() {
   };
   context.window = context; vm.createContext(context);
   const load = file => vm.runInContext(fs.readFileSync(path.join(viewerDir, 'js', file), 'utf8'), context, { filename: file });
-  for (const file of ['util.js', 'snapshot.js', 'roles.js', 'usage-adapter.js', 'tmdl-parser.js', 'canvas.js', 'layouts.js', 'matrix.js', 'dax-format.js', 'measures.js', 'sidebar.js', 'topbar.js', 'rules.js', 'relationships.js', 'explorer.js', 'host-vscode.js']) load(file);
+  for (const file of ['util.js', 'snapshot.js', 'roles.js', 'tmdl-parser.js', 'canvas.js', 'layouts.js', 'matrix.js', 'dax-format.js', 'measures.js', 'sidebar.js', 'topbar.js', 'rules.js', 'relationships.js', 'explorer.js', 'host-vscode.js']) load(file);
   const sidebarUpdate = context.Sidebar.prototype.update;
   for (const name of ['Legend', 'Hint', 'MatrixView', 'MeasuresView', 'Sidebar', 'ImportModal', 'RulesModal', 'TableExplorer']) context[name].prototype.update = function () {};
   const cv = context.GraphCanvas.prototype;
@@ -109,20 +102,19 @@ test('VS Code boot seeds shared preferences before constructing and has an actio
 });
 
 test('host default model retains the shared parser, dependency graph, table canvas and all four views', async () => {
-  const h = harness(), app = await h.boot({ open: record(undefined, undefined, analysis()) });
+  const h = harness(), app = await h.boot({ open: record() });
   assert.equal(app.state.loaded, true); assert.equal(app.modelKey, 'workspace:first');
   assert.deepEqual(plain(app.msrOf('Derived')._deps), ['Base']); assert.equal(app.model.byName.Sales.role, 'fact');
   const graph = app.measures.gLayout('Derived', {}, 500);
   assert.ok(graph.names.includes('Base')); assert.ok(graph.names.includes('Derived'));
   app.explorer.add(['Sales'], { x: 45, y: 70 }); await flush();
   assert.deepEqual([...app.explorer.names], ['Sales']); assert.deepEqual(plain(app.canvas.pos.Sales), { x: 45, y: 70 });
-  assert.equal(app.msrUse('Base')[0].p, 'Sales');
   for (const label of ['Tables', 'Measures', 'Domains', 'Matrix', 'Save snapshot', 'Choose model']) assert.ok(texts(h.document.getElementById('topbar')).includes(label), label);
   h.isolated();
 });
 
 test('choosing models uses host requests and keeps table membership, coordinates and usage isolated', async () => {
-  const h = harness(), app = await h.boot({ open: record(undefined, undefined, analysis()) });
+  const h = harness(), app = await h.boot({ open: record() });
   app.explorer.add(['Sales'], { x: 123, y: 456 }); await flush();
   const choosing = app.hostSelectModel(), list = h.next('listModels');
   h.respond(list, { models: [{ id: 'workspace:second', name: 'Second model', path: '/workspace/second' }] }); await choosing; await flush();
@@ -136,18 +128,12 @@ test('choosing models uses host requests and keeps table membership, coordinates
   assert.equal(app.canvas.LSKEY, 'smv_layout_workspace:first'); h.isolated();
 });
 
-test('late open and analysis responses cannot replace a more recently selected model', async () => {
+test('late open responses cannot replace a more recently selected model', async () => {
   const h = harness(), app = await h.boot({ open: record() });
   const oldOpen = app.hostChooseModel('workspace:old'), openRequest = h.next('openModel');
   h.receive({ type: 'model', ...record('workspace:current', 'Current model') }); await flush();
   h.respond(openRequest, record('workspace:old', 'Old model')); await oldOpen;
-  assert.equal(app.modelKey, 'workspace:current');
-  const oldAnalysis = app.hostLoadAnalysis(), analysisRequest = h.next('loadAnalysis');
-  h.receive({ type: 'model', ...record('workspace:next', 'Next model') }); await flush();
-  h.respond(analysisRequest, { data: analysis('Current model') }); await oldAnalysis;
-  assert.equal(app.modelKey, 'workspace:next'); assert.equal(app._usage, null);
-  h.receive({ type: 'usage', modelId: 'workspace:current', data: analysis('Current model') });
-  assert.equal(app._usage, null); h.isolated();
+  assert.equal(app.modelKey, 'workspace:current'); h.isolated();
 });
 
 test('same-model refresh preserves selected measures and the existing table workspace and viewport', async () => {
@@ -191,35 +177,7 @@ test('VS Code snapshot save uses host assets and save bridge, yields ordinary of
 });
 
 
-test('optional Cleaner status pills render in library, selected measure, comparison DAX and table columns', async () => {
-  const h = harness(), app = await h.boot({ open: record(undefined, undefined, analysis()) });
-  app.state.mvQuery = 'Derived'; app.state.selMeasure = 'Derived';
-  const measure = app.measures;
-  measure.totalEl = node(); measure.qInput = node(); measure.tableSelect = node(); measure.filterBtns = {}; measure.rowsEl = node();
-  measure.renderRail(); assert.ok(texts(measure.rowsEl).includes('unused'));
-  measure.mainEl = node(); measure.buildSelectedMain('Derived', app.msrOf('Derived'));
-  assert.ok(texts(measure.mainEl).includes('unused'));
-  assert.equal(texts(measure.mainEl).includes('No direct report usage'), false);
-  const header = measure.daxHeader(measure.daxCard('Derived'), 'Comparison', '', () => {});
-  assert.ok(texts(header).includes('unused'));
-  app.state.viewMode = 'graph'; app.state.selected = 'Sales';
-  h.sidebarUpdate.call(app.sidebar);
-  const labels = texts(app.sidebar.host);
-  assert.ok(labels.includes('unused')); assert.ok(labels.includes('indirect')); assert.ok(labels.includes('1 pg'));
-  app.setUsage(null); measure.renderRail();
-  assert.equal(texts(measure.rowsEl).includes('unused'), false);
-  h.sidebarUpdate.call(app.sidebar);
-  assert.equal(texts(app.sidebar.host).includes('indirect'), false); h.isolated();
-});
 
-test('analysis mismatch is rejected and status maps are cleared when selecting a different model', async () => {
-  const h = harness(), app = await h.boot({ open: record(undefined, undefined, analysis()) });
-  assert.equal(app.msrStatus('Derived').status, 'unused'); assert.equal(app.colStatus('Sales', 'Amount').status, 'indirect');
-  assert.throws(() => app.setUsage(analysis('Unrelated model')), /different model/);
-  assert.equal(app.msrStatus('Derived').status, 'unused');
-  h.receive({ type: 'model', ...record('workspace:second', 'Second model') }); await flush();
-  assert.equal(app.msrStatus('Derived'), null); assert.equal(app.colStatus('Sales', 'Amount'), null); h.isolated();
-});
 
 
 test('host initialization errors produce an accessible failure instead of a blank or sample viewer', async () => {

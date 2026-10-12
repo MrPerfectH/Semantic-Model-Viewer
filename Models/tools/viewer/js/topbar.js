@@ -88,7 +88,6 @@
     menu.appendChild(el('button',{cls:'ex-button',role:'menuitem',text:'Refresh model list',onClick:function(){app.hostSelectModel();}}));
     if (app.state.loaded) {
       menu.appendChild(el('button',{cls:'ex-button',role:'menuitem',text:'Refresh model',onClick:function(){app.hostRefreshModel();}}));
-      menu.appendChild(el('button',{cls:'ex-button',role:'menuitem',text:'Load Cleaner analysis',onClick:function(){app.hostLoadAnalysis();}}));
     }
     return wrap;
   };
