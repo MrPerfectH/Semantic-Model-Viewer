@@ -1,0 +1,36 @@
+{
+  "runtime": "5171a8e31244fa000a0471f3f10781d0cdebe637",
+  "canonicalMain": "66b766e0da9a6b6f06637075f0d6e1c7d4cb3650",
+  "pqModulesUnchangedFrom": "7c973673d1dc1d4e50d5d8967aa863cd6f8bd309",
+  "boundary": "Fresh T3 trusted controls after main-to-feature integration; local actual model, no raw source in evidence.",
+  "tablesToggles": {
+    "selectedRetained": true,
+    "viewRetained": true,
+    "layoutRetained": true
+  },
+  "tablesReturn": {
+    "selectedRetained": true,
+    "viewRetained": true,
+    "layoutRetained": true
+  },
+  "flow": {
+    "mode": "flow",
+    "count": 9,
+    "readerClosed": true
+  },
+  "modeRoundtrip": {
+    "exactModeRoundtrip": true,
+    "mode": "canvas",
+    "count": 2
+  },
+  "doubleClick": {
+    "doubleClickRootChanged": true,
+    "upstreamCount": 7,
+    "readerClosed": true
+  },
+  "harnessCorrections": [
+    "Initial Tables selector .ex-library had no matches; inspected DOM and used #table-library.",
+    "Tables positions are an object, not Map; corrected observation to Object.entries. Baseline and fresh toggle replay recaptured after correction."
+  ],
+  "repositoryProvenance": "The origin remote resolves to Semantic-Model-Viewer-archive. Initial fetch/read-only comparison was not merged. Correct main66b766e was fetched explicitly from canonical HTTPS repository into canonical/main, verified via GitHub API, and is the actual second merge parent."
+}
