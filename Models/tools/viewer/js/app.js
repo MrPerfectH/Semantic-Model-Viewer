@@ -1303,6 +1303,7 @@
         ex.direction = ['incoming', 'outgoing', 'connected'].includes(library.direction) ? library.direction : 'incoming';
         ex.depth = library.depth === 'direct' ? 'direct' : 'all';
         ex.includeInactive = !!library.includeInactive; ex.mapHidden = !!library.mapHidden;
+        ex.libraryHidden = !!library.libraryHidden; ex.inspectorHidden = !!library.inspectorHidden;
         ex.history = []; ex.message = 'Offline snapshot. Changes stay in this tab; save a snapshot to keep them.'; ex._key = null;
       }
       if (this.measures.restoreSnapshot) this.measures.restoreSnapshot(payload.measures);

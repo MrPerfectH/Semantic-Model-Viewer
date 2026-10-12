@@ -68,3 +68,7 @@ button:disabled{opacity:.45;cursor:default!important}
 @media(max-width:850px){#topbar{flex-wrap:wrap!important}.ex-brand{flex:1}.ex-main-nav{order:3;width:100%;justify-content:center}.ex-header-actions .ex-snapshot-export{display:block!important}.ex-snapshot-status{top:115px}}
 
 #canvas-selection{position:absolute;left:calc(var(--library-width) + 18px);top:76px;background:white;border:1px solid var(--line);border-radius:9px;padding:5px 6px 5px 12px;display:flex;align-items:center;gap:8px;z-index:30;box-shadow:0 3px 10px #2639570b}#canvas-selection[hidden]{display:none}#canvas-selection strong{font-size:12px;font-weight:600;color:#9a4a42;margin-right:4px}#canvas-selection .ex-button.ex-primary{background:#b4584f;border-color:#b4584f;color:white}#canvas-selection .ex-button.ex-primary:hover{background:#9a4a42;border-color:#9a4a42;color:white}
+/* Rail toggles on the canvas toolbar: pressed while the rail is showing. */
+.ex-pane-toggle{display:inline-flex;align-items:center;justify-content:center;padding:6px 7px;min-width:32px;color:#7a879a}
+.ex-pane-toggle[aria-pressed=true]{background:#eaf1ff;color:#2453cb;border-color:#aac2f0}
+.ex-pane-library{margin-right:4px}.ex-pane-inspector{margin-left:4px}

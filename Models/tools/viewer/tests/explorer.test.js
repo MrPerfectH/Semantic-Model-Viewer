@@ -649,3 +649,42 @@ test('the table library filters by domain and by source, alongside search and th
   explorer.loadModel();
   assert.equal(explorer.domain + explorer.source, '', 'opening another model clears the facets');
 });
+
+/* The library and the inspector are reading preferences, not layout: hiding either gives
+   the canvas the full width, the choice is shared by every model, and it survives a reload. */
+test('library and inspector rails can be hidden and the choice persists across models', () => {
+  const { explorer, app, cv, storage } = fixture();
+  const widths = [];
+  explorer.update = Object.getPrototypeOf(explorer).update;
+  explorer.renderLibrary = explorer.renderToolbar = explorer.renderEmpty = explorer.renderNavigation = explorer.drawMap = () => {};
+  const main = cv.host.parentNode; // #main: the fixture parks the canvas host there
+  main.style.setProperty = (name, value) => { widths.push(name + '=' + value); };
+  app.state.loaded = true; app.sidebar = { _key: 'stale' };
+  explorer.showAll(); cv.selectTable('A');
+
+  explorer.update();
+  assert.ok(widths.includes('--library-width=268px'));
+  assert.ok(widths.includes('--inspector-width=330px'));
+  assert.equal(explorer.library.hidden, false);
+
+  widths.length = 0;
+  explorer.toggleLibrary();
+  assert.ok(widths.includes('--library-width=0px'));
+  assert.equal(explorer.library.hidden, true, 'the library rail is gone');
+  assert.equal(cv.host.style.left, '0px', 'the canvas takes the width the rail had');
+
+  widths.length = 0;
+  explorer.toggleInspector();
+  assert.ok(widths.includes('--inspector-width=0px'));
+  assert.equal(cv.host.style.right, '0px');
+  assert.equal(app.state.selected, 'A', 'hiding the inspector keeps the selection');
+  assert.equal(app.sidebar._key, null, 'the drawer is asked to re-render');
+
+  const other = fixture(storage, 'second');
+  assert.equal(other.explorer.libraryHidden, true);
+  assert.equal(other.explorer.inspectorHidden, true);
+
+  explorer.toggleLibrary(); explorer.toggleInspector();
+  assert.equal(fixture(storage).explorer.libraryHidden, false);
+  assert.equal(fixture(storage).explorer.inspectorHidden, false);
+});

@@ -90,7 +90,7 @@
     /* The drawer belongs to the Tables canvas. Leaving it open over Domains, Measures or
        Matrix covers a canvas it does not describe — hide it and rebuild from the untouched
        selection when the reader comes back to Tables. */
-    var key = app.state.loaded && app.state.selected && app.state.viewMode === 'graph'
+    var key = app.state.loaded && app.state.selected && app.state.viewMode === 'graph' && !(app.explorer && app.explorer.inspectorHidden)
       ? [app.modelKey, app.state.selected, app.state.msrQuery, app.state.expandedMeasure, app.colorBy, app._usage ? 1 : 0, app.canvas.locked, app.canvas.relIndex(app.canvas.selRel), app.state.isolate, app.state.focusDepth,
         app.model.byName[app.state.selected] ? app.model.byName[app.state.selected].role : '', JSON.stringify(app.state.roleSave), !!app.roleRepo(), JSON.stringify(app.state.calcOpen || {})].join('|')
       : null;

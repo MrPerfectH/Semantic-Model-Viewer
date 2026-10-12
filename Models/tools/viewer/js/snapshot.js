@@ -52,7 +52,7 @@
     return {format:FORMAT,version:VERSION,name:model.name,createdAt:new Date().toISOString(),model:model,usage:usageData(app),
       settings:{roleRules:app.getRules?app.getRules().map(function(r){return pick(r,['role','name','sides','measures','kind']);}):[]},
       workspace:{viewMode:app.state.viewMode,tableView:tableView,presets:clone(cv.getPresets()),matrix:app.captureMatrix?clone(app.captureMatrix()):null,
-        explorer:ex?{query:ex.query,filter:ex.filter,direction:ex.direction,depth:ex.depth,includeInactive:!!ex.includeInactive,mapHidden:!!ex.mapHidden}:{},
+        explorer:ex?{query:ex.query,filter:ex.filter,direction:ex.direction,depth:ex.depth,includeInactive:!!ex.includeInactive,mapHidden:!!ex.mapHidden,libraryHidden:!!ex.libraryHidden,inspectorHidden:!!ex.inspectorHidden}:{},
         domains:app.captureDomains?clone(app.captureDomains()):{expandedGroups:Array.from(cv.expandedGroups || []),positions:Object.keys(cv.groups || {}).map(function(key){var group=cv.groups[key];return {key:key,x:group.x,y:group.y};}),tablePositions:clone(cv.cpos || {}),view:clone(cv.view)}},
       measures:app.measures.captureSnapshot?app.measures.captureSnapshot():null};
   }
