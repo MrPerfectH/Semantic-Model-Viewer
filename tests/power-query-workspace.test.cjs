@@ -188,8 +188,8 @@ test('Canvas Show all retains custom placement and restores membership with Undo
  const {w}=stateHarness();let calls=[];w.canvas.arrange=ids=>calls.push([...ids].sort());w.fitLayout=()=>{};w.applyFilters=()=>{w.visible=new Set(w.membership);};w.ensureState();w.membership.delete('Alone');w.showAll();assert.equal(calls.length,0);assert.deepEqual([...w.membership].sort(),['A','Alone','B']);await w.undo();assert.deepEqual([...w.membership].sort(),['A','B']);
 });
 
-test('opening a large flow centers a readable target while retaining every directed member',()=>{
- const {w}=stateHarness();let centered=0;w.applyFilters=()=>{w.visible=new Set(w.membership);};w.canvas.arrange=()=>{};w.fitLayout=()=>{};w.canvas.getViewport=()=>({x:0,y:0,k:.29});w.centerSelected=()=>{centered++;};w.analyzeQuery('B');assert.equal(centered,1);assert.deepEqual([...w.membership].sort(),['A','B']);assert.deepEqual([...w.visible].sort(),['A','B']);
+test('opening a full flow retains Fit framing without recentering and cropping ancestors',()=>{
+ const {w}=stateHarness();let centered=0;w.applyFilters=()=>{w.visible=new Set(w.membership);};w.canvas.arrange=()=>{};w.fitLayout=()=>{};w.canvas.getViewport=()=>({x:0,y:0,k:.29});w.centerSelected=()=>{centered++;};w.analyzeQuery('B');assert.equal(centered,0);assert.deepEqual([...w.membership].sort(),['A','B']);assert.deepEqual([...w.visible].sort(),['A','B']);
 });
 
 test('model generation resets mode snapshots, root and Canvas Undo to initial Flow',()=>{const {w}=jobHarness();w.viewMode='canvas';w.modeStates={canvas:{selectedId:'Secret'},flow:{analyzedId:'Secret'}};w.analyzedId='Secret';w.layoutHistory=[{membership:['Secret']}];w.invalidate();assert.equal(w.viewMode,'flow');assert.deepEqual(Object.keys(w.modeStates),[]);assert.equal(w.analyzedId,null);assert.equal(w.layoutHistory.length,0);});
