@@ -142,7 +142,12 @@ def read_model(path):
                     text = source.read()
                 files.append({"name": e.name, "path": rel + e.name, "text": text})
 
-    walk(root, "")
+    models = [] if _is_model_dir(root.name) else find_models(str(root))
+    if models:
+        for model in models:
+            walk(Path(model["dir"]), model["path"] + "/")
+    else:
+        walk(root, "")
     return files
 
 

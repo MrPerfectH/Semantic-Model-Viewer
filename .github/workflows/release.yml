@@ -37,7 +37,7 @@ jobs:
         run: |
           mkdir -p dist/semantic-model-viewer-web
           cd Models/tools/viewer
-          cp -r index.html explorer.css measures.css js icons sw.js manifest.webmanifest \
+          cp -r index.html *.css js icons sw.js manifest.webmanifest \
             model-data.json report-usage.json ../../../dist/semantic-model-viewer-web/
           cd ../../../dist
           zip -r "semantic-model-viewer-web-${GITHUB_REF_NAME#v}.zip" semantic-model-viewer-web

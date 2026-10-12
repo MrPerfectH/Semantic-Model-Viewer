@@ -20,6 +20,10 @@ function fixture() {
   fs.writeFileSync(path.join(model, 'notes.txt'), 'not a model file');
   fs.mkdirSync(path.join(root, 'Repo', '.git', 'Hidden.SemanticModel'), { recursive: true });
   fs.mkdirSync(path.join(root, 'Repo', 'node_modules', 'Dep.SemanticModel'), { recursive: true });
+  fs.mkdirSync(path.join(root, 'Repo', 'analysis'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'Repo', 'analysis', 'unrelated.json'), '{"unrelated":true}');
+  fs.writeFileSync(path.join(root, 'Repo', '.git', 'Hidden.SemanticModel', 'model.bim'), '{}');
+  fs.writeFileSync(path.join(root, 'Repo', 'node_modules', 'Dep.SemanticModel', 'model.bim'), '{}');
   return { root, model };
 }
 
@@ -57,7 +61,7 @@ test('serve.py answers the page: ping, browse, find, model, static files', { ski
 
     const browse = await get(s.url + '/api/browse?path=' + encodeURIComponent(path.join(root, 'Repo')));
     assert.equal(browse.status, 200);
-    assert.deepEqual(browse.body.dirs.map(d => d.name), ['node_modules', 'Sub'], 'hidden folders are not listed');
+    assert.deepEqual(browse.body.dirs.map(d => d.name), ['analysis', 'node_modules', 'Sub'], 'hidden folders are not listed');
     assert.equal(browse.body.parent, root);
     assert.ok(browse.body.roots.length >= 1);
     const sub = await get(s.url + '/api/browse?path=' + encodeURIComponent(path.join(root, 'Repo', 'Sub')));
@@ -72,6 +76,27 @@ test('serve.py answers the page: ping, browse, find, model, static files', { ski
     const read = await get(s.url + '/api/model?path=' + encodeURIComponent(model));
     assert.deepEqual(read.body.files, [{ name: 'Sales.tmdl', path: 'definition/tables/Sales.tmdl', text: 'table Sales\n\tcolumn A\n' }],
       'only model files, BOM stripped, paths with forward slashes');
+    const repoRead = await get(s.url + '/api/model?path=' + encodeURIComponent(path.join(root, 'Repo')));
+    assert.equal(repoRead.status, 200);
+    assert.deepEqual(repoRead.body.files, [{ name: 'Sales.tmdl', path: 'Sub/Demo.SemanticModel/definition/tables/Sales.tmdl', text: 'table Sales\n\tcolumn A\n' }],
+      'repo roots read only discovered models, excluding analysis JSON and skipped model directories');
+    const perf = path.join(root, 'Repo', 'Perf.SemanticModel');
+    fs.mkdirSync(perf);
+    fs.writeFileSync(path.join(perf, 'model.bim'), '{"model":{"tables":[]}}');
+    const multiRead = await get(s.url + '/api/model?path=' + encodeURIComponent(path.join(root, 'Repo')));
+    assert.deepEqual(multiRead.body.files, [
+      { name: 'model.bim', path: 'Perf.SemanticModel/model.bim', text: '{"model":{"tables":[]}}' },
+      ...repoRead.body.files,
+    ], 'multiple discovered models retain their separate relative paths');
+    const flat = path.join(root, 'Flat');
+    fs.mkdirSync(flat);
+    fs.writeFileSync(path.join(flat, 'Sales.tmdl'), 'table Sales\r\n');
+    fs.writeFileSync(path.join(flat, 'model.bim'), '{"model":{"tables":[]}}');
+    const flatRead = await get(s.url + '/api/model?path=' + encodeURIComponent(flat));
+    assert.deepEqual(flatRead.body.files, [
+      { name: 'model.bim', path: 'model.bim', text: '{"model":{"tables":[]}}' },
+      { name: 'Sales.tmdl', path: 'Sales.tmdl', text: 'table Sales\r\n' },
+    ], 'genuine flat model folders retain supported file content and paths');
 
     const index = await fetch(s.url + '/index.html');
     assert.equal(index.status, 200);
