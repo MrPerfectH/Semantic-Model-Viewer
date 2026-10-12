@@ -261,3 +261,13 @@ test('rounded detour itself clears the visible obstacle, while parameter dashes 
     for(const p of sampledPath(line.getAttribute('d')))assert.ok(p[0]<=400||p[0]>=652||p[1]<=0||p[1]>=96);
   }
 });
+
+
+test('pointer-captured double click uses two same-card taps; mixed targets, drag and generation reset cannot reroot',()=>{
+ const s=setup(),surface=s.host.querySelector('.pqc-surface');
+ function tap(id){s.node(id).fire('pointerdown');surface.fire('pointerup');}
+ tap('id-1');tap('id-1');surface.fire('dblclick');assert.deepEqual(plain(s.events.analyze),[{generation:1,nodeId:'id-1'}]);
+ tap('id-0');tap('id-1');surface.fire('dblclick');assert.equal(s.events.analyze.length,1);
+ tap('id-1');s.node('id-1').fire('pointerdown');surface.fire('pointermove',{clientX:200,clientY:200});surface.fire('pointerup');surface.fire('dblclick');assert.equal(s.events.analyze.length,1);
+ tap('id-1');tap('id-1');s.canvas.setContext(context(2));surface.fire('dblclick');assert.equal(s.events.analyze.length,1);
+});

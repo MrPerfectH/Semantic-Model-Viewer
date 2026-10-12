@@ -7,6 +7,7 @@
   function mount(host, options) {
     options = options || {};
     var doc = host.ownerDocument, win = doc.defaultView || g;
+    var lastTap = null, doubleTapId = null;
     var alive = true, context = null, generation, selected = null, matches = null, visible = null, focusIds = null, flowRoot = null, branchIds = new Set();
     var positions = new Map(), nodes = new Map(), elements = new Map(), groups = [], layoutGenerations = new WeakMap();
     var view = { x: 0, y: 0, k: 1 }, size = { w: 0, h: 0 }, roving = null;
@@ -515,7 +516,7 @@
     }
     function select(id, origin) { if (!shown(id) && id !== null) return; selected = id; applyVisibility(); emit('onSelect', { generation: generation, nodeId: id, origin: origin }); }
     function clear() {
-      if (frame) win.cancelAnimationFrame(frame); frame = 0; drag = null; pinch = null; pointers.clear();
+      if (frame) win.cancelAnimationFrame(frame); frame = 0; drag = null; lastTap = null; doubleTapId = null; pinch = null; pointers.clear();
       routeStatus.hidden = true; routeStatus.textContent = ''; cardIndex = null; routeKey = null;
       context = null; generation = undefined; positions.clear(); nodes.clear(); elements.clear(); miniElements.clear(); groups = []; edgeElements = [];
       selected = roving = matches = visible = focusIds = flowRoot = null; branchIds = new Set(); pendingFit = false; view = { x: 0, y: 0, k: 1 };
@@ -598,11 +599,14 @@
       pointers.delete(e.pointerId); surface.classList.remove('pqc-dragging');
       if (pinch) { if (!pointers.size) pinch = null; drag = null; return; }
       var d = drag; drag = null; if (!d || d.generation !== generation || d.pointerId !== e.pointerId || suspended) return;
+      var now=Date.now();doubleTapId=!d.moved&&d.id&&lastTap&&lastTap.id===d.id&&lastTap.generation===generation&&now-lastTap.at<1000?d.id:null;lastTap=!d.moved&&d.id?{id:d.id,generation:generation,at:now}:null;
       if (!d.moved) { select(d.id, d.id ? 'node' : 'blank'); if (d.id) focusNode(d.id); else surface.focus({ preventScroll: true }); }
     });
-    on(surface, 'pointercancel', function () { pointers.clear(); pinch = drag = null; surface.classList.remove('pqc-dragging'); });
+    on(surface, 'pointercancel', function () { pointers.clear(); pinch = drag = null; lastTap=null;doubleTapId=null;surface.classList.remove('pqc-dragging'); });
     on(surface, 'click', function (e) { var hit = e.target.closest && e.target.closest('[data-edge-id]'); if (!hit || !context || suspended) return; emit('onEdge', { generation: generation, edgeId: hit.dataset.edgeId, anchor: local(e) }); });
-    on(surface, 'dblclick', function (e) { var id=nodeId(e);if(!context||suspended||!shown(id))return;e.preventDefault();emit('onAnalyze',{generation:generation,nodeId:id}); });
+    // Pointer capture retargets trusted click/dblclick to the surface. Recover
+    // only two completed taps on the same card; never infer a root from selection.
+    on(surface, 'dblclick', function (e) { var id=nodeId(e)||doubleTapId;doubleTapId=null;lastTap=null;if(!context||suspended||!shown(id))return;e.preventDefault();emit('onAnalyze',{generation:generation,nodeId:id}); });
     on(mapSvg, 'click', function (e) { var id = e.target.dataset && e.target.dataset.mapId; if (id && shown(id)) { select(id, 'node'); reveal(id, { readable: true }); focusNode(id); } });
     on(surface, 'wheel', function (e) { if (!context || suspended) return; e.preventDefault(); zoomBy(Math.exp(-Math.max(-100, Math.min(100, e.deltaY)) * (e.ctrlKey ? 0.01 : 0.002)), local(e)); }, { passive: false });
     // The provided host is the coordinator's focus fallback. Surface/node key
