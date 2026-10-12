@@ -40,3 +40,16 @@
 
 /* Mode choice stays in the existing toolbar. Flow has no membership controls. */
 .pqw-modes{display:flex;flex:none;width:auto;margin:0}.pqw-modes button{min-width:58px}.pqw-modes button[aria-pressed=true]{background:var(--accent,#7566d8);color:#fff}
+
+/* Override shared library segments specifically: toolbar groups must not inherit
+   the library margin even when explorer.css is loaded later. */
+.pqw .pqw-toolbar{flex-wrap:wrap;align-content:center;gap:6px;padding:9px 14px}
+.pqw .pqw-toolbar .ex-workspace-title{display:block;flex:none;min-width:92px;margin:0 6px 0 0}
+.pqw .pqw-toolbar .ex-segments{display:flex;flex:none;width:auto;align-self:center;margin:0;padding:3px;gap:2px}
+.pqw .pqw-toolbar .ex-segments button{min-width:51px;min-height:28px;padding:4px 8px}
+.pqw .pqw-toolbar .ex-segments button[aria-pressed=true]{background:#fff;color:#4c3380;box-shadow:0 1px 3px #15254525}
+.pqw .pqw-toolbar .ex-button{white-space:nowrap;flex-shrink:0}
+.pqw .pqw-toolbar .ex-display-menu{max-width:calc(100vw - 16px);overflow:auto;z-index:70}
+.pqw .ex-display-menu .pqw-dock-label{align-items:stretch;gap:6px}
+.pqw .ex-display-menu .pqw-dock-label select{width:100%}
+@media(max-width:1050px){.pqw .pqw-toolbar{padding:8px;gap:4px}.pqw .pqw-toolbar .ex-workspace-title{min-width:84px}.pqw .pqw-toolbar>.ex-button{padding:6px}}

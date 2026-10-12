@@ -95,7 +95,7 @@
       function valid() { return current(gen, id) && version === controlsVersion; }
       function change(values) { if (valid()) emit('onFocusChange', Object.assign({ generation: gen, nodeId: id, mode: settings.mode, direction: settings.direction, depth: settings.depth }, values)); }
       if(settings.viewMode==='flow'){
-        var flowAnalyze=control(g.WorkspaceUI.button(doc,{text:'Analyze this query',label:'Analyze this query'}),'analyze-query');
+        var flowAnalyze=control(g.WorkspaceUI.button(doc,{text:'Analyze full flow',label:'Analyze full flow'}),'analyze-query');
         listen(flowAnalyze,'click',function(){if(valid())emit('onAnalyze',{generation:gen,nodeId:id});});focusBox.appendChild(flowAnalyze);
         if(saved&&controlEntries.some(function(entry){return sameFocus(entry.descriptor,saved);}))applyFocus(saved);return;
       }
@@ -104,12 +104,12 @@
       lock.classList.add('pqi-lock');lock.setAttribute('aria-pressed', String(!!settings.locked));
       lock.title = settings.locked ? 'Release ' + settings.rootLabel + '; library choices can start another flow.' : 'Keep this flow when choosing another query from the library.';
       listen(lock, 'click', function () { if (valid()) emit('onToggleLock', { generation: gen, nodeId: id }); }); focusBox.appendChild(lock);
-      var analyze = control(g.WorkspaceUI.button(doc, {text: settings.isAnalyzed ? 'Rebuild this query’s flow' : 'Analyze this query', label: 'Analyze this query'}), 'analyze-query');
+      var analyze = control(g.WorkspaceUI.button(doc, {text: settings.isAnalyzed ? 'Rebuild this query’s flow' : 'Analyze full flow', label: 'Analyze full flow'}), 'analyze-query');
       listen(analyze, 'click', function () { if(valid()) emit('onAnalyze', {generation:gen,nodeId:id}); }); focusBox.appendChild(analyze);
       var modes = el('div', 'ex-focus-options'); modes.setAttribute('role', 'group'); modes.setAttribute('aria-label', 'Unrelated queries');
       [['dim', 'Dim unrelated'], ['hide', 'Hide unrelated']].forEach(function (pair) { var b = control(g.WorkspaceUI.button(doc, { text: pair[1] }), 'focus-' + pair[0]); b.setAttribute('aria-pressed', String(settings.mode === pair[0])); listen(b, 'click', function () { change({ mode: pair[0] }); }); modes.appendChild(b); }); focusBox.appendChild(modes);
       var details = el('div', 'pqi-reference-options'); focusBox.appendChild(details);
-      details.appendChild(el('p', 'ex-muted', settings.locked ? 'Focus stays on ' + settings.rootLabel + '. Unlock to choose another flow from the library. Only resolved M references are shown.' : settings.analyzed ? 'Cards inspect without changing the analyzed flow. Analyze this query to follow a different query. Only resolved M references are shown.' : 'Dim or hide unrelated queries. Analyze this query to open its complete upstream flow.'));
+      details.appendChild(el('p', 'ex-muted', settings.locked ? 'Focus stays on ' + settings.rootLabel + '. Unlock to choose another flow from the library. Only resolved M references are shown.' : settings.analyzed ? 'Cards inspect without changing the analyzed flow. Analyze full flow to follow a different query. Only resolved M references are shown.' : 'Dim or hide unrelated queries. Analyze full flow to open all resolved inputs, or Used by for a parameter.'));
       function selector(kind, label, choices, value, toValue) {
         var e = control(el('select'), kind); e.setAttribute('aria-label', label); choices.forEach(function (pair) { var option = el('option', '', pair[1]); option.value = pair[0]; e.appendChild(option); }); e.value = String(value === Infinity ? 'all' : value); listen(e, 'change', function () { var values = {}; values[kind === 'focus-direction' ? 'direction' : 'depth'] = toValue(e.value); change(values); }); var labelElement = el('label', 'pqi-option-label', label); labelElement.appendChild(e); details.appendChild(labelElement);
       }
@@ -243,7 +243,7 @@
       var closeButton = record(el('button', 'pqi-close', '×'), 'close'); closeButton.type = 'button'; closeButton.setAttribute('aria-label', 'Close query details'); head.appendChild(name); head.appendChild(closeButton); root.appendChild(head);
       var gen = generation, id = selected, renderVersion = contentVersion; on(closeButton, 'click', function () { if (current(gen, id)) close('close'); });
       var chrome = row.chrome || {}; head.style.background = chrome.headerTint || '#f8fafc'; if (chrome.fact) { name.style.color = '#fff';head.classList.add('pqi-fact'); } name.appendChild(el('p', 'pqi-subtitle', chrome.subtitle || row.node.subtitle));
-      if (row.presentation) { var source = el('p', 'pqi-source-provider', row.presentation.providerIcon + ' Source: ' + row.presentation.provider); source.style.color = row.presentation.providerColor; source.title = row.presentation.sourceBasis; root.appendChild(source); }
+      if (row.presentation) { var source = el('p', 'pqi-source-provider', row.presentation.provider ? row.presentation.providerIcon + ' Source: ' + row.presentation.provider : 'Source provider is not identified from direct M calls.'); source.style.color = row.presentation.providerColor; source.title = row.presentation.sourceBasis; root.appendChild(source); }
       var counts = el('div', 'pqi-counts'); counts.appendChild(el('span', '', (row.inputIds || []).length + ' inputs')); counts.appendChild(el('span', '', (row.consumerIds || []).length + ' consumers')); head.appendChild(counts);
       if (typeof row.code === 'string') { readerLauncher = el('div', 'pqi-reader-launcher'); root.appendChild(readerLauncher); }
       focusBox = el('section' , 'ex-related pqi-focus'); focusBox.setAttribute('aria-label', 'Explore related queries'); root.appendChild(focusBox); renderFocusControls();

@@ -172,10 +172,10 @@ test('focus lock exposes pressed state and selected identity, rejects detached a
  s.inspector.setFocusControls({...settings,locked:true,rootLabel:'Pinned root'});const unlock=s.host.querySelector('.pqi-lock');assert.equal(unlock.getAttribute('aria-pressed'),'true');assert.equal(unlock.getAttribute('aria-label'),'Unlock query focus');lock.fire('click');assert.equal(actions.length,1);s.inspector.select('id-3',{open:true});unlock.fire('click');assert.equal(actions.length,1);s.inspector.setContext(null);unlock.fire('click');assert.equal(actions.length,1);
 });
 
-test('Analyze this query is explicit, source-preserving and rejects stale controls',()=>{
+test('Analyze full flow is explicit, source-preserving and rejects stale controls',()=>{
  const s=setup(),calls=[];s.inspector.destroy();s.inspector=s.win.PowerQueryInspector.mount(s.host,{context:s.ctx,onAnalyze:p=>calls.push(p)});s.inspector.select('id-1',{open:true});
  s.inspector.setFocusControls({mode:'dim',direction:'connected',depth:Infinity,analyzed:true,rootLabel:'Original query',isAnalyzed:false});
- const code=s.code(),button=s.host.querySelectorAll('button').find(b=>b.getAttribute('aria-label')==='Analyze this query');assert.ok(button);assert.match(s.root().textContent,/Analyzing · Original query/);code.scrollTop=82;button.fire('click');assert.deepEqual(plain(calls),[{generation:1,nodeId:'id-1'}]);assert.equal(s.code(),code);assert.equal(code.scrollTop,82);
+ const code=s.code(),button=s.host.querySelectorAll('button').find(b=>b.getAttribute('aria-label')==='Analyze full flow');assert.ok(button);assert.match(s.root().textContent,/Analyzing · Original query/);code.scrollTop=82;button.fire('click');assert.deepEqual(plain(calls),[{generation:1,nodeId:'id-1'}]);assert.equal(s.code(),code);assert.equal(code.scrollTop,82);
  s.inspector.select('id-3',{open:true});button.fire('click');assert.equal(calls.length,1);s.inspector.setContext(null);button.fire('click');assert.equal(calls.length,1);
 });
 
@@ -183,5 +183,5 @@ test('Analyze this query is explicit, source-preserving and rejects stale contro
 test('Flow inspector keeps source reader and Analyze while omitting Canvas controls; stale controls cannot act',()=>{
  const s=setup(),analyze=[];s.inspector.destroy();s.inspector=s.win.PowerQueryInspector.mount(s.host,{context:s.ctx,onAnalyze:e=>analyze.push(e)});s.inspector.select('id-1',{open:true});const code=s.code(),raw=code.textContent;code.scrollTop=55;
  s.inspector.setFocusControls({viewMode:'flow',mode:'dim',direction:'inputs',depth:Infinity,relatedCount:2,missingCount:0,removableCount:0});assert.equal(s.host.querySelectorAll('select').length,0);assert.equal(s.root().textContent.includes('Dim unrelated'),false);assert.equal(s.root().textContent.includes('Remove this object'),false);assert.equal(s.code(),code);assert.equal(code.scrollTop,55);assert.equal(code.textContent,raw);
- const button=s.host.querySelectorAll('button').find(b=>b.textContent==='Analyze this query');button.focus();s.inspector.setFocusControls({viewMode:'flow',mode:'dim',direction:'inputs',depth:Infinity});assert.equal(s.inspector.captureViewState().focus.kind,'analyze-query');button.fire('click');assert.equal(analyze.length,0);s.doc.activeElement.fire('click');assert.equal(analyze.length,1);assert.equal(analyze[0].nodeId,'id-1');
+ const button=s.host.querySelectorAll('button').find(b=>b.textContent==='Analyze full flow');button.focus();s.inspector.setFocusControls({viewMode:'flow',mode:'dim',direction:'inputs',depth:Infinity});assert.equal(s.inspector.captureViewState().focus.kind,'analyze-query');button.fire('click');assert.equal(analyze.length,0);s.doc.activeElement.fire('click');assert.equal(analyze.length,1);assert.equal(analyze[0].nodeId,'id-1');
 });

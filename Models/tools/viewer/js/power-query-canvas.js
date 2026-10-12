@@ -58,7 +58,20 @@
       units.sort(function (a, b) { return Math.min.apply(null, a.members.map(function (id) { return sourceOrder.get(id); })) - Math.min.apply(null, b.members.map(function (id) { return sourceOrder.get(id); })); });
       var degree = new Map(), todo = []; units.forEach(function (u) { degree.set(u, u.incoming.size); if (!u.incoming.size) todo.push(u); });
       for (var at = 0; at < todo.length; at++) { var u = todo[at]; u.outgoing.forEach(function (v) { v.rank = Math.max(v.rank, u.rank + 1); degree.set(v, degree.get(v) - 1); if (!degree.get(v)) todo.push(v); }); }
+      if(subset)for(var reverse=todo.length-1;reverse>=0;reverse--){var unit=todo[reverse];if(unit.outgoing.size)unit.rank=Math.min.apply(null,Array.from(unit.outgoing).map(function(next){return next.rank;}))-1;}
+      // Center each layer and order by connected neighbors. This avoids top-aligned
+      // stranded pairs while retaining cycle units and the full resolved graph.
+      var layers=new Map();units.filter(function(u){return incident.has(u);}).forEach(function(u){if(!layers.has(u.rank))layers.set(u.rank,[]);layers.get(u.rank).push(u);});
+      var ranks=Array.from(layers.keys()).sort(function(a,b){return a-b;}),centers=new Map();
+      function layerHeight(layer){return layer.reduce(function(sum,u){return sum+u.members.length*(H+GAP_Y)+(u.cycle?52:0);},0);}
+      var totalHeight=Math.max.apply(null,[0].concat(Array.from(layers.values()).map(layerHeight)));
+      function centerLayer(layer){var y=(totalHeight-layerHeight(layer))/2;layer.forEach(function(u){centers.set(u,y+(u.members.length*(H+GAP_Y)+(u.cycle?52:0))/2);y+=u.members.length*(H+GAP_Y)+(u.cycle?52:0);});}
+      layers.forEach(centerLayer);
+      if(subset)for(var pass=0;pass<4;pass++){(pass%2?ranks.slice().reverse():ranks).forEach(function(rank){var layer=layers.get(rank);function bary(u){var neighbors=Array.from(pass%2?u.outgoing:u.incoming);return neighbors.length?neighbors.reduce(function(sum,n){return sum+centers.get(n);},0)/neighbors.length:centers.get(u);}layer.sort(function(a,b){return bary(a)-bary(b);});centerLayer(layer);});}
+      if(subset)units=ranks.flatMap(function(rank){return layers.get(rank);}).concat(units.filter(function(u){return !incident.has(u);}));
       var lanes = new Map(), bottom = 0, maxRank = 0; groups = [];
+      if(subset)layers.forEach(function(layer,rank){lanes.set(rank,(totalHeight-layerHeight(layer))/2);});
+
       units.filter(function (u) { return incident.has(u); }).forEach(function (u) {
         var y = lanes.get(u.rank) || 0, x = u.rank * (W + GAP_X);
         u.members.forEach(function (id, i) { if (!positions.has(id)) positions.set(id, { x: x, y: y + i * (H + GAP_Y) }); });
@@ -547,9 +560,9 @@
       nodes.forEach(function (n) {
         var row = next.byNodeId && next.byNodeId.get(n.id), chrome = row && row.chrome || {};
         var parts = g.WorkspaceUI.createCardChrome(doc, Object.assign({ label: n.label, subtitle: n.subtitle, badge: n.kind === 'parameter' ? 'P' : n.kind === 'function' ? 'F' : 'Q', chips: [{ value: (row && row.inputIds || []).length, label: 'inputs' }, { value: (row && row.consumerIds || []).length, label: 'consumers' }] }, chrome));
-        var button = parts.card; button.classList.add('pqc-node');if(chrome.fact)button.classList.add('pqc-fact'); button.classList.add('pqc-kind-' + n.kind); button.setAttribute('role', 'button'); button.dataset.nodeId = n.id; button.title = n.label + ' · ' + (chrome.subtitle || n.subtitle) + (row && row.presentation ? ' · Source: ' + row.presentation.provider + '. ' + row.presentation.sourceBasis : '');
+        var button = parts.card; button.classList.add('pqc-node');if(chrome.fact)button.classList.add('pqc-fact'); button.classList.add('pqc-kind-' + n.kind); button.setAttribute('role', 'button'); button.dataset.nodeId = n.id; button.title = n.label + ' · ' + (chrome.subtitle || n.subtitle) + (row && row.presentation && row.presentation.provider ? ' · Source: ' + row.presentation.provider + '. ' + row.presentation.sourceBasis : '');
         button.setAttribute('aria-label', button.title + '. Click or Space to inspect. Double-click or Enter to analyze.'); parts.title.classList.add('pqc-node-title'); parts.subtitle.classList.add('pqc-node-subtitle');
-        if (row && row.presentation) {
+        if (row && row.presentation && row.presentation.provider) {
           var source = el('span', 'pqc-source', row.presentation.providerIcon + ' ' + row.presentation.provider);
           source.title = row.presentation.sourceBasis; source.style.color = row.presentation.providerColor; parts.meta.replaceChildren(source);
         }

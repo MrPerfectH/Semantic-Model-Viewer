@@ -6,11 +6,12 @@ const path=require('node:path');
 const vm=require('node:vm');
 const {harness,plain}=require('./power-query-ui-harness.cjs');
 // Synthetic model; real projection, navigation and canvas. Browser geometry is a separate acceptance gate.
-function setup(){
+function setup(parameter=false){
  const h=harness('power-query-canvas.js'),g=h.win,timers=new Map();let timerId=0;g.setTimeout=fn=>{timers.set(++timerId,fn);return timerId;};g.clearTimeout=id=>timers.delete(id);
  g.U.el=(tag,attrs={},children=[])=>{const e=h.doc.createElement(tag);for(const [key,value] of Object.entries(attrs)){if(key==='text')e.textContent=value;else if(key==='cls')e.className=value;else if(key.startsWith('on'))e.addEventListener(key.slice(2).toLowerCase(),value);else e.setAttribute(key,value);}children.forEach(c=>e.appendChild(c));return e;};
  for(const name of ['power-query-dependencies.js','power-query-graph-model.js','power-query-workspace.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'../Models/tools/viewer/js',name),'utf8'),g);
  const rows=[['A','1'],['B','A'],['C','B'],['Sibling','B'],['Other','2'],['Merge','C & Other'],['After','Merge'],['Cycle1','Cycle2'],['Cycle2','Cycle1'],['Partial','Expression.Evaluate("A", #shared)']].map(([name,code])=>({id:name,name,code,kind:'expression',type:'m',state:'available',classification:'query',groupPath:name==='A'?'Source':'Output'}));
+ if(parameter){rows.push({id:'P',name:'P',code:'"host"',kind:'expression',type:'m',state:'available',classification:'parameter'});rows.find(r=>r.id==='A').code='P';}
  const model={tables:[],byName:{},powerQuery:{nodes:rows,warnings:[]}},i=g.PowerQueryWorkspaceInternals,context=i.contextFor(g.PowerQueryGraphModel.build(model,{generation:1}),rows,1),w=Object.create(g.PowerQueryWorkspace.prototype);
  let inspectorView={codeX:19,codeY:47,inspectorX:0,inspectorY:81,focus:null,wrap:false,expanded:false};
  Object.assign(w,{app:{model},alive:true,generation:1,navigationEpoch:0,capture:i.capture(model),context,sets:i.categories(context),category:'all',query:'',history:[],layoutHistory:[],selectedId:null,analyzedId:null,flowRootId:null,inspectorOpen:false,phase:'ready',dock(){},exposeTitle(){},inspector:{select(){},captureViewState(){return {...inspectorView};},async restoreViewState(state,claim){if(!claim||claim())inspectorView={...state};},setFocusControls(state){this.controls=state;}}});
@@ -65,4 +66,29 @@ test('first pointer selection keeps closed reader geometry until double click se
  node('B').fire('pointerdown');node('B').fire('pointerup');flushInspection();assert.equal(w.inspectorOpen,true);assert.equal(w.analyzedId,'C');
  w.chooseQuery('Merge');node('C').fire('pointerdown');node('C').fire('pointerup');const stale=[...timers.values()][0];w.navigate('Other',false,{preserveView:true});stale();assert.equal(w.selectedId,'Other');assert.equal(w.inspectorOpen,true);
  w.chooseQuery('Merge');node('C').fire('pointerdown');node('C').fire('pointerup');w.cancelPendingInspection();assert.equal(timers.size,0,'new pointer/keyboard input cancels scheduled reader');
+});
+
+test('parameter defaults to complete Used by without merge co-inputs; Inputs stays an honest singleton',async()=>{
+ const {w,g,node}=setup(true);w.chooseQuery('P');
+ assert.equal(w.direction,'consumers');assert.deepEqual([...w.visible].sort(),['A','After','B','C','Merge','P','Sibling']);
+ assert.equal(w.visible.has('Other'),false,'do not switch direction at a merge');
+ const used=state(w);w.navigate('B',true,{preserveView:true});assert.equal(w.analyzedId,'P');assert.equal(w.direction,'consumers');assert.deepEqual(state(w).view,used.view);
+ w.setFlowDirection('inputs');assert.deepEqual([...w.visible],['P']);assert.equal(w.analyzedId,'P');assert.equal(w.context.byNodeId.get('P').consumerIds.length,1,'input singleton does not mean unused');
+ await w.back();assert.equal(w.direction,'consumers');assert.equal(w.selectedId,'B');assert.deepEqual([...w.visible].sort(),['A','After','B','C','Merge','P','Sibling']);
+ const entry=w.context.byNodeId.get('P');assert.equal(entry.chrome.color,'#79519f');assert.equal(entry.chrome.badge,'P');assert.equal(entry.presentation.status,'Parameter');assert.equal(entry.presentation.provider,null);
+ assert.equal(node('P').querySelector('.pqc-source'),null);assert.doesNotMatch(node('P').getAttribute('aria-label'),/Unknown|kind unknown/);
+ w.chooseQuery('Merge');assert.equal(w.direction,'inputs');assert.deepEqual([...w.visible].sort(),['A','B','C','Merge','Other','P']);
+ w.setFlowDirection('consumers');assert.deepEqual([...w.visible].sort(),['After','Merge']);
+ await w.setMode('canvas');await w.setMode('flow');assert.equal(w.direction,'consumers');assert.deepEqual([...w.visible].sort(),['After','Merge']);
+});
+test('Canvas library double-click and Enter analyze every ancestor and Back restores manual positions',async()=>{
+ const {w,row}=setup(true);await w.setMode('canvas');w.blank();w.add('Merge',{x:1919,y:-123});const before=state(w);
+ row('Merge').fire('dblclick');assert.equal(w.viewMode,'flow');assert.deepEqual([...w.visible].sort(),['A','B','C','Merge','Other','P']);await w.back();assert.deepEqual(state(w),before);
+ row('Merge').fire('keydown',{key:'Enter'});assert.equal(w.viewMode,'flow');await w.back();assert.deepEqual(state(w),before);
+});
+test('explicit compact arrange centers the merge and places short co-input next to its consumer without moving hidden cards',()=>{
+ const {w}=setup(true);const hidden=w.canvas.captureLayout().get('Cycle1');w.chooseQuery('Merge');const positions=w.canvas.captureLayout();
+ assert.deepEqual(positions.get('Cycle1'),hidden);assert.equal(positions.get('Other').x,positions.get('C').x);
+ assert.ok(positions.get('Merge').y>Math.min(positions.get('C').y,positions.get('Other').y));assert.ok(positions.get('Merge').y<Math.max(positions.get('C').y,positions.get('Other').y));
+ for(const edge of w.context.graph.edges)if(w.visible.has(edge.inputId)&&w.visible.has(edge.consumerId))assert.ok(positions.get(edge.inputId).x<positions.get(edge.consumerId).x);
 });
