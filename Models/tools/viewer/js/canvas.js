@@ -232,10 +232,11 @@
     /* ---------- build DOM ---------- */
     build: function () {
       var self = this, host = this.host; if (!host) return;
+      this.releaseLayer();
       U.clear(host);
       this._chip = null;
       this._bandBox = null;            // lane size follows this model's longest table name
-      var world = el('div', { style: 'position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;' });
+      var world = el('div', { style: 'position:absolute;left:0;top:0;transform-origin:0 0;' });
       host.appendChild(world); this.world = world;
       var svg = sv('svg', { width: '1', height: '1', style: 'position:absolute;overflow:visible;pointer-events:none;left:0;top:0;' });
       world.appendChild(svg); this.svg = svg;
@@ -447,9 +448,10 @@
       window.addEventListener('mouseup', function (e) {
         if (!panning) return;
         panning = false; host.style.cursor = 'grab';
+        self.releaseLayer();
         if (!moved && Math.hypot(e.clientX - sx, e.clientY - sy) <= 4) self.clearSelection();
       });
-      window.addEventListener('blur', function () { panning = false; host.style.cursor = 'grab'; });
+      window.addEventListener('blur', function () { panning = false; host.style.cursor = 'grab'; self.releaseLayer(); });
       host.addEventListener('wheel', function (e) {
         e.preventDefault();
         var rect = host.getBoundingClientRect();
@@ -463,7 +465,20 @@
         self.view.k = k; self.updateTransform();
       }, { passive: false });
     },
+    holdLayer: function () {
+      if (!this.world) return;
+      if (this.world.style.willChange !== 'transform') this.world.style.willChange = 'transform';
+      if (this._gestureHold != null) clearTimeout(this._gestureHold);
+      var self = this;
+      this._gestureHold = setTimeout(function () { self.releaseLayer(); }, 160);
+    },
+    releaseLayer: function () {
+      if (this._gestureHold != null) clearTimeout(this._gestureHold);
+      this._gestureHold = null;
+      if (this.world) this.world.style.willChange = '';
+    },
     updateTransform: function () {
+      this.holdLayer();
       if (this.world) this.world.style.transform = 'translate(' + this.view.x + 'px,' + this.view.y + 'px) scale(' + this.view.k + ')';
       this.applyLOD();
       this.positionRelPopover();
