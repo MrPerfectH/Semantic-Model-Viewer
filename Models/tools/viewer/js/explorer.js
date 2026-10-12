@@ -5,9 +5,23 @@
   function button(text, action, primary, title) {
     return el('button', {text:text, cls:'ex-button' + (primary ? ' ex-primary' : ''), title:title || text, onClick:action});
   }
+  /* A rail toggle: pressed while the rail is showing. The glyph is the rail's side of the
+     window, so the two read as a pair without a word of label each. */
+  function paneToggle(side, shown, title, action) {
+    var glyph = side === 'library'
+      ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="9" y1="4" x2="9" y2="20"></line></svg>'
+      : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="15" y1="4" x2="15" y2="20"></line></svg>';
+    var b = el('button', {cls:'ex-button ex-pane-toggle ex-pane-' + side, title:title, 'aria-label':title, html:glyph, onClick:action});
+    b.setAttribute('aria-pressed', String(!!shown));
+    return b;
+  }
   function TableExplorer(app) {
     this.app = app; this.names = new Set(); this.query = ''; this.filter = 'all'; this.domain = ''; this.source = ''; this.history = [];
     this.direction = 'connected'; this.depth = 'direct'; this.includeInactive = true; this.message = '';
+    /* Pane visibility is a reading preference, not part of a layout, so it is shared by
+       every model and survives a model switch. */
+    var panes = store.getJSON('smv_panes_v1', {}) || {};
+    this.libraryHidden = !!panes.libraryHidden; this.inspectorHidden = !!panes.inspectorHidden;
     this.library = document.getElementById('table-library'); this.toolbar = document.getElementById('workspace-toolbar');
     this.empty = document.getElementById('canvas-empty'); this.nav = document.getElementById('canvas-navigation');
     this.status = document.getElementById('workspace-status'); this.mapHost = document.getElementById('model-minimap');
@@ -73,6 +87,16 @@
       this.app.canvas.workspaceNames=this.names;this.app.state.isolate=false;this.app.state.showStandalone=true;this.app.canvas.showSA=true;
     },
     persist:function(){store.setJSON(this.storageKey(),{tables:Array.from(this.names)});},
+    /* Hide either rail to give the canvas the full width. The inspector preference keeps the
+       selection: the drawer comes straight back for the selected table when shown again. */
+    setPanes:function(patch){
+      if(patch.libraryHidden!==undefined)this.libraryHidden=!!patch.libraryHidden;
+      if(patch.inspectorHidden!==undefined)this.inspectorHidden=!!patch.inspectorHidden;
+      store.setJSON('smv_panes_v1',{libraryHidden:this.libraryHidden,inspectorHidden:this.inspectorHidden});
+      this._key=null;this.app.sidebar._key=null;this.update();this.app.setState({});
+    },
+    toggleLibrary:function(){this.setPanes({libraryHidden:!this.libraryHidden});},
+    toggleInspector:function(){this.setPanes({inspectorHidden:!this.inspectorHidden});},
     snapshot:function(){this.history.push({names:Array.from(this.names),pos:JSON.parse(JSON.stringify(this.app.canvas.pos)),view:Object.assign({},this.app.canvas.view),focus:this.app.canvas.captureFocus(),display:this.app.canvas.captureDisplay()});if(this.history.length>25)this.history.shift();},
     commit:function(message,fit){
       var app=this.app, cv=app.canvas, self=this;
@@ -216,8 +240,8 @@
       /* Domains borrows the Tables chrome — the same toolbar row and status line — so the two
          canvases speak one visual language instead of the old floating chip plus legend. */
       var clusters=st.loaded&&st.viewMode==='clusters';
-      var width=window.innerWidth<1050?234:268,drawer=graph&&st.selected?330:0;
-      this.library.hidden=!graph;this.empty.hidden=!graph;this.nav.hidden=!graph;
+      var width=this.libraryHidden?0:window.innerWidth<1050?234:268,drawer=graph&&st.selected&&!this.inspectorHidden?330:0;
+      this.library.hidden=!graph||this.libraryHidden;this.empty.hidden=!graph;this.nav.hidden=!graph;
       this.toolbar.hidden=!graph&&!clusters;this.status.hidden=!graph&&!clusters;
       this.mapHost.hidden=!graph||!this.names.size||this.mapHidden;
       var main=document.getElementById('main');
@@ -239,7 +263,7 @@
       if(!graph)return;
       this.empty.hidden=!!this.names.size;
       this.status.textContent=this.message || 'Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several';
-      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,st.isolate,st.focusDepth].join('|');
+      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
       if(key!==this._key){this._key=key;this.renderLibrary();this.renderToolbar();this.renderEmpty();}
       this.renderNavigation();this.drawMap();
     },
@@ -293,6 +317,7 @@
     },
     renderToolbar:function(){
       var self=this,app=this.app,cv=app.canvas;U.clear(this.toolbar);
+      this.toolbar.appendChild(paneToggle('library',!this.libraryHidden,this.libraryHidden?'Show the table library':'Hide the table library',function(){self.toggleLibrary();}));
       this.toolbar.appendChild(el('div',{cls:'ex-workspace-title'},[el('strong',{text:'Model canvas'}),el('span',{text:this.names.size+' / '+app.model.tables.length+' tables'})]));
       this.toolbar.appendChild(button('Blank layout',function(){self.blank();}));this.toolbar.appendChild(button('Show all',function(){self.showAll();}));
       var undo=button('Undo',function(){self.undo();});undo.disabled=!this.history.length;this.toolbar.appendChild(undo);
@@ -313,6 +338,7 @@
         box.appendChild(button('Table role rules',function(){app.setState({showRules:true});self.optionsOpen=false;self._key=null;self.update();}));
         box.appendChild(button('Close display settings',function(){self.optionsOpen=false;self._key=null;self.update();}));options.appendChild(box);
       }this.toolbar.appendChild(options);
+      this.toolbar.appendChild(paneToggle('inspector',!this.inspectorHidden,this.inspectorHidden?'Show the table inspector':'Hide the table inspector',function(){self.toggleInspector();}));
     },
     /* Domains toolbar: same row, same button language as Tables. The colour key lives in a
        popover here rather than a floating panel, and the old dark hint chip is now the

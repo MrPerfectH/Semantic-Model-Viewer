@@ -22,7 +22,8 @@ their model.
 - **Tables:** start with a blank canvas, add or drag tables from the library, and expand
   related tables by incoming filters, outgoing filters, or all connections. Choose direct
   relationships or follow indirect paths. Focus and pin tables, save views, and use the
-  minimap to navigate larger diagrams.
+  minimap to navigate larger diagrams. Hide the table library or the table inspector from
+  the canvas toolbar when you want the full width for the diagram.
 - **Measures:** search the library, inspect dependencies and dependents, and compare the
   graph with full DAX in graph, split, or DAX views.
 - **Domains:** inspect model groups and expand their member tables.
