@@ -271,3 +271,13 @@ test('pointer-captured double click uses two same-card taps; mixed targets, drag
  tap('id-1');s.node('id-1').fire('pointerdown');surface.fire('pointermove',{clientX:200,clientY:200});surface.fire('pointerup');surface.fire('dblclick');assert.equal(s.events.analyze.length,1);
  tap('id-1');tap('id-1');s.canvas.setContext(context(2));surface.fire('dblclick');assert.equal(s.events.analyze.length,1);
 });
+
+
+test('explicit Fit reserves measured legend and a routing disclosure appearing after zoom',()=>{
+ const s=setup(),legend=s.host.querySelector('.pqc-legend'),status=s.host.querySelector('.pqc-route-status');
+ Object.defineProperties(legend,{offsetTop:{value:12},offsetHeight:{value:32}});
+ Object.defineProperties(status,{offsetTop:{value:52},offsetHeight:{get:()=>status.hidden?0:54},hidden:{get:()=>s.canvas.getViewport().k>=1,set(){}}});
+ s.canvas.setViewport({x:90,y:40,k:1.2});assert.equal(status.hidden,true);s.canvas.fit();assert.equal(status.hidden,false);
+ const v=s.canvas.getViewport(),top=Math.min(...[...s.canvas.captureLayout().values()].map(p=>p.y*v.k+v.y));assert.ok(top>=118,'card bounds clear the wrapped disclosure plus12px');
+ const restored={x:90,y:40,k:.9};s.canvas.setViewport(restored);assert.deepEqual(plain(s.canvas.getViewport()),restored,'overlay reservation never rewrites explicitly restored viewports');
+});

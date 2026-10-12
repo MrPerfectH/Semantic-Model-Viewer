@@ -459,9 +459,23 @@
       if (!alive || !context) return false; size = measure(); var b = bounds(true);
       if (suspended || !size.w || !size.h || !surface.getClientRects().length) { pendingFit = true; return false; }
       pendingFit = false; if (!b) return false;
-      var pad = 36, bottom = size.h > 320 ? 126 : 32, usableW = Math.max(1, size.w - pad * 2), usableH = Math.max(1, size.h - pad - bottom);
-      var k = Math.min(1.25, usableW / (b.w + 28), usableH / (b.h + 40));
-      view = { x: pad + usableW / 2 - (b.x + b.w / 2) * k, y: pad + usableH / 2 - (b.y + b.h / 2) * k, k: Math.max(0.00001, k) }; transform(true); return true;
+      var pad = 36, top = pad, bottom = size.h > 320 ? 126 : 32, usableW = Math.max(1, size.w - pad * 2);
+      function headerBottom() {
+        return [legend, routeStatus].reduce(function (edge, node) {
+          var end=node.offsetTop+node.offsetHeight;
+          return !node.hidden&&Number.isFinite(end)?Math.max(edge,end+12):edge;
+        }, pad);
+      }
+      // Routing disclosures can appear or wrap after zoom changes. Reserve their
+      // measured height during this explicit Fit, never during pan or restoration.
+      top=headerBottom();
+      for(var pass=0;pass<3;pass++) {
+        var usableH = Math.max(1, size.h - top - bottom);
+        var k = Math.min(1.25, usableW / (b.w + 28), usableH / (b.h + 40));
+        view = { x: pad + usableW / 2 - (b.x + b.w / 2) * k, y: top + usableH / 2 - (b.y + b.h / 2) * k, k: Math.max(0.00001, k) }; transform(false);
+        var required=headerBottom();if(required<=top)break;top=required;
+      }
+      transform(true); return true;
     }
     function zoomBy(factor, anchor) {
       if (!alive || !context || suspended || !(factor > 0) || !Number.isFinite(factor)) return false;
