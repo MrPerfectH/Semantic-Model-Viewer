@@ -43,9 +43,4 @@ table Customer
 	partition Customer = m
 		mode: import
 		source =
-				let
-				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
-				    db = Source{[Name="sales",Kind="Schema"]}[Data],
-				    tbl = db{[Name="dim_customer",Kind="Table"]}[Data]
-				in
-				    tbl
+				CleanCustomers

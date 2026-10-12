@@ -1,15 +1,17 @@
 # Viewer build scripts
 
-Two standalone Python 3 scripts (stdlib only) that regenerate the viewer's data files from
+Standalone scripts (Python 3 stdlib only, plus one Node script that reuses the viewer's own parser) that regenerate the viewer's data files from
 the repo, so nothing is hand-maintained.
 
 | Script | In | Out |
 | --- | --- | --- |
 | `tmdl_to_model_data.py` | `*.SemanticModel` folder (or its `definition` folder, or a `model.bim`) | `model-data.json` |
+| `power_query_to_model_data.js` | the same folder plus the `model-data.json` above (Node, no packages) | adds the `powerQuery` key |
 | `scan_report_usage.py` | folder containing `*.Report` (PBIR) folders | `report-usage.json` + `report-health.json` |
 
 ```bash
 python3 tmdl_to_model_data.py "Models/demo/Contoso Retail.SemanticModel" -o ../model-data.json
+node power_query_to_model_data.js "Models/demo/Contoso Retail.SemanticModel" ../model-data.json
 python3 scan_report_usage.py Reports --model-data ../model-data.json -o ../report-usage.json
 ```
 
