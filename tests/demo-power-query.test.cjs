@@ -39,5 +39,12 @@ test('model-data.json is exactly what the committed scripts produce from the dem
   assert.equal(r.status, 0, r.stderr);
   r = spawnSync(process.execPath, [path.join(viewer, 'scripts/power_query_to_model_data.js'), demo, out], { encoding: 'utf8' });
   assert.equal(r.status, 0, r.stderr);
-  assert.equal(fs.readFileSync(out, 'utf8'), fs.readFileSync(path.join(viewer, 'model-data.json'), 'utf8'));
+  // The generator lists table files in directory order, which differs between file systems.
+  const canon = file => {
+    const model = JSON.parse(fs.readFileSync(file, 'utf8'));
+    model.tables.sort((a, b) => a.name.localeCompare(b.name));
+    model.powerQuery.nodes.sort((a, b) => a.id.localeCompare(b.id));
+    return model;
+  };
+  assert.deepEqual(canon(out), canon(path.join(viewer, 'model-data.json')));
 });
