@@ -10,7 +10,7 @@
 
 No install needed. The demo opens with a synthetic "Contoso Retail" model already loaded.
 
-[![Semantic Model Viewer showing the Contoso Retail demo model: fact and dimension tables with their relationships on a canvas](docs/img/tables.png)](https://MrPerfectH.github.io/Semantic-Model-Viewer/)
+[![Semantic Model Viewer showing the Contoso Retail demo model: fact and dimension tables with their relationships on a canvas](docs/img/marketplace/tables.png)](https://MrPerfectH.github.io/Semantic-Model-Viewer/)
 
 ## Why use it
 
@@ -166,20 +166,50 @@ new file. See [snapshot sharing and offline behavior](docs/snapshots.md).
 
 ## Screens
 
-| Screen | What it does |
-| --- | --- |
-| **Tables** | Starts with a blank layout and a searchable library of every model table. Add tables with + or drag them onto the canvas, show all, remove tables, undo layout changes, arrange visible tables and save named views with selection, focus, zoom, and card display settings. Panning preserves selection. Each model keeps its own membership and positions. The overview map supports click/drag and arrow-key navigation; Fit and keyboard-accessible zoom sit beside the canvas. |
-| **Table inspector** | Source, columns, measures and relationships for a selected table. Dim or hide unrelated tables with direct, two-hop or transitive focus; hidden tables remain in the layout. Explore tables that filter it, tables it filters, or all connected tables. Choose direct or direct + indirect paths and optionally include inactive relationships. Filtering follows model metadata; it does not simulate DAX or RLS. Table role rules remain under Display and the inspector's Table role settings. |
-| **Measures** | Search names, folders, home tables or DAX, filter visible/hidden measures, and inspect dependency and dependent counts. Split view places DAX beside or below the graph with a pointer/keyboard divider; dedicated DAX and Dependencies modes provide more room. Graphs run left-to-right, top-to-bottom or bottom-to-top. DAX comparison uses the full panel width. Workspace preferences persist in this browser. Graph opens at readable scale with Fit all/Center/zoom. Click a reference to compare formulas, then Analyze this measure to re-root. Copy DAX, line wrapping and detected column references are included. |
-| **Domains** | Full-model domain/source groups with aggregated relationships and expandable group cards. |
-| **Matrix** | Full-model fact-centered relationship matrix, with explicit scope, semantic cells and navigation back to the table diagram. Models without connected fact tables get an explanatory empty state. |
+Four ways to explore the synthetic **Contoso Retail** demo. Select an image to open it at full size.
 
+### Measures
 
-| Measure dependency flow | Table inspector |
+Follow the logic behind a measure. Trace what feeds it and what depends on it, then compare the DAX without losing your place.
+
+- Search by name, folder, home table, or DAX; spot hidden measures and report usage.
+- Switch between dependencies, DAX, and split view. Select a related measure to compare formulas.
+
+| Dependency flow | DAX comparison |
 | --- | --- |
-| ![Dependency flow for the Operating Profit measure: upstream measures in purple, downstream in blue](docs/img/measure-flow.png) | ![Table inspector for the Sales fact table with canvas focus and filter-path options](docs/img/table-inspector.png) |
-| **Relationship matrix** | **Domains** |
-| ![Fact relationship matrix: fact tables across, related dimensions down](docs/img/matrix.png) | ![Domain map grouping the model into Sales, Finance, Supply and other domains](docs/img/domains.png) |
+| [![Gross Margin % dependency flow at 100% zoom, with upstream measures in purple and a downstream measure in blue](docs/img/marketplace/measure-flow.png)](docs/img/marketplace/measure-flow.png) | [![Gross Margin % and Gross Profit formulas beside their dependency graph](docs/img/marketplace/measure-dax.png)](docs/img/marketplace/measure-dax.png) |
+
+### Tables
+
+Build a canvas around the tables you care about. Read cardinality and filter direction on the relationship lines, and inspect the selected table beside the diagram.
+
+- Add tables from the library or follow direct and indirect filter paths to related tables.
+- Arrange, focus, and pin tables; save named views and navigate with the minimap.
+
+| Relationship canvas | Table inspector |
+| --- | --- |
+| [![Sales and seven dimensions with cardinality pills, filter arrows, and a dashed inactive Date relationship](docs/img/marketplace/tables.png)](docs/img/marketplace/tables.png) | [![A closer Sales neighborhood with the table source and relationship details in the inspector](docs/img/marketplace/table-inspector.png)](docs/img/marketplace/table-inspector.png) |
+
+### Power Query
+
+See how queries, parameters, functions, and table partitions feed each other. Follow a flow from input to consumer and read the M behind it.
+
+- Select a query for **Inputs** or a parameter for **Used by**. Inspect references and use **Back** to return.
+- Read line-numbered M beside the flow, jump through highlighted references, or use **Open full query** and **Copy M**.
+
+| Input flow | M and query details |
+| --- | --- |
+| [![Environment, StartYear, and RawSales feed StageSales, with ServerName upstream of RawSales](docs/img/marketplace/power-query-flow.png)](docs/img/marketplace/power-query-flow.png) | [![StageSales input flow beside its inputs, consumer, and complete read-only M expression](docs/img/marketplace/power-query-inspector.png)](docs/img/marketplace/power-query-inspector.png) |
+
+Links come from static analysis of M. No query runs and no source data is read. Unconfirmed links remain explicit; raw M is excluded from shared snapshots.
+
+### Additional (Domains and Matrix)
+
+Step back to see the model as a whole. **Domains** groups related tables into a map you can expand; **Matrix** compares fact tables with their related tables across the model.
+
+| Domains | Fact relationship matrix |
+| --- | --- |
+| [![All eleven Contoso Retail domains with table counts and connections between domains](docs/img/marketplace/domains.png)](docs/img/marketplace/domains.png) | [![Fact tables across the matrix with related tables down the rows and active, bidirectional, and multiple relationship indicators](docs/img/marketplace/matrix.png)](docs/img/marketplace/matrix.png) |
 
 ### Layouts
 
