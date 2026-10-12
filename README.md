@@ -417,8 +417,9 @@ model and its screenshots use only synthetic data.
 
 ![Walkthrough: pick a query, follow its inputs and consumers, read its M and jump to a referenced query](docs/img/power-query.gif)
 
-The built-in sample model has no Power Query metadata, so this tab is empty there. Open a TMDL
-folder or `model.bim` of your own to use it.
+The built-in sample model carries synthetic Power Query metadata, so you can try this tab on the
+[live demo](https://MrPerfectH.github.io/Semantic-Model-Viewer/). For your own models, open a TMDL
+folder or `model.bim`. A `.pbix` file cannot be read.
 
 Open the **Power Query** workspace next to Tables and Measures. It shows the complete
 available metadata inventory as an input → consumer query graph, including disconnected
