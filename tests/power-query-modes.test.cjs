@@ -7,7 +7,7 @@ const vm=require('node:vm');
 const {harness,plain}=require('./power-query-ui-harness.cjs');
 // Synthetic model; real projection, navigation and canvas. Browser geometry is a separate acceptance gate.
 function setup(){
- const h=harness('power-query-canvas.js'),g=h.win;
+ const h=harness('power-query-canvas.js'),g=h.win,timers=new Map();let timerId=0;g.setTimeout=fn=>{timers.set(++timerId,fn);return timerId;};g.clearTimeout=id=>timers.delete(id);
  g.U.el=(tag,attrs={},children=[])=>{const e=h.doc.createElement(tag);for(const [key,value] of Object.entries(attrs)){if(key==='text')e.textContent=value;else if(key==='cls')e.className=value;else if(key.startsWith('on'))e.addEventListener(key.slice(2).toLowerCase(),value);else e.setAttribute(key,value);}children.forEach(c=>e.appendChild(c));return e;};
  for(const name of ['power-query-dependencies.js','power-query-graph-model.js','power-query-workspace.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'../Models/tools/viewer/js',name),'utf8'),g);
  const rows=[['A','1'],['B','A'],['C','B'],['Sibling','B'],['Other','2'],['Merge','C & Other'],['After','Merge'],['Cycle1','Cycle2'],['Cycle2','Cycle1'],['Partial','Expression.Evaluate("A", #shared)']].map(([name,code])=>({id:name,name,code,kind:'expression',type:'m',state:'available',classification:'query',groupPath:name==='A'?'Source':'Output'}));
@@ -17,8 +17,8 @@ function setup(){
  for(const name of ['body','banner','filter','search','list','count','inventory','memberCount','segments','note','backButton','undoButton','centerButton','openTableButton','popover','message','blankButton','showAllButton','modeControl'])w[name]=h.doc.createElement('div');
  for(const mode of ['flow','canvas']){const b=h.doc.createElement('button');b.dataset.mode=mode;w.modeControl.appendChild(b);}
  w.filter.options=['all','connected','disconnected'].map(value=>({value}));w.canvasHost=h.host;
- w.canvas=g.PowerQueryCanvas.mount(h.host,{context,onSelect:p=>{if(w.valid(p.generation))w.navigate(p.nodeId,false,{preserveView:true});},onAnalyze:p=>{if(w.valid(p.generation))w.analyzeQuery(p.nodeId);},onLayoutStart:p=>{if(w.valid(p.generation)&&w.viewMode==='canvas')w.saveLayout();}});
- w.applyFilters();h.flush();return {w,h,g,node:id=>h.host.querySelectorAll('.pqc-node').find(n=>n.dataset.nodeId===id),row:id=>w.list.querySelectorAll('.pqw-library-row').find(n=>n.title===id||n.getAttribute('title').startsWith(id+' · '))};
+ w.canvas=g.PowerQueryCanvas.mount(h.host,{context,onSelect:p=>w.inspectCard(p),onAnalyze:p=>{if(w.valid(p.generation))w.analyzeQuery(p.nodeId);},onLayoutStart:p=>{if(w.valid(p.generation)&&w.viewMode==='canvas')w.saveLayout();}});
+ w.applyFilters();h.flush();return {w,h,g,timers,flushInspection(){const work=[...timers.values()];timers.clear();work.forEach(fn=>fn());},node:id=>h.host.querySelectorAll('.pqc-node').find(n=>n.dataset.nodeId===id),row:id=>w.list.querySelectorAll('.pqw-library-row').find(n=>n.title===id||n.getAttribute('title').startsWith(id+' · '))};
 }
 const state=w=>({mode:w.viewMode,root:w.analyzedId,selected:w.selectedId,membership:[...w.membership],layout:plain([...w.canvas.captureLayout()].sort(([a],[b])=>a.localeCompare(b))),view:plain(w.canvas.getViewport()),body:[w.body.scrollLeft,w.body.scrollTop],category:w.category,query:w.query,group:w.groupFilter,facet:w.listFacet,focusMode:w.focusMode,direction:w.direction,depth:w.depth,open:w.inspectorOpen,reader:plain(w.inspector.captureViewState())});
 test('Flow defaults to a root prompt; full input ancestry excludes downstream and sibling consumers',()=>{
@@ -55,4 +55,14 @@ test('Back restores mode/root and late mode restore yields to a newer root; old 
 });
 test('dragging a Canvas card records one pre-drag Undo and restores exact layout',async()=>{
  const {w,h,node}=setup();await w.setMode('canvas');w.canvas.setViewport({x:0,y:0,k:1});const before=plain([...w.canvas.captureLayout()]);node('B').fire('pointerdown',{clientX:10,clientY:10});node('B').fire('pointermove',{clientX:50,clientY:20});node('B').fire('pointermove',{clientX:80,clientY:60});node('B').fire('pointerup');h.flush();assert.equal(w.layoutHistory.length,1);assert.notDeepEqual(plain([...w.canvas.captureLayout()]),before);await w.undo();assert.deepEqual(plain([...w.canvas.captureLayout()]),before);
+});
+
+
+test('first pointer selection keeps closed reader geometry until double click settles; reroot and newer input cancel',()=>{
+ const {w,node,timers,flushInspection}=setup();w.chooseQuery('Merge');const before=plain(w.canvas.getViewport());
+ node('C').fire('pointerdown');node('C').fire('pointerup');assert.equal(w.selectedId,'C');assert.equal(w.inspectorOpen,false,'first click must not cover the next pointer target');assert.equal(timers.size,1);assert.deepEqual(plain(w.canvas.getViewport()),before);
+ node('C').fire('pointerdown');node('C').fire('pointerup');node('C').fire('dblclick');assert.equal(w.analyzedId,'C');assert.equal(w.inspectorOpen,false);assert.equal(timers.size,0);flushInspection();assert.equal(w.inspectorOpen,false);
+ node('B').fire('pointerdown');node('B').fire('pointerup');flushInspection();assert.equal(w.inspectorOpen,true);assert.equal(w.analyzedId,'C');
+ w.chooseQuery('Merge');node('C').fire('pointerdown');node('C').fire('pointerup');const stale=[...timers.values()][0];w.navigate('Other',false,{preserveView:true});stale();assert.equal(w.selectedId,'Other');assert.equal(w.inspectorOpen,true);
+ w.chooseQuery('Merge');node('C').fire('pointerdown');node('C').fire('pointerup');w.cancelPendingInspection();assert.equal(timers.size,0,'new pointer/keyboard input cancels scheduled reader');
 });
