@@ -1,0 +1,28 @@
+name: Publish to Marketplace
+
+# Publishes the .vsix of an existing GitHub release to the VS Code Marketplace.
+# Use it for a release made before the Release workflow published on its own, or to retry.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to publish, for example v0.3.4
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Download the release .vsix
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern '*.vsix' --dir dist
+      - name: Publish to the VS Code Marketplace
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: npx --yes @vscode/vsce@4 publish --packagePath dist/*.vsix --skip-duplicate
