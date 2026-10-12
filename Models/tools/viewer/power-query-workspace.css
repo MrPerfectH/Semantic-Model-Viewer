@@ -37,3 +37,6 @@
 
 /* Narrow canvases need room for readable cards above their map/navigation. */
 @media(max-width:780px){.pqw-body.pqw-below{grid-template-rows:minmax(calc(var(--pqw-toolbar,62px) + var(--pqw-flow-height,0px) + 420px),1fr) 7px var(--pqw-inspector-height,400px)}}
+
+/* Mode choice stays in the existing toolbar. Flow has no membership controls. */
+.pqw-modes{display:flex;flex:none;width:auto;margin:0}.pqw-modes button{min-width:58px}.pqw-modes button[aria-pressed=true]{background:var(--accent,#7566d8);color:#fff}

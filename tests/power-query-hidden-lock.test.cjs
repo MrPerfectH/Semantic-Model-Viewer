@@ -30,7 +30,7 @@ function setup() {
   const i = g.PowerQueryWorkspaceInternals;
   const context = i.contextFor(g.PowerQueryGraphModel.build(model, {generation:1}), rows, 1);
   const w = Object.create(g.PowerQueryWorkspace.prototype);
-  Object.assign(w, {app:{model}, alive:true, generation:1, navigationEpoch:0, capture:i.capture(model),
+  Object.assign(w, {app:{model}, alive:true, viewMode:'canvas', generation:1, navigationEpoch:0, capture:i.capture(model),
     context, sets:i.categories(context), category:'all', query:'', history:[], layoutHistory:[],
     selectedId:null, flowRootId:null, inspectorOpen:false, phase:'ready',
     dock(){}, exposeTitle(){}, inspector:{select(){}, setContext(){}, captureViewState(){return {focus:null};},

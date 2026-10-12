@@ -94,6 +94,11 @@
       function control(e, kind) { record(e, kind); controlEntries.push(focusEntries[focusEntries.length - 1]); return e; }
       function valid() { return current(gen, id) && version === controlsVersion; }
       function change(values) { if (valid()) emit('onFocusChange', Object.assign({ generation: gen, nodeId: id, mode: settings.mode, direction: settings.direction, depth: settings.depth }, values)); }
+      if(settings.viewMode==='flow'){
+        var flowAnalyze=control(g.WorkspaceUI.button(doc,{text:'Analyze this query',label:'Analyze this query'}),'analyze-query');
+        listen(flowAnalyze,'click',function(){if(valid())emit('onAnalyze',{generation:gen,nodeId:id});});focusBox.appendChild(flowAnalyze);
+        if(saved&&controlEntries.some(function(entry){return sameFocus(entry.descriptor,saved);}))applyFocus(saved);return;
+      }
       focusBox.appendChild(el('h3', '', settings.locked ? 'Locked focus · ' + settings.rootLabel : settings.analyzed ? 'Analyzing · ' + settings.rootLabel : 'Canvas focus'));
       var lock = control(g.WorkspaceUI.button(doc, { text: settings.locked ? '🔒' : '🔓', label: settings.locked ? 'Unlock query focus' : 'Lock focus on ' + (settings.rootLabel || row.node.label) }), 'focus-lock');
       lock.classList.add('pqi-lock');lock.setAttribute('aria-pressed', String(!!settings.locked));
@@ -104,7 +109,7 @@
       var modes = el('div', 'ex-focus-options'); modes.setAttribute('role', 'group'); modes.setAttribute('aria-label', 'Unrelated queries');
       [['dim', 'Dim unrelated'], ['hide', 'Hide unrelated']].forEach(function (pair) { var b = control(g.WorkspaceUI.button(doc, { text: pair[1] }), 'focus-' + pair[0]); b.setAttribute('aria-pressed', String(settings.mode === pair[0])); listen(b, 'click', function () { change({ mode: pair[0] }); }); modes.appendChild(b); }); focusBox.appendChild(modes);
       var details = el('div', 'pqi-reference-options'); focusBox.appendChild(details);
-      details.appendChild(el('p', 'ex-muted', settings.locked ? 'Focus stays on ' + settings.rootLabel + '. Unlock to choose another flow from the library. Only resolved M references are shown.' : settings.analyzed ? 'Cards inspect without changing the analyzed flow. Analyze this query to follow a different query. Only resolved M references are shown.' : 'Dim or hide unrelated queries, or analyze this query’s full upstream and downstream flow.'));
+      details.appendChild(el('p', 'ex-muted', settings.locked ? 'Focus stays on ' + settings.rootLabel + '. Unlock to choose another flow from the library. Only resolved M references are shown.' : settings.analyzed ? 'Cards inspect without changing the analyzed flow. Analyze this query to follow a different query. Only resolved M references are shown.' : 'Dim or hide unrelated queries. Analyze this query to open its complete upstream flow.'));
       function selector(kind, label, choices, value, toValue) {
         var e = control(el('select'), kind); e.setAttribute('aria-label', label); choices.forEach(function (pair) { var option = el('option', '', pair[1]); option.value = pair[0]; e.appendChild(option); }); e.value = String(value === Infinity ? 'all' : value); listen(e, 'change', function () { var values = {}; values[kind === 'focus-direction' ? 'direction' : 'depth'] = toValue(e.value); change(values); }); var labelElement = el('label', 'pqi-option-label', label); labelElement.appendChild(e); details.appendChild(labelElement);
       }
@@ -124,7 +129,7 @@
         var mode = settings.mode, direction = settings.direction, depth = settings.depth;
         if (!['dim', 'hide'].includes(mode) || !['inputs', 'consumers', 'connected'].includes(direction) || ![0,1,2,Infinity].includes(depth)) return;
         function count(v) { return Number.isInteger(v) && v >= 0 ? v : 0; }
-        focusControls = { mode: mode, direction: direction, depth: depth, relatedCount: count(settings.relatedCount), missingCount: count(settings.missingCount), removableCount: count(settings.removableCount), locked: !!settings.locked, analyzed: !!settings.analyzed, isAnalyzed: !!settings.isAnalyzed, rootLabel: typeof settings.rootLabel === 'string' ? settings.rootLabel : null };
+        focusControls = { viewMode: settings.viewMode==='flow'?'flow':'canvas', mode: mode, direction: direction, depth: depth, relatedCount: count(settings.relatedCount), missingCount: count(settings.missingCount), removableCount: count(settings.removableCount), locked: !!settings.locked, analyzed: !!settings.analyzed, isAnalyzed: !!settings.isAnalyzed, rootLabel: typeof settings.rootLabel === 'string' ? settings.rootLabel : null };
       }
       renderFocusControls();
     }

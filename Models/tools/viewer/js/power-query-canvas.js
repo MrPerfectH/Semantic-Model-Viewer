@@ -533,7 +533,7 @@
         var row = next.byNodeId && next.byNodeId.get(n.id), chrome = row && row.chrome || {};
         var parts = g.WorkspaceUI.createCardChrome(doc, Object.assign({ label: n.label, subtitle: n.subtitle, badge: n.kind === 'parameter' ? 'P' : n.kind === 'function' ? 'F' : 'Q', chips: [{ value: (row && row.inputIds || []).length, label: 'inputs' }, { value: (row && row.consumerIds || []).length, label: 'consumers' }] }, chrome));
         var button = parts.card; button.classList.add('pqc-node');if(chrome.fact)button.classList.add('pqc-fact'); button.classList.add('pqc-kind-' + n.kind); button.setAttribute('role', 'button'); button.dataset.nodeId = n.id; button.title = n.label + ' · ' + (chrome.subtitle || n.subtitle) + (row && row.presentation ? ' · Source: ' + row.presentation.provider + '. ' + row.presentation.sourceBasis : '');
-        button.setAttribute('aria-label', button.title); parts.title.classList.add('pqc-node-title'); parts.subtitle.classList.add('pqc-node-subtitle');
+        button.setAttribute('aria-label', button.title + '. Click or Space to inspect. Double-click or Enter to analyze.'); parts.title.classList.add('pqc-node-title'); parts.subtitle.classList.add('pqc-node-subtitle');
         if (row && row.presentation) {
           var source = el('span', 'pqc-source', row.presentation.providerIcon + ' ' + row.presentation.provider);
           source.title = row.presentation.sourceBasis; source.style.color = row.presentation.providerColor; parts.meta.replaceChildren(source);
@@ -589,7 +589,7 @@
       if (!pointers.has(e.pointerId) || !context || suspended) return; var p = local(e); pointers.set(e.pointerId, p);
       if (pinch && pinch.generation === generation && pointers.size >= 2) { var pair = Array.from(pointers.values()), k = Math.max(0.00001, Math.min(4, pinch.k * Math.hypot(pair[0].x - pair[1].x, pair[0].y - pair[1].y) / Math.max(1, pinch.distance))); view = { x: (pair[0].x + pair[1].x) / 2 - pinch.world.x * k, y: (pair[0].y + pair[1].y) / 2 - pinch.world.y * k, k: k }; pendingFit = false; transform(true); return; }
       if (!drag || drag.pointerId !== e.pointerId || drag.generation !== generation) return;
-      var dx = p.x - drag.x, dy = p.y - drag.y; if (Math.hypot(dx, dy) > 4) drag.moved = true; if (!drag.moved) return;
+      var dx = p.x - drag.x, dy = p.y - drag.y; if (!drag.moved && Math.hypot(dx, dy) > 4) { if(drag.id)emit('onLayoutStart',{generation:generation,nodeId:drag.id});drag.moved = true; } if (!drag.moved) return;
       if (drag.id) { positions.set(drag.id, { x: drag.position.x + dx / view.k, y: drag.position.y + dy / view.k }); scheduleGeometry(); }
       else { view.x = drag.view.x + dx; view.y = drag.view.y + dy; pendingFit = false; transform(true); }
       surface.classList.add('pqc-dragging');
@@ -602,6 +602,7 @@
     });
     on(surface, 'pointercancel', function () { pointers.clear(); pinch = drag = null; surface.classList.remove('pqc-dragging'); });
     on(surface, 'click', function (e) { var hit = e.target.closest && e.target.closest('[data-edge-id]'); if (!hit || !context || suspended) return; emit('onEdge', { generation: generation, edgeId: hit.dataset.edgeId, anchor: local(e) }); });
+    on(surface, 'dblclick', function (e) { var id=nodeId(e);if(!context||suspended||!shown(id))return;e.preventDefault();emit('onAnalyze',{generation:generation,nodeId:id}); });
     on(mapSvg, 'click', function (e) { var id = e.target.dataset && e.target.dataset.mapId; if (id && shown(id)) { select(id, 'node'); reveal(id, { readable: true }); focusNode(id); } });
     on(surface, 'wheel', function (e) { if (!context || suspended) return; e.preventDefault(); zoomBy(Math.exp(-Math.max(-100, Math.min(100, e.deltaY)) * (e.ctrlKey ? 0.01 : 0.002)), local(e)); }, { passive: false });
     // The provided host is the coordinator's focus fallback. Surface/node key
@@ -610,7 +611,8 @@
       if (!context || suspended || e.altKey || e.metaKey || e.ctrlKey || (e.target.closest && e.target.closest('input,textarea,select,[contenteditable="true"]'))) return;
       var id = nodeId(e), list = ids(), key = e.key;
       if (id && ['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(key)) { e.preventDefault(); var at = list.indexOf(id), next = key === 'Home' ? 0 : key === 'End' ? list.length - 1 : (at + (key === 'ArrowRight' ? 1 : list.length - 1)) % list.length; focusNode(list[next]); }
-      else if ((key === 'Enter' || key === ' ') && id) { e.preventDefault(); select(id, 'keyboard'); }
+      else if (key === 'Enter' && id) { e.preventDefault(); emit('onAnalyze', {generation:generation,nodeId:id}); }
+      else if (key === ' ' && id) { e.preventDefault(); select(id, 'keyboard'); }
       else if (!id && key.startsWith('Arrow')) { e.preventDefault(); view.x += key === 'ArrowLeft' ? 40 : key === 'ArrowRight' ? -40 : 0; view.y += key === 'ArrowUp' ? 40 : key === 'ArrowDown' ? -40 : 0; pendingFit = false; transform(true); }
       else if (key === '+' || key === '=' || key === '-') { e.preventDefault(); zoomBy(key === '-' ? 1 / 1.2 : 1.2); }
       else if (key.toLowerCase() === 'f') { e.preventDefault(); fit(); }
