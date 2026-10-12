@@ -1,0 +1,587 @@
+{
+  "candidate": "7cc9175d229182eb0e11dd86ddd6aa3695c634ce",
+  "localHead": "0af24fa12f263b172bf049850bc2b4cb75387836",
+  "os": "macOS 27.0.1 (26A434)",
+  "hardware": "Apple M5 Pro arm64",
+  "node": "v24.15.0",
+  "method": "Registered viewer, real BIM file input import/update, table library selection; actual DOM control activation to two requestAnimationFrame callbacks. Stateful reopen/navigation/expansion/page traces; six rounds. Exported graph counter in first trace did not intercept lexical graph() in dependency render: graphCalls values are invalid and must not be interpreted.",
+  "results": [
+    {
+      "expressions": 300,
+      "totalNodes": 304,
+      "samples": [
+        {
+          "action": "cold-open",
+          "ms": 41,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "code-navigation",
+          "ms": 40.599999994039536,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "expansion",
+          "ms": 29.100000008940697,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "warm-open",
+          "ms": 32.70000000298023,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "code-navigation",
+          "ms": 37.900000005960464,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "expansion",
+          "ms": 28.799999997019768,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "warm-open",
+          "ms": 49.400000005960464,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "code-navigation",
+          "ms": 35.29999999701977,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "expansion",
+          "ms": 31.899999991059303,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "warm-open",
+          "ms": 49.900000005960464,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "code-navigation",
+          "ms": 35.900000005960464,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "expansion",
+          "ms": 29.799999997019768,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "warm-open",
+          "ms": 43.79999999701977,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "code-navigation",
+          "ms": 39.5,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "expansion",
+          "ms": 32.70000000298023,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "warm-open",
+          "ms": 33.20000000298023,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "code-navigation",
+          "ms": 66.20000000298023,
+          "graphCalls": 0,
+          "nodes": 41
+        },
+        {
+          "action": "expansion",
+          "ms": 33.3999999910593,
+          "graphCalls": 0,
+          "nodes": 41
+        }
+      ],
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.8037.92 Safari/537.36",
+      "viewport": [
+        1280,
+        800
+      ]
+    },
+    {
+      "expressions": 301,
+      "totalNodes": 305,
+      "samples": [
+        {
+          "action": "cold-open",
+          "ms": 40.5,
+          "nodes": 41
+        },
+        {
+          "action": "code-navigation",
+          "ms": 39.8999999910593,
+          "nodes": 41
+        },
+        {
+          "action": "expansion",
+          "ms": 27.19999998807907,
+          "nodes": 41
+        },
+        {
+          "action": "next-page",
+          "ms": 33,
+          "nodes": 41
+        },
+        {
+          "action": "warm-open",
+          "ms": 32.29999999701977,
+          "nodes": 41
+        },
+        {
+          "action": "code-navigation",
+          "ms": 37.79999999701977,
+          "nodes": 41
+        },
+        {
+          "action": "expansion",
+          "ms": 29.100000008940697,
+          "nodes": 44
+        },
+        {
+          "action": "next-page",
+          "ms": 32.900000005960464,
+          "nodes": 21
+        },
+        {
+          "action": "warm-open",
+          "ms": 46.70000000298023,
+          "nodes": 21
+        },
+        {
+          "action": "code-navigation",
+          "ms": 36.20000000298023,
+          "nodes": 21
+        },
+        {
+          "action": "expansion",
+          "ms": 33.599999994039536,
+          "nodes": 24
+        },
+        {
+          "action": "warm-open",
+          "ms": 45.1000000089407,
+          "nodes": 24
+        },
+        {
+          "action": "code-navigation",
+          "ms": 37.599999994039536,
+          "nodes": 24
+        },
+        {
+          "action": "expansion",
+          "ms": 34,
+          "nodes": 24
+        },
+        {
+          "action": "warm-open",
+          "ms": 44.29999999701977,
+          "nodes": 24
+        },
+        {
+          "action": "code-navigation",
+          "ms": 38.900000005960464,
+          "nodes": 24
+        },
+        {
+          "action": "expansion",
+          "ms": 33.400000005960464,
+          "nodes": 24
+        },
+        {
+          "action": "warm-open",
+          "ms": 46.099999994039536,
+          "nodes": 24
+        },
+        {
+          "action": "code-navigation",
+          "ms": 36.5,
+          "nodes": 24
+        },
+        {
+          "action": "expansion",
+          "ms": 33,
+          "nodes": 24
+        }
+      ],
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.8037.92 Safari/537.36",
+      "viewport": [
+        1280,
+        800
+      ]
+    },
+    {
+      "expressions": 350,
+      "totalNodes": 354,
+      "samples": [
+        {
+          "action": "cold-open",
+          "ms": 36.29999999701977,
+          "nodes": 41
+        },
+        {
+          "action": "code-navigation",
+          "ms": 37.400000005960464,
+          "nodes": 41
+        },
+        {
+          "action": "expansion",
+          "ms": 31.600000008940697,
+          "nodes": 41
+        },
+        {
+          "action": "next-page",
+          "ms": 33.5,
+          "nodes": 41
+        },
+        {
+          "action": "warm-open",
+          "ms": 50.20000000298023,
+          "nodes": 41
+        },
+        {
+          "action": "code-navigation",
+          "ms": 38.5,
+          "nodes": 41
+        },
+        {
+          "action": "expansion",
+          "ms": 27.299999997019768,
+          "nodes": 44
+        },
+        {
+          "action": "next-page",
+          "ms": 33.400000005960464,
+          "nodes": 21
+        },
+        {
+          "action": "warm-open",
+          "ms": 49.6000000089407,
+          "nodes": 21
+        },
+        {
+          "action": "code-navigation",
+          "ms": 37.29999999701977,
+          "nodes": 21
+        },
+        {
+          "action": "expansion",
+          "ms": 29.5,
+          "nodes": 24
+        },
+        {
+          "action": "warm-open",
+          "ms": 32.20000000298023,
+          "nodes": 24
+        },
+        {
+          "action": "code-navigation",
+          "ms": 37.900000005960464,
+          "nodes": 24
+        },
+        {
+          "action": "expansion",
+          "ms": 28.899999991059303,
+          "nodes": 24
+        },
+        {
+          "action": "warm-open",
+          "ms": 45.29999999701977,
+          "nodes": 24
+        },
+        {
+          "action": "code-navigation",
+          "ms": 37.900000005960464,
+          "nodes": 24
+        },
+        {
+          "action": "expansion",
+          "ms": 33.099999994039536,
+          "nodes": 24
+        },
+        {
+          "action": "warm-open",
+          "ms": 44.099999994039536,
+          "nodes": 24
+        },
+        {
+          "action": "code-navigation",
+          "ms": 38.900000005960464,
+          "nodes": 24
+        },
+        {
+          "action": "expansion",
+          "ms": 33.5,
+          "nodes": 24
+        }
+      ],
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.8037.92 Safari/537.36",
+      "viewport": [
+        1280,
+        800
+      ]
+    },
+    {
+      "expressions": 1000,
+      "totalNodes": 1004,
+      "samples": [
+        {
+          "action": "cold-open",
+          "ms": 68.29999999701977,
+          "nodes": 41
+        },
+        {
+          "action": "code-navigation",
+          "ms": 73.20000000298023,
+          "nodes": 41
+        },
+        {
+          "action": "expansion",
+          "ms": 33.5,
+          "nodes": 41
+        },
+        {
+          "action": "next-page",
+          "ms": 33.20000000298023,
+          "nodes": 41
+        },
+        {
+          "action": "warm-open",
+          "ms": 79.59999999403954,
+          "nodes": 41
+        },
+        {
+          "action": "code-navigation",
+          "ms": 70.30000001192093,
+          "nodes": 41
+        },
+        {
+          "action": "expansion",
+          "ms": 33.29999999701977,
+          "nodes": 44
+        },
+        {
+          "action": "next-page",
+          "ms": 32.79999999701977,
+          "nodes": 21
+        },
+        {
+          "action": "warm-open",
+          "ms": 74.69999998807907,
+          "nodes": 21
+        },
+        {
+          "action": "code-navigation",
+          "ms": 63,
+          "nodes": 21
+        },
+        {
+          "action": "expansion",
+          "ms": 29.200000002980232,
+          "nodes": 24
+        },
+        {
+          "action": "warm-open",
+          "ms": 73,
+          "nodes": 24
+        },
+        {
+          "action": "code-navigation",
+          "ms": 65.6000000089407,
+          "nodes": 24
+        },
+        {
+          "action": "expansion",
+          "ms": 27.599999994039536,
+          "nodes": 24
+        },
+        {
+          "action": "warm-open",
+          "ms": 71.80000001192093,
+          "nodes": 24
+        },
+        {
+          "action": "code-navigation",
+          "ms": 62.19999998807907,
+          "nodes": 24
+        },
+        {
+          "action": "expansion",
+          "ms": 32,
+          "nodes": 24
+        },
+        {
+          "action": "warm-open",
+          "ms": 72.09999999403954,
+          "nodes": 24
+        },
+        {
+          "action": "code-navigation",
+          "ms": 65.70000000298023,
+          "nodes": 24
+        },
+        {
+          "action": "expansion",
+          "ms": 28.900000005960464,
+          "nodes": 24
+        }
+      ],
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.8037.92 Safari/537.36",
+      "viewport": [
+        1280,
+        800
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "expressions": 300,
+      "totalMetadataNodes": 304,
+      "resolvedEdges": 994,
+      "statistics": {
+        "code-navigation": {
+          "n": 6,
+          "median_ms": 38.70000000298023,
+          "max_ms": 66.20000000298023
+        },
+        "cold-open": {
+          "n": 1,
+          "median_ms": 41,
+          "max_ms": 41
+        },
+        "expansion": {
+          "n": 6,
+          "median_ms": 30.849999994039536,
+          "max_ms": 33.3999999910593
+        },
+        "warm-open": {
+          "n": 5,
+          "median_ms": 43.79999999701977,
+          "max_ms": 49.900000005960464
+        }
+      }
+    },
+    {
+      "expressions": 301,
+      "totalMetadataNodes": 305,
+      "resolvedEdges": 997,
+      "statistics": {
+        "code-navigation": {
+          "n": 6,
+          "median_ms": 37.69999999552965,
+          "max_ms": 39.8999999910593
+        },
+        "cold-open": {
+          "n": 1,
+          "median_ms": 40.5,
+          "max_ms": 40.5
+        },
+        "expansion": {
+          "n": 6,
+          "median_ms": 33.20000000298023,
+          "max_ms": 34
+        },
+        "next-page": {
+          "n": 2,
+          "median_ms": 32.95000000298023,
+          "max_ms": 33
+        },
+        "warm-open": {
+          "n": 5,
+          "median_ms": 45.1000000089407,
+          "max_ms": 46.70000000298023
+        }
+      }
+    },
+    {
+      "expressions": 350,
+      "totalMetadataNodes": 354,
+      "resolvedEdges": 1144,
+      "statistics": {
+        "code-navigation": {
+          "n": 6,
+          "median_ms": 37.900000005960464,
+          "max_ms": 38.900000005960464
+        },
+        "cold-open": {
+          "n": 1,
+          "median_ms": 36.29999999701977,
+          "max_ms": 36.29999999701977
+        },
+        "expansion": {
+          "n": 6,
+          "median_ms": 30.55000000447035,
+          "max_ms": 33.5
+        },
+        "next-page": {
+          "n": 2,
+          "median_ms": 33.45000000298023,
+          "max_ms": 33.5
+        },
+        "warm-open": {
+          "n": 5,
+          "median_ms": 45.29999999701977,
+          "max_ms": 50.20000000298023
+        }
+      }
+    },
+    {
+      "expressions": 1000,
+      "totalMetadataNodes": 1004,
+      "resolvedEdges": 3094,
+      "statistics": {
+        "code-navigation": {
+          "n": 6,
+          "median_ms": 65.65000000596046,
+          "max_ms": 73.20000000298023
+        },
+        "cold-open": {
+          "n": 1,
+          "median_ms": 68.29999999701977,
+          "max_ms": 68.29999999701977
+        },
+        "expansion": {
+          "n": 6,
+          "median_ms": 30.600000001490116,
+          "max_ms": 33.5
+        },
+        "next-page": {
+          "n": 2,
+          "median_ms": 33.0,
+          "max_ms": 33.20000000298023
+        },
+        "warm-open": {
+          "n": 5,
+          "median_ms": 73,
+          "max_ms": 79.59999999403954
+        }
+      }
+    }
+  ]
+}

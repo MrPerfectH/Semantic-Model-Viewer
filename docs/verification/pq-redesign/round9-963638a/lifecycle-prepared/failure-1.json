@@ -1,0 +1,603 @@
+{
+  "nav": {
+    "membership": [
+      "[\"partition\",\"Report\",\"Report\"]",
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Downstream\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      "[\"expression\",\"\",\"Standalone\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"LanguageProbe\"]"
+    ],
+    "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "focusMode": "dim",
+    "direction": "inputs",
+    "depth": null,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 3,
+    "selectedId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": 123,
+      "y": 87,
+      "k": 1.3
+    },
+    "bodyScroll": {
+      "x": 0,
+      "y": 0
+    },
+    "inspectorView": {
+      "codeX": 120,
+      "codeY": 90,
+      "inspectorX": 0,
+      "inspectorY": 200,
+      "wrap": false,
+      "focus": {
+        "kind": "reference",
+        "nodeId": "[\"expression\",\"\",\"FinalOutput\"]",
+        "at": 32,
+        "end": 47
+      },
+      "disclosures": {
+        "provenance": true
+      },
+      "expanded": true
+    },
+    "category": "all",
+    "query": ""
+  },
+  "phase": "ready",
+  "layout": [
+    [
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      {
+        "x": 704,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CycleA\"]",
+      {
+        "x": 0,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CycleB\"]",
+      {
+        "x": 0,
+        "y": 252
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Downstream\"]",
+      {
+        "x": 1760,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      {
+        "x": 1408,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"LanguageProbe\"]",
+      {
+        "x": 704,
+        "y": 252
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Merged Query\"]",
+      {
+        "x": 1056,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Prepared\"]",
+      {
+        "x": 704,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Raw East\"]",
+      {
+        "x": 352,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Raw West\"]",
+      {
+        "x": 352,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Server\"]",
+      {
+        "x": 0,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Standalone\"]",
+      {
+        "x": 294,
+        "y": 454
+      }
+    ],
+    [
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      {
+        "x": 0,
+        "y": 454
+      }
+    ],
+    [
+      "[\"partition\",\"Report\",\"Report\"]",
+      {
+        "x": 1760,
+        "y": 0
+      }
+    ]
+  ],
+  "visible": [
+    "[\"expression\",\"\",\"CoConsumer\"]",
+    "[\"expression\",\"\",\"CycleA\"]",
+    "[\"expression\",\"\",\"CycleB\"]",
+    "[\"expression\",\"\",\"Downstream\"]",
+    "[\"expression\",\"\",\"FinalOutput\"]",
+    "[\"expression\",\"\",\"LanguageProbe\"]",
+    "[\"expression\",\"\",\"Merged Query\"]",
+    "[\"expression\",\"\",\"Prepared\"]",
+    "[\"expression\",\"\",\"Raw East\"]",
+    "[\"expression\",\"\",\"Raw West\"]",
+    "[\"expression\",\"\",\"Server\"]",
+    "[\"expression\",\"\",\"Standalone\"]",
+    "[\"partition\",\"Lookup\",\"Lookup\"]",
+    "[\"partition\",\"Report\",\"Report\"]"
+  ],
+  "map": [
+    "[\"expression\",\"\",\"CoConsumer\"]",
+    "[\"expression\",\"\",\"CycleA\"]",
+    "[\"expression\",\"\",\"CycleB\"]",
+    "[\"expression\",\"\",\"Downstream\"]",
+    "[\"expression\",\"\",\"FinalOutput\"]",
+    "[\"expression\",\"\",\"LanguageProbe\"]",
+    "[\"expression\",\"\",\"Merged Query\"]",
+    "[\"expression\",\"\",\"Prepared\"]",
+    "[\"expression\",\"\",\"Raw East\"]",
+    "[\"expression\",\"\",\"Raw West\"]",
+    "[\"expression\",\"\",\"Server\"]",
+    "[\"expression\",\"\",\"Standalone\"]",
+    "[\"partition\",\"Lookup\",\"Lookup\"]",
+    "[\"partition\",\"Report\",\"Report\"]"
+  ],
+  "mapEdges": [
+    "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+    "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+    "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Downstream\\\"]\"]",
+    "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\",\"[\\\"partition\\\",\\\"Report\\\",\\\"Report\\\"]\"]",
+    "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Merged Query\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\"]",
+    "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Prepared\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Merged Query\\\"]\"]",
+    "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw East\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Merged Query\\\"]\"]",
+    "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CoConsumer\\\"]\"]",
+    "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"LanguageProbe\\\"]\"]",
+    "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Prepared\\\"]\"]",
+    "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw East\\\"]\"]",
+    "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\"]"
+  ],
+  "edges": [
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\",\"[\\\"partition\\\",\\\"Report\\\",\\\"Report\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "consumerId": "[\"partition\",\"Report\",\"Report\"]"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"Server\"]",
+      "consumerId": "[\"expression\",\"\",\"Raw West\"]"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw East\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"Server\"]",
+      "consumerId": "[\"expression\",\"\",\"Raw East\"]"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Prepared\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"Raw West\"]",
+      "consumerId": "[\"expression\",\"\",\"Prepared\"]"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Prepared\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Merged Query\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"Prepared\"]",
+      "consumerId": "[\"expression\",\"\",\"Merged Query\"]"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw East\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Merged Query\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"Raw East\"]",
+      "consumerId": "[\"expression\",\"\",\"Merged Query\"]"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Merged Query\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"Merged Query\"]",
+      "consumerId": "[\"expression\",\"\",\"FinalOutput\"]"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Downstream\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "consumerId": "[\"expression\",\"\",\"Downstream\"]"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CoConsumer\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"Raw West\"]",
+      "consumerId": "[\"expression\",\"\",\"CoConsumer\"]"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"CycleB\"]",
+      "consumerId": "[\"expression\",\"\",\"CycleA\"]"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"CycleA\"]",
+      "consumerId": "[\"expression\",\"\",\"CycleB\"]"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"LanguageProbe\\\"]\"]",
+      "inputId": "[\"expression\",\"\",\"Raw West\"]",
+      "consumerId": "[\"expression\",\"\",\"LanguageProbe\"]"
+    }
+  ],
+  "mapBox": "-28 -28 2068 606",
+  "mapDisplay": "",
+  "mapRects": [
+    {
+      "x": 1760,
+      "y": 0,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 352,
+      "y": 0,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 352,
+      "y": 126,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 704,
+      "y": 0,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 1056,
+      "y": 0,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 1408,
+      "y": 0,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 1760,
+      "y": 126,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 704,
+      "y": 126,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 0,
+      "y": 126,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 0,
+      "y": 252,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 704,
+      "y": 252,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 0,
+      "y": 454,
+      "w": 252,
+      "h": 96
+    },
+    {
+      "x": 294,
+      "y": 454,
+      "w": 252,
+      "h": 96
+    }
+  ],
+  "registry": 14,
+  "host": {
+    "x": 268,
+    "y": 240.5,
+    "width": 1012,
+    "height": 180,
+    "top": 240.5,
+    "right": 1280,
+    "bottom": 420.5,
+    "left": 268
+  },
+  "cards": [
+    {
+      "id": "[\"partition\",\"Report\",\"Report\"]",
+      "r": {
+        "x": 2679,
+        "y": 327.5,
+        "width": 327.599853515625,
+        "height": 124.79998779296875,
+        "top": 327.5,
+        "right": 3006.599853515625,
+        "bottom": 452.29998779296875,
+        "left": 2679
+      }
+    },
+    {
+      "id": "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "r": {
+        "x": 391,
+        "y": 917.699951171875,
+        "width": 327.5999755859375,
+        "height": 124.800048828125,
+        "top": 917.699951171875,
+        "right": 718.5999755859375,
+        "bottom": 1042.5,
+        "left": 391
+      }
+    },
+    {
+      "id": "[\"expression\",\"\",\"Server\"]",
+      "r": {
+        "x": 391,
+        "y": 327.5,
+        "width": 327.5999755859375,
+        "height": 124.79998779296875,
+        "top": 327.5,
+        "right": 718.5999755859375,
+        "bottom": 452.29998779296875,
+        "left": 391
+      }
+    },
+    {
+      "id": "[\"expression\",\"\",\"Raw West\"]",
+      "r": {
+        "x": 848.5999755859375,
+        "y": 327.5,
+        "width": 327.5999755859375,
+        "height": 124.79998779296875,
+        "top": 327.5,
+        "right": 1176.199951171875,
+        "bottom": 452.29998779296875,
+        "left": 848.5999755859375
+      }
+    },
+    {
+      "id": "[\"expression\",\"\",\"Raw East\"]",
+      "r": {
+        "x": 848.5999755859375,
+        "y": 491.29998779296875,
+        "width": 327.5999755859375,
+        "height": 124.79998779296875,
+        "top": 491.29998779296875,
+        "right": 1176.199951171875,
+        "bottom": 616.0999755859375,
+        "left": 848.5999755859375
+      }
+    },
+    {
+      "id": "[\"expression\",\"\",\"Prepared\"]",
+      "r": {
+        "x": 1306.199951171875,
+        "y": 327.5,
+        "width": 327.5999755859375,
+        "height": 124.79998779296875,
+        "top": 327.5,
+        "right": 1633.7999267578125,
+        "bottom": 452.29998779296875,
+        "left": 1306.199951171875
+      }
+    },
+    {
+      "id": "[\"expression\",\"\",\"Merged Query\"]",
+      "r": {
+        "x": 1763.7999267578125,
+        "y": 327.5,
+        "width": 327.5999755859375,
+        "height": 124.79998779296875,
+        "top": 327.5,
+        "right": 2091.39990234375,
+        "bottom": 452.29998779296875,
+        "left": 1763.7999267578125
+      }
+    },
+    {
+      "id": "[\"expression\",\"\",\"FinalOutput\"]",
+      "r": {
+        "x": 2221.39990234375,
+        "y": 327.5,
+        "width": 327.60009765625,
+        "height": 124.79998779296875,
+        "top": 327.5,
+        "right": 2549,
+        "bottom": 452.29998779296875,
+        "left": 2221.39990234375
+      }
+    },
+    {
+      "id": "[\"expression\",\"\",\"Downstream\"]",
+      "r": {
+        "x": 2679,
+        "y": 491.29998779296875,
+        "width": 327.599853515625,
+        "height": 124.79998779296875,
+        "top": 491.29998779296875,
+        "right": 3006.599853515625,
+        "bottom": 616.0999755859375,
+        "left": 2679
+      }
+    },
+    {
+      "id": "[\"expression\",\"\",\"CoConsumer\"]",
+      "r": {
+        "x": 1306.199951171875,
+        "y": 491.29998779296875,
+        "width": 327.5999755859375,
+        "height": 124.79998779296875,
+        "top": 491.29998779296875,
+        "right": 1633.7999267578125,
+        "bottom": 616.0999755859375,
+        "left": 1306.199951171875
+      }
+    },
+    {
+      "id": "[\"expression\",\"\",\"Standalone\"]",
+      "r": {
+        "x": 773.199951171875,
+        "y": 917.699951171875,
+        "width": 327.60009765625,
+        "height": 124.800048828125,
+        "top": 917.699951171875,
+        "right": 1100.800048828125,
+        "bottom": 1042.5,
+        "left": 773.199951171875
+      }
+    },
+    {
+      "id": "[\"expression\",\"\",\"CycleA\"]",
+      "r": {
+        "x": 391,
+        "y": 491.29998779296875,
+        "width": 327.5999755859375,
+        "height": 124.79998779296875,
+        "top": 491.29998779296875,
+        "right": 718.5999755859375,
+        "bottom": 616.0999755859375,
+        "left": 391
+      }
+    },
+    {
+      "id": "[\"expression\",\"\",\"CycleB\"]",
+      "r": {
+        "x": 391,
+        "y": 655.0999755859375,
+        "width": 327.5999755859375,
+        "height": 124.800048828125,
+        "top": 655.0999755859375,
+        "right": 718.5999755859375,
+        "bottom": 779.9000244140625,
+        "left": 391
+      }
+    },
+    {
+      "id": "[\"expression\",\"\",\"LanguageProbe\"]",
+      "r": {
+        "x": 1306.199951171875,
+        "y": 655.0999755859375,
+        "width": 327.5999755859375,
+        "height": 124.800048828125,
+        "top": 655.0999755859375,
+        "right": 1633.7999267578125,
+        "bottom": 779.9000244140625,
+        "left": 1306.199951171875
+      }
+    }
+  ],
+  "library": [
+    "Report",
+    "Lookup",
+    "Server",
+    "Raw West",
+    "Raw East",
+    "Prepared",
+    "Merged Query",
+    "FinalOutput",
+    "Downstream",
+    "CoConsumer",
+    "Standalone",
+    "CycleA",
+    "CycleB",
+    "LanguageProbe"
+  ],
+  "groups": [
+    [
+      "all",
+      "All groups (14)"
+    ],
+    [
+      "group:Curated/Outputs",
+      "Curated/Outputs (3)"
+    ],
+    [
+      "group:Landing/SQL",
+      "Landing/SQL (3)"
+    ],
+    [
+      "group:Transform/Steps",
+      "Transform/Steps (3)"
+    ],
+    [
+      "unassigned",
+      "Unassigned (5)"
+    ]
+  ],
+  "counts": [
+    "All (14)",
+    "Connected (12)",
+    "Disconnected (2)"
+  ],
+  "center": {
+    "disabled": false,
+    "title": ""
+  },
+  "code": "let\r\n  emoji = \"😀\",\r\n  first = #\"Merged Query\",\r\n  again = #\"Merged Query\",\r\n  pad0 = \"Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 \",\r\n  pad1 = \"Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 \",\r\n  pad2 = \"Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 \",\r\n  pad3 = \"Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 \",\r\n  pad4 = \"Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 \",\r\n  pad5 = \"Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 \",\r\n  pad6 = \"Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 \",\r\n  pad7 = \"Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 \",\r\n  pad8 = \"Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 Readable exact M source 8 \",\r\n  pad9 = \"Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 Readable exact M source 9 \",\r\n  pad10 = \"Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 Readable exact M source 10 \",\r\n  pad11 = \"Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 Readable exact M source 11 \",\r\n  pad12 = \"Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 Readable exact M source 12 \",\r\n  pad13 = \"Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 Readable exact M source 13 \",\r\n  pad14 = \"Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 Readable exact M source 14 \",\r\n  pad15 = \"Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 Readable exact M source 15 \",\r\n  pad16 = \"Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 Readable exact M source 16 \",\r\n  pad17 = \"Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 Readable exact M source 17 \",\r\n  pad18 = \"Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 Readable exact M source 18 \",\r\n  pad19 = \"Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 Readable exact M source 19 \",\r\n  pad20 = \"Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 Readable exact M source 20 \",\r\n  pad21 = \"Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 Readable exact M source 21 \",\r\n  pad22 = \"Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 Readable exact M source 22 \",\r\n  pad23 = \"Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 Readable exact M source 23 \",\r\n  pad24 = \"Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 Readable exact M source 24 \",\r\n  pad25 = \"Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 Readable exact M source 25 \",\r\n  pad26 = \"Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 Readable exact M source 26 \",\r\n  pad27 = \"Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 Readable exact M source 27 \",\r\n  pad28 = \"Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 Readable exact M source 28 \",\r\n  pad29 = \"Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 Readable exact M source 29 \",\r\n  pad30 = \"Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 Readable exact M source 30 \",\r\n  pad31 = \"Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 Readable exact M source 31 \",\r\n  pad32 = \"Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 Readable exact M source 32 \",\r\n  pad33 = \"Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 Readable exact M source 33 \",\r\n  pad34 = \"Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 Readable exact M source 34 \",\r\n  pad35 = \"Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 Readable exact M source 35 \",\r\n  result = first\r\nin result",
+  "reader": true,
+  "focus": {
+    "cls": "pqi-reference",
+    "text": "#\"Merged Query\""
+  },
+  "banner": ""
+}

@@ -1,0 +1,15 @@
+{
+  "sha": "7c973673d1dc1d4e50d5d8967aa863cd6f8bd309",
+  "runtimeFiles": 33,
+  "runtimeByteEquality": true,
+  "vsixBytes": 266141,
+  "vsixSha256": "c224403c60a64c3ee68fd67bf22f08f5a4efc4757dc36095fa78bfd0637a0363",
+  "fullTests": {
+    "pass": 662,
+    "fail": 0,
+    "durationMs": 29397.965487
+  },
+  "packageEntries": 45,
+  "cacheHashCount": 31,
+  "forbiddenPayloadEntries": []
+}

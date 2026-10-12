@@ -1,0 +1,20 @@
+[
+  {
+    "edgeId": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+    "point": {
+      "x": 1162.970703125,
+      "y": 741.4002075195312,
+      "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+    },
+    "heading": "CycleB is referenced by CycleA"
+  },
+  {
+    "edgeId": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+    "point": {
+      "x": 751.9679565429688,
+      "y": 362.2798156738281,
+      "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+    },
+    "heading": "CycleA is referenced by CycleB"
+  }
+]

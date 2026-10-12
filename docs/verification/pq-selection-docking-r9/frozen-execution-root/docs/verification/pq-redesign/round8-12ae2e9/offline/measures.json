@@ -1,0 +1,11 @@
+{
+  "original": [
+    "VAR v = [Base Amount] RETURN DIVIDE(v,2,0)"
+  ],
+  "long": [
+    "VAR v = [Base Amount]\nRETURN\n    DIVIDE ( v, 2, 0 )"
+  ],
+  "short": [
+    "VAR v = [Base Amount]\nRETURN\n▾\n    DIVIDE (\n        v,\n        2,\n        0\n    )"
+  ]
+}

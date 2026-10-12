@@ -1,0 +1,13 @@
+# Preserved failures and diagnosis
+
+- Baseline T3 Contoso click: exact text `Contoso Retail built-in` timed out because label text is composed from nested nodes. Inspected live text; `button:has-text("Contoso Retail")` succeeded. No product change.
+- Tables Show all: unscoped locator was ambiguous with the hidden PQ toolbar. Inspected actual UI; `:visible` scoped it correctly.
+- Import `input[type=file]` was ambiguous (model files and directory inputs). Inspected both elements; used actual Choose files/file chooser. Only synthetic.bim was uploaded.
+- Baseline PQ `.pqw-zoom` was a wrong diagnostic selector. Source showed `.pqw-navigation` and accessible `Fit Power Query layout`; the accessible locator succeeded.
+- `node22-targeted.log`: new assertion used `Element.contains`, absent from the repository's small deterministic DOM. Replaced with `entry.closest('.pqi-code-bar') === null`. This is an equivalent test oracle; no runtime change or weakened check. Corrected run in a separate log passes 41/41.
+- A browser edge-check expression had an extra closing bracket and returned `SyntaxError: Unexpected token ']'`. Corrected only that diagnostic expression; all seven runtime paths then passed. No product mutation.
+- `package.log`: `sh: vsce: command not found`, exit127. This worktree did not yet have node_modules. Node22 npm ci used the existing lockfile (npm-ci.log), then package-corrected.log succeeds. No package manifest/lockfile changes.
+- T3 actual Cycle B drag passed. A following Undo click timed out; unchanged baseline workspace only records supported membership/Arrange operations, not arbitrary canvas movement, so drag Undo was not a valid expectation. It is not counted as a product pass or regression. The source canvas mount has no onLayout/onDrag history callback.
+- The same tool batch then reported: `No preview automation host is available ... environment 64860a54-e847-4302-8536-4d81fdc2be6e ... Do not retry.` Remaining queued evaluate/select calls were unavailable. No more T3 browser calls were made. The isolated Chrome fallback was used only after this explicit error. Membership Undo, groups and reset were then verified freshly there (fallback-receipt.json); they are not represented as T3 checks.
+- T3 saved-check observations in REVIEW.md summarize visible tool outputs; the lost host prevented exporting the in-page accumulated receipt. Saved T3 screenshots remain original evidence, and the separate fallback receipt is independently persisted by its script.
+- True browser 200% zoom/offline and native VS Code blank were not retested. 640px CSS layout is explicitly distinguished from true browser zoom. Independent/user acceptance remains with the parent.

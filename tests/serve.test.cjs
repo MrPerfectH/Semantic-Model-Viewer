@@ -86,6 +86,43 @@ test('serve.py answers the page: ping, browse, find, model, static files', { ski
   } finally { s.stop(); fs.rmSync(root, { recursive: true, force: true }); }
 });
 
+test('serve.py preserves raw fenced TMDL newlines and whitespace through metadata parsing', { skip: !python && 'python3 not installed' }, async () => {
+  const { root, model } = fixture();
+  const file = path.join(model, 'definition', 'tables', 'Sales.tmdl');
+  // Exact expression oracle from #38's independent raw-fenced transport reproduction.
+  const code = 'let\r\n  Source = #"Base Query",\r\n  Text = "PQ_RAW_ONLY_38 ""quoted"" λ"  \r\nin Source\r\n';
+  // Store raw fixture bytes as base64 so Git/platform text conversion cannot change the oracle.
+  const raw = Buffer.from(fs.readFileSync(path.join(__dirname, 'fixtures/power-query/fenced-crlf.tmdl.base64'), 'utf8').trim(), 'base64').toString('utf8');
+  assert.equal(require('node:crypto').createHash('sha256').update(raw, 'utf8').digest('hex'),
+    'dd5e5fc71672c14dfab54484d5a195ca48caf7da43a8b7030cd2f794948da21a', '#38 unchanged raw fixture');
+  const bytes = Buffer.from('\ufeff' + raw, 'utf8');
+  fs.writeFileSync(file, bytes);
+  // Existing decoding policy strips a UTF-8 BOM and replaces invalid bytes, without normalizing CR/LF.
+  fs.writeFileSync(path.join(model, 'Replacement.json'), Buffer.concat([
+    Buffer.from('\ufeffvalue\r\n', 'utf8'), Buffer.from([0xff]), Buffer.from('\rtrailing\n', 'utf8')
+  ]));
+  const s = await start();
+  try {
+    const read = await get(s.url + '/api/model?path=' + encodeURIComponent(model));
+    assert.equal(read.status, 200);
+    const transported = read.body.files.find(f => f.name === 'Sales.tmdl');
+    assert.equal(transported.text, raw, 'GET /api/model preserves exact decoded fenced TMDL, including CRLF and trailing whitespace');
+    assert.equal(read.body.files.find(f => f.name === 'Replacement.json').text, 'value\r\n\ufffd\rtrailing\n');
+    const vm = require('node:vm'), context = {};
+    context.window = context;
+    vm.createContext(context);
+    for (const name of ['roles.js', 'tmdl-parser.js']) {
+      vm.runInContext(fs.readFileSync(path.join(__dirname, '../Models/tools/viewer/js', name), 'utf8'), context);
+    }
+    const metadata = context.TMDLParser.parseTMDL([transported]).powerQuery;
+    assert.equal(metadata.nodes[0].code, code, 'transported metadata retains exact M CRLF, quoted content, trailing spaces and blank line');
+    assert.equal(Buffer.byteLength(metadata.nodes[0].code, 'utf8'), 86);
+    assert.equal(require('node:crypto').createHash('sha256').update(metadata.nodes[0].code, 'utf8').digest('hex'),
+      '0ca26d7ff5746665d15af9014936598df9e4374eb7d766dffa2858d9f99fec42', '#38 exact expression byte oracle');
+    assert.deepEqual(fs.readFileSync(file), bytes, 'model GET does not modify source bytes');
+  } finally { s.stop(); fs.rmSync(root, { recursive: true, force: true }); }
+});
+
 test('serve.py refuses requests from other websites and never writes', { skip: !python && 'python3 not installed' }, async () => {
   const { root } = fixture();
   const s = await start();

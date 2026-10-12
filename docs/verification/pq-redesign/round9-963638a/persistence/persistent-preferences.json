@@ -1,0 +1,44 @@
+{
+  "before": {
+    "stored": {
+      "dock": "bottom",
+      "width": 420,
+      "height": 440
+    },
+    "dock": "bottom",
+    "width": 420,
+    "height": 440,
+    "below": true
+  },
+  "reloaded": {
+    "stored": {
+      "dock": "bottom",
+      "width": 420,
+      "height": 440
+    },
+    "dock": "bottom",
+    "width": 420,
+    "height": 440,
+    "below": true
+  },
+  "replacement": {
+    "pref": {
+      "dock": "bottom",
+      "width": 420,
+      "height": 440
+    },
+    "gen": 2,
+    "absent": {
+      "selected": null,
+      "history": [],
+      "source": 0,
+      "reader": 0,
+      "gen": 4,
+      "prefs": {
+        "dock": "bottom",
+        "width": 420,
+        "height": 440
+      }
+    }
+  }
+}

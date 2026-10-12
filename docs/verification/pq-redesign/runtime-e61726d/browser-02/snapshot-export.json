@@ -1,0 +1,305 @@
+{
+  "payload": {
+    "format": "semantic-model-viewer",
+    "version": 1,
+    "name": "Independent main integration synthetic",
+    "createdAt": "2026-10-09T09:47:17.749Z",
+    "model": {
+      "name": "Independent main integration synthetic",
+      "tables": [
+        {
+          "name": "SyntheticSales",
+          "domain": "Measures",
+          "role": "measures",
+          "baseRole": "measures",
+          "autoRole": "measures",
+          "roleVia": "structural",
+          "columns": [
+            {
+              "name": "Amount",
+              "dataType": "int64",
+              "hidden": false,
+              "isCalc": false,
+              "isKey": false,
+              "rel": false
+            }
+          ],
+          "measures": [
+            {
+              "name": "Base Amount",
+              "dax": "SUM(SyntheticSales[Amount])",
+              "fmt": "",
+              "folder": ""
+            },
+            {
+              "name": "Formatted Probe",
+              "dax": "VAR total=[Base Amount] RETURN DIVIDE(total,2,0)",
+              "fmt": "",
+              "folder": ""
+            }
+          ],
+          "colCount": 1,
+          "measureCount": 2,
+          "source": {
+            "kind": "manual"
+          }
+        }
+      ],
+      "relationships": []
+    },
+    "usage": null,
+    "settings": {
+      "roleRules": [
+        {
+          "role": "fact",
+          "name": "(^|[._])(fact|fct)_",
+          "sides": "",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "dim",
+          "name": "(^|[._])dim_",
+          "sides": "",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "helper",
+          "name": "",
+          "sides": "none",
+          "measures": "",
+          "kind": "manual"
+        },
+        {
+          "role": "helper",
+          "name": "",
+          "sides": "none",
+          "measures": "",
+          "kind": "calculated"
+        },
+        {
+          "role": "standalone",
+          "name": "",
+          "sides": "none",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "fact",
+          "name": "",
+          "sides": "many",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "dim",
+          "name": "",
+          "sides": "one",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "fact",
+          "name": "",
+          "sides": "mostlyMany",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "dim",
+          "name": "",
+          "sides": "mostlyOne",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "dim",
+          "name": "",
+          "sides": "",
+          "measures": "",
+          "kind": ""
+        }
+      ]
+    },
+    "workspace": {
+      "viewMode": "power-query",
+      "tableView": {
+        "version": 2,
+        "name": "Snapshot starting view",
+        "pos": {
+          "SyntheticSales": {
+            "x": -188,
+            "y": 250
+          }
+        },
+        "view": {
+          "x": 0,
+          "y": 0,
+          "k": 1
+        },
+        "focus": {
+          "selected": "SyntheticSales",
+          "isolate": false,
+          "depth": 1,
+          "pinned": [],
+          "locked": null
+        },
+        "display": {
+          "detail": "auto",
+          "lines": "ortho",
+          "color": "domain",
+          "expanded": []
+        },
+        "tables": []
+      },
+      "presets": [],
+      "matrix": {
+        "scrollLeft": 0,
+        "scrollTop": 0
+      },
+      "explorer": {
+        "query": "",
+        "filter": "all",
+        "direction": "connected",
+        "depth": "direct",
+        "includeInactive": true,
+        "mapHidden": false
+      },
+      "domains": null
+    },
+    "measures": {
+      "version": 1,
+      "selectedMeasure": "Formatted Probe",
+      "comparisonMeasure": null,
+      "extraMeasures": [],
+      "library": {
+        "query": "",
+        "visibility": "all",
+        "homeTable": "",
+        "openFolders": [],
+        "width": 296
+      },
+      "preferences": {
+        "mode": "split",
+        "split": "beside",
+        "besideShare": 0.55,
+        "belowShare": 0.52,
+        "orientation": "lr",
+        "wrap": true
+      },
+      "graph": {
+        "zoom": 0.8431952662721893,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "autoFit": false
+      }
+    }
+  },
+  "bytes": 711983,
+  "requests": [
+    "http://127.0.0.1:60907/",
+    "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+    "http://127.0.0.1:60907/power-query.css?v=4ff48db438",
+    "http://127.0.0.1:60907/power-query-canvas.css?v=e2ab4aab52",
+    "http://127.0.0.1:60907/power-query-inspector.css?v=bb35422b4d",
+    "http://127.0.0.1:60907/power-query-workspace.css?v=f25be96d0d",
+    "http://127.0.0.1:60907/power-query-lineage.css?v=3fa4fd3345",
+    "http://127.0.0.1:60907/explorer.css?v=269c9a848f",
+    "http://127.0.0.1:60907/measures.css?v=020a7d7d4e",
+    "http://127.0.0.1:60907/js/util.js?v=b233a5ee4c",
+    "http://127.0.0.1:60907/js/snapshot.js?v=5a6ed737d6",
+    "http://127.0.0.1:60907/js/roles.js?v=2cf4e6cfdc",
+    "http://127.0.0.1:60907/js/usage-adapter.js?v=47ad9159c1",
+    "http://127.0.0.1:60907/js/tmdl-parser.js?v=60514e5155",
+    "http://127.0.0.1:60907/js/canvas.js?v=999936dcdd",
+    "http://127.0.0.1:60907/js/layouts.js?v=1875b73e7b",
+    "http://127.0.0.1:60907/js/matrix.js?v=a3c83262cb",
+    "http://127.0.0.1:60907/js/dax-format.js?v=478f9a6c45",
+    "http://127.0.0.1:60907/js/measures.js?v=773398f354",
+    "http://127.0.0.1:60907/js/power-query-dependencies.js?v=44e2b21a92",
+    "http://127.0.0.1:60907/js/power-query-graph-model.js?v=8c48f7ada3",
+    "http://127.0.0.1:60907/js/power-query-lineage.js?v=487522c796",
+    "http://127.0.0.1:60907/js/power-query.js?v=cecb795556",
+    "http://127.0.0.1:60907/js/power-query-canvas.js?v=7090e72215",
+    "http://127.0.0.1:60907/js/power-query-inspector.js?v=71a058c233",
+    "http://127.0.0.1:60907/js/power-query-workspace.js?v=8880befa7f",
+    "http://127.0.0.1:60907/js/sidebar.js?v=70081577d0",
+    "http://127.0.0.1:60907/js/topbar.js?v=c5789195be",
+    "http://127.0.0.1:60907/js/rules.js?v=dc35541371",
+    "http://127.0.0.1:60907/js/relationships.js?v=7f17713638",
+    "http://127.0.0.1:60907/js/explorer.js?v=6bfdf4472d",
+    "http://127.0.0.1:60907/js/app.js?v=dbc5683c97",
+    "http://127.0.0.1:60907/manifest.webmanifest",
+    "http://127.0.0.1:60907/api/ping",
+    "https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q131nj-o.woff2",
+    "https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYbSB4Zh.woff2",
+    "https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgsAXHNk.woff2",
+    "http://127.0.0.1:60907/manifest.webmanifest",
+    "http://127.0.0.1:60907/icons/favicon-32.png",
+    "https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgsAXHNk.woff2",
+    "http://127.0.0.1:60907/js/util.js?v=b233a5ee4c",
+    "http://127.0.0.1:60907/js/snapshot.js?v=5a6ed737d6",
+    "http://127.0.0.1:60907/js/usage-adapter.js?v=47ad9159c1",
+    "http://127.0.0.1:60907/js/roles.js?v=2cf4e6cfdc",
+    "http://127.0.0.1:60907/js/tmdl-parser.js?v=60514e5155",
+    "http://127.0.0.1:60907/js/canvas.js?v=999936dcdd",
+    "http://127.0.0.1:60907/js/layouts.js?v=1875b73e7b",
+    "http://127.0.0.1:60907/js/matrix.js?v=a3c83262cb",
+    "http://127.0.0.1:60907/js/dax-format.js?v=478f9a6c45",
+    "http://127.0.0.1:60907/js/measures.js?v=773398f354",
+    "http://127.0.0.1:60907/js/power-query-dependencies.js?v=44e2b21a92",
+    "http://127.0.0.1:60907/js/power-query-graph-model.js?v=8c48f7ada3",
+    "http://127.0.0.1:60907/js/power-query-canvas.js?v=7090e72215",
+    "http://127.0.0.1:60907/js/power-query-inspector.js?v=71a058c233",
+    "http://127.0.0.1:60907/js/power-query-workspace.js?v=8880befa7f",
+    "http://127.0.0.1:60907/js/power-query-lineage.js?v=487522c796",
+    "http://127.0.0.1:60907/js/power-query.js?v=cecb795556",
+    "http://127.0.0.1:60907/js/sidebar.js?v=70081577d0",
+    "http://127.0.0.1:60907/js/topbar.js?v=c5789195be",
+    "http://127.0.0.1:60907/js/rules.js?v=dc35541371",
+    "http://127.0.0.1:60907/js/relationships.js?v=7f17713638",
+    "http://127.0.0.1:60907/js/explorer.js?v=6bfdf4472d",
+    "http://127.0.0.1:60907/js/app.js?v=dbc5683c97",
+    "http://127.0.0.1:60907/explorer.css?v=269c9a848f",
+    "http://127.0.0.1:60907/measures.css?v=020a7d7d4e",
+    "http://127.0.0.1:60907/power-query.css?v=4ff48db438",
+    "http://127.0.0.1:60907/power-query-canvas.css?v=e2ab4aab52",
+    "http://127.0.0.1:60907/power-query-inspector.css?v=bb35422b4d",
+    "http://127.0.0.1:60907/power-query-workspace.css?v=f25be96d0d",
+    "http://127.0.0.1:60907/power-query-lineage.css?v=3fa4fd3345",
+    "http://127.0.0.1:60907/index.html",
+    "blob:http://127.0.0.1:60907/e02dae52-fa0b-4346-a422-11b5e6d60113",
+    "http://127.0.0.1:60907/js/util.js?v=b233a5ee4c",
+    "http://127.0.0.1:60907/js/snapshot.js?v=5a6ed737d6",
+    "http://127.0.0.1:60907/js/usage-adapter.js?v=47ad9159c1",
+    "http://127.0.0.1:60907/js/roles.js?v=2cf4e6cfdc",
+    "http://127.0.0.1:60907/js/tmdl-parser.js?v=60514e5155",
+    "http://127.0.0.1:60907/js/canvas.js?v=999936dcdd",
+    "http://127.0.0.1:60907/js/layouts.js?v=1875b73e7b",
+    "http://127.0.0.1:60907/js/matrix.js?v=a3c83262cb",
+    "http://127.0.0.1:60907/js/dax-format.js?v=478f9a6c45",
+    "http://127.0.0.1:60907/js/measures.js?v=773398f354",
+    "http://127.0.0.1:60907/js/power-query-dependencies.js?v=44e2b21a92",
+    "http://127.0.0.1:60907/js/power-query-graph-model.js?v=8c48f7ada3",
+    "http://127.0.0.1:60907/js/power-query-canvas.js?v=7090e72215",
+    "http://127.0.0.1:60907/js/power-query-inspector.js?v=71a058c233",
+    "http://127.0.0.1:60907/js/power-query-workspace.js?v=8880befa7f",
+    "http://127.0.0.1:60907/js/power-query-lineage.js?v=487522c796",
+    "http://127.0.0.1:60907/js/power-query.js?v=cecb795556",
+    "http://127.0.0.1:60907/js/sidebar.js?v=70081577d0",
+    "http://127.0.0.1:60907/js/topbar.js?v=c5789195be",
+    "http://127.0.0.1:60907/js/rules.js?v=dc35541371",
+    "http://127.0.0.1:60907/js/relationships.js?v=7f17713638",
+    "http://127.0.0.1:60907/js/explorer.js?v=6bfdf4472d",
+    "http://127.0.0.1:60907/js/app.js?v=dbc5683c97",
+    "http://127.0.0.1:60907/explorer.css?v=269c9a848f",
+    "http://127.0.0.1:60907/measures.css?v=020a7d7d4e",
+    "http://127.0.0.1:60907/power-query.css?v=4ff48db438",
+    "http://127.0.0.1:60907/power-query-canvas.css?v=e2ab4aab52",
+    "http://127.0.0.1:60907/power-query-inspector.css?v=bb35422b4d",
+    "http://127.0.0.1:60907/power-query-workspace.css?v=f25be96d0d",
+    "http://127.0.0.1:60907/power-query-lineage.css?v=3fa4fd3345",
+    "http://127.0.0.1:60907/index.html"
+  ]
+}

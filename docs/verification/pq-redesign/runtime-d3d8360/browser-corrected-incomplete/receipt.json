@@ -1,0 +1,58 @@
+{
+  "candidate": "d3d8360e4ee6e003d187f34118099e4327dd91cd",
+  "startedAt": "2026-10-09T09:07:18.694Z",
+  "boundary": "fresh authorized CDP Chrome registered app, not installed/native",
+  "cases": [
+    {
+      "name": "a6-disconnected-1000",
+      "entryMs": 145.3560830000024,
+      "searchMs": 34.552999999999884
+    },
+    {
+      "name": "a6-fanout-250",
+      "entryMs": 81.07904200000121,
+      "searchMs": 33.861791000002995
+    },
+    {
+      "name": "a7-uncertainty",
+      "entryMs": 78.63566700000229,
+      "searchMs": 33.38529099999869
+    }
+  ],
+  "checks": [
+    {
+      "name": "inventory/category a6-disconnected-1000",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a6-fanout-250",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a7-uncertainty",
+      "status": "pass"
+    }
+  ],
+  "failures": [
+    {
+      "name": "inventory/category a1-disconnected",
+      "error": "Error: Timed out import input\n    at Object.until (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:15:176)\n    at async importCase (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:19:77)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:36:19\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:35:119"
+    },
+    {
+      "name": "A3 frozen hidden-selection/reference/Back/reset workflow",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '[\"expression\",\"\",\"MergeResult\"]'\n- '[\"expression\",\"\",\"Q1\"]'\n                     ^\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:65:76\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:57:3"
+    },
+    {
+      "name": "A4 exact source, all five occurrence links, trusted Enter and Back",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '[\"expression\",\"\",\"OccurrenceProbe\"]'\n- '[\"expression\",\"\",\"Sales Raw\"]'\n                     ^\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:80:122\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:73:3"
+    }
+  ],
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "endedAt": "2026-10-09T09:07:38.683Z"
+}

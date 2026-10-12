@@ -1,0 +1,4 @@
+Installing extensions...
+Extension 'semantic-model-viewer-0.3.3.vsix' was successfully installed.
+(node:47961) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `Code - Insiders --trace-deprecation ...` to show where the warning was created)

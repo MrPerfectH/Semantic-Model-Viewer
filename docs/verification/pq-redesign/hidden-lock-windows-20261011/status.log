@@ -1,0 +1,10 @@
+independent-analysis exit=0
+portable-audit exit=0
+baseline-runtime exit=1
+baseline-runtime recheck exit=0
+focused-01 exit=0
+full-suite-01 exit=1
+package-dependencies exit=0
+package exit=0
+repair-runtime exit=0
+owned-diff-check exit=0

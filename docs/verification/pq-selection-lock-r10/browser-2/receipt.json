@@ -1,0 +1,14 @@
+{
+  "boundary": "T3 live preview used first; isolated Chrome for true zoom and trusted keyboard audit; synthetic fixture only",
+  "checks": [],
+  "failures": [
+    "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  [\n    [\n      '[\"partition\",\"Report\",\"Report\"]',\n      {\n        x: 1760,\n...\n    [\n-     '[\"expression\",\"\",\"Server\"]',\n-     {\n-       x: 8000,\n-       y: -14000\n-     }\n-   ],\n-   [\n      '[\"expression\",\"\",\"Raw West\"]',\n      {\n        x: 352,\n        y: 0\n      }\n...\n    [\n-     '[\"expression\",\"\",\"SourceSQL\"]',\n-     {\n-       x: 8400,\n-       y: 19000\n-     }\n-   ],\n-   [\n      '[\"partition\",\"Lookup\",\"Lookup\"]',\n      {\n        x: 0,\n        y: 454\n      }\n...\n    ],\n+   [\n+     '[\"expression\",\"\",\"Server\"]',\n+     {\n+       x: 8000,\n+       y: -14000\n+     }\n+   ],\n+   [\n+     '[\"expression\",\"\",\"SourceSQL\"]',\n+     {\n+       x: 8400,\n+       y: 19000\n+     }\n+   ]\n  ]\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/tests/pq-selection-lock-r10.browser.cjs:32:160"
+  ],
+  "assets": {
+    "index.html": "ce1b007b155ebf44caa2595a87d2b68971de3af30cde79c783ceef0d78857247",
+    "js/power-query-workspace.js": "396515483903af15773dd17efd07a0da0a0af5f0af4c499a34726f5535d459f6",
+    "js/power-query-dependencies.js": "27a8d4c15bfdd297b5a9ac88de3119b62033b69c0fe9690fc76810182df6d7c2",
+    "js/power-query-canvas.js": "dc6db8fe5d0ce14d619d35ffbe94bb45c669af66d8921c5e88042b76aec9c4ce",
+    "power-query-canvas.css": "2ac44fa2cda674c572283705eada44cfdffe826a4be5e8a15bc8fd37e4bf536f"
+  }
+}

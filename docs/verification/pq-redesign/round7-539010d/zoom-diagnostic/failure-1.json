@@ -1,0 +1,516 @@
+{
+  "phase": "ready",
+  "message": "Metadata inspected. Static analysis remains partial.",
+  "category": "all",
+  "query": "",
+  "selectedId": "[\"expression\",\"\",\"Merged Query\"]",
+  "inspectorOpen": true,
+  "count": "6 / 13 objects",
+  "banner": "",
+  "code": "let Left = Prepared, Right = #\"Raw East\" in Table.Combine({Left, Right})",
+  "viewport": {
+    "x": -823.1999999999999,
+    "y": 169.2,
+    "k": 0.85
+  },
+  "inspectorView": {
+    "codeX": 0,
+    "codeY": 0,
+    "inspectorX": 0,
+    "inspectorY": 0,
+    "wrap": true,
+    "focus": null,
+    "disclosures": {
+      "provenance": false,
+      "analysis": false
+    },
+    "expanded": false
+  },
+  "history": [
+    {
+      "membership": [
+        "[\"partition\",\"Report\",\"Report\"]",
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        "[\"expression\",\"\",\"Standalone\"]",
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": null,
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 3,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": -1417.1,
+        "y": 82.7,
+        "k": 0.85
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": true,
+        "focus": null,
+        "disclosures": {},
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    },
+    {
+      "membership": [
+        "[\"partition\",\"Report\",\"Report\"]",
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        "[\"expression\",\"\",\"Standalone\"]",
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "focusMode": "hide",
+      "direction": "inputs",
+      "depth": null,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 3,
+      "selectedId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": -1122.3999999999999,
+        "y": 169.2,
+        "k": 0.85
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": true,
+        "focus": {
+          "kind": "related-[\"expression\",\"\",\"Merged Query\"]",
+          "nodeId": "[\"expression\",\"\",\"FinalOutput\"]"
+        },
+        "disclosures": {
+          "provenance": false
+        },
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    }
+  ],
+  "domNodes": 13,
+  "visible": [
+    "[\"expression\",\"\",\"Server\"]",
+    "[\"expression\",\"\",\"Raw West\"]",
+    "[\"expression\",\"\",\"Raw East\"]",
+    "[\"expression\",\"\",\"Prepared\"]",
+    "[\"expression\",\"\",\"Merged Query\"]",
+    "[\"expression\",\"\",\"FinalOutput\"]"
+  ],
+  "library": [
+    "Reportm · Report · Curated/Outputs",
+    "−",
+    "Lookupm · Lookup",
+    "−",
+    "Serverparameter · Landing/SQL",
+    "−",
+    "Raw Westquery · Landing/SQL",
+    "−",
+    "Raw Eastquery · Landing/SQL",
+    "−",
+    "Preparedquery · Transform/Steps",
+    "−",
+    "Merged Queryquery · Transform/Steps",
+    "−",
+    "FinalOutputquery · Curated/Outputs",
+    "−",
+    "Downstreamquery · Curated/Outputs",
+    "−",
+    "CoConsumerquery · Transform/Steps",
+    "−",
+    "Standalonequery",
+    "−",
+    "CycleAquery",
+    "−",
+    "CycleBquery",
+    "−"
+  ],
+  "map": "6 visible objects",
+  "graph": {
+    "nodes": [
+      {
+        "id": "[\"partition\",\"Report\",\"Report\"]",
+        "metadataId": "[\"partition\",\"Report\",\"Report\"]",
+        "label": "Report",
+        "subtitle": "m · Report",
+        "kind": "partition",
+        "table": "Report",
+        "partition": "Report",
+        "state": "available"
+      },
+      {
+        "id": "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "metadataId": "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "label": "Lookup",
+        "subtitle": "m · Lookup",
+        "kind": "partition",
+        "table": "Lookup",
+        "partition": "Lookup",
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Server\"]",
+        "metadataId": "[\"expression\",\"\",\"Server\"]",
+        "label": "Server",
+        "subtitle": "parameter",
+        "kind": "parameter",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Raw West\"]",
+        "metadataId": "[\"expression\",\"\",\"Raw West\"]",
+        "label": "Raw West",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Raw East\"]",
+        "metadataId": "[\"expression\",\"\",\"Raw East\"]",
+        "label": "Raw East",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Prepared\"]",
+        "metadataId": "[\"expression\",\"\",\"Prepared\"]",
+        "label": "Prepared",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Merged Query\"]",
+        "metadataId": "[\"expression\",\"\",\"Merged Query\"]",
+        "label": "Merged Query",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"FinalOutput\"]",
+        "metadataId": "[\"expression\",\"\",\"FinalOutput\"]",
+        "label": "FinalOutput",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Downstream\"]",
+        "metadataId": "[\"expression\",\"\",\"Downstream\"]",
+        "label": "Downstream",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"CoConsumer\"]",
+        "metadataId": "[\"expression\",\"\",\"CoConsumer\"]",
+        "label": "CoConsumer",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Standalone\"]",
+        "metadataId": "[\"expression\",\"\",\"Standalone\"]",
+        "label": "Standalone",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"CycleA\"]",
+        "metadataId": "[\"expression\",\"\",\"CycleA\"]",
+        "label": "CycleA",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"CycleB\"]",
+        "metadataId": "[\"expression\",\"\",\"CycleB\"]",
+        "label": "CycleB",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      }
+    ],
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\",\"[\\\"partition\\\",\\\"Report\\\",\\\"Report\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"FinalOutput\"]",
+        "consumerId": "[\"partition\",\"Report\",\"Report\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"FinalOutput\"]",
+            "name": "FinalOutput",
+            "at": 13,
+            "end": 24
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Server\"]",
+        "consumerId": "[\"expression\",\"\",\"Raw West\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Server\"]",
+            "name": "Server",
+            "at": 13,
+            "end": 19
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw East\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Server\"]",
+        "consumerId": "[\"expression\",\"\",\"Raw East\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Server\"]",
+            "name": "Server",
+            "at": 13,
+            "end": 19
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Prepared\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Raw West\"]",
+        "consumerId": "[\"expression\",\"\",\"Prepared\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Raw West\"]",
+            "name": "Raw West",
+            "at": 13,
+            "end": 24
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Prepared\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Merged Query\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Prepared\"]",
+        "consumerId": "[\"expression\",\"\",\"Merged Query\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Prepared\"]",
+            "name": "Prepared",
+            "at": 11,
+            "end": 19
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw East\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Merged Query\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Raw East\"]",
+        "consumerId": "[\"expression\",\"\",\"Merged Query\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Raw East\"]",
+            "name": "Raw East",
+            "at": 29,
+            "end": 40
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Merged Query\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Merged Query\"]",
+        "consumerId": "[\"expression\",\"\",\"FinalOutput\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Merged Query\"]",
+            "name": "Merged Query",
+            "at": 32,
+            "end": 47
+          },
+          {
+            "id": "[\"expression\",\"\",\"Merged Query\"]",
+            "name": "Merged Query",
+            "at": 60,
+            "end": 75
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Downstream\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"FinalOutput\"]",
+        "consumerId": "[\"expression\",\"\",\"Downstream\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"FinalOutput\"]",
+            "name": "FinalOutput",
+            "at": 13,
+            "end": 24
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CoConsumer\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Raw West\"]",
+        "consumerId": "[\"expression\",\"\",\"CoConsumer\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Raw West\"]",
+            "name": "Raw West",
+            "at": 13,
+            "end": 24
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"CycleB\"]",
+        "consumerId": "[\"expression\",\"\",\"CycleA\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"CycleB\"]",
+            "name": "CycleB",
+            "at": 8,
+            "end": 14
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"CycleA\"]",
+        "consumerId": "[\"expression\",\"\",\"CycleB\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"CycleA\"]",
+            "name": "CycleA",
+            "at": 8,
+            "end": 14
+          }
+        ]
+      }
+    ],
+    "issues": [
+      {
+        "consumerId": "[\"expression\",\"\",\"Merged Query\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved library/external symbol: Table.Combine"
+      },
+      {
+        "consumerId": null,
+        "kind": "analysis-notice",
+        "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"CycleA\"]",
+        "kind": "cycle",
+        "message": "Cycle among resolved static references.",
+        "componentIds": [
+          "[\"expression\",\"\",\"CycleA\"]",
+          "[\"expression\",\"\",\"CycleB\"]"
+        ]
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"CycleB\"]",
+        "kind": "cycle",
+        "message": "Cycle among resolved static references.",
+        "componentIds": [
+          "[\"expression\",\"\",\"CycleA\"]",
+          "[\"expression\",\"\",\"CycleB\"]"
+        ]
+      }
+    ],
+    "generation": 3,
+    "analysisProgress": {
+      "analyzed": 13,
+      "total": 13,
+      "complete": true,
+      "generation": 3
+    }
+  },
+  "sets": {
+    "all": [
+      "[\"partition\",\"Report\",\"Report\"]",
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Downstream\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      "[\"expression\",\"\",\"Standalone\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]"
+    ],
+    "connected": [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"partition\",\"Report\",\"Report\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"Downstream\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"CycleA\"]"
+    ],
+    "disconnected": [
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "[\"expression\",\"\",\"Standalone\"]"
+    ]
+  }
+}

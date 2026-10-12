@@ -1,0 +1,25 @@
+{
+  "candidate": "29fc2fc6d745140a6e60723c46e8fa21076fd1f6",
+  "startedAt": "2026-10-09T09:15:58.677Z",
+  "boundary": "fresh authorized CDP Chrome registered app, not installed/native",
+  "cases": [],
+  "checks": [],
+  "failures": [
+    {
+      "name": "A5 actual browser 1280 at 200%",
+      "error": "AssertionError [ERR_ASSERTION]: Below-docked resize increases usable inspector height\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:60:14\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:46:27"
+    },
+    {
+      "name": "A5 actual browser 1440 at 200%",
+      "error": "AssertionError [ERR_ASSERTION]: Pointer resizer must not close inspector\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:59:14\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:46:27"
+    }
+  ],
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "endedAt": "2026-10-09T09:16:02.571Z"
+}

@@ -1,0 +1,166 @@
+{
+  "candidate": "d3d8360e4ee6e003d187f34118099e4327dd91cd",
+  "startedAt": "2026-10-09T09:03:15.038Z",
+  "boundary": "fresh authorized CDP Chrome registered app, not installed/native",
+  "cases": [
+    {
+      "name": "a2-parameter",
+      "entryMs": 76.5423750000009,
+      "searchMs": 33.27666700000191
+    },
+    {
+      "name": "a3-results",
+      "entryMs": 73.81083299999955,
+      "searchMs": 33.59400000000096
+    },
+    {
+      "name": "a4-occurrences",
+      "entryMs": 71.55095800000345,
+      "searchMs": 33.34958299999926
+    },
+    {
+      "name": "a6-disconnected-300",
+      "entryMs": 244.656332999999,
+      "searchMs": 34.13420899999983
+    },
+    {
+      "name": "a6-disconnected-301",
+      "entryMs": 125.23612499999945,
+      "searchMs": 33.99316700000054
+    },
+    {
+      "name": "a6-disconnected-350",
+      "entryMs": 72.4149589999979,
+      "searchMs": 33.66166700000031
+    },
+    {
+      "name": "a6-disconnected-1000",
+      "entryMs": 106.87295799999993,
+      "searchMs": 33.87408300000243
+    },
+    {
+      "name": "a6-fanout-250",
+      "entryMs": 72.36416699999972,
+      "searchMs": 33.470625000001746
+    },
+    {
+      "name": "a7-uncertainty",
+      "entryMs": 53.803374999999505,
+      "searchMs": 32.80608299999949
+    },
+    {
+      "name": "a8-reset-a",
+      "entryMs": 52.94904200000019,
+      "searchMs": 33.788958000001
+    },
+    {
+      "name": "a8-reset-b",
+      "entryMs": 65.89858300000196,
+      "searchMs": 32.99270900000192
+    },
+    {
+      "name": "a8-without-m",
+      "entryMs": 51.59975000000122,
+      "searchMs": 33.073458999999275
+    },
+    {
+      "name": "a9-privacy",
+      "entryMs": 51.13366600000154,
+      "searchMs": 33.81866699999955
+    },
+    {
+      "name": "v2-unavailable-incidence",
+      "entryMs": 67.36816700000054,
+      "searchMs": 33.35399999999936
+    },
+    {
+      "name": "v2-same-ids-no-edge",
+      "entryMs": 52.59320799999841,
+      "searchMs": 33.51454100000046
+    }
+  ],
+  "checks": [
+    {
+      "name": "inventory/category a2-parameter",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a3-results",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a4-occurrences",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a6-disconnected-300",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a6-disconnected-301",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a6-disconnected-350",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a8-reset-a",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a8-reset-b",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a8-without-m",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category a9-privacy",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category v2-unavailable-incidence",
+      "status": "pass"
+    },
+    {
+      "name": "inventory/category v2-same-ids-no-edge",
+      "status": "pass"
+    }
+  ],
+  "failures": [
+    {
+      "name": "inventory/category a1-disconnected",
+      "error": "Error: Timed out import input\n    at Object.until (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:15:176)\n    at async importCase (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:19:39)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:36:19\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:35:48"
+    },
+    {
+      "name": "inventory/category a6-disconnected-1000",
+      "error": "Error: Hidden click target\n    at Object.click (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:18:28)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:55:117\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:35:48"
+    },
+    {
+      "name": "inventory/category a6-fanout-250",
+      "error": "Error: Hidden click target\n    at Object.click (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:18:28)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:55:117\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:35:48"
+    },
+    {
+      "name": "inventory/category a7-uncertainty",
+      "error": "Error: Hidden click target\n    at Object.click (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:18:28)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:55:117\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:35:48"
+    },
+    {
+      "name": "A3 frozen hidden-selection/reference/Back/reset workflow",
+      "error": "Error: {\"exceptionId\":1,\"text\":\"Uncaught\",\"lineNumber\":0,\"columnNumber\":105,\"scriptId\":\"31\",\"stackTrace\":{\"callFrames\":[{\"functionName\":\"\",\"scriptId\":\"31\",\"url\":\"\",\"lineNumber\":0,\"columnNumber\":111},{\"functionName\":\"\",\"scriptId\":\"31\",\"url\":\"\",\"lineNumber\":0,\"columnNumber\":276}]},\"exception\":{\"type\":\"object\",\"subtype\":\"error\",\"className\":\"Error\",\"description\":\"Error: Missing click target\\n    at <anonymous>:1:112\\n    at <anonymous>:1:277\",\"objectId\":\"-1230289413322634201.2.2\"}}\n    at evaluate (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:14:153)\n    at async Object.click (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:17:12)\n    at async importCase (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:22:3)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:58:5\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:57:3"
+    },
+    {
+      "name": "A4 exact source, all five occurrence links, trusted Enter and Back",
+      "error": "Error: Timed out import input\n    at Object.until (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:15:176)\n    at async importCase (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:19:39)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:74:5\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:73:3"
+    }
+  ],
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "endedAt": "2026-10-09T09:03:52.441Z"
+}

@@ -1,0 +1,890 @@
+{
+  "candidate": "9c3b836ecfcbf36a6888b576b5b8eba9f16886cd",
+  "verdict": "HOLD: opposing horizontal cycle hit identity inaccessible",
+  "entries": [
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/REVIEW.md",
+      "bytes": 9385,
+      "sha256": "2ebc787298b3d7049f8a94cb4fa03fe2b69d3ed0c73a60ac13041e12176183ef"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/cleanup.json",
+      "bytes": 1016,
+      "sha256": "03ad390012d1ab0274ef8449f2b5a2d8784b3872bfabbc71eb4e5a9b447bf2b7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/frozen-cycle-repro.md",
+      "bytes": 3229,
+      "sha256": "de2f4233211df5982be1317d0625ba162a8cb6f74d0a0f3044a3f3115070f5cc"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/horizontal-cycle-failure.json",
+      "bytes": 26185,
+      "sha256": "9b83033578eba041aa82f24926f7bdc71e6660263290871f0a78cecfe6d753f1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/horizontal-cycle-failure.png",
+      "bytes": 119393,
+      "sha256": "415decd91af7c4cfc7bfed9c7666225b5181f29fbc4507f5afdf324072dbdd87"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/node-mapped/Models/tools/viewer",
+      "symlink": "../../../served"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/node-mapped/tests/power-query-canvas.test.cjs",
+      "bytes": 18920,
+      "sha256": "4327b91a2fe2c8b59169e90e80df1c5e34ae65d1ea988b53c2b1f722c4db3ac7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/node-mapped/tests/power-query-inspector.test.cjs",
+      "bytes": 23359,
+      "sha256": "611d0b1c6f3e0225b91ba9fa2e26d6bab43bc3a2f5c5729ddd820bfcf9ecc1e6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/node-mapped/tests/power-query-ui-harness.cjs",
+      "bytes": 6323,
+      "sha256": "880d35bc2dd75ad70dc843729ebf55deb355db7067b6562a1a9c0c9802d25a95"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/node22-targeted.log",
+      "bytes": 10424,
+      "sha256": "9c56355fedbb22ac0f441ba6a0a591e78d778a4c43a4558e22ac9df72a9f1483"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/offline/measures.json",
+      "bytes": 287,
+      "sha256": "78d86d9038600c2eabfd74ec11092c77020df2d06e269b950c96134d10305168"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/offline/network.json",
+      "bytes": 1299,
+      "sha256": "81a7169ea7b3544e2bd649120c9a6855b9b649550ec5e1868290d61189e64ef9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/offline/offline.png",
+      "bytes": 69455,
+      "sha256": "93d8d8cab1db4233db572feed03ef61f41cbdf4df333b1e8d8192dc3ab90f439"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/offline/pq-unavailable.json",
+      "bytes": 200,
+      "sha256": "3e98d7d0d27d61767f71313817ffb658dabf9fe1f1dead043ae662ec78062469"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/offline/re-export/Independent followup groups snapshot 2026-10-09.html",
+      "bytes": 755708,
+      "sha256": "3e6a1a4b6542a6eb20947d58958d372cdcd8ee069a24b5fd5d61a862a0d83101"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/offline/re-export-proof.json",
+      "bytes": 4585,
+      "sha256": "66f544b94ea4bb5b333a2c4a294f7bc0eeb465b267fd6f6c852443efdb439f73"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/offline/receipt.json",
+      "bytes": 562,
+      "sha256": "614e0c7b4fe2dd1ea2a2d60aa65431ed0c8e2d24e7482d0fc4f2bd4d17864fcc"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/offline-run.log",
+      "bytes": 562,
+      "sha256": "614e0c7b4fe2dd1ea2a2d60aa65431ed0c8e2d24e7482d0fc4f2bd4d17864fcc"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/owner-REVIEW.md",
+      "bytes": 8057,
+      "sha256": "0a2869bc453231807c44e8e9afd579d5874c196b95525403181d6035b3eac095"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/owner-failures-and-boundaries.md",
+      "bytes": 2707,
+      "sha256": "5cae8d482df10edd4a5b1fc1e20c3664d79d3071d337179aa5bb4ac342eb32ef"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/owner-runtime-package-proof.json",
+      "bytes": 6565,
+      "sha256": "a99ff97c66b65eaccc474fd5a38df27605381954b7e17e5ea77612ce4e171c80"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/package-proof.json",
+      "bytes": 9583,
+      "sha256": "fb744075fbbe6c8cf2e2f480716459af4539a9f313ecab3261dc5c723a46bc4b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/privacy/downloaded.html",
+      "bytes": 755708,
+      "sha256": "5df8964c72d34fffef28e2733c5557dc6aa6b9f19f15d1e74d7b33340cb7e2e8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/privacy/export-proof.json",
+      "bytes": 4763,
+      "sha256": "c99500c0ea0b8905b8f2d73f5713adcfd07f6b8ea1872544a039bfd33fa61f57"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/runtime-mapping.json",
+      "bytes": 7981,
+      "sha256": "4cdee072765cd8f2e100720bc0e70e0e1ae7e0556400d1407aa6cacf60cdf93b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/selected-cycle.png",
+      "bytes": 133190,
+      "sha256": "a7cdb81a28f268c4810e82ce635d6edeb8329fbd6b31c17cd000edd43e1f02c8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/selected-detour.png",
+      "bytes": 114825,
+      "sha256": "c80b863eabbd77f0f574ca815e9fc344322998ff683c69d8ba2583ef62dd6833"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/explorer.css",
+      "bytes": 14350,
+      "sha256": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/index.html",
+      "bytes": 6844,
+      "sha256": "fb184c52e44bb61fd9374cf02406425886db2fb7a12f2bdd0e59d87c779a4ce4"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/app.js",
+      "bytes": 79235,
+      "sha256": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/canvas.js",
+      "bytes": 113321,
+      "sha256": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/dax-format.js",
+      "bytes": 18659,
+      "sha256": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/explorer.js",
+      "bytes": 36750,
+      "sha256": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/host-vscode.js",
+      "bytes": 5220,
+      "sha256": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/layouts.js",
+      "bytes": 67455,
+      "sha256": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/matrix.js",
+      "bytes": 9560,
+      "sha256": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/measures.js",
+      "bytes": 93980,
+      "sha256": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/power-query-canvas.js",
+      "bytes": 32365,
+      "sha256": "2ab8f11b2c17bc83c6be606d22a057448ca2b6c58eefe5f9574cbaf4f68b2f94"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/power-query-dependencies.js",
+      "bytes": 12773,
+      "sha256": "44e2b21a9287e5e7569f9d70d02fe8ce2b6c19815d24fcf88ae53a0994ba72c6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/power-query-graph-model.js",
+      "bytes": 6368,
+      "sha256": "8c48f7ada3e7725e22ffb63835412105255054148d537722ada89efb53caaeaa"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/power-query-inspector.js",
+      "bytes": 26917,
+      "sha256": "f099183cd669f78281d4cbf4b5fe404eb7f3a57837e842ee03af96c3a5aeaae1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/power-query-lineage.js",
+      "bytes": 10472,
+      "sha256": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/power-query-workspace.js",
+      "bytes": 38746,
+      "sha256": "dfba8d99f897e408324e34a8b026eae3614a45d8f43d95567fe178f12a3736f3"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/power-query.js",
+      "bytes": 8661,
+      "sha256": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/relationships.js",
+      "bytes": 4847,
+      "sha256": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/roles.js",
+      "bytes": 7657,
+      "sha256": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/rules.js",
+      "bytes": 7610,
+      "sha256": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/sidebar.js",
+      "bytes": 22525,
+      "sha256": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/snapshot.js",
+      "bytes": 12521,
+      "sha256": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/tmdl-parser.js",
+      "bytes": 27971,
+      "sha256": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/topbar.js",
+      "bytes": 36001,
+      "sha256": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/usage-adapter.js",
+      "bytes": 3298,
+      "sha256": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/util.js",
+      "bytes": 8761,
+      "sha256": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/js/workspace-ui.js",
+      "bytes": 3688,
+      "sha256": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/measures.css",
+      "bytes": 15377,
+      "sha256": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/power-query-canvas.css",
+      "bytes": 3843,
+      "sha256": "0bec3d167bf31dc4cd9438b94ae9d1a3e3f6f652081d21e47040c20a8b3b47a4"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/power-query-inspector.css",
+      "bytes": 7416,
+      "sha256": "e16cbd178512eddfe32c02d9061a1535a57d8fd8d32e2fdb485f0f57aa479cac"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/power-query-lineage.css",
+      "bytes": 1741,
+      "sha256": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/power-query-workspace.css",
+      "bytes": 4368,
+      "sha256": "89f1b4d65871a5d3253baac75687c5b1e8b519da7aa9689396ab4140f7575fae"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/served/power-query.css",
+      "bytes": 1754,
+      "sha256": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3/entry-size-exact.json",
+      "bytes": 3448,
+      "sha256": "308a5e33c469669cc0fe6ea8589a529ff2434fa574aa5728665715db0ff51b61"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3/long-reference-history.json",
+      "bytes": 15358,
+      "sha256": "57b7583012d8d39820d2c1d04aa8c65f6548c19a02e3026d202e8b44a37bed88"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3/receipt.json",
+      "bytes": 308,
+      "sha256": "fa9b56888f8a3e5948a91ece053291c76141a11e2f6670a21597a5e20e762296"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3/top-entry-1280.png",
+      "bytes": 139405,
+      "sha256": "19d573f13c0977fa0e0f506dd8ca9154401f096a2841e16808c5d7142a5f83b8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3/wide-reader-1280.png",
+      "bytes": 96356,
+      "sha256": "691f6e5228f054ef0f5946cc38dd74644ea43b06f65845639f85e40f2383de20"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3/wide-reader-1440.png",
+      "bytes": 123278,
+      "sha256": "7b5f0f80fcd85ca12ff4c235cc09584e2314d0617dcb02065d60e7b362a6c874"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-final-state.json",
+      "bytes": 19898,
+      "sha256": "bcc0896e3ed04ae68b5e9fd0480804d1f0f1bff6c31c09d1e2c032a0ef083fdb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-lifecycle/lifecycle.json",
+      "bytes": 2381,
+      "sha256": "d95fc308493450c9a4e9d4e3ae0dbafdc4c34ea12dbc186805133540743a7851"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-lifecycle/receipt.json",
+      "bytes": 406,
+      "sha256": "fb0652eb8594dac8f0d1968c9ee2ab79f8d56909c8e4d73ecc4d99365d38a1b7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-lifecycle/tables-measures.json",
+      "bytes": 823,
+      "sha256": "bfa6708075d074ab8946aa36238538edf4160fc14c5650d3f411de59401eb72c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-regression/batch.json",
+      "bytes": 12343,
+      "sha256": "72e5ce0023e5fa186ed234e7b061fed840478e793f558c6fd1a6d8e1aa8c38a7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-regression/centers.json",
+      "bytes": 20914,
+      "sha256": "1e6d4fc63d21550e42f62273704c9b8d5ca6e8a8c2b01979ca75649e4f7da1cb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-regression/explicit-drop-undo.json",
+      "bytes": 9329,
+      "sha256": "20b4657c1a1f6f94bfb02a3231a90dab08eded46c77bb44bc958805fbf68f2a7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-regression/group-history-reset.json",
+      "bytes": 36446,
+      "sha256": "ff8662cf42e1054b2d937706d396d5f25e7073669ea98fd7bda92bc2df8186fb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-regression/nested-group.json",
+      "bytes": 5540,
+      "sha256": "1ea514b97aace11a639a9fcf026b5755e04b9f5325165b6bf643d6f2002c4ebf"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-regression/placement-controls.png",
+      "bytes": 151474,
+      "sha256": "9bb043695886acac663783209be88afabfe9e1869bd1c504ff9144ce33aa3fc3"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-regression/placement.json",
+      "bytes": 12991,
+      "sha256": "e2222084d69e9abe5dc224f64745ae91a55147b92eac8adae77825539a21ea11"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-regression/receipt.json",
+      "bytes": 381,
+      "sha256": "8b9e26322ea34e44f62722e6f4ce88386e682cb799c4ab55b69ddf8e9e27b45f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-regression/unassigned.json",
+      "bytes": 5551,
+      "sha256": "4af74e6a69284432714dfb224a009913bc49746b28b745485306adfdc9d2fa51"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-regression/undefined-group.json",
+      "bytes": 4938,
+      "sha256": "1c5cb5414f78357aef2f1093e6d318e064236a03f17e2b33c5ad84acdf2fa5ef"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-routes/cycles.png",
+      "bytes": 124147,
+      "sha256": "e65f080c89490fc20a386b62d7b69fb66f80f00be0adc52c8dad178ffcd26770"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-routes/receipt.json",
+      "bytes": 332,
+      "sha256": "e6ee2361fd59dd091a5c877b988d1c5e395a2f9155bd4fa20ac776a7fe248b81"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-routes/route-down.png",
+      "bytes": 103033,
+      "sha256": "c04522d16f14ef662716d65f008c12ac33726d8e913d5812f0b48a5cdb065c51"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-routes/route-left.png",
+      "bytes": 107965,
+      "sha256": "2b50d33ac12f76e0ab319695e51c5e23b4c4127503fa07c34c806adc8e060168"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-routes/route-right.png",
+      "bytes": 107891,
+      "sha256": "4d3e3aaab7877c399138981edf08468d4c63932113a35716d681e0b4c831a2f1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-routes/route-up.png",
+      "bytes": 103159,
+      "sha256": "df8a7a7279678a74c5bfc15b3543ece3d6f530fed650498557110ee62a2059b8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/t3-routes/routes.json",
+      "bytes": 18535,
+      "sha256": "95b0b8f1cd7be5eb7075bb15e8a67307d2fc8cadabf1533307923efe9ed37b7b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/actual-browser-setting-1.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/actual-browser-setting-2.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/actual-browser-setting-3.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/actual-browser-setting-4.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/actual-browser-setting-5.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/actual-browser-setting-6.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/actual-browser-setting-7.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/actual-browser-setting-8.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/before-additional.json",
+      "bytes": 33897,
+      "sha256": "246d3a26db2d62c6d07b63feb1074b2b8f728f357c39233e1e1cf3a25bc42280"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/cached-model-1280.json",
+      "bytes": 35,
+      "sha256": "c76ea1f7892ab3d102b5e9eac3fa50c6daa31c71484930c4e15ac3e1137f1f62"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/cached-model-1440.json",
+      "bytes": 35,
+      "sha256": "c76ea1f7892ab3d102b5e9eac3fa50c6daa31c71484930c4e15ac3e1137f1f62"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/expanded-reader-1280-0-2.png",
+      "bytes": 134830,
+      "sha256": "257862a79a6c9d8e1ba1d8fda72a543d673da28d1d606f2907ae45664cbef90a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/expanded-reader-1280-1-1.png",
+      "bytes": 119179,
+      "sha256": "7475c6c56cb6ba04fccb6855c3723570f87269aef7ee57c95fd3c629dd854cb2"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/expanded-reader-1280-2-2.png",
+      "bytes": 134830,
+      "sha256": "257862a79a6c9d8e1ba1d8fda72a543d673da28d1d606f2907ae45664cbef90a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/expanded-reader-1440-0-2.png",
+      "bytes": 137884,
+      "sha256": "529b74132dab96b08e99dfc50f7db38c0a6d1e51445b522e154f5cb92fdbcbd3"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/expanded-reader-1440-1-1.png",
+      "bytes": 115825,
+      "sha256": "84d66ad2703a91d37296b446984ad07cecdc0167760b65534cdd00ee35de8515"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/expanded-reader-1440-2-2.png",
+      "bytes": 137884,
+      "sha256": "529b74132dab96b08e99dfc50f7db38c0a6d1e51445b522e154f5cb92fdbcbd3"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/network.json",
+      "bytes": 1376789,
+      "sha256": "8346b7301638ecd95748242e5ba218e154c694f370d5181ea26065016eb2b165"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/reader-1280-0-2.json",
+      "bytes": 45574,
+      "sha256": "84d12a965059cc77b68cde46907ab70083071ef3ce3fe0a82adad9a6d524e1b1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/reader-1280-1-1.json",
+      "bytes": 45578,
+      "sha256": "b21cc787628a73ca2244b2d8b31f971e3ec8694119bfaadd94216cf6596b6d06"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/reader-1280-2-2.json",
+      "bytes": 45574,
+      "sha256": "84d12a965059cc77b68cde46907ab70083071ef3ce3fe0a82adad9a6d524e1b1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/reader-1440-0-2.json",
+      "bytes": 45574,
+      "sha256": "3839ce6b0bcb89cb65aa9b1c5d4013eb5682ba5283fde54ccde638eca54bb61a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/reader-1440-1-1.json",
+      "bytes": 45578,
+      "sha256": "20d83738fb49c17ecd28e92d717d225f8001f5c1f589234096f962f208a4e3fc"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/reader-1440-2-2.json",
+      "bytes": 45574,
+      "sha256": "3839ce6b0bcb89cb65aa9b1c5d4013eb5682ba5283fde54ccde638eca54bb61a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/reader-closed-1280-0-2.png",
+      "bytes": 135504,
+      "sha256": "8579ed5328b56f1deebce3884577950842bc4c6a38427065ccbc11c4349b3efc"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/reader-closed-1280-1-1.png",
+      "bytes": 158736,
+      "sha256": "5ec88a39abadce348d9592cd3b6c38c9a9055c8d7422cfc18cf3abe8d17be7e0"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/reader-closed-1280-2-2.png",
+      "bytes": 135504,
+      "sha256": "8579ed5328b56f1deebce3884577950842bc4c6a38427065ccbc11c4349b3efc"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/reader-closed-1440-0-2.png",
+      "bytes": 138959,
+      "sha256": "5ddb091d17f613fb578223d0520fe9fca72219c3b2bac104c09938a3978a5f55"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/reader-closed-1440-1-1.png",
+      "bytes": 169395,
+      "sha256": "fe708a7d96c862774aa190c2b5fe866b1eb60c9705ae45d1e9c8b5d0fcf1df6c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/reader-closed-1440-2-2.png",
+      "bytes": 138959,
+      "sha256": "5ddb091d17f613fb578223d0520fe9fca72219c3b2bac104c09938a3978a5f55"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/receipt.json",
+      "bytes": 1221,
+      "sha256": "e17b248d7135a02d4c01cec805f7d7e2ea6e8222e8aab7ea58f286e0860af026"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/transition-1280-0-2.json",
+      "bytes": 26975,
+      "sha256": "129bcd496463096c17b76d3fc40f66d1e83deb543b3d00a89c5049aeff39f790"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/transition-1280-0-2.png",
+      "bytes": 134258,
+      "sha256": "40067450022117bc7793c6f93de7253590553fbc101cd53fed9d6c964ec7f746"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/transition-1280-1-1.json",
+      "bytes": 18743,
+      "sha256": "58d2c4af2de25f9cf90f72e6c6a02ae582165638f379224437abfaf164346847"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/transition-1280-1-1.png",
+      "bytes": 158920,
+      "sha256": "6987960919026ce1b6c4f2dc49d883eed399ae6b813c669124df24e0286a7ab8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/transition-1280-2-2.json",
+      "bytes": 27282,
+      "sha256": "f81dd6d3514b6821ce4c27ca2c08f8b666baad38b09f45701df8979fae0a40cc"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/transition-1280-2-2.png",
+      "bytes": 134258,
+      "sha256": "40067450022117bc7793c6f93de7253590553fbc101cd53fed9d6c964ec7f746"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/transition-1440-0-2.json",
+      "bytes": 27367,
+      "sha256": "19fa43611ab503c6f6d61eef28ea8b2181c9fa1f293a10340a4699077b85e7ce"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/transition-1440-0-2.png",
+      "bytes": 137652,
+      "sha256": "ab335133e7f8b662a0293bdadb5145d97d07198fe29e0af36c25c410ef2c481d"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/transition-1440-1-1.json",
+      "bytes": 18695,
+      "sha256": "803534dda76f1c0bda15b470b3981ba55f313a4331d1e1b59e12c440810b047d"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/transition-1440-1-1.png",
+      "bytes": 169591,
+      "sha256": "9f33be487cb470317500ae02ba8914ba9e31d776b37801af4ab8b16e05b61122"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/transition-1440-2-2.json",
+      "bytes": 27334,
+      "sha256": "22ef16e77eeee3cdb79b4aa0d707222c75729497e796cb1f7095807ce4922793"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay/transition-1440-2-2.png",
+      "bytes": 137652,
+      "sha256": "ab335133e7f8b662a0293bdadb5145d97d07198fe29e0af36c25c410ef2c481d"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-cache-replay.log",
+      "bytes": 219,
+      "sha256": "69b27a58d188cc0c5d59641b64cec23d36a477415f04aafaa14f381d1fc84f1f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-run.log",
+      "bytes": 2006,
+      "sha256": "422fdc22cc181116a991da74775a74ef2e5d0e01fc103a98d024b7335df07be8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/actual-browser-setting-1.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/actual-browser-setting-2.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/actual-browser-setting-3.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/actual-browser-setting-4.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/actual-browser-setting-5.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/actual-browser-setting-6.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/actual-browser-setting-7.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/actual-browser-setting-8.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/before-additional.json",
+      "bytes": 33897,
+      "sha256": "246d3a26db2d62c6d07b63feb1074b2b8f728f357c39233e1e1cf3a25bc42280"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/expanded-reader-1280-0-2.png",
+      "bytes": 134830,
+      "sha256": "257862a79a6c9d8e1ba1d8fda72a543d673da28d1d606f2907ae45664cbef90a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/expanded-reader-1280-2-2.png",
+      "bytes": 134830,
+      "sha256": "257862a79a6c9d8e1ba1d8fda72a543d673da28d1d606f2907ae45664cbef90a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/expanded-reader-1440-0-2.png",
+      "bytes": 137884,
+      "sha256": "529b74132dab96b08e99dfc50f7db38c0a6d1e51445b522e154f5cb92fdbcbd3"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/expanded-reader-1440-2-2.png",
+      "bytes": 137884,
+      "sha256": "529b74132dab96b08e99dfc50f7db38c0a6d1e51445b522e154f5cb92fdbcbd3"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/failure-1.json",
+      "bytes": 503,
+      "sha256": "ab1be42b6690a2944c73545fa4d969dd95110d7d2c4a3f47d2e9d8e227dd4679"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/failure-1.png",
+      "bytes": 80403,
+      "sha256": "f973652196737a6f4b9c30a929d9ed72851cb51175de9167f337e8e39455027b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/failure-2.json",
+      "bytes": 503,
+      "sha256": "ab1be42b6690a2944c73545fa4d969dd95110d7d2c4a3f47d2e9d8e227dd4679"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/failure-2.png",
+      "bytes": 82219,
+      "sha256": "91f62aa1440082ae1e4ca16147b38f903286d831c4ce2651be07a23cc18807ca"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/network.json",
+      "bytes": 1153845,
+      "sha256": "580afe467b16b972fb173c5ede0c65bf7c00bcc52808cc72785131407e3d4196"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/reader-1280-0-2.json",
+      "bytes": 45574,
+      "sha256": "84d12a965059cc77b68cde46907ab70083071ef3ce3fe0a82adad9a6d524e1b1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/reader-1280-2-2.json",
+      "bytes": 45574,
+      "sha256": "84d12a965059cc77b68cde46907ab70083071ef3ce3fe0a82adad9a6d524e1b1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/reader-1440-0-2.json",
+      "bytes": 45574,
+      "sha256": "3839ce6b0bcb89cb65aa9b1c5d4013eb5682ba5283fde54ccde638eca54bb61a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/reader-1440-2-2.json",
+      "bytes": 45574,
+      "sha256": "3839ce6b0bcb89cb65aa9b1c5d4013eb5682ba5283fde54ccde638eca54bb61a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/reader-closed-1280-0-2.png",
+      "bytes": 135504,
+      "sha256": "8579ed5328b56f1deebce3884577950842bc4c6a38427065ccbc11c4349b3efc"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/reader-closed-1280-2-2.png",
+      "bytes": 135504,
+      "sha256": "8579ed5328b56f1deebce3884577950842bc4c6a38427065ccbc11c4349b3efc"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/reader-closed-1440-0-2.png",
+      "bytes": 138959,
+      "sha256": "5ddb091d17f613fb578223d0520fe9fca72219c3b2bac104c09938a3978a5f55"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/reader-closed-1440-2-2.png",
+      "bytes": 138959,
+      "sha256": "5ddb091d17f613fb578223d0520fe9fca72219c3b2bac104c09938a3978a5f55"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/receipt.json",
+      "bytes": 2819,
+      "sha256": "f1631bcdd48594d9da0ad5258e3137c4094b824ada624494acc7e46b867553f7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/transition-1280-0-2.json",
+      "bytes": 26883,
+      "sha256": "b486b7869e8617932e84ae16c94000ef8e6a663ced316b72ac726159456b46a0"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/transition-1280-0-2.png",
+      "bytes": 134258,
+      "sha256": "40067450022117bc7793c6f93de7253590553fbc101cd53fed9d6c964ec7f746"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/transition-1280-2-2.json",
+      "bytes": 27288,
+      "sha256": "949fa24077961f8393158a6083436b1b8cb1a725a346f0d20bd2cafe3c9f37e7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/transition-1280-2-2.png",
+      "bytes": 134258,
+      "sha256": "40067450022117bc7793c6f93de7253590553fbc101cd53fed9d6c964ec7f746"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/transition-1440-0-2.json",
+      "bytes": 27455,
+      "sha256": "6256d5cbd9b8f3a914ac2fbfb40cdbc9e0156cd2e9bc217ec41f1b67ef0fec75"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/transition-1440-0-2.png",
+      "bytes": 137652,
+      "sha256": "ab335133e7f8b662a0293bdadb5145d97d07198fe29e0af36c25c410ef2c481d"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/transition-1440-2-2.json",
+      "bytes": 27389,
+      "sha256": "a438ec080340bc779511e863185d13ab231879652abfd96eb82d95de4cb46ce1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/reader-connectors-9c3b836/zoom-transitions/transition-1440-2-2.png",
+      "bytes": 137652,
+      "sha256": "ab335133e7f8b662a0293bdadb5145d97d07198fe29e0af36c25c410ef2c481d"
+    },
+    {
+      "path": "tests/acceptance-fixtures/pq-redesign/reader-connectors-9c3b836/exact-expected.json",
+      "bytes": 1688,
+      "sha256": "7b3ac38ce4f61f29390155c88501601428d640e8d3ddfda2527c5e83930c661a"
+    },
+    {
+      "path": "tests/acceptance-fixtures/pq-redesign/reader-connectors-9c3b836/exact-source.m",
+      "bytes": 22189,
+      "sha256": "d6e39dd20f16814c72428562bbc3ae00f81808086ad3744b04b3b35928828bd4"
+    },
+    {
+      "path": "tests/acceptance-fixtures/pq-redesign/reader-connectors-9c3b836/model.bim",
+      "bytes": 25145,
+      "sha256": "d36743475fac750206ea3c16ef1fe84665f9075cb93905326baf835333f487ec"
+    },
+    {
+      "path": "tests/pq-redesign-independent-reader-connectors-9c3b836-lifecycle.scenarios.cjs",
+      "bytes": 9213,
+      "sha256": "9d6960229f7d9f9460274a036f7089a6c731749d200a7600d14ea847dfc77f20"
+    },
+    {
+      "path": "tests/pq-redesign-independent-reader-connectors-9c3b836-offline.browser.cjs",
+      "bytes": 4723,
+      "sha256": "5bf4ffbcd96698c305cda27bbe840ad5df740672a22d95f737b6345866e64b3f"
+    },
+    {
+      "path": "tests/pq-redesign-independent-reader-connectors-9c3b836-regression.scenarios.cjs",
+      "bytes": 12945,
+      "sha256": "348cb44c9c065f6b3f547946f75272347f0c5aed22720f9d1dfdd5558017c02c"
+    },
+    {
+      "path": "tests/pq-redesign-independent-reader-connectors-9c3b836-zoom-cache-replay.browser.cjs",
+      "bytes": 14300,
+      "sha256": "4bdbbf113b76eb8ccd3baad0a989e133d78815a8e3e0040f29626f4503ed3459"
+    },
+    {
+      "path": "tests/pq-redesign-independent-reader-connectors-9c3b836-zoom.browser.cjs",
+      "bytes": 14481,
+      "sha256": "aa42b508c9253e8f960aeb4fe0bd3346f929411ec78015e9c9ac308f23a11607"
+    },
+    {
+      "path": "tests/pq-redesign-independent-reader-connectors-9c3b836.scenarios.cjs",
+      "bytes": 15998,
+      "sha256": "812a61af7b1358515158ff6f2491af319c8a66a52b4f92799c58735adf00cc2e"
+    },
+    {
+      "path": "tests/pq-redesign-independent-reader-connectors-cycle-hit.scenarios.cjs",
+      "bytes": 5540,
+      "sha256": "602a304afcdb4fe56f95b5a7483746510d5e6ac0a89989a6659bd61a2c619449"
+    }
+  ]
+}

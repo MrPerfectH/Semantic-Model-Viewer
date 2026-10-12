@@ -1,0 +1,136 @@
+{
+  "baseline": "7ba3abe52ad8fa6dedd35de2ee798971d4b4a471",
+  "branch": "fix/pq-tables-connectors-20261011",
+  "environment": {
+    "platform": "linux",
+    "node": "v22.23.3",
+    "nodePath": "/home/harry/pq-tables-connectors-20261011/node-v22.23.3-linux-x64/bin/node"
+  },
+  "focused": {
+    "tests": 96,
+    "pass": 96,
+    "fail": 0,
+    "skipped": 0,
+    "log": "logs/focused-current-2.log"
+  },
+  "full": {
+    "tests": 633,
+    "pass": 633,
+    "fail": 0,
+    "skipped": 0,
+    "log": "logs/full-node22-1.log",
+    "note": "Baseline 627 plus six current geometry tests; four mocked Mac launcher tests pass on Linux. No tests run on macOS."
+  },
+  "package": {
+    "path": "/home/harry/pq-tables-connectors-20261011/semantic-model-viewer-pq-tables-connectors.vsix",
+    "sha256": "de1c2f78710356d4be10d1c607ca49d73bef6417f3d17304628d9b621f8e6f28",
+    "bytes": 258337,
+    "zipEntries": 45,
+    "runtimeAssetCount": 33,
+    "runtimeManifestSHA256": "6d9298931bf04e29fa9b67fffacec6a3d0ac8bee57209a0f7c1136c218648eed",
+    "allCanonicalMediaGitZipBytesEqual": true,
+    "allCacheKeysMatch": true,
+    "excluded": "Tests, docs, evidence, fixtures, source models, report data, node_modules"
+  },
+  "runtime": {
+    "boundary": "Linux Node VM and static asset checks only; no browser/native acceptance",
+    "node": "v22.23.3",
+    "platform": "linux",
+    "snapshotSHA256": "f07dff5db7fc635b4f51e90566a3be1f1e9bca8da3d6a4587a79effa46725163",
+    "snapshotPrivacy": true,
+    "runtimes": [
+      {
+        "name": "canonical",
+        "loadOrder": true,
+        "mounted": true,
+        "assets": {
+          "js/canvas.js": "6760f5a3c6c6d38ae5463afa3cc8e241664671629521459630333224fe564a40",
+          "js/power-query-canvas.js": "5cf22d6f6fb8931f3741c9fd8c9eefe29643c7e19567919b85e5b3d41c421a0e",
+          "power-query-canvas.css": "6d3c77e09ebaacc615891559163f60f6e9b764304dc2eca575271414cb851d80"
+        }
+      },
+      {
+        "name": "media",
+        "loadOrder": true,
+        "mounted": true,
+        "assets": {
+          "js/canvas.js": "6760f5a3c6c6d38ae5463afa3cc8e241664671629521459630333224fe564a40",
+          "js/power-query-canvas.js": "5cf22d6f6fb8931f3741c9fd8c9eefe29643c7e19567919b85e5b3d41c421a0e",
+          "power-query-canvas.css": "6d3c77e09ebaacc615891559163f60f6e9b764304dc2eca575271414cb851d80"
+        }
+      },
+      {
+        "name": "snapshot",
+        "loadOrder": true,
+        "mounted": true,
+        "assets": {
+          "js/canvas.js": "6760f5a3c6c6d38ae5463afa3cc8e241664671629521459630333224fe564a40",
+          "js/power-query-canvas.js": "5cf22d6f6fb8931f3741c9fd8c9eefe29643c7e19567919b85e5b3d41c421a0e",
+          "power-query-canvas.css": "6d3c77e09ebaacc615891559163f60f6e9b764304dc2eca575271414cb851d80"
+        }
+      }
+    ],
+    "tablesComparison": {
+      "baseline": "7ba3abe52ad8fa6dedd35de2ee798971d4b4a471",
+      "unchanged": [
+        "orthoPath",
+        "edgeGeom",
+        "edgeArrow"
+      ],
+      "renderLines": "Only width formula replaced with shared method call; formula parity covered by owned test"
+    }
+  },
+  "round9": {
+    "originalRestored": true,
+    "generatedCopy": "results/round9-generated-full-node22-1.json",
+    "originalCopy": "results/round9-original.json"
+  },
+  "externalTaskDirectory": "/home/harry/pq-tables-connectors-20261011",
+  "limitations": [
+    "VM geometry/DOM checks are not browser hit testing, visual acceptance, or installed/native acceptance. MAIN performs browser review.",
+    "Fully overlapping cards or extreme sub-30% views can leave no clear arrow seat; preserve positions and omit that head instead of painting under a card.",
+    "Existing unrelated reader, lock, history and provider behavior is covered by regression tests; no native acceptance claimed."
+  ],
+  "logHashes": {
+    "focused-initial.log": {
+      "sha256": "506112d2f06d02a0e10b62ddc227b0e621ea75a2936f8d0fa9f20df9d700ac51",
+      "bytes": 13262
+    },
+    "focused-current-1.log": {
+      "sha256": "2cebcc1e56dd3947c103605042b17a36dd7c6468874996aa93a4f3a2b5b53d41",
+      "bytes": 22458
+    },
+    "focused-current-2.log": {
+      "sha256": "b41fdeed802922d677c41902fa1b115ddcd4fab5c8e2c457490c52c8bd3a19b1",
+      "bytes": 21962
+    },
+    "full-node22-1.log": {
+      "sha256": "d4da9161543e89ab7dc0ee5afcd97ec03776b06b318a3ebc854893eb9814d709",
+      "bytes": 130065
+    },
+    "npm-ci.log": {
+      "sha256": "5464053aeda196a2e708be77e27168eb1611fb4ca82891d6929ad4d83d07497d",
+      "bytes": 26
+    },
+    "package.log": {
+      "sha256": "8a24e572e9ef791f52e05d8c8f56d3fe3220f20a469bcefc2c22fcb629c89a95",
+      "bytes": 1585
+    },
+    "package-audit-index.log": {
+      "sha256": "1a467716390656ab630370ba9a1341b1966c4ef81b2f41a1181064fe4e05871d",
+      "bytes": 720
+    },
+    "package-audit-index-2.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "runtime-audit-final.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "final-sync-check.log": {
+      "sha256": "c69e24999e732fcc4e713e89b337e7de43ff2ee4482d7aa8f30123a8a6418dd9",
+      "bytes": 150
+    }
+  }
+}

@@ -1,0 +1,705 @@
+{
+  "view": {
+    "x": 41.6287425149701,
+    "y": 50.05068434559456,
+    "k": 0.4020530367835757
+  },
+  "layout": [
+    [
+      "[\"partition\",\"Report\",\"Report\"]",
+      {
+        "x": 1760,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Server\"]",
+      {
+        "x": 0,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Raw West\"]",
+      {
+        "x": 352,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Raw East\"]",
+      {
+        "x": 352,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Prepared\"]",
+      {
+        "x": 704,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Merged Query\"]",
+      {
+        "x": 1056,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      {
+        "x": 1408,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Downstream\"]",
+      {
+        "x": 1760,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      {
+        "x": 704,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CycleA\"]",
+      {
+        "x": 0,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CycleB\"]",
+      {
+        "x": 0,
+        "y": 252
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"LanguageProbe\"]",
+      {
+        "x": 704,
+        "y": 252
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"SourceSQL\"]",
+      {
+        "x": 352,
+        "y": 252
+      }
+    ],
+    [
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      {
+        "x": 0,
+        "y": 454
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Standalone\"]",
+      {
+        "x": 294,
+        "y": 454
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"SourceDataflow\"]",
+      {
+        "x": 588,
+        "y": 454
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"SourceDatabricks\"]",
+      {
+        "x": 882,
+        "y": 454
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Manual\"]",
+      {
+        "x": 1176,
+        "y": 454
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"SourceMixed\"]",
+      {
+        "x": 1470,
+        "y": 454
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Shadowed\"]",
+      {
+        "x": 1764,
+        "y": 454
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"UnknownProvider\"]",
+      {
+        "x": 2058,
+        "y": 454
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare0\"]",
+      {
+        "x": 0,
+        "y": 580
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare1\"]",
+      {
+        "x": 294,
+        "y": 580
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare2\"]",
+      {
+        "x": 588,
+        "y": 580
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare3\"]",
+      {
+        "x": 882,
+        "y": 580
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare4\"]",
+      {
+        "x": 1176,
+        "y": 580
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare5\"]",
+      {
+        "x": 1470,
+        "y": 580
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare6\"]",
+      {
+        "x": 1764,
+        "y": 580
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare7\"]",
+      {
+        "x": 2058,
+        "y": 580
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare8\"]",
+      {
+        "x": 0,
+        "y": 706
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare9\"]",
+      {
+        "x": 294,
+        "y": 706
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare10\"]",
+      {
+        "x": 588,
+        "y": 706
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare11\"]",
+      {
+        "x": 882,
+        "y": 706
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare12\"]",
+      {
+        "x": 1176,
+        "y": 706
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare13\"]",
+      {
+        "x": 1470,
+        "y": 706
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare14\"]",
+      {
+        "x": 1764,
+        "y": 706
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare15\"]",
+      {
+        "x": 2058,
+        "y": 706
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare16\"]",
+      {
+        "x": 0,
+        "y": 832
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare17\"]",
+      {
+        "x": 294,
+        "y": 832
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare18\"]",
+      {
+        "x": 588,
+        "y": 832
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare19\"]",
+      {
+        "x": 882,
+        "y": 832
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare20\"]",
+      {
+        "x": 1176,
+        "y": 832
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare21\"]",
+      {
+        "x": 1470,
+        "y": 832
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare22\"]",
+      {
+        "x": 1764,
+        "y": 832
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare23\"]",
+      {
+        "x": 2058,
+        "y": 832
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare24\"]",
+      {
+        "x": 0,
+        "y": 958
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare25\"]",
+      {
+        "x": 294,
+        "y": 958
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare26\"]",
+      {
+        "x": 588,
+        "y": 958
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare27\"]",
+      {
+        "x": 882,
+        "y": 958
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare28\"]",
+      {
+        "x": 1176,
+        "y": 958
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare29\"]",
+      {
+        "x": 1470,
+        "y": 958
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare30\"]",
+      {
+        "x": 1764,
+        "y": 958
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare31\"]",
+      {
+        "x": 2058,
+        "y": 958
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare32\"]",
+      {
+        "x": 0,
+        "y": 1084
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare33\"]",
+      {
+        "x": 294,
+        "y": 1084
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare34\"]",
+      {
+        "x": 588,
+        "y": 1084
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare35\"]",
+      {
+        "x": 882,
+        "y": 1084
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare36\"]",
+      {
+        "x": 1176,
+        "y": 1084
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare37\"]",
+      {
+        "x": 1470,
+        "y": 1084
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare38\"]",
+      {
+        "x": 1764,
+        "y": 1084
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare39\"]",
+      {
+        "x": 2058,
+        "y": 1084
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare40\"]",
+      {
+        "x": 0,
+        "y": 1210
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare41\"]",
+      {
+        "x": 294,
+        "y": 1210
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare42\"]",
+      {
+        "x": 588,
+        "y": 1210
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare43\"]",
+      {
+        "x": 882,
+        "y": 1210
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare44\"]",
+      {
+        "x": 1176,
+        "y": 1210
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare45\"]",
+      {
+        "x": 1470,
+        "y": 1210
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare46\"]",
+      {
+        "x": 1764,
+        "y": 1210
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare47\"]",
+      {
+        "x": 2058,
+        "y": 1210
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare48\"]",
+      {
+        "x": 0,
+        "y": 1336
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare49\"]",
+      {
+        "x": 294,
+        "y": 1336
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare50\"]",
+      {
+        "x": 588,
+        "y": 1336
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare51\"]",
+      {
+        "x": 882,
+        "y": 1336
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare52\"]",
+      {
+        "x": 1176,
+        "y": 1336
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare53\"]",
+      {
+        "x": 1470,
+        "y": 1336
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare54\"]",
+      {
+        "x": 1764,
+        "y": 1336
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare55\"]",
+      {
+        "x": 2058,
+        "y": 1336
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare56\"]",
+      {
+        "x": 0,
+        "y": 1462
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare57\"]",
+      {
+        "x": 294,
+        "y": 1462
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare58\"]",
+      {
+        "x": 588,
+        "y": 1462
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare59\"]",
+      {
+        "x": 882,
+        "y": 1462
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare60\"]",
+      {
+        "x": 1176,
+        "y": 1462
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare61\"]",
+      {
+        "x": 1470,
+        "y": 1462
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Spare62\"]",
+      {
+        "x": 1764,
+        "y": 1462
+      }
+    ]
+  ],
+  "root": "[\"expression\",\"\",\"Raw West\"]",
+  "selected": "[\"partition\",\"Report\",\"Report\"]",
+  "mode": "dim",
+  "direction": "connected",
+  "depth": 1,
+  "body": [
+    0,
+    0
+  ],
+  "visible": [
+    "[\"partition\",\"Report\",\"Report\"]",
+    "[\"partition\",\"Lookup\",\"Lookup\"]",
+    "[\"expression\",\"\",\"Server\"]",
+    "[\"expression\",\"\",\"Raw West\"]",
+    "[\"expression\",\"\",\"Raw East\"]",
+    "[\"expression\",\"\",\"Prepared\"]",
+    "[\"expression\",\"\",\"Merged Query\"]",
+    "[\"expression\",\"\",\"FinalOutput\"]",
+    "[\"expression\",\"\",\"Downstream\"]",
+    "[\"expression\",\"\",\"CoConsumer\"]",
+    "[\"expression\",\"\",\"Standalone\"]",
+    "[\"expression\",\"\",\"CycleA\"]",
+    "[\"expression\",\"\",\"CycleB\"]",
+    "[\"expression\",\"\",\"LanguageProbe\"]",
+    "[\"expression\",\"\",\"SourceDataflow\"]",
+    "[\"expression\",\"\",\"SourceDatabricks\"]",
+    "[\"expression\",\"\",\"Manual\"]",
+    "[\"expression\",\"\",\"SourceSQL\"]",
+    "[\"expression\",\"\",\"SourceMixed\"]",
+    "[\"expression\",\"\",\"Shadowed\"]",
+    "[\"expression\",\"\",\"UnknownProvider\"]",
+    "[\"expression\",\"\",\"Spare0\"]",
+    "[\"expression\",\"\",\"Spare1\"]",
+    "[\"expression\",\"\",\"Spare2\"]",
+    "[\"expression\",\"\",\"Spare3\"]",
+    "[\"expression\",\"\",\"Spare4\"]",
+    "[\"expression\",\"\",\"Spare5\"]",
+    "[\"expression\",\"\",\"Spare6\"]",
+    "[\"expression\",\"\",\"Spare7\"]",
+    "[\"expression\",\"\",\"Spare8\"]",
+    "[\"expression\",\"\",\"Spare9\"]",
+    "[\"expression\",\"\",\"Spare10\"]",
+    "[\"expression\",\"\",\"Spare11\"]",
+    "[\"expression\",\"\",\"Spare12\"]",
+    "[\"expression\",\"\",\"Spare13\"]",
+    "[\"expression\",\"\",\"Spare14\"]",
+    "[\"expression\",\"\",\"Spare15\"]",
+    "[\"expression\",\"\",\"Spare16\"]",
+    "[\"expression\",\"\",\"Spare17\"]",
+    "[\"expression\",\"\",\"Spare18\"]",
+    "[\"expression\",\"\",\"Spare19\"]",
+    "[\"expression\",\"\",\"Spare20\"]",
+    "[\"expression\",\"\",\"Spare21\"]",
+    "[\"expression\",\"\",\"Spare22\"]",
+    "[\"expression\",\"\",\"Spare23\"]",
+    "[\"expression\",\"\",\"Spare24\"]",
+    "[\"expression\",\"\",\"Spare25\"]",
+    "[\"expression\",\"\",\"Spare26\"]",
+    "[\"expression\",\"\",\"Spare27\"]",
+    "[\"expression\",\"\",\"Spare28\"]",
+    "[\"expression\",\"\",\"Spare29\"]",
+    "[\"expression\",\"\",\"Spare30\"]",
+    "[\"expression\",\"\",\"Spare31\"]",
+    "[\"expression\",\"\",\"Spare32\"]",
+    "[\"expression\",\"\",\"Spare33\"]",
+    "[\"expression\",\"\",\"Spare34\"]",
+    "[\"expression\",\"\",\"Spare35\"]",
+    "[\"expression\",\"\",\"Spare36\"]",
+    "[\"expression\",\"\",\"Spare37\"]",
+    "[\"expression\",\"\",\"Spare38\"]",
+    "[\"expression\",\"\",\"Spare39\"]",
+    "[\"expression\",\"\",\"Spare40\"]",
+    "[\"expression\",\"\",\"Spare41\"]",
+    "[\"expression\",\"\",\"Spare42\"]",
+    "[\"expression\",\"\",\"Spare43\"]",
+    "[\"expression\",\"\",\"Spare44\"]",
+    "[\"expression\",\"\",\"Spare45\"]",
+    "[\"expression\",\"\",\"Spare46\"]",
+    "[\"expression\",\"\",\"Spare47\"]",
+    "[\"expression\",\"\",\"Spare48\"]",
+    "[\"expression\",\"\",\"Spare49\"]",
+    "[\"expression\",\"\",\"Spare50\"]",
+    "[\"expression\",\"\",\"Spare51\"]",
+    "[\"expression\",\"\",\"Spare52\"]",
+    "[\"expression\",\"\",\"Spare53\"]",
+    "[\"expression\",\"\",\"Spare54\"]",
+    "[\"expression\",\"\",\"Spare55\"]",
+    "[\"expression\",\"\",\"Spare56\"]",
+    "[\"expression\",\"\",\"Spare57\"]",
+    "[\"expression\",\"\",\"Spare58\"]",
+    "[\"expression\",\"\",\"Spare59\"]",
+    "[\"expression\",\"\",\"Spare60\"]",
+    "[\"expression\",\"\",\"Spare61\"]",
+    "[\"expression\",\"\",\"Spare62\"]"
+  ],
+  "label": "40%",
+  "code": {
+    "codeX": 0,
+    "codeY": 0,
+    "inspectorX": 0,
+    "inspectorY": 0,
+    "wrap": true,
+    "focus": null,
+    "disclosures": {
+      "provenance": false
+    },
+    "expanded": false
+  }
+}

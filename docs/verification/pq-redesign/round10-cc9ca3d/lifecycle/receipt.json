@@ -1,0 +1,17 @@
+{
+  "candidate": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7",
+  "transport": "T3 collaborative preview",
+  "startedAt": "2026-10-10T11:47:33.777Z",
+  "checks": [
+    {
+      "name": "reader-superseded-navigation-copy-reset",
+      "status": "pass"
+    },
+    {
+      "name": "tables-measures-and-reader-suspend",
+      "status": "pass"
+    }
+  ],
+  "failures": [],
+  "endedAt": "2026-10-10T11:47:37.258Z"
+}

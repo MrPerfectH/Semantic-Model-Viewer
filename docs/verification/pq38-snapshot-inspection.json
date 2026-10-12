@@ -1,0 +1,14 @@
+{
+  "bytes": 580949,
+  "sha256": "c2386eb0af0887950dde64f9bc27429fe25c8d30262a7184ccc13934d09378d7",
+  "markersAbsent": {
+    "PQ_RAW_ONLY_38": true,
+    "PQ_SHARED_ONLY_38": true,
+    "PQ_CREDENTIAL_ONLY_38": true,
+    "pq-private-38.invalid": true
+  },
+  "powerQueryAbsent": true,
+  "tables": 2,
+  "measures": 1,
+  "externalAssets": []
+}

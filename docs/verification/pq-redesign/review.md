@@ -1,0 +1,46 @@
+# Independent proposal review — 2026-10-08
+
+**Verdict: direction fits the request; do not freeze implementation contracts yet.**
+PR [#40](https://github.com/MrPerfectH/Semantic-Model-Viewer/pull/40) is linked to this review thread. Baseline/worktree HEAD was `f45f69605b8620d39495d96b8d04a7ed4cdf70ae`. The baseline remains rejected UX. No redesigned production candidate was supplied or executed. These findings are about a synthetic proposal and its written contract, not failures demonstrated in a redesigned production app.
+
+Scope: app-bound `test-pq-redesign-independent-20261008`; only new fixtures, independently named tests/oracles and this verification directory. Initial tree clean. No applicable AGENTS.md/CLAUDE.md found in worktree or ancestor locations checked. CONTRIBUTING.md and its required CODE_OF_CONDUCT.md read. No source model edits, data access, M execution, credentials, production changes, push, merge or release. Original fixtures and historical evidence untouched.
+
+## Evidence inspected
+
+Original `/tmp/pq-redesign-20261008/design-plan.md`, `proposal.html` and all four requested PNGs were read/viewed. Copies and hashes under `review-inputs/` / `review-input-hashes.json` pin the reviewed revision; subsequent proposal revisions require a new review.
+
+- `03-pq-entry.png`: large modal obscures Tables; initial “No partition metadata” statement appears before selection although the library has objects. It does not answer the whole-model question.
+- `04-pq-selected.png`: code and root-only upstream card stack dominate; explicit query→referenced arrow wording opposes the user's input→result intent. Passing this baseline is not a redesign pass.
+- `05-proposed-inspector.png`: eight-object whole canvas remains visible, including two disconnected objects. One parameter fans to two consumers; merge and append input arrows point toward results. Nonmodal inspector is the correct hierarchy.
+- `06-proposed-disconnected.png`: six nodes and zero links form a valid overview, with neutral no-dependency copy. The footer still says “Selected Sales Raw” from the previous scenario: illustrative stale status, not lifecycle proof.
+
+T3 preview independently opened the synthetic HTML over loopback HTTP at 1280×800. No production app was served. Selection measurements: 740px canvas, 360px inspector, 11px computed M font, literal displayed `Sales Raw` without quoted-identifier syntax. Reset removed `.open` but left the prior `.code` text in the inspector DOM. Captured values are in `proposal-observations.json`. This is an illustrative limitation only. The parent explicitly confirmed prototype interactions are not lifecycle acceptance.
+
+## Blocking objections and required decisions
+
+**B1 — Exact M spelling is part of the design, not just parser correctness.** `link(name)` prints a decoded name into the code block. The screenshot/live DOM show `Sales Raw` and `Sales Enriched` where M requires `#"Sales Raw"` / `#"Sales Enriched"`. This contradicts exact read-only source and can teach the wrong syntax. Revise the illustrative source and render each link as a source slice. Freeze UTF-16, end-exclusive ranges including the entire quoted token and all escape spelling. Repeated occurrences must each navigate; local bindings, record/field names, comments and strings must not. A4 contains CRLF, emoji, doubled quotes and `#(0020)` escapes.
+
+**B2 — Duplicate metadata identity cannot equal unique display identity in every case.** The proposed node ID contract preserves metadata IDs and the plan retains every record, but A7 also admits duplicate IDs. A map keyed only by that ID silently loses an object or selects the wrong one. Freeze a stable, collision-safe UI ID policy with original `metadataId` and provenance retained. Duplicate targets must remain ambiguous, with no dependency edge or guessed code link. Define IDs for status-only tables and behavior under metadata reorder. Do not use file/array order to decide a resolvable dependency.
+
+**B3 — Lifecycle/progress interfaces are incomplete.** `build(model) -> graph` with `analysisProgress` does not say whether work is synchronous, scheduled or cancellable, how progress updates arrive, or how stale generations are rejected. Freeze model+metadata generation ownership, cancellation/late-result behavior, terminal completion/error/cancel states, and observable progress. A new model with the same metadata object AND a new metadata object with the same IDs must invalidate prior work. Define which layer removes retained code/history and cancels pending callbacks. A synchronous implementation must demonstrate it remains responsive at the scale target; it cannot claim cancellable incremental work it does not implement.
+
+**B4 — Navigation state and focus ownership need a contract.** The prototype stores only selected indexes; reference navigation calls `fit()`, and Back does not restore viewport or code scroll. Escape is handled only on the SVG, so inspector focus is not covered; all nodes have `tabindex=0`, not roving focus. These examples are illustrative, but canvas/inspector/coordinator APIs must explicitly assign selection, reveal, history, code-scroll capture/restore, Escape focus return and teardown ownership before implementation. `Inspector.select(nodeId)` alone does not expose the promised scroll restoration. Reset must clear hidden DOM as well as visible state. Blank click versus drag must be distinguished.
+
+**B5 — Inspector readability and narrow-screen access must survive the visual revision.** At desktop widths CSS reduces M to 11px, below the plan's 12–13px; line numbers, Copy M, wrapping control and resizing are not represented. Below 700px the library disappears without a visible reopen route, conflicting with keyboard/library use at 200% zoom. Keep node labels readable when opening the inspector and show how search/library remain reachable. Supply 1280/1440 and 200% examples with the inspector open; source fidelity and legibility are required before the design becomes an implementation target.
+
+**B6 — Uncertainty must distinguish unavailable metadata from ambiguous static analysis.** The uncertainty example supplies generic “Metadata details” under an M code heading for missing/non-M objects. Freeze neutral missing/non-M status copy, distinct partition labels and an inspectable ambiguous consumer with no outgoing guessed reference. Cycle status must be visible without implying execution order. Existing analyzer strings include library-symbol uncertainty: do not convert every standard function call into an amber query failure through regex classification. Keep a generic partial-analysis caveat once and expose specific unresolved/dynamic/ambiguous reasons on affected objects.
+
+## Proposed freeze criteria
+
+The parent should request a new design revision carrying the original brief and B1–B6 responses. This review creates no new delegated job.
+
+1. Updated proposal shows exact M token spelling and readable code, whole-model entry, disconnected validity, parameter fanout and inputs→results. It includes deliberate multipartition/ambiguous/missing/non-M examples and an accessible narrow/200% route. Every response identifies changed artifact/section; outstanding objections remain explicit.
+2. Freeze one node/edge/occurrence schema: collision-safe display ID, preserved metadata ID/provenance, status-node namespace, directional edges, stable edge ID, all occurrence ranges, issue ownership/severity and cycle representation. Static uncertainty creates no speculative edges. Analyzer's existing consumer→input API stays unchanged.
+3. Freeze lifecycle/navigation ownership and executable interface semantics: synchronous versus incremental build, completion/progress/cancellation, model+metadata generations, retained-code deletion, history and scroll restoration, reveal/fit bounds, Escape/focus, no stale callbacks. Agree the contract before separately owned modules are integrated.
+4. Freeze scale meaning: registry totals 300/301/350/1000, every component in initial overview, semantic zoom/culling permitted, last result selectable/readable, one parameter with 250 outward arrows. No hidden truncation or mandatory expansion. Record actual timings and responsiveness; agree performance budgets separately rather than inventing a pass threshold.
+5. User reviews the corrected proposal before UI implementation proceeds. Parent owns that approval and final integration SHA; this independent review does not grant it.
+6. After integration, supply the full exact SHA, clean served asset provenance and responses to findings. Execute independent graph and fresh UI A1–A9, preserve first failures, verify canonical/generated media. Browser/source/package/installed evidence remain separate. A10 requires the user's representative-model product review; tests or screenshots cannot substitute.
+
+## Current completion boundary
+
+Proposal review and new fixture/oracle delivery only. Fixture self-checks are authoring checks; candidate runner is syntax-checked but unexecuted. Browser observation oracle is unexecuted against any candidate and needs actual integrated captures. No acceptance verdict, installed-app claim or merge/release approval. Next owner: parent coordinator, to obtain the revised design/contract and user review, then provide an exact redesigned integration SHA.

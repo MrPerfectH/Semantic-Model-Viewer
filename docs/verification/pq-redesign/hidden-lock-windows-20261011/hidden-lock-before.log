@@ -1,0 +1,457 @@
+TAP version 13
+# Subtest: hidden locked root: category, dim; reset retains navigation and layout
+not ok 1 - hidden locked root: category, dim; reset retains navigation and layout
+  ---
+  duration_ms: 53.4845
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:72:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Locked focus.*FinalOutput.*hidden/i. Input:
+    
+    ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: ''
+  operator: 'match'
+  stack: |-
+    hidden (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:68:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:77:34)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: hidden locked root: group, dim; reset retains navigation and layout
+not ok 2 - hidden locked root: group, dim; reset retains navigation and layout
+  ---
+  duration_ms: 13.3602
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:72:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Locked focus.*FinalOutput.*hidden/i. Input:
+    
+    ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: ''
+  operator: 'match'
+  stack: |-
+    hidden (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:68:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:77:34)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: hidden locked root: both, dim; reset retains navigation and layout
+not ok 3 - hidden locked root: both, dim; reset retains navigation and layout
+  ---
+  duration_ms: 12.8055
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:72:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Locked focus.*FinalOutput.*hidden/i. Input:
+    
+    ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: ''
+  operator: 'match'
+  stack: |-
+    hidden (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:68:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:77:34)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: hidden locked root: category, hide; reset retains navigation and layout
+not ok 4 - hidden locked root: category, hide; reset retains navigation and layout
+  ---
+  duration_ms: 10.4758
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:72:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Locked focus.*FinalOutput.*hidden/i. Input:
+    
+    ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: ''
+  operator: 'match'
+  stack: |-
+    hidden (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:68:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:77:34)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: hidden locked root: group, hide; reset retains navigation and layout
+not ok 5 - hidden locked root: group, hide; reset retains navigation and layout
+  ---
+  duration_ms: 11.1145
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:72:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Locked focus.*FinalOutput.*hidden/i. Input:
+    
+    ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: ''
+  operator: 'match'
+  stack: |-
+    hidden (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:68:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:77:34)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: hidden locked root: both, hide; reset retains navigation and layout
+not ok 6 - hidden locked root: both, hide; reset retains navigation and layout
+  ---
+  duration_ms: 7.0294
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:72:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Locked focus.*FinalOutput.*hidden/i. Input:
+    
+    ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: ''
+  operator: 'match'
+  stack: |-
+    hidden (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:68:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:77:34)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: search and library facets do not falsely describe a visible locked root as hidden
+not ok 7 - search and library facets do not falsely describe a visible locked root as hidden
+  ---
+  duration_ms: 10.3673
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:88:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Locked focus.*FinalOutput.*hidden/i. Input:
+    
+    ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: ''
+  operator: 'match'
+  stack: |-
+    hidden (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:68:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:96:48)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: a membership-excluded locked root offers Show all with its existing unlock contract
+not ok 8 - a membership-excluded locked root offers Show all with its existing unlock contract
+  ---
+  duration_ms: 6.9289
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:102:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Locked focus.*FinalOutput.*hidden/i. Input:
+    
+    ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: ''
+  operator: 'match'
+  stack: |-
+    hidden (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:68:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:105:57)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: selected-hidden explanation coexists with lock explanation and disappears on reset
+not ok 9 - selected-hidden explanation coexists with lock explanation and disappears on reset
+  ---
+  duration_ms: 7.0152
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:115:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Locked focus.*FinalOutput.*hidden/. Input:
+    
+    'Selected object hidden by filter. Inspector retained.Show all'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: 'Selected object hidden by filter. Inspector retained.Show all'
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:117:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: selected locked root gets one lock explanation and reset does not unlock it
+not ok 10 - selected locked root gets one lock explanation and reset does not unlock it
+  ---
+  duration_ms: 7.7702
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:126:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Locked focus.*FinalOutput.*hidden/. Input:
+    
+    'Selected object hidden by filter. Inspector retained.Show all'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: 'Selected object hidden by filter. Inspector retained.Show all'
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:129:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: Back and Undo recompute the explanation from restored lock and filters
+not ok 11 - Back and Undo recompute the explanation from restored lock and filters
+  ---
+  duration_ms: 8.3864
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:135:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Locked focus.*FinalOutput.*hidden/i. Input:
+    
+    ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: ''
+  operator: 'match'
+  stack: |-
+    hidden (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:68:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:138:19)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: detached Reset filters cannot affect navigation
+not ok 12 - detached Reset filters cannot affect navigation
+  ---
+  duration_ms: 7.9586
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:146:3'
+  failureType: 'testCodeFailure'
+  error: 'discoverable banner action: Reset filters'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    button (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:62:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:149:33)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: detached Reset filters cannot affect reset
+not ok 13 - detached Reset filters cannot affect reset
+  ---
+  duration_ms: 5.3524
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:146:3'
+  failureType: 'testCodeFailure'
+  error: 'discoverable banner action: Reset filters'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    button (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:62:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:149:33)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: detached Reset filters cannot affect replacement
+not ok 14 - detached Reset filters cannot affect replacement
+  ---
+  duration_ms: 9.8199
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:146:3'
+  failureType: 'testCodeFailure'
+  error: 'discoverable banner action: Reset filters'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    button (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:62:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:149:33)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: detached Show all cannot affect navigation
+not ok 15 - detached Show all cannot affect navigation
+  ---
+  duration_ms: 5.2062
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:146:3'
+  failureType: 'testCodeFailure'
+  error: 'discoverable banner action: Show all'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    button (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:62:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:149:33)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: detached Show all cannot affect reset
+not ok 16 - detached Show all cannot affect reset
+  ---
+  duration_ms: 5.7649
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:146:3'
+  failureType: 'testCodeFailure'
+  error: 'discoverable banner action: Show all'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    button (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:62:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:149:33)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: detached Show all cannot affect replacement
+not ok 17 - detached Show all cannot affect replacement
+  ---
+  duration_ms: 6.3679
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:146:3'
+  failureType: 'testCodeFailure'
+  error: 'discoverable banner action: Show all'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    button (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:62:10)
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:149:33)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: a markup-shaped locked label is rendered as text
+not ok 18 - a markup-shaped locked label is rendered as text
+  ---
+  duration_ms: 5.6096
+  type: 'test'
+  location: 'C:\\Users\\PrzemekHarazny\\pq-r10-windows\\worktree\\tests\\power-query-hidden-lock.test.cjs:159:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /<img src=x onerror=bad\(\)>/. Input:
+    
+    ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: ''
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\PrzemekHarazny\pq-r10-windows\worktree\tests\power-query-hidden-lock.test.cjs:162:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 0
+# fail 18
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 370.4932

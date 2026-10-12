@@ -1,0 +1,7 @@
+{
+  "candidate": "963638aeb2d124460709374004ddcf0799268ada",
+  "checks": [
+    "explicit Frame applies target inputs1 inputs2 consumers1 selected-only while inspection RawWest unchanged; each Back exact"
+  ],
+  "failures": []
+}

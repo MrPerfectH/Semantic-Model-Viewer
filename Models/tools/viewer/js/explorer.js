@@ -53,7 +53,7 @@
       self.closeMenus(true);
     },true);
     window.addEventListener('keydown', function(e){
-      if(e.key==='Escape'){if(self.closeMenus())e.stopPropagation();else if(app.canvas.marked.size)app.canvas.setMarked([]);return;}
+      if(e.key==='Escape'){if(app.state.viewMode!=='graph')return;if(self.closeMenus())e.stopPropagation();else if(app.canvas.marked.size)app.canvas.setMarked([]);return;}
       if(e.key!=='Delete'&&e.key!=='Backspace')return;
       var t=e.target,tag=t&&t.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||(t&&t.isContentEditable))return;
       if(app.state.viewMode!=='graph'||!app.state.loaded)return;

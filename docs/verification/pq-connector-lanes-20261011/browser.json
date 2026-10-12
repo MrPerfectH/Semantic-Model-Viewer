@@ -1,0 +1,737 @@
+{
+  "candidate": "d29b0e8cab106bb0ccf6e2991a0dfbfc1426d867",
+  "boundary": "Registered T3 browser, own synthetic import. Card coordinates and canvas zoom set through public APIs; four pointer activations and close controls trusted. Numeric canvas zoom, not browser 200% zoom or native acceptance.",
+  "before": {
+    "candidate": "737eae446e51604b2b1175376973d0f6110f07c4",
+    "view": {
+      "x": 0,
+      "y": 0,
+      "k": 0.58
+    },
+    "layout": [
+      [
+        "[\"partition\",\"Final\",\"Final\"]",
+        {
+          "x": 1100,
+          "y": 360
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"InputA\"]",
+        {
+          "x": 200,
+          "y": 180
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"InputB\"]",
+        {
+          "x": 750,
+          "y": 30
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"InputC\"]",
+        {
+          "x": 40,
+          "y": 660
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"InputD\"]",
+        {
+          "x": 40,
+          "y": 800
+        }
+      ]
+    ],
+    "graph": {
+      "nodes": [
+        {
+          "id": "[\"partition\",\"Final\",\"Final\"]",
+          "metadataId": "[\"partition\",\"Final\",\"Final\"]",
+          "label": "Final",
+          "subtitle": "m · Final",
+          "kind": "partition",
+          "table": "Final",
+          "partition": "Final",
+          "state": "available",
+          "sourceEvidence": []
+        },
+        {
+          "id": "[\"expression\",\"\",\"InputA\"]",
+          "metadataId": "[\"expression\",\"\",\"InputA\"]",
+          "label": "InputA",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available",
+          "sourceEvidence": [
+            {
+              "name": "#table",
+              "provider": "Inline table",
+              "at": 0,
+              "end": 6
+            }
+          ]
+        },
+        {
+          "id": "[\"expression\",\"\",\"InputB\"]",
+          "metadataId": "[\"expression\",\"\",\"InputB\"]",
+          "label": "InputB",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available",
+          "sourceEvidence": [
+            {
+              "name": "#table",
+              "provider": "Inline table",
+              "at": 0,
+              "end": 6
+            }
+          ]
+        },
+        {
+          "id": "[\"expression\",\"\",\"InputC\"]",
+          "metadataId": "[\"expression\",\"\",\"InputC\"]",
+          "label": "InputC",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available",
+          "sourceEvidence": [
+            {
+              "name": "#table",
+              "provider": "Inline table",
+              "at": 0,
+              "end": 6
+            }
+          ]
+        },
+        {
+          "id": "[\"expression\",\"\",\"InputD\"]",
+          "metadataId": "[\"expression\",\"\",\"InputD\"]",
+          "label": "InputD",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available",
+          "sourceEvidence": [
+            {
+              "name": "#table",
+              "provider": "Inline table",
+              "at": 0,
+              "end": 6
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"InputA\\\"]\",\"[\\\"partition\\\",\\\"Final\\\",\\\"Final\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"InputA\"]",
+          "consumerId": "[\"partition\",\"Final\",\"Final\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"InputA\"]",
+              "name": "InputA",
+              "at": 15,
+              "end": 21
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"InputB\\\"]\",\"[\\\"partition\\\",\\\"Final\\\",\\\"Final\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"InputB\"]",
+          "consumerId": "[\"partition\",\"Final\",\"Final\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"InputB\"]",
+              "name": "InputB",
+              "at": 22,
+              "end": 28
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"InputC\\\"]\",\"[\\\"partition\\\",\\\"Final\\\",\\\"Final\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"InputC\"]",
+          "consumerId": "[\"partition\",\"Final\",\"Final\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"InputC\"]",
+              "name": "InputC",
+              "at": 29,
+              "end": 35
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"InputD\\\"]\",\"[\\\"partition\\\",\\\"Final\\\",\\\"Final\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"InputD\"]",
+          "consumerId": "[\"partition\",\"Final\",\"Final\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"InputD\"]",
+              "name": "InputD",
+              "at": 36,
+              "end": 42
+            }
+          ]
+        }
+      ],
+      "issues": [
+        {
+          "consumerId": "[\"partition\",\"Final\",\"Final\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved name: Table.Combine. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+        },
+        {
+          "consumerId": null,
+          "kind": "analysis-notice",
+          "message": "Links come from reading M text, without running queries. Some links may be missing; no arrow does not mean no dependency."
+        }
+      ],
+      "generation": 3,
+      "analysisProgress": {
+        "analyzed": 5,
+        "total": 5,
+        "complete": true,
+        "generation": 3
+      }
+    },
+    "paths": [
+      {
+        "title": "InputA is referenced by Final",
+        "d": "M 452.0 228.0 L 767.0 228.0 Q 776.0 228.0 776.0 237.0 L 776.0 399.0 Q 776.0 408.0 785.0 408.0 L 1100.0 408.0"
+      },
+      {
+        "title": "InputB is referenced by Final",
+        "d": "M 1002.0 78.0 L 1042.0 78.0 Q 1051.0 78.0 1051.0 87.0 L 1051.0 399.0 Q 1051.0 408.0 1060.0 408.0 L 1100.0 408.0"
+      },
+      {
+        "title": "InputC is referenced by Final",
+        "d": "M 292.0 708.0 L 687.0 708.0 Q 696.0 708.0 696.0 699.0 L 696.0 417.0 Q 696.0 408.0 705.0 408.0 L 1100.0 408.0"
+      },
+      {
+        "title": "InputD is referenced by Final",
+        "d": "M 292.0 848.0 L 687.0 848.0 Q 696.0 848.0 696.0 839.0 L 696.0 417.0 Q 696.0 408.0 705.0 408.0 L 1100.0 408.0"
+      }
+    ]
+  },
+  "after": {
+    "view": {
+      "x": 0,
+      "y": 0,
+      "k": 0.58
+    },
+    "positions": [
+      [
+        "[\"partition\",\"Final\",\"Final\"]",
+        {
+          "x": 1100,
+          "y": 360
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"InputA\"]",
+        {
+          "x": 200,
+          "y": 180
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"InputB\"]",
+        {
+          "x": 750,
+          "y": 30
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"InputC\"]",
+        {
+          "x": 40,
+          "y": 660
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"InputD\"]",
+        {
+          "x": 40,
+          "y": 800
+        }
+      ]
+    ],
+    "paths": [
+      {
+        "title": "InputA is referenced by Final",
+        "d": "M 452.0 228.0 L 767.0 228.0 Q 776.0 228.0 776.0 237.0 L 776.0 387.0 Q 776.0 396.0 785.0 396.0 L 1100.0 396.0",
+        "status": "routed",
+        "ownSamples": 99,
+        "click": {
+          "x": 718.0799870491028,
+          "y": 334.45999479293823
+        }
+      },
+      {
+        "title": "InputB is referenced by Final",
+        "d": "M 1002.0 78.0 L 1042.0 78.0 Q 1051.0 78.0 1051.0 87.0 L 1051.0 363.0 Q 1051.0 372.0 1060.0 372.0 L 1100.0 372.0",
+        "status": "routed",
+        "ownSamples": 99,
+        "click": {
+          "x": 877.5799824595451,
+          "y": 283.9999962449074
+        }
+      },
+      {
+        "title": "InputC is referenced by Final",
+        "d": "M 292.0 708.0 L 687.0 708.0 Q 696.0 708.0 696.0 699.0 L 696.0 429.0 Q 696.0 420.0 705.0 420.0 L 1100.0 420.0",
+        "status": "routed",
+        "ownSamples": 94,
+        "click": {
+          "x": 671.6799883842468,
+          "y": 480.6199905872345
+        }
+      },
+      {
+        "title": "InputD is referenced by Final",
+        "d": "M 292.0 848.0 L 663.0 848.0 Q 672.0 848.0 672.0 839.0 L 672.0 453.0 Q 672.0 444.0 681.0 444.0 L 1100.0 444.0",
+        "status": "routed",
+        "ownSamples": 99,
+        "click": {
+          "x": 657.75998878479,
+          "y": 514.2599896192551
+        }
+      }
+    ],
+    "status": "",
+    "graph": {
+      "nodes": [
+        {
+          "id": "[\"partition\",\"Final\",\"Final\"]",
+          "metadataId": "[\"partition\",\"Final\",\"Final\"]",
+          "label": "Final",
+          "subtitle": "m · Final",
+          "kind": "partition",
+          "table": "Final",
+          "partition": "Final",
+          "state": "available",
+          "sourceEvidence": []
+        },
+        {
+          "id": "[\"expression\",\"\",\"InputA\"]",
+          "metadataId": "[\"expression\",\"\",\"InputA\"]",
+          "label": "InputA",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available",
+          "sourceEvidence": [
+            {
+              "name": "#table",
+              "provider": "Inline table",
+              "at": 0,
+              "end": 6
+            }
+          ]
+        },
+        {
+          "id": "[\"expression\",\"\",\"InputB\"]",
+          "metadataId": "[\"expression\",\"\",\"InputB\"]",
+          "label": "InputB",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available",
+          "sourceEvidence": [
+            {
+              "name": "#table",
+              "provider": "Inline table",
+              "at": 0,
+              "end": 6
+            }
+          ]
+        },
+        {
+          "id": "[\"expression\",\"\",\"InputC\"]",
+          "metadataId": "[\"expression\",\"\",\"InputC\"]",
+          "label": "InputC",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available",
+          "sourceEvidence": [
+            {
+              "name": "#table",
+              "provider": "Inline table",
+              "at": 0,
+              "end": 6
+            }
+          ]
+        },
+        {
+          "id": "[\"expression\",\"\",\"InputD\"]",
+          "metadataId": "[\"expression\",\"\",\"InputD\"]",
+          "label": "InputD",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available",
+          "sourceEvidence": [
+            {
+              "name": "#table",
+              "provider": "Inline table",
+              "at": 0,
+              "end": 6
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"InputA\\\"]\",\"[\\\"partition\\\",\\\"Final\\\",\\\"Final\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"InputA\"]",
+          "consumerId": "[\"partition\",\"Final\",\"Final\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"InputA\"]",
+              "name": "InputA",
+              "at": 15,
+              "end": 21
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"InputB\\\"]\",\"[\\\"partition\\\",\\\"Final\\\",\\\"Final\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"InputB\"]",
+          "consumerId": "[\"partition\",\"Final\",\"Final\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"InputB\"]",
+              "name": "InputB",
+              "at": 22,
+              "end": 28
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"InputC\\\"]\",\"[\\\"partition\\\",\\\"Final\\\",\\\"Final\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"InputC\"]",
+          "consumerId": "[\"partition\",\"Final\",\"Final\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"InputC\"]",
+              "name": "InputC",
+              "at": 29,
+              "end": 35
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"InputD\\\"]\",\"[\\\"partition\\\",\\\"Final\\\",\\\"Final\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"InputD\"]",
+          "consumerId": "[\"partition\",\"Final\",\"Final\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"InputD\"]",
+              "name": "InputD",
+              "at": 36,
+              "end": 42
+            }
+          ]
+        }
+      ],
+      "issues": [
+        {
+          "consumerId": "[\"partition\",\"Final\",\"Final\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Unresolved name: Table.Combine. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+        },
+        {
+          "consumerId": null,
+          "kind": "analysis-notice",
+          "message": "Links come from reading M text, without running queries. Some links may be missing; no arrow does not mean no dependency."
+        }
+      ],
+      "generation": 2,
+      "analysisProgress": {
+        "analyzed": 5,
+        "total": 5,
+        "complete": true,
+        "generation": 2
+      }
+    }
+  },
+  "matrix": {
+    "results": [
+      {
+        "k": 0.58,
+        "rendered": 4,
+        "overlaps": [],
+        "minimumPortGapScreen": 13.919999999999998,
+        "status": "",
+        "paths": [
+          {
+            "title": "InputA is referenced by Final",
+            "d": "M 452.0 228.0 L 767.0 228.0 Q 776.0 228.0 776.0 237.0 L 776.0 387.0 Q 776.0 396.0 785.0 396.0 L 1100.0 396.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputB is referenced by Final",
+            "d": "M 1002.0 78.0 L 1042.0 78.0 Q 1051.0 78.0 1051.0 87.0 L 1051.0 363.0 Q 1051.0 372.0 1060.0 372.0 L 1100.0 372.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputC is referenced by Final",
+            "d": "M 292.0 708.0 L 687.0 708.0 Q 696.0 708.0 696.0 699.0 L 696.0 429.0 Q 696.0 420.0 705.0 420.0 L 1100.0 420.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputD is referenced by Final",
+            "d": "M 292.0 848.0 L 663.0 848.0 Q 672.0 848.0 672.0 839.0 L 672.0 453.0 Q 672.0 444.0 681.0 444.0 L 1100.0 444.0",
+            "status": "routed"
+          }
+        ]
+      },
+      {
+        "k": 0.47,
+        "rendered": 4,
+        "overlaps": [],
+        "minimumPortGapScreen": 11.28,
+        "status": "",
+        "paths": [
+          {
+            "title": "InputA is referenced by Final",
+            "d": "M 452.0 228.0 L 767.0 228.0 Q 776.0 228.0 776.0 237.0 L 776.0 387.0 Q 776.0 396.0 785.0 396.0 L 1100.0 396.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputB is referenced by Final",
+            "d": "M 1002.0 78.0 L 1042.0 78.0 Q 1051.0 78.0 1051.0 87.0 L 1051.0 363.0 Q 1051.0 372.0 1060.0 372.0 L 1100.0 372.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputC is referenced by Final",
+            "d": "M 292.0 708.0 L 687.0 708.0 Q 696.0 708.0 696.0 699.0 L 696.0 429.0 Q 696.0 420.0 705.0 420.0 L 1100.0 420.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputD is referenced by Final",
+            "d": "M 292.0 848.0 L 663.0 848.0 Q 672.0 848.0 672.0 839.0 L 672.0 453.0 Q 672.0 444.0 681.0 444.0 L 1100.0 444.0",
+            "status": "routed"
+          }
+        ]
+      },
+      {
+        "k": 0.37,
+        "rendered": 4,
+        "overlaps": [],
+        "minimumPortGapScreen": 8.879999999999999,
+        "status": "",
+        "paths": [
+          {
+            "title": "InputA is referenced by Final",
+            "d": "M 452.0 228.0 L 767.0 228.0 Q 776.0 228.0 776.0 237.0 L 776.0 387.0 Q 776.0 396.0 785.0 396.0 L 1100.0 396.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputB is referenced by Final",
+            "d": "M 1002.0 78.0 L 1042.0 78.0 Q 1051.0 78.0 1051.0 87.0 L 1051.0 363.0 Q 1051.0 372.0 1060.0 372.0 L 1100.0 372.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputC is referenced by Final",
+            "d": "M 292.0 708.0 L 687.0 708.0 Q 696.0 708.0 696.0 699.0 L 696.0 429.0 Q 696.0 420.0 705.0 420.0 L 1100.0 420.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputD is referenced by Final",
+            "d": "M 292.0 848.0 L 663.0 848.0 Q 672.0 848.0 672.0 839.0 L 672.0 453.0 Q 672.0 444.0 681.0 444.0 L 1100.0 444.0",
+            "status": "routed"
+          }
+        ]
+      },
+      {
+        "k": 0.3,
+        "rendered": 4,
+        "overlaps": [],
+        "minimumPortGapScreen": 7.980000000000007,
+        "status": "",
+        "paths": [
+          {
+            "title": "InputA is referenced by Final",
+            "d": "M 452.0 228.0 L 767.0 228.0 Q 776.0 228.0 776.0 237.0 L 776.0 385.7 Q 776.0 394.7 785.0 394.7 L 1100.0 394.7",
+            "status": "routed"
+          },
+          {
+            "title": "InputB is referenced by Final",
+            "d": "M 1002.0 78.0 L 1042.0 78.0 Q 1051.0 78.0 1051.0 87.0 L 1051.0 359.0 Q 1051.0 368.0 1060.0 368.0 L 1100.0 368.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputC is referenced by Final",
+            "d": "M 292.0 708.0 L 687.0 708.0 Q 696.0 708.0 696.0 699.0 L 696.0 430.3 Q 696.0 421.3 705.0 421.3 L 1100.0 421.3",
+            "status": "routed"
+          },
+          {
+            "title": "InputD is referenced by Final",
+            "d": "M 292.0 848.0 L 660.3 848.0 Q 669.3 848.0 669.3 839.0 L 669.3 457.0 Q 669.3 448.0 678.3 448.0 L 1100.0 448.0",
+            "status": "routed"
+          }
+        ]
+      },
+      {
+        "k": 0.85,
+        "rendered": 4,
+        "overlaps": [],
+        "minimumPortGapScreen": 20.4,
+        "status": "",
+        "paths": [
+          {
+            "title": "InputA is referenced by Final",
+            "d": "M 452.0 228.0 L 767.0 228.0 Q 776.0 228.0 776.0 237.0 L 776.0 387.0 Q 776.0 396.0 785.0 396.0 L 1100.0 396.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputB is referenced by Final",
+            "d": "M 1002.0 78.0 L 1042.0 78.0 Q 1051.0 78.0 1051.0 87.0 L 1051.0 363.0 Q 1051.0 372.0 1060.0 372.0 L 1100.0 372.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputC is referenced by Final",
+            "d": "M 292.0 708.0 L 687.0 708.0 Q 696.0 708.0 696.0 699.0 L 696.0 429.0 Q 696.0 420.0 705.0 420.0 L 1100.0 420.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputD is referenced by Final",
+            "d": "M 292.0 848.0 L 663.0 848.0 Q 672.0 848.0 672.0 839.0 L 672.0 453.0 Q 672.0 444.0 681.0 444.0 L 1100.0 444.0",
+            "status": "routed"
+          }
+        ]
+      },
+      {
+        "k": 1,
+        "rendered": 4,
+        "overlaps": [],
+        "minimumPortGapScreen": 24,
+        "status": "",
+        "paths": [
+          {
+            "title": "InputA is referenced by Final",
+            "d": "M 452.0 228.0 L 767.0 228.0 Q 776.0 228.0 776.0 237.0 L 776.0 387.0 Q 776.0 396.0 785.0 396.0 L 1100.0 396.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputB is referenced by Final",
+            "d": "M 1002.0 78.0 L 1042.0 78.0 Q 1051.0 78.0 1051.0 87.0 L 1051.0 363.0 Q 1051.0 372.0 1060.0 372.0 L 1100.0 372.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputC is referenced by Final",
+            "d": "M 292.0 708.0 L 687.0 708.0 Q 696.0 708.0 696.0 699.0 L 696.0 429.0 Q 696.0 420.0 705.0 420.0 L 1100.0 420.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputD is referenced by Final",
+            "d": "M 292.0 848.0 L 663.0 848.0 Q 672.0 848.0 672.0 839.0 L 672.0 453.0 Q 672.0 444.0 681.0 444.0 L 1100.0 444.0",
+            "status": "routed"
+          }
+        ]
+      },
+      {
+        "k": 2,
+        "rendered": 4,
+        "overlaps": [],
+        "minimumPortGapScreen": 48,
+        "status": "",
+        "paths": [
+          {
+            "title": "InputA is referenced by Final",
+            "d": "M 452.0 228.0 L 767.0 228.0 Q 776.0 228.0 776.0 237.0 L 776.0 387.0 Q 776.0 396.0 785.0 396.0 L 1100.0 396.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputB is referenced by Final",
+            "d": "M 1002.0 78.0 L 1042.0 78.0 Q 1051.0 78.0 1051.0 87.0 L 1051.0 363.0 Q 1051.0 372.0 1060.0 372.0 L 1100.0 372.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputC is referenced by Final",
+            "d": "M 292.0 708.0 L 687.0 708.0 Q 696.0 708.0 696.0 699.0 L 696.0 429.0 Q 696.0 420.0 705.0 420.0 L 1100.0 420.0",
+            "status": "routed"
+          },
+          {
+            "title": "InputD is referenced by Final",
+            "d": "M 292.0 848.0 L 663.0 848.0 Q 672.0 848.0 672.0 839.0 L 672.0 453.0 Q 672.0 444.0 681.0 444.0 L 1100.0 444.0",
+            "status": "routed"
+          }
+        ]
+      }
+    ],
+    "panStable": true,
+    "hiddenPaths": 3,
+    "restoreDeterministic": true,
+    "graphUnchanged": true,
+    "positionsUnchanged": true,
+    "selection": null
+  },
+  "trustedClicks": [
+    {
+      "index": 0,
+      "point": {
+        "x": 718.0799870491028,
+        "y": 334.45999479293823
+      },
+      "text": "InputA is referenced by Final\nClose reference details\nLine 1, column 16 · InputA",
+      "close": {
+        "x": 807.578125,
+        "y": 314.5
+      }
+    },
+    {
+      "index": 1,
+      "point": {
+        "x": 877.5799824595451,
+        "y": 283.9999962449074
+      },
+      "text": "InputB is referenced by Final\nClose reference details\nLine 1, column 23 · InputB",
+      "close": {
+        "x": 966.578125,
+        "y": 264.5
+      }
+    },
+    {
+      "index": 2,
+      "point": {
+        "x": 671.6799883842468,
+        "y": 480.6199905872345
+      },
+      "text": "InputC is referenced by Final\nClose reference details\nLine 1, column 30 · InputC",
+      "close": {
+        "x": 760.578125,
+        "y": 460.5
+      }
+    },
+    {
+      "index": 3,
+      "point": {
+        "x": 657.75998878479,
+        "y": 514.2599896192551
+      },
+      "text": "InputD is referenced by Final\nClose reference details\nLine 1, column 37 · InputD",
+      "close": {
+        "x": 746.578125,
+        "y": 494.5
+      }
+    }
+  ]
+}

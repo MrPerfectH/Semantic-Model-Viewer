@@ -1,0 +1,190 @@
+{
+  "viewport": {
+    "x": 137,
+    "y": 93,
+    "k": 0.46
+  },
+  "layout": [
+    [
+      "[\"partition\",\"Report\",\"Report\"]",
+      {
+        "x": 1760,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Server\"]",
+      {
+        "x": 0,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Raw West\"]",
+      {
+        "x": 352,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Raw East\"]",
+      {
+        "x": 352,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Prepared\"]",
+      {
+        "x": 704,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Merged Query\"]",
+      {
+        "x": 1056,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      {
+        "x": 1408,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Downstream\"]",
+      {
+        "x": 1760,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      {
+        "x": 704,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CycleA\"]",
+      {
+        "x": 0,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CycleB\"]",
+      {
+        "x": 0,
+        "y": 252
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"LanguageProbe\"]",
+      {
+        "x": 704,
+        "y": 252
+      }
+    ],
+    [
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      {
+        "x": 0,
+        "y": 454
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Standalone\"]",
+      {
+        "x": 294,
+        "y": 454
+      }
+    ]
+  ],
+  "body": {
+    "x": 0,
+    "y": 0
+  },
+  "selected": "[\"expression\",\"\",\"LanguageProbe\"]",
+  "root": "[\"expression\",\"\",\"FinalOutput\"]",
+  "open": true,
+  "dock": "bottom",
+  "below": true,
+  "width": 420,
+  "height": 420,
+  "prefs": {
+    "dock": "bottom",
+    "width": 420,
+    "height": 420
+  },
+  "nav": {
+    "membership": [
+      "[\"partition\",\"Report\",\"Report\"]",
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Downstream\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      "[\"expression\",\"\",\"Standalone\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"LanguageProbe\"]"
+    ],
+    "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "focusMode": "dim",
+    "direction": "inputs",
+    "depth": null,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 3,
+    "selectedId": "[\"expression\",\"\",\"LanguageProbe\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": 137,
+      "y": 93,
+      "k": 0.46
+    },
+    "bodyScroll": {
+      "x": 0,
+      "y": 0
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": true,
+      "focus": null,
+      "disclosures": {
+        "provenance": false,
+        "analysis": false
+      },
+      "expanded": false
+    },
+    "category": "all",
+    "query": ""
+  },
+  "visible": [
+    "[\"partition\",\"Report\",\"Report\"]",
+    "[\"partition\",\"Lookup\",\"Lookup\"]",
+    "[\"expression\",\"\",\"Server\"]",
+    "[\"expression\",\"\",\"Raw West\"]",
+    "[\"expression\",\"\",\"Raw East\"]",
+    "[\"expression\",\"\",\"Prepared\"]",
+    "[\"expression\",\"\",\"Merged Query\"]",
+    "[\"expression\",\"\",\"FinalOutput\"]",
+    "[\"expression\",\"\",\"Downstream\"]",
+    "[\"expression\",\"\",\"CoConsumer\"]",
+    "[\"expression\",\"\",\"Standalone\"]",
+    "[\"expression\",\"\",\"CycleA\"]",
+    "[\"expression\",\"\",\"CycleB\"]",
+    "[\"expression\",\"\",\"LanguageProbe\"]"
+  ]
+}

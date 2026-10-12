@@ -1,0 +1,20 @@
+{
+  "previewTab": "tab_2l_9fb37a1a-9d5e-4eca-a366-3aa050ab491f",
+  "previewClose": "T3 returned success",
+  "servers": [
+    {
+      "pid": 76493,
+      "port": 54089,
+      "command": "/opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python tests/pq-redesign-independent-alignment-server.py 54089 docs/verification/pq-redesign/reader-connectors-9c3b836/served",
+      "action": "SIGTERM owned server"
+    },
+    {
+      "pid": 82300,
+      "port": 54090,
+      "command": "/opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python tests/pq-redesign-independent-alignment-server.py 54090 docs/verification/pq-redesign/reader-connectors-9c3b836/served",
+      "action": "SIGTERM owned server"
+    }
+  ],
+  "chrome": "Scoped scripts completed and closed their temporary profiles in finally; no user/native browser operated",
+  "afterHold": "No production replay or source change"
+}

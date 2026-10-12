@@ -1,0 +1,8 @@
+{
+  "environmentId": "64860a54-e847-4302-8536-4d81fdc2be6e",
+  "platform": "darwin/arm64",
+  "catalogDiscovery": "environment_read + orchestrator_capabilities; provider/thread surfaces only; no remote environment or execution routing selector exposed",
+  "genericExecution": "NOT RUN; Linux/Windows prerequisite",
+  "nativeBrowser": "user expressly authorizes local actual Chrome zoom and browser UI",
+  "newJobs": false
+}

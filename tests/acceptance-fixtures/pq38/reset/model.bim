@@ -1,0 +1,65 @@
+{
+  "name": "PQ38 Synthetic",
+  "model": {
+    "tables": [
+      {
+        "name": "Acceptance Sales",
+        "columns": [
+          {
+            "name": "Amount",
+            "dataType": "int64"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Acceptance Total",
+            "expression": "SUM('Acceptance Sales'[Amount])"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Main 'quoted'",
+            "source": {
+              "type": "m",
+              "expression": "Replacement"
+            }
+          },
+          {
+            "name": "Other",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "  x = Scalar",
+                "in x"
+              ]
+            }
+          },
+          {
+            "name": "Calculated",
+            "source": {
+              "type": "calculated",
+              "expression": "ROW(\"Amount\", 1)"
+            }
+          },
+          {
+            "name": "Missing"
+          }
+        ]
+      },
+      {
+        "name": "No Partitions",
+        "columns": [],
+        "partitions": []
+      }
+    ],
+    "expressions": [
+      {
+        "name": "Replacement",
+        "kind": "m",
+        "expression": "999"
+      }
+    ],
+    "relationships": []
+  }
+}

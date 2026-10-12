@@ -1,0 +1,203 @@
+{
+  "bytes": 755708,
+  "sha256": "3e6a1a4b6542a6eb20947d58958d372cdcd8ee069a24b5fd5d61a862a0d83101",
+  "payload": {
+    "format": "semantic-model-viewer",
+    "version": 1,
+    "name": "Independent followup groups",
+    "createdAt": "2026-10-09T14:46:54.662Z",
+    "model": {
+      "name": "Independent followup groups",
+      "tables": [
+        {
+          "name": "SyntheticSales",
+          "domain": "Measures",
+          "role": "measures",
+          "baseRole": "measures",
+          "autoRole": "measures",
+          "roleVia": "structural",
+          "columns": [
+            {
+              "name": "Amount",
+              "dataType": "int64",
+              "hidden": false,
+              "isCalc": false,
+              "isKey": false,
+              "rel": false
+            }
+          ],
+          "measures": [
+            {
+              "name": "Base Amount",
+              "dax": "SUM(SyntheticSales[Amount])",
+              "fmt": "",
+              "folder": ""
+            },
+            {
+              "name": "Formatted Probe",
+              "dax": "VAR total=[Base Amount] RETURN DIVIDE(total,2,0)",
+              "fmt": "",
+              "folder": ""
+            }
+          ],
+          "colCount": 1,
+          "measureCount": 2,
+          "source": {
+            "kind": "manual"
+          }
+        }
+      ],
+      "relationships": []
+    },
+    "usage": null,
+    "settings": {
+      "roleRules": [
+        {
+          "role": "fact",
+          "name": "(^|[._])(fact|fct)_",
+          "sides": "",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "dim",
+          "name": "(^|[._])dim_",
+          "sides": "",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "helper",
+          "name": "",
+          "sides": "none",
+          "measures": "",
+          "kind": "manual"
+        },
+        {
+          "role": "helper",
+          "name": "",
+          "sides": "none",
+          "measures": "",
+          "kind": "calculated"
+        },
+        {
+          "role": "standalone",
+          "name": "",
+          "sides": "none",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "fact",
+          "name": "",
+          "sides": "many",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "dim",
+          "name": "",
+          "sides": "one",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "fact",
+          "name": "",
+          "sides": "mostlyMany",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "dim",
+          "name": "",
+          "sides": "mostlyOne",
+          "measures": "",
+          "kind": ""
+        },
+        {
+          "role": "dim",
+          "name": "",
+          "sides": "",
+          "measures": "",
+          "kind": ""
+        }
+      ]
+    },
+    "workspace": {
+      "viewMode": "power-query",
+      "tableView": {
+        "version": 2,
+        "name": "Snapshot starting view",
+        "pos": {
+          "SyntheticSales": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "view": {
+          "x": 137,
+          "y": 93,
+          "k": 0.9
+        },
+        "focus": {
+          "selected": "SyntheticSales",
+          "isolate": false,
+          "depth": 1,
+          "pinned": [],
+          "locked": null
+        },
+        "display": {
+          "detail": "auto",
+          "lines": "ortho",
+          "color": "domain",
+          "expanded": []
+        },
+        "tables": [
+          "SyntheticSales"
+        ]
+      },
+      "presets": [],
+      "matrix": {
+        "scrollLeft": 0,
+        "scrollTop": 0
+      },
+      "explorer": {
+        "query": "",
+        "filter": "all",
+        "direction": "connected",
+        "depth": "direct",
+        "includeInactive": true,
+        "mapHidden": false
+      },
+      "domains": null
+    },
+    "measures": {
+      "version": 1,
+      "selectedMeasure": "Formatted Probe",
+      "comparisonMeasure": null,
+      "extraMeasures": [],
+      "library": {
+        "query": "",
+        "visibility": "all",
+        "homeTable": "",
+        "openFolders": [],
+        "width": 296
+      },
+      "preferences": {
+        "mode": "split",
+        "split": "beside",
+        "besideShare": 0.55,
+        "belowShare": 0.52,
+        "orientation": "lr",
+        "wrap": true
+      },
+      "graph": {
+        "zoom": 0.8431952662721893,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "autoFit": false
+      }
+    }
+  }
+}

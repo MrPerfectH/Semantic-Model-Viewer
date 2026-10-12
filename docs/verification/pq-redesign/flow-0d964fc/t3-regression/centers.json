@@ -1,0 +1,842 @@
+{
+  "centers": [
+    {
+      "nav": {
+        "membership": [
+          "[\"expression\",\"\",\"FarA\"]",
+          "[\"expression\",\"\",\"FarB\"]"
+        ],
+        "flowRootId": "[\"expression\",\"\",\"FarA\"]",
+        "focusMode": "dim",
+        "direction": "consumers",
+        "depth": null,
+        "listFacet": "all",
+        "groupFilter": "all",
+        "generation": 11,
+        "selectedId": "[\"expression\",\"\",\"FarB\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": -335.5,
+          "y": 62.5,
+          "k": 0.85
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": true,
+          "focus": null,
+          "disclosures": {
+            "provenance": false
+          },
+          "expanded": false
+        },
+        "category": "all",
+        "query": ""
+      },
+      "phase": "ready",
+      "layout": [
+        [
+          "[\"expression\",\"\",\"FarA\"]",
+          {
+            "x": 418.7058823529412,
+            "y": 287.29411764705884
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"FarB\"]",
+          {
+            "x": 718.7058823529412,
+            "y": 287.29411764705884
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          {
+            "x": 0,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Server\"]",
+          {
+            "x": 0,
+            "y": 252
+          }
+        ],
+        [
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+          {
+            "x": 0,
+            "y": 426
+          }
+        ]
+      ],
+      "visible": [
+        "[\"expression\",\"\",\"FarA\"]",
+        "[\"expression\",\"\",\"FarB\"]"
+      ],
+      "map": [
+        "[\"expression\",\"\",\"FarA\"]",
+        "[\"expression\",\"\",\"FarB\"]"
+      ],
+      "mapEdges": [],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Sales Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Sales Raw\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Quote\\\\\\\"Query\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        }
+      ],
+      "mapBox": "390.7058823529412 259.29411764705884 608 152",
+      "mapDisplay": "",
+      "mapRects": [
+        {
+          "x": 418.7058823529412,
+          "y": 287.29411764705884,
+          "w": 252,
+          "h": 96
+        },
+        {
+          "x": 718.7058823529412,
+          "y": 287.29411764705884,
+          "w": 252,
+          "h": 96
+        }
+      ],
+      "registry": 7,
+      "host": {
+        "x": 268,
+        "y": 175,
+        "width": 765,
+        "height": 695,
+        "top": 175,
+        "right": 1033,
+        "bottom": 870,
+        "left": 268
+      },
+      "cards": [
+        {
+          "id": "[\"expression\",\"\",\"FarA\"]",
+          "r": {
+            "x": 288.3999938964844,
+            "y": 481.70001220703125,
+            "width": 214.20004272460938,
+            "height": 81.60003662109375,
+            "top": 481.70001220703125,
+            "right": 502.60003662109375,
+            "bottom": 563.300048828125,
+            "left": 288.3999938964844
+          }
+        },
+        {
+          "id": "[\"expression\",\"\",\"FarB\"]",
+          "r": {
+            "x": 543.4000244140625,
+            "y": 481.70001220703125,
+            "width": 214.20001220703125,
+            "height": 81.60003662109375,
+            "top": 481.70001220703125,
+            "right": 757.6000366210938,
+            "bottom": 563.300048828125,
+            "left": 543.4000244140625
+          }
+        }
+      ],
+      "library": [
+        "SyntheticSales",
+        "Sales Raw",
+        "Quote\"Query",
+        "Server",
+        "OccurrenceProbe",
+        "FarA",
+        "FarB"
+      ],
+      "groups": [
+        [
+          "all",
+          "All groups (7)"
+        ],
+        [
+          "group:Curated/Results/Nested",
+          "Curated/Results/Nested (2)"
+        ],
+        [
+          "group:DeclaredOnly",
+          "DeclaredOnly (1)"
+        ],
+        [
+          "group:Landing/SQL",
+          "Landing/SQL (2)"
+        ],
+        [
+          "unassigned",
+          "Unassigned (2)"
+        ]
+      ],
+      "counts": [
+        "All (7)",
+        "Connected (4)",
+        "Disconnected (3)"
+      ],
+      "center": {
+        "disabled": false,
+        "title": ""
+      },
+      "code": "let x = 2 in x",
+      "reader": false,
+      "focus": {
+        "cls": "ex-button",
+        "text": "Center selected"
+      },
+      "banner": ""
+    },
+    {
+      "nav": {
+        "membership": [
+          "[\"expression\",\"\",\"FarA\"]",
+          "[\"expression\",\"\",\"FarB\"]"
+        ],
+        "flowRootId": "[\"expression\",\"\",\"FarA\"]",
+        "focusMode": "dim",
+        "direction": "consumers",
+        "depth": null,
+        "listFacet": "all",
+        "groupFilter": "all",
+        "generation": 11,
+        "selectedId": "[\"expression\",\"\",\"FarB\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": -631.1470588235294,
+          "y": -54.85294117647061,
+          "k": 1.2
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": true,
+          "focus": null,
+          "disclosures": {
+            "provenance": false
+          },
+          "expanded": false
+        },
+        "category": "all",
+        "query": ""
+      },
+      "phase": "ready",
+      "layout": [
+        [
+          "[\"expression\",\"\",\"FarA\"]",
+          {
+            "x": 418.7058823529412,
+            "y": 287.29411764705884
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"FarB\"]",
+          {
+            "x": 718.7058823529412,
+            "y": 287.29411764705884
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          {
+            "x": 0,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Server\"]",
+          {
+            "x": 0,
+            "y": 252
+          }
+        ],
+        [
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+          {
+            "x": 0,
+            "y": 426
+          }
+        ]
+      ],
+      "visible": [
+        "[\"expression\",\"\",\"FarA\"]",
+        "[\"expression\",\"\",\"FarB\"]"
+      ],
+      "map": [
+        "[\"expression\",\"\",\"FarA\"]",
+        "[\"expression\",\"\",\"FarB\"]"
+      ],
+      "mapEdges": [],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Sales Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Sales Raw\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Quote\\\\\\\"Query\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        }
+      ],
+      "mapBox": "390.7058823529412 259.29411764705884 608 152",
+      "mapDisplay": "",
+      "mapRects": [
+        {
+          "x": 418.7058823529412,
+          "y": 287.29411764705884,
+          "w": 252,
+          "h": 96
+        },
+        {
+          "x": 718.7058823529412,
+          "y": 287.29411764705884,
+          "w": 252,
+          "h": 96
+        }
+      ],
+      "registry": 7,
+      "host": {
+        "x": 268,
+        "y": 175,
+        "width": 765,
+        "height": 695,
+        "top": 175,
+        "right": 1033,
+        "bottom": 870,
+        "left": 268
+      },
+      "cards": [
+        {
+          "id": "[\"expression\",\"\",\"FarA\"]",
+          "r": {
+            "x": 139.30001831054688,
+            "y": 464.9000244140625,
+            "width": 302.4000549316406,
+            "height": 115.20001220703125,
+            "top": 464.9000244140625,
+            "right": 441.7000732421875,
+            "bottom": 580.1000366210938,
+            "left": 139.30001831054688
+          }
+        },
+        {
+          "id": "[\"expression\",\"\",\"FarB\"]",
+          "r": {
+            "x": 499.300048828125,
+            "y": 464.9000244140625,
+            "width": 302.39996337890625,
+            "height": 115.20001220703125,
+            "top": 464.9000244140625,
+            "right": 801.7000122070312,
+            "bottom": 580.1000366210938,
+            "left": 499.300048828125
+          }
+        }
+      ],
+      "library": [
+        "SyntheticSales",
+        "Sales Raw",
+        "Quote\"Query",
+        "Server",
+        "OccurrenceProbe",
+        "FarA",
+        "FarB"
+      ],
+      "groups": [
+        [
+          "all",
+          "All groups (7)"
+        ],
+        [
+          "group:Curated/Results/Nested",
+          "Curated/Results/Nested (2)"
+        ],
+        [
+          "group:DeclaredOnly",
+          "DeclaredOnly (1)"
+        ],
+        [
+          "group:Landing/SQL",
+          "Landing/SQL (2)"
+        ],
+        [
+          "unassigned",
+          "Unassigned (2)"
+        ]
+      ],
+      "counts": [
+        "All (7)",
+        "Connected (4)",
+        "Disconnected (3)"
+      ],
+      "center": {
+        "disabled": false,
+        "title": ""
+      },
+      "code": "let x = 2 in x",
+      "reader": false,
+      "focus": {
+        "cls": "ex-button",
+        "text": "Center selected"
+      },
+      "banner": ""
+    },
+    {
+      "nav": {
+        "membership": [
+          "[\"expression\",\"\",\"FarA\"]",
+          "[\"expression\",\"\",\"FarB\"]"
+        ],
+        "flowRootId": "[\"expression\",\"\",\"FarA\"]",
+        "focusMode": "dim",
+        "direction": "consumers",
+        "depth": null,
+        "listFacet": "all",
+        "groupFilter": "all",
+        "generation": 11,
+        "selectedId": "[\"expression\",\"\",\"FarB\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": -419.97058823529414,
+          "y": 28.970588235294144,
+          "k": 0.95
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": true,
+          "focus": null,
+          "disclosures": {
+            "provenance": false
+          },
+          "expanded": false
+        },
+        "category": "all",
+        "query": ""
+      },
+      "phase": "ready",
+      "layout": [
+        [
+          "[\"expression\",\"\",\"FarA\"]",
+          {
+            "x": 418.7058823529412,
+            "y": 287.29411764705884
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"FarB\"]",
+          {
+            "x": 718.7058823529412,
+            "y": 287.29411764705884
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          {
+            "x": 0,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Server\"]",
+          {
+            "x": 0,
+            "y": 252
+          }
+        ],
+        [
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+          {
+            "x": 0,
+            "y": 426
+          }
+        ]
+      ],
+      "visible": [
+        "[\"expression\",\"\",\"FarA\"]",
+        "[\"expression\",\"\",\"FarB\"]"
+      ],
+      "map": [
+        "[\"expression\",\"\",\"FarA\"]",
+        "[\"expression\",\"\",\"FarB\"]"
+      ],
+      "mapEdges": [],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Sales Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Sales Raw\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Quote\\\\\\\"Query\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+        }
+      ],
+      "mapBox": "390.7058823529412 259.29411764705884 608 152",
+      "mapDisplay": "",
+      "mapRects": [
+        {
+          "x": 418.7058823529412,
+          "y": 287.29411764705884,
+          "w": 252,
+          "h": 96
+        },
+        {
+          "x": 718.7058823529412,
+          "y": 287.29411764705884,
+          "w": 252,
+          "h": 96
+        }
+      ],
+      "registry": 7,
+      "host": {
+        "x": 268,
+        "y": 175,
+        "width": 765,
+        "height": 695,
+        "top": 175,
+        "right": 1033,
+        "bottom": 870,
+        "left": 268
+      },
+      "cards": [
+        {
+          "id": "[\"expression\",\"\",\"FarA\"]",
+          "r": {
+            "x": 245.79998779296875,
+            "y": 476.8999938964844,
+            "width": 239.4000244140625,
+            "height": 91.19998168945312,
+            "top": 476.8999938964844,
+            "right": 485.20001220703125,
+            "bottom": 568.0999755859375,
+            "left": 245.79998779296875
+          }
+        },
+        {
+          "id": "[\"expression\",\"\",\"FarB\"]",
+          "r": {
+            "x": 530.7999877929688,
+            "y": 476.8999938964844,
+            "width": 239.4000244140625,
+            "height": 91.19998168945312,
+            "top": 476.8999938964844,
+            "right": 770.2000122070312,
+            "bottom": 568.0999755859375,
+            "left": 530.7999877929688
+          }
+        }
+      ],
+      "library": [
+        "SyntheticSales",
+        "Sales Raw",
+        "Quote\"Query",
+        "Server",
+        "OccurrenceProbe",
+        "FarA",
+        "FarB"
+      ],
+      "groups": [
+        [
+          "all",
+          "All groups (7)"
+        ],
+        [
+          "group:Curated/Results/Nested",
+          "Curated/Results/Nested (2)"
+        ],
+        [
+          "group:DeclaredOnly",
+          "DeclaredOnly (1)"
+        ],
+        [
+          "group:Landing/SQL",
+          "Landing/SQL (2)"
+        ],
+        [
+          "unassigned",
+          "Unassigned (2)"
+        ]
+      ],
+      "counts": [
+        "All (7)",
+        "Connected (4)",
+        "Disconnected (3)"
+      ],
+      "center": {
+        "disabled": false,
+        "title": ""
+      },
+      "code": "let x = 2 in x",
+      "reader": false,
+      "focus": {
+        "cls": "ex-button",
+        "text": "Center selected"
+      },
+      "banner": ""
+    }
+  ],
+  "hidden": {
+    "nav": {
+      "membership": [
+        "[\"expression\",\"\",\"FarA\"]",
+        "[\"expression\",\"\",\"FarB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"FarA\"]",
+      "focusMode": "dim",
+      "direction": "consumers",
+      "depth": null,
+      "listFacet": "all",
+      "groupFilter": "group:Landing/SQL",
+      "generation": 11,
+      "selectedId": "[\"expression\",\"\",\"FarB\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": -419.97058823529414,
+        "y": 4.470588235294144,
+        "k": 0.95
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": true,
+        "focus": null,
+        "disclosures": {
+          "provenance": false
+        },
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "layout": [
+      [
+        "[\"expression\",\"\",\"FarA\"]",
+        {
+          "x": 418.7058823529412,
+          "y": 287.29411764705884
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"FarB\"]",
+        {
+          "x": 718.7058823529412,
+          "y": 287.29411764705884
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"expression\",\"\",\"Server\"]",
+        {
+          "x": 0,
+          "y": 252
+        }
+      ],
+      [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        {
+          "x": 0,
+          "y": 426
+        }
+      ]
+    ],
+    "visible": [
+      "[\"expression\",\"\",\"FarA\"]"
+    ],
+    "map": [
+      "[\"expression\",\"\",\"FarA\"]"
+    ],
+    "mapEdges": [],
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Sales Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Sales Raw\"]",
+        "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Quote\\\\\\\"Query\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Server\"]",
+        "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      }
+    ],
+    "mapBox": "390.7058823529412 259.29411764705884 308 152",
+    "mapDisplay": "",
+    "mapRects": [
+      {
+        "x": 418.7058823529412,
+        "y": 287.29411764705884,
+        "w": 252,
+        "h": 96
+      }
+    ],
+    "registry": 7,
+    "host": {
+      "x": 268,
+      "y": 224,
+      "width": 765,
+      "height": 646,
+      "top": 224,
+      "right": 1033,
+      "bottom": 870,
+      "left": 268
+    },
+    "cards": [
+      {
+        "id": "[\"expression\",\"\",\"FarA\"]",
+        "r": {
+          "x": 245.79998779296875,
+          "y": 501.3999938964844,
+          "width": 239.4000244140625,
+          "height": 91.19998168945312,
+          "top": 501.3999938964844,
+          "right": 485.20001220703125,
+          "bottom": 592.5999755859375,
+          "left": 245.79998779296875
+        }
+      }
+    ],
+    "library": [
+      "Sales Raw",
+      "FarA"
+    ],
+    "groups": [
+      [
+        "all",
+        "All groups (7)"
+      ],
+      [
+        "group:Curated/Results/Nested",
+        "Curated/Results/Nested (2)"
+      ],
+      [
+        "group:DeclaredOnly",
+        "DeclaredOnly (1)"
+      ],
+      [
+        "group:Landing/SQL",
+        "Landing/SQL (2)"
+      ],
+      [
+        "unassigned",
+        "Unassigned (2)"
+      ]
+    ],
+    "counts": [
+      "All (7)",
+      "Connected (4)",
+      "Disconnected (3)"
+    ],
+    "center": {
+      "disabled": true,
+      "title": "Select a visible canvas object to center."
+    },
+    "code": "let x = 2 in x",
+    "reader": false,
+    "focus": {
+      "cls": "",
+      "text": "\n\n  Independent followup groups1 tables · 0 relationshipsTablesMeasuresPower Que"
+    },
+    "banner": "Selected object hidden by filter. Inspector retained.Show all"
+  }
+}

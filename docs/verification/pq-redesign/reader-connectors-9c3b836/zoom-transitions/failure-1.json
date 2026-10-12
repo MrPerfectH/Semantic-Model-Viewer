@@ -1,0 +1,32 @@
+{
+  "phase": "idle",
+  "message": "",
+  "category": "all",
+  "query": "",
+  "selectedId": null,
+  "inspectorOpen": false,
+  "count": "",
+  "banner": "",
+  "code": "",
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "k": 1
+  },
+  "inspectorView": {
+    "codeX": 0,
+    "codeY": 0,
+    "inspectorX": 0,
+    "inspectorY": 0,
+    "wrap": true,
+    "focus": null,
+    "disclosures": {},
+    "expanded": false
+  },
+  "history": [],
+  "domNodes": 0,
+  "visible": [],
+  "library": [],
+  "map": "",
+  "sets": null
+}

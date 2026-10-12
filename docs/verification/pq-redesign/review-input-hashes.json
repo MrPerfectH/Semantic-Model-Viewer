@@ -1,0 +1,26 @@
+{
+  "design-plan.md": {
+    "original": "/tmp/pq-redesign-20261008/design-plan.md",
+    "sha256": "d383561e3e901e2e9be2ee4531c1f3b2396240ffd1a379be6244524928eb4f9d"
+  },
+  "proposal.html": {
+    "original": "/tmp/pq-redesign-20261008/proposal.html",
+    "sha256": "d6a2fdb47489a3c9a29aca20432ba211e9d6f74dcb454429b194c5cc7864976e"
+  },
+  "03-pq-entry.png": {
+    "original": "/tmp/pq-redesign-20261008/03-pq-entry.png",
+    "sha256": "4b99dd2cee86176cf0dbc026c665d88a427b95cb9be25d3e343a225e0ecf91c0"
+  },
+  "04-pq-selected.png": {
+    "original": "/tmp/pq-redesign-20261008/04-pq-selected.png",
+    "sha256": "8c745d6e5f9ac0314b897e35e3ab6ec7aa199cf5d6c79aa61fbfe98e6f5f7645"
+  },
+  "05-proposed-inspector.png": {
+    "original": "/tmp/pq-redesign-20261008/05-proposed-inspector.png",
+    "sha256": "09a82fa21768c9ccdb5fc2dfc4e136c61bf94d0e3d2bdbf142e7e445f513fa10"
+  },
+  "06-proposed-disconnected.png": {
+    "original": "/tmp/pq-redesign-20261008/06-proposed-disconnected.png",
+    "sha256": "325eb3fba555d646c3b8a0da08d4ce7515e70413d18c358022d338c0055bce28"
+  }
+}

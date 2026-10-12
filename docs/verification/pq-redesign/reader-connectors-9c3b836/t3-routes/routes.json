@@ -1,0 +1,653 @@
+{
+  "rows": [
+    {
+      "name": "right",
+      "s": {
+        "layout": {
+          "[\"expression\",\"\",\"Sales Raw\"]": {
+            "x": 0,
+            "y": 0
+          },
+          "[\"expression\",\"\",\"Quote\\\"Query\"]": {
+            "x": 0,
+            "y": 126
+          },
+          "[\"expression\",\"\",\"Server\"]": {
+            "x": 0,
+            "y": 252
+          },
+          "[\"expression\",\"\",\"OccurrenceProbe\"]": {
+            "x": 600,
+            "y": 0
+          },
+          "[\"expression\",\"\",\"CycleA\"]": {
+            "x": 0,
+            "y": 378
+          },
+          "[\"expression\",\"\",\"CycleB\"]": {
+            "x": 0,
+            "y": 504
+          },
+          "[\"expression\",\"\",\"SelfLoop\"]": {
+            "x": 0,
+            "y": 682
+          },
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]": {
+            "x": 0,
+            "y": 884
+          },
+          "[\"expression\",\"\",\"FarA\"]": {
+            "x": 300,
+            "y": 0
+          },
+          "[\"expression\",\"\",\"FarB\"]": {
+            "x": 0,
+            "y": 1010
+          }
+        },
+        "visible": [
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "[\"expression\",\"\",\"FarA\"]"
+        ],
+        "view": {
+          "x": 53.5,
+          "y": 267,
+          "k": 1.25
+        },
+        "surface": {
+          "x": 268,
+          "y": 126,
+          "width": 1172,
+          "height": 744,
+          "top": 126,
+          "right": 1440,
+          "bottom": 870,
+          "left": 268
+        },
+        "marker": {
+          "width": "8",
+          "height": "8",
+          "units": "userSpaceOnUse",
+          "orient": "auto",
+          "d": "M 3 1 L 8 5 L 3 9",
+          "fill": "none"
+        },
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Sales Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+            "input": "[\"expression\",\"\",\"Sales Raw\"]",
+            "consumer": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "d": "M252,48 L268,48 L268,-18 L584,-18 L584,48 L600,48",
+            "hit": "M252,48 L268,48 L268,-18 L584,-18 L584,48 L600,48",
+            "hitWidth": "14px"
+          }
+        ]
+      }
+    },
+    {
+      "name": "left",
+      "s": {
+        "layout": {
+          "[\"expression\",\"\",\"Sales Raw\"]": {
+            "x": 600,
+            "y": 0
+          },
+          "[\"expression\",\"\",\"Quote\\\"Query\"]": {
+            "x": 0,
+            "y": 126
+          },
+          "[\"expression\",\"\",\"Server\"]": {
+            "x": 0,
+            "y": 252
+          },
+          "[\"expression\",\"\",\"OccurrenceProbe\"]": {
+            "x": 0,
+            "y": 0
+          },
+          "[\"expression\",\"\",\"CycleA\"]": {
+            "x": 0,
+            "y": 378
+          },
+          "[\"expression\",\"\",\"CycleB\"]": {
+            "x": 0,
+            "y": 504
+          },
+          "[\"expression\",\"\",\"SelfLoop\"]": {
+            "x": 0,
+            "y": 682
+          },
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]": {
+            "x": 0,
+            "y": 884
+          },
+          "[\"expression\",\"\",\"FarA\"]": {
+            "x": 300,
+            "y": 0
+          },
+          "[\"expression\",\"\",\"FarB\"]": {
+            "x": 0,
+            "y": 1010
+          }
+        },
+        "visible": [
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "[\"expression\",\"\",\"FarA\"]"
+        ],
+        "view": {
+          "x": 53.5,
+          "y": 267,
+          "k": 1.25
+        },
+        "surface": {
+          "x": 268,
+          "y": 126,
+          "width": 1172,
+          "height": 744,
+          "top": 126,
+          "right": 1440,
+          "bottom": 870,
+          "left": 268
+        },
+        "marker": {
+          "width": "8",
+          "height": "8",
+          "units": "userSpaceOnUse",
+          "orient": "auto",
+          "d": "M 3 1 L 8 5 L 3 9",
+          "fill": "none"
+        },
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Sales Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+            "input": "[\"expression\",\"\",\"Sales Raw\"]",
+            "consumer": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "d": "M600,48 L584,48 L584,-18 L268,-18 L268,48 L252,48",
+            "hit": "M600,48 L584,48 L584,-18 L268,-18 L268,48 L252,48",
+            "hitWidth": "14px"
+          }
+        ]
+      }
+    },
+    {
+      "name": "down",
+      "s": {
+        "layout": {
+          "[\"expression\",\"\",\"Sales Raw\"]": {
+            "x": 0,
+            "y": 0
+          },
+          "[\"expression\",\"\",\"Quote\\\"Query\"]": {
+            "x": 0,
+            "y": 126
+          },
+          "[\"expression\",\"\",\"Server\"]": {
+            "x": 0,
+            "y": 252
+          },
+          "[\"expression\",\"\",\"OccurrenceProbe\"]": {
+            "x": 0,
+            "y": 600
+          },
+          "[\"expression\",\"\",\"CycleA\"]": {
+            "x": 0,
+            "y": 378
+          },
+          "[\"expression\",\"\",\"CycleB\"]": {
+            "x": 0,
+            "y": 504
+          },
+          "[\"expression\",\"\",\"SelfLoop\"]": {
+            "x": 0,
+            "y": 682
+          },
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]": {
+            "x": 0,
+            "y": 884
+          },
+          "[\"expression\",\"\",\"FarA\"]": {
+            "x": 0,
+            "y": 300
+          },
+          "[\"expression\",\"\",\"FarB\"]": {
+            "x": 0,
+            "y": 1010
+          }
+        },
+        "visible": [
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "[\"expression\",\"\",\"FarA\"]"
+        ],
+        "view": {
+          "x": 486.3641304347826,
+          "y": 51.815217391304316,
+          "k": 0.7907608695652174
+        },
+        "surface": {
+          "x": 268,
+          "y": 126,
+          "width": 1172,
+          "height": 744,
+          "top": 126,
+          "right": 1440,
+          "bottom": 870,
+          "left": 268
+        },
+        "marker": {
+          "width": "8",
+          "height": "8",
+          "units": "userSpaceOnUse",
+          "orient": "auto",
+          "d": "M 3 1 L 8 5 L 3 9",
+          "fill": "none"
+        },
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Sales Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+            "input": "[\"expression\",\"\",\"Sales Raw\"]",
+            "consumer": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "d": "M138,96 L138,112 L270,112 L270,584 L138,584 L138,600",
+            "hit": "M138,96 L138,112 L270,112 L270,584 L138,584 L138,600",
+            "hitWidth": "14px"
+          }
+        ]
+      }
+    },
+    {
+      "name": "up",
+      "s": {
+        "layout": {
+          "[\"expression\",\"\",\"Sales Raw\"]": {
+            "x": 0,
+            "y": 600
+          },
+          "[\"expression\",\"\",\"Quote\\\"Query\"]": {
+            "x": 0,
+            "y": 126
+          },
+          "[\"expression\",\"\",\"Server\"]": {
+            "x": 0,
+            "y": 252
+          },
+          "[\"expression\",\"\",\"OccurrenceProbe\"]": {
+            "x": 0,
+            "y": 0
+          },
+          "[\"expression\",\"\",\"CycleA\"]": {
+            "x": 0,
+            "y": 378
+          },
+          "[\"expression\",\"\",\"CycleB\"]": {
+            "x": 0,
+            "y": 504
+          },
+          "[\"expression\",\"\",\"SelfLoop\"]": {
+            "x": 0,
+            "y": 682
+          },
+          "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]": {
+            "x": 0,
+            "y": 884
+          },
+          "[\"expression\",\"\",\"FarA\"]": {
+            "x": 0,
+            "y": 300
+          },
+          "[\"expression\",\"\",\"FarB\"]": {
+            "x": 0,
+            "y": 1010
+          }
+        },
+        "visible": [
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "[\"expression\",\"\",\"FarA\"]"
+        ],
+        "view": {
+          "x": 486.3641304347826,
+          "y": 51.815217391304316,
+          "k": 0.7907608695652174
+        },
+        "surface": {
+          "x": 268,
+          "y": 126,
+          "width": 1172,
+          "height": 744,
+          "top": 126,
+          "right": 1440,
+          "bottom": 870,
+          "left": 268
+        },
+        "marker": {
+          "width": "8",
+          "height": "8",
+          "units": "userSpaceOnUse",
+          "orient": "auto",
+          "d": "M 3 1 L 8 5 L 3 9",
+          "fill": "none"
+        },
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Sales Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+            "input": "[\"expression\",\"\",\"Sales Raw\"]",
+            "consumer": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "d": "M114,600 L114,584 L-18,584 L-18,112 L114,112 L114,96",
+            "hit": "M114,600 L114,584 L-18,584 L-18,112 L114,112 L114,96",
+            "hitWidth": "14px"
+          }
+        ]
+      }
+    }
+  ],
+  "point": {
+    "x": 826.7978515625,
+    "y": 639.6195678710938,
+    "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Sales Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+    "target": "pqc-edge-hit"
+  },
+  "details": "Sales Raw is referenced by OccurrenceProbeClose reference detailsLine 3, column 11 · #\"Sales Raw\"Line 4, column 11 · #\"Sales Raw\"Line 6, column 17 · #\"Sales#(0020)Raw\"",
+  "cycles": {
+    "layout": {
+      "[\"expression\",\"\",\"Sales Raw\"]": {
+        "x": 0,
+        "y": 600
+      },
+      "[\"expression\",\"\",\"Quote\\\"Query\"]": {
+        "x": 0,
+        "y": 126
+      },
+      "[\"expression\",\"\",\"Server\"]": {
+        "x": 0,
+        "y": 252
+      },
+      "[\"expression\",\"\",\"OccurrenceProbe\"]": {
+        "x": 0,
+        "y": 0
+      },
+      "[\"expression\",\"\",\"CycleA\"]": {
+        "x": 0,
+        "y": 0
+      },
+      "[\"expression\",\"\",\"CycleB\"]": {
+        "x": 0,
+        "y": 300
+      },
+      "[\"expression\",\"\",\"SelfLoop\"]": {
+        "x": 450,
+        "y": 150
+      },
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]": {
+        "x": 0,
+        "y": 884
+      },
+      "[\"expression\",\"\",\"FarA\"]": {
+        "x": 0,
+        "y": 300
+      },
+      "[\"expression\",\"\",\"FarB\"]": {
+        "x": 0,
+        "y": 1010
+      }
+    },
+    "visible": [
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"SelfLoop\"]"
+    ],
+    "view": {
+      "x": 147.25,
+      "y": 79.5,
+      "k": 1.25
+    },
+    "surface": {
+      "x": 268,
+      "y": 126,
+      "width": 1172,
+      "height": 744,
+      "top": 126,
+      "right": 1440,
+      "bottom": 870,
+      "left": 268
+    },
+    "marker": {
+      "width": "8",
+      "height": "8",
+      "units": "userSpaceOnUse",
+      "orient": "auto",
+      "d": "M 3 1 L 8 5 L 3 9",
+      "fill": "none"
+    },
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "input": "[\"expression\",\"\",\"CycleB\"]",
+        "consumer": "[\"expression\",\"\",\"CycleA\"]",
+        "d": "M114,300 L114,198 L114,198 L114,96",
+        "hit": "M114,300 L114,198 L114,198 L114,96",
+        "hitWidth": "14px"
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "input": "[\"expression\",\"\",\"CycleA\"]",
+        "consumer": "[\"expression\",\"\",\"CycleB\"]",
+        "d": "M138,96 L138,198 L138,198 L138,300",
+        "hit": "M138,96 L138,198 L138,198 L138,300",
+        "hitWidth": "14px"
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"SelfLoop\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"SelfLoop\\\"]\"]",
+        "input": "[\"expression\",\"\",\"SelfLoop\"]",
+        "consumer": "[\"expression\",\"\",\"SelfLoop\"]",
+        "d": "M576,150 L576,128 L724,128 L724,198 L702,198",
+        "hit": "M576,150 L576,128 L724,128 L724,198 L702,198",
+        "hitWidth": "14px"
+      }
+    ]
+  },
+  "beforeDrag": {
+    "layout": {
+      "[\"expression\",\"\",\"Sales Raw\"]": {
+        "x": 0,
+        "y": 600
+      },
+      "[\"expression\",\"\",\"Quote\\\"Query\"]": {
+        "x": 0,
+        "y": 126
+      },
+      "[\"expression\",\"\",\"Server\"]": {
+        "x": 0,
+        "y": 252
+      },
+      "[\"expression\",\"\",\"OccurrenceProbe\"]": {
+        "x": 0,
+        "y": 0
+      },
+      "[\"expression\",\"\",\"CycleA\"]": {
+        "x": 0,
+        "y": 0
+      },
+      "[\"expression\",\"\",\"CycleB\"]": {
+        "x": 0,
+        "y": 300
+      },
+      "[\"expression\",\"\",\"SelfLoop\"]": {
+        "x": 450,
+        "y": 150
+      },
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]": {
+        "x": 0,
+        "y": 884
+      },
+      "[\"expression\",\"\",\"FarA\"]": {
+        "x": 0,
+        "y": 300
+      },
+      "[\"expression\",\"\",\"FarB\"]": {
+        "x": 0,
+        "y": 1010
+      }
+    },
+    "visible": [
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"SelfLoop\"]"
+    ],
+    "view": {
+      "x": 147.25,
+      "y": 79.5,
+      "k": 1.25
+    },
+    "surface": {
+      "x": 268,
+      "y": 126,
+      "width": 1172,
+      "height": 744,
+      "top": 126,
+      "right": 1440,
+      "bottom": 870,
+      "left": 268
+    },
+    "marker": {
+      "width": "8",
+      "height": "8",
+      "units": "userSpaceOnUse",
+      "orient": "auto",
+      "d": "M 3 1 L 8 5 L 3 9",
+      "fill": "none"
+    },
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "input": "[\"expression\",\"\",\"CycleB\"]",
+        "consumer": "[\"expression\",\"\",\"CycleA\"]",
+        "d": "M114,300 L114,198 L114,198 L114,96",
+        "hit": "M114,300 L114,198 L114,198 L114,96",
+        "hitWidth": "14px"
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "input": "[\"expression\",\"\",\"CycleA\"]",
+        "consumer": "[\"expression\",\"\",\"CycleB\"]",
+        "d": "M138,96 L138,198 L138,198 L138,300",
+        "hit": "M138,96 L138,198 L138,198 L138,300",
+        "hitWidth": "14px"
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"SelfLoop\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"SelfLoop\\\"]\"]",
+        "input": "[\"expression\",\"\",\"SelfLoop\"]",
+        "consumer": "[\"expression\",\"\",\"SelfLoop\"]",
+        "d": "M576,150 L576,128 L724,128 L724,198 L702,198",
+        "hit": "M576,150 L576,128 L724,128 L724,198 L702,198",
+        "hitWidth": "14px"
+      }
+    ]
+  },
+  "afterDrag": {
+    "layout": {
+      "[\"expression\",\"\",\"Sales Raw\"]": {
+        "x": 0,
+        "y": 600
+      },
+      "[\"expression\",\"\",\"Quote\\\"Query\"]": {
+        "x": 0,
+        "y": 126
+      },
+      "[\"expression\",\"\",\"Server\"]": {
+        "x": 0,
+        "y": 252
+      },
+      "[\"expression\",\"\",\"OccurrenceProbe\"]": {
+        "x": 0,
+        "y": 0
+      },
+      "[\"expression\",\"\",\"CycleA\"]": {
+        "x": 0,
+        "y": 0
+      },
+      "[\"expression\",\"\",\"CycleB\"]": {
+        "x": 210.256005859375,
+        "y": 214.231982421875
+      },
+      "[\"expression\",\"\",\"SelfLoop\"]": {
+        "x": 450,
+        "y": 150
+      },
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]": {
+        "x": 0,
+        "y": 884
+      },
+      "[\"expression\",\"\",\"FarA\"]": {
+        "x": 0,
+        "y": 300
+      },
+      "[\"expression\",\"\",\"FarB\"]": {
+        "x": 0,
+        "y": 1010
+      }
+    },
+    "visible": [
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"SelfLoop\"]"
+    ],
+    "view": {
+      "x": 147.25,
+      "y": 79.5,
+      "k": 1.25
+    },
+    "surface": {
+      "x": 268,
+      "y": 126,
+      "width": 1172,
+      "height": 744,
+      "top": 126,
+      "right": 1440,
+      "bottom": 870,
+      "left": 268
+    },
+    "marker": {
+      "width": "8",
+      "height": "8",
+      "units": "userSpaceOnUse",
+      "orient": "auto",
+      "d": "M 3 1 L 8 5 L 3 9",
+      "fill": "none"
+    },
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "input": "[\"expression\",\"\",\"CycleB\"]",
+        "consumer": "[\"expression\",\"\",\"CycleA\"]",
+        "d": "M324.256005859375,214.231982421875 L324.256005859375,155.1159912109375 L114,155.1159912109375 L114,96",
+        "hit": "M324.256005859375,214.231982421875 L324.256005859375,155.1159912109375 L114,155.1159912109375 L114,96",
+        "hitWidth": "14px"
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "input": "[\"expression\",\"\",\"CycleA\"]",
+        "consumer": "[\"expression\",\"\",\"CycleB\"]",
+        "d": "M138,96 L138,155.1159912109375 L348.256005859375,155.1159912109375 L348.256005859375,214.231982421875",
+        "hit": "M138,96 L138,155.1159912109375 L348.256005859375,155.1159912109375 L348.256005859375,214.231982421875",
+        "hitWidth": "14px"
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"SelfLoop\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"SelfLoop\\\"]\"]",
+        "input": "[\"expression\",\"\",\"SelfLoop\"]",
+        "consumer": "[\"expression\",\"\",\"SelfLoop\"]",
+        "d": "M576,150 L576,128 L724,128 L724,198 L702,198",
+        "hit": "M576,150 L576,128 L724,128 L724,198 L702,198",
+        "hitWidth": "14px"
+      }
+    ]
+  },
+  "pointer": [
+    {
+      "trusted": true,
+      "target": "wui-card-title pqc-node-title",
+      "x": 591.1799926757812,
+      "y": 605.2100219726562
+    }
+  ]
+}

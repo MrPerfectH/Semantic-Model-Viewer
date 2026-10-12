@@ -1,0 +1,13 @@
+{
+  "ownHits": [
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+      "count": 191
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+      "count": 199
+    }
+  ],
+  "expected": "Each semantic edge has at least one reachable own interior hit, then actual click opens its own consumer/source detail"
+}

@@ -1,0 +1,271 @@
+{
+  "rows": [
+    {
+      "i": 0,
+      "before": {
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": 123,
+          "y": 87,
+          "k": 1.3
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": {
+            "kind": "reference",
+            "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "at": 32,
+            "end": 44
+          }
+        },
+        "category": "all",
+        "query": ""
+      },
+      "after": {
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": 123,
+          "y": 87,
+          "k": 1.3
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": {
+            "kind": "reference",
+            "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "at": 32,
+            "end": 44
+          }
+        },
+        "category": "all",
+        "query": ""
+      }
+    },
+    {
+      "i": 1,
+      "before": {
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": 123,
+          "y": 87,
+          "k": 1.3
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": {
+            "kind": "reference",
+            "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "at": 57,
+            "end": 69
+          }
+        },
+        "category": "all",
+        "query": ""
+      },
+      "after": {
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": 123,
+          "y": 87,
+          "k": 1.3
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": {
+            "kind": "reference",
+            "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "at": 57,
+            "end": 69
+          }
+        },
+        "category": "all",
+        "query": ""
+      }
+    },
+    {
+      "i": 2,
+      "before": {
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": 123,
+          "y": 87,
+          "k": 1.3
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": {
+            "kind": "reference",
+            "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "at": 84,
+            "end": 99
+          }
+        },
+        "category": "all",
+        "query": ""
+      },
+      "after": {
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": 123,
+          "y": 87,
+          "k": 1.3
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": {
+            "kind": "reference",
+            "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "at": 84,
+            "end": 99
+          }
+        },
+        "category": "all",
+        "query": ""
+      }
+    },
+    {
+      "i": 3,
+      "before": {
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": 123,
+          "y": 87,
+          "k": 1.3
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": {
+            "kind": "reference",
+            "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "at": 118,
+            "end": 136
+          }
+        },
+        "category": "all",
+        "query": ""
+      },
+      "after": {
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": 123,
+          "y": 87,
+          "k": 1.3
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": {
+            "kind": "reference",
+            "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "at": 118,
+            "end": 136
+          }
+        },
+        "category": "all",
+        "query": ""
+      }
+    },
+    {
+      "i": 4,
+      "before": {
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": 123,
+          "y": 87,
+          "k": 1.3
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": {
+            "kind": "reference",
+            "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "at": 153,
+            "end": 159
+          }
+        },
+        "category": "all",
+        "query": ""
+      },
+      "after": {
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": 123,
+          "y": 87,
+          "k": 1.3
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": {
+            "kind": "reference",
+            "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+            "at": 153,
+            "end": 159
+          }
+        },
+        "category": "all",
+        "query": ""
+      }
+    }
+  ],
+  "clipboardExact": true,
+  "utf16Length": 412
+}

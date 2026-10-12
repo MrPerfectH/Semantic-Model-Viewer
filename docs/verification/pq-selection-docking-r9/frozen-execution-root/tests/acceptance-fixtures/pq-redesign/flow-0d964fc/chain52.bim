@@ -1,0 +1,283 @@
+{
+  "name": "Independent52 step flow",
+  "model": {
+    "tables": [
+      {
+        "name": "FinalChain",
+        "columns": [
+          {
+            "name": "Value",
+            "dataType": "int64",
+            "sourceColumn": "Value"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FinalChain",
+            "source": {
+              "type": "m",
+              "expression": "let Source = Step49 in Source"
+            }
+          }
+        ]
+      }
+    ],
+    "expressions": [
+      {
+        "name": "Parameter",
+        "kind": "m",
+        "expression": "1 meta [IsParameterQuery=true, Type=\"Number\"]"
+      },
+      {
+        "name": "Step00",
+        "kind": "m",
+        "expression": "let Source = Parameter in Source"
+      },
+      {
+        "name": "Step01",
+        "kind": "m",
+        "expression": "let Source = Step00 in Source"
+      },
+      {
+        "name": "Step02",
+        "kind": "m",
+        "expression": "let Source = Step01 in Source"
+      },
+      {
+        "name": "Step03",
+        "kind": "m",
+        "expression": "let Source = Step02 in Source"
+      },
+      {
+        "name": "Step04",
+        "kind": "m",
+        "expression": "let Source = Step03 in Source"
+      },
+      {
+        "name": "Step05",
+        "kind": "m",
+        "expression": "let Source = Step04 in Source"
+      },
+      {
+        "name": "Step06",
+        "kind": "m",
+        "expression": "let Source = Step05 in Source"
+      },
+      {
+        "name": "Step07",
+        "kind": "m",
+        "expression": "let Source = Step06 in Source"
+      },
+      {
+        "name": "Step08",
+        "kind": "m",
+        "expression": "let Source = Step07 in Source"
+      },
+      {
+        "name": "Step09",
+        "kind": "m",
+        "expression": "let Source = Step08 in Source"
+      },
+      {
+        "name": "Step10",
+        "kind": "m",
+        "expression": "let Source = Step09 in Source"
+      },
+      {
+        "name": "Step11",
+        "kind": "m",
+        "expression": "let Source = Step10 in Source"
+      },
+      {
+        "name": "Step12",
+        "kind": "m",
+        "expression": "let Source = Step11 in Source"
+      },
+      {
+        "name": "Step13",
+        "kind": "m",
+        "expression": "let Source = Step12 in Source"
+      },
+      {
+        "name": "Step14",
+        "kind": "m",
+        "expression": "let Source = Step13 in Source"
+      },
+      {
+        "name": "Step15",
+        "kind": "m",
+        "expression": "let Source = Step14 in Source"
+      },
+      {
+        "name": "Step16",
+        "kind": "m",
+        "expression": "let Source = Step15 in Source"
+      },
+      {
+        "name": "Step17",
+        "kind": "m",
+        "expression": "let Source = Step16 in Source"
+      },
+      {
+        "name": "Step18",
+        "kind": "m",
+        "expression": "let Source = Step17 in Source"
+      },
+      {
+        "name": "Step19",
+        "kind": "m",
+        "expression": "let Source = Step18 in Source"
+      },
+      {
+        "name": "Step20",
+        "kind": "m",
+        "expression": "let Source = Step19 in Source"
+      },
+      {
+        "name": "Step21",
+        "kind": "m",
+        "expression": "let Source = Step20 in Source"
+      },
+      {
+        "name": "Step22",
+        "kind": "m",
+        "expression": "let Source = Step21 in Source"
+      },
+      {
+        "name": "Step23",
+        "kind": "m",
+        "expression": "let Source = Step22 in Source"
+      },
+      {
+        "name": "Step24",
+        "kind": "m",
+        "expression": "let Source = Step23 in Source"
+      },
+      {
+        "name": "Step25",
+        "kind": "m",
+        "expression": "let Source = Step24 in Source"
+      },
+      {
+        "name": "Step26",
+        "kind": "m",
+        "expression": "let Source = Step25 in Source"
+      },
+      {
+        "name": "Step27",
+        "kind": "m",
+        "expression": "let Source = Step26 in Source"
+      },
+      {
+        "name": "Step28",
+        "kind": "m",
+        "expression": "let Source = Step27 in Source"
+      },
+      {
+        "name": "Step29",
+        "kind": "m",
+        "expression": "let Source = Step28 in Source"
+      },
+      {
+        "name": "Step30",
+        "kind": "m",
+        "expression": "let Source = Step29 in Source"
+      },
+      {
+        "name": "Step31",
+        "kind": "m",
+        "expression": "let Source = Step30 in Source"
+      },
+      {
+        "name": "Step32",
+        "kind": "m",
+        "expression": "let Source = Step31 in Source"
+      },
+      {
+        "name": "Step33",
+        "kind": "m",
+        "expression": "let Source = Step32 in Source"
+      },
+      {
+        "name": "Step34",
+        "kind": "m",
+        "expression": "let Source = Step33 in Source"
+      },
+      {
+        "name": "Step35",
+        "kind": "m",
+        "expression": "let Source = Step34 in Source"
+      },
+      {
+        "name": "Step36",
+        "kind": "m",
+        "expression": "let Source = Step35 in Source"
+      },
+      {
+        "name": "Step37",
+        "kind": "m",
+        "expression": "let Source = Step36 in Source"
+      },
+      {
+        "name": "Step38",
+        "kind": "m",
+        "expression": "let Source = Step37 in Source"
+      },
+      {
+        "name": "Step39",
+        "kind": "m",
+        "expression": "let Source = Step38 in Source"
+      },
+      {
+        "name": "Step40",
+        "kind": "m",
+        "expression": "let Source = Step39 in Source"
+      },
+      {
+        "name": "Step41",
+        "kind": "m",
+        "expression": "let Source = Step40 in Source"
+      },
+      {
+        "name": "Step42",
+        "kind": "m",
+        "expression": "let Source = Step41 in Source"
+      },
+      {
+        "name": "Step43",
+        "kind": "m",
+        "expression": "let Source = Step42 in Source"
+      },
+      {
+        "name": "Step44",
+        "kind": "m",
+        "expression": "let Source = Step43 in Source"
+      },
+      {
+        "name": "Step45",
+        "kind": "m",
+        "expression": "let Source = Step44 in Source"
+      },
+      {
+        "name": "Step46",
+        "kind": "m",
+        "expression": "let Source = Step45 in Source"
+      },
+      {
+        "name": "Step47",
+        "kind": "m",
+        "expression": "let Source = Step46 in Source"
+      },
+      {
+        "name": "Step48",
+        "kind": "m",
+        "expression": "let Source = Step47 in Source"
+      },
+      {
+        "name": "Step49",
+        "kind": "m",
+        "expression": "let Source = Step48 in Source"
+      }
+    ]
+  }
+}

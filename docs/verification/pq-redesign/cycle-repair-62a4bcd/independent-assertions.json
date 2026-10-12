@@ -1,0 +1,241 @@
+{
+  "frozenScriptSHA256": "602a304afcdb4fe56f95b5a7483746510d5e6ac0a89989a6659bd61a2c619449",
+  "unchangedFrom093fdd9": true,
+  "actualDragOtherPositionsUnchanged": true,
+  "actualDragGraphUnchanged": true,
+  "actualDragTrusted": true,
+  "actualDragBefore": {
+    "x": 0,
+    "y": 300
+  },
+  "actualDragAfter": {
+    "x": 581.456005859375,
+    "y": 395.031982421875
+  },
+  "arrowDirections": [
+    {
+      "case": "exact-frozen",
+      "input": "CycleB",
+      "consumer": "CycleA",
+      "end": [
+        252.0,
+        36.0
+      ],
+      "prior": [
+        404.7280029296875,
+        36.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "exact-frozen",
+      "input": "CycleA",
+      "consumer": "CycleB",
+      "end": [
+        581.456005859375,
+        455.031982421875
+      ],
+      "prior": [
+        428.7280029296875,
+        455.031982421875
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "horizontal-right",
+      "input": "CycleB",
+      "consumer": "CycleA",
+      "end": [
+        252.0,
+        36.0
+      ],
+      "prior": [
+        439.0,
+        36.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "horizontal-right",
+      "input": "CycleA",
+      "consumer": "CycleB",
+      "end": [
+        650.0,
+        60.0
+      ],
+      "prior": [
+        463.0,
+        60.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "horizontal-left",
+      "input": "CycleB",
+      "consumer": "CycleA",
+      "end": [
+        650.0,
+        60.0
+      ],
+      "prior": [
+        463.0,
+        60.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "horizontal-left",
+      "input": "CycleA",
+      "consumer": "CycleB",
+      "end": [
+        252.0,
+        36.0
+      ],
+      "prior": [
+        439.0,
+        36.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "vertical-down",
+      "input": "CycleB",
+      "consumer": "CycleA",
+      "end": [
+        114.0,
+        96.0
+      ],
+      "prior": [
+        114.0,
+        211.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "vertical-down",
+      "input": "CycleA",
+      "consumer": "CycleB",
+      "end": [
+        138.0,
+        350.0
+      ],
+      "prior": [
+        138.0,
+        235.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "vertical-up",
+      "input": "CycleB",
+      "consumer": "CycleA",
+      "end": [
+        138.0,
+        350.0
+      ],
+      "prior": [
+        138.0,
+        235.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "vertical-up",
+      "input": "CycleA",
+      "consumer": "CycleB",
+      "end": [
+        114.0,
+        96.0
+      ],
+      "prior": [
+        114.0,
+        211.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "vertical-diagonal",
+      "input": "CycleB",
+      "consumer": "CycleA",
+      "end": [
+        114.0,
+        96.0
+      ],
+      "prior": [
+        114.0,
+        211.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "vertical-diagonal",
+      "input": "CycleA",
+      "consumer": "CycleB",
+      "end": [
+        238.0,
+        350.0
+      ],
+      "prior": [
+        238.0,
+        235.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "horizontal-diagonal-left",
+      "input": "CycleB",
+      "consumer": "CycleA",
+      "end": [
+        650.0,
+        60.0
+      ],
+      "prior": [
+        463.0,
+        60.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "horizontal-diagonal-left",
+      "input": "CycleA",
+      "consumer": "CycleB",
+      "end": [
+        252.0,
+        286.0
+      ],
+      "prior": [
+        439.0,
+        286.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "reciprocal-obstacle",
+      "input": "CycleB",
+      "consumer": "CycleA",
+      "end": [
+        252.0,
+        36.0
+      ],
+      "prior": [
+        292.0,
+        36.0
+      ],
+      "entersConsumer": true
+    },
+    {
+      "case": "reciprocal-obstacle",
+      "input": "CycleA",
+      "consumer": "CycleB",
+      "end": [
+        800.0,
+        60.0
+      ],
+      "prior": [
+        784.0,
+        60.0
+      ],
+      "entersConsumer": true
+    }
+  ]
+}

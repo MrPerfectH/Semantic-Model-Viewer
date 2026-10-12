@@ -1,0 +1,10 @@
+{
+  "candidate": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7",
+  "boundary": "Actual registered browser importer/worker/context and visible inspector; generic Node oracle remains pending non-Mac",
+  "checks": [
+    "56 actual imported worker classifications, no source arguments/guessed edges, definitive table association and visible provider/kind UI",
+    "all14 exact same model source names and two standard names win over catalogs",
+    "same named source table multipartition ambiguity never falls through to provider"
+  ],
+  "failures": []
+}

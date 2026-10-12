@@ -1,0 +1,10 @@
+CASE 1280-1
+CASE 1280-2
+{
+  "checks": [
+    "1280-1"
+  ],
+  "failures": [
+    "AssertionError [ERR_ASSERTION]: compact cards visibly larger\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/tests/pq-selection-lock-r10.browser.cjs:31:226"
+  ]
+}

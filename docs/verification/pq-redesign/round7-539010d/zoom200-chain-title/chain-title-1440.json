@@ -1,0 +1,221 @@
+{
+  "initialTitle": {
+    "view": {
+      "x": -15144.8,
+      "y": 169.2,
+      "k": 0.85
+    },
+    "label": "85%",
+    "root": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "selected": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "registry": 52,
+    "edges": 51,
+    "visible": 52,
+    "title": {
+      "x": 427.025390625,
+      "y": -134.4499969482422,
+      "width": 159.375,
+      "height": 14.914840698242188,
+      "top": -134.4499969482422,
+      "right": 586.400390625,
+      "bottom": -119.53515625,
+      "left": 427.025390625
+    },
+    "own": false,
+    "map": {
+      "x": 535,
+      "y": -56,
+      "width": 160,
+      "height": 147,
+      "top": -56,
+      "right": 695,
+      "bottom": 91,
+      "left": 535
+    },
+    "nav": {
+      "x": 286,
+      "y": 49,
+      "width": 390.9140625,
+      "height": 40,
+      "top": 49,
+      "right": 676.9140625,
+      "bottom": 89,
+      "left": 286
+    },
+    "canvas": {
+      "x": 268,
+      "y": -313,
+      "width": 443,
+      "height": 420,
+      "top": -313,
+      "right": 711,
+      "bottom": 107,
+      "left": 268
+    },
+    "bodyY": 661,
+    "flowButtons": [
+      {
+        "text": "Inspect target",
+        "r": {
+          "x": 618.265625,
+          "y": -474,
+          "width": 80.734375,
+          "height": 32,
+          "top": -474,
+          "right": 699,
+          "bottom": -442,
+          "left": 618.265625
+        }
+      },
+      {
+        "text": "Trace this query",
+        "r": {
+          "x": 280,
+          "y": -436,
+          "width": 89.21875,
+          "height": 32,
+          "top": -436,
+          "right": 369.21875,
+          "bottom": -404,
+          "left": 280
+        }
+      },
+      {
+        "text": "Clear flow",
+        "r": {
+          "x": 375.21875,
+          "y": -436,
+          "width": 62.203125,
+          "height": 32,
+          "top": -436,
+          "right": 437.421875,
+          "bottom": -404,
+          "left": 375.21875
+        }
+      },
+      {
+        "text": "← Follow input Step49",
+        "r": {
+          "x": 280,
+          "y": -398,
+          "width": 119.46875,
+          "height": 32,
+          "top": -398,
+          "right": 399.46875,
+          "bottom": -366,
+          "left": 280
+        }
+      }
+    ]
+  },
+  "centeredTitle": {
+    "view": {
+      "x": -15144.8,
+      "y": 169.2,
+      "k": 0.85
+    },
+    "label": "85%",
+    "root": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "selected": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "registry": 52,
+    "edges": 51,
+    "visible": 52,
+    "title": {
+      "x": 427.025390625,
+      "y": 282.04998779296875,
+      "width": 159.375,
+      "height": 14.91485595703125,
+      "top": 282.04998779296875,
+      "right": 586.400390625,
+      "bottom": 296.96484375,
+      "left": 427.025390625
+    },
+    "hit": "<div class=\"wui-card-title pqc-node-title\" title=\"FinalChain\" style=\"font: 600 13.5px / 17.55px &quot;IBM Plex Sans&quot;, sans-serif; letter-spacing: -0.2px; color: rgb(31, 36, 48);\">FinalChain</div>",
+    "own": true,
+    "map": {
+      "x": 535,
+      "y": 360.5,
+      "width": 160,
+      "height": 147,
+      "top": 360.5,
+      "right": 695,
+      "bottom": 507.5,
+      "left": 535
+    },
+    "nav": {
+      "x": 286,
+      "y": 465.5,
+      "width": 390.9140625,
+      "height": 40,
+      "top": 465.5,
+      "right": 676.9140625,
+      "bottom": 505.5,
+      "left": 286
+    },
+    "canvas": {
+      "x": 268,
+      "y": 103.5,
+      "width": 443,
+      "height": 420,
+      "top": 103.5,
+      "right": 711,
+      "bottom": 523.5,
+      "left": 268
+    },
+    "bodyY": 244.5,
+    "flowButtons": [
+      {
+        "text": "Inspect target",
+        "r": {
+          "x": 618.265625,
+          "y": -57.5,
+          "width": 80.734375,
+          "height": 32,
+          "top": -57.5,
+          "right": 699,
+          "bottom": -25.5,
+          "left": 618.265625
+        }
+      },
+      {
+        "text": "Trace this query",
+        "r": {
+          "x": 280,
+          "y": -19.5,
+          "width": 89.21875,
+          "height": 32,
+          "top": -19.5,
+          "right": 369.21875,
+          "bottom": 12.5,
+          "left": 280
+        }
+      },
+      {
+        "text": "Clear flow",
+        "r": {
+          "x": 375.21875,
+          "y": -19.5,
+          "width": 62.203125,
+          "height": 32,
+          "top": -19.5,
+          "right": 437.421875,
+          "bottom": 12.5,
+          "left": 375.21875
+        }
+      },
+      {
+        "text": "← Follow input Step49",
+        "r": {
+          "x": 280,
+          "y": 18.5,
+          "width": 119.46875,
+          "height": 32,
+          "top": 18.5,
+          "right": 399.46875,
+          "bottom": 50.5,
+          "left": 280
+        }
+      }
+    ]
+  }
+}

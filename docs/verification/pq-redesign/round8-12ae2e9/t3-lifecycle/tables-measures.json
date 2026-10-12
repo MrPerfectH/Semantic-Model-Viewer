@@ -1,0 +1,55 @@
+{
+  "before": {
+    "view": {
+      "x": 137,
+      "y": 93,
+      "k": 0.9
+    },
+    "pos": {
+      "Report": {
+        "x": 0,
+        "y": 0
+      },
+      "Lookup": {
+        "x": -152.49999999999184,
+        "y": 9.901471797005426
+      }
+    },
+    "selected": "Report",
+    "marked": [
+      "Report"
+    ]
+  },
+  "after": {
+    "view": {
+      "x": 137,
+      "y": 93,
+      "k": 0.9
+    },
+    "pos": {
+      "Report": {
+        "x": 0,
+        "y": 0
+      },
+      "Lookup": {
+        "x": -152.49999999999184,
+        "y": 9.901471797005426
+      }
+    },
+    "selected": "Report",
+    "marked": [
+      "Report"
+    ]
+  },
+  "formats": {
+    "original": [
+      "VAR v = [Base Amount] RETURN DIVIDE(v,2,0)"
+    ],
+    "long": [
+      "VAR v = [Base Amount]\nRETURN\n    DIVIDE ( v, 2, 0 )"
+    ],
+    "short": [
+      "VAR v = [Base Amount]\nRETURN\n▾\n    DIVIDE (\n        v,\n        2,\n        0\n    )"
+    ]
+  }
+}

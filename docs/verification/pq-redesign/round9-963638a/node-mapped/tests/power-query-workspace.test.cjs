@@ -1,0 +1,142 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const path=require('node:path');
+const dir=path.join(__dirname,'../Models/tools/viewer/js');
+function harness(extra={}){const g={U:{el(){}},console,setTimeout,clearTimeout,Blob,URL,...extra};g.window=g;vm.createContext(g);for(const f of ['power-query-dependencies.js','power-query-graph-model.js','power-query-workspace.js'])vm.runInContext(fs.readFileSync(path.join(dir,f),'utf8'),g);return g;}
+const row=(id,code='1',extra={})=>({id,name:id,kind:'expression',code,type:'m',state:'available',classification:'query',...extra});
+const model=nodes=>({tables:[],powerQuery:{nodes,warnings:[]}});
+test('positional mapping keeps duplicate rows distinct; no metadata ID overwrite',()=>{const g=harness(),rows=[row('D','"first"'),row('D','"second"'),row('Consumer','D')],graph=g.PowerQueryGraphModel.build(model(rows),{generation:4}),c=g.PowerQueryWorkspaceInternals.contextFor(graph,rows,4);assert.equal(c.byNodeId.size,3);assert.equal(c.byNodeId.get(graph.nodes[0].id).code,'"first"');assert.equal(c.byNodeId.get(graph.nodes[1].id).code,'"second"');assert.equal(graph.edges.length,0);assert.throws(()=>g.PowerQueryWorkspaceInternals.contextFor(graph,[rows[2],rows[0],rows[1]],4),/mapping/);});
+test('connectivity uses complete resolved incident edges, including parameter/status rows without relations',()=>{const g=harness(),rows=[row('P','1',{classification:'parameter'}),row('Consumer','P'),row('Standalone','Expression.Evaluate("P", #shared)')],m=model(rows);m.tables=[{name:'Missing'}];m.relationships=[{from:'Standalone',to:'Missing'}];const c=g.PowerQueryWorkspaceInternals.contextFor(g.PowerQueryGraphModel.build(m,{generation:1}),rows,1),sets=g.PowerQueryWorkspaceInternals.categories(c);assert.equal(sets.all.size,4);assert.deepEqual([...sets.connected].sort(),['Consumer','P']);assert.equal(sets.disconnected.size,2);assert.ok(sets.disconnected.has('Standalone'));});
+test('ranges are authoritative UTF16 slices and invalid/overlapping spans never become links',()=>{const g=harness(),rows=[row('Quoted','1'),row('C','"😀" & #"Quoted"\r\n  ')],graph={generation:2,nodes:rows.map(n=>({id:n.id,metadataId:n.id,state:n.state})),edges:[{inputId:'Quoted',consumerId:'C',referenceOccurrences:[{at:7,end:16,name:'Quoted'}]}],issues:[]};let c=g.PowerQueryWorkspaceInternals.contextFor(graph,rows,2);assert.equal(c.byNodeId.get('C').code,rows[1].code);assert.equal(rows[1].code.slice(7,16),'#"Quoted"');graph.edges[0].referenceOccurrences.push({at:8,end:13,name:'Bad'});c=g.PowerQueryWorkspaceInternals.contextFor(graph,rows,2);assert.equal(c.byNodeId.get('C').occurrences.length,0);assert.match(c.byNodeId.get('C').issues[0].message,/Overlapping/);graph.edges[0].referenceOccurrences=[{at:-1,end:4}];c=g.PowerQueryWorkspaceInternals.contextFor(graph,rows,2);assert.equal(c.byNodeId.get('C').occurrences.length,0);});
+test('identity gates reject model/metadata replacement, revision changes and duplicate reorder',()=>{const g=harness(),i=g.PowerQueryWorkspaceInternals,m=model([row('D','1'),row('D','2')]),c=i.capture(m);assert.ok(i.same(c,m));m.powerQuery.nodes.reverse();assert.equal(i.same(c,m),false);m.powerQuery.nodes.reverse();m.powerQuery.revision=2;assert.equal(i.same(c,m),false);delete m.powerQuery.revision;m.powerQuery.nodes[0].code='3';assert.equal(i.same(c,m),false);assert.equal(i.same(c,model(m.powerQuery.nodes)),false);});
+test('worker executes canonical build in isolated context, emits atomic graph and job-bound progress',()=>{const g=harness(),messages=[],w={Date,postMessage:m=>messages.push(m)};w.self=w;vm.createContext(w);vm.runInContext('self.window=self;'+fs.readFileSync(path.join(dir,'power-query-dependencies.js'),'utf8')+fs.readFileSync(path.join(dir,'power-query-graph-model.js'),'utf8')+'('+g.PowerQueryWorkspaceInternals.workerMain.toString()+')()',w);w.onmessage({data:{jobId:'one',generation:9,model:model([row('A'),row('B','A')])}});assert.ok(messages.some(m=>m.type==='progress'));assert.equal(messages.at(-1).type,'ready');assert.equal(messages.at(-1).graph.edges.length,1);assert.equal(messages.at(-1).jobId,'one');assert.equal(messages.at(-1).generation,9);assert.equal(messages.filter(m=>m.type==='ready').length,1);});
+function stateHarness(){const g=harness(),w=Object.create(g.PowerQueryWorkspace.prototype),rows=[row('A'),row('B','A'),row('Alone')],m=model(rows),context=g.PowerQueryWorkspaceInternals.contextFor(g.PowerQueryGraphModel.build(m,{generation:3}),rows,3);const events=[];Object.assign(w,{app:{model:m},alive:true,generation:3,navigationEpoch:0,capture:g.PowerQueryWorkspaceInternals.capture(m),context,sets:g.PowerQueryWorkspaceInternals.categories(context),category:'all',query:'',history:[],selectedId:'B',inspectorOpen:true,popover:{hidden:true},message:{textContent:''},canvasHost:{focus(){events.push('hostfocus');}},canvas:{captureLayout(){return new Map();},restoreLayout(){},fit(){events.push(["fit"]);},getViewport(){return {x:12,y:23,k:.8};},setSelection(id){events.push(['select',id]);},setViewport(v){events.push(['viewport',v]);},reveal(id){events.push(['reveal',id]);},focusNode(id){events.push(['focus',id]);return w.sets[w.category].has(id);}},inspector:{captureViewState(){return {codeX:50,codeY:70,inspectorX:3,inspectorY:4,wrap:false,focus:{kind:'reference',nodeId:'B',at:0,end:1}};},select(id,p){events.push(['inspector',id,p.open]);},async restoreViewState(s){events.push(['restore',s]);},focus(){return true;}},dock(){},applyFilters(){events.push(['filters',w.category,w.query]);}});return {w,events,g};}
+test('excluded reference clears filters; Back restores filters/view/scroll without Fit/reveal',async()=>{const {w,events}=stateHarness();w.category='disconnected';w.query='Alone';w.navigate('A',true);assert.equal(w.category,'all');assert.equal(w.query,'');assert.equal(w.selectedId,'A');assert.match(w.message.textContent,/Filters cleared/);events.length=0;await w.back();assert.equal(w.category,'disconnected');assert.equal(w.query,'Alone');assert.equal(w.selectedId,'B');assert.equal(w.inspectorOpen,true);assert.ok(events.some(e=>e[0]==='restore'&&e[1].codeX===50&&e[1].codeY===70));assert.equal(events.some(e=>e[0]==='reveal'),false);assert.equal(w.history.length,0);});
+test('matching library selection retains search; Show all preserves selected object and does not Fit',()=>{const {w,events}=stateHarness();w.query='A';w.navigate('A',false);assert.equal(w.query,'A');w.category='disconnected';w.showAll();assert.equal(w.category,'all');assert.equal(w.query,'');assert.equal(w.selectedId,'A');assert.ok(events.some(e=>e[0]==='reveal'&&e[1]==='A'));});
+test('late navigation callbacks fail generation and source identity gates',()=>{const {w}=stateHarness();assert.equal(w.valid(2),false);let cleared=0;w.reset=()=>{cleared++;};w.app.model.powerQuery={nodes:[],warnings:[]};assert.equal(w.valid(3),false);assert.equal(cleared,1);});
+function jobHarness(extra={}){const workers=[],g=harness({Snapshots:{async loadAssets(){return {sources:{'js/power-query-dependencies.js':'/* canonical */','js/power-query-graph-model.js':'/* canonical */'}};}},Worker:class{constructor(){workers.push(this);}postMessage(m){this.job=m;}terminate(){this.terminated=true;}},...extra}),w=Object.create(g.PowerQueryWorkspace.prototype),contextCalls=[];const node=()=>({hidden:false,textContent:'',value:'',replaceChildren(){this.textContent='';}});Object.assign(w,{alive:true,app:{model:model([row('Secret','SECRET_RAW_M')])},generation:0,navigationEpoch:0,history:[],canvas:{setContext(c){contextCalls.push(c);},fit(){}},inspector:{setContext(c){contextCalls.push(c);}},list:node(),banner:node(),search:node(),filter:node(),count:node(),message:node(),popover:node(),globalDetails:node(),backButton:node(),cancelButton:node(),retryButton:node(),dock(){},applyFilters(){}});return {w,g,workers,contextCalls};}
+const tick=()=>new Promise(resolve=>setTimeout(resolve,15));
+test('real scheduler cancellation terminates worker and rejects queued old-generation graph messages',async()=>{const {w,g,workers}=jobHarness();w.start();await tick();assert.equal(w.phase,'building');const old=workers[0],callback=old.onmessage,generation=w.generation,graph=g.PowerQueryGraphModel.build(w.app.model,{generation});assert.equal(old.job.model.powerQuery.nodes[0].code,'SECRET_RAW_M');w.cancel();assert.equal(old.terminated,true);assert.equal(w.phase,'cancelled');assert.equal(w.jobRows,null);assert.equal(w.context,null);callback({data:{type:'ready',jobId:old.job.jobId,generation,graph}});assert.equal(w.context,null);assert.equal(w.phase,'cancelled');assert.equal(w.selectedId,null);});
+test('worker unavailable produces explicit error with no synchronous analysis fallback',async()=>{const {w}=jobHarness({Worker:undefined});w.start();await tick();assert.equal(w.phase,'error');assert.match(w.message.textContent,/No blocking analysis fallback/);assert.equal(w.context,null);assert.equal(w.retryButton.hidden,false);});
+test('model replaced while runtime assets load cannot launch or publish an old worker',async()=>{let resolve;const {w,workers}=jobHarness({Snapshots:{loadAssets(){return new Promise(r=>{resolve=r;});}}});w.start();await tick();w.app.model=model([row('Replacement','new')]);resolve({sources:{}});await tick();assert.equal(workers.length,0);assert.equal(w.context,null);assert.equal(w.jobRows,null);assert.equal(w.phase,'idle');});
+test('Back deferred focus cannot override a newer same-generation navigation',async()=>{const {w,events}=stateHarness();w.navigate('A',false);let done;w.inspector.restoreViewState=()=>new Promise(r=>{done=r;});let focus=0;w.inspector.focus=()=>{focus++;return true;};const pending=w.back();w.navigate('Alone',false);done();await pending;assert.equal(w.selectedId,'Alone');assert.equal(focus,0);});
+test('terminal worker error invalidates queued ready publication and retained lookup',async()=>{const {w,g,workers}=jobHarness();w.start();await tick();const worker=workers[0],callback=worker.onmessage,generation=w.generation,graph=g.PowerQueryGraphModel.build(w.app.model,{generation});callback({data:{type:'error',jobId:worker.job.jobId,generation,message:'failed'}});assert.equal(w.phase,'error');assert.ok(w.generation>generation);callback({data:{type:'ready',jobId:worker.job.jobId,generation,graph}});assert.equal(w.context,null);assert.equal(w.jobRows,null);assert.equal(w.phase,'error');});
+test('peer tab suspension happens only on transitions and preserves same-model context',()=>{const {w}=stateHarness();const suspended=[];w.host={};w.phase='ready';w.app.state={loaded:true,viewMode:'power-query'};w.canvas.suspend=v=>suspended.push(['canvas',v]);w.inspector.suspend=v=>suspended.push(['inspector',v]);w.update();w.update();assert.equal(suspended.length,2);w.app.state.viewMode='graph';w.update();assert.equal(suspended.length,4);assert.equal(w.host.hidden,true);assert.ok(w.context);assert.equal(w.selectedId,'B');});
+
+test('Reset filters restores exact viewport after banner layout, preserving selection inspector and history',()=>{const {w,events}=stateHarness();w.category='disconnected';w.query='Alone';w.history=[{sentinel:true}];let height=500,cached=height,view={x:-152.5,y:312.55,k:1.3};w.canvas.getViewport=()=>({...view});w.canvas.setViewport=v=>{cached=height;view={...v};events.push('silent-viewport');};w.applyFilters=()=>{height=578;events.push('filters-layout');};const before={...view};w.resetFilters();if(height!==cached)view.y+=(height-cached)/2;assert.deepEqual(view,before);assert.deepEqual(events,['filters-layout','silent-viewport']);assert.equal(w.category,'all');assert.equal(w.query,'');assert.equal(w.selectedId,'B');assert.equal(w.inspectorOpen,true);assert.equal(w.history.length,1);});
+test('Reset filters does not restore an old viewport after replacement or newer navigation',()=>{for(const replace of [false,true]){const {w,events}=stateHarness();w.applyFilters=()=>{if(replace)w.app.model=model([row('new')]);else w.navigationEpoch++;};if(replace)w.reset=()=>{};w.resetFilters();assert.equal(events.some(e=>e[0]==='viewport'),false);}});
+
+test('inspector resize changes independent orientation dimensions and clamps practical bounds',()=>{const {w}=stateHarness();w.width=400;w.height=400;w.below=true;w.resizeInspector(40);assert.equal(w.height,440);assert.equal(w.width,400);w.resizeInspector(999);assert.equal(w.height,650);w.resizeInspector(-999);assert.equal(w.height,300);w.below=false;w.resizeInspector(40);assert.equal(w.width,440);assert.equal(w.height,300);});
+
+test('membership/category/focus/search stay distinct and traversals bound cycles',()=>{
+ const g=harness(),rows=[row('A','C'),row('B','A'),row('C','B'),row('D','C'),row('Alone')],c=g.PowerQueryWorkspaceInternals.contextFor(g.PowerQueryGraphModel.build(model(rows),{generation:1}),rows,1),i=g.PowerQueryWorkspaceInternals;
+ assert.deepEqual([...i.neighborhood(c,'A','inputs',0)],['A']);
+ assert.deepEqual([...i.neighborhood(c,'A','inputs',1)].sort(),['A','C']);
+ assert.deepEqual([...i.neighborhood(c,'A','inputs',2)].sort(),['A','B','C']);
+ assert.deepEqual([...i.neighborhood(c,'A','consumers',Infinity)].sort(),['A','B','C','D']);
+ let p=i.projection(c,new Set(['A','B','Alone']),'all','A','hide','connected',0);assert.deepEqual([...p.visible],['A']);assert.equal(p.sets.connected.size,4);assert.equal(p.sets.all.size,5);
+ p=i.projection(c,new Set(['A','B','Alone']),'all','A','dim','connected',0);assert.equal(p.visible.size,3);assert.equal(p.focus.size,1);
+ p=i.projection(c,new Set(['A','B','Alone']),'disconnected','A','hide','connected',0);assert.equal(p.visible.size,0);assert.equal(p.sets.disconnected.size,1);
+});
+test('remove and blank affect layout only; Undo and Back restore separate state without source mutation',async()=>{
+ const {w,events}=stateHarness();w.ensureState();const source=w.context.byNodeId.get('B').code;
+ w.focusMode='hide';w.direction='inputs';w.depth=0;w.remove('A');assert.equal(w.membership.has('A'),false);assert.ok(w.context.byNodeId.has('A'));assert.equal(w.history.length,0);
+ w.category='disconnected';w.query='Alone';w.listFacet='available';w.navigate('A',false);assert.ok(w.membership.has('A'));assert.equal(w.listFacet,'all');
+ await w.back();assert.equal(w.membership.has('A'),false);assert.equal(w.focusMode,'hide');assert.equal(w.direction,'inputs');assert.equal(w.depth,0);assert.equal(w.listFacet,'available');assert.equal(w.category,'disconnected');
+ w.blank();assert.equal(w.membership.size,0);assert.equal(w.selectedId,null);assert.equal(w.inspectorOpen,false);assert.equal(w.focusMode,'dim');await w.undo();assert.equal(w.selectedId,'B');assert.equal(w.inspectorOpen,true);assert.equal(w.membership.size,2);assert.equal(w.context.byNodeId.get('B').code,source);assert.equal(w.history.length,0);
+});
+test('layout Undo is bounded and model replacement invalidates either restoration',async()=>{const {w}=stateHarness();w.ensureState();for(let i=0;i<30;i++)w.saveLayout();assert.equal(w.layoutHistory.length,25);w.app.model=model([row('Replacement')]);let reset=0;w.reset=()=>reset++;await w.undo();assert.equal(reset,1);assert.equal(w.selectedId,'B');});
+test('table entry uses exact association and never chooses a multipartition default',()=>{const {w}=stateHarness();let navigated=null;w.navigate=id=>navigated=id;w.context.byNodeId=new Map([['p1',{metadataRow:{kind:'partition',table:'Sales',name:'one'},state:'available'}]]);w.chooseTable('Sales');assert.equal(navigated,'p1');});
+test('Back restores viewport after the final hidden-selection banner layout',async()=>{const {w}=stateHarness();w.category='disconnected';w.navigate('A',true);let height=500,cached=height,view={x:10,y:20,k:1};const expected={...w.history.at(-1).viewport};w.canvas.setViewport=v=>{cached=height;view={...v};};w.applyFilters=()=>{height+=49;};await w.back();if(height!==cached)view.y+=(height-cached)/2;assert.deepEqual(view,expected);});
+
+test('Back finalizes controls before restoring disclosure and scroll state',async()=>{const {w,events}=stateHarness();w.navigate('A',true);events.length=0;await w.back();const at=events.findIndex(e=>e[0]==='restore');assert.ok(at>=0);assert.ok(events.slice(0,at).some(e=>e[0]==='filters'));assert.equal(events.slice(at+1).some(e=>e[0]==='filters'),false);assert.equal(events.at(-1)[0],'viewport');});
+test('group filtering uses exact metadata and persists opaquely through Back and reset',async()=>{const {w,g}=stateHarness();const match=g.PowerQueryWorkspaceInternals.groupMatches;assert.equal(match({groupPath:'A/B'},'group:A/B'),true);assert.equal(match({name:'A_B'},'group:A/B'),false);assert.equal(match({},'unassigned'),true);w.groupFilter='group:A/B';w.navigate('A',false);assert.equal(w.groupFilter,'all');await w.back();assert.equal(w.groupFilter,'group:A/B');w.resetFilters();assert.equal(w.groupFilter,'all');});
+test('new membership requests placement once, preserves other members and explicit drop coordinates',()=>{const {w}=stateHarness();w.ensureState();w.membership.delete('A');w.visible=new Set(['B']);const calls=[];w.canvas.placeAdded=(id,p)=>calls.push({id,...p});w.add('A',{x:55,y:66});assert.equal(calls.length,1);assert.equal(calls[0].anchorId,'B');assert.deepEqual(calls[0].position,{x:55,y:66});w.navigate('A',false);assert.equal(calls.length,1);});
+test('Center selected dispatches genuine center only for a current visible selection',()=>{const {w}=stateHarness();w.visible=new Set(['B']);let call=null;w.canvas.center=(id,p)=>{call={id,p};return true;};assert.equal(w.centerSelected(),true);assert.equal(call.id,'B');assert.equal(call.p.readable,true);w.visible.clear();call=null;assert.equal(w.centerSelected(),false);assert.equal(call,null);});
+test('group-only metadata changes invalidate captured workspace identity',()=>{const g=harness(),m=model([row('A')]),i=g.PowerQueryWorkspaceInternals,c=i.capture(m);m.powerQuery.nodes[0].groupPath='Private/Nested';assert.equal(i.same(c,m),false);});
+
+test('flow branch follows only directed resolved paths, excludes merge siblings and terminates cycles',()=>{
+ const g=harness(),rows=[row('P'),row('Raw','P'),row('Clean','Raw'),row('Lookup'),row('Merge','Table.Combine({Clean, Lookup})'),row('Final','Merge'),row('Side','Raw'),row('CycleA','CycleB'),row('CycleB','CycleA'),row('Alone')];
+ const c=g.PowerQueryWorkspaceInternals.contextFor(g.PowerQueryGraphModel.build(model(rows),{generation:1}),rows,1),branch=g.PowerQueryWorkspaceInternals.flowBranch;
+ assert.deepEqual([...branch(c,'Final','P')].sort(),['Clean','Final','Merge','P','Raw']);
+ assert.deepEqual([...branch(c,'P','Final')].sort(),['Clean','Final','Merge','P','Raw']);
+ assert.equal(branch(c,'Final','Side').size,0);assert.equal(branch(c,'Final','Alone').size,0);
+ assert.deepEqual([...branch(c,'CycleA','CycleB')].sort(),['CycleA','CycleB']);
+ assert.equal(branch(c,'Final','Final').size,0);
+});
+test('inspecting a reference retains flow root and direction; Back and layout Undo restore root independently',async()=>{
+ const {w}=stateHarness();w.flowRootId='B';w.direction='inputs';w.depth=Infinity;w.focusMode='hide';
+ w.navigate('A',true);assert.equal(w.flowRootId,'B');assert.equal(w.direction,'inputs');assert.equal(w.depth,Infinity);
+ w.traceSelected();assert.equal(w.flowRootId,'A');assert.equal(w.direction,'consumers');
+ await w.back();assert.equal(w.flowRootId,'B');assert.equal(w.selectedId,'A');assert.equal(w.direction,'inputs');
+ w.blank();assert.equal(w.flowRootId,null);await w.undo();assert.equal(w.flowRootId,'B');assert.equal(w.selectedId,'A');
+ w.clearFlow();assert.equal(w.flowRootId,null);await w.back();assert.equal(w.flowRootId,'B');
+ w.showAll();assert.equal(w.flowRootId,null);await w.undo();assert.equal(w.flowRootId,'B');
+ w.remove('B');assert.equal(w.flowRootId,null);await w.undo();assert.equal(w.flowRootId,'B');
+});
+test('first query establishes an all-depth flow and new generation clears it',()=>{
+ const {w}=stateHarness();w.navigate('B',true);assert.equal(w.flowRootId,'B');assert.equal(w.depth,Infinity);assert.equal(w.direction,'inputs');
+ const job=jobHarness();job.w.flowRootId='Secret';job.w.invalidate();assert.equal(job.w.flowRootId,null);
+});
+test('Arrange enables Undo immediately even when it was previously disabled',()=>{const {w}=stateHarness();w.undoButton={disabled:true};w.canvas.arrange=()=>{};w.visible=new Set(['A','B']);w.arrange();assert.equal(w.undoButton.disabled,false);assert.equal(w.layoutHistory.length,1);});
+test('adding the first object to a blank layout establishes its flow target',()=>{const {w}=stateHarness();w.blank();w.add('B');assert.equal(w.flowRootId,'B');assert.equal(w.direction,'inputs');assert.equal(w.depth,Infinity);});
+
+test('silent restoration refreshes displayed zoom from accepted canvas state, for every shell restore path',async()=>{
+ const {w}=stateHarness();let view={x:25,y:-80,k:.85};w.zoom={textContent:'85%'};w.canvas.getViewport=()=>({...view});w.canvas.setViewport=v=>{view={...v};};
+ w.saveLayout();view={x:0,y:0,k:.31575829383886256};w.zoom.textContent='32%';await w.undo();assert.equal(view.k,.85);assert.equal(w.zoom.textContent,'85%');
+ w.navigate('A',true);view={x:2,y:3,k:.03};w.zoom.textContent='3%';await w.back();assert.equal(view.k,.85);assert.equal(w.zoom.textContent,'85%');
+ w.zoom.textContent='3%';w.resetFilters();assert.equal(w.zoom.textContent,'85%');
+ w.canvas.setViewport=()=>false;w.restoreViewport({x:0,y:0,k:.4});assert.equal(w.zoom.textContent,'85%');
+});
+test('late Undo restoration cannot replace a newer navigation zoom or label',async()=>{
+ const {w}=stateHarness();let view={x:0,y:0,k:.85},done;w.zoom={textContent:'85%'};w.canvas.getViewport=()=>({...view});w.canvas.setViewport=v=>{view={...v};};w.saveLayout();w.inspector.restoreViewState=()=>new Promise(r=>{done=r;});const pending=w.undo();w.navigate('A',false);view={x:20,y:30,k:1.2};w.syncViewportChrome();done();await pending;assert.equal(view.k,1.2);assert.equal(w.zoom.textContent,'120%');
+});
+test('long flow auto framing keeps all membership/positions and centers the selected or supplied terminal node',()=>{
+ const {w}=stateHarness();w.ensureState();w.visible=new Set(['A','B','Alone']);let centered,view={x:0,y:0,k:.03};w.canvas.getViewport=()=>view;w.canvas.center=(id,opts)=>{centered={id,opts};view={x:100,y:50,k:.85};};const membership=[...w.membership];w.fitLayout();assert.equal(centered.id,'B');assert.equal(centered.opts.readable,true);assert.deepEqual([...w.membership],membership);view={x:0,y:0,k:.03};w.selectedId=null;w.fitLayout();assert.equal(centered.id,'B');
+ centered=null;view={x:0,y:0,k:.32};w.fitLayout();assert.equal(centered,null);
+});
+
+test('automatic framing exposes the title inside actual zoomed viewport without changing canvas coordinates',()=>{
+  const {w}=stateHarness();let scroll=645.5;const view=w.canvas.getViewport();
+  w.body={get scrollTop(){return scroll;},set scrollTop(v){scroll=Math.max(0,v);},getBoundingClientRect(){return {top:48,bottom:495};}};
+  w.host={ownerDocument:{defaultView:{innerHeight:543,visualViewport:{offsetTop:0,height:543}}}};
+  w.toolbar={getBoundingClientRect(){return {bottom:190};}};
+  const title={getBoundingClientRect(){return {top:511.05-scroll,bottom:525.965-scroll,height:14.915};}};
+  w.canvasHost.querySelectorAll=()=>[{dataset:{nodeId:'B'},querySelector:()=>title}];
+  w.exposeTitle('B');assert.equal(title.getBoundingClientRect().top,202);assert.deepEqual(w.canvas.getViewport(),view);
+  const settled=scroll;w.exposeTitle('B');assert.equal(scroll,settled,'already-visible target must not jump');
+  scroll=0;w.exposeTitle('B');assert.equal(title.getBoundingClientRect().bottom,483,'bottom clipping respects the visible scroll-container boundary');
+});
+
+test('pending Back and Undo yield inspector focus and late viewport writes to newer input',async()=>{
+  for(const operation of ['back','undo'])for(const type of ['focusin','pointerdown','keydown','wheel']){
+    const {w,events}=stateHarness(),listeners=new Map();let finish,claim;
+    w.host={ownerDocument:{addEventListener(t,f){listeners.set(t,f);},removeEventListener(t,f){if(listeners.get(t)===f)listeners.delete(t);}}};
+    w.navigate('A',false);if(operation==='undo'){w.saveLayout();w.selectedId='Alone';}
+    w.inspector.restoreViewState=(state,owner)=>{claim=owner;return new Promise(r=>finish=r);};
+    const pending=w[operation]();listeners.get(type)();events.length=0;
+    assert.equal(claim(),false);finish();await pending;
+    assert.equal(events.length,0,operation+' must not refocus or reapply the old viewport after '+type);
+    assert.equal(listeners.size,0);
+  }
+});
+
+test('uninterrupted Back retains full restore and exact below-dock scroll; ownership listeners are released',async()=>{
+  const {w,events}=stateHarness(),listeners=new Map();w.body={scrollLeft:0,scrollTop:83.5};
+  w.host={ownerDocument:{addEventListener(t,f){listeners.set(t,f);},removeEventListener(t,f){if(listeners.get(t)===f)listeners.delete(t);}}};
+  const original=w.captureNavigation();w.navigate('A',false);w.body.scrollTop=320;
+  w.inspector.restoreViewState=async(state,claim)=>{assert.equal(claim(),true);assert.equal(listeners.size,0);assert.deepEqual(state,original.inspectorView);};
+  await w.back();assert.equal(w.body.scrollTop,83.5);assert.equal(w.selectedId,original.selectedId);assert.equal(listeners.size,0);assert(events.some(e=>e[0]==='viewport'));
+});
+
+test('ordinary inspection preserves pan/zoom and scroll while deliberate follow still reveals; Back restores root',async()=>{
+ const {w,events}=stateHarness();let view={x:-99,y:43,k:.39};w.canvas.getViewport=()=>({...view});w.canvas.setViewport=v=>{view={...v};};w.body={scrollLeft:3,scrollTop:123};w.flowRootId='B';
+ const before=w.captureNavigation();w.navigate('A',true,{preserveView:true});assert.deepEqual(view,before.viewport);assert.equal(w.body.scrollTop,123);assert.equal(w.flowRootId,'B');assert(!events.some(e=>e[0]==='reveal'));
+ await w.back();assert.equal(w.selectedId,'B');assert.deepEqual(view,before.viewport);events.length=0;w.navigate('A',true);assert(events.some(e=>e[0]==='reveal'));
+});
+test('dock preference persists source-free geometry and survives model invalidation',()=>{
+ const saved=[],g=harness({localStorage:{setItem:(k,v)=>saved.push([k,JSON.parse(v)])}}),w=Object.create(g.PowerQueryWorkspace.prototype);Object.assign(w,{width:440,height:320,dock(){}});w.setDockPreference('bottom');assert.deepEqual(saved,[['smv.pq.inspector.v1',{dock:'bottom',width:440,height:320}]]);w.setDockPreference('invalid');assert.equal(saved.length,1);
+ const j=jobHarness();j.w.dockPreference='bottom';j.w.width=440;j.w.height=320;j.w.invalidate();assert.equal(j.w.dockPreference,'bottom');assert.equal(j.w.width,440);assert.equal(j.w.height,320);
+});

@@ -1,0 +1,715 @@
+{
+  "entryMs": 67.36816700000054,
+  "searchMs": 33.35399999999936,
+  "states": {
+    "all": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "all",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "8 visible / 8 total objects · 8 library results",
+      "banner": "",
+      "code": "",
+      "viewport": {
+        "x": 272.5,
+        "y": 76,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 8,
+      "visible": [
+        "[\"partition\",\"MissingInput\",\"Main\"]",
+        "[\"partition\",\"NonMInput\",\"Main\"]",
+        "[\"expression\",\"\",\"MissingConsumer\"]",
+        "[\"expression\",\"\",\"NonMConsumer\"]",
+        "[\"expression\",\"\",\"StandaloneSQL\"]",
+        "[\"expression\",\"\",\"UnusedParameter\"]",
+        "[\"expression\",\"\",\"DynamicOnly\"]",
+        "[\"table-status\",\"NoPartitions\"]"
+      ],
+      "library": [
+        "MissingInput · unknown · Main",
+        "NonMInput · calculated · Main",
+        "MissingConsumer · query",
+        "NonMConsumer · query",
+        "StandaloneSQL · query",
+        "UnusedParameter · parameter",
+        "DynamicOnly · query",
+        "NoPartitions · No partition metadata"
+      ],
+      "map": "8 visible / 8 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"partition\",\"MissingInput\",\"Main\"]",
+            "metadataId": "[\"partition\",\"MissingInput\",\"Main\"]",
+            "label": "MissingInput",
+            "subtitle": "unknown · Main",
+            "kind": "partition",
+            "table": "MissingInput",
+            "partition": "Main",
+            "state": "missing"
+          },
+          {
+            "id": "[\"partition\",\"NonMInput\",\"Main\"]",
+            "metadataId": "[\"partition\",\"NonMInput\",\"Main\"]",
+            "label": "NonMInput",
+            "subtitle": "calculated · Main",
+            "kind": "partition",
+            "table": "NonMInput",
+            "partition": "Main",
+            "state": "non-m"
+          },
+          {
+            "id": "[\"expression\",\"\",\"MissingConsumer\"]",
+            "metadataId": "[\"expression\",\"\",\"MissingConsumer\"]",
+            "label": "MissingConsumer",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"NonMConsumer\"]",
+            "metadataId": "[\"expression\",\"\",\"NonMConsumer\"]",
+            "label": "NonMConsumer",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"StandaloneSQL\"]",
+            "metadataId": "[\"expression\",\"\",\"StandaloneSQL\"]",
+            "label": "StandaloneSQL",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"UnusedParameter\"]",
+            "metadataId": "[\"expression\",\"\",\"UnusedParameter\"]",
+            "label": "UnusedParameter",
+            "subtitle": "parameter",
+            "kind": "parameter",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "metadataId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "label": "DynamicOnly",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"table-status\",\"NoPartitions\"]",
+            "metadataId": null,
+            "label": "NoPartitions",
+            "subtitle": "No partition metadata",
+            "kind": "table-status",
+            "table": "NoPartitions",
+            "partition": null,
+            "state": "no-partitions"
+          }
+        ],
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"partition\\\",\\\"MissingInput\\\",\\\"Main\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"MissingConsumer\\\"]\"]",
+            "inputId": "[\"partition\",\"MissingInput\",\"Main\"]",
+            "consumerId": "[\"expression\",\"\",\"MissingConsumer\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"partition\",\"MissingInput\",\"Main\"]",
+                "name": "MissingInput",
+                "at": 0,
+                "end": 12
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"partition\\\",\\\"NonMInput\\\",\\\"Main\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"NonMConsumer\\\"]\"]",
+            "inputId": "[\"partition\",\"NonMInput\",\"Main\"]",
+            "consumerId": "[\"expression\",\"\",\"NonMConsumer\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"partition\",\"NonMInput\",\"Main\"]",
+                "name": "NonMInput",
+                "at": 0,
+                "end": 9
+              }
+            ]
+          }
+        ],
+        "issues": [
+          {
+            "consumerId": "[\"partition\",\"MissingInput\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "M metadata is missing or not M."
+          },
+          {
+            "consumerId": "[\"partition\",\"NonMInput\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "M metadata is missing or not M."
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"StandaloneSQL\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Dynamic/environment reference: Expression.Evaluate; targets cannot be established statically."
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Expression.Evaluate"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Dynamic/environment reference: #shared; targets cannot be established statically."
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved reference: #shared"
+          },
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 29,
+        "analysisProgress": {
+          "analyzed": 7,
+          "total": 7,
+          "complete": true,
+          "generation": 29
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"partition\",\"MissingInput\",\"Main\"]",
+          "[\"partition\",\"NonMInput\",\"Main\"]",
+          "[\"expression\",\"\",\"MissingConsumer\"]",
+          "[\"expression\",\"\",\"NonMConsumer\"]",
+          "[\"expression\",\"\",\"StandaloneSQL\"]",
+          "[\"expression\",\"\",\"UnusedParameter\"]",
+          "[\"expression\",\"\",\"DynamicOnly\"]",
+          "[\"table-status\",\"NoPartitions\"]"
+        ],
+        "connected": [
+          "[\"partition\",\"MissingInput\",\"Main\"]",
+          "[\"expression\",\"\",\"MissingConsumer\"]",
+          "[\"partition\",\"NonMInput\",\"Main\"]",
+          "[\"expression\",\"\",\"NonMConsumer\"]"
+        ],
+        "disconnected": [
+          "[\"expression\",\"\",\"StandaloneSQL\"]",
+          "[\"expression\",\"\",\"UnusedParameter\"]",
+          "[\"expression\",\"\",\"DynamicOnly\"]",
+          "[\"table-status\",\"NoPartitions\"]"
+        ]
+      }
+    },
+    "connected": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "connected",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "4 visible / 8 total objects · 4 library results",
+      "banner": "",
+      "code": "",
+      "viewport": {
+        "x": 272.5,
+        "y": 76,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 8,
+      "visible": [
+        "[\"partition\",\"MissingInput\",\"Main\"]",
+        "[\"partition\",\"NonMInput\",\"Main\"]",
+        "[\"expression\",\"\",\"MissingConsumer\"]",
+        "[\"expression\",\"\",\"NonMConsumer\"]"
+      ],
+      "library": [
+        "MissingInput · unknown · Main",
+        "NonMInput · calculated · Main",
+        "MissingConsumer · query",
+        "NonMConsumer · query"
+      ],
+      "map": "4 visible / 8 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"partition\",\"MissingInput\",\"Main\"]",
+            "metadataId": "[\"partition\",\"MissingInput\",\"Main\"]",
+            "label": "MissingInput",
+            "subtitle": "unknown · Main",
+            "kind": "partition",
+            "table": "MissingInput",
+            "partition": "Main",
+            "state": "missing"
+          },
+          {
+            "id": "[\"partition\",\"NonMInput\",\"Main\"]",
+            "metadataId": "[\"partition\",\"NonMInput\",\"Main\"]",
+            "label": "NonMInput",
+            "subtitle": "calculated · Main",
+            "kind": "partition",
+            "table": "NonMInput",
+            "partition": "Main",
+            "state": "non-m"
+          },
+          {
+            "id": "[\"expression\",\"\",\"MissingConsumer\"]",
+            "metadataId": "[\"expression\",\"\",\"MissingConsumer\"]",
+            "label": "MissingConsumer",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"NonMConsumer\"]",
+            "metadataId": "[\"expression\",\"\",\"NonMConsumer\"]",
+            "label": "NonMConsumer",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"StandaloneSQL\"]",
+            "metadataId": "[\"expression\",\"\",\"StandaloneSQL\"]",
+            "label": "StandaloneSQL",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"UnusedParameter\"]",
+            "metadataId": "[\"expression\",\"\",\"UnusedParameter\"]",
+            "label": "UnusedParameter",
+            "subtitle": "parameter",
+            "kind": "parameter",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "metadataId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "label": "DynamicOnly",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"table-status\",\"NoPartitions\"]",
+            "metadataId": null,
+            "label": "NoPartitions",
+            "subtitle": "No partition metadata",
+            "kind": "table-status",
+            "table": "NoPartitions",
+            "partition": null,
+            "state": "no-partitions"
+          }
+        ],
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"partition\\\",\\\"MissingInput\\\",\\\"Main\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"MissingConsumer\\\"]\"]",
+            "inputId": "[\"partition\",\"MissingInput\",\"Main\"]",
+            "consumerId": "[\"expression\",\"\",\"MissingConsumer\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"partition\",\"MissingInput\",\"Main\"]",
+                "name": "MissingInput",
+                "at": 0,
+                "end": 12
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"partition\\\",\\\"NonMInput\\\",\\\"Main\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"NonMConsumer\\\"]\"]",
+            "inputId": "[\"partition\",\"NonMInput\",\"Main\"]",
+            "consumerId": "[\"expression\",\"\",\"NonMConsumer\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"partition\",\"NonMInput\",\"Main\"]",
+                "name": "NonMInput",
+                "at": 0,
+                "end": 9
+              }
+            ]
+          }
+        ],
+        "issues": [
+          {
+            "consumerId": "[\"partition\",\"MissingInput\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "M metadata is missing or not M."
+          },
+          {
+            "consumerId": "[\"partition\",\"NonMInput\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "M metadata is missing or not M."
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"StandaloneSQL\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Dynamic/environment reference: Expression.Evaluate; targets cannot be established statically."
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Expression.Evaluate"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Dynamic/environment reference: #shared; targets cannot be established statically."
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved reference: #shared"
+          },
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 29,
+        "analysisProgress": {
+          "analyzed": 7,
+          "total": 7,
+          "complete": true,
+          "generation": 29
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"partition\",\"MissingInput\",\"Main\"]",
+          "[\"partition\",\"NonMInput\",\"Main\"]",
+          "[\"expression\",\"\",\"MissingConsumer\"]",
+          "[\"expression\",\"\",\"NonMConsumer\"]",
+          "[\"expression\",\"\",\"StandaloneSQL\"]",
+          "[\"expression\",\"\",\"UnusedParameter\"]",
+          "[\"expression\",\"\",\"DynamicOnly\"]",
+          "[\"table-status\",\"NoPartitions\"]"
+        ],
+        "connected": [
+          "[\"partition\",\"MissingInput\",\"Main\"]",
+          "[\"expression\",\"\",\"MissingConsumer\"]",
+          "[\"partition\",\"NonMInput\",\"Main\"]",
+          "[\"expression\",\"\",\"NonMConsumer\"]"
+        ],
+        "disconnected": [
+          "[\"expression\",\"\",\"StandaloneSQL\"]",
+          "[\"expression\",\"\",\"UnusedParameter\"]",
+          "[\"expression\",\"\",\"DynamicOnly\"]",
+          "[\"table-status\",\"NoPartitions\"]"
+        ]
+      }
+    },
+    "disconnected": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "disconnected",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "4 visible / 8 total objects · 4 library results",
+      "banner": "Zero resolved incident references. Static uncertainty remains; disconnected does not prove independence.",
+      "code": "",
+      "viewport": {
+        "x": 272.5,
+        "y": 53.75,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 8,
+      "visible": [
+        "[\"expression\",\"\",\"StandaloneSQL\"]",
+        "[\"expression\",\"\",\"UnusedParameter\"]",
+        "[\"expression\",\"\",\"DynamicOnly\"]",
+        "[\"table-status\",\"NoPartitions\"]"
+      ],
+      "library": [
+        "StandaloneSQL · query",
+        "UnusedParameter · parameter",
+        "DynamicOnly · query",
+        "NoPartitions · No partition metadata"
+      ],
+      "map": "4 visible / 8 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"partition\",\"MissingInput\",\"Main\"]",
+            "metadataId": "[\"partition\",\"MissingInput\",\"Main\"]",
+            "label": "MissingInput",
+            "subtitle": "unknown · Main",
+            "kind": "partition",
+            "table": "MissingInput",
+            "partition": "Main",
+            "state": "missing"
+          },
+          {
+            "id": "[\"partition\",\"NonMInput\",\"Main\"]",
+            "metadataId": "[\"partition\",\"NonMInput\",\"Main\"]",
+            "label": "NonMInput",
+            "subtitle": "calculated · Main",
+            "kind": "partition",
+            "table": "NonMInput",
+            "partition": "Main",
+            "state": "non-m"
+          },
+          {
+            "id": "[\"expression\",\"\",\"MissingConsumer\"]",
+            "metadataId": "[\"expression\",\"\",\"MissingConsumer\"]",
+            "label": "MissingConsumer",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"NonMConsumer\"]",
+            "metadataId": "[\"expression\",\"\",\"NonMConsumer\"]",
+            "label": "NonMConsumer",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"StandaloneSQL\"]",
+            "metadataId": "[\"expression\",\"\",\"StandaloneSQL\"]",
+            "label": "StandaloneSQL",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"UnusedParameter\"]",
+            "metadataId": "[\"expression\",\"\",\"UnusedParameter\"]",
+            "label": "UnusedParameter",
+            "subtitle": "parameter",
+            "kind": "parameter",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "metadataId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "label": "DynamicOnly",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"table-status\",\"NoPartitions\"]",
+            "metadataId": null,
+            "label": "NoPartitions",
+            "subtitle": "No partition metadata",
+            "kind": "table-status",
+            "table": "NoPartitions",
+            "partition": null,
+            "state": "no-partitions"
+          }
+        ],
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"partition\\\",\\\"MissingInput\\\",\\\"Main\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"MissingConsumer\\\"]\"]",
+            "inputId": "[\"partition\",\"MissingInput\",\"Main\"]",
+            "consumerId": "[\"expression\",\"\",\"MissingConsumer\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"partition\",\"MissingInput\",\"Main\"]",
+                "name": "MissingInput",
+                "at": 0,
+                "end": 12
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"partition\\\",\\\"NonMInput\\\",\\\"Main\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"NonMConsumer\\\"]\"]",
+            "inputId": "[\"partition\",\"NonMInput\",\"Main\"]",
+            "consumerId": "[\"expression\",\"\",\"NonMConsumer\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"partition\",\"NonMInput\",\"Main\"]",
+                "name": "NonMInput",
+                "at": 0,
+                "end": 9
+              }
+            ]
+          }
+        ],
+        "issues": [
+          {
+            "consumerId": "[\"partition\",\"MissingInput\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "M metadata is missing or not M."
+          },
+          {
+            "consumerId": "[\"partition\",\"NonMInput\",\"Main\"]",
+            "kind": "analysis-uncertainty",
+            "message": "M metadata is missing or not M."
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"StandaloneSQL\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Dynamic/environment reference: Expression.Evaluate; targets cannot be established statically."
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Expression.Evaluate"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Dynamic/environment reference: #shared; targets cannot be established statically."
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"DynamicOnly\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved reference: #shared"
+          },
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 29,
+        "analysisProgress": {
+          "analyzed": 7,
+          "total": 7,
+          "complete": true,
+          "generation": 29
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"partition\",\"MissingInput\",\"Main\"]",
+          "[\"partition\",\"NonMInput\",\"Main\"]",
+          "[\"expression\",\"\",\"MissingConsumer\"]",
+          "[\"expression\",\"\",\"NonMConsumer\"]",
+          "[\"expression\",\"\",\"StandaloneSQL\"]",
+          "[\"expression\",\"\",\"UnusedParameter\"]",
+          "[\"expression\",\"\",\"DynamicOnly\"]",
+          "[\"table-status\",\"NoPartitions\"]"
+        ],
+        "connected": [
+          "[\"partition\",\"MissingInput\",\"Main\"]",
+          "[\"expression\",\"\",\"MissingConsumer\"]",
+          "[\"partition\",\"NonMInput\",\"Main\"]",
+          "[\"expression\",\"\",\"NonMConsumer\"]"
+        ],
+        "disconnected": [
+          "[\"expression\",\"\",\"StandaloneSQL\"]",
+          "[\"expression\",\"\",\"UnusedParameter\"]",
+          "[\"expression\",\"\",\"DynamicOnly\"]",
+          "[\"table-status\",\"NoPartitions\"]"
+        ]
+      }
+    }
+  },
+  "target": {
+    "id": "[\"expression\",\"\",\"DynamicOnly\"]",
+    "rect": {
+      "x": 492.5,
+      "y": 705.5,
+      "width": 275,
+      "height": 97.5,
+      "top": 705.5,
+      "right": 767.5,
+      "bottom": 803,
+      "left": 492.5
+    },
+    "canvas": {
+      "x": 220,
+      "y": 164.5,
+      "width": 813,
+      "height": 804.5,
+      "top": 164.5,
+      "right": 1033,
+      "bottom": 969,
+      "left": 220
+    },
+    "view": {
+      "x": 272.5,
+      "y": 76,
+      "k": 1.25
+    }
+  },
+  "longTasks": []
+}

@@ -1,0 +1,120 @@
+{
+  "name": "PQ38 Synthetic",
+  "model": {
+    "tables": [
+      {
+        "name": "Acceptance Sales",
+        "columns": [
+          {
+            "name": "Amount",
+            "dataType": "int64"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Acceptance Total",
+            "expression": "SUM('Acceptance Sales'[Amount])"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Main 'quoted'",
+            "source": {
+              "type": "m",
+              "expression": "let\r\n  Source = #\"Base Query\",\r\n  Text = \"PQ_RAW_ONLY_38 \"\"quoted\"\" λ\"  \r\nin Source\r\n"
+            }
+          },
+          {
+            "name": "Other",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "  x = Scalar",
+                "in x"
+              ]
+            }
+          },
+          {
+            "name": "Calculated",
+            "source": {
+              "type": "calculated",
+              "expression": "ROW(\"Amount\", 1)"
+            }
+          },
+          {
+            "name": "Missing"
+          }
+        ]
+      },
+      {
+        "name": "No Partitions",
+        "columns": [],
+        "partitions": []
+      }
+    ],
+    "expressions": [
+      {
+        "name": "Base Query",
+        "kind": "m",
+        "expression": "let Source = CycleA in Source"
+      },
+      {
+        "name": "CycleA",
+        "kind": "m",
+        "expression": "CycleB"
+      },
+      {
+        "name": "CycleB",
+        "kind": "m",
+        "expression": "CycleA"
+      },
+      {
+        "name": "pRegion",
+        "kind": "m",
+        "expression": "\"PQ_CREDENTIAL_ONLY_38\" meta [IsParameterQuery=true]"
+      },
+      {
+        "name": "Scalar",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "Function",
+        "kind": "m",
+        "expression": "(SharedValue as number) => SharedValue + 1"
+      },
+      {
+        "name": "SharedValue",
+        "kind": "m",
+        "expression": "7"
+      },
+      {
+        "name": "Shadow",
+        "kind": "m",
+        "expression": "let SharedValue = 1 in SharedValue"
+      },
+      {
+        "name": "Lexical",
+        "kind": "m",
+        "expression": "let x = #\"Base Query\", s = \"SharedValue\" /* CycleA */ in x"
+      },
+      {
+        "name": "Dynamic",
+        "kind": "m",
+        "expression": "Expression.Evaluate(\"Base Query\", #shared)"
+      },
+      {
+        "name": "Missing",
+        "kind": "m",
+        "expression": "AbsentQuery"
+      },
+      {
+        "name": "UnsafeText",
+        "kind": "m",
+        "expression": "\"</script> PQ_SHARED_ONLY_38 https://pq-private-38.invalid/\""
+      }
+    ],
+    "relationships": []
+  }
+}

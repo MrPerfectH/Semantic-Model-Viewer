@@ -1,0 +1,10 @@
+Independent fixture self-check only; no production module was loaded.
+Command: node --test tests/pq-redesign-independent-fixtures.test.cjs
+First run: 9 tests, 8 pass, 1 fail.
+A4 literal UTF-16 oracle protects repeated/escaped refs and CRLF bytes
+AssertionError: 32 !== 33
+Diagnosis: hand-counted assertion was one UTF-16 unit too large. Prefix is
+"let\r\n" (5) + "  Emoji = \"😀\",\r\n" (17) + "  First = " (10) = 32.
+The authored source, annotated occurrence oracle and all historical fixtures
+were unchanged by the correction. Corrected only the new hand-count assertion.
+This record is fixture-authoring evidence, not a product regression or acceptance.

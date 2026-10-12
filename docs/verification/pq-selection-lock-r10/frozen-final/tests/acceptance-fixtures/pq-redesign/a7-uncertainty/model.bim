@@ -1,0 +1,145 @@
+{
+  "name": "Independent PQ redesign a7-uncertainty",
+  "model": {
+    "tables": [
+      {
+        "name": "Sales",
+        "columns": [],
+        "partitions": [
+          {
+            "name": "Current",
+            "source": {
+              "type": "m",
+              "expression": "RangeStart"
+            }
+          },
+          {
+            "name": "History",
+            "source": {
+              "type": "m",
+              "expression": "RangeStart"
+            }
+          }
+        ]
+      },
+      {
+        "name": "NoPartitions",
+        "columns": [],
+        "partitions": []
+      },
+      {
+        "name": "NonM",
+        "columns": [],
+        "partitions": [
+          {
+            "name": "Calc",
+            "source": {
+              "type": "calculated",
+              "expression": "ROW(\"ID\", 1)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Missing",
+        "columns": [],
+        "partitions": [
+          {
+            "name": "Main"
+          }
+        ]
+      },
+      {
+        "name": "Collision",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Main",
+            "source": {
+              "type": "m",
+              "expression": "1"
+            }
+          }
+        ]
+      }
+    ],
+    "expressions": [
+      {
+        "name": "RangeStart",
+        "kind": "m",
+        "expression": "\"2026-01-01\" meta [IsParameterQuery=true]"
+      },
+      {
+        "name": "AmbiguousTable",
+        "kind": "m",
+        "expression": "Sales"
+      },
+      {
+        "name": "Collision",
+        "kind": "m",
+        "expression": "2"
+      },
+      {
+        "name": "AmbiguousName",
+        "kind": "m",
+        "expression": "Collision"
+      },
+      {
+        "name": "Duplicate",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Duplicate",
+        "kind": "m",
+        "expression": "2"
+      },
+      {
+        "name": "DuplicateConsumer",
+        "kind": "m",
+        "expression": "Duplicate"
+      },
+      {
+        "name": "Dynamic",
+        "kind": "m",
+        "expression": "Expression.Evaluate(\"Sales\", #shared)"
+      },
+      {
+        "name": "MissingRef",
+        "kind": "m",
+        "expression": "NotInMetadata"
+      },
+      {
+        "name": "Unsupported",
+        "kind": "m",
+        "expression": "section Section1; shared Probe = RangeStart;"
+      },
+      {
+        "name": "CycleA",
+        "kind": "m",
+        "expression": "CycleB"
+      },
+      {
+        "name": "CycleB",
+        "kind": "m",
+        "expression": "CycleA"
+      },
+      {
+        "name": "SelfCycle",
+        "kind": "m",
+        "expression": "SelfCycle"
+      },
+      {
+        "name": "ParseFailure",
+        "kind": "m",
+        "expression": "RangeStart +"
+      }
+    ],
+    "relationships": []
+  }
+}

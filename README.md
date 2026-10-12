@@ -411,3 +411,54 @@ Bug reports, ideas and questions are welcome through
 Semantic Model Viewer is built and maintained by Przemek Harazny
 ([@MrPerfectH](https://github.com/MrPerfectH)) as a personal open-source project. The demo
 model and its screenshots use only synthetic data.
+
+### Power Query metadata (feature branch)
+
+Open the **Power Query** workspace next to Tables and Measures. It shows the complete
+available metadata inventory as an input → consumer query graph, including disconnected
+objects, parameters, functions, explicit table partitions and missing-partition status.
+Select an object for read-only, line-numbered M; exact resolved reference occurrences
+navigate to their input. Back restores selection, filters, viewport and inspector scroll.
+No M runs and no source data is fetched. TMDL partition sources/shared expressions and
+corresponding `model.bim` metadata are supported, with explicit missing/non-M states.
+
+**All / Connected / Disconnected** filters use resolved incident Power Query references
+in the complete model, never semantic relationships or source co-location. Disconnected
+means zero resolved edges, with an uncertainty caveat; it does not prove independence.
+Category filters hide canvas/library rows; search narrows the library and dims canvas
+nonmatches. Counts retain total inventory. A filtered selection retains its inspector
+and offers Show all. Reset filters preserves selection/layout; model changes clear them.
+
+Use **Open full query** beneath the selected query name for a nearly full-window M
+reader with 14px code, line wrapping, exact Copy M and clickable references. Escape
+returns focus to the opener. Source text and original line endings are never reformatted.
+Query connectors use thin straight segments and small open chevrons pointing from input
+to consumer; click a connector for reference details.
+
+Pan, zoom, Fit and the visible-canvas minimap explore all components without upstream
+expansion caps. Analysis builds atomically in a cancellable background worker; cancellation
+and worker failure do not imply absent dependencies. Static findings remain partial:
+dynamic/missing/ambiguous references, unsupported syntax, cycles and analysis notices
+remain explicit and do not establish execution order or complete lineage.
+
+Raw M and PQ workspace/context/history stay excluded from **Save snapshot**. Offline
+snapshots explain that code is unavailable. Pre-generated JSON may also omit M.
+See [metadata limitations](docs/power-query-contract.md), the
+[presentation contract](docs/power-query-redesign/interface-contract-v2.md), and
+[filter policy](docs/power-query-redesign/filter-addendum.md). Original verification
+remains historical; redesigned UI acceptance is recorded separately.
+
+### Following a Power Query flow
+
+Choose a query, parameter or table to set a flow target. Inspecting an M reference,
+canvas card, or an **Inputs / Consumers** button keeps that target fixed. The purple
+outline marks the target; stronger blue links trace the inspected branch using only
+resolved M references. These are separate from semantic model relationships.
+
+Use **Hide unrelated** to see the flow, **Trace this query** to choose the inspected
+query as the new target, or **Inspect target** to return to its M. Direction and
+distance apply to the target. **Back** restores navigation, filters and reader state;
+**Undo** restores layout edits. **Clear flow** returns to selection focus; **Show all**
+also restores the complete layout membership. Arrange remains input → consumer and
+preserves positions until explicitly invoked. Static analysis is partial; cycles and
+uncertainty remain visible. No M is executed or included in default shared snapshots.

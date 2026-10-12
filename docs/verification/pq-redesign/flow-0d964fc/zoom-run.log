@@ -1,0 +1,22 @@
+{
+  "out": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay",
+  "passed": 2,
+  "failures": [
+    {
+      "name": "Actual resize transition 1280 step0 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ null\n- '[\"expression\",\"\",\"Merged Query\"]'\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs:57:56\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs:47:45"
+    },
+    {
+      "name": "Actual resize transition 1280 step2 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ null\n- '[\"expression\",\"\",\"Merged Query\"]'\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs:57:56\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs:47:45"
+    },
+    {
+      "name": "Actual resize transition 1440 step0 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '[\"expression\",\"\",\"FinalOutput\"]'\n- '[\"expression\",\"\",\"Merged Query\"]'\n                     ^\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs:57:56\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs:47:45"
+    },
+    {
+      "name": "Actual resize transition 1440 step2 zoom2",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '[\"expression\",\"\",\"FinalOutput\"]'\n- '[\"expression\",\"\",\"Merged Query\"]'\n                     ^\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs:57:56\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs:47:45"
+    }
+  ]
+}

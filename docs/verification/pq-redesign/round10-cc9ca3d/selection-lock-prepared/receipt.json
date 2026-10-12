@@ -1,0 +1,13 @@
+{
+  "candidate": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7",
+  "checks": [
+    "selected fact outside locked root stays opaque and dark, true47/85 typography and 1.8 non-scaling edges",
+    "Fit never positions; two far-origin Arrange compact retains hidden coordinates and exact Undo"
+  ],
+  "failures": [
+    {
+      "name": "unlocked follows selection; trusted lock/unlock preserves view; direct neighbor Back; reset and Blank Undo",
+      "error": "Error: {\"content\":[{\"type\":\"text\",\"text\":\"Preview automation evaluate failed: SyntaxError: missing ) after argument list\"}],\"isError\":true}\n    at u (eval at <anonymous> (exec_main.mjs:4:160), <anonymous>:1:159)\n    at run (eval at <anonymous> (exec_main.mjs:4:160), <anonymous>:1:287)\n    at async eval (eval at <anonymous> (exec_main.mjs:4:160), <anonymous>:6:1457)\n    at async check (eval at <anonymous> (exec_main.mjs:4:160), <anonymous>:4:77)\n    at async eval (eval at <anonymous> (exec_main.mjs:4:160), <anonymous>:5:1)\n    at async exec_main.mjs:4:154"
+    }
+  ]
+}

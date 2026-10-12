@@ -1,0 +1,105 @@
+{
+  "phase": "ready",
+  "message": "Metadata inspected. Static analysis remains partial.",
+  "category": "all",
+  "query": "SameIdentity",
+  "selectedId": "[\"expression\",\"\",\"SameIdentity\"]",
+  "inspectorOpen": true,
+  "count": "2 visible / 2 total objects · 1 library results · Search: SameIdentity",
+  "banner": "",
+  "code": "\"PQ_FILTER_NEW_IDENTITY_ONLY\"",
+  "viewport": {
+    "x": -58.5,
+    "y": 353.5,
+    "k": 1.25
+  },
+  "inspectorView": {
+    "codeX": 0,
+    "codeY": 0,
+    "inspectorX": 0,
+    "inspectorY": 0,
+    "wrap": false,
+    "focus": null
+  },
+  "history": [
+    {
+      "generation": 31,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 308.75,
+        "y": 308.5,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": "SameIdentity"
+    }
+  ],
+  "domNodes": 2,
+  "visible": [
+    "[\"partition\",\"SameTable\",\"Main\"]",
+    "[\"expression\",\"\",\"SameIdentity\"]"
+  ],
+  "library": [
+    "SameIdentity · query"
+  ],
+  "map": "2 visible / 2 objects",
+  "graph": {
+    "nodes": [
+      {
+        "id": "[\"partition\",\"SameTable\",\"Main\"]",
+        "metadataId": "[\"partition\",\"SameTable\",\"Main\"]",
+        "label": "SameTable",
+        "subtitle": "m · Main",
+        "kind": "partition",
+        "table": "SameTable",
+        "partition": "Main",
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"SameIdentity\"]",
+        "metadataId": "[\"expression\",\"\",\"SameIdentity\"]",
+        "label": "SameIdentity",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      }
+    ],
+    "edges": [],
+    "issues": [
+      {
+        "consumerId": null,
+        "kind": "analysis-notice",
+        "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+      }
+    ],
+    "generation": 31,
+    "analysisProgress": {
+      "analyzed": 2,
+      "total": 2,
+      "complete": true,
+      "generation": 31
+    }
+  },
+  "sets": {
+    "all": [
+      "[\"partition\",\"SameTable\",\"Main\"]",
+      "[\"expression\",\"\",\"SameIdentity\"]"
+    ],
+    "connected": [],
+    "disconnected": [
+      "[\"partition\",\"SameTable\",\"Main\"]",
+      "[\"expression\",\"\",\"SameIdentity\"]"
+    ]
+  }
+}

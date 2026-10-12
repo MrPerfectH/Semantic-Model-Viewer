@@ -1,0 +1,1 @@
+CDP internal error occurred returning Object.defineProperty result (Worker.prototype) by value from test-hook cleanup. Correct cleanup performs same restoration then returns primitive true. Underlying lifecycle assertions were reached; no pass claimed until primitive-return rerun finishes.

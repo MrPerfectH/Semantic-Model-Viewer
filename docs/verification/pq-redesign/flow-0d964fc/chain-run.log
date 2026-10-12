@@ -1,0 +1,16 @@
+{
+  "candidate": "0d964fc97273cca8626e3cc4e9b39f73620b7e24",
+  "boundary": "T3 explicit unavailable / Do not retry; isolated Chrome long-chain only",
+  "checks": [
+    "52 exact resolved target ancestors available",
+    "Center selected returns target to readable zoom"
+  ],
+  "failures": [],
+  "usabilityObservation": {
+    "zoom": 0.02923431329530496,
+    "effectiveFont": 0.3946632294866169,
+    "cardsInViewport": 52,
+    "total": 52,
+    "userFitAccepted": false
+  }
+}

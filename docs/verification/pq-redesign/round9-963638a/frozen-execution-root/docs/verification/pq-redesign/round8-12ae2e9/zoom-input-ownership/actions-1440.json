@@ -1,0 +1,5783 @@
+[
+  {
+    "action": "Hide",
+    "point": {
+      "x": 587,
+      "y": 289.7421875,
+      "own": true,
+      "text": "Hide unrelated"
+    },
+    "after": {
+      "nav": {
+        "membership": [
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          "[\"expression\",\"\",\"Parameter\"]",
+          "[\"expression\",\"\",\"Step00\"]",
+          "[\"expression\",\"\",\"Step01\"]",
+          "[\"expression\",\"\",\"Step02\"]",
+          "[\"expression\",\"\",\"Step03\"]",
+          "[\"expression\",\"\",\"Step04\"]",
+          "[\"expression\",\"\",\"Step05\"]",
+          "[\"expression\",\"\",\"Step06\"]",
+          "[\"expression\",\"\",\"Step07\"]",
+          "[\"expression\",\"\",\"Step08\"]",
+          "[\"expression\",\"\",\"Step09\"]",
+          "[\"expression\",\"\",\"Step10\"]",
+          "[\"expression\",\"\",\"Step11\"]",
+          "[\"expression\",\"\",\"Step12\"]",
+          "[\"expression\",\"\",\"Step13\"]",
+          "[\"expression\",\"\",\"Step14\"]",
+          "[\"expression\",\"\",\"Step15\"]",
+          "[\"expression\",\"\",\"Step16\"]",
+          "[\"expression\",\"\",\"Step17\"]",
+          "[\"expression\",\"\",\"Step18\"]",
+          "[\"expression\",\"\",\"Step19\"]",
+          "[\"expression\",\"\",\"Step20\"]",
+          "[\"expression\",\"\",\"Step21\"]",
+          "[\"expression\",\"\",\"Step22\"]",
+          "[\"expression\",\"\",\"Step23\"]",
+          "[\"expression\",\"\",\"Step24\"]",
+          "[\"expression\",\"\",\"Step25\"]",
+          "[\"expression\",\"\",\"Step26\"]",
+          "[\"expression\",\"\",\"Step27\"]",
+          "[\"expression\",\"\",\"Step28\"]",
+          "[\"expression\",\"\",\"Step29\"]",
+          "[\"expression\",\"\",\"Step30\"]",
+          "[\"expression\",\"\",\"Step31\"]",
+          "[\"expression\",\"\",\"Step32\"]",
+          "[\"expression\",\"\",\"Step33\"]",
+          "[\"expression\",\"\",\"Step34\"]",
+          "[\"expression\",\"\",\"Step35\"]",
+          "[\"expression\",\"\",\"Step36\"]",
+          "[\"expression\",\"\",\"Step37\"]",
+          "[\"expression\",\"\",\"Step38\"]",
+          "[\"expression\",\"\",\"Step39\"]",
+          "[\"expression\",\"\",\"Step40\"]",
+          "[\"expression\",\"\",\"Step41\"]",
+          "[\"expression\",\"\",\"Step42\"]",
+          "[\"expression\",\"\",\"Step43\"]",
+          "[\"expression\",\"\",\"Step44\"]",
+          "[\"expression\",\"\",\"Step45\"]",
+          "[\"expression\",\"\",\"Step46\"]",
+          "[\"expression\",\"\",\"Step47\"]",
+          "[\"expression\",\"\",\"Step48\"]",
+          "[\"expression\",\"\",\"Step49\"]"
+        ],
+        "flowRootId": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+        "focusMode": "hide",
+        "direction": "inputs",
+        "depth": null,
+        "listFacet": "all",
+        "groupFilter": "all",
+        "generation": 3,
+        "selectedId": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": -15144.8,
+          "y": 169.2,
+          "k": 0.85
+        },
+        "bodyScroll": {
+          "x": 0,
+          "y": 335.5
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 138,
+          "wrap": true,
+          "focus": {
+            "kind": "focus-hide",
+            "nodeId": "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+          },
+          "disclosures": {
+            "provenance": false
+          },
+          "expanded": false
+        },
+        "category": "all",
+        "query": ""
+      },
+      "layout": [
+        [
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          {
+            "x": 17952,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Parameter\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step00\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step01\"]",
+          {
+            "x": 704,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step02\"]",
+          {
+            "x": 1056,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step03\"]",
+          {
+            "x": 1408,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step04\"]",
+          {
+            "x": 1760,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step05\"]",
+          {
+            "x": 2112,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step06\"]",
+          {
+            "x": 2464,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step07\"]",
+          {
+            "x": 2816,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step08\"]",
+          {
+            "x": 3168,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step09\"]",
+          {
+            "x": 3520,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step10\"]",
+          {
+            "x": 3872,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step11\"]",
+          {
+            "x": 4224,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step12\"]",
+          {
+            "x": 4576,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step13\"]",
+          {
+            "x": 4928,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step14\"]",
+          {
+            "x": 5280,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step15\"]",
+          {
+            "x": 5632,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step16\"]",
+          {
+            "x": 5984,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step17\"]",
+          {
+            "x": 6336,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step18\"]",
+          {
+            "x": 6688,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step19\"]",
+          {
+            "x": 7040,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step20\"]",
+          {
+            "x": 7392,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step21\"]",
+          {
+            "x": 7744,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step22\"]",
+          {
+            "x": 8096,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step23\"]",
+          {
+            "x": 8448,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step24\"]",
+          {
+            "x": 8800,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step25\"]",
+          {
+            "x": 9152,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step26\"]",
+          {
+            "x": 9504,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step27\"]",
+          {
+            "x": 9856,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step28\"]",
+          {
+            "x": 10208,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step29\"]",
+          {
+            "x": 10560,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step30\"]",
+          {
+            "x": 10912,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step31\"]",
+          {
+            "x": 11264,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step32\"]",
+          {
+            "x": 11616,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step33\"]",
+          {
+            "x": 11968,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step34\"]",
+          {
+            "x": 12320,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step35\"]",
+          {
+            "x": 12672,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step36\"]",
+          {
+            "x": 13024,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step37\"]",
+          {
+            "x": 13376,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step38\"]",
+          {
+            "x": 13728,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step39\"]",
+          {
+            "x": 14080,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step40\"]",
+          {
+            "x": 14432,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step41\"]",
+          {
+            "x": 14784,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step42\"]",
+          {
+            "x": 15136,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step43\"]",
+          {
+            "x": 15488,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step44\"]",
+          {
+            "x": 15840,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step45\"]",
+          {
+            "x": 16192,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step46\"]",
+          {
+            "x": 16544,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step47\"]",
+          {
+            "x": 16896,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step48\"]",
+          {
+            "x": 17248,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step49\"]",
+          {
+            "x": 17600,
+            "y": 0
+          }
+        ]
+      ],
+      "label": "85%",
+      "registry": [
+        "[\"expression\",\"\",\"Parameter\"]",
+        "[\"expression\",\"\",\"Step00\"]",
+        "[\"expression\",\"\",\"Step01\"]",
+        "[\"expression\",\"\",\"Step02\"]",
+        "[\"expression\",\"\",\"Step03\"]",
+        "[\"expression\",\"\",\"Step04\"]",
+        "[\"expression\",\"\",\"Step05\"]",
+        "[\"expression\",\"\",\"Step06\"]",
+        "[\"expression\",\"\",\"Step07\"]",
+        "[\"expression\",\"\",\"Step08\"]",
+        "[\"expression\",\"\",\"Step09\"]",
+        "[\"expression\",\"\",\"Step10\"]",
+        "[\"expression\",\"\",\"Step11\"]",
+        "[\"expression\",\"\",\"Step12\"]",
+        "[\"expression\",\"\",\"Step13\"]",
+        "[\"expression\",\"\",\"Step14\"]",
+        "[\"expression\",\"\",\"Step15\"]",
+        "[\"expression\",\"\",\"Step16\"]",
+        "[\"expression\",\"\",\"Step17\"]",
+        "[\"expression\",\"\",\"Step18\"]",
+        "[\"expression\",\"\",\"Step19\"]",
+        "[\"expression\",\"\",\"Step20\"]",
+        "[\"expression\",\"\",\"Step21\"]",
+        "[\"expression\",\"\",\"Step22\"]",
+        "[\"expression\",\"\",\"Step23\"]",
+        "[\"expression\",\"\",\"Step24\"]",
+        "[\"expression\",\"\",\"Step25\"]",
+        "[\"expression\",\"\",\"Step26\"]",
+        "[\"expression\",\"\",\"Step27\"]",
+        "[\"expression\",\"\",\"Step28\"]",
+        "[\"expression\",\"\",\"Step29\"]",
+        "[\"expression\",\"\",\"Step30\"]",
+        "[\"expression\",\"\",\"Step31\"]",
+        "[\"expression\",\"\",\"Step32\"]",
+        "[\"expression\",\"\",\"Step33\"]",
+        "[\"expression\",\"\",\"Step34\"]",
+        "[\"expression\",\"\",\"Step35\"]",
+        "[\"expression\",\"\",\"Step36\"]",
+        "[\"expression\",\"\",\"Step37\"]",
+        "[\"expression\",\"\",\"Step38\"]",
+        "[\"expression\",\"\",\"Step39\"]",
+        "[\"expression\",\"\",\"Step40\"]",
+        "[\"expression\",\"\",\"Step41\"]",
+        "[\"expression\",\"\",\"Step42\"]",
+        "[\"expression\",\"\",\"Step43\"]",
+        "[\"expression\",\"\",\"Step44\"]",
+        "[\"expression\",\"\",\"Step45\"]",
+        "[\"expression\",\"\",\"Step46\"]",
+        "[\"expression\",\"\",\"Step47\"]",
+        "[\"expression\",\"\",\"Step48\"]",
+        "[\"expression\",\"\",\"Step49\"]",
+        "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+      ],
+      "edges": [
+        [
+          "[\"expression\",\"\",\"Parameter\"]",
+          "[\"expression\",\"\",\"Step00\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step00\"]",
+          "[\"expression\",\"\",\"Step01\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step01\"]",
+          "[\"expression\",\"\",\"Step02\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step02\"]",
+          "[\"expression\",\"\",\"Step03\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step03\"]",
+          "[\"expression\",\"\",\"Step04\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step04\"]",
+          "[\"expression\",\"\",\"Step05\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step05\"]",
+          "[\"expression\",\"\",\"Step06\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step06\"]",
+          "[\"expression\",\"\",\"Step07\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step07\"]",
+          "[\"expression\",\"\",\"Step08\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step08\"]",
+          "[\"expression\",\"\",\"Step09\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step09\"]",
+          "[\"expression\",\"\",\"Step10\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step10\"]",
+          "[\"expression\",\"\",\"Step11\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step11\"]",
+          "[\"expression\",\"\",\"Step12\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step12\"]",
+          "[\"expression\",\"\",\"Step13\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step13\"]",
+          "[\"expression\",\"\",\"Step14\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step14\"]",
+          "[\"expression\",\"\",\"Step15\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step15\"]",
+          "[\"expression\",\"\",\"Step16\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step16\"]",
+          "[\"expression\",\"\",\"Step17\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step17\"]",
+          "[\"expression\",\"\",\"Step18\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step18\"]",
+          "[\"expression\",\"\",\"Step19\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step19\"]",
+          "[\"expression\",\"\",\"Step20\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step20\"]",
+          "[\"expression\",\"\",\"Step21\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step21\"]",
+          "[\"expression\",\"\",\"Step22\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step22\"]",
+          "[\"expression\",\"\",\"Step23\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step23\"]",
+          "[\"expression\",\"\",\"Step24\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step24\"]",
+          "[\"expression\",\"\",\"Step25\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step25\"]",
+          "[\"expression\",\"\",\"Step26\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step26\"]",
+          "[\"expression\",\"\",\"Step27\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step27\"]",
+          "[\"expression\",\"\",\"Step28\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step28\"]",
+          "[\"expression\",\"\",\"Step29\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step29\"]",
+          "[\"expression\",\"\",\"Step30\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step30\"]",
+          "[\"expression\",\"\",\"Step31\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step31\"]",
+          "[\"expression\",\"\",\"Step32\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step32\"]",
+          "[\"expression\",\"\",\"Step33\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step33\"]",
+          "[\"expression\",\"\",\"Step34\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step34\"]",
+          "[\"expression\",\"\",\"Step35\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step35\"]",
+          "[\"expression\",\"\",\"Step36\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step36\"]",
+          "[\"expression\",\"\",\"Step37\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step37\"]",
+          "[\"expression\",\"\",\"Step38\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step38\"]",
+          "[\"expression\",\"\",\"Step39\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step39\"]",
+          "[\"expression\",\"\",\"Step40\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step40\"]",
+          "[\"expression\",\"\",\"Step41\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step41\"]",
+          "[\"expression\",\"\",\"Step42\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step42\"]",
+          "[\"expression\",\"\",\"Step43\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step43\"]",
+          "[\"expression\",\"\",\"Step44\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step44\"]",
+          "[\"expression\",\"\",\"Step45\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step45\"]",
+          "[\"expression\",\"\",\"Step46\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step46\"]",
+          "[\"expression\",\"\",\"Step47\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step47\"]",
+          "[\"expression\",\"\",\"Step48\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step48\"]",
+          "[\"expression\",\"\",\"Step49\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step49\"]",
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+        ]
+      ],
+      "visible": [
+        "[\"expression\",\"\",\"Parameter\"]",
+        "[\"expression\",\"\",\"Step00\"]",
+        "[\"expression\",\"\",\"Step01\"]",
+        "[\"expression\",\"\",\"Step02\"]",
+        "[\"expression\",\"\",\"Step03\"]",
+        "[\"expression\",\"\",\"Step04\"]",
+        "[\"expression\",\"\",\"Step05\"]",
+        "[\"expression\",\"\",\"Step06\"]",
+        "[\"expression\",\"\",\"Step07\"]",
+        "[\"expression\",\"\",\"Step08\"]",
+        "[\"expression\",\"\",\"Step09\"]",
+        "[\"expression\",\"\",\"Step10\"]",
+        "[\"expression\",\"\",\"Step11\"]",
+        "[\"expression\",\"\",\"Step12\"]",
+        "[\"expression\",\"\",\"Step13\"]",
+        "[\"expression\",\"\",\"Step14\"]",
+        "[\"expression\",\"\",\"Step15\"]",
+        "[\"expression\",\"\",\"Step16\"]",
+        "[\"expression\",\"\",\"Step17\"]",
+        "[\"expression\",\"\",\"Step18\"]",
+        "[\"expression\",\"\",\"Step19\"]",
+        "[\"expression\",\"\",\"Step20\"]",
+        "[\"expression\",\"\",\"Step21\"]",
+        "[\"expression\",\"\",\"Step22\"]",
+        "[\"expression\",\"\",\"Step23\"]",
+        "[\"expression\",\"\",\"Step24\"]",
+        "[\"expression\",\"\",\"Step25\"]",
+        "[\"expression\",\"\",\"Step26\"]",
+        "[\"expression\",\"\",\"Step27\"]",
+        "[\"expression\",\"\",\"Step28\"]",
+        "[\"expression\",\"\",\"Step29\"]",
+        "[\"expression\",\"\",\"Step30\"]",
+        "[\"expression\",\"\",\"Step31\"]",
+        "[\"expression\",\"\",\"Step32\"]",
+        "[\"expression\",\"\",\"Step33\"]",
+        "[\"expression\",\"\",\"Step34\"]",
+        "[\"expression\",\"\",\"Step35\"]",
+        "[\"expression\",\"\",\"Step36\"]",
+        "[\"expression\",\"\",\"Step37\"]",
+        "[\"expression\",\"\",\"Step38\"]",
+        "[\"expression\",\"\",\"Step39\"]",
+        "[\"expression\",\"\",\"Step40\"]",
+        "[\"expression\",\"\",\"Step41\"]",
+        "[\"expression\",\"\",\"Step42\"]",
+        "[\"expression\",\"\",\"Step43\"]",
+        "[\"expression\",\"\",\"Step44\"]",
+        "[\"expression\",\"\",\"Step45\"]",
+        "[\"expression\",\"\",\"Step46\"]",
+        "[\"expression\",\"\",\"Step47\"]",
+        "[\"expression\",\"\",\"Step48\"]",
+        "[\"expression\",\"\",\"Step49\"]",
+        "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+      ],
+      "title": {
+        "x": 427.025390625,
+        "y": 191.0500030517578,
+        "width": 159.375,
+        "height": 14.914840698242188,
+        "top": 191.0500030517578,
+        "right": 586.400390625,
+        "bottom": 205.96484375,
+        "left": 427.025390625
+      },
+      "own": true,
+      "windowScroll": {
+        "x": 0,
+        "y": 0
+      },
+      "active": {
+        "cls": "ex-button",
+        "aria": null
+      },
+      "width": 400,
+      "height": 400
+    },
+    "actual": {
+      "innerWidth": 720,
+      "innerHeight": 500,
+      "outerWidth": 1440,
+      "outerHeight": 1087,
+      "dpr": 2,
+      "below": true,
+      "width": 400,
+      "height": 400,
+      "inspectorOpen": true,
+      "selectedId": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+      "inspector": {
+        "x": 268,
+        "y": 439.5,
+        "width": 443,
+        "height": 400,
+        "top": 439.5,
+        "right": 711,
+        "bottom": 839.5,
+        "left": 268
+      },
+      "separator": {
+        "x": 268,
+        "y": 432.5,
+        "width": 443,
+        "height": 7,
+        "top": 432.5,
+        "right": 711,
+        "bottom": 439.5,
+        "left": 268
+      },
+      "surface": {
+        "x": 268,
+        "y": 12.5,
+        "width": 443,
+        "height": 420,
+        "top": 12.5,
+        "right": 711,
+        "bottom": 432.5,
+        "left": 268
+      },
+      "aria": {
+        "orientation": "horizontal",
+        "value": "400"
+      },
+      "hit": {
+        "tag": "DIV",
+        "cls": "pqw-resizer",
+        "html": "<div class=\"pqw-resizer\" role=\"separator\" tabindex=\"0\" aria-label=\"Resize Power Query inspector\" aria-orientation=\"horizontal\" aria-valuemin=\"300\" aria-valuemax=\"650\" aria-valuenow=\"400\" aria-valuetext=\"Height 400 pixels\"></div>"
+      },
+      "visualViewport": {
+        "offsetLeft": 0,
+        "offsetTop": 0,
+        "pageLeft": 0,
+        "pageTop": 0,
+        "width": 720,
+        "height": 500,
+        "scale": 1
+      },
+      "scroll": {
+        "windowX": 0,
+        "windowY": 0,
+        "documentX": 0,
+        "documentY": 0,
+        "bodyX": 0,
+        "bodyY": 0,
+        "pqBodyX": 0,
+        "pqBodyY": 335.5,
+        "inspectorHostY": 0,
+        "inspectorRootY": 138
+      },
+      "active": {
+        "tag": "BUTTON",
+        "cls": "ex-button"
+      },
+      "pointer": [
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button ex-primary",
+            "id": "",
+            "aria": null,
+            "text": "Open model"
+          },
+          "clientX": 660.70703125,
+          "clientY": 28,
+          "pageX": 660.70703125,
+          "pageY": 28,
+          "screenX": 1343.4140625,
+          "screenY": 165,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 95.09999999403954
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button ex-primary",
+            "id": "",
+            "aria": null,
+            "text": "Open model"
+          },
+          "clientX": 660.70703125,
+          "clientY": 28,
+          "pageX": 660.70703125,
+          "pageY": 28,
+          "screenX": 1343.4140625,
+          "screenY": 165,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 95.5
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Update model"
+          },
+          "clientX": 505.94140625,
+          "clientY": 338.7265625,
+          "pageX": 505.94140625,
+          "pageY": 338.7265625,
+          "screenX": 1033.8828125,
+          "screenY": 786.453125,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 161.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Update model"
+          },
+          "clientX": 505.94140625,
+          "clientY": 338.7265625,
+          "pageX": 505.94140625,
+          "pageY": 338.7265625,
+          "screenX": 1033.8828125,
+          "screenY": 786.453125,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 161.7999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Power Query"
+          },
+          "clientX": 362.796875,
+          "clientY": 77,
+          "pageX": 362.796875,
+          "pageY": 77,
+          "screenX": 747.59375,
+          "screenY": 263,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 195
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Power Query"
+          },
+          "clientX": 362.796875,
+          "clientY": 77,
+          "pageX": 362.796875,
+          "pageY": 77,
+          "screenX": 747.59375,
+          "screenY": 263,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 195.2999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-table-name pqw-library-row",
+            "id": "",
+            "aria": null,
+            "text": "FinalChainm · FinalChain"
+          },
+          "clientX": 109.8984375,
+          "clientY": 412.44921875,
+          "pageX": 109.8984375,
+          "pageY": 412.44921875,
+          "screenX": 241.796875,
+          "screenY": 933.8984375,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 311.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-table-name pqw-library-row",
+            "id": "",
+            "aria": null,
+            "text": "FinalChainm · FinalChain"
+          },
+          "clientX": 109.8984375,
+          "clientY": 412.44921875,
+          "pageX": 109.8984375,
+          "pageY": 412.44921875,
+          "screenX": 241.796875,
+          "screenY": 933.8984375,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 311.90000000596046
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": null,
+            "text": "Hide unrelated"
+          },
+          "clientX": 587,
+          "clientY": 289.7421875,
+          "pageX": 587,
+          "pageY": 289.7421875,
+          "screenX": 1196,
+          "screenY": 688.484375,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 395
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": null,
+            "text": "Hide unrelated"
+          },
+          "clientX": 587,
+          "clientY": 289.7421875,
+          "pageX": 587,
+          "pageY": 289.7421875,
+          "screenX": 1196,
+          "screenY": 688.484375,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 395.40000000596046
+        }
+      ]
+    }
+  },
+  {
+    "action": "Follow",
+    "point": {
+      "x": 339.734375,
+      "y": 279,
+      "own": true,
+      "text": "← Follow input Step49"
+    },
+    "after": {
+      "nav": {
+        "membership": [
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          "[\"expression\",\"\",\"Parameter\"]",
+          "[\"expression\",\"\",\"Step00\"]",
+          "[\"expression\",\"\",\"Step01\"]",
+          "[\"expression\",\"\",\"Step02\"]",
+          "[\"expression\",\"\",\"Step03\"]",
+          "[\"expression\",\"\",\"Step04\"]",
+          "[\"expression\",\"\",\"Step05\"]",
+          "[\"expression\",\"\",\"Step06\"]",
+          "[\"expression\",\"\",\"Step07\"]",
+          "[\"expression\",\"\",\"Step08\"]",
+          "[\"expression\",\"\",\"Step09\"]",
+          "[\"expression\",\"\",\"Step10\"]",
+          "[\"expression\",\"\",\"Step11\"]",
+          "[\"expression\",\"\",\"Step12\"]",
+          "[\"expression\",\"\",\"Step13\"]",
+          "[\"expression\",\"\",\"Step14\"]",
+          "[\"expression\",\"\",\"Step15\"]",
+          "[\"expression\",\"\",\"Step16\"]",
+          "[\"expression\",\"\",\"Step17\"]",
+          "[\"expression\",\"\",\"Step18\"]",
+          "[\"expression\",\"\",\"Step19\"]",
+          "[\"expression\",\"\",\"Step20\"]",
+          "[\"expression\",\"\",\"Step21\"]",
+          "[\"expression\",\"\",\"Step22\"]",
+          "[\"expression\",\"\",\"Step23\"]",
+          "[\"expression\",\"\",\"Step24\"]",
+          "[\"expression\",\"\",\"Step25\"]",
+          "[\"expression\",\"\",\"Step26\"]",
+          "[\"expression\",\"\",\"Step27\"]",
+          "[\"expression\",\"\",\"Step28\"]",
+          "[\"expression\",\"\",\"Step29\"]",
+          "[\"expression\",\"\",\"Step30\"]",
+          "[\"expression\",\"\",\"Step31\"]",
+          "[\"expression\",\"\",\"Step32\"]",
+          "[\"expression\",\"\",\"Step33\"]",
+          "[\"expression\",\"\",\"Step34\"]",
+          "[\"expression\",\"\",\"Step35\"]",
+          "[\"expression\",\"\",\"Step36\"]",
+          "[\"expression\",\"\",\"Step37\"]",
+          "[\"expression\",\"\",\"Step38\"]",
+          "[\"expression\",\"\",\"Step39\"]",
+          "[\"expression\",\"\",\"Step40\"]",
+          "[\"expression\",\"\",\"Step41\"]",
+          "[\"expression\",\"\",\"Step42\"]",
+          "[\"expression\",\"\",\"Step43\"]",
+          "[\"expression\",\"\",\"Step44\"]",
+          "[\"expression\",\"\",\"Step45\"]",
+          "[\"expression\",\"\",\"Step46\"]",
+          "[\"expression\",\"\",\"Step47\"]",
+          "[\"expression\",\"\",\"Step48\"]",
+          "[\"expression\",\"\",\"Step49\"]"
+        ],
+        "flowRootId": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+        "focusMode": "hide",
+        "direction": "inputs",
+        "depth": null,
+        "listFacet": "all",
+        "groupFilter": "all",
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"Step49\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": -14845.6,
+          "y": 169.2,
+          "k": 0.85
+        },
+        "bodyScroll": {
+          "x": 0,
+          "y": 83.5
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": true,
+          "focus": null,
+          "disclosures": {
+            "provenance": false
+          },
+          "expanded": false
+        },
+        "category": "all",
+        "query": ""
+      },
+      "layout": [
+        [
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          {
+            "x": 17952,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Parameter\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step00\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step01\"]",
+          {
+            "x": 704,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step02\"]",
+          {
+            "x": 1056,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step03\"]",
+          {
+            "x": 1408,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step04\"]",
+          {
+            "x": 1760,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step05\"]",
+          {
+            "x": 2112,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step06\"]",
+          {
+            "x": 2464,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step07\"]",
+          {
+            "x": 2816,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step08\"]",
+          {
+            "x": 3168,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step09\"]",
+          {
+            "x": 3520,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step10\"]",
+          {
+            "x": 3872,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step11\"]",
+          {
+            "x": 4224,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step12\"]",
+          {
+            "x": 4576,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step13\"]",
+          {
+            "x": 4928,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step14\"]",
+          {
+            "x": 5280,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step15\"]",
+          {
+            "x": 5632,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step16\"]",
+          {
+            "x": 5984,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step17\"]",
+          {
+            "x": 6336,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step18\"]",
+          {
+            "x": 6688,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step19\"]",
+          {
+            "x": 7040,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step20\"]",
+          {
+            "x": 7392,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step21\"]",
+          {
+            "x": 7744,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step22\"]",
+          {
+            "x": 8096,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step23\"]",
+          {
+            "x": 8448,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step24\"]",
+          {
+            "x": 8800,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step25\"]",
+          {
+            "x": 9152,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step26\"]",
+          {
+            "x": 9504,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step27\"]",
+          {
+            "x": 9856,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step28\"]",
+          {
+            "x": 10208,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step29\"]",
+          {
+            "x": 10560,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step30\"]",
+          {
+            "x": 10912,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step31\"]",
+          {
+            "x": 11264,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step32\"]",
+          {
+            "x": 11616,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step33\"]",
+          {
+            "x": 11968,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step34\"]",
+          {
+            "x": 12320,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step35\"]",
+          {
+            "x": 12672,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step36\"]",
+          {
+            "x": 13024,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step37\"]",
+          {
+            "x": 13376,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step38\"]",
+          {
+            "x": 13728,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step39\"]",
+          {
+            "x": 14080,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step40\"]",
+          {
+            "x": 14432,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step41\"]",
+          {
+            "x": 14784,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step42\"]",
+          {
+            "x": 15136,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step43\"]",
+          {
+            "x": 15488,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step44\"]",
+          {
+            "x": 15840,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step45\"]",
+          {
+            "x": 16192,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step46\"]",
+          {
+            "x": 16544,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step47\"]",
+          {
+            "x": 16896,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step48\"]",
+          {
+            "x": 17248,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step49\"]",
+          {
+            "x": 17600,
+            "y": 0
+          }
+        ]
+      ],
+      "label": "85%",
+      "registry": [
+        "[\"expression\",\"\",\"Parameter\"]",
+        "[\"expression\",\"\",\"Step00\"]",
+        "[\"expression\",\"\",\"Step01\"]",
+        "[\"expression\",\"\",\"Step02\"]",
+        "[\"expression\",\"\",\"Step03\"]",
+        "[\"expression\",\"\",\"Step04\"]",
+        "[\"expression\",\"\",\"Step05\"]",
+        "[\"expression\",\"\",\"Step06\"]",
+        "[\"expression\",\"\",\"Step07\"]",
+        "[\"expression\",\"\",\"Step08\"]",
+        "[\"expression\",\"\",\"Step09\"]",
+        "[\"expression\",\"\",\"Step10\"]",
+        "[\"expression\",\"\",\"Step11\"]",
+        "[\"expression\",\"\",\"Step12\"]",
+        "[\"expression\",\"\",\"Step13\"]",
+        "[\"expression\",\"\",\"Step14\"]",
+        "[\"expression\",\"\",\"Step15\"]",
+        "[\"expression\",\"\",\"Step16\"]",
+        "[\"expression\",\"\",\"Step17\"]",
+        "[\"expression\",\"\",\"Step18\"]",
+        "[\"expression\",\"\",\"Step19\"]",
+        "[\"expression\",\"\",\"Step20\"]",
+        "[\"expression\",\"\",\"Step21\"]",
+        "[\"expression\",\"\",\"Step22\"]",
+        "[\"expression\",\"\",\"Step23\"]",
+        "[\"expression\",\"\",\"Step24\"]",
+        "[\"expression\",\"\",\"Step25\"]",
+        "[\"expression\",\"\",\"Step26\"]",
+        "[\"expression\",\"\",\"Step27\"]",
+        "[\"expression\",\"\",\"Step28\"]",
+        "[\"expression\",\"\",\"Step29\"]",
+        "[\"expression\",\"\",\"Step30\"]",
+        "[\"expression\",\"\",\"Step31\"]",
+        "[\"expression\",\"\",\"Step32\"]",
+        "[\"expression\",\"\",\"Step33\"]",
+        "[\"expression\",\"\",\"Step34\"]",
+        "[\"expression\",\"\",\"Step35\"]",
+        "[\"expression\",\"\",\"Step36\"]",
+        "[\"expression\",\"\",\"Step37\"]",
+        "[\"expression\",\"\",\"Step38\"]",
+        "[\"expression\",\"\",\"Step39\"]",
+        "[\"expression\",\"\",\"Step40\"]",
+        "[\"expression\",\"\",\"Step41\"]",
+        "[\"expression\",\"\",\"Step42\"]",
+        "[\"expression\",\"\",\"Step43\"]",
+        "[\"expression\",\"\",\"Step44\"]",
+        "[\"expression\",\"\",\"Step45\"]",
+        "[\"expression\",\"\",\"Step46\"]",
+        "[\"expression\",\"\",\"Step47\"]",
+        "[\"expression\",\"\",\"Step48\"]",
+        "[\"expression\",\"\",\"Step49\"]",
+        "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+      ],
+      "edges": [
+        [
+          "[\"expression\",\"\",\"Parameter\"]",
+          "[\"expression\",\"\",\"Step00\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step00\"]",
+          "[\"expression\",\"\",\"Step01\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step01\"]",
+          "[\"expression\",\"\",\"Step02\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step02\"]",
+          "[\"expression\",\"\",\"Step03\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step03\"]",
+          "[\"expression\",\"\",\"Step04\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step04\"]",
+          "[\"expression\",\"\",\"Step05\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step05\"]",
+          "[\"expression\",\"\",\"Step06\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step06\"]",
+          "[\"expression\",\"\",\"Step07\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step07\"]",
+          "[\"expression\",\"\",\"Step08\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step08\"]",
+          "[\"expression\",\"\",\"Step09\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step09\"]",
+          "[\"expression\",\"\",\"Step10\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step10\"]",
+          "[\"expression\",\"\",\"Step11\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step11\"]",
+          "[\"expression\",\"\",\"Step12\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step12\"]",
+          "[\"expression\",\"\",\"Step13\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step13\"]",
+          "[\"expression\",\"\",\"Step14\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step14\"]",
+          "[\"expression\",\"\",\"Step15\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step15\"]",
+          "[\"expression\",\"\",\"Step16\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step16\"]",
+          "[\"expression\",\"\",\"Step17\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step17\"]",
+          "[\"expression\",\"\",\"Step18\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step18\"]",
+          "[\"expression\",\"\",\"Step19\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step19\"]",
+          "[\"expression\",\"\",\"Step20\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step20\"]",
+          "[\"expression\",\"\",\"Step21\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step21\"]",
+          "[\"expression\",\"\",\"Step22\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step22\"]",
+          "[\"expression\",\"\",\"Step23\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step23\"]",
+          "[\"expression\",\"\",\"Step24\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step24\"]",
+          "[\"expression\",\"\",\"Step25\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step25\"]",
+          "[\"expression\",\"\",\"Step26\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step26\"]",
+          "[\"expression\",\"\",\"Step27\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step27\"]",
+          "[\"expression\",\"\",\"Step28\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step28\"]",
+          "[\"expression\",\"\",\"Step29\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step29\"]",
+          "[\"expression\",\"\",\"Step30\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step30\"]",
+          "[\"expression\",\"\",\"Step31\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step31\"]",
+          "[\"expression\",\"\",\"Step32\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step32\"]",
+          "[\"expression\",\"\",\"Step33\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step33\"]",
+          "[\"expression\",\"\",\"Step34\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step34\"]",
+          "[\"expression\",\"\",\"Step35\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step35\"]",
+          "[\"expression\",\"\",\"Step36\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step36\"]",
+          "[\"expression\",\"\",\"Step37\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step37\"]",
+          "[\"expression\",\"\",\"Step38\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step38\"]",
+          "[\"expression\",\"\",\"Step39\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step39\"]",
+          "[\"expression\",\"\",\"Step40\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step40\"]",
+          "[\"expression\",\"\",\"Step41\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step41\"]",
+          "[\"expression\",\"\",\"Step42\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step42\"]",
+          "[\"expression\",\"\",\"Step43\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step43\"]",
+          "[\"expression\",\"\",\"Step44\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step44\"]",
+          "[\"expression\",\"\",\"Step45\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step45\"]",
+          "[\"expression\",\"\",\"Step46\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step46\"]",
+          "[\"expression\",\"\",\"Step47\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step47\"]",
+          "[\"expression\",\"\",\"Step48\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step48\"]",
+          "[\"expression\",\"\",\"Step49\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step49\"]",
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+        ]
+      ],
+      "visible": [
+        "[\"expression\",\"\",\"Parameter\"]",
+        "[\"expression\",\"\",\"Step00\"]",
+        "[\"expression\",\"\",\"Step01\"]",
+        "[\"expression\",\"\",\"Step02\"]",
+        "[\"expression\",\"\",\"Step03\"]",
+        "[\"expression\",\"\",\"Step04\"]",
+        "[\"expression\",\"\",\"Step05\"]",
+        "[\"expression\",\"\",\"Step06\"]",
+        "[\"expression\",\"\",\"Step07\"]",
+        "[\"expression\",\"\",\"Step08\"]",
+        "[\"expression\",\"\",\"Step09\"]",
+        "[\"expression\",\"\",\"Step10\"]",
+        "[\"expression\",\"\",\"Step11\"]",
+        "[\"expression\",\"\",\"Step12\"]",
+        "[\"expression\",\"\",\"Step13\"]",
+        "[\"expression\",\"\",\"Step14\"]",
+        "[\"expression\",\"\",\"Step15\"]",
+        "[\"expression\",\"\",\"Step16\"]",
+        "[\"expression\",\"\",\"Step17\"]",
+        "[\"expression\",\"\",\"Step18\"]",
+        "[\"expression\",\"\",\"Step19\"]",
+        "[\"expression\",\"\",\"Step20\"]",
+        "[\"expression\",\"\",\"Step21\"]",
+        "[\"expression\",\"\",\"Step22\"]",
+        "[\"expression\",\"\",\"Step23\"]",
+        "[\"expression\",\"\",\"Step24\"]",
+        "[\"expression\",\"\",\"Step25\"]",
+        "[\"expression\",\"\",\"Step26\"]",
+        "[\"expression\",\"\",\"Step27\"]",
+        "[\"expression\",\"\",\"Step28\"]",
+        "[\"expression\",\"\",\"Step29\"]",
+        "[\"expression\",\"\",\"Step30\"]",
+        "[\"expression\",\"\",\"Step31\"]",
+        "[\"expression\",\"\",\"Step32\"]",
+        "[\"expression\",\"\",\"Step33\"]",
+        "[\"expression\",\"\",\"Step34\"]",
+        "[\"expression\",\"\",\"Step35\"]",
+        "[\"expression\",\"\",\"Step36\"]",
+        "[\"expression\",\"\",\"Step37\"]",
+        "[\"expression\",\"\",\"Step38\"]",
+        "[\"expression\",\"\",\"Step39\"]",
+        "[\"expression\",\"\",\"Step40\"]",
+        "[\"expression\",\"\",\"Step41\"]",
+        "[\"expression\",\"\",\"Step42\"]",
+        "[\"expression\",\"\",\"Step43\"]",
+        "[\"expression\",\"\",\"Step44\"]",
+        "[\"expression\",\"\",\"Step45\"]",
+        "[\"expression\",\"\",\"Step46\"]",
+        "[\"expression\",\"\",\"Step47\"]",
+        "[\"expression\",\"\",\"Step48\"]",
+        "[\"expression\",\"\",\"Step49\"]",
+        "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+      ],
+      "title": {
+        "x": 417.67578125,
+        "y": 443.04998779296875,
+        "width": 168.724609375,
+        "height": 14.91485595703125,
+        "top": 443.04998779296875,
+        "right": 586.400390625,
+        "bottom": 457.96484375,
+        "left": 417.67578125
+      },
+      "own": true,
+      "windowScroll": {
+        "x": 0,
+        "y": 0
+      },
+      "active": {
+        "cls": "wui-card pqc-node pqc-kind-query pqc-selected pqc-branch",
+        "aria": "Step49 · query"
+      },
+      "width": 400,
+      "height": 400
+    },
+    "actual": {
+      "innerWidth": 720,
+      "innerHeight": 500,
+      "outerWidth": 1440,
+      "outerHeight": 1087,
+      "dpr": 2,
+      "below": true,
+      "width": 400,
+      "height": 400,
+      "inspectorOpen": true,
+      "selectedId": "[\"expression\",\"\",\"Step49\"]",
+      "inspector": {
+        "x": 268,
+        "y": 691.5,
+        "width": 443,
+        "height": 400,
+        "top": 691.5,
+        "right": 711,
+        "bottom": 1091.5,
+        "left": 268
+      },
+      "separator": {
+        "x": 268,
+        "y": 684.5,
+        "width": 443,
+        "height": 7,
+        "top": 684.5,
+        "right": 711,
+        "bottom": 691.5,
+        "left": 268
+      },
+      "surface": {
+        "x": 268,
+        "y": 264.5,
+        "width": 443,
+        "height": 420,
+        "top": 264.5,
+        "right": 711,
+        "bottom": 684.5,
+        "left": 268
+      },
+      "aria": {
+        "orientation": "horizontal",
+        "value": "400"
+      },
+      "hit": {},
+      "visualViewport": {
+        "offsetLeft": 0,
+        "offsetTop": 0,
+        "pageLeft": 0,
+        "pageTop": 0,
+        "width": 720,
+        "height": 500,
+        "scale": 1
+      },
+      "scroll": {
+        "windowX": 0,
+        "windowY": 0,
+        "documentX": 0,
+        "documentY": 0,
+        "bodyX": 0,
+        "bodyY": 0,
+        "pqBodyX": 0,
+        "pqBodyY": 83.5,
+        "inspectorHostY": 0,
+        "inspectorRootY": 0
+      },
+      "active": {
+        "tag": "DIV",
+        "cls": "wui-card pqc-node pqc-kind-query pqc-selected pqc-branch"
+      },
+      "pointer": [
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button ex-primary",
+            "id": "",
+            "aria": null,
+            "text": "Open model"
+          },
+          "clientX": 660.70703125,
+          "clientY": 28,
+          "pageX": 660.70703125,
+          "pageY": 28,
+          "screenX": 1343.4140625,
+          "screenY": 165,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 95.09999999403954
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button ex-primary",
+            "id": "",
+            "aria": null,
+            "text": "Open model"
+          },
+          "clientX": 660.70703125,
+          "clientY": 28,
+          "pageX": 660.70703125,
+          "pageY": 28,
+          "screenX": 1343.4140625,
+          "screenY": 165,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 95.5
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Update model"
+          },
+          "clientX": 505.94140625,
+          "clientY": 338.7265625,
+          "pageX": 505.94140625,
+          "pageY": 338.7265625,
+          "screenX": 1033.8828125,
+          "screenY": 786.453125,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 161.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Update model"
+          },
+          "clientX": 505.94140625,
+          "clientY": 338.7265625,
+          "pageX": 505.94140625,
+          "pageY": 338.7265625,
+          "screenX": 1033.8828125,
+          "screenY": 786.453125,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 161.7999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Power Query"
+          },
+          "clientX": 362.796875,
+          "clientY": 77,
+          "pageX": 362.796875,
+          "pageY": 77,
+          "screenX": 747.59375,
+          "screenY": 263,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 195
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Power Query"
+          },
+          "clientX": 362.796875,
+          "clientY": 77,
+          "pageX": 362.796875,
+          "pageY": 77,
+          "screenX": 747.59375,
+          "screenY": 263,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 195.2999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-table-name pqw-library-row",
+            "id": "",
+            "aria": null,
+            "text": "FinalChainm · FinalChain"
+          },
+          "clientX": 109.8984375,
+          "clientY": 412.44921875,
+          "pageX": 109.8984375,
+          "pageY": 412.44921875,
+          "screenX": 241.796875,
+          "screenY": 933.8984375,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 311.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-table-name pqw-library-row",
+            "id": "",
+            "aria": null,
+            "text": "FinalChainm · FinalChain"
+          },
+          "clientX": 109.8984375,
+          "clientY": 412.44921875,
+          "pageX": 109.8984375,
+          "pageY": 412.44921875,
+          "screenX": 241.796875,
+          "screenY": 933.8984375,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 311.90000000596046
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": null,
+            "text": "Hide unrelated"
+          },
+          "clientX": 587,
+          "clientY": 289.7421875,
+          "pageX": 587,
+          "pageY": 289.7421875,
+          "screenX": 1196,
+          "screenY": 688.484375,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 395
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": null,
+            "text": "Hide unrelated"
+          },
+          "clientX": 587,
+          "clientY": 289.7421875,
+          "pageX": 587,
+          "pageY": 289.7421875,
+          "screenX": 1196,
+          "screenY": 688.484375,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 395.40000000596046
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Follow input Step49",
+            "text": "← Follow input Step49"
+          },
+          "clientX": 339.734375,
+          "clientY": 279,
+          "pageX": 339.734375,
+          "pageY": 279,
+          "screenX": 701.46875,
+          "screenY": 667,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 461.40000000596046
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Follow input Step49",
+            "text": "← Follow input Step49"
+          },
+          "clientX": 339.734375,
+          "clientY": 279,
+          "pageX": 339.734375,
+          "pageY": 279,
+          "screenX": 701.46875,
+          "screenY": 667,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 461.7999999821186
+        }
+      ]
+    }
+  },
+  {
+    "action": "Trace",
+    "point": {
+      "x": 324.609375,
+      "y": 241,
+      "own": true,
+      "text": "Trace this query"
+    },
+    "after": {
+      "nav": {
+        "membership": [
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          "[\"expression\",\"\",\"Parameter\"]",
+          "[\"expression\",\"\",\"Step00\"]",
+          "[\"expression\",\"\",\"Step01\"]",
+          "[\"expression\",\"\",\"Step02\"]",
+          "[\"expression\",\"\",\"Step03\"]",
+          "[\"expression\",\"\",\"Step04\"]",
+          "[\"expression\",\"\",\"Step05\"]",
+          "[\"expression\",\"\",\"Step06\"]",
+          "[\"expression\",\"\",\"Step07\"]",
+          "[\"expression\",\"\",\"Step08\"]",
+          "[\"expression\",\"\",\"Step09\"]",
+          "[\"expression\",\"\",\"Step10\"]",
+          "[\"expression\",\"\",\"Step11\"]",
+          "[\"expression\",\"\",\"Step12\"]",
+          "[\"expression\",\"\",\"Step13\"]",
+          "[\"expression\",\"\",\"Step14\"]",
+          "[\"expression\",\"\",\"Step15\"]",
+          "[\"expression\",\"\",\"Step16\"]",
+          "[\"expression\",\"\",\"Step17\"]",
+          "[\"expression\",\"\",\"Step18\"]",
+          "[\"expression\",\"\",\"Step19\"]",
+          "[\"expression\",\"\",\"Step20\"]",
+          "[\"expression\",\"\",\"Step21\"]",
+          "[\"expression\",\"\",\"Step22\"]",
+          "[\"expression\",\"\",\"Step23\"]",
+          "[\"expression\",\"\",\"Step24\"]",
+          "[\"expression\",\"\",\"Step25\"]",
+          "[\"expression\",\"\",\"Step26\"]",
+          "[\"expression\",\"\",\"Step27\"]",
+          "[\"expression\",\"\",\"Step28\"]",
+          "[\"expression\",\"\",\"Step29\"]",
+          "[\"expression\",\"\",\"Step30\"]",
+          "[\"expression\",\"\",\"Step31\"]",
+          "[\"expression\",\"\",\"Step32\"]",
+          "[\"expression\",\"\",\"Step33\"]",
+          "[\"expression\",\"\",\"Step34\"]",
+          "[\"expression\",\"\",\"Step35\"]",
+          "[\"expression\",\"\",\"Step36\"]",
+          "[\"expression\",\"\",\"Step37\"]",
+          "[\"expression\",\"\",\"Step38\"]",
+          "[\"expression\",\"\",\"Step39\"]",
+          "[\"expression\",\"\",\"Step40\"]",
+          "[\"expression\",\"\",\"Step41\"]",
+          "[\"expression\",\"\",\"Step42\"]",
+          "[\"expression\",\"\",\"Step43\"]",
+          "[\"expression\",\"\",\"Step44\"]",
+          "[\"expression\",\"\",\"Step45\"]",
+          "[\"expression\",\"\",\"Step46\"]",
+          "[\"expression\",\"\",\"Step47\"]",
+          "[\"expression\",\"\",\"Step48\"]",
+          "[\"expression\",\"\",\"Step49\"]"
+        ],
+        "flowRootId": "[\"expression\",\"\",\"Step49\"]",
+        "focusMode": "hide",
+        "direction": "inputs",
+        "depth": null,
+        "listFacet": "all",
+        "groupFilter": "all",
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"Step49\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": -14845.6,
+          "y": 169.2,
+          "k": 0.85
+        },
+        "bodyScroll": {
+          "x": 0,
+          "y": 83.5
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": true,
+          "focus": null,
+          "disclosures": {
+            "provenance": false
+          },
+          "expanded": false
+        },
+        "category": "all",
+        "query": ""
+      },
+      "layout": [
+        [
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          {
+            "x": 17952,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Parameter\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step00\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step01\"]",
+          {
+            "x": 704,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step02\"]",
+          {
+            "x": 1056,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step03\"]",
+          {
+            "x": 1408,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step04\"]",
+          {
+            "x": 1760,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step05\"]",
+          {
+            "x": 2112,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step06\"]",
+          {
+            "x": 2464,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step07\"]",
+          {
+            "x": 2816,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step08\"]",
+          {
+            "x": 3168,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step09\"]",
+          {
+            "x": 3520,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step10\"]",
+          {
+            "x": 3872,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step11\"]",
+          {
+            "x": 4224,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step12\"]",
+          {
+            "x": 4576,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step13\"]",
+          {
+            "x": 4928,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step14\"]",
+          {
+            "x": 5280,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step15\"]",
+          {
+            "x": 5632,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step16\"]",
+          {
+            "x": 5984,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step17\"]",
+          {
+            "x": 6336,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step18\"]",
+          {
+            "x": 6688,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step19\"]",
+          {
+            "x": 7040,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step20\"]",
+          {
+            "x": 7392,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step21\"]",
+          {
+            "x": 7744,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step22\"]",
+          {
+            "x": 8096,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step23\"]",
+          {
+            "x": 8448,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step24\"]",
+          {
+            "x": 8800,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step25\"]",
+          {
+            "x": 9152,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step26\"]",
+          {
+            "x": 9504,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step27\"]",
+          {
+            "x": 9856,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step28\"]",
+          {
+            "x": 10208,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step29\"]",
+          {
+            "x": 10560,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step30\"]",
+          {
+            "x": 10912,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step31\"]",
+          {
+            "x": 11264,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step32\"]",
+          {
+            "x": 11616,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step33\"]",
+          {
+            "x": 11968,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step34\"]",
+          {
+            "x": 12320,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step35\"]",
+          {
+            "x": 12672,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step36\"]",
+          {
+            "x": 13024,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step37\"]",
+          {
+            "x": 13376,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step38\"]",
+          {
+            "x": 13728,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step39\"]",
+          {
+            "x": 14080,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step40\"]",
+          {
+            "x": 14432,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step41\"]",
+          {
+            "x": 14784,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step42\"]",
+          {
+            "x": 15136,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step43\"]",
+          {
+            "x": 15488,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step44\"]",
+          {
+            "x": 15840,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step45\"]",
+          {
+            "x": 16192,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step46\"]",
+          {
+            "x": 16544,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step47\"]",
+          {
+            "x": 16896,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step48\"]",
+          {
+            "x": 17248,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step49\"]",
+          {
+            "x": 17600,
+            "y": 0
+          }
+        ]
+      ],
+      "label": "85%",
+      "registry": [
+        "[\"expression\",\"\",\"Parameter\"]",
+        "[\"expression\",\"\",\"Step00\"]",
+        "[\"expression\",\"\",\"Step01\"]",
+        "[\"expression\",\"\",\"Step02\"]",
+        "[\"expression\",\"\",\"Step03\"]",
+        "[\"expression\",\"\",\"Step04\"]",
+        "[\"expression\",\"\",\"Step05\"]",
+        "[\"expression\",\"\",\"Step06\"]",
+        "[\"expression\",\"\",\"Step07\"]",
+        "[\"expression\",\"\",\"Step08\"]",
+        "[\"expression\",\"\",\"Step09\"]",
+        "[\"expression\",\"\",\"Step10\"]",
+        "[\"expression\",\"\",\"Step11\"]",
+        "[\"expression\",\"\",\"Step12\"]",
+        "[\"expression\",\"\",\"Step13\"]",
+        "[\"expression\",\"\",\"Step14\"]",
+        "[\"expression\",\"\",\"Step15\"]",
+        "[\"expression\",\"\",\"Step16\"]",
+        "[\"expression\",\"\",\"Step17\"]",
+        "[\"expression\",\"\",\"Step18\"]",
+        "[\"expression\",\"\",\"Step19\"]",
+        "[\"expression\",\"\",\"Step20\"]",
+        "[\"expression\",\"\",\"Step21\"]",
+        "[\"expression\",\"\",\"Step22\"]",
+        "[\"expression\",\"\",\"Step23\"]",
+        "[\"expression\",\"\",\"Step24\"]",
+        "[\"expression\",\"\",\"Step25\"]",
+        "[\"expression\",\"\",\"Step26\"]",
+        "[\"expression\",\"\",\"Step27\"]",
+        "[\"expression\",\"\",\"Step28\"]",
+        "[\"expression\",\"\",\"Step29\"]",
+        "[\"expression\",\"\",\"Step30\"]",
+        "[\"expression\",\"\",\"Step31\"]",
+        "[\"expression\",\"\",\"Step32\"]",
+        "[\"expression\",\"\",\"Step33\"]",
+        "[\"expression\",\"\",\"Step34\"]",
+        "[\"expression\",\"\",\"Step35\"]",
+        "[\"expression\",\"\",\"Step36\"]",
+        "[\"expression\",\"\",\"Step37\"]",
+        "[\"expression\",\"\",\"Step38\"]",
+        "[\"expression\",\"\",\"Step39\"]",
+        "[\"expression\",\"\",\"Step40\"]",
+        "[\"expression\",\"\",\"Step41\"]",
+        "[\"expression\",\"\",\"Step42\"]",
+        "[\"expression\",\"\",\"Step43\"]",
+        "[\"expression\",\"\",\"Step44\"]",
+        "[\"expression\",\"\",\"Step45\"]",
+        "[\"expression\",\"\",\"Step46\"]",
+        "[\"expression\",\"\",\"Step47\"]",
+        "[\"expression\",\"\",\"Step48\"]",
+        "[\"expression\",\"\",\"Step49\"]",
+        "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+      ],
+      "edges": [
+        [
+          "[\"expression\",\"\",\"Parameter\"]",
+          "[\"expression\",\"\",\"Step00\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step00\"]",
+          "[\"expression\",\"\",\"Step01\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step01\"]",
+          "[\"expression\",\"\",\"Step02\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step02\"]",
+          "[\"expression\",\"\",\"Step03\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step03\"]",
+          "[\"expression\",\"\",\"Step04\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step04\"]",
+          "[\"expression\",\"\",\"Step05\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step05\"]",
+          "[\"expression\",\"\",\"Step06\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step06\"]",
+          "[\"expression\",\"\",\"Step07\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step07\"]",
+          "[\"expression\",\"\",\"Step08\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step08\"]",
+          "[\"expression\",\"\",\"Step09\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step09\"]",
+          "[\"expression\",\"\",\"Step10\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step10\"]",
+          "[\"expression\",\"\",\"Step11\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step11\"]",
+          "[\"expression\",\"\",\"Step12\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step12\"]",
+          "[\"expression\",\"\",\"Step13\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step13\"]",
+          "[\"expression\",\"\",\"Step14\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step14\"]",
+          "[\"expression\",\"\",\"Step15\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step15\"]",
+          "[\"expression\",\"\",\"Step16\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step16\"]",
+          "[\"expression\",\"\",\"Step17\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step17\"]",
+          "[\"expression\",\"\",\"Step18\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step18\"]",
+          "[\"expression\",\"\",\"Step19\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step19\"]",
+          "[\"expression\",\"\",\"Step20\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step20\"]",
+          "[\"expression\",\"\",\"Step21\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step21\"]",
+          "[\"expression\",\"\",\"Step22\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step22\"]",
+          "[\"expression\",\"\",\"Step23\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step23\"]",
+          "[\"expression\",\"\",\"Step24\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step24\"]",
+          "[\"expression\",\"\",\"Step25\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step25\"]",
+          "[\"expression\",\"\",\"Step26\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step26\"]",
+          "[\"expression\",\"\",\"Step27\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step27\"]",
+          "[\"expression\",\"\",\"Step28\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step28\"]",
+          "[\"expression\",\"\",\"Step29\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step29\"]",
+          "[\"expression\",\"\",\"Step30\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step30\"]",
+          "[\"expression\",\"\",\"Step31\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step31\"]",
+          "[\"expression\",\"\",\"Step32\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step32\"]",
+          "[\"expression\",\"\",\"Step33\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step33\"]",
+          "[\"expression\",\"\",\"Step34\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step34\"]",
+          "[\"expression\",\"\",\"Step35\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step35\"]",
+          "[\"expression\",\"\",\"Step36\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step36\"]",
+          "[\"expression\",\"\",\"Step37\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step37\"]",
+          "[\"expression\",\"\",\"Step38\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step38\"]",
+          "[\"expression\",\"\",\"Step39\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step39\"]",
+          "[\"expression\",\"\",\"Step40\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step40\"]",
+          "[\"expression\",\"\",\"Step41\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step41\"]",
+          "[\"expression\",\"\",\"Step42\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step42\"]",
+          "[\"expression\",\"\",\"Step43\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step43\"]",
+          "[\"expression\",\"\",\"Step44\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step44\"]",
+          "[\"expression\",\"\",\"Step45\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step45\"]",
+          "[\"expression\",\"\",\"Step46\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step46\"]",
+          "[\"expression\",\"\",\"Step47\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step47\"]",
+          "[\"expression\",\"\",\"Step48\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step48\"]",
+          "[\"expression\",\"\",\"Step49\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step49\"]",
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+        ]
+      ],
+      "visible": [
+        "[\"expression\",\"\",\"Parameter\"]",
+        "[\"expression\",\"\",\"Step00\"]",
+        "[\"expression\",\"\",\"Step01\"]",
+        "[\"expression\",\"\",\"Step02\"]",
+        "[\"expression\",\"\",\"Step03\"]",
+        "[\"expression\",\"\",\"Step04\"]",
+        "[\"expression\",\"\",\"Step05\"]",
+        "[\"expression\",\"\",\"Step06\"]",
+        "[\"expression\",\"\",\"Step07\"]",
+        "[\"expression\",\"\",\"Step08\"]",
+        "[\"expression\",\"\",\"Step09\"]",
+        "[\"expression\",\"\",\"Step10\"]",
+        "[\"expression\",\"\",\"Step11\"]",
+        "[\"expression\",\"\",\"Step12\"]",
+        "[\"expression\",\"\",\"Step13\"]",
+        "[\"expression\",\"\",\"Step14\"]",
+        "[\"expression\",\"\",\"Step15\"]",
+        "[\"expression\",\"\",\"Step16\"]",
+        "[\"expression\",\"\",\"Step17\"]",
+        "[\"expression\",\"\",\"Step18\"]",
+        "[\"expression\",\"\",\"Step19\"]",
+        "[\"expression\",\"\",\"Step20\"]",
+        "[\"expression\",\"\",\"Step21\"]",
+        "[\"expression\",\"\",\"Step22\"]",
+        "[\"expression\",\"\",\"Step23\"]",
+        "[\"expression\",\"\",\"Step24\"]",
+        "[\"expression\",\"\",\"Step25\"]",
+        "[\"expression\",\"\",\"Step26\"]",
+        "[\"expression\",\"\",\"Step27\"]",
+        "[\"expression\",\"\",\"Step28\"]",
+        "[\"expression\",\"\",\"Step29\"]",
+        "[\"expression\",\"\",\"Step30\"]",
+        "[\"expression\",\"\",\"Step31\"]",
+        "[\"expression\",\"\",\"Step32\"]",
+        "[\"expression\",\"\",\"Step33\"]",
+        "[\"expression\",\"\",\"Step34\"]",
+        "[\"expression\",\"\",\"Step35\"]",
+        "[\"expression\",\"\",\"Step36\"]",
+        "[\"expression\",\"\",\"Step37\"]",
+        "[\"expression\",\"\",\"Step38\"]",
+        "[\"expression\",\"\",\"Step39\"]",
+        "[\"expression\",\"\",\"Step40\"]",
+        "[\"expression\",\"\",\"Step41\"]",
+        "[\"expression\",\"\",\"Step42\"]",
+        "[\"expression\",\"\",\"Step43\"]",
+        "[\"expression\",\"\",\"Step44\"]",
+        "[\"expression\",\"\",\"Step45\"]",
+        "[\"expression\",\"\",\"Step46\"]",
+        "[\"expression\",\"\",\"Step47\"]",
+        "[\"expression\",\"\",\"Step48\"]",
+        "[\"expression\",\"\",\"Step49\"]"
+      ],
+      "title": {
+        "x": 417.67578125,
+        "y": 443.04998779296875,
+        "width": 168.724609375,
+        "height": 14.91485595703125,
+        "top": 443.04998779296875,
+        "right": 586.400390625,
+        "bottom": 457.96484375,
+        "left": 417.67578125
+      },
+      "own": true,
+      "windowScroll": {
+        "x": 0,
+        "y": 0
+      },
+      "active": {
+        "cls": "",
+        "aria": null
+      },
+      "width": 400,
+      "height": 400
+    },
+    "actual": {
+      "innerWidth": 720,
+      "innerHeight": 500,
+      "outerWidth": 1440,
+      "outerHeight": 1087,
+      "dpr": 2,
+      "below": true,
+      "width": 400,
+      "height": 400,
+      "inspectorOpen": true,
+      "selectedId": "[\"expression\",\"\",\"Step49\"]",
+      "inspector": {
+        "x": 268,
+        "y": 691.5,
+        "width": 443,
+        "height": 400,
+        "top": 691.5,
+        "right": 711,
+        "bottom": 1091.5,
+        "left": 268
+      },
+      "separator": {
+        "x": 268,
+        "y": 684.5,
+        "width": 443,
+        "height": 7,
+        "top": 684.5,
+        "right": 711,
+        "bottom": 691.5,
+        "left": 268
+      },
+      "surface": {
+        "x": 268,
+        "y": 264.5,
+        "width": 443,
+        "height": 420,
+        "top": 264.5,
+        "right": 711,
+        "bottom": 684.5,
+        "left": 268
+      },
+      "aria": {
+        "orientation": "horizontal",
+        "value": "400"
+      },
+      "hit": {},
+      "visualViewport": {
+        "offsetLeft": 0,
+        "offsetTop": 0,
+        "pageLeft": 0,
+        "pageTop": 0,
+        "width": 720,
+        "height": 500,
+        "scale": 1
+      },
+      "scroll": {
+        "windowX": 0,
+        "windowY": 0,
+        "documentX": 0,
+        "documentY": 0,
+        "bodyX": 0,
+        "bodyY": 0,
+        "pqBodyX": 0,
+        "pqBodyY": 83.5,
+        "inspectorHostY": 0,
+        "inspectorRootY": 0
+      },
+      "active": {
+        "tag": "BODY",
+        "cls": ""
+      },
+      "pointer": [
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button ex-primary",
+            "id": "",
+            "aria": null,
+            "text": "Open model"
+          },
+          "clientX": 660.70703125,
+          "clientY": 28,
+          "pageX": 660.70703125,
+          "pageY": 28,
+          "screenX": 1343.4140625,
+          "screenY": 165,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 95.09999999403954
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button ex-primary",
+            "id": "",
+            "aria": null,
+            "text": "Open model"
+          },
+          "clientX": 660.70703125,
+          "clientY": 28,
+          "pageX": 660.70703125,
+          "pageY": 28,
+          "screenX": 1343.4140625,
+          "screenY": 165,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 95.5
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Update model"
+          },
+          "clientX": 505.94140625,
+          "clientY": 338.7265625,
+          "pageX": 505.94140625,
+          "pageY": 338.7265625,
+          "screenX": 1033.8828125,
+          "screenY": 786.453125,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 161.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Update model"
+          },
+          "clientX": 505.94140625,
+          "clientY": 338.7265625,
+          "pageX": 505.94140625,
+          "pageY": 338.7265625,
+          "screenX": 1033.8828125,
+          "screenY": 786.453125,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 161.7999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Power Query"
+          },
+          "clientX": 362.796875,
+          "clientY": 77,
+          "pageX": 362.796875,
+          "pageY": 77,
+          "screenX": 747.59375,
+          "screenY": 263,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 195
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Power Query"
+          },
+          "clientX": 362.796875,
+          "clientY": 77,
+          "pageX": 362.796875,
+          "pageY": 77,
+          "screenX": 747.59375,
+          "screenY": 263,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 195.2999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-table-name pqw-library-row",
+            "id": "",
+            "aria": null,
+            "text": "FinalChainm · FinalChain"
+          },
+          "clientX": 109.8984375,
+          "clientY": 412.44921875,
+          "pageX": 109.8984375,
+          "pageY": 412.44921875,
+          "screenX": 241.796875,
+          "screenY": 933.8984375,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 311.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-table-name pqw-library-row",
+            "id": "",
+            "aria": null,
+            "text": "FinalChainm · FinalChain"
+          },
+          "clientX": 109.8984375,
+          "clientY": 412.44921875,
+          "pageX": 109.8984375,
+          "pageY": 412.44921875,
+          "screenX": 241.796875,
+          "screenY": 933.8984375,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 311.90000000596046
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": null,
+            "text": "Hide unrelated"
+          },
+          "clientX": 587,
+          "clientY": 289.7421875,
+          "pageX": 587,
+          "pageY": 289.7421875,
+          "screenX": 1196,
+          "screenY": 688.484375,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 395
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": null,
+            "text": "Hide unrelated"
+          },
+          "clientX": 587,
+          "clientY": 289.7421875,
+          "pageX": 587,
+          "pageY": 289.7421875,
+          "screenX": 1196,
+          "screenY": 688.484375,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 395.40000000596046
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Follow input Step49",
+            "text": "← Follow input Step49"
+          },
+          "clientX": 339.734375,
+          "clientY": 279,
+          "pageX": 339.734375,
+          "pageY": 279,
+          "screenX": 701.46875,
+          "screenY": 667,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 461.40000000596046
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Follow input Step49",
+            "text": "← Follow input Step49"
+          },
+          "clientX": 339.734375,
+          "clientY": 279,
+          "pageX": 339.734375,
+          "pageY": 279,
+          "screenX": 701.46875,
+          "screenY": 667,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 461.7999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Trace this query",
+            "text": "Trace this query"
+          },
+          "clientX": 324.609375,
+          "clientY": 241,
+          "pageX": 324.609375,
+          "pageY": 241,
+          "screenX": 671.21875,
+          "screenY": 591,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 528.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Trace this query",
+            "text": "Trace this query"
+          },
+          "clientX": 324.609375,
+          "clientY": 241,
+          "pageX": 324.609375,
+          "pageY": 241,
+          "screenX": 671.21875,
+          "screenY": 591,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 528.7999999821186
+        }
+      ]
+    }
+  },
+  {
+    "action": "Show all",
+    "point": {
+      "x": 510.3828125,
+      "y": 125,
+      "own": true,
+      "text": "Show all"
+    },
+    "after": {
+      "nav": {
+        "membership": [
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          "[\"expression\",\"\",\"Parameter\"]",
+          "[\"expression\",\"\",\"Step00\"]",
+          "[\"expression\",\"\",\"Step01\"]",
+          "[\"expression\",\"\",\"Step02\"]",
+          "[\"expression\",\"\",\"Step03\"]",
+          "[\"expression\",\"\",\"Step04\"]",
+          "[\"expression\",\"\",\"Step05\"]",
+          "[\"expression\",\"\",\"Step06\"]",
+          "[\"expression\",\"\",\"Step07\"]",
+          "[\"expression\",\"\",\"Step08\"]",
+          "[\"expression\",\"\",\"Step09\"]",
+          "[\"expression\",\"\",\"Step10\"]",
+          "[\"expression\",\"\",\"Step11\"]",
+          "[\"expression\",\"\",\"Step12\"]",
+          "[\"expression\",\"\",\"Step13\"]",
+          "[\"expression\",\"\",\"Step14\"]",
+          "[\"expression\",\"\",\"Step15\"]",
+          "[\"expression\",\"\",\"Step16\"]",
+          "[\"expression\",\"\",\"Step17\"]",
+          "[\"expression\",\"\",\"Step18\"]",
+          "[\"expression\",\"\",\"Step19\"]",
+          "[\"expression\",\"\",\"Step20\"]",
+          "[\"expression\",\"\",\"Step21\"]",
+          "[\"expression\",\"\",\"Step22\"]",
+          "[\"expression\",\"\",\"Step23\"]",
+          "[\"expression\",\"\",\"Step24\"]",
+          "[\"expression\",\"\",\"Step25\"]",
+          "[\"expression\",\"\",\"Step26\"]",
+          "[\"expression\",\"\",\"Step27\"]",
+          "[\"expression\",\"\",\"Step28\"]",
+          "[\"expression\",\"\",\"Step29\"]",
+          "[\"expression\",\"\",\"Step30\"]",
+          "[\"expression\",\"\",\"Step31\"]",
+          "[\"expression\",\"\",\"Step32\"]",
+          "[\"expression\",\"\",\"Step33\"]",
+          "[\"expression\",\"\",\"Step34\"]",
+          "[\"expression\",\"\",\"Step35\"]",
+          "[\"expression\",\"\",\"Step36\"]",
+          "[\"expression\",\"\",\"Step37\"]",
+          "[\"expression\",\"\",\"Step38\"]",
+          "[\"expression\",\"\",\"Step39\"]",
+          "[\"expression\",\"\",\"Step40\"]",
+          "[\"expression\",\"\",\"Step41\"]",
+          "[\"expression\",\"\",\"Step42\"]",
+          "[\"expression\",\"\",\"Step43\"]",
+          "[\"expression\",\"\",\"Step44\"]",
+          "[\"expression\",\"\",\"Step45\"]",
+          "[\"expression\",\"\",\"Step46\"]",
+          "[\"expression\",\"\",\"Step47\"]",
+          "[\"expression\",\"\",\"Step48\"]",
+          "[\"expression\",\"\",\"Step49\"]"
+        ],
+        "flowRootId": null,
+        "focusMode": "dim",
+        "direction": "inputs",
+        "depth": null,
+        "listFacet": "all",
+        "groupFilter": "all",
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"Step49\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": -14845.6,
+          "y": 169.2,
+          "k": 0.85
+        },
+        "bodyScroll": {
+          "x": 0,
+          "y": 83.5
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": true,
+          "focus": null,
+          "disclosures": {
+            "provenance": false
+          },
+          "expanded": false
+        },
+        "category": "all",
+        "query": ""
+      },
+      "layout": [
+        [
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          {
+            "x": 17952,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Parameter\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step00\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step01\"]",
+          {
+            "x": 704,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step02\"]",
+          {
+            "x": 1056,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step03\"]",
+          {
+            "x": 1408,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step04\"]",
+          {
+            "x": 1760,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step05\"]",
+          {
+            "x": 2112,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step06\"]",
+          {
+            "x": 2464,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step07\"]",
+          {
+            "x": 2816,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step08\"]",
+          {
+            "x": 3168,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step09\"]",
+          {
+            "x": 3520,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step10\"]",
+          {
+            "x": 3872,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step11\"]",
+          {
+            "x": 4224,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step12\"]",
+          {
+            "x": 4576,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step13\"]",
+          {
+            "x": 4928,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step14\"]",
+          {
+            "x": 5280,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step15\"]",
+          {
+            "x": 5632,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step16\"]",
+          {
+            "x": 5984,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step17\"]",
+          {
+            "x": 6336,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step18\"]",
+          {
+            "x": 6688,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step19\"]",
+          {
+            "x": 7040,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step20\"]",
+          {
+            "x": 7392,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step21\"]",
+          {
+            "x": 7744,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step22\"]",
+          {
+            "x": 8096,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step23\"]",
+          {
+            "x": 8448,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step24\"]",
+          {
+            "x": 8800,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step25\"]",
+          {
+            "x": 9152,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step26\"]",
+          {
+            "x": 9504,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step27\"]",
+          {
+            "x": 9856,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step28\"]",
+          {
+            "x": 10208,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step29\"]",
+          {
+            "x": 10560,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step30\"]",
+          {
+            "x": 10912,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step31\"]",
+          {
+            "x": 11264,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step32\"]",
+          {
+            "x": 11616,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step33\"]",
+          {
+            "x": 11968,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step34\"]",
+          {
+            "x": 12320,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step35\"]",
+          {
+            "x": 12672,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step36\"]",
+          {
+            "x": 13024,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step37\"]",
+          {
+            "x": 13376,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step38\"]",
+          {
+            "x": 13728,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step39\"]",
+          {
+            "x": 14080,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step40\"]",
+          {
+            "x": 14432,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step41\"]",
+          {
+            "x": 14784,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step42\"]",
+          {
+            "x": 15136,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step43\"]",
+          {
+            "x": 15488,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step44\"]",
+          {
+            "x": 15840,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step45\"]",
+          {
+            "x": 16192,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step46\"]",
+          {
+            "x": 16544,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step47\"]",
+          {
+            "x": 16896,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step48\"]",
+          {
+            "x": 17248,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step49\"]",
+          {
+            "x": 17600,
+            "y": 0
+          }
+        ]
+      ],
+      "label": "85%",
+      "registry": [
+        "[\"expression\",\"\",\"Parameter\"]",
+        "[\"expression\",\"\",\"Step00\"]",
+        "[\"expression\",\"\",\"Step01\"]",
+        "[\"expression\",\"\",\"Step02\"]",
+        "[\"expression\",\"\",\"Step03\"]",
+        "[\"expression\",\"\",\"Step04\"]",
+        "[\"expression\",\"\",\"Step05\"]",
+        "[\"expression\",\"\",\"Step06\"]",
+        "[\"expression\",\"\",\"Step07\"]",
+        "[\"expression\",\"\",\"Step08\"]",
+        "[\"expression\",\"\",\"Step09\"]",
+        "[\"expression\",\"\",\"Step10\"]",
+        "[\"expression\",\"\",\"Step11\"]",
+        "[\"expression\",\"\",\"Step12\"]",
+        "[\"expression\",\"\",\"Step13\"]",
+        "[\"expression\",\"\",\"Step14\"]",
+        "[\"expression\",\"\",\"Step15\"]",
+        "[\"expression\",\"\",\"Step16\"]",
+        "[\"expression\",\"\",\"Step17\"]",
+        "[\"expression\",\"\",\"Step18\"]",
+        "[\"expression\",\"\",\"Step19\"]",
+        "[\"expression\",\"\",\"Step20\"]",
+        "[\"expression\",\"\",\"Step21\"]",
+        "[\"expression\",\"\",\"Step22\"]",
+        "[\"expression\",\"\",\"Step23\"]",
+        "[\"expression\",\"\",\"Step24\"]",
+        "[\"expression\",\"\",\"Step25\"]",
+        "[\"expression\",\"\",\"Step26\"]",
+        "[\"expression\",\"\",\"Step27\"]",
+        "[\"expression\",\"\",\"Step28\"]",
+        "[\"expression\",\"\",\"Step29\"]",
+        "[\"expression\",\"\",\"Step30\"]",
+        "[\"expression\",\"\",\"Step31\"]",
+        "[\"expression\",\"\",\"Step32\"]",
+        "[\"expression\",\"\",\"Step33\"]",
+        "[\"expression\",\"\",\"Step34\"]",
+        "[\"expression\",\"\",\"Step35\"]",
+        "[\"expression\",\"\",\"Step36\"]",
+        "[\"expression\",\"\",\"Step37\"]",
+        "[\"expression\",\"\",\"Step38\"]",
+        "[\"expression\",\"\",\"Step39\"]",
+        "[\"expression\",\"\",\"Step40\"]",
+        "[\"expression\",\"\",\"Step41\"]",
+        "[\"expression\",\"\",\"Step42\"]",
+        "[\"expression\",\"\",\"Step43\"]",
+        "[\"expression\",\"\",\"Step44\"]",
+        "[\"expression\",\"\",\"Step45\"]",
+        "[\"expression\",\"\",\"Step46\"]",
+        "[\"expression\",\"\",\"Step47\"]",
+        "[\"expression\",\"\",\"Step48\"]",
+        "[\"expression\",\"\",\"Step49\"]",
+        "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+      ],
+      "edges": [
+        [
+          "[\"expression\",\"\",\"Parameter\"]",
+          "[\"expression\",\"\",\"Step00\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step00\"]",
+          "[\"expression\",\"\",\"Step01\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step01\"]",
+          "[\"expression\",\"\",\"Step02\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step02\"]",
+          "[\"expression\",\"\",\"Step03\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step03\"]",
+          "[\"expression\",\"\",\"Step04\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step04\"]",
+          "[\"expression\",\"\",\"Step05\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step05\"]",
+          "[\"expression\",\"\",\"Step06\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step06\"]",
+          "[\"expression\",\"\",\"Step07\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step07\"]",
+          "[\"expression\",\"\",\"Step08\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step08\"]",
+          "[\"expression\",\"\",\"Step09\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step09\"]",
+          "[\"expression\",\"\",\"Step10\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step10\"]",
+          "[\"expression\",\"\",\"Step11\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step11\"]",
+          "[\"expression\",\"\",\"Step12\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step12\"]",
+          "[\"expression\",\"\",\"Step13\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step13\"]",
+          "[\"expression\",\"\",\"Step14\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step14\"]",
+          "[\"expression\",\"\",\"Step15\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step15\"]",
+          "[\"expression\",\"\",\"Step16\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step16\"]",
+          "[\"expression\",\"\",\"Step17\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step17\"]",
+          "[\"expression\",\"\",\"Step18\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step18\"]",
+          "[\"expression\",\"\",\"Step19\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step19\"]",
+          "[\"expression\",\"\",\"Step20\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step20\"]",
+          "[\"expression\",\"\",\"Step21\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step21\"]",
+          "[\"expression\",\"\",\"Step22\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step22\"]",
+          "[\"expression\",\"\",\"Step23\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step23\"]",
+          "[\"expression\",\"\",\"Step24\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step24\"]",
+          "[\"expression\",\"\",\"Step25\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step25\"]",
+          "[\"expression\",\"\",\"Step26\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step26\"]",
+          "[\"expression\",\"\",\"Step27\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step27\"]",
+          "[\"expression\",\"\",\"Step28\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step28\"]",
+          "[\"expression\",\"\",\"Step29\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step29\"]",
+          "[\"expression\",\"\",\"Step30\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step30\"]",
+          "[\"expression\",\"\",\"Step31\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step31\"]",
+          "[\"expression\",\"\",\"Step32\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step32\"]",
+          "[\"expression\",\"\",\"Step33\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step33\"]",
+          "[\"expression\",\"\",\"Step34\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step34\"]",
+          "[\"expression\",\"\",\"Step35\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step35\"]",
+          "[\"expression\",\"\",\"Step36\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step36\"]",
+          "[\"expression\",\"\",\"Step37\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step37\"]",
+          "[\"expression\",\"\",\"Step38\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step38\"]",
+          "[\"expression\",\"\",\"Step39\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step39\"]",
+          "[\"expression\",\"\",\"Step40\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step40\"]",
+          "[\"expression\",\"\",\"Step41\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step41\"]",
+          "[\"expression\",\"\",\"Step42\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step42\"]",
+          "[\"expression\",\"\",\"Step43\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step43\"]",
+          "[\"expression\",\"\",\"Step44\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step44\"]",
+          "[\"expression\",\"\",\"Step45\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step45\"]",
+          "[\"expression\",\"\",\"Step46\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step46\"]",
+          "[\"expression\",\"\",\"Step47\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step47\"]",
+          "[\"expression\",\"\",\"Step48\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step48\"]",
+          "[\"expression\",\"\",\"Step49\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step49\"]",
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+        ]
+      ],
+      "visible": [
+        "[\"expression\",\"\",\"Parameter\"]",
+        "[\"expression\",\"\",\"Step00\"]",
+        "[\"expression\",\"\",\"Step01\"]",
+        "[\"expression\",\"\",\"Step02\"]",
+        "[\"expression\",\"\",\"Step03\"]",
+        "[\"expression\",\"\",\"Step04\"]",
+        "[\"expression\",\"\",\"Step05\"]",
+        "[\"expression\",\"\",\"Step06\"]",
+        "[\"expression\",\"\",\"Step07\"]",
+        "[\"expression\",\"\",\"Step08\"]",
+        "[\"expression\",\"\",\"Step09\"]",
+        "[\"expression\",\"\",\"Step10\"]",
+        "[\"expression\",\"\",\"Step11\"]",
+        "[\"expression\",\"\",\"Step12\"]",
+        "[\"expression\",\"\",\"Step13\"]",
+        "[\"expression\",\"\",\"Step14\"]",
+        "[\"expression\",\"\",\"Step15\"]",
+        "[\"expression\",\"\",\"Step16\"]",
+        "[\"expression\",\"\",\"Step17\"]",
+        "[\"expression\",\"\",\"Step18\"]",
+        "[\"expression\",\"\",\"Step19\"]",
+        "[\"expression\",\"\",\"Step20\"]",
+        "[\"expression\",\"\",\"Step21\"]",
+        "[\"expression\",\"\",\"Step22\"]",
+        "[\"expression\",\"\",\"Step23\"]",
+        "[\"expression\",\"\",\"Step24\"]",
+        "[\"expression\",\"\",\"Step25\"]",
+        "[\"expression\",\"\",\"Step26\"]",
+        "[\"expression\",\"\",\"Step27\"]",
+        "[\"expression\",\"\",\"Step28\"]",
+        "[\"expression\",\"\",\"Step29\"]",
+        "[\"expression\",\"\",\"Step30\"]",
+        "[\"expression\",\"\",\"Step31\"]",
+        "[\"expression\",\"\",\"Step32\"]",
+        "[\"expression\",\"\",\"Step33\"]",
+        "[\"expression\",\"\",\"Step34\"]",
+        "[\"expression\",\"\",\"Step35\"]",
+        "[\"expression\",\"\",\"Step36\"]",
+        "[\"expression\",\"\",\"Step37\"]",
+        "[\"expression\",\"\",\"Step38\"]",
+        "[\"expression\",\"\",\"Step39\"]",
+        "[\"expression\",\"\",\"Step40\"]",
+        "[\"expression\",\"\",\"Step41\"]",
+        "[\"expression\",\"\",\"Step42\"]",
+        "[\"expression\",\"\",\"Step43\"]",
+        "[\"expression\",\"\",\"Step44\"]",
+        "[\"expression\",\"\",\"Step45\"]",
+        "[\"expression\",\"\",\"Step46\"]",
+        "[\"expression\",\"\",\"Step47\"]",
+        "[\"expression\",\"\",\"Step48\"]",
+        "[\"expression\",\"\",\"Step49\"]",
+        "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+      ],
+      "title": {
+        "x": 417.67578125,
+        "y": 318.04998779296875,
+        "width": 168.724609375,
+        "height": 14.91485595703125,
+        "top": 318.04998779296875,
+        "right": 586.400390625,
+        "bottom": 332.96484375,
+        "left": 417.67578125
+      },
+      "own": true,
+      "windowScroll": {
+        "x": 0,
+        "y": 0
+      },
+      "active": {
+        "cls": "wui-card pqc-node pqc-kind-query pqc-selected",
+        "aria": "Step49 · query"
+      },
+      "width": 400,
+      "height": 400
+    },
+    "actual": {
+      "innerWidth": 720,
+      "innerHeight": 500,
+      "outerWidth": 1440,
+      "outerHeight": 1087,
+      "dpr": 2,
+      "below": true,
+      "width": 400,
+      "height": 400,
+      "inspectorOpen": true,
+      "selectedId": "[\"expression\",\"\",\"Step49\"]",
+      "inspector": {
+        "x": 268,
+        "y": 566.5,
+        "width": 443,
+        "height": 400,
+        "top": 566.5,
+        "right": 711,
+        "bottom": 966.5,
+        "left": 268
+      },
+      "separator": {
+        "x": 268,
+        "y": 559.5,
+        "width": 443,
+        "height": 7,
+        "top": 559.5,
+        "right": 711,
+        "bottom": 566.5,
+        "left": 268
+      },
+      "surface": {
+        "x": 268,
+        "y": 139.5,
+        "width": 443,
+        "height": 420,
+        "top": 139.5,
+        "right": 711,
+        "bottom": 559.5,
+        "left": 268
+      },
+      "aria": {
+        "orientation": "horizontal",
+        "value": "400"
+      },
+      "hit": {},
+      "visualViewport": {
+        "offsetLeft": 0,
+        "offsetTop": 0,
+        "pageLeft": 0,
+        "pageTop": 0,
+        "width": 720,
+        "height": 500,
+        "scale": 1
+      },
+      "scroll": {
+        "windowX": 0,
+        "windowY": 0,
+        "documentX": 0,
+        "documentY": 0,
+        "bodyX": 0,
+        "bodyY": 0,
+        "pqBodyX": 0,
+        "pqBodyY": 83.5,
+        "inspectorHostY": 0,
+        "inspectorRootY": 0
+      },
+      "active": {
+        "tag": "DIV",
+        "cls": "wui-card pqc-node pqc-kind-query pqc-selected"
+      },
+      "pointer": [
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button ex-primary",
+            "id": "",
+            "aria": null,
+            "text": "Open model"
+          },
+          "clientX": 660.70703125,
+          "clientY": 28,
+          "pageX": 660.70703125,
+          "pageY": 28,
+          "screenX": 1343.4140625,
+          "screenY": 165,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 95.09999999403954
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button ex-primary",
+            "id": "",
+            "aria": null,
+            "text": "Open model"
+          },
+          "clientX": 660.70703125,
+          "clientY": 28,
+          "pageX": 660.70703125,
+          "pageY": 28,
+          "screenX": 1343.4140625,
+          "screenY": 165,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 95.5
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Update model"
+          },
+          "clientX": 505.94140625,
+          "clientY": 338.7265625,
+          "pageX": 505.94140625,
+          "pageY": 338.7265625,
+          "screenX": 1033.8828125,
+          "screenY": 786.453125,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 161.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Update model"
+          },
+          "clientX": 505.94140625,
+          "clientY": 338.7265625,
+          "pageX": 505.94140625,
+          "pageY": 338.7265625,
+          "screenX": 1033.8828125,
+          "screenY": 786.453125,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 161.7999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Power Query"
+          },
+          "clientX": 362.796875,
+          "clientY": 77,
+          "pageX": 362.796875,
+          "pageY": 77,
+          "screenX": 747.59375,
+          "screenY": 263,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 195
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Power Query"
+          },
+          "clientX": 362.796875,
+          "clientY": 77,
+          "pageX": 362.796875,
+          "pageY": 77,
+          "screenX": 747.59375,
+          "screenY": 263,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 195.2999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-table-name pqw-library-row",
+            "id": "",
+            "aria": null,
+            "text": "FinalChainm · FinalChain"
+          },
+          "clientX": 109.8984375,
+          "clientY": 412.44921875,
+          "pageX": 109.8984375,
+          "pageY": 412.44921875,
+          "screenX": 241.796875,
+          "screenY": 933.8984375,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 311.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-table-name pqw-library-row",
+            "id": "",
+            "aria": null,
+            "text": "FinalChainm · FinalChain"
+          },
+          "clientX": 109.8984375,
+          "clientY": 412.44921875,
+          "pageX": 109.8984375,
+          "pageY": 412.44921875,
+          "screenX": 241.796875,
+          "screenY": 933.8984375,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 311.90000000596046
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": null,
+            "text": "Hide unrelated"
+          },
+          "clientX": 587,
+          "clientY": 289.7421875,
+          "pageX": 587,
+          "pageY": 289.7421875,
+          "screenX": 1196,
+          "screenY": 688.484375,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 395
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": null,
+            "text": "Hide unrelated"
+          },
+          "clientX": 587,
+          "clientY": 289.7421875,
+          "pageX": 587,
+          "pageY": 289.7421875,
+          "screenX": 1196,
+          "screenY": 688.484375,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 395.40000000596046
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Follow input Step49",
+            "text": "← Follow input Step49"
+          },
+          "clientX": 339.734375,
+          "clientY": 279,
+          "pageX": 339.734375,
+          "pageY": 279,
+          "screenX": 701.46875,
+          "screenY": 667,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 461.40000000596046
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Follow input Step49",
+            "text": "← Follow input Step49"
+          },
+          "clientX": 339.734375,
+          "clientY": 279,
+          "pageX": 339.734375,
+          "pageY": 279,
+          "screenX": 701.46875,
+          "screenY": 667,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 461.7999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Trace this query",
+            "text": "Trace this query"
+          },
+          "clientX": 324.609375,
+          "clientY": 241,
+          "pageX": 324.609375,
+          "pageY": 241,
+          "screenX": 671.21875,
+          "screenY": 591,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 528.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Trace this query",
+            "text": "Trace this query"
+          },
+          "clientX": 324.609375,
+          "clientY": 241,
+          "pageX": 324.609375,
+          "pageY": 241,
+          "screenX": 671.21875,
+          "screenY": 591,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 528.7999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Show all",
+            "text": "Show all"
+          },
+          "clientX": 510.3828125,
+          "clientY": 125,
+          "pageX": 510.3828125,
+          "pageY": 125,
+          "screenX": 1042.765625,
+          "screenY": 359,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 594.7999999821186
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Show all",
+            "text": "Show all"
+          },
+          "clientX": 510.3828125,
+          "clientY": 125,
+          "pageX": 510.3828125,
+          "pageY": 125,
+          "screenX": 1042.765625,
+          "screenY": 359,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 595.2999999821186
+        }
+      ]
+    }
+  },
+  {
+    "action": "Center",
+    "point": {
+      "x": 536.44140625,
+      "y": 289.5,
+      "own": true,
+      "text": "Center selected"
+    },
+    "after": {
+      "nav": {
+        "membership": [
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          "[\"expression\",\"\",\"Parameter\"]",
+          "[\"expression\",\"\",\"Step00\"]",
+          "[\"expression\",\"\",\"Step01\"]",
+          "[\"expression\",\"\",\"Step02\"]",
+          "[\"expression\",\"\",\"Step03\"]",
+          "[\"expression\",\"\",\"Step04\"]",
+          "[\"expression\",\"\",\"Step05\"]",
+          "[\"expression\",\"\",\"Step06\"]",
+          "[\"expression\",\"\",\"Step07\"]",
+          "[\"expression\",\"\",\"Step08\"]",
+          "[\"expression\",\"\",\"Step09\"]",
+          "[\"expression\",\"\",\"Step10\"]",
+          "[\"expression\",\"\",\"Step11\"]",
+          "[\"expression\",\"\",\"Step12\"]",
+          "[\"expression\",\"\",\"Step13\"]",
+          "[\"expression\",\"\",\"Step14\"]",
+          "[\"expression\",\"\",\"Step15\"]",
+          "[\"expression\",\"\",\"Step16\"]",
+          "[\"expression\",\"\",\"Step17\"]",
+          "[\"expression\",\"\",\"Step18\"]",
+          "[\"expression\",\"\",\"Step19\"]",
+          "[\"expression\",\"\",\"Step20\"]",
+          "[\"expression\",\"\",\"Step21\"]",
+          "[\"expression\",\"\",\"Step22\"]",
+          "[\"expression\",\"\",\"Step23\"]",
+          "[\"expression\",\"\",\"Step24\"]",
+          "[\"expression\",\"\",\"Step25\"]",
+          "[\"expression\",\"\",\"Step26\"]",
+          "[\"expression\",\"\",\"Step27\"]",
+          "[\"expression\",\"\",\"Step28\"]",
+          "[\"expression\",\"\",\"Step29\"]",
+          "[\"expression\",\"\",\"Step30\"]",
+          "[\"expression\",\"\",\"Step31\"]",
+          "[\"expression\",\"\",\"Step32\"]",
+          "[\"expression\",\"\",\"Step33\"]",
+          "[\"expression\",\"\",\"Step34\"]",
+          "[\"expression\",\"\",\"Step35\"]",
+          "[\"expression\",\"\",\"Step36\"]",
+          "[\"expression\",\"\",\"Step37\"]",
+          "[\"expression\",\"\",\"Step38\"]",
+          "[\"expression\",\"\",\"Step39\"]",
+          "[\"expression\",\"\",\"Step40\"]",
+          "[\"expression\",\"\",\"Step41\"]",
+          "[\"expression\",\"\",\"Step42\"]",
+          "[\"expression\",\"\",\"Step43\"]",
+          "[\"expression\",\"\",\"Step44\"]",
+          "[\"expression\",\"\",\"Step45\"]",
+          "[\"expression\",\"\",\"Step46\"]",
+          "[\"expression\",\"\",\"Step47\"]",
+          "[\"expression\",\"\",\"Step48\"]",
+          "[\"expression\",\"\",\"Step49\"]"
+        ],
+        "flowRootId": null,
+        "focusMode": "dim",
+        "direction": "inputs",
+        "depth": null,
+        "listFacet": "all",
+        "groupFilter": "all",
+        "generation": 3,
+        "selectedId": "[\"expression\",\"\",\"Step49\"]",
+        "inspectorOpen": true,
+        "viewport": {
+          "x": -14845.6,
+          "y": 82.7,
+          "k": 0.85
+        },
+        "bodyScroll": {
+          "x": 0,
+          "y": 0
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": true,
+          "focus": null,
+          "disclosures": {
+            "provenance": false
+          },
+          "expanded": false
+        },
+        "category": "all",
+        "query": ""
+      },
+      "layout": [
+        [
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+          {
+            "x": 17952,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Parameter\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step00\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step01\"]",
+          {
+            "x": 704,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step02\"]",
+          {
+            "x": 1056,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step03\"]",
+          {
+            "x": 1408,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step04\"]",
+          {
+            "x": 1760,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step05\"]",
+          {
+            "x": 2112,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step06\"]",
+          {
+            "x": 2464,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step07\"]",
+          {
+            "x": 2816,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step08\"]",
+          {
+            "x": 3168,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step09\"]",
+          {
+            "x": 3520,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step10\"]",
+          {
+            "x": 3872,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step11\"]",
+          {
+            "x": 4224,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step12\"]",
+          {
+            "x": 4576,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step13\"]",
+          {
+            "x": 4928,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step14\"]",
+          {
+            "x": 5280,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step15\"]",
+          {
+            "x": 5632,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step16\"]",
+          {
+            "x": 5984,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step17\"]",
+          {
+            "x": 6336,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step18\"]",
+          {
+            "x": 6688,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step19\"]",
+          {
+            "x": 7040,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step20\"]",
+          {
+            "x": 7392,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step21\"]",
+          {
+            "x": 7744,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step22\"]",
+          {
+            "x": 8096,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step23\"]",
+          {
+            "x": 8448,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step24\"]",
+          {
+            "x": 8800,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step25\"]",
+          {
+            "x": 9152,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step26\"]",
+          {
+            "x": 9504,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step27\"]",
+          {
+            "x": 9856,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step28\"]",
+          {
+            "x": 10208,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step29\"]",
+          {
+            "x": 10560,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step30\"]",
+          {
+            "x": 10912,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step31\"]",
+          {
+            "x": 11264,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step32\"]",
+          {
+            "x": 11616,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step33\"]",
+          {
+            "x": 11968,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step34\"]",
+          {
+            "x": 12320,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step35\"]",
+          {
+            "x": 12672,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step36\"]",
+          {
+            "x": 13024,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step37\"]",
+          {
+            "x": 13376,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step38\"]",
+          {
+            "x": 13728,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step39\"]",
+          {
+            "x": 14080,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step40\"]",
+          {
+            "x": 14432,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step41\"]",
+          {
+            "x": 14784,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step42\"]",
+          {
+            "x": 15136,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step43\"]",
+          {
+            "x": 15488,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step44\"]",
+          {
+            "x": 15840,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step45\"]",
+          {
+            "x": 16192,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step46\"]",
+          {
+            "x": 16544,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step47\"]",
+          {
+            "x": 16896,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step48\"]",
+          {
+            "x": 17248,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Step49\"]",
+          {
+            "x": 17600,
+            "y": 0
+          }
+        ]
+      ],
+      "label": "85%",
+      "registry": [
+        "[\"expression\",\"\",\"Parameter\"]",
+        "[\"expression\",\"\",\"Step00\"]",
+        "[\"expression\",\"\",\"Step01\"]",
+        "[\"expression\",\"\",\"Step02\"]",
+        "[\"expression\",\"\",\"Step03\"]",
+        "[\"expression\",\"\",\"Step04\"]",
+        "[\"expression\",\"\",\"Step05\"]",
+        "[\"expression\",\"\",\"Step06\"]",
+        "[\"expression\",\"\",\"Step07\"]",
+        "[\"expression\",\"\",\"Step08\"]",
+        "[\"expression\",\"\",\"Step09\"]",
+        "[\"expression\",\"\",\"Step10\"]",
+        "[\"expression\",\"\",\"Step11\"]",
+        "[\"expression\",\"\",\"Step12\"]",
+        "[\"expression\",\"\",\"Step13\"]",
+        "[\"expression\",\"\",\"Step14\"]",
+        "[\"expression\",\"\",\"Step15\"]",
+        "[\"expression\",\"\",\"Step16\"]",
+        "[\"expression\",\"\",\"Step17\"]",
+        "[\"expression\",\"\",\"Step18\"]",
+        "[\"expression\",\"\",\"Step19\"]",
+        "[\"expression\",\"\",\"Step20\"]",
+        "[\"expression\",\"\",\"Step21\"]",
+        "[\"expression\",\"\",\"Step22\"]",
+        "[\"expression\",\"\",\"Step23\"]",
+        "[\"expression\",\"\",\"Step24\"]",
+        "[\"expression\",\"\",\"Step25\"]",
+        "[\"expression\",\"\",\"Step26\"]",
+        "[\"expression\",\"\",\"Step27\"]",
+        "[\"expression\",\"\",\"Step28\"]",
+        "[\"expression\",\"\",\"Step29\"]",
+        "[\"expression\",\"\",\"Step30\"]",
+        "[\"expression\",\"\",\"Step31\"]",
+        "[\"expression\",\"\",\"Step32\"]",
+        "[\"expression\",\"\",\"Step33\"]",
+        "[\"expression\",\"\",\"Step34\"]",
+        "[\"expression\",\"\",\"Step35\"]",
+        "[\"expression\",\"\",\"Step36\"]",
+        "[\"expression\",\"\",\"Step37\"]",
+        "[\"expression\",\"\",\"Step38\"]",
+        "[\"expression\",\"\",\"Step39\"]",
+        "[\"expression\",\"\",\"Step40\"]",
+        "[\"expression\",\"\",\"Step41\"]",
+        "[\"expression\",\"\",\"Step42\"]",
+        "[\"expression\",\"\",\"Step43\"]",
+        "[\"expression\",\"\",\"Step44\"]",
+        "[\"expression\",\"\",\"Step45\"]",
+        "[\"expression\",\"\",\"Step46\"]",
+        "[\"expression\",\"\",\"Step47\"]",
+        "[\"expression\",\"\",\"Step48\"]",
+        "[\"expression\",\"\",\"Step49\"]",
+        "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+      ],
+      "edges": [
+        [
+          "[\"expression\",\"\",\"Parameter\"]",
+          "[\"expression\",\"\",\"Step00\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step00\"]",
+          "[\"expression\",\"\",\"Step01\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step01\"]",
+          "[\"expression\",\"\",\"Step02\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step02\"]",
+          "[\"expression\",\"\",\"Step03\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step03\"]",
+          "[\"expression\",\"\",\"Step04\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step04\"]",
+          "[\"expression\",\"\",\"Step05\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step05\"]",
+          "[\"expression\",\"\",\"Step06\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step06\"]",
+          "[\"expression\",\"\",\"Step07\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step07\"]",
+          "[\"expression\",\"\",\"Step08\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step08\"]",
+          "[\"expression\",\"\",\"Step09\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step09\"]",
+          "[\"expression\",\"\",\"Step10\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step10\"]",
+          "[\"expression\",\"\",\"Step11\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step11\"]",
+          "[\"expression\",\"\",\"Step12\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step12\"]",
+          "[\"expression\",\"\",\"Step13\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step13\"]",
+          "[\"expression\",\"\",\"Step14\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step14\"]",
+          "[\"expression\",\"\",\"Step15\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step15\"]",
+          "[\"expression\",\"\",\"Step16\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step16\"]",
+          "[\"expression\",\"\",\"Step17\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step17\"]",
+          "[\"expression\",\"\",\"Step18\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step18\"]",
+          "[\"expression\",\"\",\"Step19\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step19\"]",
+          "[\"expression\",\"\",\"Step20\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step20\"]",
+          "[\"expression\",\"\",\"Step21\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step21\"]",
+          "[\"expression\",\"\",\"Step22\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step22\"]",
+          "[\"expression\",\"\",\"Step23\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step23\"]",
+          "[\"expression\",\"\",\"Step24\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step24\"]",
+          "[\"expression\",\"\",\"Step25\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step25\"]",
+          "[\"expression\",\"\",\"Step26\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step26\"]",
+          "[\"expression\",\"\",\"Step27\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step27\"]",
+          "[\"expression\",\"\",\"Step28\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step28\"]",
+          "[\"expression\",\"\",\"Step29\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step29\"]",
+          "[\"expression\",\"\",\"Step30\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step30\"]",
+          "[\"expression\",\"\",\"Step31\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step31\"]",
+          "[\"expression\",\"\",\"Step32\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step32\"]",
+          "[\"expression\",\"\",\"Step33\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step33\"]",
+          "[\"expression\",\"\",\"Step34\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step34\"]",
+          "[\"expression\",\"\",\"Step35\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step35\"]",
+          "[\"expression\",\"\",\"Step36\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step36\"]",
+          "[\"expression\",\"\",\"Step37\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step37\"]",
+          "[\"expression\",\"\",\"Step38\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step38\"]",
+          "[\"expression\",\"\",\"Step39\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step39\"]",
+          "[\"expression\",\"\",\"Step40\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step40\"]",
+          "[\"expression\",\"\",\"Step41\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step41\"]",
+          "[\"expression\",\"\",\"Step42\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step42\"]",
+          "[\"expression\",\"\",\"Step43\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step43\"]",
+          "[\"expression\",\"\",\"Step44\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step44\"]",
+          "[\"expression\",\"\",\"Step45\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step45\"]",
+          "[\"expression\",\"\",\"Step46\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step46\"]",
+          "[\"expression\",\"\",\"Step47\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step47\"]",
+          "[\"expression\",\"\",\"Step48\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step48\"]",
+          "[\"expression\",\"\",\"Step49\"]"
+        ],
+        [
+          "[\"expression\",\"\",\"Step49\"]",
+          "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+        ]
+      ],
+      "visible": [
+        "[\"expression\",\"\",\"Parameter\"]",
+        "[\"expression\",\"\",\"Step00\"]",
+        "[\"expression\",\"\",\"Step01\"]",
+        "[\"expression\",\"\",\"Step02\"]",
+        "[\"expression\",\"\",\"Step03\"]",
+        "[\"expression\",\"\",\"Step04\"]",
+        "[\"expression\",\"\",\"Step05\"]",
+        "[\"expression\",\"\",\"Step06\"]",
+        "[\"expression\",\"\",\"Step07\"]",
+        "[\"expression\",\"\",\"Step08\"]",
+        "[\"expression\",\"\",\"Step09\"]",
+        "[\"expression\",\"\",\"Step10\"]",
+        "[\"expression\",\"\",\"Step11\"]",
+        "[\"expression\",\"\",\"Step12\"]",
+        "[\"expression\",\"\",\"Step13\"]",
+        "[\"expression\",\"\",\"Step14\"]",
+        "[\"expression\",\"\",\"Step15\"]",
+        "[\"expression\",\"\",\"Step16\"]",
+        "[\"expression\",\"\",\"Step17\"]",
+        "[\"expression\",\"\",\"Step18\"]",
+        "[\"expression\",\"\",\"Step19\"]",
+        "[\"expression\",\"\",\"Step20\"]",
+        "[\"expression\",\"\",\"Step21\"]",
+        "[\"expression\",\"\",\"Step22\"]",
+        "[\"expression\",\"\",\"Step23\"]",
+        "[\"expression\",\"\",\"Step24\"]",
+        "[\"expression\",\"\",\"Step25\"]",
+        "[\"expression\",\"\",\"Step26\"]",
+        "[\"expression\",\"\",\"Step27\"]",
+        "[\"expression\",\"\",\"Step28\"]",
+        "[\"expression\",\"\",\"Step29\"]",
+        "[\"expression\",\"\",\"Step30\"]",
+        "[\"expression\",\"\",\"Step31\"]",
+        "[\"expression\",\"\",\"Step32\"]",
+        "[\"expression\",\"\",\"Step33\"]",
+        "[\"expression\",\"\",\"Step34\"]",
+        "[\"expression\",\"\",\"Step35\"]",
+        "[\"expression\",\"\",\"Step36\"]",
+        "[\"expression\",\"\",\"Step37\"]",
+        "[\"expression\",\"\",\"Step38\"]",
+        "[\"expression\",\"\",\"Step39\"]",
+        "[\"expression\",\"\",\"Step40\"]",
+        "[\"expression\",\"\",\"Step41\"]",
+        "[\"expression\",\"\",\"Step42\"]",
+        "[\"expression\",\"\",\"Step43\"]",
+        "[\"expression\",\"\",\"Step44\"]",
+        "[\"expression\",\"\",\"Step45\"]",
+        "[\"expression\",\"\",\"Step46\"]",
+        "[\"expression\",\"\",\"Step47\"]",
+        "[\"expression\",\"\",\"Step48\"]",
+        "[\"expression\",\"\",\"Step49\"]",
+        "[\"partition\",\"FinalChain\",\"FinalChain\"]"
+      ],
+      "title": {
+        "x": 417.67578125,
+        "y": 315.04998779296875,
+        "width": 168.724609375,
+        "height": 14.91485595703125,
+        "top": 315.04998779296875,
+        "right": 586.400390625,
+        "bottom": 329.96484375,
+        "left": 417.67578125
+      },
+      "own": true,
+      "windowScroll": {
+        "x": 0,
+        "y": 0
+      },
+      "active": {
+        "cls": "ex-button",
+        "aria": "Center selected"
+      },
+      "width": 400,
+      "height": 400
+    },
+    "actual": {
+      "innerWidth": 720,
+      "innerHeight": 500,
+      "outerWidth": 1440,
+      "outerHeight": 1087,
+      "dpr": 2,
+      "below": true,
+      "width": 400,
+      "height": 400,
+      "inspectorOpen": true,
+      "selectedId": "[\"expression\",\"\",\"Step49\"]",
+      "inspector": {
+        "x": 268,
+        "y": 650,
+        "width": 443,
+        "height": 400,
+        "top": 650,
+        "right": 711,
+        "bottom": 1050,
+        "left": 268
+      },
+      "separator": {
+        "x": 268,
+        "y": 643,
+        "width": 443,
+        "height": 7,
+        "top": 643,
+        "right": 711,
+        "bottom": 650,
+        "left": 268
+      },
+      "surface": {
+        "x": 268,
+        "y": 223,
+        "width": 443,
+        "height": 420,
+        "top": 223,
+        "right": 711,
+        "bottom": 643,
+        "left": 268
+      },
+      "aria": {
+        "orientation": "horizontal",
+        "value": "400"
+      },
+      "hit": {},
+      "visualViewport": {
+        "offsetLeft": 0,
+        "offsetTop": 0,
+        "pageLeft": 0,
+        "pageTop": 0,
+        "width": 720,
+        "height": 500,
+        "scale": 1
+      },
+      "scroll": {
+        "windowX": 0,
+        "windowY": 0,
+        "documentX": 0,
+        "documentY": 0,
+        "bodyX": 0,
+        "bodyY": 0,
+        "pqBodyX": 0,
+        "pqBodyY": 0,
+        "inspectorHostY": 0,
+        "inspectorRootY": 0
+      },
+      "active": {
+        "tag": "BUTTON",
+        "cls": "ex-button"
+      },
+      "pointer": [
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button ex-primary",
+            "id": "",
+            "aria": null,
+            "text": "Open model"
+          },
+          "clientX": 660.70703125,
+          "clientY": 28,
+          "pageX": 660.70703125,
+          "pageY": 28,
+          "screenX": 1343.4140625,
+          "screenY": 165,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 95.09999999403954
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button ex-primary",
+            "id": "",
+            "aria": null,
+            "text": "Open model"
+          },
+          "clientX": 660.70703125,
+          "clientY": 28,
+          "pageX": 660.70703125,
+          "pageY": 28,
+          "screenX": 1343.4140625,
+          "screenY": 165,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 95.5
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Update model"
+          },
+          "clientX": 505.94140625,
+          "clientY": 338.7265625,
+          "pageX": 505.94140625,
+          "pageY": 338.7265625,
+          "screenX": 1033.8828125,
+          "screenY": 786.453125,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 161.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Update model"
+          },
+          "clientX": 505.94140625,
+          "clientY": 338.7265625,
+          "pageX": 505.94140625,
+          "pageY": 338.7265625,
+          "screenX": 1033.8828125,
+          "screenY": 786.453125,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 161.7999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Power Query"
+          },
+          "clientX": 362.796875,
+          "clientY": 77,
+          "pageX": 362.796875,
+          "pageY": 77,
+          "screenX": 747.59375,
+          "screenY": 263,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 195
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "",
+            "id": "",
+            "aria": null,
+            "text": "Power Query"
+          },
+          "clientX": 362.796875,
+          "clientY": 77,
+          "pageX": 362.796875,
+          "pageY": 77,
+          "screenX": 747.59375,
+          "screenY": 263,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 195.2999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-table-name pqw-library-row",
+            "id": "",
+            "aria": null,
+            "text": "FinalChainm · FinalChain"
+          },
+          "clientX": 109.8984375,
+          "clientY": 412.44921875,
+          "pageX": 109.8984375,
+          "pageY": 412.44921875,
+          "screenX": 241.796875,
+          "screenY": 933.8984375,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 311.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-table-name pqw-library-row",
+            "id": "",
+            "aria": null,
+            "text": "FinalChainm · FinalChain"
+          },
+          "clientX": 109.8984375,
+          "clientY": 412.44921875,
+          "pageX": 109.8984375,
+          "pageY": 412.44921875,
+          "screenX": 241.796875,
+          "screenY": 933.8984375,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 311.90000000596046
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": null,
+            "text": "Hide unrelated"
+          },
+          "clientX": 587,
+          "clientY": 289.7421875,
+          "pageX": 587,
+          "pageY": 289.7421875,
+          "screenX": 1196,
+          "screenY": 688.484375,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 395
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": null,
+            "text": "Hide unrelated"
+          },
+          "clientX": 587,
+          "clientY": 289.7421875,
+          "pageX": 587,
+          "pageY": 289.7421875,
+          "screenX": 1196,
+          "screenY": 688.484375,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 395.40000000596046
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Follow input Step49",
+            "text": "← Follow input Step49"
+          },
+          "clientX": 339.734375,
+          "clientY": 279,
+          "pageX": 339.734375,
+          "pageY": 279,
+          "screenX": 701.46875,
+          "screenY": 667,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 461.40000000596046
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Follow input Step49",
+            "text": "← Follow input Step49"
+          },
+          "clientX": 339.734375,
+          "clientY": 279,
+          "pageX": 339.734375,
+          "pageY": 279,
+          "screenX": 701.46875,
+          "screenY": 667,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 461.7999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Trace this query",
+            "text": "Trace this query"
+          },
+          "clientX": 324.609375,
+          "clientY": 241,
+          "pageX": 324.609375,
+          "pageY": 241,
+          "screenX": 671.21875,
+          "screenY": 591,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 528.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Trace this query",
+            "text": "Trace this query"
+          },
+          "clientX": 324.609375,
+          "clientY": 241,
+          "pageX": 324.609375,
+          "pageY": 241,
+          "screenX": 671.21875,
+          "screenY": 591,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 528.7999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Show all",
+            "text": "Show all"
+          },
+          "clientX": 510.3828125,
+          "clientY": 125,
+          "pageX": 510.3828125,
+          "pageY": 125,
+          "screenX": 1042.765625,
+          "screenY": 359,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 594.7999999821186
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Show all",
+            "text": "Show all"
+          },
+          "clientX": 510.3828125,
+          "clientY": 125,
+          "pageX": 510.3828125,
+          "pageY": 125,
+          "screenX": 1042.765625,
+          "screenY": 359,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 595.2999999821186
+        },
+        {
+          "type": "pointerdown",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Center selected",
+            "text": "Center selected"
+          },
+          "clientX": 536.44140625,
+          "clientY": 289.5,
+          "pageX": 536.44140625,
+          "pageY": 289.5,
+          "screenX": 1094.8828125,
+          "screenY": 688,
+          "isTrusted": true,
+          "buttons": 1,
+          "pointerId": 1,
+          "time": 661.5
+        },
+        {
+          "type": "pointerup",
+          "target": {
+            "tag": "BUTTON",
+            "cls": "ex-button",
+            "id": "",
+            "aria": "Center selected",
+            "text": "Center selected"
+          },
+          "clientX": 536.44140625,
+          "clientY": 289.5,
+          "pageX": 536.44140625,
+          "pageY": 289.5,
+          "screenX": 1094.8828125,
+          "screenY": 688,
+          "isTrusted": true,
+          "buttons": 0,
+          "pointerId": 1,
+          "time": 662
+        }
+      ]
+    }
+  }
+]

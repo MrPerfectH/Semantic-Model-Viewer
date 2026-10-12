@@ -1,0 +1,612 @@
+{
+  "baseline": "362c6783c13ae7c3604bd832554579b0efa4a00a",
+  "tab": "tab_2_a0d1d832-9389-42c1-bd1c-8b8de950c5a2",
+  "observations": [
+    {
+      "stage": "tablesSelected",
+      "snapshot": {
+        "url": "http://localhost:8945/?review=flow-20261010",
+        "title": "Semantic Model Viewer",
+        "loading": false,
+        "visibleText": "Flow audit (synthetic)\n2 tables · 1 relationships\nTables\nMeasures\nPower Query\nDomains\nMatrix\nLocal analysis\nSave snapshot\nRefresh\nPNG\nOpen model\nDIM\nSales\n◇Other\n2 cols\n1 rel\n2 msr\nTables\n\n2 in this model\n\n1 on canvas\nAll tables\nOn canvas\nAvailable\nReturns\nFact · 2 columns\n+\nSales\nDimension · 2 columns\n−\nAdd with + or drag onto the canvas. Save view keeps your arrangement and focus in this browser.\nModel canvas\n1 / 2 tables\nBlank layout\nShow all\nUndo\nArrange\nSave view\nSaved views\nDisplay\n−\n125%\n+\nFit\nCenter selected\nOVERVIEW\n1 table added.\nDIM\nSales\nOther · Dimension\n×\n◇\nOTHER\n—\n2\ncolumns\n1\nrelations\n2\nmeasures\nCanvas focus\nDim unrelated\nHide unrelated\nExplore filter paths\n\nThese settings control highlighted tables and lines, and which tables are added. Hidden tables stay in your saved view.\n\nTables that filter this table\nTables filtered by this table\nAll connected tables\nDirect only\nUp to 2 connections\nDirect + indirect\nInclude inactive relationships\n\n1 related · 1 to add\n\nAdd 1 to canvas\n\nFollows relationship connections in either direction.\n\nRemove 0 unrelated from layoutRemove this table from layout\nTable role settings\nRule 7: only on the one side — change it if wrong:\nRules…\nFact\nDimension\nHelper\nConnect the repo folder to save changes in TMDL. Browser-only choices are not shared.\nOpen Power Query\nRELATIONSHIPS\n→\nReturns\nID = ID\n1 : *\nMEASURES\n2\nTotal Amount\nNet Amount\nCOLUMNS\n2\nID\nint\nAmount\ndbl",
+        "interactiveElements": [],
+        "consoleEntries": [],
+        "networkEntries": [
+          {
+            "url": "http://localhost:8945/js/power-query-lineage.js?v=487522c796",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.051Z"
+          },
+          {
+            "url": "http://localhost:8945/js/power-query.js?v=cecb795556",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.051Z"
+          },
+          {
+            "url": "http://localhost:8945/js/power-query-canvas.js?v=d2846aa033",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.052Z"
+          },
+          {
+            "url": "http://localhost:8945/js/power-query-inspector.js?v=f099183cd6",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.052Z"
+          },
+          {
+            "url": "http://localhost:8945/js/power-query-workspace.js?v=dfba8d99f8",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.052Z"
+          },
+          {
+            "url": "http://localhost:8945/js/sidebar.js?v=13fab92f5e",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.052Z"
+          },
+          {
+            "url": "http://localhost:8945/js/topbar.js?v=c5789195be",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.053Z"
+          },
+          {
+            "url": "http://localhost:8945/js/rules.js?v=dc35541371",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.053Z"
+          },
+          {
+            "url": "http://localhost:8945/js/relationships.js?v=7f17713638",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.054Z"
+          },
+          {
+            "url": "http://localhost:8945/js/explorer.js?v=6bfdf4472d",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.054Z"
+          },
+          {
+            "url": "http://localhost:8945/js/app.js?v=dbc5683c97",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.055Z"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.329Z"
+          },
+          {
+            "url": "http://localhost:8945/api/ping",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.354Z"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q131nj-o.woff2",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.372Z"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYbSB4Zh.woff2",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.372Z"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgsAXHNk.woff2",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.385Z"
+          },
+          {
+            "url": "http://localhost:8945/api/ping",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:12:16.383Z"
+          },
+          {
+            "url": "http://localhost:8945/api/ping",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:12:46.381Z"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgsAXHNk.woff2",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:13:06.361Z"
+          },
+          {
+            "url": "http://localhost:8945/api/ping",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:13:16.392Z"
+          }
+        ],
+        "actionTimeline": [],
+        "screenshot": {
+          "mimeType": "image/png",
+          "width": 1280,
+          "height": 800
+        },
+        "accessibilityTree": "- generic [ref=t3-db357e89-7-e2] [box=0,0,1280,800]:\n  - banner [ref=t3-db357e89-7-e3] [box=0,0,1280,64]:\n    - generic [ref=t3-db357e89-7-e137] [box=20,14,220,36]:\n      - img [ref=t3-db357e89-7-e139] [box=30,24,15,15]\n      - button \"Flow audit (synthetic) 2 tables · 1 relationships\" [ref=t3-db357e89-7-e143] [cursor=pointer] [box=64,14,143,36]:\n        - strong [ref=t3-db357e89-7-e144] [box=64,14,143,19]: Flow audit (synthetic)\n        - generic [ref=t3-db357e89-7-e145] [box=64,35,143,15]: 2 tables · 1 relationships\n    - navigation \"Analysis views\" [ref=t3-db357e89-7-e146] [box=331,11,422,42]:\n      - button \"Tables\" [ref=t3-db357e89-7-e147] [cursor=pointer] [box=335,15,68,34]\n      - button \"Measures\" [ref=t3-db357e89-7-e148] [cursor=pointer] [box=406,15,86,34]\n      - button \"Power Query\" [ref=t3-db357e89-7-e149] [cursor=pointer] [box=493,15,103,34]\n      - button \"Domains\" [ref=t3-db357e89-7-e150] [cursor=pointer] [box=599,15,81,34]\n      - button \"Matrix\" [ref=t3-db357e89-7-e151] [cursor=pointer] [box=681,15,68,34]\n    - generic [ref=t3-db357e89-7-e152] [box=844,16,416,32]:\n      - generic \"Model parsing and analysis run in your browser.\" [ref=t3-db357e89-7-e153] [box=844,24,68,15]: Local analysis\n      - button \"Save snapshot\" [ref=t3-db357e89-7-e154] [cursor=pointer] [box=927,16,104,32]\n      - button \"Refresh\" [ref=t3-db357e89-7-e155] [cursor=pointer] [box=1038,16,66,32]\n      - button \"PNG\" [ref=t3-db357e89-7-e156] [cursor=pointer] [box=1113,16,49,32]\n      - button \"Open model\" [ref=t3-db357e89-7-e157] [cursor=pointer] [box=1169,16,91,32]\n  - generic [ref=t3-db357e89-7-e45] [box=0,64,1280,736]:\n    - generic [ref=t3-db357e89-7-e46] [box=268,126,682,644]:\n      - generic [box=452,303,0,0]:\n        - img [box=452,303,1,1]\n        - generic [ref=t3-db357e89-7-e204] [box=452,303,315,116]:\n          - button \"Select table Sales\" [ref=t3-db357e89-7-e205] [box=453,305,313,66]:\n            - generic [ref=t3-db357e89-7-e206] [box=473,318,33,21]: DIM\n            - generic [ref=t3-db357e89-7-e207] [box=517,317,196,41]:\n              - generic \"Sales\" [ref=t3-db357e89-7-e208] [box=517,317,196,20]\n              - generic \"Other\" [ref=t3-db357e89-7-e209] [box=517,341,196,18]: ◇Other\n            - button \"Show / hide columns and measures\" [ref=t3-db357e89-7-e210] [cursor=pointer] [box=724,317,28,28]:\n              - img [ref=t3-db357e89-7-e211] [box=730,323,16,16]\n          - generic [ref=t3-db357e89-7-e213] [box=453,371,313,48]:\n            - generic [ref=t3-db357e89-7-e214] [box=473,384,63,23]: 2 cols\n            - generic [ref=t3-db357e89-7-e215] [box=543,384,55,23]: 1 rel\n            - generic [ref=t3-db357e89-7-e216] [box=605,384,55,23]: 2 msr\n    - complementary \"Model table library\" [ref=t3-db357e89-7-e47] [box=0,64,268,736]:\n      - generic [ref=t3-db357e89-7-e217] [box=0,64,267,80]:\n        - generic [ref=t3-db357e89-7-e218] [box=16,86,73,42]:\n          - heading \"Tables\" [level=2] [ref=t3-db357e89-7-e219] [box=16,86,73,22]\n          - paragraph [ref=t3-db357e89-7-e220] [box=16,113,73,15]: 2 in this model\n        - generic [ref=t3-db357e89-7-e221] [box=184,96,67,23]: 1 on canvas\n      - searchbox \"Search table library\" [ref=t3-db357e89-7-e222] [box=14,144,239,36]\n      - generic \"Table library filter\" [ref=t3-db357e89-7-e223] [box=14,192,239,33]:\n        - button \"All tables\" [pressed] [ref=t3-db357e89-7-e224] [cursor=pointer] [box=17,195,76,27]\n        - button \"On canvas\" [ref=t3-db357e89-7-e225] [cursor=pointer] [box=95,195,76,27]\n        - button \"Available\" [ref=t3-db357e89-7-e226] [cursor=pointer] [box=174,195,76,27]\n      - generic [ref=t3-db357e89-7-e227] [box=0,237,267,503]:\n        - generic [ref=t3-db357e89-7-e228] [box=8,239,251,53]:\n          - button \"Returns Fact · 2 columns\" [ref=t3-db357e89-7-e229] [box=8,239,222,53]:\n            - generic [ref=t3-db357e89-7-e231] [box=31,249,74,33]:\n              - strong [ref=t3-db357e89-7-e232] [box=31,249,74,17]: Returns\n              - generic [ref=t3-db357e89-7-e233] [box=31,269,74,13]: Fact · 2 columns\n          - button \"Add Returns to canvas\" [ref=t3-db357e89-7-e234] [cursor=pointer] [box=233,251,22,28]: +\n        - generic [ref=t3-db357e89-7-e235] [box=8,293,251,53]:\n          - button \"Sales Dimension · 2 columns\" [ref=t3-db357e89-7-e236] [box=8,293,222,53]:\n            - generic [ref=t3-db357e89-7-e238] [box=31,303,102,33]:\n              - strong [ref=t3-db357e89-7-e239] [box=31,303,102,17]: Sales\n              - generic [ref=t3-db357e89-7-e240] [box=31,324,102,13]: Dimension · 2 columns\n          - button \"Remove Sales from layout\" [ref=t3-db357e89-7-e241] [cursor=pointer] [box=233,306,22,28]: −\n      - generic [ref=t3-db357e89-7-e242] [box=0,739,267,61]: Add with + or drag onto the canvas. Save view keeps your arrangement and focus in this browser.\n    - generic [ref=t3-db357e89-7-e63] [box=268,64,1012,62]:\n      - generic [ref=t3-db357e89-7-e243] [box=286,78,110,33]:\n        - strong [ref=t3-db357e89-7-e244] [box=286,78,110,17]: Model canvas\n        - generic [ref=t3-db357e89-7-e245] [box=286,98,110,13]: 1 / 2 tables\n      - button \"Blank layout\" [ref=t3-db357e89-7-e246] [cursor=pointer] [box=412,79,92,32]\n      - button \"Show all\" [ref=t3-db357e89-7-e247] [cursor=pointer] [box=511,79,71,32]\n      - button \"Undo\" [ref=t3-db357e89-7-e248] [cursor=pointer] [box=589,79,53,32]\n      - button \"Arrange\" [ref=t3-db357e89-7-e249] [cursor=pointer] [box=938,79,68,32]\n      - button \"Save view\" [ref=t3-db357e89-7-e250] [cursor=pointer] [box=1013,79,79,32]\n      - button \"Saved views\" [ref=t3-db357e89-7-e252] [cursor=pointer] [box=1099,79,92,32]\n      - button \"Display\" [ref=t3-db357e89-7-e254] [cursor=pointer] [box=1197,79,65,32]\n    - generic \"Canvas navigation\" [ref=t3-db357e89-7-e80] [box=286,712,256,40]:\n      - button \"−\" [ref=t3-db357e89-7-e255] [cursor=pointer] [box=291,717,27,30]\n      - generic [ref=t3-db357e89-7-e256] [box=320,725,43,15]: 125%\n      - button \"+\" [ref=t3-db357e89-7-e257] [cursor=pointer] [box=365,717,27,30]\n      - button \"Fit\" [ref=t3-db357e89-7-e258] [cursor=pointer] [box=394,717,34,30]\n      - button \"Center selected\" [ref=t3-db357e89-7-e259] [cursor=pointer] [box=431,717,106,30]\n    - generic [ref=t3-db357e89-7-e260] [box=722,612,212,141]:\n      - generic [ref=t3-db357e89-7-e261] [box=734,621,188,10]: OVERVIEW\n      - img \"Diagram overview. Click to navigate; arrow keys pan the diagram.\" [ref=t3-db357e89-7-e262] [box=729,634,200,112]\n    - status [ref=t3-db357e89-7-e85] [box=268,770,1012,30]: 1 table added.\n    - generic [ref=t3-db357e89-7-e263] [box=950,126,330,644]:\n      - generic [ref=t3-db357e89-7-e264] [box=951,126,329,175]:\n        - generic [ref=t3-db357e89-7-e265] [box=967,141,297,35]:\n          - generic [ref=t3-db357e89-7-e266] [box=967,141,30,19]: DIM\n          - generic [ref=t3-db357e89-7-e267] [box=1007,141,185,35]:\n            - generic [ref=t3-db357e89-7-e268] [box=1007,141,185,19]: Sales\n            - generic [ref=t3-db357e89-7-e269] [box=1007,162,185,15]: Other · Dimension\n          - button \"Lock focus on this table — the highlight stays when you click elsewhere\" [ref=t3-db357e89-7-e270] [cursor=pointer] [box=1202,141,26,26]:\n            - img [ref=t3-db357e89-7-e271] [box=1209,148,13,13]\n          - button \"×\" [ref=t3-db357e89-7-e274] [cursor=pointer] [box=1238,141,26,26]\n        - generic [ref=t3-db357e89-7-e275] [box=967,187,297,46]:\n          - generic [ref=t3-db357e89-7-e276] [box=978,200,20,20]: ◇\n          - generic [ref=t3-db357e89-7-e277] [box=1006,196,33,28]:\n            - generic [ref=t3-db357e89-7-e278] [box=1006,196,33,12]: Other\n            - generic [ref=t3-db357e89-7-e279] [box=1006,208,33,16]: —\n        - generic [ref=t3-db357e89-7-e280] [box=967,242,297,45]:\n          - generic [ref=t3-db357e89-7-e281] [box=967,242,94,45]:\n            - generic [ref=t3-db357e89-7-e282] [box=972,249,84,16]: \"2\"\n            - generic [ref=t3-db357e89-7-e283] [box=972,268,84,12]: columns\n          - generic [ref=t3-db357e89-7-e284] [box=1068,242,94,45]:\n            - generic [ref=t3-db357e89-7-e285] [box=1073,249,84,16]: \"1\"\n            - generic [ref=t3-db357e89-7-e286] [box=1073,268,84,12]: relations\n          - generic [ref=t3-db357e89-7-e287] [box=1170,242,94,45]:\n            - generic [ref=t3-db357e89-7-e288] [box=1175,249,84,16]: \"2\"\n            - generic [ref=t3-db357e89-7-e289] [box=1175,268,84,12]: measures\n      - generic [ref=t3-db357e89-7-e290] [box=951,301,329,469]:\n        - region \"Explore related tables\" [ref=t3-db357e89-7-e291] [box=951,305,329,488]:\n          - heading \"Canvas focus\" [level=3] [ref=t3-db357e89-7-e292] [box=967,321,297,16]\n          - group \"Unrelated tables\" [ref=t3-db357e89-7-e293] [box=967,347,297,32]:\n            - button \"Dim unrelated\" [pressed] [ref=t3-db357e89-7-e294] [cursor=pointer] [box=967,347,146,32]\n            - button \"Hide unrelated\" [ref=t3-db357e89-7-e295] [cursor=pointer] [box=1118,347,146,32]\n          - heading \"Explore filter paths\" [level=3] [ref=t3-db357e89-7-e296] [box=967,399,297,33]\n          - paragraph [ref=t3-db357e89-7-e297] [box=967,442,297,32]: These settings control highlighted tables and lines, and which tables are added. Hidden tables stay in your saved view.\n          - combobox \"Relationship direction\" [ref=t3-db357e89-7-e298] [box=967,486,297,36]:\n            - option \"Tables that filter this table\" [box=0,0,0,0]\n            - option \"Tables filtered by this table\" [box=0,0,0,0]\n            - option \"All connected tables\" [selected] [box=0,0,0,0]\n          - combobox \"Relationship distance\" [ref=t3-db357e89-7-e299] [box=967,529,297,36]:\n            - option \"Direct only\" [selected] [box=0,0,0,0]\n            - option \"Up to 2 connections\" [box=0,0,0,0]\n            - option \"Direct + indirect\" [box=0,0,0,0]\n          - generic [ref=t3-db357e89-7-e300] [box=967,576,297,19]:\n            - checkbox \"Include inactive relationships\" [checked] [ref=t3-db357e89-7-e301] [box=971,579,13,13]\n            - text: Include inactive relationships\n          - paragraph [ref=t3-db357e89-7-e302] [box=967,607,297,15]: 1 related · 1 to add\n          - button \"Add 1 to canvas\" [ref=t3-db357e89-7-e303] [cursor=pointer] [box=967,630,297,32]\n          - paragraph [ref=t3-db357e89-7-e304] [box=967,674,297,16]: Follows relationship connections in either direction.\n          - button \"Remove 0 unrelated from layout\" [disabled] [ref=t3-db357e89-7-e305] [box=967,702,297,32]\n          - button \"Remove this table from layout\" [ref=t3-db357e89-7-e306] [cursor=pointer] [box=967,739,297,32]\n        - group [ref=t3-db357e89-7-e307] [box=951,793,329,129]:\n          - generic \"Table role settings\" [ref=t3-db357e89-7-e308] [cursor=pointer] [box=967,805,297,15]\n          - generic [ref=t3-db357e89-7-e309] [box=967,828,297,81]:\n            - generic [ref=t3-db357e89-7-e310] [box=967,828,297,13]:\n              - generic [ref=t3-db357e89-7-e311] [box=967,828,256,13]: \"Rule 7: only on the one side — change it if wrong:\"\n              - button \"Rules…\" [ref=t3-db357e89-7-e312] [cursor=pointer] [box=1229,830,35,10]\n            - generic [ref=t3-db357e89-7-e313] [box=967,847,297,26]:\n              - button \"Fact\" [ref=t3-db357e89-7-e314] [cursor=pointer] [box=967,847,95,26]\n              - button \"Dimension\" [ref=t3-db357e89-7-e315] [cursor=pointer] [box=1068,847,95,26]\n              - button \"Helper\" [ref=t3-db357e89-7-e316] [cursor=pointer] [box=1169,847,95,26]\n            - generic [ref=t3-db357e89-7-e317] [box=967,880,297,29]: Connect the repo folder to save changes in TMDL. Browser-only choices are not shared.\n        - button \"Open Power Query\" [ref=t3-db357e89-7-e318] [cursor=pointer] [box=967,934,127,32]\n        - generic [ref=t3-db357e89-7-e319] [box=951,978,329,33]: Relationships\n        - 'button \"→ Returns ID = ID 1 : *\" [ref=t3-db357e89-7-e320] [cursor=pointer] [box=951,1010,329,47]':\n          - generic [ref=t3-db357e89-7-e321] [box=967,1022,24,24]: →\n          - generic [ref=t3-db357e89-7-e322] [box=1002,1018,178,31]:\n            - generic [ref=t3-db357e89-7-e323] [box=1002,1018,178,17]: Returns\n            - generic [ref=t3-db357e89-7-e324] [box=1002,1037,178,13]: ID = ID\n          - generic [ref=t3-db357e89-7-e325] [box=1191,1025,41,18]: \"1 : *\"\n          - generic \"Go to Returns\" [ref=t3-db357e89-7-e326] [box=1242,1023,22,22]:\n            - img [ref=t3-db357e89-7-e327] [box=1247,1028,12,12]\n        - generic [ref=t3-db357e89-7-e329] [box=951,1057,329,33]:\n          - generic [ref=t3-db357e89-7-e330] [box=967,1071,58,13]: Measures\n          - generic [ref=t3-db357e89-7-e331] [box=1257,1071,7,13]: \"2\"\n        - button \"Total Amount\" [ref=t3-db357e89-7-e333] [cursor=pointer] [box=951,1090,329,25]:\n          - img [ref=t3-db357e89-7-e335] [box=967,1098,10,10]\n          - generic [ref=t3-db357e89-7-e338] [box=985,1095,279,15]: Total Amount\n        - button \"Net Amount\" [ref=t3-db357e89-7-e340] [cursor=pointer] [box=951,1115,329,25]:\n          - img [ref=t3-db357e89-7-e342] [box=967,1123,10,10]\n          - generic [ref=t3-db357e89-7-e345] [box=985,1120,279,15]: Net Amount\n        - generic [ref=t3-db357e89-7-e346] [box=951,1140,329,33]:\n          - generic [ref=t3-db357e89-7-e347] [box=967,1154,51,13]: Columns\n          - generic [ref=t3-db357e89-7-e348] [box=1257,1154,7,13]: \"2\"\n        - generic [ref=t3-db357e89-7-e349] [box=951,1172,329,27]:\n          - generic [ref=t3-db357e89-7-e351] [box=984,1177,243,17]: ID\n          - generic [ref=t3-db357e89-7-e352] [box=1237,1178,27,16]: int\n        - generic [ref=t3-db357e89-7-e353] [box=951,1199,329,27]:\n          - generic [ref=t3-db357e89-7-e355] [box=984,1204,243,17]: Amount\n          - generic [ref=t3-db357e89-7-e356] [box=1237,1204,27,16]: dbl",
+        "omitted": [
+          "1 older network entries",
+          "6 of 6 actionTimeline",
+          "20 of 40 networkEntries"
+        ]
+      }
+    },
+    {
+      "stage": "measuresCompared",
+      "snapshot": {
+        "url": "http://localhost:8945/?review=flow-20261010",
+        "title": "Semantic Model Viewer",
+        "loading": false,
+        "visibleText": "Flow audit (synthetic)\n2 tables · 1 relationships\nTables\nMeasures\nPower Query\nDomains\nMatrix\nLocal analysis\nSave snapshot\nRefresh\nPNG\nOpen model\nMEASURE LIBRARY\nOverview\nAll\nVisible\nHidden\nAll home tables\nSales (2)\n2 measures\nƒ\nNet Amount\nSales\n1 / 0\nƒ\nTotal Amount\nSales\n0 / 1\nRow counts: uses / used by · measures only\nANALYZING MEASURE\nNet Amount\nSales\n1 direct upstream\n0 direct downstream\n1 column reference\nSplit view\nDAX\nDependencies\nDAX beside graph\nDAX below graph\nDependency flow\n\nUpstream → analyzed measure → downstream\n\nLeft → right\nTop → bottom\nBottom → top\n−\n71%\n+\nFit all\nCenter\nReset\nNet Amount\nTotal Amount\n● Upstream\n● Downstream\n2 measures · 2 shown · 0 collapsed · 1 visible links\nClick to compare · Enter to analyze\nDAX workspace\n\nRead the formula. Compare the logic.\n\nWrap lines\nANALYZED MEASURE\nNet Amount\nSales\nInline measures\nOriginal\nLong lines\nShort lines\nCopy DAX\n[Total Amount] - SUM ( Returns[Amount] )\nCOMPARING · UPSTREAM\nTotal Amount\nSales\nCopy DAX\nAnalyze this measure\nClear\nSUM ( Sales[Amount] )\nReferenced columns (1)",
+        "interactiveElements": [],
+        "consoleEntries": [],
+        "networkEntries": [
+          {
+            "url": "http://localhost:8945/power-query-workspace.css?v=89f1b4d658",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.035Z"
+          },
+          {
+            "url": "http://localhost:8945/power-query-inspector.css?v=e16cbd1785",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.043Z"
+          },
+          {
+            "url": "http://localhost:8945/power-query-lineage.css?v=3fa4fd3345",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.043Z"
+          },
+          {
+            "url": "http://localhost:8945/explorer.css?v=5699d561e3",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.043Z"
+          },
+          {
+            "url": "http://localhost:8945/measures.css?v=020a7d7d4e",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.043Z"
+          },
+          {
+            "url": "http://localhost:8945/js/util.js?v=b233a5ee4c",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.045Z"
+          },
+          {
+            "url": "http://localhost:8945/js/usage-adapter.js?v=47ad9159c1",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.045Z"
+          },
+          {
+            "url": "http://localhost:8945/js/snapshot.js?v=b63823ca6c",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.045Z"
+          },
+          {
+            "url": "http://localhost:8945/js/roles.js?v=2cf4e6cfdc",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.045Z"
+          },
+          {
+            "url": "http://localhost:8945/js/tmdl-parser.js?v=0e97ff4704",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.047Z"
+          },
+          {
+            "url": "http://localhost:8945/js/workspace-ui.js?v=d88454c851",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.047Z"
+          },
+          {
+            "url": "http://localhost:8945/js/matrix.js?v=a3c83262cb",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.047Z"
+          },
+          {
+            "url": "http://localhost:8945/js/layouts.js?v=1875b73e7b",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.048Z"
+          },
+          {
+            "url": "http://localhost:8945/js/dax-format.js?v=478f9a6c45",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.048Z"
+          },
+          {
+            "url": "http://localhost:8945/js/canvas.js?v=fe9d193349",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.048Z"
+          },
+          {
+            "url": "http://localhost:8945/js/power-query-graph-model.js?v=8c48f7ada3",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.051Z"
+          },
+          {
+            "url": "http://localhost:8945/js/power-query-dependencies.js?v=44e2b21a92",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.051Z"
+          },
+          {
+            "url": "http://localhost:8945/js/measures.js?v=773398f354",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.051Z"
+          },
+          {
+            "url": "http://localhost:8945/js/power-query-lineage.js?v=487522c796",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.051Z"
+          },
+          {
+            "url": "http://localhost:8945/js/power-query.js?v=cecb795556",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.051Z"
+          },
+          {
+            "url": "http://localhost:8945/js/power-query-canvas.js?v=d2846aa033",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.052Z"
+          },
+          {
+            "url": "http://localhost:8945/js/power-query-inspector.js?v=f099183cd6",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.052Z"
+          },
+          {
+            "url": "http://localhost:8945/js/power-query-workspace.js?v=dfba8d99f8",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.052Z"
+          },
+          {
+            "url": "http://localhost:8945/js/sidebar.js?v=13fab92f5e",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.052Z"
+          },
+          {
+            "url": "http://localhost:8945/js/topbar.js?v=c5789195be",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.053Z"
+          },
+          {
+            "url": "http://localhost:8945/js/rules.js?v=dc35541371",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.053Z"
+          },
+          {
+            "url": "http://localhost:8945/js/relationships.js?v=7f17713638",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.054Z"
+          },
+          {
+            "url": "http://localhost:8945/js/explorer.js?v=6bfdf4472d",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.054Z"
+          },
+          {
+            "url": "http://localhost:8945/js/app.js?v=dbc5683c97",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.055Z"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.329Z"
+          },
+          {
+            "url": "http://localhost:8945/api/ping",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.354Z"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q131nj-o.woff2",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.372Z"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYbSB4Zh.woff2",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.372Z"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgsAXHNk.woff2",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:11:46.385Z"
+          },
+          {
+            "url": "http://localhost:8945/api/ping",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:12:16.383Z"
+          },
+          {
+            "url": "http://localhost:8945/api/ping",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:12:46.381Z"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgsAXHNk.woff2",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:13:06.361Z"
+          },
+          {
+            "url": "http://localhost:8945/api/ping",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:13:16.392Z"
+          },
+          {
+            "url": "http://localhost:8945/api/ping",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:13:46.389Z"
+          },
+          {
+            "url": "http://localhost:8945/api/ping",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:14:16.382Z"
+          }
+        ],
+        "actionTimeline": [
+          {
+            "id": "b9fe70dd-99af-4292-afb6-dbde0d471b2a",
+            "action": "click",
+            "status": "succeeded",
+            "startedAt": "2026-10-10T08:14:04.034Z",
+            "completedAt": "2026-10-10T08:14:04.130Z"
+          },
+          {
+            "id": "33405e2b-16bb-4808-9d07-eafee20b6f53",
+            "action": "click",
+            "status": "succeeded",
+            "startedAt": "2026-10-10T08:14:22.790Z",
+            "completedAt": "2026-10-10T08:14:22.861Z"
+          }
+        ],
+        "screenshot": {
+          "mimeType": "image/png",
+          "width": 1280,
+          "height": 800
+        },
+        "accessibilityTree": "- generic [ref=t3-db357e89-d-e2] [box=0,0,1280,800]:\n  - banner [ref=t3-db357e89-d-e3] [box=0,0,1280,64]:\n    - generic [ref=t3-db357e89-d-e357] [box=20,14,220,36]:\n      - img [ref=t3-db357e89-d-e359] [box=30,24,15,15]\n      - button \"Flow audit (synthetic) 2 tables · 1 relationships\" [ref=t3-db357e89-d-e363] [cursor=pointer] [box=64,14,143,36]:\n        - strong [ref=t3-db357e89-d-e364] [box=64,14,143,19]: Flow audit (synthetic)\n        - generic [ref=t3-db357e89-d-e365] [box=64,35,143,15]: 2 tables · 1 relationships\n    - navigation \"Analysis views\" [ref=t3-db357e89-d-e366] [box=331,11,422,42]:\n      - button \"Tables\" [ref=t3-db357e89-d-e367] [cursor=pointer] [box=335,15,68,34]\n      - button \"Measures\" [ref=t3-db357e89-d-e368] [cursor=pointer] [box=406,15,86,34]\n      - button \"Power Query\" [ref=t3-db357e89-d-e369] [cursor=pointer] [box=493,15,103,34]\n      - button \"Domains\" [ref=t3-db357e89-d-e370] [cursor=pointer] [box=599,15,81,34]\n      - button \"Matrix\" [ref=t3-db357e89-d-e371] [cursor=pointer] [box=681,15,68,34]\n    - generic [ref=t3-db357e89-d-e372] [box=844,16,416,32]:\n      - generic \"Model parsing and analysis run in your browser.\" [ref=t3-db357e89-d-e373] [box=844,24,68,15]: Local analysis\n      - button \"Save snapshot\" [ref=t3-db357e89-d-e374] [cursor=pointer] [box=927,16,104,32]\n      - button \"Refresh\" [ref=t3-db357e89-d-e375] [cursor=pointer] [box=1038,16,66,32]\n      - button \"PNG\" [ref=t3-db357e89-d-e376] [cursor=pointer] [box=1113,16,49,32]\n      - button \"Open model\" [ref=t3-db357e89-d-e377] [cursor=pointer] [box=1169,16,91,32]\n  - generic [ref=t3-db357e89-d-e378] [box=0,64,1280,736]:\n    - complementary \"Measure library\" [ref=t3-db357e89-d-e379] [box=0,64,296,736]:\n      - generic [ref=t3-db357e89-d-e380] [box=0,64,295,227]:\n        - generic [ref=t3-db357e89-d-e381] [box=16,84,263,24]:\n          - generic [ref=t3-db357e89-d-e382] [box=16,90,109,13]: MEASURE LIBRARY\n          - button \"Overview\" [ref=t3-db357e89-d-e383] [cursor=pointer] [box=223,84,56,24]\n        - searchbox \"Search measures by name, folder, table, or DAX\" [ref=t3-db357e89-d-e384] [box=16,124,263,36]\n        - group \"Measure visibility\" [ref=t3-db357e89-d-e385] [box=16,172,263,34]:\n          - button \"All\" [pressed] [ref=t3-db357e89-d-e386] [cursor=pointer] [box=19,175,84,28]\n          - button \"Visible\" [ref=t3-db357e89-d-e387] [cursor=pointer] [box=106,175,84,28]\n          - button \"Hidden\" [ref=t3-db357e89-d-e388] [cursor=pointer] [box=192,175,84,28]\n        - combobox \"Filter measures by home table\" [ref=t3-db357e89-d-e389] [box=16,215,263,36]:\n          - option \"All home tables\" [selected] [box=0,0,0,0]\n          - option \"Sales (2)\" [box=0,0,0,0]\n        - generic [ref=t3-db357e89-d-e390] [box=16,263,263,15]: 2 measures\n      - generic \"Measures\" [ref=t3-db357e89-d-e391] [box=0,291,295,472]:\n        - button \"Net Amount Sales Uses 1 measures · used by 0 measures\" [ref=t3-db357e89-d-e438] [cursor=pointer] [box=8,299,270,52]:\n          - generic [ref=t3-db357e89-d-e439] [box=19,316,16,18]: ƒ\n          - generic [ref=t3-db357e89-d-e440] [box=43,309,188,32]:\n            - generic [ref=t3-db357e89-d-e441] [box=43,309,188,16]: Net Amount\n            - generic [ref=t3-db357e89-d-e442] [box=43,328,188,13]: Sales\n          - generic [ref=t3-db357e89-d-e443] [box=239,318,30,13]: 1 / 0\n        - button \"Total Amount Sales Uses 0 measures · used by 1 measures\" [ref=t3-db357e89-d-e444] [cursor=pointer] [box=8,351,270,52]:\n          - generic [ref=t3-db357e89-d-e445] [box=19,368,16,18]: ƒ\n          - generic [ref=t3-db357e89-d-e446] [box=43,361,188,32]:\n            - generic [ref=t3-db357e89-d-e447] [box=43,361,188,16]: Total Amount\n            - generic [ref=t3-db357e89-d-e448] [box=43,380,188,13]: Sales\n          - generic [ref=t3-db357e89-d-e449] [box=239,370,30,13]: 0 / 1\n      - generic [ref=t3-db357e89-d-e404] [box=0,763,295,38]: \"Row counts: uses / used by · measures only\"\n    - separator \"Resize measure library\" [ref=t3-db357e89-d-e405] [box=293,64,5,736]\n    - main \"Measure analysis\" [ref=t3-db357e89-d-e406] [box=298,64,982,736]:\n      - generic [ref=t3-db357e89-d-e450] [box=298,64,982,736]:\n        - generic [ref=t3-db357e89-d-e451] [box=298,64,982,119]:\n          - generic [ref=t3-db357e89-d-e452] [box=322,84,358,80]:\n            - generic [ref=t3-db357e89-d-e453] [box=322,84,358,13]: ANALYZING MEASURE\n            - heading \"Net Amount\" [level=1] [ref=t3-db357e89-d-e454] [box=322,104,358,26]\n            - generic [ref=t3-db357e89-d-e455] [box=322,141,358,23]:\n              - button \"Sales\" [ref=t3-db357e89-d-e456] [cursor=pointer] [box=322,141,38,23]\n              - generic [ref=t3-db357e89-d-e457] [box=366,141,94,23]: 1 direct upstream\n              - generic [ref=t3-db357e89-d-e458] [box=466,141,107,23]: 0 direct downstream\n              - 'generic \"Returns: Amount\" [ref=t3-db357e89-d-e459] [box=579,141,101,23]': 1 column reference\n          - generic [ref=t3-db357e89-d-e460] [box=1048,84,208,74]:\n            - group \"Analysis view\" [ref=t3-db357e89-d-e461] [box=1048,87,208,33]:\n              - button \"Split view\" [pressed] [ref=t3-db357e89-d-e462] [cursor=pointer] [box=1051,90,67,27]\n              - button \"DAX\" [ref=t3-db357e89-d-e463] [cursor=pointer] [box=1121,90,40,27]\n              - button \"Dependencies\" [ref=t3-db357e89-d-e464] [cursor=pointer] [box=1163,90,90,27]\n            - combobox \"DAX position in split view\" [ref=t3-db357e89-d-e465] [box=1130,128,126,30]:\n              - option \"DAX beside graph\" [selected] [box=0,0,0,0]\n              - option \"DAX below graph\" [box=0,0,0,0]\n        - generic [ref=t3-db357e89-d-e466] [box=298,183,982,617]:\n          - region \"Measure dependency graph\" [ref=t3-db357e89-d-e467] [box=314,199,516,585]:\n            - generic [ref=t3-db357e89-d-e468] [box=315,200,514,65]:\n              - generic [ref=t3-db357e89-d-e469] [box=331,215,209,36]:\n                - heading \"Dependency flow\" [level=2] [ref=t3-db357e89-d-e470] [box=331,215,209,17]\n                - paragraph [ref=t3-db357e89-d-e471] [box=331,237,209,14]: Upstream → analyzed measure → downstream\n              - combobox \"Dependency graph direction\" [ref=t3-db357e89-d-e472] [box=683,218,130,30]:\n                - option \"Left → right\" [selected] [box=0,0,0,0]\n                - option \"Top → bottom\" [box=0,0,0,0]\n                - option \"Bottom → top\" [box=0,0,0,0]\n            - group \"Graph navigation\" [ref=t3-db357e89-d-e473] [box=315,265,514,50]:\n              - button \"Zoom out dependency graph\" [ref=t3-db357e89-d-e474] [cursor=pointer] [box=327,275,27,29]: −\n              - button \"Reset dependency graph zoom to 100%\" [ref=t3-db357e89-d-e475] [cursor=pointer] [box=359,275,44,29]: 71%\n              - button \"Zoom in dependency graph\" [ref=t3-db357e89-d-e476] [cursor=pointer] [box=407,275,27,29]: +\n              - button \"Fit entire dependency graph\" [ref=t3-db357e89-d-e477] [cursor=pointer] [box=439,275,48,29]: Fit all\n              - button \"Center the analyzed measure\" [ref=t3-db357e89-d-e478] [cursor=pointer] [box=492,275,54,29]: Center\n              - button \"Reset dependency expansion and comparison\" [ref=t3-db357e89-d-e524] [cursor=pointer] [box=768,275,49,29]: Reset\n            - generic \"Dependency graph. Drag to pan or use arrow keys. Select a measure to compare its formula.\" [ref=t3-db357e89-d-e479] [box=315,315,514,413]:\n              - generic [ref=t3-db357e89-d-e481] [box=331,449,482,144]:\n                - img [box=331,449,482,144]\n                - button \"Net Amount. Click or Space to compare. Enter to analyze.\" [ref=t3-db357e89-d-e484] [cursor=pointer] [box=606,509,135,24]: Net Amount\n                - button \"Total Amount. Click or Space to compare. Enter to analyze.\" [pressed] [ref=t3-db357e89-d-e488] [cursor=pointer] [box=402,509,135,24]: Total Amount\n            - generic [ref=t3-db357e89-d-e490] [box=315,728,514,55]:\n              - generic [ref=t3-db357e89-d-e491] [box=328,740,56,13]: ● Upstream\n              - generic [ref=t3-db357e89-d-e492] [box=397,740,69,13]: ● Downstream\n              - generic [ref=t3-db357e89-d-e493] [box=479,740,226,13]: 2 measures · 2 shown · 0 collapsed · 1 visible links\n              - generic [ref=t3-db357e89-d-e494] [box=328,761,139,12]: Click to compare · Enter to analyze\n          - separator \"Resize graph and DAX panels\" [ref=t3-db357e89-d-e495] [box=830,199,12,585]\n          - region \"DAX formulas\" [ref=t3-db357e89-d-e497] [box=842,199,422,585]:\n            - generic [ref=t3-db357e89-d-e498] [box=843,200,420,65]:\n              - generic [ref=t3-db357e89-d-e499] [box=859,215,166,36]:\n                - heading \"DAX workspace\" [level=2] [ref=t3-db357e89-d-e500] [box=859,215,166,17]\n                - paragraph [ref=t3-db357e89-d-e501] [box=859,237,166,14]: Read the formula. Compare the logic.\n              - button \"Wrap lines\" [pressed] [ref=t3-db357e89-d-e502] [cursor=pointer] [box=1174,218,73,29]\n            - generic [ref=t3-db357e89-d-e503] [box=843,265,420,518]:\n              - article [ref=t3-db357e89-d-e525] [box=855,277,387,219]:\n                - generic [ref=t3-db357e89-d-e526] [box=856,278,385,121]:\n                  - generic [ref=t3-db357e89-d-e529] [box=883,290,100,12]: Analyzed measure\n                  - heading \"Net Amount\" [level=3] [ref=t3-db357e89-d-e530] [box=869,308,359,18]\n                  - generic [ref=t3-db357e89-d-e531] [box=869,330,359,15]: Sales\n                  - generic [ref=t3-db357e89-d-e532] [box=869,355,359,30]:\n                    - button \"Inline measures\" [ref=t3-db357e89-d-e533] [cursor=pointer] [box=869,356,101,29]\n                    - combobox \"DAX layout\" [ref=t3-db357e89-d-e534] [box=976,355,91,30]:\n                      - option \"Original\" [box=0,0,0,0]\n                      - option \"Long lines\" [selected] [box=0,0,0,0]\n                      - option \"Short lines\" [box=0,0,0,0]\n                    - button \"Copy DAX for Net Amount\" [ref=t3-db357e89-d-e535] [cursor=pointer] [box=1073,356,69,29]: Copy DAX\n                - generic \"DAX formula for Net Amount\" [ref=t3-db357e89-d-e536] [box=856,398,385,96]:\n                  - generic [ref=t3-db357e89-d-e538] [box=880,408,347,25]:\n                    - button \"[Total Amount]\" [ref=t3-db357e89-d-e539] [cursor=pointer] [box=881,408,117,25]\n                    - text: \"- SUM ( Returns[Amount] )\"\n              - article [ref=t3-db357e89-d-e540] [box=855,508,387,219]:\n                - generic [ref=t3-db357e89-d-e541] [box=856,509,385,120]:\n                  - generic [ref=t3-db357e89-d-e544] [box=883,521,121,12]: Comparing · upstream\n                  - heading \"Total Amount\" [level=3] [ref=t3-db357e89-d-e545] [box=869,539,359,18]\n                  - generic [ref=t3-db357e89-d-e546] [box=869,561,359,15]: Sales\n                  - generic [ref=t3-db357e89-d-e547] [box=869,586,359,29]:\n                    - button \"Copy DAX for Total Amount\" [ref=t3-db357e89-d-e548] [cursor=pointer] [box=869,586,69,29]: Copy DAX\n                    - button \"Analyze this measure\" [ref=t3-db357e89-d-e549] [cursor=pointer] [box=944,586,128,29]\n                    - button \"Clear comparison with Total Amount\" [ref=t3-db357e89-d-e550] [cursor=pointer] [box=1078,589,33,24]: Clear\n                - generic \"DAX formula for Total Amount\" [ref=t3-db357e89-d-e551] [box=856,628,385,97]:\n                  - generic [ref=t3-db357e89-d-e553] [box=880,638,347,23]: SUM ( Sales[Amount] )\n              - group [ref=t3-db357e89-d-e554] [box=855,739,387,33]:\n                - generic \"Referenced columns (1)\" [ref=t3-db357e89-d-e555] [cursor=pointer] [box=869,748,359,15]",
+        "omitted": [
+          "3 older network entries",
+          "8 of 10 actionTimeline"
+        ]
+      }
+    },
+    {
+      "stage": "pqInitial",
+      "snapshot": {
+        "url": "http://localhost:8945/?review=flow-20261010",
+        "title": "Semantic Model Viewer",
+        "loading": false,
+        "visibleText": "Flow audit (synthetic)\n2 tables · 1 relationships\nTables\nMeasures\nPower Query\nDomains\nMatrix\nLocal analysis\nSave snapshot\nRefresh\nOpen model\nPower Query\n\n10 objects in this model\n\n10 on canvas\nAll objects\nOn canvas\nAvailable\nAll (10)\nConnected (9)\nDisconnected (1)\nAll groups (10)\nReview/Inputs (3)\nReview/Transformations (2)\nUnassigned (5)\nReset filters\nSales\nm · Sales\n−\nReturns\nm · Returns\n−\nEnvironment\nparameter · Review/Inputs\n−\nSales Raw\nquery · Review/Inputs\n−\nPrepared Sales\nquery · Review/Transformations\n−\nLookup\nquery · Review/Inputs\n−\nMerged Sales\nquery · Review/Transformations\n−\nCycle A\nquery\n−\nCycle B\nquery\n−\nStandalone\nquery\n−\nAdd with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.\nCycle · 2\nDIM\nSales\nFACT\nReturns\nP\nEnvironment\nQ\nSales Raw\nQ\nPrepared Sales\nQ\nLookup\nQ\nMerged Sales\nQ\nCycle A\nCycle\nQ\nCycle B\nCycle\nQ\nStandalone\nQuery input → consumer\nParameter → consumer\n10 visible objects\n−\n56%\n+\nFit\nCenter selected\nQuery canvas\n10 / 10 objects\nQueries\nBack\nBlank layout\nShow all\nUndo\nArrange\nDisplay\nMetadata inspected. Static analysis remains partial.",
+        "interactiveElements": [],
+        "consoleEntries": [],
+        "networkEntries": [
+          {
+            "url": "http://localhost:8945/js/app.js?v=dbc5683c97",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:14:23.117Z"
+          },
+          {
+            "url": "http://localhost:8945/explorer.css?v=5699d561e3",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:14:23.117Z"
+          },
+          {
+            "url": "http://localhost:8945/power-query.css?v=4ff48db438",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:14:23.117Z"
+          },
+          {
+            "url": "http://localhost:8945/measures.css?v=020a7d7d4e",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:14:23.117Z"
+          },
+          {
+            "url": "http://localhost:8945/power-query-canvas.css?v=0bec3d167b",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:14:23.117Z"
+          },
+          {
+            "url": "http://localhost:8945/power-query-inspector.css?v=e16cbd1785",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:14:23.117Z"
+          },
+          {
+            "url": "http://localhost:8945/power-query-workspace.css?v=89f1b4d658",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:14:23.117Z"
+          },
+          {
+            "url": "http://localhost:8945/power-query-lineage.css?v=3fa4fd3345",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:14:23.117Z"
+          },
+          {
+            "url": "http://localhost:8945/index.html",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:14:23.118Z"
+          },
+          {
+            "url": "blob:http://localhost:8945/20546407-ac50-47e7-83dc-582ccd600499",
+            "method": "GET",
+            "status": 200,
+            "failed": false,
+            "timestamp": "2026-10-10T08:14:23.124Z"
+          }
+        ],
+        "actionTimeline": [],
+        "screenshot": {
+          "mimeType": "image/png",
+          "width": 1280,
+          "height": 800
+        },
+        "accessibilityTree": "- generic [ref=t3-db357e89-f-e2] [box=0,0,1280,800]:\n  - banner [ref=t3-db357e89-f-e3] [box=0,0,1280,64]:\n    - generic [ref=t3-db357e89-f-e556] [box=20,14,220,36]:\n      - img [ref=t3-db357e89-f-e558] [box=30,24,15,15]\n      - button \"Flow audit (synthetic) 2 tables · 1 relationships\" [ref=t3-db357e89-f-e562] [cursor=pointer] [box=64,14,143,36]:\n        - strong [ref=t3-db357e89-f-e563] [box=64,14,143,19]: Flow audit (synthetic)\n        - generic [ref=t3-db357e89-f-e564] [box=64,35,143,15]: 2 tables · 1 relationships\n    - navigation \"Analysis views\" [ref=t3-db357e89-f-e565] [box=360,11,422,42]:\n      - button \"Tables\" [ref=t3-db357e89-f-e566] [cursor=pointer] [box=364,15,68,34]\n      - button \"Measures\" [ref=t3-db357e89-f-e567] [cursor=pointer] [box=434,15,86,34]\n      - button \"Power Query\" [ref=t3-db357e89-f-e568] [cursor=pointer] [box=521,15,103,34]\n      - button \"Domains\" [ref=t3-db357e89-f-e569] [cursor=pointer] [box=627,15,81,34]\n      - button \"Matrix\" [ref=t3-db357e89-f-e570] [cursor=pointer] [box=710,15,68,34]\n    - generic [ref=t3-db357e89-f-e571] [box=901,16,359,32]:\n      - generic \"Model parsing and analysis run in your browser.\" [ref=t3-db357e89-f-e572] [box=901,24,68,15]: Local analysis\n      - button \"Save snapshot\" [ref=t3-db357e89-f-e573] [cursor=pointer] [box=983,16,104,32]\n      - button \"Refresh\" [ref=t3-db357e89-f-e574] [cursor=pointer] [box=1095,16,66,32]\n      - button \"Open model\" [ref=t3-db357e89-f-e575] [cursor=pointer] [box=1169,16,91,32]\n  - region \"Power Query workspace\" [ref=t3-db357e89-f-e576] [box=0,64,1280,736]:\n    - generic [ref=t3-db357e89-f-e577] [box=0,64,1280,706]:\n      - complementary \"Power Query objects\" [ref=t3-db357e89-f-e578] [box=0,64,268,706]:\n        - generic [ref=t3-db357e89-f-e579] [box=0,64,267,85]:\n          - generic [ref=t3-db357e89-f-e580] [box=16,86,118,47]:\n            - heading \"Power Query\" [level=2] [ref=t3-db357e89-f-e581] [box=16,86,118,26]\n            - paragraph [ref=t3-db357e89-f-e582] [box=16,117,118,17]: 10 objects in this model\n          - generic [ref=t3-db357e89-f-e583] [box=178,97,73,25]: 10 on canvas\n        - searchbox \"Search Power Query objects\" [ref=t3-db357e89-f-e584] [box=14,149,239,36]\n        - generic \"Power Query library filter\" [ref=t3-db357e89-f-e585] [box=14,197,239,33]:\n          - button \"All objects\" [pressed] [ref=t3-db357e89-f-e586] [cursor=pointer] [box=17,200,76,27]\n          - button \"On canvas\" [ref=t3-db357e89-f-e587] [cursor=pointer] [box=95,200,76,27]\n          - button \"Available\" [ref=t3-db357e89-f-e588] [cursor=pointer] [box=174,200,76,27]\n        - generic [ref=t3-db357e89-f-e589] [box=14,242,239,43]:\n          - combobox \"Power Query connectivity filter\" [ref=t3-db357e89-f-e590] [box=14,242,239,19]:\n            - option \"All (10)\" [selected] [box=0,0,0,0]\n            - option \"Connected (9)\" [box=0,0,0,0]\n            - option \"Disconnected (1)\" [box=0,0,0,0]\n          - combobox \"Power Query group filter\" [ref=t3-db357e89-f-e591] [box=14,267,239,19]:\n            - option \"All groups (10)\" [selected] [box=0,0,0,0]\n            - option \"Review/Inputs (3)\" [box=0,0,0,0]\n            - option \"Review/Transformations (2)\" [box=0,0,0,0]\n            - option \"Unassigned (5)\" [box=0,0,0,0]\n        - button \"Reset filters\" [ref=t3-db357e89-f-e592] [cursor=pointer] [box=14,297,90,32]\n        - generic [ref=t3-db357e89-f-e593] [box=0,339,267,361]:\n          - generic [ref=t3-db357e89-f-e594] [box=8,341,251,53]:\n            - button \"Sales m · Sales\" [ref=t3-db357e89-f-e595] [box=8,341,222,53]:\n              - generic [ref=t3-db357e89-f-e597] [box=31,351,41,33]:\n                - strong [ref=t3-db357e89-f-e598] [box=31,351,41,17]: Sales\n                - generic [ref=t3-db357e89-f-e599] [box=31,371,41,13]: m · Sales\n            - button \"Remove Sales from layout\" [ref=t3-db357e89-f-e600] [cursor=pointer] [box=233,353,22,28]: −\n          - generic [ref=t3-db357e89-f-e601] [box=8,396,251,53]:\n            - button \"Returns m · Returns\" [ref=t3-db357e89-f-e602] [box=8,396,222,53]:\n              - generic [ref=t3-db357e89-f-e604] [box=31,406,52,33]:\n                - strong [ref=t3-db357e89-f-e605] [box=31,406,52,17]: Returns\n                - generic [ref=t3-db357e89-f-e606] [box=31,426,52,13]: m · Returns\n            - button \"Remove Returns from layout\" [ref=t3-db357e89-f-e607] [cursor=pointer] [box=233,408,22,28]: −\n          - generic [ref=t3-db357e89-f-e608] [box=8,451,251,53]:\n            - button \"Environment parameter · Review/Inputs\" [ref=t3-db357e89-f-e609] [box=8,451,222,53]:\n              - generic [ref=t3-db357e89-f-e611] [box=31,461,121,33]:\n                - strong [ref=t3-db357e89-f-e612] [box=31,461,121,17]: Environment\n                - generic [ref=t3-db357e89-f-e613] [box=31,481,121,13]: parameter · Review/Inputs\n            - button \"Remove Environment from layout\" [ref=t3-db357e89-f-e614] [cursor=pointer] [box=233,463,22,28]: −\n          - generic [ref=t3-db357e89-f-e615] [box=8,506,251,53]:\n            - button \"Sales Raw query · Review/Inputs\" [ref=t3-db357e89-f-e616] [box=8,506,222,53]:\n              - generic [ref=t3-db357e89-f-e618] [box=31,516,99,33]:\n                - strong [ref=t3-db357e89-f-e619] [box=31,516,99,17]: Sales Raw\n                - generic [ref=t3-db357e89-f-e620] [box=31,536,99,13]: query · Review/Inputs\n            - button \"Remove Sales Raw from layout\" [ref=t3-db357e89-f-e621] [cursor=pointer] [box=233,518,22,28]: −\n          - generic [ref=t3-db357e89-f-e622] [box=8,561,251,53]:\n            - button \"Prepared Sales query · Review/Transformations\" [ref=t3-db357e89-f-e623] [box=8,561,222,53]:\n              - generic [ref=t3-db357e89-f-e625] [box=31,571,143,33]:\n                - strong [ref=t3-db357e89-f-e626] [box=31,571,143,17]: Prepared Sales\n                - generic [ref=t3-db357e89-f-e627] [box=31,591,143,13]: query · Review/Transformations\n            - button \"Remove Prepared Sales from layout\" [ref=t3-db357e89-f-e628] [cursor=pointer] [box=233,573,22,28]: −\n          - generic [ref=t3-db357e89-f-e629] [box=8,615,251,53]:\n            - button \"Lookup query · Review/Inputs\" [ref=t3-db357e89-f-e630] [box=8,615,222,53]:\n              - generic [ref=t3-db357e89-f-e632] [box=31,625,99,33]:\n                - strong [ref=t3-db357e89-f-e633] [box=31,625,99,17]: Lookup\n                - generic [ref=t3-db357e89-f-e634] [box=31,646,99,13]: query · Review/Inputs\n            - button \"Remove Lookup from layout\" [ref=t3-db357e89-f-e635] [cursor=pointer] [box=233,628,22,28]: −\n          - generic [ref=t3-db357e89-f-e636] [box=8,670,251,53]:\n            - button \"Merged Sales query · Review/Transformations\" [ref=t3-db357e89-f-e637] [box=8,670,222,53]:\n              - generic [ref=t3-db357e89-f-e639] [box=31,680,143,33]:\n                - strong [ref=t3-db357e89-f-e640] [box=31,680,143,17]: Merged Sales\n                - generic [ref=t3-db357e89-f-e641] [box=31,701,143,13]: query · Review/Transformations\n            - button \"Remove Merged Sales from layout\" [ref=t3-db357e89-f-e642] [cursor=pointer] [box=233,683,22,28]: −\n          - generic [ref=t3-db357e89-f-e643] [box=8,725,251,53]:\n            - button \"Cycle A query\" [ref=t3-db357e89-f-e644] [box=8,725,222,53]:\n              - generic [ref=t3-db357e89-f-e646] [box=31,735,41,33]:\n                - strong [ref=t3-db357e89-f-e647] [box=31,735,41,17]: Cycle A\n                - generic [ref=t3-db357e89-f-e648] [box=31,756,41,13]: query\n            - button \"Remove Cycle A from layout\" [ref=t3-db357e89-f-e649] [cursor=pointer] [box=233,738,22,28]: −\n          - generic [ref=t3-db357e89-f-e650] [box=8,780,251,53]:\n            - button \"Cycle B query\" [ref=t3-db357e89-f-e651] [box=8,780,222,53]:\n              - generic [ref=t3-db357e89-f-e653] [box=31,790,41,33]:\n                - strong [ref=t3-db357e89-f-e654] [box=31,790,41,17]: Cycle B\n                - generic [ref=t3-db357e89-f-e655] [box=31,811,41,13]: query\n            - button \"Remove Cycle B from layout\" [ref=t3-db357e89-f-e656] [cursor=pointer] [box=233,793,22,28]: −\n          - generic [ref=t3-db357e89-f-e657] [box=8,835,251,53]:\n            - button \"Standalone query\" [ref=t3-db357e89-f-e658] [box=8,835,222,53]:\n              - generic [ref=t3-db357e89-f-e660] [box=31,845,63,33]:\n                - strong [ref=t3-db357e89-f-e661] [box=31,845,63,17]: Standalone\n                - generic [ref=t3-db357e89-f-e662] [box=31,865,63,13]: query\n            - button \"Remove Standalone from layout\" [ref=t3-db357e89-f-e663] [cursor=pointer] [box=233,848,22,28]: −\n        - generic [ref=t3-db357e89-f-e664] [box=0,700,267,70]: Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.\n      - generic [ref=t3-db357e89-f-e665] [box=268,64,1012,706]:\n        - generic \"Power Query model workspace\" [ref=t3-db357e89-f-e666] [box=268,126,1012,644]:\n          - group \"Power Query input to consumer canvas\" [ref=t3-db357e89-f-e667] [box=268,126,1012,644]:\n            - generic \"Query canvas. Arrow keys pan; F fits; plus and minus zoom.\" [ref=t3-db357e89-f-e668] [box=268,126,1012,644]:\n              - generic [box=312,215,0,0]:\n                - generic [box=312,215,0,0]:\n                  - generic [box=304,338,156,148]:\n                    - generic [box=312,342,21,8]: Cycle · 2\n                - img \"Resolved query references\" [box=312,215,1,1]:\n                  - generic [box=375,242,721,184]:\n                    - generic \"Merged Sales is referenced by Sales\" [box=1040,242,56,0]\n                    - generic \"Sales Raw is referenced by Returns\" [box=648,242,56,0]\n                    - generic \"Environment is referenced by Sales Raw\" [box=452,242,56,0]\n                    - generic \"Sales Raw is referenced by Prepared Sales\" [box=648,242,56,70]\n                    - generic \"Environment is referenced by Prepared Sales\" [box=452,242,252,70]\n                    - generic \"Prepared Sales is referenced by Merged Sales\" [box=844,242,56,70]\n                    - generic \"Lookup is referenced by Merged Sales\" [box=452,242,448,70]\n                    - generic \"Cycle B is referenced by Cycle A\" [box=375,409,0,17]\n                    - generic \"Cycle A is referenced by Cycle B\" [box=389,409,0,17]\n                - generic [box=312,215,0,0]:\n                  - button \"Sales · m · Sales\" [ref=t3-db357e89-f-e673] [box=1096,215,140,53]:\n                    - generic [ref=t3-db357e89-f-e674] [box=1096,215,139,52]:\n                      - generic \"dim\" [ref=t3-db357e89-f-e675] [box=1105,221,15,9]: DIM\n                      - generic \"Sales\" [ref=t3-db357e89-f-e677] [box=1125,221,104,14]\n                  - button \"Returns · m · Returns\" [ref=t3-db357e89-f-e679] [box=704,215,140,53]:\n                    - generic [ref=t3-db357e89-f-e680] [box=704,215,139,52]:\n                      - generic \"fact\" [ref=t3-db357e89-f-e681] [box=713,221,18,9]: FACT\n                      - generic \"Returns\" [ref=t3-db357e89-f-e683] [box=736,221,101,14]\n                  - button \"Environment · parameter\" [ref=t3-db357e89-f-e685] [box=312,215,140,53]:\n                    - generic [ref=t3-db357e89-f-e686] [box=312,215,139,52]:\n                      - generic \"parameter\" [ref=t3-db357e89-f-e687] [box=321,221,9,9]: P\n                      - generic \"Environment\" [ref=t3-db357e89-f-e689] [box=335,221,111,14]\n                  - button \"Sales Raw · query\" [ref=t3-db357e89-f-e691] [box=508,215,140,53]:\n                    - generic [ref=t3-db357e89-f-e692] [box=508,215,139,52]:\n                      - generic \"query\" [ref=t3-db357e89-f-e693] [box=517,221,9,9]: Q\n                      - generic \"Sales Raw\" [ref=t3-db357e89-f-e695] [box=531,221,111,14]\n                  - button \"Prepared Sales · query\" [ref=t3-db357e89-f-e697] [box=704,285,140,53]:\n                    - generic [ref=t3-db357e89-f-e698] [box=704,286,139,52]:\n                      - generic \"query\" [ref=t3-db357e89-f-e699] [box=713,292,9,9]: Q\n                      - generic \"Prepared Sales\" [ref=t3-db357e89-f-e701] [box=727,291,111,14]\n                  - button \"Lookup · query\" [ref=t3-db357e89-f-e703] [box=312,285,140,53]:\n                    - generic [ref=t3-db357e89-f-e704] [box=312,286,139,52]:\n                      - generic \"query\" [ref=t3-db357e89-f-e705] [box=321,292,9,9]: Q\n                      - generic \"Lookup\" [ref=t3-db357e89-f-e707] [box=335,291,111,14]\n                  - button \"Merged Sales · query\" [ref=t3-db357e89-f-e709] [box=900,215,140,53]:\n                    - generic [ref=t3-db357e89-f-e710] [box=900,215,139,52]:\n                      - generic \"query\" [ref=t3-db357e89-f-e711] [box=909,221,9,9]: Q\n                      - generic \"Merged Sales\" [ref=t3-db357e89-f-e713] [box=923,221,111,14]\n                  - button \"Cycle A · query\" [ref=t3-db357e89-f-e715] [box=312,355,140,53]:\n                    - generic [ref=t3-db357e89-f-e716] [box=312,356,139,52]:\n                      - generic \"query\" [ref=t3-db357e89-f-e717] [box=321,362,9,9]: Q\n                      - generic \"Cycle A\" [ref=t3-db357e89-f-e719] [box=335,361,111,14]\n                    - generic [ref=t3-db357e89-f-e721] [box=427,391,15,9]: Cycle\n                  - button \"Cycle B · query\" [ref=t3-db357e89-f-e722] [box=312,425,140,53]:\n                    - generic [ref=t3-db357e89-f-e723] [box=312,426,139,52]:\n                      - generic \"query\" [ref=t3-db357e89-f-e724] [box=321,432,9,9]: Q\n                      - generic \"Cycle B\" [ref=t3-db357e89-f-e726] [box=335,431,111,14]\n                    - generic [ref=t3-db357e89-f-e728] [box=427,461,15,9]: Cycle\n                  - button \"Standalone · query\" [ref=t3-db357e89-f-e729] [box=312,538,140,53]:\n                    - generic [ref=t3-db357e89-f-e730] [box=312,538,139,52]:\n                      - generic \"query\" [ref=t3-db357e89-f-e731] [box=321,544,9,9]: Q\n                      - generic \"Standalone\" [ref=t3-db357e89-f-e733] [box=335,544,111,14]\n            - generic [box=284,738,278,16]:\n              - generic [box=284,738,135,16]: Query input → consumer\n              - generic [box=433,738,130,16]: Parameter → consumer\n            - generic [ref=t3-db357e89-f-e735] [box=1052,607,212,147]:\n              - generic [ref=t3-db357e89-f-e736] [box=1064,616,188,16]: 10 visible objects\n              - img \"Visible query canvas overview\" [ref=t3-db357e89-f-e737] [box=1059,635,198,112]\n        - generic [ref=t3-db357e89-f-e750] [box=286,712,256,40]:\n          - button \"Zoom out Power Query\" [ref=t3-db357e89-f-e751] [cursor=pointer] [box=291,717,27,30]: −\n          - generic [ref=t3-db357e89-f-e752] [box=320,725,43,15]: 56%\n          - button \"Zoom in Power Query\" [ref=t3-db357e89-f-e753] [cursor=pointer] [box=365,717,27,30]: +\n          - button \"Fit Power Query layout\" [ref=t3-db357e89-f-e754] [cursor=pointer] [box=394,717,34,30]: Fit\n          - button \"Center selected\" [disabled] [ref=t3-db357e89-f-e755] [box=431,717,106,30]\n    - generic [ref=t3-db357e89-f-e756] [box=268,64,1012,62]:\n      - generic [ref=t3-db357e89-f-e757] [box=286,76,95,38]:\n        - strong [ref=t3-db357e89-f-e758] [box=286,76,95,20]: Query canvas\n        - generic [ref=t3-db357e89-f-e759] [box=286,98,95,15]: 10 / 10 objects\n      - button \"Queries\" [expanded] [ref=t3-db357e89-f-e760] [cursor=pointer] [box=397,79,63,32]\n      - button \"Back\" [disabled] [ref=t3-db357e89-f-e761] [box=467,79,47,32]\n      - button \"Blank layout\" [ref=t3-db357e89-f-e762] [cursor=pointer] [box=521,79,88,32]\n      - button \"Show all\" [ref=t3-db357e89-f-e763] [cursor=pointer] [box=616,79,67,32]\n      - button \"Undo\" [disabled] [ref=t3-db357e89-f-e764] [box=690,79,49,32]\n      - button \"Arrange\" [ref=t3-db357e89-f-e765] [cursor=pointer] [box=1127,79,64,32]\n      - button \"Display\" [ref=t3-db357e89-f-e767] [cursor=pointer] [box=1197,79,65,32]\n    - status [ref=t3-db357e89-f-e768] [box=268,770,1012,30]: Metadata inspected. Static analysis remains partial.",
+        "omitted": [
+          "36 older network entries",
+          "11 of 11 actionTimeline",
+          "30 of 40 networkEntries"
+        ]
+      }
+    },
+    {
+      "stage": "pqSales",
+      "snapshot": {
+        "url": "http://localhost:8945/?review=flow-20261010",
+        "title": "Semantic Model Viewer",
+        "loading": false,
+        "visibleText": "…",
+        "interactiveElements": [],
+        "consoleEntries": [],
+        "networkEntries": [],
+        "actionTimeline": [],
+        "screenshot": {
+          "mimeType": "image/png",
+          "width": 1280,
+          "height": 800
+        },
+        "accessibilityTree": "- generic [ref=t3-db357e89-h-e2] [box=0,0,1280,800]:\n  - banner [ref=t3-db357e89-h-e3] [box=0,0,1280,64]:\n    - generic [ref=t3-db357e89-h-e556] [box=20,14,220,36]:\n      - img [ref=t3-db357e89-h-e558] [box=30,24,15,15]\n      - button \"Flow audit (synthetic) 2 tables · 1 relationships\" [ref=t3-db357e89-h-e562] [cursor=pointer] [box=64,14,143,36]:\n        - strong [ref=t3-db357e89-h-e563] [box=64,14,143,19]: Flow audit (synthetic)\n        - generic [ref=t3-db357e89-h-e564] [box=64,35,143,15]: 2 tables · 1 relationships\n    - navigation \"Analysis views\" [ref=t3-db357e89-h-e565] [box=360,11,422,42]:\n      - button \"Tables\" [ref=t3-db357e89-h-e566] [cursor=pointer] [box=364,15,68,34]\n      - button \"Measures\" [ref=t3-db357e89-h-e567] [cursor=pointer] [box=434,15,86,34]\n      - button \"Power Query\" [ref=t3-db357e89-h-e568] [cursor=pointer] [box=521,15,103,34]\n      - button \"Domains\" [ref=t3-db357e89-h-e569] [cursor=pointer] [box=627,15,81,34]\n      - button \"Matrix\" [ref=t3-db357e89-h-e570] [cursor=pointer] [box=710,15,68,34]\n    - generic [ref=t3-db357e89-h-e571] [box=901,16,359,32]:\n      - generic \"Model parsing and analysis run in your browser.\" [ref=t3-db357e89-h-e572] [box=901,24,68,15]: Local analysis\n      - button \"Save snapshot\" [ref=t3-db357e89-h-e573] [cursor=pointer] [box=983,16,104,32]\n      - button \"Refresh\" [ref=t3-db357e89-h-e574] [cursor=pointer] [box=1095,16,66,32]\n      - button \"Open model\" [ref=t3-db357e89-h-e575] [cursor=pointer] [box=1169,16,91,32]\n  - region \"Power Query workspace\" [ref=t3-db357e89-h-e576] [box=0,64,1280,736]:\n    - generic [ref=t3-db357e89-h-e577] [box=0,64,1280,706]:\n      - complementary \"Power Query objects\" [ref=t3-db357e89-h-e578] [box=0,64,268,706]:\n        - generic [ref=t3-db357e89-h-e579] [box=0,64,267,85]:\n          - generic [ref=t3-db357e89-h-e580] [box=16,86,118,47]:\n            - heading \"Power Query\" [level=2] [ref=t3-db357e89-h-e581] [box=16,86,118,26]\n            - paragraph [ref=t3-db357e89-h-e582] [box=16,117,118,17]: 10 objects in this model\n          - generic [ref=t3-db357e89-h-e583] [box=178,97,73,25]: 10 on canvas\n        - searchbox \"Search Power Query objects\" [ref=t3-db357e89-h-e584] [box=14,149,239,36]\n        - generic \"Power Query library filter\" [ref=t3-db357e89-h-e585] [box=14,197,239,33]:\n          - button \"All objects\" [pressed] [ref=t3-db357e89-h-e586] [cursor=pointer] [box=17,200,76,27]\n          - button \"On canvas\" [ref=t3-db357e89-h-e587] [cursor=pointer] [box=95,200,76,27]\n          - button \"Available\" [ref=t3-db357e89-h-e588] [cursor=pointer] [box=174,200,76,27]\n        - generic [ref=t3-db357e89-h-e589] [box=14,242,239,43]:\n          - combobox \"Power Query connectivity filter\" [ref=t3-db357e89-h-e590] [box=14,242,239,19]:\n            - option \"All (10)\" [selected] [box=0,0,0,0]\n            - option \"Connected (9)\" [box=0,0,0,0]\n            - option \"Disconnected (1)\" [box=0,0,0,0]\n          - combobox \"Power Query group filter\" [ref=t3-db357e89-h-e591] [box=14,267,239,19]:\n            - option \"All groups (10)\" [selected] [box=0,0,0,0]\n            - option \"Review/Inputs (3)\" [box=0,0,0,0]\n            - option \"Review/Transformations (2)\" [box=0,0,0,0]\n            - option \"Unassigned (5)\" [box=0,0,0,0]\n        - button \"Reset filters\" [ref=t3-db357e89-h-e592] [cursor=pointer] [box=14,297,90,32]\n        - generic [ref=t3-db357e89-h-e593] [box=0,339,267,361]:\n          - generic [ref=t3-db357e89-h-e769] [box=8,341,251,53]:\n            - button \"Sales m · Sales\" [ref=t3-db357e89-h-e770] [box=8,341,222,53]:\n              - generic [ref=t3-db357e89-h-e772] [box=31,351,41,33]:\n                - strong [ref=t3-db357e89-h-e773] [box=31,351,41,17]: Sales\n                - generic [ref=t3-db357e89-h-e774] [box=31,371,41,13]: m · Sales\n            - button \"Remove Sales from layout\" [ref=t3-db357e89-h-e775] [cursor=pointer] [box=233,353,22,28]: −\n          - generic [ref=t3-db357e89-h-e776] [box=8,396,251,53]:\n            - button \"Returns m · Returns\" [ref=t3-db357e89-h-e777] [box=8,396,222,53]:\n              - generic [ref=t3-db357e89-h-e779] [box=31,406,52,33]:\n                - strong [ref=t3-db357e89-h-e780] [box=31,406,52,17]: Returns\n                - generic [ref=t3-db357e89-h-e781] [box=31,426,52,13]: m · Returns\n            - button \"Remove Returns from layout\" [ref=t3-db357e89-h-e782] [cursor=pointer] [box=233,408,22,28]: −\n          - generic [ref=t3-db357e89-h-e783] [box=8,451,251,53]:\n            - button \"Environment parameter · Review/Inputs\" [ref=t3-db357e89-h-e784] [box=8,451,222,53]:\n              - generic [ref=t3-db357e89-h-e786] [box=31,461,121,33]:\n                - strong [ref=t3-db357e89-h-e787] [box=31,461,121,17]: Environment\n                - generic [ref=t3-db357e89-h-e788] [box=31,481,121,13]: parameter · Review/Inputs\n            - button \"Remove Environment from layout\" [ref=t3-db357e89-h-e789] [cursor=pointer] [box=233,463,22,28]: −\n          - generic [ref=t3-db357e89-h-e790] [box=8,506,251,53]:\n            - button \"Sales Raw query · Review/Inputs\" [ref=t3-db357e89-h-e791] [box=8,506,222,53]:\n              - generic [ref=t3-db357e89-h-e793] [box=31,516,99,33]:\n                - strong [ref=t3-db357e89-h-e794] [box=31,516,99,17]: Sales Raw\n                - generic [ref=t3-db357e89-h-e795] [box=31,536,99,13]: query · Review/Inputs\n            - button \"Remove Sales Raw from layout\" [ref=t3-db357e89-h-e796] [cursor=pointer] [box=233,518,22,28]: −\n          - generic [ref=t3-db357e89-h-e797] [box=8,561,251,53]:\n            - button \"Prepared Sales query · Review/Transformations\" [ref=t3-db357e89-h-e798] [box=8,561,222,53]:\n              - generic [ref=t3-db357e89-h-e800] [box=31,571,143,33]:\n                - strong [ref=t3-db357e89-h-e801] [box=31,571,143,17]: Prepared Sales\n                - generic [ref=t3-db357e89-h-e802] [box=31,591,143,13]: query · Review/Transformations\n            - button \"Remove Prepared Sales from layout\" [ref=t3-db357e89-h-e803] [cursor=pointer] [box=233,573,22,28]: −\n          - generic [ref=t3-db357e89-h-e804] [box=8,615,251,53]:\n            - button \"Lookup query · Review/Inputs\" [ref=t3-db357e89-h-e805] [box=8,615,222,53]:\n              - generic [ref=t3-db357e89-h-e807] [box=31,625,99,33]:\n                - strong [ref=t3-db357e89-h-e808] [box=31,625,99,17]: Lookup\n                - generic [ref=t3-db357e89-h-e809] [box=31,646,99,13]: query · Review/Inputs\n            - button \"Remove Lookup from layout\" [ref=t3-db357e89-h-e810] [cursor=pointer] [box=233,628,22,28]: −\n          - generic [ref=t3-db357e89-h-e811] [box=8,670,251,53]:\n            - button \"Merged Sales query · Review/Transformations\" [ref=t3-db357e89-h-e812] [box=8,670,222,53]:\n              - generic [ref=t3-db357e89-h-e814] [box=31,680,143,33]:\n                - strong [ref=t3-db357e89-h-e815] [box=31,680,143,17]: Merged Sales\n                - generic [ref=t3-db357e89-h-e816] [box=31,701,143,13]: query · Review/Transformations\n            - button \"Remove Merged Sales from layout\" [ref=t3-db357e89-h-e817] [cursor=pointer] [box=233,683,22,28]: −\n          - generic [ref=t3-db357e89-h-e818] [box=8,725,251,53]:\n            - button \"Cycle A query\" [ref=t3-db357e89-h-e819] [box=8,725,222,53]:\n              - generic [ref=t3-db357e89-h-e821] [box=31,735,41,33]:\n                - strong [ref=t3-db357e89-h-e822] [box=31,735,41,17]: Cycle A\n                - generic [ref=t3-db357e89-h-e823] [box=31,756,41,13]: query\n            - button \"Remove Cycle A from layout\" [ref=t3-db357e89-h-e824] [cursor=pointer] [box=233,738,22,28]: −\n          - generic [ref=t3-db357e89-h-e825] [box=8,780,251,53]:\n            - button \"Cycle B query\" [ref=t3-db357e89-h-e826] [box=8,780,222,53]:\n              - generic [ref=t3-db357e89-h-e828] [box=31,790,41,33]:\n                - strong [ref=t3-db357e89-h-e829] [box=31,790,41,17]: Cycle B\n                - generic [ref=t3-db357e89-h-e830] [box=31,811,41,13]: query\n            - button \"Remove Cycle B from layout\" [ref=t3-db357e89-h-e831] [cursor=pointer] [box=233,793,22,28]: −\n          - generic [ref=t3-db357e89-h-e832] [box=8,835,251,53]:\n            - button \"Standalone query\" [ref=t3-db357e89-h-e833] [box=8,835,222,53]:\n              - generic [ref=t3-db357e89-h-e835] [box=31,845,63,33]:\n                - strong [ref=t3-db357e89-h-e836] [box=31,845,63,17]: Standalone\n                - generic [ref=t3-db357e89-h-e837] [box=31,865,63,13]: query\n            - button \"Remove Standalone from layout\" [ref=t3-db357e89-h-e838] [cursor=pointer] [box=233,848,22,28]: −\n        - generic [ref=t3-db357e89-h-e664] [box=0,700,267,70]: Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.\n      - generic [ref=t3-db357e89-h-e665] [box=268,64,605,706]:\n        - generic \"Power Query model workspace\" [ref=t3-db357e89-h-e666] [box=268,126,605,644]:\n          - group \"Power Query input to consumer canvas\" [ref=t3-db357e89-h-e667] [box=268,126,605,644]:\n            - generic \"Query canvas. Arrow keys pan; F fits; plus and minus zoom.\" [ref=t3-db357e89-h-e668] [box=268,126,605,644]:\n              - generic [box=-733,407,0,0]:\n                - generic [box=-733,407,0,0]:\n                  - generic [box=-745,596,238,226]:\n                    - generic [box=-733,602,33,12]: Cycle · 2\n                - img \"Resolved query references\" [box=-733,407,1,1]:\n                  - generic [box=-636,448,1100,281]:\n                    - generic \"Merged Sales is referenced by Sales\" [box=378,448,85,0]\n                    - generic \"Sales Raw is referenced by Returns\" [box=-220,448,85,0]\n                    - generic \"Environment is referenced by Sales Raw\" [box=-519,448,85,0]\n                    - generic \"Sales Raw is referenced by Prepared Sales\" [box=-220,448,85,107]\n                    - generic \"Environment is referenced by Prepared Sales\" [box=-519,448,384,107]\n                    - generic \"Prepared Sales is referenced by Merged Sales…",
+        "omitted": [
+          "36 older network entries",
+          "visibleText after 0 characters (use preview_evaluate for more)",
+          "accessibilityTree after 10000 characters",
+          "12 of 12 actionTimeline",
+          "40 of 40 networkEntries"
+        ]
+      }
+    }
+  ],
+  "fallback": "Open full query click timed out; then T3 returned: No preview automation host is available ... Do not retry."
+}

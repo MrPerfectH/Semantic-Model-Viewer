@@ -1,0 +1,273 @@
+{
+  "reached": {
+    "body": {
+      "x": 0,
+      "y": 234.5,
+      "width": 720,
+      "height": 234.5,
+      "top": 234.5,
+      "right": 720,
+      "bottom": 469,
+      "left": 0
+    },
+    "bodyScroll": 0,
+    "inspector": {
+      "x": 0,
+      "y": 373.625,
+      "width": 720,
+      "height": 93.796875,
+      "top": 373.625,
+      "right": 720,
+      "bottom": 467.421875,
+      "left": 0
+    },
+    "rootScroll": 163.5,
+    "hostScroll": 0,
+    "code": {
+      "x": 20,
+      "y": 476.625,
+      "width": 671,
+      "height": 325,
+      "top": 476.625,
+      "right": 691,
+      "bottom": 801.625,
+      "left": 20
+    },
+    "wrap": "pqi-code-scroll pqi-wrap",
+    "resizer": {
+      "x": 0,
+      "y": 365.046875,
+      "width": 720,
+      "height": 7,
+      "top": 365.046875,
+      "right": 720,
+      "bottom": 372.046875,
+      "left": 0
+    },
+    "size": 400
+  },
+  "resized": {
+    "size": 400,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0,
+      "top": 0,
+      "right": 0,
+      "bottom": 0,
+      "left": 0
+    }
+  },
+  "hit": {
+    "target": "<div class=\"pqc-surface\" tabindex=\"0\" aria-label=\"Query canvas. Arrow keys pan; F fits; plus and minus zoom.\" style=\"background-position: -115.5px 76.85px;\"><div class=\"pqc-world\" style=\"transform: translate(-115.5px, 76.85px) scale(0.85);\"><div class=\"pqc-cycles\"></div><svg class=\"pqc-edges\" aria-label=\"Resolved query references\"><defs><marker id=\"pqc-arrow-1\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"context-stroke\"></path></marker></defs><g><g class=\"pqc-edge pqc-related\"><title>Sales Raw is referenced by OccurrenceProbe</title><path class=\"pqc-edge-line\" marker-end=\"url(#pqc-arrow-1)\" d=\"M220,39 C270,39 270,39 320,39\"></path><path class=\"pqc-edge-hit\" data-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Sales Raw\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;OccurrenceProbe\\&quot;]&quot;]\" d=\"M220,39 C270,39 270,39 320,39\"></path></g><g class=\"pqc-edge pqc-related\"><title>Quote\"Query is referenced by OccurrenceProbe</title><path class=\"pqc-edge-line\" marker-end=\"url(#pqc-arrow-1)\" d=\"M220,147 C270,147 270,39 320,39\"></path><path class=\"pqc-edge-hit\" data-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Quote\\\\\\&quot;Query\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;OccurrenceProbe\\&quot;]&quot;]\" d=\"M220,147 C270,147 270,39 320,39\"></path></g><g class=\"pqc-edge pqc-parameter-edge pqc-related\"><title>Server is referenced by OccurrenceProbe</title><path class=\"pqc-edge-line\" marker-end=\"url(#pqc-arrow-1)\" d=\"M220,255 C270,255 270,39 320,39\"></path><path class=\"pqc-edge-hit\" data-edge-id=\"[&quot;reference&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;Server\\&quot;]&quot;,&quot;[\\&quot;expression\\&quot;,\\&quot;\\&quot;,\\&quot;OccurrenceProbe\\&quot;]&quot;]\" d=\"M220,255 C270,255 270,39 320,39\"></path></g></g></svg><div class=\"pqc-nodes\"><button class=\"pqc-node pqc-kind-query\" type=\"button\" data-node-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Sales Raw&quot;]\" title=\"Sales Raw · query\" aria-label=\"Sales Raw · query\" tabindex=\"-1\" aria-pressed=\"false\" style=\"transform: translate(0px, 0px);\"><span class=\"pqc-node-title\" style=\"font-size: 13px; line-height: 16.9px;\">Sales Raw</span><span class=\"pqc-node-subtitle\">query</span></button><button class=\"pqc-node pqc-kind-query\" type=\"button\" data-node-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Quote\\&quot;Query&quot;]\" title=\"Quote&quot;Query · query\" aria-label=\"Quote&quot;Query · query\" tabindex=\"-1\" aria-pressed=\"false\" style=\"transform: translate(0px, 108px);\"><span class=\"pqc-node-title\" style=\"font-size: 13px; line-height: 16.9px;\">Quote\"Query</span><span class=\"pqc-node-subtitle\">query</span></button><button class=\"pqc-node pqc-kind-parameter\" type=\"button\" data-node-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;Server&quot;]\" title=\"Server · parameter\" aria-label=\"Server · parameter\" tabindex=\"-1\" aria-pressed=\"false\" style=\"transform: translate(0px, 216px);\"><span class=\"pqc-node-title\" style=\"font-size: 13px; line-height: 16.9px;\">Server</span><span class=\"pqc-node-subtitle\">parameter</span></button><button class=\"pqc-node pqc-kind-query pqc-selected\" type=\"button\" data-node-id=\"[&quot;expression&quot;,&quot;&quot;,&quot;OccurrenceProbe&quot;]\" title=\"OccurrenceProbe · query\" aria-label=\"OccurrenceProbe · query\" tabindex=\"0\" aria-pressed=\"true\" style=\"transform: translate(320px, 0px);\"><span class=\"pqc-node-title\" style=\"font-size: 13px; line-height: 16.9px;\">OccurrenceProbe</span><span class=\"pqc-node-subtitle\">query</span></button></div></div></div>",
+    "ancestors": [
+      "pqc-surface",
+      "pqc",
+      "pqw-canvas",
+      "pqw-center",
+      "pqw-body pqw-below",
+      "pqw",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "rect": {
+      "x": 0,
+      "y": 365.046875,
+      "width": 720,
+      "height": 7,
+      "top": 365.046875,
+      "right": 720,
+      "bottom": 372.046875,
+      "left": 0
+    }
+  },
+  "afterClick": {
+    "phase": "ready",
+    "message": "Metadata inspected. Static analysis remains partial.",
+    "category": "all",
+    "query": "",
+    "selectedId": null,
+    "inspectorOpen": false,
+    "count": "4 visible / 4 total objects · 4 library results",
+    "banner": "",
+    "code": "",
+    "viewport": {
+      "x": -115.5,
+      "y": 4.099999999999994,
+      "k": 0.85
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": true,
+      "focus": null
+    },
+    "history": [
+      {
+        "generation": 3,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 115.40419161676647,
+          "y": 45.97005988023952,
+          "k": 0.49850299401197606
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null
+        },
+        "category": "all",
+        "query": ""
+      }
+    ],
+    "domNodes": 4,
+    "visible": [
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "library": [
+      "Sales Raw · query",
+      "Quote\"Query · query",
+      "Server · parameter",
+      "OccurrenceProbe · query"
+    ],
+    "map": "4 visible / 4 objects",
+    "graph": {
+      "nodes": [
+        {
+          "id": "[\"expression\",\"\",\"Sales Raw\"]",
+          "metadataId": "[\"expression\",\"\",\"Sales Raw\"]",
+          "label": "Sales Raw",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "metadataId": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "label": "Quote\"Query",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"Server\"]",
+          "metadataId": "[\"expression\",\"\",\"Server\"]",
+          "label": "Server",
+          "subtitle": "parameter",
+          "kind": "parameter",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        },
+        {
+          "id": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "metadataId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "label": "OccurrenceProbe",
+          "subtitle": "query",
+          "kind": "query",
+          "table": null,
+          "partition": null,
+          "state": "available"
+        }
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Sales Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Sales Raw\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Sales Raw\"]",
+              "name": "Sales Raw",
+              "at": 32,
+              "end": 44
+            },
+            {
+              "id": "[\"expression\",\"\",\"Sales Raw\"]",
+              "name": "Sales Raw",
+              "at": 57,
+              "end": 69
+            },
+            {
+              "id": "[\"expression\",\"\",\"Sales Raw\"]",
+              "name": "Sales Raw",
+              "at": 118,
+              "end": 136
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Quote\\\\\\\"Query\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+              "name": "Quote\"Query",
+              "at": 84,
+              "end": 99
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"OccurrenceProbe\\\"]\"]",
+          "inputId": "[\"expression\",\"\",\"Server\"]",
+          "consumerId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+          "referenceOccurrences": [
+            {
+              "id": "[\"expression\",\"\",\"Server\"]",
+              "name": "Server",
+              "at": 153,
+              "end": 159
+            }
+          ]
+        }
+      ],
+      "issues": [
+        {
+          "consumerId": null,
+          "kind": "analysis-notice",
+          "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+        }
+      ],
+      "generation": 3,
+      "analysisProgress": {
+        "analyzed": 4,
+        "total": 4,
+        "complete": true,
+        "generation": 3
+      }
+    },
+    "sets": {
+      "all": [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]"
+      ],
+      "disconnected": []
+    }
+  }
+}

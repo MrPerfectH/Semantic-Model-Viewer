@@ -1,0 +1,11 @@
+{
+  "file": "/tmp/pq38-native-snapshot.html",
+  "sha256": "9ec3f9d245329518e26e35a5b2d6b190763d809fe3de72a7e2a46577484fe8a8",
+  "bytes": 580560,
+  "markersAbsent": {
+    "PQ_RAW_ONLY_38": true,
+    "PQ_SHARED_ONLY_38": true,
+    "PQ_CREDENTIAL_ONLY_38": true,
+    "pq-private-38.invalid": true
+  }
+}

@@ -247,7 +247,7 @@
       host.appendChild(pop); this.relPop = pop;
       if (!this._escBound) {
         this._escBound = true;
-        window.addEventListener('keydown', function (e) { if (e.key === 'Escape' && self.selRel) self.selectRel(null); });
+        window.addEventListener('keydown', function (e) { if (e.key === 'Escape' && self.selRel && ['graph', 'clusters'].includes(self.app.state.viewMode)) self.selectRel(null); });
       }
       this.cards = {};
       this.app.model.tables.forEach(function (t) { self.makeCard(world, t); });
@@ -261,16 +261,17 @@
     makeCard: function (world, t) {
       var self = this, app = this.app;
       var fact = app.isFact(t);
+      var chrome = g.WorkspaceUI ? g.WorkspaceUI.cardStyles({fact:fact,color:app.tableColor(t),headerTint:U.tint(app.tableColor(t),.1)}) : {};
       var card = el('div', {
         data: { name: t.name },
         style: 'position:absolute;width:' + this.CARD_W + 'px;background:#fff;border:1px solid #e4e7ec;border-radius:' + (fact ? '7px' : '13px') +
           ';box-shadow:0 1px 2px rgba(20,30,50,.05),0 4px 12px rgba(20,30,50,.07);font-family:\'IBM Plex Sans\',sans-serif;overflow:hidden;transition:box-shadow .15s,opacity .15s,border-color .15s;'
       });
       var sm = app.srcMeta(t);
-      var head = el('div', { data: { head: '1' }, style: 'display:flex;align-items:flex-start;gap:9px;padding:10px 11px 10px 12px;cursor:grab;border-left:4px solid transparent;' });
+      var head = el('div', { data: { head: '1' }, style: chrome.head || 'display:flex;align-items:flex-start;gap:9px;padding:10px 11px 10px 12px;cursor:grab;border-left:4px solid transparent;' });
       var rmap = { fact: 'FACT', dim: 'DIM', helper: 'HLP', calcgroup: 'CG', fieldparam: 'FP', measures: 'M', standalone: 'STD', unknown: 'UNK' };
       var role = el('span', { text: rmap[t.role] || 'TBL', style: 'font:700 8.5px/1 "IBM Plex Mono",monospace;letter-spacing:.4px;padding:4px 5px;border-radius:4px;flex:none;color:#fff;margin-top:1px;' });
-      var titleWrap = el('div', { style: 'flex:1;min-width:0;' });
+      var titleWrap = el('div', { style: chrome.titleWrap || 'flex:1;min-width:0;' });
       var nm = el('div', { text: t.name, title: t.name, style: 'font:600 13.5px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:-.2px;color:#1f2430;word-break:break-word;' });
       var src = el('div', {
         title: sm.kind + (sm.detail && sm.detail !== '—' ? ' · ' + sm.detail : '') + (sm.via ? '\nvia ' + sm.via : '') + (sm.server ? '\n' + sm.server : ''),
@@ -298,7 +299,7 @@
       rm.addEventListener('click', function (e) { e.stopPropagation(); if (app.explorer) app.explorer.removeMany([t.name]); });
       head.appendChild(role); head.appendChild(titleWrap); head.appendChild(lock); head.appendChild(rm); head.appendChild(caret);
       card.appendChild(head);
-      var meta = el('div', { data: { meta: '1' }, style: 'display:flex;align-items:center;gap:6px;padding:9px 11px 10px 16px;border-top:1px solid #eef0f3;' });
+      var meta = el('div', { data: { meta: '1' }, style: chrome.meta || 'display:flex;align-items:center;gap:6px;padding:9px 11px 10px 16px;border-top:1px solid #eef0f3;' });
       var chip = function (num, label) {
         return el('span', {
           html: '<b style="font-weight:600;color:#5b6472;">' + num + '</b> <span style="color:#9aa1ad;">' + label + '</span>',
@@ -1270,6 +1271,11 @@
       this.lineStyle = m; store.set('smv-lines', m);
       this.renderLines(); this.app.render(true);
     },
+    /* Drawing-only width policy shared with the Power Query canvas. */
+    edgeStrokeWidth: function (zoom, isSel, active, hop, chip) {
+      var thin = Math.max(1.15, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : 1.15))) / zoom;
+      return Math.max(thin, isSel ? (chip ? 4.4 : 3.4) : (active ? (chip ? 3.4 : 2.6) : (hop ? (chip ? 2.8 : 2) : (chip ? 2.2 : 1.4))));
+    },
     renderLines: function () {
       var self = this;
       if (!this.svg) return;
@@ -1327,8 +1333,7 @@
         var col = isSel ? EDGE.lock : (EDGE[kind] || EDGE.base);
         /* every line has to stay at least a pixel wide on screen, whatever the zoom is;
            the focused ones are drawn heavier so the selection reads at a glance */
-        var thin = Math.max(1.15, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : 1.15))) / self.view.k;
-        var baseW = Math.max(thin, isSel ? (chip ? 4.4 : 3.4) : (active ? (chip ? 3.4 : 2.6) : (hop ? (chip ? 2.8 : 2) : (chip ? 2.2 : 1.4))));
+        var baseW = self.edgeStrokeWidth(self.view.k, isSel, active, hop, chip);
         if (active || hop || isSel) {
           self.svg.appendChild(sv('path', { d: d, fill: 'none', stroke: '#fff', 'stroke-width': baseW * 2.1, 'stroke-linecap': 'round', opacity: 0.95 }));
         }

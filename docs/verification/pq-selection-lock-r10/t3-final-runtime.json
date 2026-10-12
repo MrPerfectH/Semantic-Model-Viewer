@@ -1,0 +1,233 @@
+{
+  "url": "http://localhost:8945/?review=r10-typography-verified",
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "dpr": 2
+  },
+  "assets": [
+    {
+      "file": "js/util.js",
+      "url": "http://localhost:8945/js/util.js",
+      "status": 200,
+      "sha256": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960"
+    },
+    {
+      "file": "js/snapshot.js",
+      "url": "http://localhost:8945/js/snapshot.js",
+      "status": 200,
+      "sha256": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c"
+    },
+    {
+      "file": "js/usage-adapter.js",
+      "url": "http://localhost:8945/js/usage-adapter.js",
+      "status": 200,
+      "sha256": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428"
+    },
+    {
+      "file": "js/roles.js",
+      "url": "http://localhost:8945/js/roles.js",
+      "status": 200,
+      "sha256": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1"
+    },
+    {
+      "file": "js/tmdl-parser.js",
+      "url": "http://localhost:8945/js/tmdl-parser.js",
+      "status": 200,
+      "sha256": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399"
+    },
+    {
+      "file": "js/workspace-ui.js",
+      "url": "http://localhost:8945/js/workspace-ui.js",
+      "status": 200,
+      "sha256": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43"
+    },
+    {
+      "file": "js/canvas.js",
+      "url": "http://localhost:8945/js/canvas.js",
+      "status": 200,
+      "sha256": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787"
+    },
+    {
+      "file": "js/layouts.js",
+      "url": "http://localhost:8945/js/layouts.js",
+      "status": 200,
+      "sha256": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1"
+    },
+    {
+      "file": "js/matrix.js",
+      "url": "http://localhost:8945/js/matrix.js",
+      "status": 200,
+      "sha256": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1"
+    },
+    {
+      "file": "js/dax-format.js",
+      "url": "http://localhost:8945/js/dax-format.js",
+      "status": 200,
+      "sha256": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8"
+    },
+    {
+      "file": "js/measures.js",
+      "url": "http://localhost:8945/js/measures.js",
+      "status": 200,
+      "sha256": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179"
+    },
+    {
+      "file": "js/power-query-dependencies.js",
+      "url": "http://localhost:8945/js/power-query-dependencies.js",
+      "status": 200,
+      "sha256": "27a8d4c15bfdd297b5a9ac88de3119b62033b69c0fe9690fc76810182df6d7c2"
+    },
+    {
+      "file": "js/power-query-graph-model.js",
+      "url": "http://localhost:8945/js/power-query-graph-model.js",
+      "status": 200,
+      "sha256": "317e10635857a8026513a499ff99ba8a3e39c4099266369b9d6d932a33ffd650"
+    },
+    {
+      "file": "js/power-query-canvas.js",
+      "url": "http://localhost:8945/js/power-query-canvas.js",
+      "status": 200,
+      "sha256": "d6faebb8d4fed43265e7abb4d9f2cfe7b4f993a34ae19bb56ea63bd913e25685"
+    },
+    {
+      "file": "js/power-query-inspector.js",
+      "url": "http://localhost:8945/js/power-query-inspector.js",
+      "status": 200,
+      "sha256": "7cd72f22ad9819317fcad0a4f9dab7f1f5e5d268be7d223ef68bce2b727020e2"
+    },
+    {
+      "file": "js/power-query-workspace.js",
+      "url": "http://localhost:8945/js/power-query-workspace.js",
+      "status": 200,
+      "sha256": "96502a1a97b9bfc151a988c64cad72c2c8febf7e129608af60d47b7ed7fcb7c9"
+    },
+    {
+      "file": "js/power-query-lineage.js",
+      "url": "http://localhost:8945/js/power-query-lineage.js",
+      "status": 200,
+      "sha256": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1"
+    },
+    {
+      "file": "js/power-query.js",
+      "url": "http://localhost:8945/js/power-query.js",
+      "status": 200,
+      "sha256": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f"
+    },
+    {
+      "file": "js/sidebar.js",
+      "url": "http://localhost:8945/js/sidebar.js",
+      "status": 200,
+      "sha256": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4"
+    },
+    {
+      "file": "js/topbar.js",
+      "url": "http://localhost:8945/js/topbar.js",
+      "status": 200,
+      "sha256": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9"
+    },
+    {
+      "file": "js/rules.js",
+      "url": "http://localhost:8945/js/rules.js",
+      "status": 200,
+      "sha256": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad"
+    },
+    {
+      "file": "js/relationships.js",
+      "url": "http://localhost:8945/js/relationships.js",
+      "status": 200,
+      "sha256": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5"
+    },
+    {
+      "file": "js/explorer.js",
+      "url": "http://localhost:8945/js/explorer.js",
+      "status": 200,
+      "sha256": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0"
+    },
+    {
+      "file": "js/app.js",
+      "url": "http://localhost:8945/js/app.js",
+      "status": 200,
+      "sha256": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a"
+    },
+    {
+      "file": "explorer.css",
+      "url": "http://localhost:8945/explorer.css",
+      "status": 200,
+      "sha256": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011"
+    },
+    {
+      "file": "measures.css",
+      "url": "http://localhost:8945/measures.css",
+      "status": 200,
+      "sha256": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86"
+    },
+    {
+      "file": "power-query.css",
+      "url": "http://localhost:8945/power-query.css",
+      "status": 200,
+      "sha256": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee"
+    },
+    {
+      "file": "power-query-canvas.css",
+      "url": "http://localhost:8945/power-query-canvas.css",
+      "status": 200,
+      "sha256": "d5a04586c5d10457674231444d0bdb16b3089aa68820b91349cfe37639e2cc20"
+    },
+    {
+      "file": "power-query-inspector.css",
+      "url": "http://localhost:8945/power-query-inspector.css",
+      "status": 200,
+      "sha256": "cf4a86b4d7e6ca66b5275a02ca43dcc28b69e04263f653c5784a301cfd307cca"
+    },
+    {
+      "file": "power-query-workspace.css",
+      "url": "http://localhost:8945/power-query-workspace.css",
+      "status": 200,
+      "sha256": "8f69cb0d2d52e998482141a4bbc65685426cf827ecd0272eeacf6a2ce400e10d"
+    },
+    {
+      "file": "power-query-lineage.css",
+      "url": "http://localhost:8945/power-query-lineage.css",
+      "status": 200,
+      "sha256": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b"
+    }
+  ],
+  "loaded": [
+    "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+    "http://localhost:8945/power-query.css?v=4ff48db438",
+    "http://localhost:8945/power-query-canvas.css?v=d5a04586c5",
+    "http://localhost:8945/power-query-inspector.css?v=cf4a86b4d7",
+    "http://localhost:8945/power-query-workspace.css?v=8f69cb0d2d",
+    "http://localhost:8945/power-query-lineage.css?v=3fa4fd3345",
+    "http://localhost:8945/explorer.css?v=5699d561e3",
+    "http://localhost:8945/measures.css?v=020a7d7d4e",
+    "http://localhost:8945/js/util.js?v=b233a5ee4c",
+    "http://localhost:8945/js/snapshot.js?v=b63823ca6c",
+    "http://localhost:8945/js/roles.js?v=2cf4e6cfdc",
+    "http://localhost:8945/js/usage-adapter.js?v=47ad9159c1",
+    "http://localhost:8945/js/tmdl-parser.js?v=0e97ff4704",
+    "http://localhost:8945/js/workspace-ui.js?v=d88454c851",
+    "http://localhost:8945/js/canvas.js?v=fe9d193349",
+    "http://localhost:8945/js/layouts.js?v=1875b73e7b",
+    "http://localhost:8945/js/matrix.js?v=a3c83262cb",
+    "http://localhost:8945/js/dax-format.js?v=478f9a6c45",
+    "http://localhost:8945/js/measures.js?v=773398f354",
+    "http://localhost:8945/js/power-query-dependencies.js?v=27a8d4c15b",
+    "http://localhost:8945/js/power-query-graph-model.js?v=317e106358",
+    "http://localhost:8945/js/power-query-lineage.js?v=487522c796",
+    "http://localhost:8945/js/power-query.js?v=cecb795556",
+    "http://localhost:8945/js/power-query-canvas.js?v=d6faebb8d4",
+    "http://localhost:8945/js/power-query-inspector.js?v=7cd72f22ad",
+    "http://localhost:8945/js/power-query-workspace.js?v=96502a1a97",
+    "http://localhost:8945/js/sidebar.js?v=13fab92f5e",
+    "http://localhost:8945/js/topbar.js?v=c5789195be",
+    "http://localhost:8945/js/rules.js?v=dc35541371",
+    "http://localhost:8945/js/relationships.js?v=7f17713638",
+    "http://localhost:8945/js/explorer.js?v=6bfdf4472d",
+    "http://localhost:8945/js/app.js?v=dbc5683c97"
+  ],
+  "model": "Independent wide reader and routes",
+  "phase": "ready",
+  "preferences": "{\"dock\":\"bottom\",\"width\":400,\"height\":420}"
+}

@@ -1,0 +1,32 @@
+{
+  "reader": {
+    "same": true,
+    "code": "let\r\n  Emoji = \"😀\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n",
+    "expected": "let\r\n  Emoji = \"😀\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n",
+    "rect": {
+      "x": 20,
+      "y": 20,
+      "width": 600,
+      "height": 460,
+      "top": 20,
+      "right": 620,
+      "bottom": 480,
+      "left": 20
+    },
+    "innerWidth": 640,
+    "innerHeight": 500,
+    "wrap": true,
+    "focus": {
+      "kind": "reader-close",
+      "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    }
+  },
+  "closed": {
+    "expanded": false,
+    "focus": {
+      "kind": "expand",
+      "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    },
+    "open": true
+  }
+}

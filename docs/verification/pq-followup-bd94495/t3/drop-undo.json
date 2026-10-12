@@ -1,0 +1,12 @@
+{
+  "toolIcon": {
+    "_tag": "website",
+    "pageUrl": "http://localhost:8945/"
+  },
+  "value": {
+    "exact": true,
+    "others": true,
+    "undoMembers": true,
+    "undoLayout": true
+  }
+}

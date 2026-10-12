@@ -1,0 +1,754 @@
+TAP version 13
+# Subtest: Direct0
+ok 1 - Direct0
+  ---
+  duration_ms: 8.9664
+  type: 'test'
+  ...
+# Subtest: Local0
+ok 2 - Local0
+  ---
+  duration_ms: 0.534
+  type: 'test'
+  ...
+# Subtest: Function0
+ok 3 - Function0
+  ---
+  duration_ms: 0.263
+  type: 'test'
+  ...
+# Subtest: Direct1
+ok 4 - Direct1
+  ---
+  duration_ms: 0.2604
+  type: 'test'
+  ...
+# Subtest: Local1
+ok 5 - Local1
+  ---
+  duration_ms: 0.5672
+  type: 'test'
+  ...
+# Subtest: Function1
+ok 6 - Function1
+  ---
+  duration_ms: 0.1152
+  type: 'test'
+  ...
+# Subtest: Direct2
+ok 7 - Direct2
+  ---
+  duration_ms: 0.1808
+  type: 'test'
+  ...
+# Subtest: Local2
+ok 8 - Local2
+  ---
+  duration_ms: 0.1856
+  type: 'test'
+  ...
+# Subtest: Function2
+ok 9 - Function2
+  ---
+  duration_ms: 0.3825
+  type: 'test'
+  ...
+# Subtest: Direct3
+ok 10 - Direct3
+  ---
+  duration_ms: 0.3875
+  type: 'test'
+  ...
+# Subtest: Local3
+ok 11 - Local3
+  ---
+  duration_ms: 0.1714
+  type: 'test'
+  ...
+# Subtest: Function3
+ok 12 - Function3
+  ---
+  duration_ms: 0.0837
+  type: 'test'
+  ...
+# Subtest: Direct4
+ok 13 - Direct4
+  ---
+  duration_ms: 0.0983
+  type: 'test'
+  ...
+# Subtest: Local4
+ok 14 - Local4
+  ---
+  duration_ms: 0.0885
+  type: 'test'
+  ...
+# Subtest: Function4
+ok 15 - Function4
+  ---
+  duration_ms: 0.0678
+  type: 'test'
+  ...
+# Subtest: Direct5
+ok 16 - Direct5
+  ---
+  duration_ms: 0.0713
+  type: 'test'
+  ...
+# Subtest: Local5
+ok 17 - Local5
+  ---
+  duration_ms: 0.079
+  type: 'test'
+  ...
+# Subtest: Function5
+ok 18 - Function5
+  ---
+  duration_ms: 0.1857
+  type: 'test'
+  ...
+# Subtest: Direct6
+ok 19 - Direct6
+  ---
+  duration_ms: 0.0818
+  type: 'test'
+  ...
+# Subtest: Local6
+ok 20 - Local6
+  ---
+  duration_ms: 0.0746
+  type: 'test'
+  ...
+# Subtest: Function6
+ok 21 - Function6
+  ---
+  duration_ms: 0.0626
+  type: 'test'
+  ...
+# Subtest: Direct7
+ok 22 - Direct7
+  ---
+  duration_ms: 0.0654
+  type: 'test'
+  ...
+# Subtest: Local7
+ok 23 - Local7
+  ---
+  duration_ms: 0.0665
+  type: 'test'
+  ...
+# Subtest: Function7
+ok 24 - Function7
+  ---
+  duration_ms: 0.2446
+  type: 'test'
+  ...
+# Subtest: Direct8
+ok 25 - Direct8
+  ---
+  duration_ms: 0.0828
+  type: 'test'
+  ...
+# Subtest: Local8
+ok 26 - Local8
+  ---
+  duration_ms: 0.0755
+  type: 'test'
+  ...
+# Subtest: Function8
+ok 27 - Function8
+  ---
+  duration_ms: 0.0636
+  type: 'test'
+  ...
+# Subtest: Direct9
+ok 28 - Direct9
+  ---
+  duration_ms: 0.0668
+  type: 'test'
+  ...
+# Subtest: Local9
+ok 29 - Local9
+  ---
+  duration_ms: 0.0733
+  type: 'test'
+  ...
+# Subtest: Function9
+ok 30 - Function9
+  ---
+  duration_ms: 0.062
+  type: 'test'
+  ...
+# Subtest: Direct10
+ok 31 - Direct10
+  ---
+  duration_ms: 0.0702
+  type: 'test'
+  ...
+# Subtest: Local10
+ok 32 - Local10
+  ---
+  duration_ms: 0.0843
+  type: 'test'
+  ...
+# Subtest: Function10
+ok 33 - Function10
+  ---
+  duration_ms: 0.082
+  type: 'test'
+  ...
+# Subtest: Direct11
+ok 34 - Direct11
+  ---
+  duration_ms: 0.0919
+  type: 'test'
+  ...
+# Subtest: Local11
+ok 35 - Local11
+  ---
+  duration_ms: 0.216
+  type: 'test'
+  ...
+# Subtest: Function11
+ok 36 - Function11
+  ---
+  duration_ms: 0.0867
+  type: 'test'
+  ...
+# Subtest: Direct12
+ok 37 - Direct12
+  ---
+  duration_ms: 0.1036
+  type: 'test'
+  ...
+# Subtest: Local12
+ok 38 - Local12
+  ---
+  duration_ms: 0.0718
+  type: 'test'
+  ...
+# Subtest: Function12
+ok 39 - Function12
+  ---
+  duration_ms: 0.072
+  type: 'test'
+  ...
+# Subtest: Direct13
+ok 40 - Direct13
+  ---
+  duration_ms: 0.0928
+  type: 'test'
+  ...
+# Subtest: Local13
+ok 41 - Local13
+  ---
+  duration_ms: 0.2842
+  type: 'test'
+  ...
+# Subtest: Function13
+ok 42 - Function13
+  ---
+  duration_ms: 0.1437
+  type: 'test'
+  ...
+# Subtest: RepeatedQuoted
+ok 43 - RepeatedQuoted
+  ---
+  duration_ms: 2.2462
+  type: 'test'
+  ...
+# Subtest: Mixed
+ok 44 - Mixed
+  ---
+  duration_ms: 0.2792
+  type: 'test'
+  ...
+# Subtest: TransitiveOnly
+ok 45 - TransitiveOnly
+  ---
+  duration_ms: 0.2449
+  type: 'test'
+  ...
+# Subtest: Uncalled
+ok 46 - Uncalled
+  ---
+  duration_ms: 0.1298
+  type: 'test'
+  ...
+# Subtest: AliasCall
+ok 47 - AliasCall
+  ---
+  duration_ms: 0.2532
+  type: 'test'
+  ...
+# Subtest: FieldCall
+ok 48 - FieldCall
+  ---
+  duration_ms: 0.2149
+  type: 'test'
+  ...
+# Subtest: ItemCall
+ok 49 - ItemCall
+  ---
+  duration_ms: 0.1579
+  type: 'test'
+  ...
+# Subtest: StringComment
+ok 50 - StringComment
+  ---
+  duration_ms: 0.1354
+  type: 'test'
+  ...
+# Subtest: UnknownCall
+ok 51 - UnknownCall
+  ---
+  duration_ms: 0.1184
+  type: 'test'
+  ...
+# Subtest: DynamicCall
+ok 52 - DynamicCall
+  ---
+  duration_ms: 0.143
+  type: 'test'
+  ...
+# Subtest: Incomplete
+ok 53 - Incomplete
+  ---
+  duration_ms: 0.4361
+  type: 'test'
+  ...
+# Subtest: UnsupportedGeneratedEnterData
+ok 54 - UnsupportedGeneratedEnterData
+  ---
+  duration_ms: 0.4581
+  type: 'test'
+  ...
+# Subtest: BuiltinTwelve
+ok 55 - BuiltinTwelve
+  ---
+  duration_ms: 0.1893
+  type: 'test'
+  ...
+# Subtest: ConditionalCall
+ok 56 - ConditionalCall
+  ---
+  duration_ms: 0.1437
+  type: 'test'
+  ...
+# Subtest: PowerPlatform.Dataflows exactModel
+ok 57 - PowerPlatform.Dataflows exactModel
+  ---
+  duration_ms: 0.318
+  type: 'test'
+  ...
+# Subtest: PowerPlatform.Dataflows duplicateName
+ok 58 - PowerPlatform.Dataflows duplicateName
+  ---
+  duration_ms: 0.1559
+  type: 'test'
+  ...
+# Subtest: PowerPlatform.Dataflows duplicateIdentity
+ok 59 - PowerPlatform.Dataflows duplicateIdentity
+  ---
+  duration_ms: 0.1121
+  type: 'test'
+  ...
+# Subtest: PowerPlatform.Dataflows multipartition
+ok 60 - PowerPlatform.Dataflows multipartition
+  ---
+  duration_ms: 0.1327
+  type: 'test'
+  ...
+# Subtest: PowerBI.Dataflows exactModel
+ok 61 - PowerBI.Dataflows exactModel
+  ---
+  duration_ms: 0.0984
+  type: 'test'
+  ...
+# Subtest: PowerBI.Dataflows duplicateName
+ok 62 - PowerBI.Dataflows duplicateName
+  ---
+  duration_ms: 0.0858
+  type: 'test'
+  ...
+# Subtest: PowerBI.Dataflows duplicateIdentity
+ok 63 - PowerBI.Dataflows duplicateIdentity
+  ---
+  duration_ms: 0.0682
+  type: 'test'
+  ...
+# Subtest: PowerBI.Dataflows multipartition
+ok 64 - PowerBI.Dataflows multipartition
+  ---
+  duration_ms: 0.0681
+  type: 'test'
+  ...
+# Subtest: Databricks.Catalogs exactModel
+ok 65 - Databricks.Catalogs exactModel
+  ---
+  duration_ms: 0.0822
+  type: 'test'
+  ...
+# Subtest: Databricks.Catalogs duplicateName
+ok 66 - Databricks.Catalogs duplicateName
+  ---
+  duration_ms: 0.1338
+  type: 'test'
+  ...
+# Subtest: Databricks.Catalogs duplicateIdentity
+ok 67 - Databricks.Catalogs duplicateIdentity
+  ---
+  duration_ms: 0.0712
+  type: 'test'
+  ...
+# Subtest: Databricks.Catalogs multipartition
+ok 68 - Databricks.Catalogs multipartition
+  ---
+  duration_ms: 0.1161
+  type: 'test'
+  ...
+# Subtest: Databricks.Contents exactModel
+ok 69 - Databricks.Contents exactModel
+  ---
+  duration_ms: 0.11
+  type: 'test'
+  ...
+# Subtest: Databricks.Contents duplicateName
+ok 70 - Databricks.Contents duplicateName
+  ---
+  duration_ms: 0.1065
+  type: 'test'
+  ...
+# Subtest: Databricks.Contents duplicateIdentity
+ok 71 - Databricks.Contents duplicateIdentity
+  ---
+  duration_ms: 0.1067
+  type: 'test'
+  ...
+# Subtest: Databricks.Contents multipartition
+ok 72 - Databricks.Contents multipartition
+  ---
+  duration_ms: 0.1239
+  type: 'test'
+  ...
+# Subtest: Sql.Database exactModel
+ok 73 - Sql.Database exactModel
+  ---
+  duration_ms: 0.1097
+  type: 'test'
+  ...
+# Subtest: Sql.Database duplicateName
+ok 74 - Sql.Database duplicateName
+  ---
+  duration_ms: 0.1017
+  type: 'test'
+  ...
+# Subtest: Sql.Database duplicateIdentity
+ok 75 - Sql.Database duplicateIdentity
+  ---
+  duration_ms: 0.0955
+  type: 'test'
+  ...
+# Subtest: Sql.Database multipartition
+ok 76 - Sql.Database multipartition
+  ---
+  duration_ms: 0.1009
+  type: 'test'
+  ...
+# Subtest: Sql.Databases exactModel
+ok 77 - Sql.Databases exactModel
+  ---
+  duration_ms: 0.1142
+  type: 'test'
+  ...
+# Subtest: Sql.Databases duplicateName
+ok 78 - Sql.Databases duplicateName
+  ---
+  duration_ms: 0.0965
+  type: 'test'
+  ...
+# Subtest: Sql.Databases duplicateIdentity
+ok 79 - Sql.Databases duplicateIdentity
+  ---
+  duration_ms: 0.0976
+  type: 'test'
+  ...
+# Subtest: Sql.Databases multipartition
+ok 80 - Sql.Databases multipartition
+  ---
+  duration_ms: 0.1024
+  type: 'test'
+  ...
+# Subtest: Snowflake.Databases exactModel
+ok 81 - Snowflake.Databases exactModel
+  ---
+  duration_ms: 0.0961
+  type: 'test'
+  ...
+# Subtest: Snowflake.Databases duplicateName
+ok 82 - Snowflake.Databases duplicateName
+  ---
+  duration_ms: 0.0951
+  type: 'test'
+  ...
+# Subtest: Snowflake.Databases duplicateIdentity
+ok 83 - Snowflake.Databases duplicateIdentity
+  ---
+  duration_ms: 0.1037
+  type: 'test'
+  ...
+# Subtest: Snowflake.Databases multipartition
+ok 84 - Snowflake.Databases multipartition
+  ---
+  duration_ms: 0.1044
+  type: 'test'
+  ...
+# Subtest: OData.Feed exactModel
+ok 85 - OData.Feed exactModel
+  ---
+  duration_ms: 0.1154
+  type: 'test'
+  ...
+# Subtest: OData.Feed duplicateName
+ok 86 - OData.Feed duplicateName
+  ---
+  duration_ms: 0.1253
+  type: 'test'
+  ...
+# Subtest: OData.Feed duplicateIdentity
+ok 87 - OData.Feed duplicateIdentity
+  ---
+  duration_ms: 0.1491
+  type: 'test'
+  ...
+# Subtest: OData.Feed multipartition
+ok 88 - OData.Feed multipartition
+  ---
+  duration_ms: 0.112
+  type: 'test'
+  ...
+# Subtest: AzureStorage.DataLake exactModel
+ok 89 - AzureStorage.DataLake exactModel
+  ---
+  duration_ms: 0.1081
+  type: 'test'
+  ...
+# Subtest: AzureStorage.DataLake duplicateName
+ok 90 - AzureStorage.DataLake duplicateName
+  ---
+  duration_ms: 0.0981
+  type: 'test'
+  ...
+# Subtest: AzureStorage.DataLake duplicateIdentity
+ok 91 - AzureStorage.DataLake duplicateIdentity
+  ---
+  duration_ms: 0.202
+  type: 'test'
+  ...
+# Subtest: AzureStorage.DataLake multipartition
+ok 92 - AzureStorage.DataLake multipartition
+  ---
+  duration_ms: 0.072
+  type: 'test'
+  ...
+# Subtest: Excel.Workbook exactModel
+ok 93 - Excel.Workbook exactModel
+  ---
+  duration_ms: 0.0686
+  type: 'test'
+  ...
+# Subtest: Excel.Workbook duplicateName
+ok 94 - Excel.Workbook duplicateName
+  ---
+  duration_ms: 0.068
+  type: 'test'
+  ...
+# Subtest: Excel.Workbook duplicateIdentity
+ok 95 - Excel.Workbook duplicateIdentity
+  ---
+  duration_ms: 0.0622
+  type: 'test'
+  ...
+# Subtest: Excel.Workbook multipartition
+ok 96 - Excel.Workbook multipartition
+  ---
+  duration_ms: 0.0635
+  type: 'test'
+  ...
+# Subtest: Web.Contents exactModel
+ok 97 - Web.Contents exactModel
+  ---
+  duration_ms: 0.0756
+  type: 'test'
+  ...
+# Subtest: Web.Contents duplicateName
+ok 98 - Web.Contents duplicateName
+  ---
+  duration_ms: 0.0683
+  type: 'test'
+  ...
+# Subtest: Web.Contents duplicateIdentity
+ok 99 - Web.Contents duplicateIdentity
+  ---
+  duration_ms: 0.0547
+  type: 'test'
+  ...
+# Subtest: Web.Contents multipartition
+ok 100 - Web.Contents multipartition
+  ---
+  duration_ms: 0.0618
+  type: 'test'
+  ...
+# Subtest: File.Contents exactModel
+ok 101 - File.Contents exactModel
+  ---
+  duration_ms: 0.0552
+  type: 'test'
+  ...
+# Subtest: File.Contents duplicateName
+ok 102 - File.Contents duplicateName
+  ---
+  duration_ms: 0.0593
+  type: 'test'
+  ...
+# Subtest: File.Contents duplicateIdentity
+ok 103 - File.Contents duplicateIdentity
+  ---
+  duration_ms: 0.0679
+  type: 'test'
+  ...
+# Subtest: File.Contents multipartition
+ok 104 - File.Contents multipartition
+  ---
+  duration_ms: 0.0863
+  type: 'test'
+  ...
+# Subtest: Table.FromRows exactModel
+ok 105 - Table.FromRows exactModel
+  ---
+  duration_ms: 0.0627
+  type: 'test'
+  ...
+# Subtest: Table.FromRows duplicateName
+ok 106 - Table.FromRows duplicateName
+  ---
+  duration_ms: 0.055
+  type: 'test'
+  ...
+# Subtest: Table.FromRows duplicateIdentity
+ok 107 - Table.FromRows duplicateIdentity
+  ---
+  duration_ms: 0.0742
+  type: 'test'
+  ...
+# Subtest: Table.FromRows multipartition
+ok 108 - Table.FromRows multipartition
+  ---
+  duration_ms: 0.06
+  type: 'test'
+  ...
+# Subtest: \#table exactModel
+ok 109 - \#table exactModel
+  ---
+  duration_ms: 0.057
+  type: 'test'
+  ...
+# Subtest: \#table duplicateName
+ok 110 - \#table duplicateName
+  ---
+  duration_ms: 0.0511
+  type: 'test'
+  ...
+# Subtest: \#table duplicateIdentity
+ok 111 - \#table duplicateIdentity
+  ---
+  duration_ms: 0.0651
+  type: 'test'
+  ...
+# Subtest: \#table multipartition
+ok 112 - \#table multipartition
+  ---
+  duration_ms: 0.061
+  type: 'test'
+  ...
+# Subtest: preserved12 builtin Table.TransformColumnTypes
+ok 113 - preserved12 builtin Table.TransformColumnTypes
+  ---
+  duration_ms: 0.1692
+  type: 'test'
+  ...
+# Subtest: preserved12 builtin Int64.Type
+ok 114 - preserved12 builtin Int64.Type
+  ---
+  duration_ms: 0.0644
+  type: 'test'
+  ...
+# Subtest: preserved12 builtin Byte.Type
+ok 115 - preserved12 builtin Byte.Type
+  ---
+  duration_ms: 0.0866
+  type: 'test'
+  ...
+# Subtest: preserved12 builtin Int8.Type
+ok 116 - preserved12 builtin Int8.Type
+  ---
+  duration_ms: 0.0666
+  type: 'test'
+  ...
+# Subtest: preserved12 builtin Int16.Type
+ok 117 - preserved12 builtin Int16.Type
+  ---
+  duration_ms: 0.0815
+  type: 'test'
+  ...
+# Subtest: preserved12 builtin Int32.Type
+ok 118 - preserved12 builtin Int32.Type
+  ---
+  duration_ms: 0.058
+  type: 'test'
+  ...
+# Subtest: preserved12 builtin Single.Type
+ok 119 - preserved12 builtin Single.Type
+  ---
+  duration_ms: 0.8019
+  type: 'test'
+  ...
+# Subtest: preserved12 builtin Double.Type
+ok 120 - preserved12 builtin Double.Type
+  ---
+  duration_ms: 0.0654
+  type: 'test'
+  ...
+# Subtest: preserved12 builtin Decimal.Type
+ok 121 - preserved12 builtin Decimal.Type
+  ---
+  duration_ms: 0.0678
+  type: 'test'
+  ...
+# Subtest: preserved12 builtin Currency.Type
+ok 122 - preserved12 builtin Currency.Type
+  ---
+  duration_ms: 0.0752
+  type: 'test'
+  ...
+# Subtest: preserved12 builtin Percentage.Type
+ok 123 - preserved12 builtin Percentage.Type
+  ---
+  duration_ms: 0.0579
+  type: 'test'
+  ...
+# Subtest: preserved12 builtin Guid.Type
+ok 124 - preserved12 builtin Guid.Type
+  ---
+  duration_ms: 0.0545
+  type: 'test'
+  ...
+1..124
+# tests 124
+# suites 0
+# pass 124
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 235.8603

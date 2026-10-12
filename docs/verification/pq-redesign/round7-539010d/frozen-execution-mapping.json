@@ -1,0 +1,7 @@
+{
+  "actualCandidate": "539010d01f086298e2a8de614ecd73757737a416",
+  "url": "http://127.0.0.1:54093/",
+  "script": "tests/pq-redesign-independent-flow-0d964fc-arrange-undo-zoomed.browser.cjs",
+  "scriptSHA256": "ef4481e55e6b407f885f30f6e0744eed7dcc227b5d05462d9f89e7ddd89585d5",
+  "note": "Frozen script bytes unchanged. Legacy candidate/boundary constants in its raw receipt are historical constants, not execution provenance. New execution uses mapped round7 service. Separate mirror protects every historical receipt."
+}

@@ -1,0 +1,22 @@
+{
+  "candidate": "dbd0e49dc7470db58865d6e0d8d77824d58335dc",
+  "transport": "T3 collaborative preview",
+  "startedAt": "2026-10-09T13:40:56.523Z",
+  "checks": [
+    {
+      "name": "tables-measures-retention",
+      "status": "pass"
+    }
+  ],
+  "failures": [
+    {
+      "name": "exact-UTF16-all-five-reference-activations",
+      "error": "SyntaxError: Unexpected token 'W', \"Warning: t\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at eval (eval at <anonymous> (exec_main.mjs:2:12), <anonymous>:23:211)\n    at async check (eval at <anonymous> (exec_main.mjs:2:12), <anonymous>:18:84)\n    at async eval (eval at <anonymous> (exec_main.mjs:2:12), <anonymous>:22:1)\n    at async exec_main.mjs:2:6"
+    },
+    {
+      "name": "TMDL-groups-and-reader-model-reset",
+      "error": "Error: equality actual=[\"In\",\"T\"] expected=[\"In\",\"P\"]\n    at eq (eval at <anonymous> (exec_main.mjs:2:12), <anonymous>:7:67)\n    at eval (eval at <anonymous> (exec_main.mjs:2:12), <anonymous>:31:235)\n    at async check (eval at <anonymous> (exec_main.mjs:2:12), <anonymous>:18:84)\n    at async eval (eval at <anonymous> (exec_main.mjs:2:12), <anonymous>:29:1)\n    at async exec_main.mjs:2:6"
+    }
+  ],
+  "endedAt": "2026-10-09T13:40:59.387Z"
+}

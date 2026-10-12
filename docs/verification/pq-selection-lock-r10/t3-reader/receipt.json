@@ -1,0 +1,8 @@
+{
+  "candidate": "963638aeb2d124460709374004ddcf0799268ada",
+  "checks": [
+    "exact raw CRLF UTF16 repeated references expanded full Back disclosures scroll target",
+    "old direct-neighbor callback rejected after source selection changes"
+  ],
+  "failures": []
+}

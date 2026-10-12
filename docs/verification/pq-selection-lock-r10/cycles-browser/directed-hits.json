@@ -1,0 +1,41 @@
+{
+  "unchanged": true,
+  "a": {
+    "x": 0,
+    "y": 0
+  },
+  "b": {
+    "x": 420,
+    "y": 180
+  },
+  "edges": [
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+      "input": "CycleB",
+      "consumer": "CycleA",
+      "d": "M420,216 L324,216 L324,36 L252,36",
+      "width": "14px",
+      "ownCount": 183,
+      "point": {
+        "x": 1219.324951171875,
+        "y": 489.2500305175781,
+        "own": true
+      },
+      "heading": "CycleB is referenced by CycleA"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+      "input": "CycleA",
+      "consumer": "CycleB",
+      "d": "M252,60 L348,60 L348,240 L420,240",
+      "width": "14px",
+      "ownCount": 199,
+      "point": {
+        "x": 1013.6749877929688,
+        "y": 294.25,
+        "own": true
+      },
+      "heading": "CycleA is referenced by CycleB"
+    }
+  ]
+}

@@ -574,3 +574,5 @@ test('local app: the hosted page is the demo and opens the sample; the local app
   app.server = null; context.location = { protocol: 'file:', hostname: '' };
   assert.equal(app.isDemoSite(), false);
 });
+
+test('Tables to Power Query and back preserves viewport; other normal return routes still fit',()=>{const {app}=harness();let fits=0,transforms=0;app.state.viewMode='graph';app.canvas.view={x:137,y:93,k:.9};app.captureTableView=()=>({selected:'Sales'});app.canvas.applyHighlight=()=>{};app.canvas.fitView=()=>{fits++;app.canvas.view={x:0,y:0,k:1};};app.canvas.updateTransform=()=>{transforms++;};app.setViewMode('power-query');app.setViewMode('graph');assert.deepEqual(plain(app.canvas.view),{x:137,y:93,k:.9});assert.equal(fits,0);assert.equal(transforms,1);app.setViewMode('measures');app.setViewMode('graph');assert.equal(fits,1);assert.deepEqual(plain(app.canvas.view),{x:0,y:0,k:1});});

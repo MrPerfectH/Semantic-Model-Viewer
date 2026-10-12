@@ -1,0 +1,11 @@
+{
+  "node": "v22.23.3",
+  "browser": "154.0.8037.99",
+  "baseline": true,
+  "checks": [
+    "Reproduced stale label after exact viewport restoration"
+  ],
+  "failures": [
+    "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Import model (TMDL / BIM)', exact: true })\u001b[22m\n\n    at click (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/t3-bea3fe03/tests/pq-round7.browser.cjs:6:61)\n    at load (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/t3-bea3fe03/tests/pq-round7.browser.cjs:8:95)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/t3-bea3fe03/tests/pq-round7.browser.cjs:10:1"
+  ]
+}

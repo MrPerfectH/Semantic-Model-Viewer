@@ -1,0 +1,275 @@
+{
+  "prior": {
+    "navigation": {
+      "membership": [
+        "[\"partition\",\"SameTable\",\"Main\"]",
+        "[\"expression\",\"\",\"SameIdentity\"]"
+      ],
+      "focusMode": "hide",
+      "direction": "inputs",
+      "depth": 0,
+      "listFacet": "all",
+      "generation": 6,
+      "selectedId": "[\"expression\",\"\",\"SameIdentity\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": 145,
+        "y": 192.5,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null,
+        "disclosures": {
+          "references": true,
+          "provenance": false
+        }
+      },
+      "category": "disconnected",
+      "query": "Same"
+    },
+    "phase": "ready",
+    "generation": 6,
+    "selected": "[\"expression\",\"\",\"SameIdentity\"]",
+    "code": "\"PQ_REDESIGN_RESET_A_ONLY\"",
+    "visible": [],
+    "dimmed": [],
+    "layout": [
+      [
+        "[\"expression\",\"\",\"SameIdentity\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"partition\",\"SameTable\",\"Main\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ]
+    ],
+    "history": [
+      {
+        "membership": [
+          "[\"partition\",\"SameTable\",\"Main\"]",
+          "[\"expression\",\"\",\"SameIdentity\"]"
+        ],
+        "focusMode": "dim",
+        "direction": "connected",
+        "depth": 1,
+        "listFacet": "all",
+        "generation": 6,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 128.5,
+          "y": 217,
+          "k": 1.25
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null,
+          "disclosures": {}
+        },
+        "category": "all",
+        "query": ""
+      }
+    ],
+    "undo": 0,
+    "registry": [
+      "[\"partition\",\"SameTable\",\"Main\"]",
+      "[\"expression\",\"\",\"SameIdentity\"]"
+    ],
+    "edges": [
+      [
+        "[\"expression\",\"\",\"SameIdentity\"]",
+        "[\"partition\",\"SameTable\",\"Main\"]"
+      ]
+    ],
+    "sets": {
+      "all": [
+        "[\"partition\",\"SameTable\",\"Main\"]",
+        "[\"expression\",\"\",\"SameIdentity\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"SameIdentity\"]",
+        "[\"partition\",\"SameTable\",\"Main\"]"
+      ],
+      "disconnected": []
+    },
+    "library": [],
+    "banner": "Selected object hidden by filter. Inspector retained.Show all",
+    "note": "Zero resolved incident references; static uncertainty remains. Disconnected does not prove independence.",
+    "mapCount": 2,
+    "map": "0 visible / 2 objects",
+    "focus": {
+      "tag": "BODY",
+      "cls": ""
+    },
+    "options": [
+      "All (2)",
+      "Connected (2)",
+      "Disconnected (0)"
+    ]
+  },
+  "reset": {
+    "navigation": {
+      "membership": [
+        "[\"partition\",\"SameTable\",\"Main\"]",
+        "[\"expression\",\"\",\"SameIdentity\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "generation": 8,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 128.5,
+        "y": 217,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null,
+        "disclosures": {}
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "generation": 8,
+    "selected": null,
+    "code": "",
+    "visible": [
+      "[\"partition\",\"SameTable\",\"Main\"]",
+      "[\"expression\",\"\",\"SameIdentity\"]"
+    ],
+    "dimmed": [],
+    "layout": [
+      [
+        "[\"expression\",\"\",\"SameIdentity\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      [
+        "[\"partition\",\"SameTable\",\"Main\"]",
+        {
+          "x": 352,
+          "y": 0
+        }
+      ]
+    ],
+    "history": [],
+    "undo": 0,
+    "registry": [
+      "[\"partition\",\"SameTable\",\"Main\"]",
+      "[\"expression\",\"\",\"SameIdentity\"]"
+    ],
+    "edges": [
+      [
+        "[\"expression\",\"\",\"SameIdentity\"]",
+        "[\"partition\",\"SameTable\",\"Main\"]"
+      ]
+    ],
+    "sets": {
+      "all": [
+        "[\"partition\",\"SameTable\",\"Main\"]",
+        "[\"expression\",\"\",\"SameIdentity\"]"
+      ],
+      "connected": [
+        "[\"expression\",\"\",\"SameIdentity\"]",
+        "[\"partition\",\"SameTable\",\"Main\"]"
+      ],
+      "disconnected": []
+    },
+    "library": [
+      "SameTable",
+      "SameIdentity"
+    ],
+    "banner": "",
+    "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+    "mapCount": 2,
+    "map": "2 visible / 2 objects",
+    "focus": {
+      "tag": "BODY",
+      "cls": ""
+    },
+    "options": [
+      "All (2)",
+      "Connected (2)",
+      "Disconnected (0)"
+    ]
+  },
+  "suspended": {
+    "navigation": null,
+    "phase": "idle",
+    "generation": 9,
+    "selected": null,
+    "code": "",
+    "visible": [],
+    "dimmed": [],
+    "layout": [],
+    "history": [],
+    "undo": 0,
+    "sets": null,
+    "library": [],
+    "banner": "",
+    "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+    "mapCount": 0,
+    "map": "2 visible / 2 objects",
+    "focus": {
+      "tag": "BODY",
+      "cls": ""
+    },
+    "options": [
+      "All",
+      "Connected",
+      "Disconnected"
+    ]
+  },
+  "stale": {
+    "navigation": null,
+    "phase": "ready",
+    "generation": 13,
+    "selected": null,
+    "code": "",
+    "visible": [],
+    "dimmed": [],
+    "layout": [],
+    "history": [],
+    "undo": 0,
+    "sets": null,
+    "library": [],
+    "banner": "",
+    "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+    "mapCount": 0,
+    "map": "2 visible / 2 objects",
+    "focus": {
+      "tag": "BODY",
+      "cls": ""
+    },
+    "options": [
+      "All",
+      "Connected",
+      "Disconnected"
+    ]
+  }
+}

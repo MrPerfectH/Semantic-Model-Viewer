@@ -1,0 +1,60 @@
+# Independent round-seven review: BLOCKER
+
+Exact runtime: **539010d01f086298e2a8de614ecd73757737a416**, read from `/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/t3-bea3fe03` (`fix/pq-readable-flow-round7`). Review checkout remains based on owned evidence commit `7bd244962a713ab73b8eb56e9bb52e53857ffc0b`; no feature commits were picked or feature files edited. [PR40](https://github.com/MrPerfectH/Semantic-Model-Viewer/pull/40) is linked and unwatched. Integration's 8945 service was not used.
+
+## P2: automatic readable framing leaves the selected object outside the browser
+
+Reproduced independently at real Chrome zoom 200%, outer widths 1280 and 1440, measured CSS widths 640 and 720, DPR2, visualViewport scale1. Normal synthetic import → select FinalChain → **Hide unrelated → Arrange**. Both actual trusted pointer events target the intended buttons. Numeric zoom is85%, all52 objects/51 edges remain, but the below-dock body keeps its inspector scroll offset. The selected card title is entirely above the browser viewport. This violates automatic visible/readable framing; scrolling manually to the title is not acceptance.
+
+| Outer/CSS width | Body scrollTop | Canvas top | FinalChain title top/bottom | Arrange trusted client point |
+|---|---:|---:|---:|---|
+|1280/640|645.5|-313|-134.449997 / -119.535156|(307.80078125,162)|
+|1440/720|661|-313|-134.449997 / -119.535156|(680.19921875,125)|
+
+Hide unrelated trusted points: (527,452.2421875) and (587,452.2421875). Title own-hit is false at both widths. Canvas view is `{x:-15184.8,y:169.2,k:.85}` / `{x:-15144.8,y:169.2,k:.85}`. Screenshots show inspector controls after Arrange, with the graph above the visible surface.
+
+Frozen repro: `tests/pq-redesign-independent-round7-auto-framing-strict.browser.cjs` (hash in `frozen-repros.json`). Data: unchanged `tests/acceptance-fixtures/pq-redesign/flow-0d964fc/chain52.bim`. Serve this directory's mapped `served` assets on own port54093, then run the script with the Node22 path below. Script refuses to overwrite its existing output directory; use a separate execution mirror to replay unchanged bytes. It uses fresh isolated Chrome profiles and actual zoom settings. No model/source execution occurs.
+
+Evidence: `zoom200-auto-framing-strict/automatic-framing-{1280,1440}.{json,png}`, `receipt.json`, `auto-framing-strict.log`. JSON includes actual pointer target/tag/class/ARIA/text, trusted flag and client/page/screen coordinates; visualViewport; document/body/PQ scroll; separator rect/ARIA; selected identity; graph counts. Both cases failed the strict automatic own-hit oracle. Preserve the failure, do not replace it with `zoom200-chain-title`'s manually scrolled title pass.
+
+## Additional focus-race evidence; boundary is explicit
+
+`tests/pq-redesign-independent-round7-chain-focus-diagnostic.browser.cjs` reproduces at1280/true200. It follows Step49, clicks Back with a **trusted pointer**, then immediately performs **programmatic** `resizer.scrollIntoView({block:'center'}); resizer.focus()`, waits two RAFs, and dispatches trusted ArrowUp keys. This is not a claim that a human Tab/pointer separator action reproduced the race.
+
+`zoom200-chain-focus-diagnostic/focus-timing-1280.json` records focusin sequence: Back at801.30ms; separator at809.20ms; FinalChain canvas card at834.10ms. The pending Back restore moves focus away from the separator ~25ms after the programmatic focus. Before and after keys, active element is the FinalChain card; inspector height stays400, expected440. Preserve `zoom200-chain-title`'s two failed keyboard cases and `chain-focus-diagnostic.log`/receipt. This diagnoses why that immediate-follow-up keyboard test did not exercise the separator. It does not establish a general settled resizer defect, nor prove rapid focus is safely cancelled. Instrument real user focus and restoration ownership before a broader conclusion.
+
+## Fresh passing scopes on this exact runtime
+
+- **Unchanged frozen7bd Arrange/Undo oracle passes:** prior85%/actual.85 → Arrange32%/.315758 → Undo85%/.85; exact viewport, layout, root retained. The byte-identical script ran in `frozen-execution-root`, protecting historical0d receipts. Its raw receipt retains the old candidate and unavailable-boundary string literals; these are historical script constants, not current execution provenance. `frozen-execution-mapping.json` gives actual539 runtime and the explicitly requested frozen-workflow Chrome boundary. T3 was available this turn.
+- **Node22 targeted79/79**: mapped exact candidate canvas, inspector, workspaceUI and workspace tests; `node22-targeted.log`. Owner419/full-suite and102-owner-hops are not independent results here.
+- **Registered T352-chain102 trusted hops** at1280×800: FinalChain→Step49…Step00→Parameter and back; stable final flow root, exact positions, complete registry and graph, each exact adjacent selection, visible minimap IDs,85% label and own-title hit. Full-state Back passes. Explicit Fit and keyboardF give honest2.923431% overview; Center selected returns85%. `t3-chain/`.
+- Initial no-selection terminal fallback85% with null selection/root and52/51 retained. New independent52-node cycle-only fixture has52 edges, zero terminals, centers first actual visible registry object at85%, leaves selection/root/history empty. `cycle-fallback*.json`; the initial probe before entering PQ is preserved separately as a harness error.
+- Stable target/branch intersection excludes merge siblings and co-consumers; direction/depth operate on target; reroot/Clear/Blank/Showall/remove-target Back/Undo; keyboard Arrange/Undo, Display Escape, overview accessible labels, reader launcher. `t3-core/`.
+- New input chooser exact Prepared/Raw East IDs; consumer chooser exact Prepared/CoConsumer IDs; trusted Enter follows chosen branch, stable root, strict full Back; CoConsumer honestly outside flow. The saved `t3-branches/branch-chooser.json` is fresh completed evidence even though the later banner-case assertion aborted the encompassing script.
+- Hidden selection retained; excluded Follow clears category; Back restores full hidden navigation; Reset filters preserves viewport/selection/root; stale detached Follow rejected after generation replacement with no code/history/selection. `t3-hidden-stale-replay/`.
+- Exact long CRLF raw copy argument and repeated quoted UTF16 references32–47/60–75; expanded same-source Back restores wrap, codeX120/codeY90, disclosure, focus and flow target. Raw copy interception proves exact string passed to clipboard API, not OS clipboard content. Stale related callback rejected. `t3-reader/`.
+- Superseded reader restore, pending copy and model-generation invalidation; Tables viewport `{137,93,.9}`, positions/marks/selection retained; Measures formatter original/long/short; reader Escape/suspend. `t3-lifecycle/` (documented API fault injections distinguish these from normal input).
+- Frozen reciprocal semantic edge identity after actual card drag: both opposing edges individually hit-tested and trusted-clicked with correct headings. `t3-cycle/`; original frozen scenario unchanged, lossless chunk transport only. Routing source differs only in help text from0d.
+- True Chrome zoom2→1→2 at1280 and1440: **six settled input/reader cases pass**. Captured actual settings, CSSviewport/DPR/visualViewport, pointerdown separator targets and client coordinates, orientation, keyboard/pointer dimensions+ARIA, cached model picker, selected query retained, wide14px same-code reader exact source and Escape focus. `zoom200-centered/`. Explicit capability fallback while T3 available, not nativeVSCode or T3-unavailable evidence. These passes do not clear automatic framing or the immediate Back focus boundary.
+- Fresh registered-app snapshot downloaded this run: SHA256 `d04e2f4ccc0407097be0c0feb37943234fb851950f67a9bd6b7468ddae06194f`. Raw M/private sentinel/query groups absent; actual offline opening and re-export with helper and Measures formatting pass; PQ honestly unavailable. Network log records **only the local file request**, zeroHTTP(S) attempts. `privacy/`, `offline/`. Synthetic fixture's old0d name is not artifact provenance.
+
+## Exact runtime/package mapping and carried boundaries
+
+`mapping.json` lists all33 Git blob IDs and SHA256s. `http-runtime-audit.json` independently hashes each response from own54093. All33 equal exact Git candidate, actual root canonical assets, generated media, and ZIP payload. **Four assets changed from0d**: index.html, power-query-workspace.css, js/power-query-workspace.js, js/power-query-canvas.js. The other29 are byte-identical, including parser/analyzer/graph/Inspector/helper/snapshot/Tables/Measures. Graph/Inspector semantic evidence is explicitly supplemented by fresh checks above; unchanged historical fixtures/receipts were not restamped as new acceptance. Broad former folder/placement/scaling journeys were not repeated once the new automatic-framing blocker was established.
+
+Package `/tmp/pq-round7-0.3.3.vsix` SHA256 **48183dd2875a5f0ac5d248d7f9e049f5e33904f0476f0f0d2d2e5587d9b92cdb**. Independent `package-audit.json`:45files,33 runtime entries,31 valid cache hashes, no fixtures/models/docs/evidence/data entries. No CLI installation/native proof.
+
+Node used: `/tmp/pq-graph-native-diagnosis-20261008/node-v22.23.3-darwin-arm64/bin/node`. Targeted command from `node-mapped`: `node --test tests/power-query-canvas.test.cjs tests/power-query-inspector.test.cjs tests/workspace-ui.test.cjs tests/power-query-workspace.test.cjs`.
+
+## Preserved harness failures and diagnosis
+
+- `zoom200/` had four Trace visibility failures; `zoom-diagnostic/` had two diagnostic failures. One wheel at the old location left PQ bodyY339.5/350.5 and Trace y−130/−125.5. Centering the actual control in the viewport yielded own hit at y209.5/225 and six fresh trusted settled passes in `zoom200-centered`. Original receipts remain failed.
+- `t3-branches` used case-sensitive `Hidden by filter`, while actual explicit message is `Selected object hidden by filter. Inspector retained.`. Subsequent new targeted test checks the actual lowercase phrase, preserves full state/disabled Center/map oracles. First extracted continuation failed `ReferenceError: before is not defined`; its receipt/source are preserved. A pre-execution correction initially produced `SyntaxError: Identifier 'before' has already been declared` because a replacement inserted twice; no browser interaction occurred for that syntax error. The corrected separately named replay passes.
+- `cycle-pre-ready-probe-error.json`: context null because normal import returned to Tables; entering PQ and waiting ready yielded recorded cycle result. No retry of an unexplained product error.
+- Back→separator rapid-focus failures remain failures with exact focus trace, as detailed above.
+
+## Freeze/release criteria and ownership
+
+**HOLD** automatic readable framing. Parent accepted P2 and assigned Astra round8 as sole repair owner. No further replay before a new exact SHA release. New candidate must pass the unchanged `round7-auto-framing-strict` oracle at both real200% widths after trusted Hide→Arrange, without manual title scrolling; preserve all52 IDs/51 edges/positions/root and explicit overview semantics. Preserve the older unchanged Arrange→Undo zoom oracle. Measure whether pending Back can overwrite a newer actual trusted focus action; distinguish programmatic focus from user input and keep complete navigation/viewport/disclosure restoration requirements. Recheck only changed runtime/package payloads and affected scope.
+
+User-fit acceptance of long-chain presentation remains OPEN. Native blank investigation and A10/final user acceptance remain OPEN. Test passes and parent visual inspection are not user acceptance. No feature edits, source-model checkout/access, data fetch/M execution, credentials, push/merge/release, new jobs, or native interference. Own T3 tab closed and own54093 PID87067 stopped; all isolated Chrome profiles closed. No watchers.

@@ -1,0 +1,36 @@
+{
+  "candidate": "539010d01f086298e2a8de614ecd73757737a416",
+  "source": {
+    "index.html": "0a17ebdebb9e89f6eaf49db12ad806f1285f8617078e68a9a3f043ab42477b3d",
+    "js/power-query-workspace.js": "c9b5025302a4bb2f713d4e75ae8ae4b0f2ac44abd314ebad97f21d541d40fc51",
+    "js/power-query-inspector.js": "ae9963583ff1f0b9b280292cd112ebc55c274620055942f036c0d9cd3ab3e77d"
+  },
+  "node": "v22.23.3",
+  "startedAt": "2026-10-10T09:17:06.724Z",
+  "boundary": "explicitly authorized narrow capability fallback while T3 available; fresh isolated Chrome; not native VS Code",
+  "cases": [],
+  "checks": [
+    {
+      "name": "Actual resize transition 1440 step0 zoom2",
+      "status": "pass"
+    },
+    {
+      "name": "Trusted rapid Back to separator owns focus; settled Back retains exact view",
+      "status": "pass"
+    }
+  ],
+  "failures": [
+    {
+      "name": "Actual resize transition 1280 step0 zoom2",
+      "error": "Error: {\"exceptionId\":1,\"text\":\"Uncaught\",\"lineNumber\":0,\"columnNumber\":129,\"scriptId\":\"47\",\"stackTrace\":{\"callFrames\":[{\"functionName\":\"\",\"scriptId\":\"47\",\"url\":\"\",\"lineNumber\":0,\"columnNumber\":129},{\"functionName\":\"\",\"scriptId\":\"47\",\"url\":\"\",\"lineNumber\":0,\"columnNumber\":835}]},\"exception\":{\"type\":\"object\",\"subtype\":\"error\",\"className\":\"TypeError\",\"description\":\"TypeError: Cannot read properties of undefined (reading 'querySelector')\\n    at <anonymous>:1:130\\n    at <anonymous>:1:836\",\"objectId\":\"-3294237190186673673.1.2\"}}\n    at evaluate (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/t3-bea3fe03/tests/pq-redesign-independent-runtime-transport.cjs:14:153)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/t3-bea3fe03/tests/pq-round8.browser.cjs:64:97\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/t3-bea3fe03/tests/pq-round8.browser.cjs:15:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/t3-bea3fe03/tests/pq-round8.browser.cjs:48:41"
+    }
+  ],
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "endedAt": "2026-10-10T09:17:12.523Z"
+}

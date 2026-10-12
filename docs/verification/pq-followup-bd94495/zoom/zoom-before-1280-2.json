@@ -1,0 +1,27 @@
+{
+  "innerWidth": 640,
+  "dpr": 2,
+  "below": true,
+  "rect": {
+    "x": 268,
+    "y": 293,
+    "width": 363,
+    "height": 400,
+    "top": 293,
+    "right": 631,
+    "bottom": 693,
+    "left": 268
+  },
+  "r": {
+    "x": 268,
+    "y": 286,
+    "width": 363,
+    "height": 7,
+    "top": 286,
+    "right": 631,
+    "bottom": 293,
+    "left": 268
+  },
+  "aria": 400,
+  "hit": "pqw-resizer"
+}

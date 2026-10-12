@@ -1,0 +1,30 @@
+{
+  "sha": "5171a8e31244fa000a0471f3f10781d0cdebe637",
+  "parents": [
+    "edc22c289c85a872ff4495d259de3c9b03ffb28a",
+    "66b766e0da9a6b6f06637075f0d6e1c7d4cb3650"
+  ],
+  "version": "0.3.4",
+  "packageFiles": 45,
+  "runtimeFiles": 33,
+  "runtimeByteEquality": true,
+  "versionedReferences": 31,
+  "cacheHashesMatch": true,
+  "privateModelReportFixturesBundled": false,
+  "powerQueryAssetsUnchangedFrom": "edc22c289c85a872ff4495d259de3c9b03ffb28a",
+  "runtimeChanges": [
+    "Models/tools/viewer/explorer.css",
+    "Models/tools/viewer/index.html",
+    "Models/tools/viewer/js/app.js",
+    "Models/tools/viewer/js/explorer.js",
+    "Models/tools/viewer/js/sidebar.js",
+    "Models/tools/viewer/js/snapshot.js"
+  ],
+  "fullTests": {
+    "pass": 663,
+    "fail": 0,
+    "durationMs": 28898.615608
+  },
+  "vsixBytes": 267141,
+  "vsixSha256": "aaa74f822ed283db778e420f2f01085a964a90528537eb4347c2004f67c1daab"
+}

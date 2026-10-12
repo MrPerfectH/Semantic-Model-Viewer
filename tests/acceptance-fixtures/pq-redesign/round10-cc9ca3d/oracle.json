@@ -1,0 +1,457 @@
+{
+  "catalog": {
+    "PowerPlatform.Dataflows": "Dataflow",
+    "PowerBI.Dataflows": "Dataflow",
+    "Databricks.Catalogs": "Databricks",
+    "Databricks.Contents": "Databricks",
+    "Sql.Database": "SQL Server",
+    "Sql.Databases": "SQL Server",
+    "Snowflake.Databases": "Snowflake",
+    "OData.Feed": "OData",
+    "AzureStorage.DataLake": "Azure Data Lake",
+    "Excel.Workbook": "Excel",
+    "Web.Contents": "Web",
+    "File.Contents": "File",
+    "Table.FromRows": "Inline table",
+    "#table": "Inline table"
+  },
+  "cases": [
+    {
+      "name": "Direct0",
+      "code": "PowerPlatform.Dataflows(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})",
+      "providers": [
+        "Dataflow"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local0",
+      "code": "let #\"PowerPlatform.Dataflows\"=(x)=>x in #\"PowerPlatform.Dataflows\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function0",
+      "code": "(#\"PowerPlatform.Dataflows\") => #\"PowerPlatform.Dataflows\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct1",
+      "code": "PowerBI.Dataflows(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})",
+      "providers": [
+        "Dataflow"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local1",
+      "code": "let #\"PowerBI.Dataflows\"=(x)=>x in #\"PowerBI.Dataflows\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function1",
+      "code": "(#\"PowerBI.Dataflows\") => #\"PowerBI.Dataflows\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct2",
+      "code": "Databricks.Catalogs(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})",
+      "providers": [
+        "Databricks"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local2",
+      "code": "let #\"Databricks.Catalogs\"=(x)=>x in #\"Databricks.Catalogs\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function2",
+      "code": "(#\"Databricks.Catalogs\") => #\"Databricks.Catalogs\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct3",
+      "code": "Databricks.Contents(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})",
+      "providers": [
+        "Databricks"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local3",
+      "code": "let #\"Databricks.Contents\"=(x)=>x in #\"Databricks.Contents\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function3",
+      "code": "(#\"Databricks.Contents\") => #\"Databricks.Contents\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct4",
+      "code": "Sql.Database(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})",
+      "providers": [
+        "SQL Server"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local4",
+      "code": "let #\"Sql.Database\"=(x)=>x in #\"Sql.Database\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function4",
+      "code": "(#\"Sql.Database\") => #\"Sql.Database\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct5",
+      "code": "Sql.Databases(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})",
+      "providers": [
+        "SQL Server"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local5",
+      "code": "let #\"Sql.Databases\"=(x)=>x in #\"Sql.Databases\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function5",
+      "code": "(#\"Sql.Databases\") => #\"Sql.Databases\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct6",
+      "code": "Snowflake.Databases(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})",
+      "providers": [
+        "Snowflake"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local6",
+      "code": "let #\"Snowflake.Databases\"=(x)=>x in #\"Snowflake.Databases\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function6",
+      "code": "(#\"Snowflake.Databases\") => #\"Snowflake.Databases\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct7",
+      "code": "OData.Feed(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})",
+      "providers": [
+        "OData"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local7",
+      "code": "let #\"OData.Feed\"=(x)=>x in #\"OData.Feed\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function7",
+      "code": "(#\"OData.Feed\") => #\"OData.Feed\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct8",
+      "code": "AzureStorage.DataLake(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})",
+      "providers": [
+        "Azure Data Lake"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local8",
+      "code": "let #\"AzureStorage.DataLake\"=(x)=>x in #\"AzureStorage.DataLake\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function8",
+      "code": "(#\"AzureStorage.DataLake\") => #\"AzureStorage.DataLake\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct9",
+      "code": "Excel.Workbook(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})",
+      "providers": [
+        "Excel"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local9",
+      "code": "let #\"Excel.Workbook\"=(x)=>x in #\"Excel.Workbook\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function9",
+      "code": "(#\"Excel.Workbook\") => #\"Excel.Workbook\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct10",
+      "code": "Web.Contents(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})",
+      "providers": [
+        "Web"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local10",
+      "code": "let #\"Web.Contents\"=(x)=>x in #\"Web.Contents\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function10",
+      "code": "(#\"Web.Contents\") => #\"Web.Contents\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct11",
+      "code": "File.Contents(\"R10_PROVIDER_PRIVATE_ARGUMENT\", {})",
+      "providers": [
+        "File"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local11",
+      "code": "let #\"File.Contents\"=(x)=>x in #\"File.Contents\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function11",
+      "code": "(#\"File.Contents\") => #\"File.Contents\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct12",
+      "code": "Table.FromRows({{1}}, {\"A\"})",
+      "providers": [
+        "Inline table"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local12",
+      "code": "let #\"Table.FromRows\"=(x)=>x in #\"Table.FromRows\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function12",
+      "code": "(#\"Table.FromRows\") => #\"Table.FromRows\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Direct13",
+      "code": "#table({\"A\"}, {{1}})",
+      "providers": [
+        "Inline table"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Local13",
+      "code": "let #\"#table\"=(x)=>x in #\"#table\"(\"R10_PROVIDER_PRIVATE_LOCAL\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Function13",
+      "code": "(#\"#table\") => #\"#table\"(\"R10_PROVIDER_PRIVATE_FUNCTION\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "RepeatedQuoted",
+      "code": "let emoji=\"😀\", a=#\"Sql.Database\"(\"R10_PROVIDER_PRIVATE_A\",\"d\"), b=#\"Sql.Database\"(\"R10_PROVIDER_PRIVATE_B\",\"d\") in {a,b}\r\n",
+      "providers": [
+        "SQL Server",
+        "SQL Server"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Mixed",
+      "code": "{Sql.Database(\"R10_PROVIDER_PRIVATE_SQL\",\"d\"), Databricks.Catalogs(\"R10_PROVIDER_PRIVATE_DBX\",\"w\")}",
+      "providers": [
+        "SQL Server",
+        "Databricks"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "TransitiveOnly",
+      "code": "Direct4",
+      "providers": [],
+      "dependencies": [
+        "Direct4"
+      ],
+      "incomplete": false
+    },
+    {
+      "name": "Uncalled",
+      "code": "Sql.Database",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "AliasCall",
+      "code": "let f=Sql.Database in f(\"s\",\"d\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "FieldCall",
+      "code": "let r=[#\"Sql.Database\"=(x)=>x] in r[Sql.Database](\"x\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "ItemCall",
+      "code": "Sql.Database{0}(\"x\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "StringComment",
+      "code": "let txt=\"Sql.Database()\", x=1 /* Databricks.Catalogs() */ in x",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "UnknownCall",
+      "code": "Unknown.Provider(\"R10_PROVIDER_PRIVATE_UNKNOWN\")",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "DynamicCall",
+      "code": "Expression.Evaluate(\"Sql.Database(1,2)\", #shared)",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "Incomplete",
+      "code": "let x=Sql.Database(\"s\",\"d\") in (",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": true
+    },
+    {
+      "name": "UnsupportedGeneratedEnterData",
+      "code": "Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText(\"AAAA\", BinaryEncoding.Base64), Compression.Deflate)), let _t=((type nullable text) meta [Serialized.Text=true]) in type table [A=_t])",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": true
+    },
+    {
+      "name": "BuiltinTwelve",
+      "code": "{Table.TransformColumnTypes, Int64.Type, Byte.Type, Int8.Type, Int16.Type, Int32.Type, Single.Type, Double.Type, Decimal.Type, Currency.Type, Percentage.Type, Guid.Type}",
+      "providers": [],
+      "dependencies": [],
+      "incomplete": false
+    },
+    {
+      "name": "ConditionalCall",
+      "code": "if false then Sql.Database(\"R10_PROVIDER_PRIVATE_UNUSED\",\"d\") else 1",
+      "providers": [
+        "SQL Server"
+      ],
+      "dependencies": [],
+      "incomplete": false
+    }
+  ],
+  "casesExecution": "Generic Node pending Linux/Windows; registered browser observes actual imported worker results separately",
+  "noArgumentEvidenceKeys": [
+    "name",
+    "provider",
+    "at",
+    "end"
+  ]
+}

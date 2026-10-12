@@ -1,0 +1,33 @@
+{
+  "name": "Independent PQ filter same-ID replacement",
+  "model": {
+    "tables": [
+      {
+        "name": "SameTable",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Main",
+            "source": {
+              "type": "m",
+              "expression": "\"PQ_FILTER_REPLACEMENT_ONLY\""
+            }
+          }
+        ]
+      }
+    ],
+    "expressions": [
+      {
+        "name": "SameIdentity",
+        "kind": "m",
+        "expression": "\"PQ_FILTER_NEW_IDENTITY_ONLY\""
+      }
+    ],
+    "relationships": []
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "toolIcon": {
+    "_tag": "website",
+    "pageUrl": "http://localhost:8945/"
+  },
+  "value": {
+    "anchorPreserved": true,
+    "positions": [
+      {
+        "id": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "x": 588,
+        "y": 564.5228215767635
+      },
+      {
+        "id": "[\"expression\",\"\",\"Sales Raw\"]",
+        "x": 588,
+        "y": 690.5228215767635
+      },
+      {
+        "id": "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "x": 588,
+        "y": 438.5228215767635
+      },
+      {
+        "id": "[\"expression\",\"\",\"Server\"]",
+        "x": 588,
+        "y": 312.5228215767635
+      }
+    ],
+    "overlap": [],
+    "map": [
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "visible": [
+      "[\"expression\",\"\",\"OccurrenceProbe\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]"
+    ]
+  }
+}

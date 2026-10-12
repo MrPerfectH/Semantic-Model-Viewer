@@ -1,0 +1,40 @@
+{
+  "name": "Cycle routing regression",
+  "compatibilityLevel": 1600,
+  "model": {
+    "culture": "en-US",
+    "expressions": [
+      {
+        "name": "CycleA",
+        "kind": "m",
+        "expression": "let x = CycleB in x"
+      },
+      {
+        "name": "CycleB",
+        "kind": "m",
+        "expression": "let x = CycleA in x"
+      }
+    ],
+    "tables": [
+      {
+        "name": "Synthetic",
+        "columns": [
+          {
+            "name": "Value",
+            "dataType": "int64",
+            "sourceColumn": "Value"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Synthetic",
+            "source": {
+              "type": "m",
+              "expression": "#table({\"Value\"}, {{1}})"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+queryGroup 'InGroup'
+	folder: 'Raw/Nested'
+
+expression 'In' =
+		1
+	queryGroup: 'InGroup'
+
+expression 'Plain' =
+		2
+	annotation QueryGroup = 'Not/Declared'
+
+expression 'Loose' =
+		3
+	queryGroup: 'UnresolvedDefinition'
+
+table 'T'
+	column 'ID'
+		dataType: int64
+	partition 'P' = m
+		queryGroup: 'InGroup'
+		source =
+			#"In"

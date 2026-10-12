@@ -1,0 +1,2936 @@
+
+> semantic-model-viewer@0.3.3 test
+> npm run sync-viewer && npm run check-viewer && node --test --test-concurrency=1 ../tests/*.test.cjs ../tests/extension.test.js ../tests/usage-adapter.test.js ../Models/tools/viewer/tests/*.test.js
+
+
+> semantic-model-viewer@0.3.3 sync-viewer
+> node scripts/sync-viewer.js
+
+synced 33 viewer runtime assets from Models/tools/viewer into media/
+
+> semantic-model-viewer@0.3.3 check-viewer
+> node scripts/sync-viewer.js --check
+
+verified 33 viewer runtime assets; no model or report data bundled
+TAP version 13
+# Subtest: blank canvas and table membership persist separately for each model
+ok 1 - blank canvas and table membership persist separately for each model
+  ---
+  duration_ms: 7.516875
+  type: 'test'
+  ...
+# Subtest: Explore all keeps laying the model out until the reader actually arranges it
+ok 2 - Explore all keeps laying the model out until the reader actually arranges it
+  ---
+  duration_ms: 2.162
+  type: 'test'
+  ...
+# Subtest: saved membership ignores deleted table names
+ok 3 - saved membership ignores deleted table names
+  ---
+  duration_ms: 1.413458
+  type: 'test'
+  ...
+# Subtest: remove clears focus and membership and undo restores the table
+ok 4 - remove clears focus and membership and undo restores the table
+  ---
+  duration_ms: 1.020167
+  type: 'test'
+  ...
+# Subtest: removeMany drops several tables, their marks and focus in one undoable step
+ok 5 - removeMany drops several tables, their marks and focus in one undoable step
+  ---
+  duration_ms: 1.332167
+  type: 'test'
+  ...
+# Subtest: removeMany with nothing on the canvas is a no-op that leaves undo untouched
+ok 6 - removeMany with nothing on the canvas is a no-op that leaves undo untouched
+  ---
+  duration_ms: 0.860541
+  type: 'test'
+  ...
+# Subtest: blank layout can be undone with positions and viewport restored
+ok 7 - blank layout can be undone with positions and viewport restored
+  ---
+  duration_ms: 0.76625
+  type: 'test'
+  ...
+# Subtest: dragging a table converts screen coordinates and persists the placement
+ok 8 - dragging a table converts screen coordinates and persists the placement
+  ---
+  duration_ms: 1.017583
+  type: 'test'
+  ...
+# Subtest: dragging over the empty-state sibling bubbles to main and adds the first table
+ok 9 - dragging over the empty-state sibling bubbles to main and adds the first table
+  ---
+  duration_ms: 0.731917
+  type: 'test'
+  ...
+# Subtest: table drops outside every edge of the canvas are rejected
+ok 10 - table drops outside every edge of the canvas are rejected
+  ---
+  duration_ms: 2.438417
+  type: 'test'
+  ...
+# Subtest: table drops in other views are rejected even inside the canvas rectangle
+ok 11 - table drops in other views are rejected even inside the canvas rectangle
+  ---
+  duration_ms: 1.444167
+  type: 'test'
+  ...
+# Subtest: file drags remain available to model import without changing canvas membership
+ok 12 - file drags remain available to model import without changing canvas membership
+  ---
+  duration_ms: 0.429584
+  type: 'test'
+  ...
+# Subtest: undo persists restored positions so reload cannot resurrect an undone arrangement
+ok 13 - undo persists restored positions so reload cannot resurrect an undone arrangement
+  ---
+  duration_ms: 1.288916
+  type: 'test'
+  ...
+# Subtest: adding another table preserves positions already arranged by the user
+ok 14 - adding another table preserves positions already arranged by the user
+  ---
+  duration_ms: 0.90325
+  type: 'test'
+  ...
+# Subtest: a no-op add leaves undo history unchanged
+ok 15 - a no-op add leaves undo history unchanged
+  ---
+  duration_ms: 0.539458
+  type: 'test'
+  ...
+# Subtest: restoring membership clears selected, locked and pinned tables outside that layout
+ok 16 - restoring membership clears selected, locked and pinned tables outside that layout
+  ---
+  duration_ms: 0.536792
+  type: 'test'
+  ...
+# Subtest: blank layout closes a previously selected relationship popover
+ok 17 - blank layout closes a previously selected relationship popover
+  ---
+  duration_ms: 0.482375
+  type: 'test'
+  ...
+# Subtest: removing a relationship endpoint closes its popover
+ok 18 - removing a relationship endpoint closes its popover
+  ---
+  duration_ms: 0.525791
+  type: 'test'
+  ...
+# Subtest: relationship expansion respects direct/incoming/all settings
+ok 19 - relationship expansion respects direct/incoming/all settings
+  ---
+  duration_ms: 0.91525
+  type: 'test'
+  ...
+# Subtest: minimap navigation centers its chosen world point without changing zoom
+ok 20 - minimap navigation centers its chosen world point without changing zoom
+  ---
+  duration_ms: 0.470125
+  type: 'test'
+  ...
+# Subtest: canvas visibility honors blank and partial membership even for connected tables
+ok 21 - canvas visibility honors blank and partial membership even for connected tables
+  ---
+  duration_ms: 0.4655
+  type: 'test'
+  ...
+# Subtest: named presets restore membership, positions and viewport, including an empty canvas
+ok 22 - named presets restore membership, positions and viewport, including an empty canvas
+  ---
+  duration_ms: 0.833458
+  type: 'test'
+  ...
+# Subtest: named views restore focus and hide unrelated without losing hidden table membership
+ok 23 - named views restore focus and hide unrelated without losing hidden table membership
+  ---
+  duration_ms: 1.609334
+  type: 'test'
+  ...
+# Subtest: hide unrelated follows distance but never adds related tables outside membership
+ok 24 - hide unrelated follows distance but never adds related tables outside membership
+  ---
+  duration_ms: 1.376958
+  type: 'test'
+  ...
+# Subtest: legacy presets clear prior focus even if the formerly selected table remains a member
+ok 25 - legacy presets clear prior focus even if the formerly selected table remains a member
+  ---
+  duration_ms: 0.843625
+  type: 'test'
+  ...
+# Subtest: undo after restoring a named view restores the prior focus, hidden state and viewport
+ok 26 - undo after restoring a named view restores the prior focus, hidden state and viewport
+  ---
+  duration_ms: 0.729458
+  type: 'test'
+  ...
+# Subtest: restoring an empty named view clears focus and leaves every card hidden
+ok 27 - restoring an empty named view clears focus and leaves every card hidden
+  ---
+  duration_ms: 0.685917
+  type: 'test'
+  ...
+# Subtest: restore ignores removed tables and malformed geometry while keeping valid positions
+ok 28 - restore ignores removed tables and malformed geometry while keeping valid positions
+  ---
+  duration_ms: 0.665875
+  type: 'test'
+  ...
+# Subtest: saved views preserve the minimum zoom produced by fitView for large diagrams
+ok 29 - saved views preserve the minimum zoom produced by fitView for large diagrams
+  ---
+  duration_ms: 0.641458
+  type: 'test'
+  ...
+# Subtest: save and delete report storage failure without replacing previously saved views
+ok 30 - save and delete report storage failure without replacing previously saved views
+  ---
+  duration_ms: 1.063667
+  type: 'test'
+  ...
+# Subtest: generated default view names fill gaps without overwriting another saved view
+ok 31 - generated default view names fill gaps without overwriting another saved view
+  ---
+  duration_ms: 0.554041
+  type: 'test'
+  ...
+# Subtest: dropping a library table preserves selection and pins the new table to keep it visible in focus
+ok 32 - dropping a library table preserves selection and pins the new table to keep it visible in focus
+  ---
+  duration_ms: 0.541625
+  type: 'test'
+  ...
+# Subtest: restoring and undoing a named view restores display settings and expansion controls
+ok 33 - restoring and undoing a named view restores display settings and expansion controls
+  ---
+  duration_ms: 0.644833
+  type: 'test'
+  ...
+# Subtest: dropping a connected table does not expand direct focus through an unnecessary pin
+ok 34 - dropping a connected table does not expand direct focus through an unnecessary pin
+  ---
+  duration_ms: 0.907125
+  type: 'test'
+  ...
+# Subtest: arranging focused tables leaves hidden table positions and membership unchanged
+ok 35 - arranging focused tables leaves hidden table positions and membership unchanged
+  ---
+  duration_ms: 1.130625
+  type: 'test'
+  ...
+# Subtest: filter paths drive canvas highlighting and hiding in the selected direction
+ok 36 - filter paths drive canvas highlighting and hiding in the selected direction
+  ---
+  duration_ms: 1.243875
+  type: 'test'
+  ...
+# Subtest: canvas paths honor indirect, inactive and bidirectional relationships
+ok 37 - canvas paths honor indirect, inactive and bidirectional relationships
+  ---
+  duration_ms: 0.915291
+  type: 'test'
+  ...
+# Subtest: saved views restore filter path direction, distance and inactive setting
+ok 38 - saved views restore filter path direction, distance and inactive setting
+  ---
+  duration_ms: 0.668917
+  type: 'test'
+  ...
+# Subtest: the table library filters by domain and by source, alongside search and the canvas filter
+ok 39 - the table library filters by domain and by source, alongside search and the canvas filter
+  ---
+  duration_ms: 0.639709
+  type: 'test'
+  ...
+# Subtest: incoming and outgoing preserve TOM direction and direct/transitive distances
+ok 40 - incoming and outgoing preserve TOM direction and direct/transitive distances
+  ---
+  duration_ms: 0.676583
+  type: 'test'
+  ...
+# Subtest: a common fact table does not make one dimension filter another
+ok 41 - a common fact table does not make one dimension filter another
+  ---
+  duration_ms: 0.126833
+  type: 'test'
+  ...
+# Subtest: bidirectional relationships add the reverse filter arc only on that edge
+ok 42 - bidirectional relationships add the reverse filter arc only on that edge
+  ---
+  duration_ms: 0.095958
+  type: 'test'
+  ...
+# Subtest: inactive relationships are opt-in for every traversal direction
+ok 43 - inactive relationships are opt-in for every traversal direction
+  ---
+  duration_ms: 0.060166
+  type: 'test'
+  ...
+# Subtest: single-direction many-to-many is still to -> from
+ok 44 - single-direction many-to-many is still to -> from
+  ---
+  duration_ms: 0.088041
+  type: 'test'
+  ...
+# Subtest: cycles and parallel relationships terminate with unique shortest distances
+ok 45 - cycles and parallel relationships terminate with unique shortest distances
+  ---
+  duration_ms: 0.045458
+  type: 'test'
+  ...
+# Subtest: disconnected, absent and dangling tables are safe
+ok 46 - disconnected, absent and dangling tables are safe
+  ---
+  duration_ms: 0.070833
+  type: 'test'
+  ...
+# Subtest: multiple roots keep zero distance and find the nearest root
+ok 47 - multiple roots keep zero distance and find the nearest root
+  ---
+  duration_ms: 0.033583
+  type: 'test'
+  ...
+# Subtest: zero depth returns roots and rejects invalid depth or direction
+ok 48 - zero depth returns roots and rejects invalid depth or direction
+  ---
+  duration_ms: 0.275709
+  type: 'test'
+  ...
+# Subtest: prototype names, Unicode and apostrophes are ordinary identifiers
+ok 49 - prototype names, Unicode and apostrophes are ordinary identifiers
+  ---
+  duration_ms: 0.196042
+  type: 'test'
+  ...
+# Subtest: path evidence references original edges without mutating model data
+ok 50 - path evidence references original edges without mutating model data
+  ---
+  duration_ms: 0.114917
+  type: 'test'
+  ...
+# Subtest: raw crossFilteringBehavior is honored and automatic direction stays unresolved
+ok 51 - raw crossFilteringBehavior is honored and automatic direction stays unresolved
+  ---
+  duration_ms: 0.048417
+  type: 'test'
+  ...
+# Subtest: dependency index resolves qualified measures and preserves real column references
+ok 52 - dependency index resolves qualified measures and preserves real column references
+  ---
+  duration_ms: 4.583833
+  type: 'test'
+  ...
+# Subtest: strings, comments, escaped identifiers and case-insensitive names do not lose or invent edges
+ok 53 - strings, comments, escaped identifiers and case-insensitive names do not lose or invent edges
+  ---
+  duration_ms: 1.539542
+  type: 'test'
+  ...
+# Subtest: late built-in report usage cannot leak into a subsequently selected imported model
+ok 54 - late built-in report usage cannot leak into a subsequently selected imported model
+  ---
+  duration_ms: 3.55425
+  type: 'test'
+  ...
+# Subtest: report usage still loads for the active built-in model
+ok 55 - report usage still loads for the active built-in model
+  ---
+  duration_ms: 1.561917
+  type: 'test'
+  ...
+# Subtest: a late model fetch cannot replace a newer model selection
+ok 56 - a late model fetch cannot replace a newer model selection
+  ---
+  duration_ms: 1.571084
+  type: 'test'
+  ...
+# Subtest: storage failure preserves the import preview and current model, then allows retry
+ok 57 - storage failure preserves the import preview and current model, then allows retry
+  ---
+  duration_ms: 1.168417
+  type: 'test'
+  ...
+# Subtest: multi-model import failure does not close the dialog or open a fallback model
+ok 58 - multi-model import failure does not close the dialog or open a fallback model
+  ---
+  duration_ms: 1.977334
+  type: 'test'
+  ...
+# Subtest: repo cache storage failure does not silently reopen the stale cached model
+ok 59 - repo cache storage failure does not silently reopen the stale cached model
+  ---
+  duration_ms: 0.916917
+  type: 'test'
+  ...
+# Subtest: repo refresh cannot reopen an old selection after the user switches model
+ok 60 - repo refresh cannot reopen an old selection after the user switches model
+  ---
+  duration_ms: 1.331375
+  type: 'test'
+  ...
+# Subtest: a drop handled by the import modal stops bubbling to the root import listener
+ok 61 - a drop handled by the import modal stops bubbling to the root import listener
+  ---
+  duration_ms: 1.145791
+  type: 'test'
+  ...
+# Subtest: root import listener ignores internal table drags and text-only drops
+ok 62 - root import listener ignores internal table drags and text-only drops
+  ---
+  duration_ms: 1.286791
+  type: 'test'
+  ...
+# Subtest: switching models after expanding cards cannot restore the previous model positions
+ok 63 - switching models after expanding cards cannot restore the previous model positions
+  ---
+  duration_ms: 1.079375
+  type: 'test'
+  ...
+# Subtest: forced render refreshes an already-open layout list after saving and deleting a preset
+ok 64 - forced render refreshes an already-open layout list after saving and deleting a preset
+  ---
+  duration_ms: 1.000125
+  type: 'test'
+  ...
+# Subtest: a genuinely fresh browser boots with no model selected, not the bundled sample
+ok 65 - a genuinely fresh browser boots with no model selected, not the bundled sample
+  ---
+  duration_ms: 1.054125
+  type: 'test'
+  ...
+# Subtest: a fresh boot never persists a current-model choice the user did not make
+ok 66 - a fresh boot never persists a current-model choice the user did not make
+  ---
+  duration_ms: 0.683083
+  type: 'test'
+  ...
+# Subtest: a returning user (smv_current_v1 already set) still boots straight into their model
+ok 67 - a returning user (smv_current_v1 already set) still boots straight into their model
+  ---
+  duration_ms: 0.662333
+  type: 'test'
+  ...
+# Subtest: model switches restore lane zoom with positions and discard the previous model size cache
+ok 68 - model switches restore lane zoom with positions and discard the previous model size cache
+  ---
+  duration_ms: 1.369792
+  type: 'test'
+  ...
+# Subtest: invalid saved lane zoom falls back to a finite supported value
+ok 69 - invalid saved lane zoom falls back to a finite supported value
+  ---
+  duration_ms: 0.710667
+  type: 'test'
+  ...
+# Subtest: role annotation patch preserves DAX, child annotations, and CRLF; Auto removes only table annotation
+ok 70 - role annotation patch preserves DAX, child annotations, and CRLF; Auto removes only table annotation
+  ---
+  duration_ms: 1.038083
+  type: 'test'
+  ...
+# Subtest: repo role writes TMDL and is visible in a fresh parser without browser overrides
+ok 71 - repo role writes TMDL and is visible in a fresh parser without browser overrides
+  ---
+  duration_ms: 2.48
+  type: 'test'
+  ...
+# Subtest: denied or failed repo writes leave classification and file unchanged
+ok 72 - denied or failed repo writes leave classification and file unchanged
+  ---
+  duration_ms: 1.632167
+  type: 'test'
+  ...
+# Subtest: cached disconnected repo does not silently save a browser-only override
+ok 73 - cached disconnected repo does not silently save a browser-only override
+  ---
+  duration_ms: 0.734292
+  type: 'test'
+  ...
+# Subtest: importing a model with an existing name updates it in place and keeps its id
+ok 74 - importing a model with an existing name updates it in place and keeps its id
+  ---
+  duration_ms: 0.722
+  type: 'test'
+  ...
+# Subtest: refresh re-reads the open model, reports new tables, and remembers the folder
+ok 75 - refresh re-reads the open model, reports new tables, and remembers the folder
+  ---
+  duration_ms: 2.228125
+  type: 'test'
+  ...
+# Subtest: a folder import remembers its folder, so refresh never shows the picker
+ok 76 - a folder import remembers its folder, so refresh never shows the picker
+  ---
+  duration_ms: 2.83275
+  type: 'test'
+  ...
+# Subtest: refresh with an unchanged source makes no change
+ok 77 - refresh with an unchanged source makes no change
+  ---
+  duration_ms: 0.999791
+  type: 'test'
+  ...
+# Subtest: refresh cancelled at the folder picker or failing to read changes nothing
+ok 78 - refresh cancelled at the folder picker or failing to read changes nothing
+  ---
+  duration_ms: 0.940667
+  type: 'test'
+  ...
+# Subtest: refresh is unavailable for the built-in model, hosts, and browsers without folder access
+ok 79 - refresh is unavailable for the built-in model, hosts, and browsers without folder access
+  ---
+  duration_ms: 0.671042
+  type: 'test'
+  ...
+# Subtest: local app: the folder chooser resolves to the chosen folder and remembers it
+ok 80 - local app: the folder chooser resolves to the chosen folder and remembers it
+  ---
+  duration_ms: 1.448583
+  type: 'test'
+  ...
+# Subtest: local app: connecting a repo scans through the server and opens its single model, no browser picker
+ok 81 - local app: connecting a repo scans through the server and opens its single model, no browser picker
+  ---
+  duration_ms: 3.170292
+  type: 'test'
+  ...
+# Subtest: local app: Refresh re-reads a repo model and an imported model without any prompt
+ok 82 - local app: Refresh re-reads a repo model and an imported model without any prompt
+  ---
+  duration_ms: 1.199959
+  type: 'test'
+  ...
+# Subtest: local app: the hosted page is the demo and opens the sample; the local app does not
+ok 83 - local app: the hosted page is the demo and opens the sample; the local app does not
+  ---
+  duration_ms: 0.776125
+  type: 'test'
+  ...
+# Subtest: Tables to Power Query and back preserves viewport; other normal return routes still fit
+ok 84 - Tables to Power Query and back preserves viewport; other normal return routes still fit
+  ---
+  duration_ms: 0.844709
+  type: 'test'
+  ...
+# Subtest: an explicit focus keeps the viewport it aimed at; an ordinary selection still refits
+ok 85 - an explicit focus keeps the viewport it aimed at; an ordinary selection still refits
+  ---
+  duration_ms: 2.605209
+  type: 'test'
+  ...
+# Subtest: panning preserves selected table, pins, lock, relationship and isolate visibility
+ok 86 - panning preserves selected table, pins, lock, relationship and isolate visibility
+  ---
+  duration_ms: 1.200875
+  type: 'test'
+  ...
+# Subtest: an out-and-back pan remains a drag when released at its starting point
+ok 87 - an out-and-back pan remains a drag when released at its starting point
+  ---
+  duration_ms: 0.8555
+  type: 'test'
+  ...
+# Subtest: a background click clears selection and pins only after release while retaining its lock
+ok 88 - a background click clears selection and pins only after release while retaining its lock
+  ---
+  duration_ms: 0.810916
+  type: 'test'
+  ...
+# Subtest: pointer jitter stays a click and never moves the viewport
+ok 89 - pointer jitter stays a click and never moves the viewport
+  ---
+  duration_ms: 1.263667
+  type: 'test'
+  ...
+# Subtest: pan threshold uses screen pixels at every zoom
+ok 90 - pan threshold uses screen pixels at every zoom
+  ---
+  duration_ms: 1.561333
+  type: 'test'
+  ...
+# Subtest: right and middle gestures cannot pan or clear selection
+ok 91 - right and middle gestures cannot pan or clear selection
+  ---
+  duration_ms: 1.661041
+  type: 'test'
+  ...
+# Subtest: moving another card preserves existing selection, pins and locked roots
+ok 92 - moving another card preserves existing selection, pins and locked roots
+  ---
+  duration_ms: 0.654166
+  type: 'test'
+  ...
+# Subtest: a card click selects that card without becoming a background click
+ok 93 - a card click selects that card without becoming a background click
+  ---
+  duration_ms: 0.624791
+  type: 'test'
+  ...
+# Subtest: right and middle gestures cannot move or select a card
+ok 94 - right and middle gestures cannot move or select a card
+  ---
+  duration_ms: 1.147708
+  type: 'test'
+  ...
+# Subtest: canvas controls and their descendants cannot initiate a pan
+ok 95 - canvas controls and their descendants cannot initiate a pan
+  ---
+  duration_ms: 2.753417
+  type: 'test'
+  ...
+# Subtest: blur cancels a pending background click without clearing selection
+ok 96 - blur cancels a pending background click without clearing selection
+  ---
+  duration_ms: 0.821291
+  type: 'test'
+  ...
+# Subtest: blur ends a pan until a fresh gesture starts
+ok 97 - blur ends a pan until a fresh gesture starts
+  ---
+  duration_ms: 0.381917
+  type: 'test'
+  ...
+# Subtest: blur ends a card drag, persists its position once and ignores later pointer movement
+ok 98 - blur ends a card drag, persists its position once and ignores later pointer movement
+  ---
+  duration_ms: 0.35525
+  type: 'test'
+  ...
+# Subtest: shift+drag on the background marks the tables the box touches without panning or clearing focus
+ok 99 - shift+drag on the background marks the tables the box touches without panning or clearing focus
+  ---
+  duration_ms: 0.483125
+  type: 'test'
+  ...
+# Subtest: alt+click toggles a table in the marked set and a background click clears it
+ok 100 - alt+click toggles a table in the marked set and a background click clears it
+  ---
+  duration_ms: 0.361042
+  type: 'test'
+  ...
+# Subtest: snapshot command works outside the repo and keeps the whole model behind a focused canvas
+ok 101 - snapshot command works outside the repo and keeps the whole model behind a focused canvas
+  ---
+  duration_ms: 61.769958
+  type: 'test'
+  ...
+# Subtest: measure snapshots preserve DAX, select the measure and fit its graph
+ok 102 - measure snapshots preserve DAX, select the measure and fit its graph
+  ---
+  duration_ms: 75.506084
+  type: 'test'
+  ...
+# Subtest: TMDL special characters remain data and source queries are excluded
+ok 103 - TMDL special characters remain data and source queries are excluded
+  ---
+  duration_ms: 41.254834
+  type: 'test'
+  ...
+# Subtest: invalid input and removed commands fail without writing or overwriting files
+ok 104 - invalid input and removed commands fail without writing or overwriting files
+  ---
+  duration_ms: 446.473625
+  type: 'test'
+  ...
+# Subtest: TMDL relationship validation preserves parallel edges and rejects incomplete endpoints
+ok 105 - TMDL relationship validation preserves parallel edges and rejects incomplete endpoints
+  ---
+  duration_ms: 122.36975
+  type: 'test'
+  ...
+# Subtest: long style keeps short calls on one line and splits long ones
+ok 106 - long style keeps short calls on one line and splits long ones
+  ---
+  duration_ms: 1.445042
+  type: 'test'
+  ...
+# Subtest: short style puts every argument of a multi-argument call on its own line
+ok 107 - short style puts every argument of a multi-argument call on its own line
+  ---
+  duration_ms: 0.189708
+  type: 'test'
+  ...
+# Subtest: operators, unary signs, comments and strings survive formatting
+ok 108 - operators, unary signs, comments and strings survive formatting
+  ---
+  duration_ms: 0.1315
+  type: 'test'
+  ...
+# Subtest: formatting never changes the tokens of the formula
+ok 109 - formatting never changes the tokens of the formula
+  ---
+  duration_ms: 0.312292
+  type: 'test'
+  ...
+# Subtest: inlining splices measure bodies in parentheses, with fold regions and ghost labels
+ok 110 - inlining splices measure bodies in parentheses, with fold regions and ghost labels
+  ---
+  duration_ms: 0.744666
+  type: 'test'
+  ...
+# Subtest: a measure that loops back stays a reference, and empty measures are not inlined
+ok 111 - a measure that loops back stays a reference, and empty measures are not inlined
+  ---
+  duration_ms: 0.076542
+  type: 'test'
+  ...
+# Subtest: a diamond of measures hits the size cap instead of exploding
+ok 112 - a diamond of measures hits the size cap instead of exploding
+  ---
+  duration_ms: 20.041667
+  type: 'test'
+  ...
+# Subtest: malformed DAX does not throw
+ok 113 - malformed DAX does not throw
+  ---
+  duration_ms: 0.341708
+  type: 'test'
+  ...
+# Subtest: an inlined measure puts its label on one line and the "(" on the next, and each level has its own depth
+ok 114 - an inlined measure puts its label on one line and the "(" on the next, and each level has its own depth
+  ---
+  duration_ms: 0.362208
+  type: 'test'
+  ...
+# Subtest: a block comment that spans lines is printed one line per source line
+ok 115 - a block comment that spans lines is printed one line per source line
+  ---
+  duration_ms: 0.325542
+  type: 'test'
+  ...
+# Subtest: deep nesting does not push short calls onto many lines
+ok 116 - deep nesting does not push short calls onto many lines
+  ---
+  duration_ms: 3.153458
+  type: 'test'
+  ...
+# Subtest: webview packages canonical CSS and hashed scripts with a fresh nonce and adapter first
+ok 117 - webview packages canonical CSS and hashed scripts with a fresh nonce and adapter first
+  ---
+  duration_ms: 12.874792
+  type: 'test'
+  ...
+# Subtest: snapshotAssets returns complete portable assets and pristine template without the host adapter
+ok 118 - snapshotAssets returns complete portable assets and pristine template without the host adapter
+  ---
+  duration_ms: 8.521417
+  type: 'test'
+  ...
+# Subtest: saveSnapshot uses the user-selected destination, preserves UTF-8, and strips paths from the suggested name
+ok 119 - saveSnapshot uses the user-selected destination, preserves UTF-8, and strips paths from the suggested name
+  ---
+  duration_ms: 2.956292
+  type: 'test'
+  ...
+# Subtest: snapshot cancellation writes nothing and failures return a request error
+ok 120 - snapshot cancellation writes nothing and failures return a request error
+  ---
+  duration_ms: 2.379083
+  type: 'test'
+  ...
+# Subtest: malformed messages, unsupported requests and storage keys cannot call privileged APIs
+ok 121 - malformed messages, unsupported requests and storage keys cannot call privileged APIs
+  ---
+  duration_ms: 1.816291
+  type: 'test'
+  ...
+# Subtest: openFile accepts model source paths and blocks traversal, absolute paths, and outside symlinks
+ok 122 - openFile accepts model source paths and blocks traversal, absolute paths, and outside symlinks
+  ---
+  duration_ms: 3.000583
+  type: 'test'
+  ...
+# Subtest: a standalone BIM only permits opening the selected model file
+ok 123 - a standalone BIM only permits opening the selected model file
+  ---
+  duration_ms: 1.292791
+  type: 'test'
+  ...
+# Subtest: untrusted workspaces may browse and load analysis files but never execute the cleaner
+ok 124 - untrusted workspaces may browse and load analysis files but never execute the cleaner
+  ---
+  duration_ms: 2.374959
+  type: 'test'
+  ...
+# Subtest: cleaner uses an executable and argument array without a shell, unique outputs and cleanup on every outcome
+ok 125 - cleaner uses an executable and argument array without a shell, unique outputs and cleanup on every outcome
+  ---
+  duration_ms: 1.852708
+  type: 'test'
+  ...
+# Subtest: ready initialization follows the latest requested model while an older read is pending
+ok 126 - ready initialization follows the latest requested model while an older read is pending
+  ---
+  duration_ms: 4.927167
+  type: 'test'
+  ...
+# Subtest: a slower openModel request cannot replace the newer model or watcher
+ok 127 - a slower openModel request cannot replace the newer model or watcher
+  ---
+  duration_ms: 4.818333
+  type: 'test'
+  ...
+# Subtest: a refresh cannot push stale data after switching models and refreshModel acknowledges its push
+ok 128 - a refresh cannot push stale data after switching models and refreshModel acknowledges its push
+  ---
+  duration_ms: 2.20925
+  type: 'test'
+  ...
+# Subtest: analysis picked for a previous model is cancelled and cannot be pushed by the command
+ok 129 - analysis picked for a previous model is cancelled and cannot be pushed by the command
+  ---
+  duration_ms: 2.504292
+  type: 'test'
+  ...
+# Subtest: automatic cleaner usage is tied to the model revision and includes the model identity
+ok 130 - automatic cleaner usage is tied to the model revision and includes the model identity
+  ---
+  duration_ms: 2.607459
+  type: 'test'
+  ...
+# Subtest: disposing the panel clears pending watcher refresh and prevents old reads reaching a new panel
+ok 131 - disposing the panel clears pending watcher refresh and prevents old reads reaching a new panel
+  ---
+  duration_ms: 457.369375
+  type: 'test'
+  ...
+# Subtest: VS Code boot seeds shared preferences before constructing and has an actionable empty model picker
+ok 132 - VS Code boot seeds shared preferences before constructing and has an actionable empty model picker
+  ---
+  duration_ms: 10.216417
+  type: 'test'
+  ...
+# Subtest: host default model retains the shared parser, dependency graph, table canvas and all four views
+ok 133 - host default model retains the shared parser, dependency graph, table canvas and all four views
+  ---
+  duration_ms: 5.925917
+  type: 'test'
+  ...
+# Subtest: choosing models uses host requests and keeps table membership, coordinates and usage isolated
+ok 134 - choosing models uses host requests and keeps table membership, coordinates and usage isolated
+  ---
+  duration_ms: 5.279625
+  type: 'test'
+  ...
+# Subtest: late open and analysis responses cannot replace a more recently selected model
+ok 135 - late open and analysis responses cannot replace a more recently selected model
+  ---
+  duration_ms: 5.890542
+  type: 'test'
+  ...
+# Subtest: same-model refresh preserves selected measures and the existing table workspace and viewport
+ok 136 - same-model refresh preserves selected measures and the existing table workspace and viewport
+  ---
+  duration_ms: 3.959958
+  type: 'test'
+  ...
+# Subtest: host request errors remain actionable and file drops do not enter browser import
+ok 137 - host request errors remain actionable and file drops do not enter browser import
+  ---
+  duration_ms: 2.077333
+  type: 'test'
+  ...
+# Subtest: VS Code snapshot save uses host assets and save bridge, yields ordinary offline HTML, and supports cancellation
+ok 138 - VS Code snapshot save uses host assets and save bridge, yields ordinary offline HTML, and supports cancellation
+  ---
+  duration_ms: 18.707583
+  type: 'test'
+  ...
+# Subtest: optional Cleaner status pills render in library, selected measure, comparison DAX and table columns
+ok 139 - optional Cleaner status pills render in library, selected measure, comparison DAX and table columns
+  ---
+  duration_ms: 7.711459
+  type: 'test'
+  ...
+# Subtest: analysis mismatch is rejected and status maps are cleared when selecting a different model
+ok 140 - analysis mismatch is rejected and status maps are cleared when selecting a different model
+  ---
+  duration_ms: 4.418208
+  type: 'test'
+  ...
+# Subtest: host initialization errors produce an accessible failure instead of a blank or sample viewer
+ok 141 - host initialization errors produce an accessible failure instead of a blank or sample viewer
+  ---
+  duration_ms: 1.719666
+  type: 'test'
+  ...
+# Subtest: host model switching restores each model lane zoom before layout and fit
+ok 142 - host model switching restores each model lane zoom before layout and fit
+  ---
+  duration_ms: 5.8005
+  type: 'test'
+  ...
+# extension.test.js: ok
+# Subtest: ../tests/extension.test.js
+ok 9 - ../tests/extension.test.js
+  ---
+  duration_ms: 46.462375
+  type: 'test'
+  ...
+# Subtest: star, constellation and layered place every card clear of the others (bundled model)
+ok 144 - star, constellation and layered place every card clear of the others (bundled model)
+  ---
+  duration_ms: 162.794833
+  type: 'test'
+  ...
+# Subtest: a single-hub subset keeps the per-hub ring (bundled model)
+ok 145 - a single-hub subset keeps the per-hub ring (bundled model)
+  ---
+  duration_ms: 5.490833
+  type: 'test'
+  ...
+# Subtest: the whole model star puts the conformed dims inside the ring of facts (bundled model)
+ok 146 - the whole model star puts the conformed dims inside the ring of facts (bundled model)
+  ---
+  duration_ms: 21.018958
+  type: 'test'
+  ...
+# Subtest: the tray of relationship-free tables sits under the picture (bundled model)
+ok 147 - the tray of relationship-free tables sits under the picture (bundled model)
+  ---
+  duration_ms: 19.811792
+  type: 'test'
+  ...
+# Subtest: layered puts every fact below every dimension (bundled model)
+ok 148 - layered puts every fact below every dimension (bundled model)
+  ---
+  duration_ms: 28.51975
+  type: 'test'
+  ...
+# Subtest: layouts are deterministic (bundled model)
+ok 149 - layouts are deterministic (bundled model)
+  ---
+  duration_ms: 121.27425
+  type: 'test'
+  ...
+# Subtest: star, constellation and layered place every card clear of the others (synthetic star)
+ok 150 - star, constellation and layered place every card clear of the others (synthetic star)
+  ---
+  duration_ms: 7.492416
+  type: 'test'
+  ...
+# Subtest: a single-hub subset keeps the per-hub ring (synthetic star)
+ok 151 - a single-hub subset keeps the per-hub ring (synthetic star)
+  ---
+  duration_ms: 1.219667
+  type: 'test'
+  ...
+# Subtest: the whole model star puts the conformed dims inside the ring of facts (synthetic star)
+ok 152 - the whole model star puts the conformed dims inside the ring of facts (synthetic star)
+  ---
+  duration_ms: 1.085959
+  type: 'test'
+  ...
+# Subtest: the tray of relationship-free tables sits under the picture (synthetic star)
+ok 153 - the tray of relationship-free tables sits under the picture (synthetic star)
+  ---
+  duration_ms: 1.373125
+  type: 'test'
+  ...
+# Subtest: layered puts every fact below every dimension (synthetic star)
+ok 154 - layered puts every fact below every dimension (synthetic star)
+  ---
+  duration_ms: 1.027541
+  type: 'test'
+  ...
+# Subtest: layouts are deterministic (synthetic star)
+ok 155 - layouts are deterministic (synthetic star)
+  ---
+  duration_ms: 4.463834
+  type: 'test'
+  ...
+# Subtest: star beats the galaxy rows on edge crossings for the bundled model
+ok 156 - star beats the galaxy rows on edge crossings for the bundled model
+  ---
+  duration_ms: 69.833667
+  type: 'test'
+  ...
+# Subtest: the converging arrange lands the whole model at or above the floor with nothing stacked
+ok 157 - the converging arrange lands the whole model at or above the floor with nothing stacked
+  ---
+  duration_ms: 311.515666
+  type: 'test'
+  ...
+# Subtest: chip titles scale with the zoom so a table name is never smaller than 11px on screen
+ok 158 - chip titles scale with the zoom so a table name is never smaller than 11px on screen
+  ---
+  duration_ms: 1.075333
+  type: 'test'
+  ...
+# Subtest: cellFor(k) always clears the chip drawn at k
+ok 159 - cellFor(k) always clears the chip drawn at k
+  ---
+  duration_ms: 0.771208
+  type: 'test'
+  ...
+# Subtest: full-card lanes leave room for the relationship pill, chip lanes keep the 12px gutter
+ok 160 - full-card lanes leave room for the relationship pill, chip lanes keep the 12px gutter
+  ---
+  duration_ms: 0.899334
+  type: 'test'
+  ...
+# Subtest: an arrange whose fit lands on full cards lays out again for that zoom
+ok 161 - an arrange whose fit lands on full cards lays out again for that zoom
+  ---
+  duration_ms: 0.806584
+  type: 'test'
+  ...
+# Subtest: a focused star at card zoom seats its cards a pill apart
+ok 162 - a focused star at card zoom seats its cards a pill apart
+  ---
+  duration_ms: 1.455167
+  type: 'test'
+  ...
+# Subtest: detail mode decides the chip treatment, zoom only decides it on Auto
+ok 163 - detail mode decides the chip treatment, zoom only decides it on Auto
+  ---
+  duration_ms: 2.119625
+  type: 'test'
+  ...
+# Subtest: the filter arrow is a fixed size on screen and doubles up for bidirectional edges
+ok 164 - the filter arrow is a fixed size on screen and doubles up for bidirectional edges
+  ---
+  duration_ms: 0.813458
+  type: 'test'
+  ...
+# Subtest: the combined pill puts each cardinality on the side its table lies, arrow in between
+ok 165 - the combined pill puts each cardinality on the side its table lies, arrow in between
+  ---
+  duration_ms: 1.10275
+  type: 'test'
+  ...
+# Subtest: the pill is a fixed size on screen and its seat box follows it
+ok 166 - the pill is a fixed size on screen and its seat box follows it
+  ---
+  duration_ms: 0.745208
+  type: 'test'
+  ...
+# Subtest: a label that would land on a card or on another label takes the next free seat
+ok 167 - a label that would land on a card or on another label takes the next free seat
+  ---
+  duration_ms: 1.056792
+  type: 'test'
+  ...
+# Subtest: a subset arrange never moves a table that is not on the canvas
+ok 168 - a subset arrange never moves a table that is not on the canvas
+  ---
+  duration_ms: 12.59825
+  type: 'test'
+  ...
+# Subtest: Arrange applies the layout chosen in Display, not a hard-coded grid
+ok 169 - Arrange applies the layout chosen in Display, not a hard-coded grid
+  ---
+  duration_ms: 12.827667
+  type: 'test'
+  ...
+# Subtest: Arrange leaves the tables that are hidden by focus where they were
+ok 170 - Arrange leaves the tables that are hidden by focus where they were
+  ---
+  duration_ms: 45.875417
+  type: 'test'
+  ...
+# Subtest: the grid option lays tables out in plain rows, on the same lanes as every other layout
+ok 171 - the grid option lays tables out in plain rows, on the same lanes as every other layout
+  ---
+  duration_ms: 1.174541
+  type: 'test'
+  ...
+# Subtest: the grid option seats the selected table ahead of the tables it connects to
+ok 172 - the grid option seats the selected table ahead of the tables it connects to
+  ---
+  duration_ms: 0.809833
+  type: 'test'
+  ...
+# Subtest: a big model arranges in well under a second instead of grinding on the refinement pass
+ok 173 - a big model arranges in well under a second instead of grinding on the refinement pass
+  ---
+  duration_ms: 61.599417
+  type: 'test'
+  ...
+# Subtest: a table related only to something off the canvas keeps its place beside the picture
+ok 174 - a table related only to something off the canvas keeps its place beside the picture
+  ---
+  duration_ms: 0.952875
+  type: 'test'
+  ...
+# Subtest: an arrange over tables with no relationships between them falls back to the grid
+ok 175 - an arrange over tables with no relationships between them falls back to the grid
+  ---
+  duration_ms: 0.604375
+  type: 'test'
+  ...
+# Subtest: fit aims at the unobstructed canvas: the drawer and the overview map are cut away, with 24px of padding
+ok 176 - fit aims at the unobstructed canvas: the drawer and the overview map are cut away, with 24px of padding
+  ---
+  duration_ms: 0.572625
+  type: 'test'
+  ...
+# Subtest: an obstruction that misses the canvas costs nothing, and one that swallows it falls back to the padded host
+ok 177 - an obstruction that misses the canvas costs nothing, and one that swallows it falls back to the padded host
+  ---
+  duration_ms: 0.686917
+  type: 'test'
+  ...
+# Subtest: Escape closes the Display popover first, then Saved views, and returns focus to the button
+ok 178 - Escape closes the Display popover first, then Saved views, and returns focus to the button
+  ---
+  duration_ms: 0.854916
+  type: 'test'
+  ...
+# Subtest: a press outside closes every open toolbar popover without stealing focus
+ok 179 - a press outside closes every open toolbar popover without stealing focus
+  ---
+  duration_ms: 0.553584
+  type: 'test'
+  ...
+# Subtest: Mac launcher reopens Google Chrome when its profile process survives without a viewer window
+ok 180 - Mac launcher reopens Google Chrome when its profile process survives without a viewer window
+  ---
+  duration_ms: 11.287625
+  type: 'test'
+  ...
+# Subtest: Mac launcher reopens Microsoft Edge when its profile process survives without a viewer window
+ok 181 - Mac launcher reopens Microsoft Edge when its profile process survives without a viewer window
+  ---
+  duration_ms: 9.387708
+  type: 'test'
+  ...
+# Subtest: Mac launcher cold start uses the same dedicated-profile window launch as reopening
+ok 182 - Mac launcher cold start uses the same dedicated-profile window launch as reopening
+  ---
+  duration_ms: 18.39625
+  type: 'test'
+  ...
+# Subtest: Mac launcher retains the default-browser fallback without Chrome or Edge
+ok 183 - Mac launcher retains the default-browser fallback without Chrome or Edge
+  ---
+  duration_ms: 8.987584
+  type: 'test'
+  ...
+# Subtest: library search finds names, folders, home tables and DAX, expanding matching folders
+ok 184 - library search finds names, folders, home tables and DAX, expanding matching folders
+  ---
+  duration_ms: 2.231042
+  type: 'test'
+  ...
+# Subtest: visibility and home-table filters combine and stale table filters recover after model switching
+ok 185 - visibility and home-table filters combine and stale table filters recover after model switching
+  ---
+  duration_ms: 0.477167
+  type: 'test'
+  ...
+# Subtest: folder paths do not inflate the matching-measure count
+ok 186 - folder paths do not inflate the matching-measure count
+  ---
+  duration_ms: 4.092583
+  type: 'test'
+  ...
+# Subtest: DAX highlighting preserves source spelling and resolves qualified references and escaped identifiers
+ok 187 - DAX highlighting preserves source spelling and resolves qualified references and escaped identifiers
+  ---
+  duration_ms: 0.895625
+  type: 'test'
+  ...
+# Subtest: DAX render cache is invalidated whenever the selected main panel is rebuilt
+ok 188 - DAX render cache is invalidated whenever the selected main panel is rebuilt
+  ---
+  duration_ms: 0.77875
+  type: 'test'
+  ...
+# Subtest: Fit contains a large graph and Center uses scaled node coordinates
+ok 189 - Fit contains a large graph and Center uses scaled node coordinates
+  ---
+  duration_ms: 0.492167
+  type: 'test'
+  ...
+# Subtest: graph orientation preserves dependencies and reflects vertical layers without rotating labels
+ok 190 - graph orientation preserves dependencies and reflects vertical layers without rotating labels
+  ---
+  duration_ms: 1.213083
+  type: 'test'
+  ...
+# Subtest: branching and cyclic graphs stay inside bounds in every orientation
+ok 191 - branching and cyclic graphs stay inside bounds in every orientation
+  ---
+  duration_ms: 0.849375
+  type: 'test'
+  ...
+# Subtest: workspace preferences round-trip and invalid stored values receive safe defaults
+ok 192 - workspace preferences round-trip and invalid stored values receive safe defaults
+  ---
+  duration_ms: 1.42925
+  type: 'test'
+  ...
+# Subtest: zoom preserves the viewport center when moving between a fitted stage and scrolling
+ok 193 - zoom preserves the viewport center when moving between a fitted stage and scrolling
+  ---
+  duration_ms: 0.484834
+  type: 'test'
+  ...
+# Subtest: measure snapshot is JSON-safe and preserves comparison, library state, preferences and viewport
+ok 194 - measure snapshot is JSON-safe and preserves comparison, library state, preferences and viewport
+  ---
+  duration_ms: 0.533
+  type: 'test'
+  ...
+# Subtest: snapshot restore sanitizes model references and numeric values without changing the app view or saved preferences
+ok 195 - snapshot restore sanitizes model references and numeric values without changing the app view or saved preferences
+  ---
+  duration_ms: 0.417959
+  type: 'test'
+  ...
+# Subtest: viewport restoration waits for visible layout and ignores superseded model state
+ok 196 - viewport restoration waits for visible layout and ignores superseded model state
+  ---
+  duration_ms: 0.543916
+  type: 'test'
+  ...
+# Subtest: invalid selections clear comparison and expansions, and auto-fit restores responsively
+ok 197 - invalid selections clear comparison and expansions, and auto-fit restores responsively
+  ---
+  duration_ms: 0.369708
+  type: 'test'
+  ...
+# Subtest: a hidden graph viewport is not reused for a different expansion context
+ok 198 - a hidden graph viewport is not reused for a different expansion context
+  ---
+  duration_ms: 0.340709
+  type: 'test'
+  ...
+# Subtest: dependents are grouped by home table then display folder, and the grouping is deterministic
+ok 199 - dependents are grouped by home table then display folder, and the grouping is deterministic
+  ---
+  duration_ms: 1.236667
+  type: 'test'
+  ...
+# Subtest: the group expander reveals every member and collapsing puts them back
+ok 200 - the group expander reveals every member and collapsing puts them back
+  ---
+  duration_ms: 1.212958
+  type: 'test'
+  ...
+# Subtest: group expansion is remembered per analyzed measure and never leaks between them
+ok 201 - group expansion is remembered per analyzed measure and never leaks between them
+  ---
+  duration_ms: 1.066583
+  type: 'test'
+  ...
+# Subtest: the graph opens on the analyzed measure at a readable zoom, in every orientation
+ok 202 - the graph opens on the analyzed measure at a readable zoom, in every orientation
+  ---
+  duration_ms: 1.225584
+  type: 'test'
+  ...
+# Subtest: a small dependency graph is not grouped
+ok 203 - a small dependency graph is not grouped
+  ---
+  duration_ms: 0.390625
+  type: 'test'
+  ...
+# Subtest: collapsed measures retain semantic roles and Expand all draws every included path
+ok 204 - collapsed measures retain semantic roles and Expand all draws every included path
+  ---
+  duration_ms: 1.309416
+  type: 'test'
+  ...
+# Subtest: plus six reveals six downstream neighbours and minus removes exactly those six
+ok 205 - plus six reveals six downstream neighbours and minus removes exactly those six
+  ---
+  duration_ms: 1.991417
+  type: 'test'
+  ...
+# Subtest: legacy extras cannot offer to remove mandatory upstream or downstream measures
+ok 206 - legacy extras cannot offer to remove mandatory upstream or downstream measures
+  ---
+  duration_ms: 0.733041
+  type: 'test'
+  ...
+# Subtest: Expand all reports the display limit and does not hide additional groups at the cap
+ok 207 - Expand all reports the display limit and does not hide additional groups at the cap
+  ---
+  duration_ms: 24.893417
+  type: 'test'
+  ...
+# Subtest: library search lists name matches before measures that only mention the text in DAX
+ok 208 - library search lists name matches before measures that only mention the text in DAX
+  ---
+  duration_ms: 0.582583
+  type: 'test'
+  ...
+# Subtest: DAX code block resets the host <code> styling so tokens stay readable in VS Code themes
+ok 209 - DAX code block resets the host <code> styling so tokens stay readable in VS Code themes
+  ---
+  duration_ms: 0.147458
+  type: 'test'
+  ...
+# Subtest: entire registry is initially laid out including disconnected/status/duplicate display IDs
+ok 210 - entire registry is initially laid out including disconnected/status/duplicate display IDs
+  ---
+  duration_ms: 3.292292
+  type: 'test'
+  ...
+# Subtest: zero-edge model is complete and supplied cycle components are grouped
+ok 211 - zero-edge model is complete and supplied cycle components are grouped
+  ---
+  duration_ms: 1.345375
+  type: 'test'
+  ...
+# Subtest: visibility is silent induced-edge projection; matches only dim; hidden selection/minimap remain explicit
+ok 212 - visibility is silent induced-edge projection; matches only dim; hidden selection/minimap remain explicit
+  ---
+  duration_ms: 1.705791
+  type: 'test'
+  ...
+# Subtest: empty projection does not discard complete model or auto-fit
+ok 213 - empty projection does not discard complete model or auto-fit
+  ---
+  duration_ms: 0.781834
+  type: 'test'
+  ...
+# Subtest: pan threshold distinguishes blank click from drag; node drag is layout only
+ok 214 - pan threshold distinguishes blank click from drag; node drag is layout only
+  ---
+  duration_ms: 1.460625
+  type: 'test'
+  ...
+# Subtest: wheel/pinch keep gesture anchor fixed and have finite positive scale
+ok 215 - wheel/pinch keep gesture anchor fixed and have finite positive scale
+  ---
+  duration_ms: 1.133
+  type: 'test'
+  ...
+# Subtest: provided-host keyboard fallback pans; node arrows rove/Enter selects; input shortcuts ignored
+ok 216 - provided-host keyboard fallback pans; node arrows rove/Enter selects; input shortcuts ignored
+  ---
+  duration_ms: 0.950542
+  type: 'test'
+  ...
+# Subtest: queued resize after explicit Back viewport restore cannot translate or notify
+ok 217 - queued resize after explicit Back viewport restore cannot translate or notify
+  ---
+  duration_ms: 0.624708
+  type: 'test'
+  ...
+# Subtest: edge callback uses host CSS anchor and full stable edge ID
+ok 218 - edge callback uses host CSS anchor and full stable edge ID
+  ---
+  duration_ms: 0.990375
+  type: 'test'
+  ...
+# Subtest: layout captures cannot restore into another generation with coincident IDs
+ok 219 - layout captures cannot restore into another generation with coincident IDs
+  ---
+  duration_ms: 0.815084
+  type: 'test'
+  ...
+# Subtest: same-generation updates/layout restores preserve view; generation/null clears filters and old gestures
+ok 220 - same-generation updates/layout restores preserve view; generation/null clears filters and old gestures
+  ---
+  duration_ms: 1.078666
+  type: 'test'
+  ...
+# Subtest: 300/301/350/1000 registries and parameter fanout retain last object without caps
+ok 221 - 300/301/350/1000 registries and parameter fanout retain last object without caps
+  ---
+  duration_ms: 82.952625
+  type: 'test'
+  ...
+# Subtest: search and focus dim independently without hiding membership or mutating registry
+ok 222 - search and focus dim independently without hiding membership or mutating registry
+  ---
+  duration_ms: 1.337542
+  type: 'test'
+  ...
+# Subtest: explicit Arrange touches only visible requested positions and is silent, registry preserving and undoable
+ok 223 - explicit Arrange touches only visible requested positions and is silent, registry preserving and undoable
+  ---
+  duration_ms: 0.76125
+  type: 'test'
+  ...
+# Subtest: minimap nodes, induced edges and bounds use only rendered IDs; empty stays honest and registry survives
+ok 224 - minimap nodes, induced edges and bounds use only rendered IDs; empty stays honest and registry survives
+  ---
+  duration_ms: 0.7635
+  type: 'test'
+  ...
+# Subtest: Center genuinely centers already-visible nodes at pan/zoom and side/below/resized host bounds
+ok 225 - Center genuinely centers already-visible nodes at pan/zoom and side/below/resized host bounds
+  ---
+  duration_ms: 0.802334
+  type: 'test'
+  ...
+# Subtest: blank/add repositions far-away new members near current view collision-free, preserves other manual positions and Undo
+ok 226 - blank/add repositions far-away new members near current view collision-free, preserves other manual positions and Undo
+  ---
+  duration_ms: 0.822125
+  type: 'test'
+  ...
+# Subtest: narrow side canvas prefers a visible vertical neighbor; collisions preserve the manual anchor
+ok 227 - narrow side canvas prefers a visible vertical neighbor; collisions preserve the manual anchor
+  ---
+  duration_ms: 0.615417
+  type: 'test'
+  ...
+# Subtest: straight routes retain input-to-consumer endpoints after reversal, stacking and self cycles; hit path follows geometry
+ok 228 - straight routes retain input-to-consumer endpoints after reversal, stacking and self cycles; hit path follows geometry
+  ---
+  duration_ms: 0.88875
+  type: 'test'
+  ...
+# Subtest: straight long links detour around visible intervening cards and simplify when the obstacle is hidden
+ok 229 - straight long links detour around visible intervening cards and simplify when the obstacle is hidden
+  ---
+  duration_ms: 0.61525
+  type: 'test'
+  ...
+# Subtest: reciprocal edges have independent 14px hit corridors in every orientation and after the reported drag
+ok 230 - reciprocal edges have independent 14px hit corridors in every orientation and after the reported drag
+  ---
+  duration_ms: 1.770417
+  type: 'test'
+  ...
+# Subtest: flow target and inspected branch are independent of selection and never mutate routes or positions
+ok 231 - flow target and inspected branch are independent of selection and never mutate routes or positions
+  ---
+  duration_ms: 0.837959
+  type: 'test'
+  ...
+# Subtest: opening and resizing either inspector dock preserves numeric pan/zoom and every node position
+ok 232 - opening and resizing either inspector dock preserves numeric pan/zoom and every node position
+  ---
+  duration_ms: 0.653042
+  type: 'test'
+  ...
+# Subtest: explicit center is repeatable in the clipped visible canvas frame
+ok 233 - explicit center is repeatable in the clipped visible canvas frame
+  ---
+  duration_ms: 0.526167
+  type: 'test'
+  ...
+# Subtest: two far-origin visible nodes compact explicitly while Fit and Undo layout preserve every hidden position
+ok 234 - two far-origin visible nodes compact explicitly while Fit and Undo layout preserve every hidden position
+  ---
+  duration_ms: 0.645959
+  type: 'test'
+  ...
+# Subtest: secondary typography resets after tiny overview even when title font stays at its minimum
+ok 235 - secondary typography resets after tiny overview even when title font stays at its minimum
+  ---
+  duration_ms: 6.7
+  type: 'test'
+  ...
+# Subtest: quoted identifiers decode escapes; strings and comments never create edges
+ok 236 - quoted identifiers decode escapes; strings and comments never create edges
+  ---
+  duration_ms: 4.268917
+  type: 'test'
+  ...
+# Subtest: let forward references, nested sibling scopes and quoted shadowing
+ok 237 - let forward references, nested sibling scopes and quoted shadowing
+  ---
+  duration_ms: 0.811875
+  type: 'test'
+  ...
+# Subtest: exclusive initialization is explicit, inclusive recursive references are local
+ok 238 - exclusive initialization is explicit, inclusive recursive references are local
+  ---
+  duration_ms: 1.310042
+  type: 'test'
+  ...
+# Subtest: typed functions and each do not shadow sibling arguments or branches
+ok 239 - typed functions and each do not shadow sibling arguments or branches
+  ---
+  duration_ms: 1.366916
+  type: 'test'
+  ...
+# Subtest: record generalized fields, projection, item access and type names
+ok 240 - record generalized fields, projection, item access and type names
+  ---
+  duration_ms: 1.152333
+  type: 'test'
+  ...
+# Subtest: dynamic, unresolved, library and malformed inputs remain explicit
+ok 241 - dynamic, unresolved, library and malformed inputs remain explicit
+  ---
+  duration_ms: 1.760084
+  type: 'test'
+  ...
+# Subtest: table names resolve rather than partition names; ambiguous identities never resolve
+ok 242 - table names resolve rather than partition names; ambiguous identities never resolve
+  ---
+  duration_ms: 0.349375
+  type: 'test'
+  ...
+# Subtest: graph exposes direct edges, cycle components and disconnected nodes without mutation
+ok 243 - graph exposes direct edges, cycle components and disconnected nodes without mutation
+  ---
+  duration_ms: 0.649167
+  type: 'test'
+  ...
+# Subtest: depth limits are explicit and do not throw to consumers
+ok 244 - depth limits are explicit and do not throw to consumers
+  ---
+  duration_ms: 0.595959
+  type: 'test'
+  ...
+# Subtest: render provides safe clickable code navigation and visible uncertainty in its host
+ok 245 - render provides safe clickable code navigation and visible uncertainty in its host
+  ---
+  duration_ms: 0.541542
+  type: 'test'
+  ...
+# Subtest: missing/non-M targets remain navigable and every result retains partial status
+ok 246 - missing/non-M targets remain navigable and every result retains partial status
+  ---
+  duration_ms: 0.277541
+  type: 'test'
+  ...
+# Subtest: render exposes cycles and replaces the old host contents on navigation
+ok 247 - render exposes cycles and replaces the old host contents on navigation
+  ---
+  duration_ms: 0.30975
+  type: 'test'
+  ...
+# Subtest: documented M names do not masquerade as missing queries; unknown model names remain explicit
+ok 248 - documented M names do not masquerade as missing queries; unknown model names remain explicit
+  ---
+  duration_ms: 1.817375
+  type: 'test'
+  ...
+# Subtest: source evidence uses exact direct calls with lexical and model precedence and no argument disclosure
+ok 249 - source evidence uses exact direct calls with lexical and model precedence and no argument disclosure
+  ---
+  duration_ms: 3.817791
+  type: 'test'
+  ...
+# Subtest: complete inventory includes disconnected objects, explicit partitions and status-only tables
+ok 250 - complete inventory includes disconnected objects, explicit partitions and status-only tables
+  ---
+  duration_ms: 3.808791
+  type: 'test'
+  ...
+# Subtest: merge/append static inputs reverse legacy direction exactly once with all occurrences
+ok 251 - merge/append static inputs reverse legacy direction exactly once with all occurrences
+  ---
+  duration_ms: 0.844333
+  type: 'test'
+  ...
+# Subtest: SQL source literals, semantic relationships and partition ownership never create edges
+ok 252 - SQL source literals, semantic relationships and partition ownership never create edges
+  ---
+  duration_ms: 0.773
+  type: 'test'
+  ...
+# Subtest: complete parameter fanout and final disconnected object survive all requested thresholds
+ok 253 - complete parameter fanout and final disconnected object survive all requested thresholds
+  ---
+  duration_ms: 176.313625
+  type: 'test'
+  ...
+# Subtest: duplicate IDs retain every row with stable collision-safe UI identity and no guessed edges
+ok 254 - duplicate IDs retain every row with stable collision-safe UI identity and no guessed edges
+  ---
+  duration_ms: 1.217958
+  type: 'test'
+  ...
+# Subtest: duplicate names, multipartition names and same-named expression/table remain ambiguous
+ok 255 - duplicate names, multipartition names and same-named expression/table remain ambiguous
+  ---
+  duration_ms: 0.919875
+  type: 'test'
+  ...
+# Subtest: local shadowing, malformed code and placeholders never invent edges; legacy synthetic _ is reported
+ok 256 - local shadowing, malformed code and placeholders never invent edges; legacy synthetic _ is reported
+  ---
+  duration_ms: 0.360583
+  type: 'test'
+  ...
+# Subtest: missing/non-M referenced metadata keeps valid static name edges, but contributes no outgoing analysis
+ok 257 - missing/non-M referenced metadata keeps valid static name edges, but contributes no outgoing analysis
+  ---
+  duration_ms: 0.482834
+  type: 'test'
+  ...
+# Subtest: stable cycles use only emitted edges and handle long whole-model paths without legacy cycle cap
+ok 258 - stable cycles use only emitted edges and handle long whole-model paths without legacy cycle cap
+  ---
+  duration_ms: 166.901042
+  type: 'test'
+  ...
+# Subtest: unavailable model metadata produces status inventory without retaining earlier model state
+ok 259 - unavailable model metadata produces status inventory without retaining earlier model state
+  ---
+  duration_ms: 0.835042
+  type: 'test'
+  ...
+# Subtest: cancellation and model-switch/destroy generation gate suppress progress and result publication
+ok 260 - cancellation and model-switch/destroy generation gate suppress progress and result publication
+  ---
+  duration_ms: 0.662167
+  type: 'test'
+  ...
+# Subtest: cancellation from final progress callback still prevents completed graph return
+ok 261 - cancellation from final progress callback still prevents completed graph return
+  ---
+  duration_ms: 0.292583
+  type: 'test'
+  ...
+# Subtest: same-model metadata replacement during progress cancels the old graph
+ok 262 - same-model metadata replacement during progress cancels the old graph
+  ---
+  duration_ms: 0.544834
+  type: 'test'
+  ...
+# Subtest: exact CRLF/quoted/repeated/non-BMP source slices are separate from numbered gutter; Copy original source
+ok 263 - exact CRLF/quoted/repeated/non-BMP source slices are separate from numbered gutter; Copy original source
+  ---
+  duration_ms: 5.765417
+  type: 'test'
+  ...
+# Subtest: invalid/overlapping/missing-target spans never create guessed links
+ok 264 - invalid/overlapping/missing-target spans never create guessed links
+  ---
+  duration_ms: 2.193208
+  type: 'test'
+  ...
+# Subtest: opaque uncertainty is neutral disclosure; presentation diagnostics are review; no regex classification
+ok 265 - opaque uncertainty is neutral disclosure; presentation diagnostics are review; no regex classification
+  ---
+  duration_ms: 0.654542
+  type: 'test'
+  ...
+# Subtest: duplicate graph IDs select exactly supplied rows; status rows have no invented M
+ok 266 - duplicate graph IDs select exactly supplied rows; status rows have no invented M
+  ---
+  duration_ms: 0.957
+  type: 'test'
+  ...
+# Subtest: capture/restore contains both scroll axes, wrap and stable occurrence descriptor
+ok 267 - capture/restore contains both scroll axes, wrap and stable occurrence descriptor
+  ---
+  duration_ms: 1.023417
+  type: 'test'
+  ...
+# Subtest: new selection, same-ID select, close, suspend, reset and destroy cancel queued restores
+ok 268 - new selection, same-ID select, close, suspend, reset and destroy cancel queued restores
+  ---
+  duration_ms: 3.038708
+  type: 'test'
+  ...
+# Subtest: newer restore/direct focus wins within same generation
+ok 269 - newer restore/direct focus wins within same generation
+  ---
+  duration_ms: 0.846125
+  type: 'test'
+  ...
+# Subtest: same-generation context and hide/reopen preserve view; generation reset clears hidden source and callbacks
+ok 270 - same-generation context and hide/reopen preserve view; generation reset clears hidden source and callbacks
+  ---
+  duration_ms: 0.587791
+  type: 'test'
+  ...
+# Subtest: clipboard completion after close/reopen or reset cannot repaint code/status
+ok 271 - clipboard completion after close/reopen or reset cannot repaint code/status
+  ---
+  duration_ms: 0.641416
+  type: 'test'
+  ...
+# Subtest: focus controls emit only generation/selected-ID actions; Infinity serializes without changing source/view
+ok 272 - focus controls emit only generation/selected-ID actions; Infinity serializes without changing source/view
+  ---
+  duration_ms: 1.32375
+  type: 'test'
+  ...
+# Subtest: history restores focused controls by descriptor and never keeps old control DOM
+ok 273 - history restores focused controls by descriptor and never keeps old control DOM
+  ---
+  duration_ms: 0.557417
+  type: 'test'
+  ...
+# Subtest: Back retains strict 325px scroll with always-visible options; unrelated disclosures stay closed
+ok 274 - Back retains strict 325px scroll with always-visible options; unrelated disclosures stay closed
+  ---
+  duration_ms: 1.310625
+  type: 'test'
+  ...
+# Subtest: all four optional disclosure combinations restore exact scroll and booleans across source selection
+ok 275 - all four optional disclosure combinations restore exact scroll and booleans across source selection
+  ---
+  duration_ms: 3.347959
+  type: 'test'
+  ...
+# Subtest: legacy and partial disclosure state leave absent, invalid and unknown sections untouched
+ok 276 - legacy and partial disclosure state leave absent, invalid and unknown sections untouched
+  ---
+  duration_ms: 1.070916
+  type: 'test'
+  ...
+# Subtest: restored primary focus preserves scroll, and focus-triggered navigation cannot receive old scroll
+ok 277 - restored primary focus preserves scroll, and focus-triggered navigation cannot receive old scroll
+  ---
+  duration_ms: 0.588917
+  type: 'test'
+  ...
+# Subtest: stale disclosure restores cannot reopen prior or current source after any lifecycle cancellation
+ok 278 - stale disclosure restores cannot reopen prior or current source after any lifecycle cancellation
+  ---
+  duration_ms: 3.315875
+  type: 'test'
+  ...
+# Subtest: primary neighborhood controls stay visible, default wrap is true and explicit saved false survives history
+ok 279 - primary neighborhood controls stay visible, default wrap is true and explicit saved false survives history
+  ---
+  duration_ms: 0.616459
+  type: 'test'
+  ...
+# Subtest: expanded reader moves exact code DOM, copies original CRLF/UTF16 source, Escape closes reader first and returns focus
+ok 280 - expanded reader moves exact code DOM, copies original CRLF/UTF16 source, Escape closes reader first and returns focus
+  ---
+  duration_ms: 0.640875
+  type: 'test'
+  ...
+# Subtest: expanded history restores source focus/scroll and cannot reopen after stale lifecycle work
+ok 281 - expanded history restores source focus/scroll and cannot reopen after stale lifecycle work
+  ---
+  duration_ms: 2.867834
+  type: 'test'
+  ...
+# Subtest: reader keyboard boundary stays inside, and native-dialog autofocus navigation cancels old view restore
+ok 282 - reader keyboard boundary stays inside, and native-dialog autofocus navigation cancels old view restore
+  ---
+  duration_ms: 0.675
+  type: 'test'
+  ...
+# Subtest: full-query entry precedes all focus controls and source without duplicating or reformatting code
+ok 283 - full-query entry precedes all focus controls and source without duplicating or reformatting code
+  ---
+  duration_ms: 0.500292
+  type: 'test'
+  ...
+# Subtest: direct input and consumer buttons emit supplied IDs without requiring or inventing source ranges
+ok 284 - direct input and consumer buttons emit supplied IDs without requiring or inventing source ranges
+  ---
+  duration_ms: 0.453209
+  type: 'test'
+  ...
+# Subtest: declined restoration ownership preserves newer focus, scroll and disclosures
+ok 285 - declined restoration ownership preserves newer focus, scroll and disclosures
+  ---
+  duration_ms: 0.401667
+  type: 'test'
+  ...
+# Subtest: focus lock exposes pressed state and selected identity, rejects detached and stale controls
+ok 286 - focus lock exposes pressed state and selected identity, rejects detached and stale controls
+  ---
+  duration_ms: 1.334291
+  type: 'test'
+  ...
+# Subtest: progressive expansion and exact code navigation preserve partition root, expansion and scroll
+ok 287 - progressive expansion and exact code navigation preserve partition root, expansion and scroll
+  ---
+  duration_ms: 4.251458
+  type: 'test'
+  ...
+# Subtest: partition state is isolated and app model/metadata replacement clears expansion
+ok 288 - partition state is isolated and app model/metadata replacement clears expansion
+  ---
+  duration_ms: 1.222333
+  type: 'test'
+  ...
+# Subtest: SCC and self cycles terminate; dynamic/missing references stay visible as uncertainty
+ok 289 - SCC and self cycles terminate; dynamic/missing references stay visible as uncertainty
+  ---
+  duration_ms: 0.663042
+  type: 'test'
+  ...
+# Subtest: duplicate, missing, wrong-table, non-M and no-root states never open arbitrary code
+ok 290 - duplicate, missing, wrong-table, non-M and no-root states never open arbitrary code
+  ---
+  duration_ms: 2.086125
+  type: 'test'
+  ...
+# Subtest: optional analyzer unavailable is explicit
+ok 291 - optional analyzer unavailable is explicit
+  ---
+  duration_ms: 0.426917
+  type: 'test'
+  ...
+# Subtest: hostile labels are text, keyboard navigation moves focus and edge navigation targets upstream code
+ok 292 - hostile labels are text, keyboard navigation moves focus and edge navigation targets upstream code
+  ---
+  duration_ms: 0.449834
+  type: 'test'
+  ...
+# Subtest: large graph uses complete metadata resolution but caps visible nodes with explicit limits
+ok 293 - large graph uses complete metadata resolution but caps visible nodes with explicit limits
+  ---
+  duration_ms: 4.583167
+  type: 'test'
+  ...
+# Subtest: large-model duplicate names never become resolved edges
+ok 294 - large-model duplicate names never become resolved edges
+  ---
+  duration_ms: 0.558708
+  type: 'test'
+  ...
+# Subtest: branch expansion caps nodes and reset restores first page
+ok 295 - branch expansion caps nodes and reset restores first page
+  ---
+  duration_ms: 3.062125
+  type: 'test'
+  ...
+# Subtest: model replacement without a valid root still invalidates previous state
+ok 296 - model replacement without a valid root still invalidates previous state
+  ---
+  duration_ms: 0.796959
+  type: 'test'
+  ...
+# Subtest: bounded large-model cycle findings include only expanded visible edges
+ok 297 - bounded large-model cycle findings include only expanded visible edges
+  ---
+  duration_ms: 0.675209
+  type: 'test'
+  ...
+# Subtest: every repeated occurrence retains exact quoted spelling and UTF-16 end-exclusive range
+ok 298 - every repeated occurrence retains exact quoted spelling and UTF-16 end-exclusive range
+  ---
+  duration_ms: 4.164958
+  type: 'test'
+  ...
+# Subtest: scope walk excludes locals, parameters, fields, comments and strings while retaining sibling refs
+ok 299 - scope walk excludes locals, parameters, fields, comments and strings while retaining sibling refs
+  ---
+  duration_ms: 1.432292
+  type: 'test'
+  ...
+# Subtest: explicit inclusive global token range excludes the @ punctuation
+ok 300 - explicit inclusive global token range excludes the @ punctuation
+  ---
+  duration_ms: 0.348416
+  type: 'test'
+  ...
+# Subtest: ambiguous names, duplicate IDs and multipartition tables do not produce ranges
+ok 301 - ambiguous names, duplicate IDs and multipartition tables do not produce ranges
+  ---
+  duration_ms: 0.380583
+  type: 'test'
+  ...
+# Subtest: malformed and unavailable expressions clear both outputs
+ok 302 - malformed and unavailable expressions clear both outputs
+  ---
+  duration_ms: 2.423
+  type: 'test'
+  ...
+# Subtest: synthetic implicit _ remains legacy-only; real _ still has a source range
+ok 303 - synthetic implicit _ remains legacy-only; real _ still has a source range
+  ---
+  duration_ms: 0.471042
+  type: 'test'
+  ...
+# Subtest: legacy graph edge schema, direction and dedup remain unchanged
+ok 304 - legacy graph edge schema, direction and dedup remain unchanged
+  ---
+  duration_ms: 0.650333
+  type: 'test'
+  ...
+# Subtest: shared chrome is source-free text presentation with caller-owned identity and interactions
+ok 305 - shared chrome is source-free text presentation with caller-owned identity and interactions
+  ---
+  duration_ms: 1.124333
+  type: 'test'
+  ...
+# Subtest: positional mapping keeps duplicate rows distinct; no metadata ID overwrite
+ok 306 - positional mapping keeps duplicate rows distinct; no metadata ID overwrite
+  ---
+  duration_ms: 3.316416
+  type: 'test'
+  ...
+# Subtest: connectivity uses complete resolved incident edges, including parameter/status rows without relations
+ok 307 - connectivity uses complete resolved incident edges, including parameter/status rows without relations
+  ---
+  duration_ms: 1.497417
+  type: 'test'
+  ...
+# Subtest: ranges are authoritative UTF16 slices and invalid/overlapping spans never become links
+ok 308 - ranges are authoritative UTF16 slices and invalid/overlapping spans never become links
+  ---
+  duration_ms: 0.504167
+  type: 'test'
+  ...
+# Subtest: identity gates reject model/metadata replacement, revision changes and duplicate reorder
+ok 309 - identity gates reject model/metadata replacement, revision changes and duplicate reorder
+  ---
+  duration_ms: 0.396209
+  type: 'test'
+  ...
+# Subtest: worker executes canonical build in isolated context, emits atomic graph and job-bound progress
+ok 310 - worker executes canonical build in isolated context, emits atomic graph and job-bound progress
+  ---
+  duration_ms: 2.170958
+  type: 'test'
+  ...
+# Subtest: excluded reference clears filters; Back restores filters/view/scroll without Fit/reveal
+ok 311 - excluded reference clears filters; Back restores filters/view/scroll without Fit/reveal
+  ---
+  duration_ms: 0.756083
+  type: 'test'
+  ...
+# Subtest: matching library selection retains search; Show all preserves selected object and does not Fit
+ok 312 - matching library selection retains search; Show all preserves selected object and does not Fit
+  ---
+  duration_ms: 0.466334
+  type: 'test'
+  ...
+# Subtest: late navigation callbacks fail generation and source identity gates
+ok 313 - late navigation callbacks fail generation and source identity gates
+  ---
+  duration_ms: 0.404375
+  type: 'test'
+  ...
+# Subtest: real scheduler cancellation terminates worker and rejects queued old-generation graph messages
+ok 314 - real scheduler cancellation terminates worker and rejects queued old-generation graph messages
+  ---
+  duration_ms: 18.001417
+  type: 'test'
+  ...
+# Subtest: worker unavailable produces explicit error with no synchronous analysis fallback
+ok 315 - worker unavailable produces explicit error with no synchronous analysis fallback
+  ---
+  duration_ms: 18.183834
+  type: 'test'
+  ...
+# Subtest: model replaced while runtime assets load cannot launch or publish an old worker
+ok 316 - model replaced while runtime assets load cannot launch or publish an old worker
+  ---
+  duration_ms: 33.86175
+  type: 'test'
+  ...
+# Subtest: Back deferred focus cannot override a newer same-generation navigation
+ok 317 - Back deferred focus cannot override a newer same-generation navigation
+  ---
+  duration_ms: 1.057334
+  type: 'test'
+  ...
+# Subtest: terminal worker error invalidates queued ready publication and retained lookup
+ok 318 - terminal worker error invalidates queued ready publication and retained lookup
+  ---
+  duration_ms: 15.794542
+  type: 'test'
+  ...
+# Subtest: peer tab suspension happens only on transitions and preserves same-model context
+ok 319 - peer tab suspension happens only on transitions and preserves same-model context
+  ---
+  duration_ms: 0.70725
+  type: 'test'
+  ...
+# Subtest: Reset filters restores exact viewport after banner layout, preserving selection inspector and history
+ok 320 - Reset filters restores exact viewport after banner layout, preserving selection inspector and history
+  ---
+  duration_ms: 0.896583
+  type: 'test'
+  ...
+# Subtest: Reset filters does not restore an old viewport after replacement or newer navigation
+ok 321 - Reset filters does not restore an old viewport after replacement or newer navigation
+  ---
+  duration_ms: 0.994833
+  type: 'test'
+  ...
+# Subtest: inspector resize changes independent orientation dimensions and clamps practical bounds
+ok 322 - inspector resize changes independent orientation dimensions and clamps practical bounds
+  ---
+  duration_ms: 0.771209
+  type: 'test'
+  ...
+# Subtest: membership/category/focus/search stay distinct and traversals bound cycles
+ok 323 - membership/category/focus/search stay distinct and traversals bound cycles
+  ---
+  duration_ms: 0.836541
+  type: 'test'
+  ...
+# Subtest: remove and blank affect layout only; Undo and Back restore separate state without source mutation
+ok 324 - remove and blank affect layout only; Undo and Back restore separate state without source mutation
+  ---
+  duration_ms: 0.752541
+  type: 'test'
+  ...
+# Subtest: layout Undo is bounded and model replacement invalidates either restoration
+ok 325 - layout Undo is bounded and model replacement invalidates either restoration
+  ---
+  duration_ms: 0.867084
+  type: 'test'
+  ...
+# Subtest: table entry uses exact association and never chooses a multipartition default
+ok 326 - table entry uses exact association and never chooses a multipartition default
+  ---
+  duration_ms: 0.689
+  type: 'test'
+  ...
+# Subtest: Back restores viewport after the final hidden-selection banner layout
+ok 327 - Back restores viewport after the final hidden-selection banner layout
+  ---
+  duration_ms: 0.683333
+  type: 'test'
+  ...
+# Subtest: Back finalizes controls before restoring disclosure and scroll state
+ok 328 - Back finalizes controls before restoring disclosure and scroll state
+  ---
+  duration_ms: 0.565542
+  type: 'test'
+  ...
+# Subtest: group filtering uses exact metadata and persists opaquely through Back and reset
+ok 329 - group filtering uses exact metadata and persists opaquely through Back and reset
+  ---
+  duration_ms: 0.537417
+  type: 'test'
+  ...
+# Subtest: new membership requests placement once, preserves other members and explicit drop coordinates
+ok 330 - new membership requests placement once, preserves other members and explicit drop coordinates
+  ---
+  duration_ms: 0.549875
+  type: 'test'
+  ...
+# Subtest: Center selected dispatches genuine center only for a current visible selection
+ok 331 - Center selected dispatches genuine center only for a current visible selection
+  ---
+  duration_ms: 0.515334
+  type: 'test'
+  ...
+# Subtest: group-only metadata changes invalidate captured workspace identity
+ok 332 - group-only metadata changes invalidate captured workspace identity
+  ---
+  duration_ms: 0.639791
+  type: 'test'
+  ...
+# Subtest: flow branch follows only directed resolved paths, excludes merge siblings and terminates cycles
+ok 333 - flow branch follows only directed resolved paths, excludes merge siblings and terminates cycles
+  ---
+  duration_ms: 1.068125
+  type: 'test'
+  ...
+# Subtest: inspecting a reference retains flow root and direction; Back and layout Undo restore root independently
+ok 334 - inspecting a reference retains flow root and direction; Back and layout Undo restore root independently
+  ---
+  duration_ms: 0.789208
+  type: 'test'
+  ...
+# Subtest: ordinary first query remains unlocked and new generation clears explicit lock
+ok 335 - ordinary first query remains unlocked and new generation clears explicit lock
+  ---
+  duration_ms: 0.91125
+  type: 'test'
+  ...
+# Subtest: Arrange enables Undo immediately even when it was previously disabled
+ok 336 - Arrange enables Undo immediately even when it was previously disabled
+  ---
+  duration_ms: 0.497042
+  type: 'test'
+  ...
+# Subtest: adding the first object to a blank layout keeps focus unlocked
+ok 337 - adding the first object to a blank layout keeps focus unlocked
+  ---
+  duration_ms: 0.759583
+  type: 'test'
+  ...
+# Subtest: silent restoration refreshes displayed zoom from accepted canvas state, for every shell restore path
+ok 338 - silent restoration refreshes displayed zoom from accepted canvas state, for every shell restore path
+  ---
+  duration_ms: 0.675083
+  type: 'test'
+  ...
+# Subtest: late Undo restoration cannot replace a newer navigation zoom or label
+ok 339 - late Undo restoration cannot replace a newer navigation zoom or label
+  ---
+  duration_ms: 0.56925
+  type: 'test'
+  ...
+# Subtest: long flow auto framing keeps all membership/positions and centers the selected or supplied terminal node
+ok 340 - long flow auto framing keeps all membership/positions and centers the selected or supplied terminal node
+  ---
+  duration_ms: 0.557917
+  type: 'test'
+  ...
+# Subtest: automatic framing exposes the title inside actual zoomed viewport without changing canvas coordinates
+ok 341 - automatic framing exposes the title inside actual zoomed viewport without changing canvas coordinates
+  ---
+  duration_ms: 0.525667
+  type: 'test'
+  ...
+# Subtest: pending Back and Undo yield inspector focus and late viewport writes to newer input
+ok 342 - pending Back and Undo yield inspector focus and late viewport writes to newer input
+  ---
+  duration_ms: 4.055875
+  type: 'test'
+  ...
+# Subtest: uninterrupted Back retains full restore and exact below-dock scroll; ownership listeners are released
+ok 343 - uninterrupted Back retains full restore and exact below-dock scroll; ownership listeners are released
+  ---
+  duration_ms: 0.6125
+  type: 'test'
+  ...
+# Subtest: ordinary inspection preserves pan/zoom and scroll while deliberate follow still reveals; Back restores root
+ok 344 - ordinary inspection preserves pan/zoom and scroll while deliberate follow still reveals; Back restores root
+  ---
+  duration_ms: 0.58275
+  type: 'test'
+  ...
+# Subtest: dock preference persists source-free geometry and survives model invalidation
+ok 345 - dock preference persists source-free geometry and survives model invalidation
+  ---
+  duration_ms: 0.736083
+  type: 'test'
+  ...
+# Subtest: explicit lock follows selection on unlock; Back restores root and viewport; stale toggle is rejected
+ok 346 - explicit lock follows selection on unlock; Back restores root and viewport; stale toggle is rejected
+  ---
+  duration_ms: 0.567458
+  type: 'test'
+  ...
+# Subtest: model status and source provider are independent conservative evidence axes
+ok 347 - model status and source provider are independent conservative evidence axes
+  ---
+  duration_ms: 0.766375
+  type: 'test'
+  ...
+# Subtest: BIM preserves exact string / array code, partitions, stable identities, kinds and missing states
+ok 348 - BIM preserves exact string / array code, partitions, stable identities, kinds and missing states
+  ---
+  duration_ms: 2.828125
+  type: 'test'
+  ...
+# Subtest: TMDL keeps decoded M indentation, quoted names, multiple partitions and shared expressions
+ok 349 - TMDL keeps decoded M indentation, quoted names, multiple partitions and shared expressions
+  ---
+  duration_ms: 1.72325
+  type: 'test'
+  ...
+# Subtest: TMDL fenced code preserves trailing whitespace, blank lines and CRLF
+ok 350 - TMDL fenced code preserves trailing whitespace, blank lines and CRLF
+  ---
+  duration_ms: 1.069084
+  type: 'test'
+  ...
+# Subtest: identities survive file order and no metadata does not invent code
+ok 351 - identities survive file order and no metadata does not invent code
+  ---
+  duration_ms: 0.860208
+  type: 'test'
+  ...
+# Subtest: snapshot export allowlist excludes raw M and metadata (including hostile markers)
+ok 352 - snapshot export allowlist excludes raw M and metadata (including hostile markers)
+  ---
+  duration_ms: 0.568458
+  type: 'test'
+  ...
+# Subtest: stale hook code navigation cannot close or change a newer model inspector
+ok 353 - stale hook code navigation cannot close or change a newer model inspector
+  ---
+  duration_ms: 1.072625
+  type: 'test'
+  ...
+# Subtest: explicit BIM query group references resolve declared nested folders without name inference or snapshot exposure
+ok 354 - explicit BIM query group references resolve declared nested folders without name inference or snapshot exposure
+  ---
+  duration_ms: 0.58975
+  type: 'test'
+  ...
+# Subtest: TMDL group properties before/after exact fenced expressions and partition sources stay metadata
+ok 355 - TMDL group properties before/after exact fenced expressions and partition sources stay metadata
+  ---
+  duration_ms: 0.596333
+  type: 'test'
+  ...
+# Subtest: filter addendum artifacts are reproducible and preserve explicit expected incidence sets
+ok 356 - filter addendum artifacts are reproducible and preserve explicit expected incidence sets
+  ---
+  duration_ms: 2.791167
+  type: 'test'
+  ...
+# Subtest: all-disconnected same SQL and semantic relationship is All6 Connected0 Disconnected6
+ok 357 - all-disconnected same SQL and semantic relationship is All6 Connected0 Disconnected6
+  ---
+  duration_ms: 0.578916
+  type: 'test'
+  ...
+# Subtest: parameter fanout counts unique incident objects, not arrow count or inbound-only dependencies
+ok 358 - parameter fanout counts unique incident objects, not arrow count or inbound-only dependencies
+  ---
+  duration_ms: 1.167209
+  type: 'test'
+  ...
+# Subtest: cycles, duplicate rows, unavailable inputs, status objects and unused parameter have deliberate categories
+ok 359 - cycles, duplicate rows, unavailable inputs, status objects and unused parameter have deliberate categories
+  ---
+  duration_ms: 0.12725
+  type: 'test'
+  ...
+# Subtest: 300/301/350/1000 category totals do not truncate; same-ID replacement changes category membership
+ok 360 - 300/301/350/1000 category totals do not truncate; same-ID replacement changes category membership
+  ---
+  duration_ms: 0.058
+  type: 'test'
+  ...
+# Subtest: state oracle rejects search-derived graph, category counts after search, stale filter/search and invented independence
+ok 361 - state oracle rejects search-derived graph, category counts after search, stale filter/search and invented independence
+  ---
+  duration_ms: 1.526375
+  type: 'test'
+  ...
+# Subtest: hidden methods and explicit empty category are separate from empty model
+ok 362 - hidden methods and explicit empty category are separate from empty model
+  ---
+  duration_ms: 0.248542
+  type: 'test'
+  ...
+# Subtest: combined hidden-selection, Show all, reference/library navigation, Back and Reset workflows reject violations
+ok 363 - combined hidden-selection, Show all, reference/library navigation, Back and Reset workflows reject violations
+  ---
+  duration_ms: 12.581584
+  type: 'test'
+  ...
+# Subtest: atomic ready oracle accepts pending links without progressive edges, rejects early category finalization
+ok 364 - atomic ready oracle accepts pending links without progressive edges, rejects early category finalization
+  ---
+  duration_ms: 2.965459
+  type: 'test'
+  ...
+# Subtest: generation reset invalidates same-ID membership, filter/search/selection/code/history and late messages
+ok 365 - generation reset invalidates same-ID membership, filter/search/selection/code/history and late messages
+  ---
+  duration_ms: 1.117625
+  type: 'test'
+  ...
+# Subtest: new filter browser validator requires supplied exact candidate and rejects synthetic evidence before execution
+ok 366 - new filter browser validator requires supplied exact candidate and rejects synthetic evidence before execution
+  ---
+  duration_ms: 1.675625
+  type: 'test'
+  ...
+# Subtest: new corpus is reproducible without any production imports
+ok 367 - new corpus is reproducible without any production imports
+  ---
+  duration_ms: 3.7525
+  type: 'test'
+  ...
+# Subtest: every authored dependency has an exact occurrence oracle; no expected edge is inferred by scanning names
+ok 368 - every authored dependency has an exact occurrence oracle; no expected edge is inferred by scanning names
+  ---
+  duration_ms: 1.733167
+  type: 'test'
+  ...
+# Subtest: A1 independently has six same-source queries, a semantic relationship and zero expected edges
+ok 369 - A1 independently has six same-source queries, a semantic relationship and zero expected edges
+  ---
+  duration_ms: 0.085792
+  type: 'test'
+  ...
+# Subtest: A2 five parameter arrows; A3 four result arrows; A6 exact boundary totals and >200 fanout
+ok 370 - A2 five parameter arrows; A3 four result arrows; A6 exact boundary totals and >200 fanout
+  ---
+  duration_ms: 0.342125
+  type: 'test'
+  ...
+# Subtest: A4 literal UTF-16 oracle protects repeated/escaped refs and CRLF bytes
+ok 371 - A4 literal UTF-16 oracle protects repeated/escaped refs and CRLF bytes
+  ---
+  duration_ms: 0.842875
+  type: 'test'
+  ...
+# Subtest: A7 contains intentional duplicate IDs, ambiguity, cycles, unavailable metadata; A8 reuses identities
+ok 372 - A7 contains intentional duplicate IDs, ambiguity, cycles, unavailable metadata; A8 reuses identities
+  ---
+  duration_ms: 0.093167
+  type: 'test'
+  ...
+# Subtest: graph oracle rejects invented SQL/relationship edges, reversal, missing inventory and duplicate UI IDs
+ok 373 - graph oracle rejects invented SQL/relationship edges, reversal, missing inventory and duplicate UI IDs
+  ---
+  duration_ms: 0.506208
+  type: 'test'
+  ...
+# Subtest: A4/A5/A6/A8 evidence oracles fail closed on missing or stale observations
+ok 374 - A4/A5/A6/A8 evidence oracles fail closed on missing or stale observations
+  ---
+  duration_ms: 0.382
+  type: 'test'
+  ...
+# Subtest: A9 privacy oracle rejects exports of M, altered raw text, XSS and source requests
+ok 375 - A9 privacy oracle rejects exports of M, altered raw text, XSS and source requests
+  ---
+  duration_ms: 0.278917
+  type: 'test'
+  ...
+# Subtest: candidate gate rejects absent/short/exact rejected baseline SHA
+ok 376 - candidate gate rejects absent/short/exact rejected baseline SHA
+  ---
+  duration_ms: 0.25925
+  type: 'test'
+  ...
+# Subtest: browser receipt validator rejects synthetic/absent provenance before any acceptance
+ok 377 - browser receipt validator rejects synthetic/absent provenance before any acceptance
+  ---
+  duration_ms: 1.026666
+  type: 'test'
+  ...
+# Subtest: exact catalog Table.TransformColumnTypes cannot emit model reference
+ok 378 - exact catalog Table.TransformColumnTypes cannot emit model reference
+  ---
+  duration_ms: 3.636834
+  type: 'test'
+  ...
+# Subtest: model collision wins for Table.TransformColumnTypes
+ok 379 - model collision wins for Table.TransformColumnTypes
+  ---
+  duration_ms: 0.346958
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Table.TransformColumnTypes
+ok 380 - local and parameter shadow win for Table.TransformColumnTypes
+  ---
+  duration_ms: 1.503167
+  type: 'test'
+  ...
+# Subtest: exact catalog Int64.Type cannot emit model reference
+ok 381 - exact catalog Int64.Type cannot emit model reference
+  ---
+  duration_ms: 0.302
+  type: 'test'
+  ...
+# Subtest: model collision wins for Int64.Type
+ok 382 - model collision wins for Int64.Type
+  ---
+  duration_ms: 0.276959
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Int64.Type
+ok 383 - local and parameter shadow win for Int64.Type
+  ---
+  duration_ms: 0.794708
+  type: 'test'
+  ...
+# Subtest: exact catalog Byte.Type cannot emit model reference
+ok 384 - exact catalog Byte.Type cannot emit model reference
+  ---
+  duration_ms: 0.264208
+  type: 'test'
+  ...
+# Subtest: model collision wins for Byte.Type
+ok 385 - model collision wins for Byte.Type
+  ---
+  duration_ms: 0.362542
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Byte.Type
+ok 386 - local and parameter shadow win for Byte.Type
+  ---
+  duration_ms: 1.050167
+  type: 'test'
+  ...
+# Subtest: exact catalog Int8.Type cannot emit model reference
+ok 387 - exact catalog Int8.Type cannot emit model reference
+  ---
+  duration_ms: 0.458958
+  type: 'test'
+  ...
+# Subtest: model collision wins for Int8.Type
+ok 388 - model collision wins for Int8.Type
+  ---
+  duration_ms: 0.258541
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Int8.Type
+ok 389 - local and parameter shadow win for Int8.Type
+  ---
+  duration_ms: 0.701875
+  type: 'test'
+  ...
+# Subtest: exact catalog Int16.Type cannot emit model reference
+ok 390 - exact catalog Int16.Type cannot emit model reference
+  ---
+  duration_ms: 0.231
+  type: 'test'
+  ...
+# Subtest: model collision wins for Int16.Type
+ok 391 - model collision wins for Int16.Type
+  ---
+  duration_ms: 0.210125
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Int16.Type
+ok 392 - local and parameter shadow win for Int16.Type
+  ---
+  duration_ms: 0.637125
+  type: 'test'
+  ...
+# Subtest: exact catalog Int32.Type cannot emit model reference
+ok 393 - exact catalog Int32.Type cannot emit model reference
+  ---
+  duration_ms: 0.231209
+  type: 'test'
+  ...
+# Subtest: model collision wins for Int32.Type
+ok 394 - model collision wins for Int32.Type
+  ---
+  duration_ms: 0.207458
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Int32.Type
+ok 395 - local and parameter shadow win for Int32.Type
+  ---
+  duration_ms: 0.631334
+  type: 'test'
+  ...
+# Subtest: exact catalog Single.Type cannot emit model reference
+ok 396 - exact catalog Single.Type cannot emit model reference
+  ---
+  duration_ms: 0.222292
+  type: 'test'
+  ...
+# Subtest: model collision wins for Single.Type
+ok 397 - model collision wins for Single.Type
+  ---
+  duration_ms: 0.20775
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Single.Type
+ok 398 - local and parameter shadow win for Single.Type
+  ---
+  duration_ms: 0.844666
+  type: 'test'
+  ...
+# Subtest: exact catalog Double.Type cannot emit model reference
+ok 399 - exact catalog Double.Type cannot emit model reference
+  ---
+  duration_ms: 0.211458
+  type: 'test'
+  ...
+# Subtest: model collision wins for Double.Type
+ok 400 - model collision wins for Double.Type
+  ---
+  duration_ms: 0.202833
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Double.Type
+ok 401 - local and parameter shadow win for Double.Type
+  ---
+  duration_ms: 0.614958
+  type: 'test'
+  ...
+# Subtest: exact catalog Decimal.Type cannot emit model reference
+ok 402 - exact catalog Decimal.Type cannot emit model reference
+  ---
+  duration_ms: 0.326834
+  type: 'test'
+  ...
+# Subtest: model collision wins for Decimal.Type
+ok 403 - model collision wins for Decimal.Type
+  ---
+  duration_ms: 0.317125
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Decimal.Type
+ok 404 - local and parameter shadow win for Decimal.Type
+  ---
+  duration_ms: 0.789458
+  type: 'test'
+  ...
+# Subtest: exact catalog Currency.Type cannot emit model reference
+ok 405 - exact catalog Currency.Type cannot emit model reference
+  ---
+  duration_ms: 0.230791
+  type: 'test'
+  ...
+# Subtest: model collision wins for Currency.Type
+ok 406 - model collision wins for Currency.Type
+  ---
+  duration_ms: 0.232
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Currency.Type
+ok 407 - local and parameter shadow win for Currency.Type
+  ---
+  duration_ms: 0.695542
+  type: 'test'
+  ...
+# Subtest: exact catalog Percentage.Type cannot emit model reference
+ok 408 - exact catalog Percentage.Type cannot emit model reference
+  ---
+  duration_ms: 0.21925
+  type: 'test'
+  ...
+# Subtest: model collision wins for Percentage.Type
+ok 409 - model collision wins for Percentage.Type
+  ---
+  duration_ms: 0.531625
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Percentage.Type
+ok 410 - local and parameter shadow win for Percentage.Type
+  ---
+  duration_ms: 0.763959
+  type: 'test'
+  ...
+# Subtest: exact catalog Guid.Type cannot emit model reference
+ok 411 - exact catalog Guid.Type cannot emit model reference
+  ---
+  duration_ms: 0.267875
+  type: 'test'
+  ...
+# Subtest: model collision wins for Guid.Type
+ok 412 - model collision wins for Guid.Type
+  ---
+  duration_ms: 0.21275
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Guid.Type
+ok 413 - local and parameter shadow win for Guid.Type
+  ---
+  duration_ms: 0.62875
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty table.TransformColumnTypes
+ok 414 - uncatalogued exact spelling remains uncertainty table.TransformColumnTypes
+  ---
+  duration_ms: 0.26925
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty Table.TransformColumnTypesX
+ok 415 - uncatalogued exact spelling remains uncertainty Table.TransformColumnTypesX
+  ---
+  duration_ms: 0.201958
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty Int64.TypeX
+ok 416 - uncatalogued exact spelling remains uncertainty Int64.TypeX
+  ---
+  duration_ms: 0.214666
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty int64.Type
+ok 417 - uncatalogued exact spelling remains uncertainty int64.Type
+  ---
+  duration_ms: 0.197208
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty Table.SelectRows
+ok 418 - uncatalogued exact spelling remains uncertainty Table.SelectRows
+  ---
+  duration_ms: 0.205542
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty Unknown.Library
+ok 419 - uncatalogued exact spelling remains uncertainty Unknown.Library
+  ---
+  duration_ms: 0.204167
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty Number.Type
+ok 420 - uncatalogued exact spelling remains uncertainty Number.Type
+  ---
+  duration_ms: 0.19725
+  type: 'test'
+  ...
+# Subtest: quoted repeated CRLF UTF16 references resolve twice, function shadow does not
+ok 421 - quoted repeated CRLF UTF16 references resolve twice, function shadow does not
+  ---
+  duration_ms: 1.038541
+  type: 'test'
+  ...
+# Subtest: duplicate model names, identities and table partitions never fall through to catalog
+ok 422 - duplicate model names, identities and table partitions never fall through to catalog
+  ---
+  duration_ms: 0.93325
+  type: 'test'
+  ...
+# Subtest: one model partition wins over language name
+ok 423 - one model partition wins over language name
+  ---
+  duration_ms: 0.306958
+  type: 'test'
+  ...
+# Subtest: exclusive initialization and duplicate local bindings remain uncertainty
+ok 424 - exclusive initialization and duplicate local bindings remain uncertainty
+  ---
+  duration_ms: 0.540792
+  type: 'test'
+  ...
+# Subtest: mixed standard, dynamic and unknown remain separately classified without guessed edges
+ok 425 - mixed standard, dynamic and unknown remain separately classified without guessed edges
+  ---
+  duration_ms: 0.333416
+  type: 'test'
+  ...
+# Subtest: incomplete/non-M/missing never leak successful catalog classification
+ok 426 - incomplete/non-M/missing never leak successful catalog classification
+  ---
+  duration_ms: 1.247417
+  type: 'test'
+  ...
+# Subtest: graph forwards opaque uncertainty strings, with no text-based classification
+ok 427 - graph forwards opaque uncertainty strings, with no text-based classification
+  ---
+  duration_ms: 0.388084
+  type: 'test'
+  ...
+# Subtest: model graph IDs, edges and every exact occurrence equal prior runtime despite informational issue change
+ok 428 - model graph IDs, edges and every exact occurrence equal prior runtime despite informational issue change
+  ---
+  duration_ms: 3.36175
+  type: 'test'
+  ...
+# Subtest: BIM independently authored inventory, exact text and states
+ok 429 - BIM independently authored inventory, exact text and states
+  ---
+  duration_ms: 1.683917
+  type: 'test'
+  ...
+# Subtest: TMDL independently authored inventory, exact text and states
+ok 430 - TMDL independently authored inventory, exact text and states
+  ---
+  duration_ms: 2.893625
+  type: 'test'
+  ...
+# Subtest: independent scope/lexical/dynamic oracle and cycles
+ok 431 - independent scope/lexical/dynamic oracle and cycles
+  ---
+  duration_ms: 3.416834
+  type: 'test'
+  ...
+# Subtest: snapshot analytical allowlist excludes all acceptance raw-code sentinels
+ok 432 - snapshot analytical allowlist excludes all acceptance raw-code sentinels
+  ---
+  duration_ms: 0.236125
+  type: 'test'
+  ...
+# Subtest: replacement metadata contains no previous query identities
+ok 433 - replacement metadata contains no previous query identities
+  ---
+  duration_ms: 0.4265
+  type: 'test'
+  ...
+# Subtest: serve.py answers the page: ping, browse, find, model, static files
+ok 434 - serve.py answers the page: ping, browse, find, model, static files
+  ---
+  duration_ms: 114.781292
+  type: 'test'
+  ...
+# Subtest: serve.py preserves raw fenced TMDL newlines and whitespace through metadata parsing
+ok 435 - serve.py preserves raw fenced TMDL newlines and whitespace through metadata parsing
+  ---
+  duration_ms: 75.826584
+  type: 'test'
+  ...
+# Subtest: serve.py refuses requests from other websites and never writes
+ok 436 - serve.py refuses requests from other websites and never writes
+  ---
+  duration_ms: 63.647
+  type: 'test'
+  ...
+# Subtest: serve.py starts again on the same port right after it stopped
+ok 437 - serve.py starts again on the same port right after it stopped
+  ---
+  duration_ms: 210.573833
+  type: 'test'
+  ...
+# Subtest: offline startup restores graph without normal model, usage, repo or IDB access
+ok 438 - offline startup restores graph without normal model, usage, repo or IDB access
+  ---
+  duration_ms: 5.38675
+  type: 'test'
+  ...
+# Subtest: offline startup restores measures without normal model, usage, repo or IDB access
+ok 439 - offline startup restores measures without normal model, usage, repo or IDB access
+  ---
+  duration_ms: 1.521875
+  type: 'test'
+  ...
+# Subtest: offline startup restores clusters without normal model, usage, repo or IDB access
+ok 440 - offline startup restores clusters without normal model, usage, repo or IDB access
+  ---
+  duration_ms: 1.505708
+  type: 'test'
+  ...
+# Subtest: offline startup restores matrix without normal model, usage, repo or IDB access
+ok 441 - offline startup restores matrix without normal model, usage, repo or IDB access
+  ---
+  duration_ms: 1.599375
+  type: 'test'
+  ...
+# Subtest: offline startup preserves intentionally empty canvas membership and discards invalid focus
+ok 442 - offline startup preserves intentionally empty canvas membership and discards invalid focus
+  ---
+  duration_ms: 1.145333
+  type: 'test'
+  ...
+# Subtest: switching snapshot Domains and Tables retains each viewport and domain expansion positions
+ok 443 - switching snapshot Domains and Tables retains each viewport and domain expansion positions
+  ---
+  duration_ms: 1.184834
+  type: 'test'
+  ...
+# Subtest: an invalid embedded snapshot reports failure instead of falling back to fetch or repositories
+ok 444 - an invalid embedded snapshot reports failure instead of falling back to fetch or repositories
+  ---
+  duration_ms: 0.949834
+  type: 'test'
+  ...
+# Subtest: snapshot export reports progress, prevents duplicate saves and permits retry after failure
+ok 445 - snapshot export reports progress, prevents duplicate saves and permits retry after failure
+  ---
+  duration_ms: 1.124375
+  type: 'test'
+  ...
+# Subtest: recipient UI keeps four analysis modes and Save snapshot but has no model switcher, import or PNG
+ok 446 - recipient UI keeps four analysis modes and Save snapshot but has no model switcher, import or PNG
+  ---
+  duration_ms: 27.85475
+  type: 'test'
+  ...
+# Subtest: Domains then Measures preserves table focus, expanded display, positions and camera for export
+ok 447 - Domains then Measures preserves table focus, expanded display, positions and camera for export
+  ---
+  duration_ms: 1.4435
+  type: 'test'
+  ...
+# Subtest: new table changes after returning from Domains replace the previously cached table view
+ok 448 - new table changes after returning from Domains replace the previously cached table view
+  ---
+  duration_ms: 0.989
+  type: 'test'
+  ...
+# Subtest: Matrix snapshot restores both scroll axes and caches them before leaving the view
+ok 449 - Matrix snapshot restores both scroll axes and caches them before leaving the view
+  ---
+  duration_ms: 1.169625
+  type: 'test'
+  ...
+# Subtest: malformed Matrix scroll values are sanitized without affecting table state
+ok 450 - malformed Matrix scroll values are sanitized without affecting table state
+  ---
+  duration_ms: 0.759792
+  type: 'test'
+  ...
+# Subtest: direct measure navigation captures the latest table changes before changing modes
+ok 451 - direct measure navigation captures the latest table changes before changing modes
+  ---
+  duration_ms: 1.047709
+  type: 'test'
+  ...
+# Subtest: model serialization preserves analytical schema and exact DAX while excluding source secrets and unknown fields
+ok 452 - model serialization preserves analytical schema and exact DAX while excluding source secrets and unknown fields
+  ---
+  duration_ms: 0.656584
+  type: 'test'
+  ...
+# Subtest: blank workspace exports every table and measure, independent of visible membership and search
+ok 453 - blank workspace exports every table and measure, independent of visible membership and search
+  ---
+  duration_ms: 1.080833
+  type: 'test'
+  ...
+# Subtest: HTML embeds hostile DAX and Unicode losslessly without creating executable data scripts
+ok 454 - HTML embeds hostile DAX and Unicode losslessly without creating executable data scripts
+  ---
+  duration_ms: 9.628416
+  type: 'test'
+  ...
+# Subtest: dollar replacement sequences remain literal in names, DAX, and the saved template
+ok 455 - dollar replacement sequences remain literal in names, DAX, and the saved template
+  ---
+  duration_ms: 3.605417
+  type: 'test'
+  ...
+# Subtest: HTML is self-contained and denies network requests through its content security policy
+ok 456 - HTML is self-contained and denies network requests through its content security policy
+  ---
+  duration_ms: 4.189417
+  type: 'test'
+  ...
+# Subtest: an exported snapshot can package its inline assets again without fetch or local asset paths
+ok 457 - an exported snapshot can package its inline assets again without fetch or local asset paths
+  ---
+  duration_ms: 6.391458
+  type: 'test'
+  ...
+# Subtest: unsupported versions and malformed embedded model data are rejected explicitly
+ok 458 - unsupported versions and malformed embedded model data are rejected explicitly
+  ---
+  duration_ms: 0.545167
+  type: 'test'
+  ...
+# Subtest: missing runtime assets abort export rather than creating an incomplete HTML file
+ok 459 - missing runtime assets abort export rather than creating an incomplete HTML file
+  ---
+  duration_ms: 1.608958
+  type: 'test'
+  ...
+# Subtest: memory storage never touches native storage and replaces all preferences between snapshots
+ok 460 - memory storage never touches native storage and replaces all preferences between snapshots
+  ---
+  duration_ms: 0.706416
+  type: 'test'
+  ...
+# Subtest: embedded payload switches to memory before application constructors read preferences
+ok 461 - embedded payload switches to memory before application constructors read preferences
+  ---
+  duration_ms: 0.688208
+  type: 'test'
+  ...
+# Subtest: invalid embedded payload remains isolated instead of falling back to recipient storage
+ok 462 - invalid embedded payload remains isolated instead of falling back to recipient storage
+  ---
+  duration_ms: 0.350333
+  type: 'test'
+  ...
+# Subtest: a bare `database` line (no inline name) does not read its own compatibilityLevel property as the name
+ok 463 - a bare `database` line (no inline name) does not read its own compatibilityLevel property as the name
+  ---
+  duration_ms: 2.883125
+  type: 'test'
+  ...
+# Subtest: an inline `database <Name>` line still parses correctly (older/common TMDL style)
+ok 464 - an inline `database <Name>` line still parses correctly (older/common TMDL style)
+  ---
+  duration_ms: 0.717375
+  type: 'test'
+  ...
+# Subtest: the repo fixture (inline database name) still parses to its real name
+ok 465 - the repo fixture (inline database name) still parses to its real name
+  ---
+  duration_ms: 5.807458
+  type: 'test'
+  ...
+# Subtest: names with an escaped apostrophe keep their measures and columns
+ok 466 - names with an escaped apostrophe keep their measures and columns
+  ---
+  duration_ms: 0.834208
+  type: 'test'
+  ...
+# Subtest: calculated columns, calculated tables and calculation items keep their DAX (TMDL)
+ok 467 - calculated columns, calculated tables and calculation items keep their DAX (TMDL)
+  ---
+  duration_ms: 1.308708
+  type: 'test'
+  ...
+# Subtest: calculated columns, calculated tables and calculation items keep their DAX (BIM)
+ok 468 - calculated columns, calculated tables and calculation items keep their DAX (BIM)
+  ---
+  duration_ms: 1.277
+  type: 'test'
+  ...
+# Subtest: ``` fences around a multi-line measure are not part of its DAX
+ok 469 - ``` fences around a multi-line measure are not part of its DAX
+  ---
+  duration_ms: 0.583167
+  type: 'test'
+  ...
+# Subtest: unfence drops ``` fences that an older import left in a stored measure
+ok 470 - unfence drops ``` fences that an older import left in a stored measure
+  ---
+  duration_ms: 0.462875
+  type: 'test'
+  ...
+# usage-adapter.test.js: ok
+# Subtest: ../tests/usage-adapter.test.js
+ok 30 - ../tests/usage-adapter.test.js
+  ---
+  duration_ms: 36.8485
+  type: 'test'
+  ...
+# Subtest: matrix updates immediately when table roles change without a model or count change
+ok 472 - matrix updates immediately when table roles change without a model or count change
+  ---
+  duration_ms: 6.768833
+  type: 'test'
+  ...
+# Subtest: a model with no fact tables has a covering empty state and working next actions
+ok 473 - a model with no fact tables has a covering empty state and working next actions
+  ---
+  duration_ms: 0.748375
+  type: 'test'
+  ...
+# Subtest: matrix is a semantic table and empty relationships are not focusable controls
+ok 474 - matrix is a semantic table and empty relationships are not focusable controls
+  ---
+  duration_ms: 1.376083
+  type: 'test'
+  ...
+# Subtest: table relationship tooltip escapes all model-supplied names
+ok 475 - table relationship tooltip escapes all model-supplied names
+  ---
+  duration_ms: 0.831584
+  type: 'test'
+  ...
+# Subtest: aggregated domain relationship tooltip escapes model-supplied names on hover
+ok 476 - aggregated domain relationship tooltip escapes model-supplied names on hover
+  ---
+  duration_ms: 0.877209
+  type: 'test'
+  ...
+# Subtest: switching away from Tables closes the inspector, and coming back reopens it on the same table
+ok 477 - switching away from Tables closes the inspector, and coming back reopens it on the same table
+  ---
+  duration_ms: 1.042583
+  type: 'test'
+  ...
+# Subtest: layered date-to-fact connection uses facing row edges and clears the item card
+ok 478 - layered date-to-fact connection uses facing row edges and clears the item card
+  ---
+  duration_ms: 3.510791
+  type: 'test'
+  ...
+# Subtest: expanded cards preserve column anchors while horizontal approaches avoid obstacles
+ok 479 - expanded cards preserve column anchors while horizontal approaches avoid obstacles
+  ---
+  duration_ms: 1.096833
+  type: 'test'
+  ...
+# Subtest: vertical obstacle detours retain endpoints and labels follow the routed segments
+ok 480 - vertical obstacle detours retain endpoints and labels follow the routed segments
+  ---
+  duration_ms: 1.280916
+  type: 'test'
+  ...
+# Subtest: fact ports are distinct and ordered by the other endpoint, regardless of metadata order
+ok 481 - fact ports are distinct and ordered by the other endpoint, regardless of metadata order
+  ---
+  duration_ms: 0.879042
+  type: 'test'
+  ...
+# Subtest: curved row connections leave and enter vertically with the correct label direction
+ok 482 - curved row connections leave and enter vertically with the correct label direction
+  ---
+  duration_ms: 0.92525
+  type: 'test'
+  ...
+# Subtest: each endpoint chooses its side independently for a diagonal layout
+ok 483 - each endpoint chooses its side independently for a diagonal layout
+  ---
+  duration_ms: 0.701791
+  type: 'test'
+  ...
+# Subtest: one table uses different sides for neighbors above, below, left and right
+ok 484 - one table uses different sides for neighbors above, below, left and right
+  ---
+  duration_ms: 1.132625
+  type: 'test'
+  ...
+# Subtest: a tiny relationship still provides a fallback arrow seat at the zoom floor
+ok 485 - a tiny relationship still provides a fallback arrow seat at the zoom floor
+  ---
+  duration_ms: 0.998667
+  type: 'test'
+  ...
+1..485
+# tests 485
+# suites 0
+# pass 485
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14587.383625

@@ -1,0 +1,14 @@
+{
+  "out": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/runtime-d3d8360/browser-zoom-interaction",
+  "passed": 0,
+  "failures": [
+    {
+      "name": "A5 actual browser 1280 at 200%",
+      "error": "AssertionError [ERR_ASSERTION]: Below-docked resize increases usable inspector height\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:60:14\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:46:27"
+    },
+    {
+      "name": "A5 actual browser 1440 at 200%",
+      "error": "Error: {\"exceptionId\":1,\"text\":\"Uncaught\",\"lineNumber\":0,\"columnNumber\":69,\"scriptId\":\"47\",\"stackTrace\":{\"callFrames\":[{\"functionName\":\"\",\"scriptId\":\"47\",\"url\":\"\",\"lineNumber\":0,\"columnNumber\":75},{\"functionName\":\"\",\"scriptId\":\"47\",\"url\":\"\",\"lineNumber\":0,\"columnNumber\":240}]},\"exception\":{\"type\":\"object\",\"subtype\":\"error\",\"className\":\"Error\",\"description\":\"Error: Missing click target\\n    at <anonymous>:1:76\\n    at <anonymous>:1:241\",\"objectId\":\"-5060542809354918980.1.2\"}}\n    at evaluate (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:14:153)\n    at async Object.click (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-transport.cjs:18:12)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:59:7\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs:46:27"
+    }
+  ]
+}

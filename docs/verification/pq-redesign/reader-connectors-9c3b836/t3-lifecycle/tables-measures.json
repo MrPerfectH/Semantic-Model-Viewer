@@ -1,0 +1,47 @@
+{
+  "before": {
+    "view": {
+      "x": 137,
+      "y": 93,
+      "k": 0.9
+    },
+    "pos": {
+      "SyntheticSales": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "selected": "SyntheticSales",
+    "marked": [
+      "SyntheticSales"
+    ]
+  },
+  "after": {
+    "view": {
+      "x": 137,
+      "y": 93,
+      "k": 0.9
+    },
+    "pos": {
+      "SyntheticSales": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "selected": "SyntheticSales",
+    "marked": [
+      "SyntheticSales"
+    ]
+  },
+  "formats": {
+    "original": [
+      "VAR total=[Base Amount] RETURN DIVIDE(total,2,0)"
+    ],
+    "long": [
+      "VAR total = [Base Amount]\nRETURN\n    DIVIDE ( total, 2, 0 )"
+    ],
+    "short": [
+      "VAR total = [Base Amount]\nRETURN\n▾\n    DIVIDE (\n        total,\n        2,\n        0\n    )"
+    ]
+  }
+}

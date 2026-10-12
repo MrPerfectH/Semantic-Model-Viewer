@@ -1,0 +1,15 @@
+expression OccurrenceProbe = ```
+	let
+	  Emoji = "😀",
+	  First = #"Sales Raw",
+	  Again = #"Sales Raw",
+	  Escaped = #"Quote""Query",
+	  EscapedCode = #"Sales#(0020)Raw",
+	  Parameter = Server,
+	  Text = "Sales Raw Server", // #"Sales Raw" Server
+	  Local = (let #"Sales Raw" = 1 in #"Sales Raw"),
+	  Lambda = (Server as text) => Server,
+	  Field = [Server = "field"][Server]
+	in {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  
+	
+	```

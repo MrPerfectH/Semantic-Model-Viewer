@@ -1,0 +1,229 @@
+{
+  "phase": "ready",
+  "message": "Metadata inspected. Static analysis remains partial.",
+  "category": "disconnected",
+  "query": "Q1",
+  "selectedId": "[\"expression\",\"\",\"MergeResult\"]",
+  "inspectorOpen": true,
+  "count": "1 visible / 6 total objects · 0 library results · Search: Q1",
+  "banner": "Selected object hidden by filter. Inspector retained.Show allZero resolved incident references. Static uncertainty remains; disconnected does not prove independence.",
+  "code": "Table.NestedJoin(Q1, {\"ID\"}, Q2, {\"ID\"}, \"Joined\")",
+  "viewport": {
+    "x": 72.5,
+    "y": 37,
+    "k": 1.25
+  },
+  "inspectorView": {
+    "codeX": 0,
+    "codeY": 0,
+    "inspectorX": 0,
+    "inspectorY": 0,
+    "wrap": false,
+    "focus": null
+  },
+  "history": [
+    {
+      "generation": 5,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 72.5,
+        "y": 76,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": ""
+    }
+  ],
+  "domNodes": 6,
+  "visible": [
+    "[\"expression\",\"\",\"Disconnected\"]"
+  ],
+  "library": [],
+  "map": "1 visible / 6 objects",
+  "graph": {
+    "nodes": [
+      {
+        "id": "[\"expression\",\"\",\"Q1\"]",
+        "metadataId": "[\"expression\",\"\",\"Q1\"]",
+        "label": "Q1",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Q2\"]",
+        "metadataId": "[\"expression\",\"\",\"Q2\"]",
+        "label": "Q2",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Q3\"]",
+        "metadataId": "[\"expression\",\"\",\"Q3\"]",
+        "label": "Q3",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"MergeResult\"]",
+        "metadataId": "[\"expression\",\"\",\"MergeResult\"]",
+        "label": "MergeResult",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"AppendResult\"]",
+        "metadataId": "[\"expression\",\"\",\"AppendResult\"]",
+        "label": "AppendResult",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Disconnected\"]",
+        "metadataId": "[\"expression\",\"\",\"Disconnected\"]",
+        "label": "Disconnected",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      }
+    ],
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Q1\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"MergeResult\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Q1\"]",
+        "consumerId": "[\"expression\",\"\",\"MergeResult\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Q1\"]",
+            "name": "Q1",
+            "at": 17,
+            "end": 19
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Q2\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"MergeResult\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Q2\"]",
+        "consumerId": "[\"expression\",\"\",\"MergeResult\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Q2\"]",
+            "name": "Q2",
+            "at": 29,
+            "end": 31
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"MergeResult\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"AppendResult\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"MergeResult\"]",
+        "consumerId": "[\"expression\",\"\",\"AppendResult\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"MergeResult\"]",
+            "name": "MergeResult",
+            "at": 15,
+            "end": 26
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Q3\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"AppendResult\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Q3\"]",
+        "consumerId": "[\"expression\",\"\",\"AppendResult\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Q3\"]",
+            "name": "Q3",
+            "at": 28,
+            "end": 30
+          }
+        ]
+      }
+    ],
+    "issues": [
+      {
+        "consumerId": "[\"expression\",\"\",\"Q1\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved reference: #table"
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Q2\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved reference: #table"
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Q3\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved reference: #table"
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"MergeResult\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved library/external symbol: Table.NestedJoin"
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"AppendResult\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved library/external symbol: Table.Combine"
+      },
+      {
+        "consumerId": null,
+        "kind": "analysis-notice",
+        "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+      }
+    ],
+    "generation": 5,
+    "analysisProgress": {
+      "analyzed": 6,
+      "total": 6,
+      "complete": true,
+      "generation": 5
+    }
+  },
+  "sets": {
+    "all": [
+      "[\"expression\",\"\",\"Q1\"]",
+      "[\"expression\",\"\",\"Q2\"]",
+      "[\"expression\",\"\",\"Q3\"]",
+      "[\"expression\",\"\",\"MergeResult\"]",
+      "[\"expression\",\"\",\"AppendResult\"]",
+      "[\"expression\",\"\",\"Disconnected\"]"
+    ],
+    "connected": [
+      "[\"expression\",\"\",\"Q1\"]",
+      "[\"expression\",\"\",\"MergeResult\"]",
+      "[\"expression\",\"\",\"Q2\"]",
+      "[\"expression\",\"\",\"AppendResult\"]",
+      "[\"expression\",\"\",\"Q3\"]"
+    ],
+    "disconnected": [
+      "[\"expression\",\"\",\"Disconnected\"]"
+    ]
+  }
+}
