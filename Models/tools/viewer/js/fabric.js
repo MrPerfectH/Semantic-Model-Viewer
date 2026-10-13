@@ -8,7 +8,7 @@
     return {kind:'fabric',tenantId:String(s.tenantId),workspaceId:String(s.workspaceId),modelId:String(s.modelId),fetchedAt:s.fetchedAt || new Date().toISOString(),method:s.method || '',accountId:s.accountId?String(s.accountId):''};
   }
   function key(s) { return 'fabric:' + [s.tenantId,s.workspaceId,s.modelId].map(encodeURIComponent).join(':'); }
-  function FabricConnection(app) { this.app=app; this.generation=0; this.items=[]; this.account=null; this.busy=false; }
+  function FabricConnection(app) { this.app=app; this.generation=0; this.items=[]; this.account=null; this.busy=false;this.transport='xmla'; }
   FabricConnection.prototype.available=function(){return !this.app.snapshotMode && !!(this.app.server || this.app.host && this.app.host.fabricRequest);};
   FabricConnection.prototype.request=async function(payload){
     if(!this.available())throw new Error('Fabric connections are available in the standalone app and VS Code.');
@@ -35,7 +35,7 @@
   };
   FabricConnection.prototype.open=async function(item,n){
     var workspace=this.workspace, modelKey=this.app.modelKey,expectedTenant=this.account && this.account.tenantId, expectedAccount=this.account && (this.account.accountId || this.account.id);
-    var result=await this.request({action:'openModel',workspaceId:workspace.id,modelId:item.id,tenantId:expectedTenant,accountId:expectedAccount});
+    var result=await this.request({action:'openModel',workspaceId:workspace.id,modelId:item.id,transport:this.transport,tenantId:expectedTenant,accountId:expectedAccount});
     if(n!==this.generation || modelKey!==this.app.modelKey)return;
     var source=sourceOf(Object.assign({},result,{tenantId:result.tenantId || this.account && this.account.tenantId,workspaceId:workspace.id,modelId:item.id}));
     if(expectedTenant && source.tenantId!==expectedTenant)throw new Error('This model belongs to another tenant. Sign in with the original work account to refresh it.');
@@ -50,14 +50,14 @@
   FabricConnection.prototype.activate=function(record){this.app.hostOpenModel(JSON.parse(JSON.stringify(record)));U.store.set('smv_current_v1',record.id);this.app.render(true);};
   FabricConnection.prototype.refresh=function(){
     var record=this.current();if(!record || !record.source)return;
-    this.workspace={id:record.source.workspaceId};this.account={tenantId:record.source.tenantId,accountId:record.source.accountId};
+    this.transport=record.source.method || 'xmla';this.workspace={id:record.source.workspaceId};this.account={tenantId:record.source.tenantId,accountId:record.source.accountId};
     this.run(async function(n){await this.open({id:record.source.modelId,name:record.name},n);if(n===this.generation)this.app.setState({snapshotMessage:'Refreshed from Fabric. Your views are kept.',snapshotError:''});});
   };
   FabricConnection.prototype.remove=async function(record){
     this.generation++;
     if(this.app.host){try{await this.request(Object.assign({action:'removeModel'},record.source));}catch(e){this.error=e.message;this.draw();return;}}var records=this.app.getStore().filter(function(r){return r.id!==record.id;});
     if(!this.app.setStore(records)){this.error='Could not remove the cached model.';this.draw();return;}
-    ['smv_layout_','smv_presets_'].forEach(function(prefix){U.store.del(prefix+record.id);});
+    ['smv_layout_','smv_presets_','smv_workspace_v1_'].forEach(function(prefix){U.store.del(prefix+record.id);});
     if(this.app.modelKey===record.id){U.store.del('smv_current_v1');this.app.loadEmptyModel();}
     this.draw();this.app.render(true);
   };
@@ -68,7 +68,10 @@
     var dialog=el('section',{role:'dialog','aria-modal':'true','aria-label':'Connect to Fabric',style:'background:#fff;border-radius:12px;padding:22px;width:520px;max-width:90vw;max-height:85vh;overflow:auto;font:14px "IBM Plex Sans",sans-serif;'});overlay.appendChild(dialog);
     dialog.addEventListener('keydown',function(e){if(e.key==='Escape'){e.preventDefault();self.close();}if(e.key==='Tab'){var nodes=dialog.querySelectorAll('button:not(:disabled), input:not(:disabled)');if(!nodes.length)return;var first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey && document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey && document.activeElement===last){e.preventDefault();first.focus();}}});
     function button(text,fn,disabled){return el('button',{cls:'ex-button',text:text,onClick:fn,disabled:!!disabled,style:'margin:4px;'});}
-    dialog.appendChild(el('h2',{text:'Connect to Fabric'}));dialog.appendChild(button('Close',function(){self.close();}));
+    dialog.appendChild(el('h2',{text:'Connect to Fabric'}));
+    dialog.appendChild(el('label',{text:'Connection method',for:'fabric-transport'}));
+    var transport=el('select',{id:'fabric-transport',disabled:this.busy,style:'display:block;width:100%;padding:8px;margin:8px 0;'},[el('option',{value:'xmla',text:'Standard · Read + Build access'}),el('option',{value:'rest',text:'Fabric definition API · requires edit access'})]);transport.value=this.transport;transport.addEventListener('change',function(){self.transport=transport.value;});dialog.appendChild(transport);
+    dialog.appendChild(el('p',{text:'Read-only inspection. Standard XMLA access requires an enabled endpoint; available Power Query definitions may be limited. The definition API requires edit access and may request additional Microsoft permissions.'}));dialog.appendChild(button('Close',function(){self.close();}));
     if(this.unavailable)dialog.appendChild(el('p',{role:'status',text:this.unavailable}));
     if(this.error)dialog.appendChild(el('p',{role:'alert',text:this.error,style:'color:#b91c1c;'}));
     if(this.busy)dialog.appendChild(el('p',{role:'status',text:'Working… Close to cancel.'}));
@@ -81,7 +84,7 @@
       var search=el('input',{type:'search',placeholder:'Search loaded '+(this.workspace?'models':'workspaces'),'aria-label':'Search loaded items',value:this.query || '',style:'width:95%;padding:8px;'});
       var list=el('div',{});function fill(){U.clear(list);self.items.filter(function(i){return String(i.name || i.displayName || '').toLowerCase().includes((search.value || '').toLowerCase());}).forEach(function(i){list.appendChild(button(i.name || i.displayName,function(){self.query='';self.run(async function(n){if(self.workspace)await self.open(i,n);else{self.workspace=i;await self.list(false,n);}});},self.busy));});if(!self.items.length&&!self.busy)list.appendChild(el('p',{text:'No accessible items found.'}));}search.addEventListener('input',function(){self.query=search.value;fill();});dialog.appendChild(search);dialog.appendChild(list);fill();
       if(this.next)dialog.appendChild(button('Load more',function(){self.run(async function(n){await self.list(true,n);});},this.busy));
-    }else dialog.appendChild(button('Sign in with Microsoft',function(){self.run(async function(n){var s=await self.request({action:'signIn'});if(n!==self.generation)return;self.account=s.account;if(!self.account)throw new Error('Sign-in did not complete.');await self.list(false,n);});},this.busy || !!this.unavailable));
+    }else dialog.appendChild(button('Sign in with Microsoft',function(){self.run(async function(n){var s=await self.request({action:'signIn',transport:self.transport});if(n!==self.generation)return;self.account=s.account;if(!self.account)throw new Error('Sign-in did not complete.');await self.list(false,n);});},this.busy || !!this.unavailable));
     var cached=this.app.getStore().filter(function(r){return r.source && r.source.kind==='fabric';});
     if(cached.length){dialog.appendChild(el('h3',{text:'Saved models (available offline)'}));cached.forEach(function(r){dialog.appendChild(button(r.name,function(){self.activate(r);self.close();},self.busy));dialog.appendChild(button('Remove '+r.name,function(){self.remove(r);},self.busy));});}
     document.body.appendChild(overlay);this.overlay=overlay;var focus=dialog.querySelector('input, button:not(:disabled)');if(focus)focus.focus();

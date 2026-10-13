@@ -529,6 +529,8 @@
       this.loadModel(id);
     },
     deleteModel: function (id) {
+      var fabricRecord = this.fabric && this.getStore().find(function (r) { return r.id === id && r.source && r.source.kind === 'fabric'; });
+      if (fabricRecord) return this.fabric.remove(fabricRecord);
       if (!this.setStore(this.getStore().filter(function (m) { return m.id !== id; }))) {
         this.setState({ repoError: 'Could not update browser storage. The model was not removed.' }); return;
       }
