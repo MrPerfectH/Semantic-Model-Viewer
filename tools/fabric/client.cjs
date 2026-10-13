@@ -20,7 +20,7 @@ function decodeDefinition(body) {
   let total = 0;
   const seen = new Set();
   return parts.map(part => {
-    if (typeof part.path !== 'string' || part.path.startsWith('/') || part.path.includes('\\') || part.path.split('/').some(p => p === '..' || p === '.' || !p) || seen.has(part.path)) throw new FabricError('InvalidDefinition', 'Fabric returned an unsafe or duplicate definition path.');
+    if (typeof part.path !== 'string' || part.path.startsWith('/') || /[:\x00-\x1f]/.test(part.path) || part.path.includes('\\') || part.path.split('/').some(p => p === '..' || p === '.' || !p) || seen.has(part.path)) throw new FabricError('InvalidDefinition', 'Fabric returned an unsafe or duplicate definition path.');
     seen.add(part.path);
     if (part.payloadType !== 'InlineBase64' || typeof part.payload !== 'string' || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(part.payload)) throw new FabricError('InvalidDefinition', 'Unsupported definition payload.');
     total += part.payload.length;
