@@ -45,6 +45,11 @@
     [['graph','Tables'],['measures','Measures'],['power-query','Power Query'],['clusters','Domains'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
     this.host.appendChild(nav);
     var actions=el('div',{cls:'ex-header-actions'});
+    if(g.ViewerTheme){
+      var theme=el('select',{cls:'ex-theme-select','aria-label':'Appearance',title:'Choose the viewer appearance',onChange:function(e){g.ViewerTheme.set(e.target.value);}},[
+        el('option',{value:'classic',text:'Classic'}),el('option',{value:'spellbook',text:'Spellbook'})]);
+      theme.value=g.ViewerTheme.get();actions.appendChild(theme);
+    }
     actions.appendChild(el('span',{cls:offline?'ex-snapshot-badge':'ex-local-badge',text:offline?'Offline snapshot':app.host?'VS Code workspace':'Local analysis',
       title:offline?'Includes model metadata, DAX and available Power Query definitions. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'}));
     actions.appendChild(el('button',{cls:'ex-button ex-snapshot-export',text:st.snapshotSaving?'Saving snapshot…':'Save snapshot',disabled:!st.loaded||!!st.snapshotSaving,

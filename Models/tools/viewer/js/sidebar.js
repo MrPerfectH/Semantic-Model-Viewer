@@ -106,7 +106,7 @@
       ]);
     };
 
-    var head = el('div', { style: 'flex:none;padding:15px 16px 13px;border-bottom:1px solid #edeff2;background:' + sel.tintBg + ';' }, [
+    var head = el('div', { cls: 'ex-inspector-head', style: 'flex:none;padding:15px 16px 13px;border-bottom:1px solid #edeff2;background:' + sel.tintBg + ';' }, [
       el('div', { style: 'display:flex;align-items:flex-start;gap:10px;' }, [
         el('span', { style: sel.roleGlyphStyle, text: sel.roleShort }),
         el('div', { style: 'flex:1;min-width:0;' }, [

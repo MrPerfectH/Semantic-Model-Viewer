@@ -3,7 +3,7 @@
 (function (g) {
   'use strict';
   var FORMAT = 'semantic-model-viewer', VERSION = 1;
-  var FILES = ['js/util.js', 'js/snapshot.js', 'js/roles.js', 'js/tmdl-parser.js', 'js/workspace-ui.js', 'js/canvas.js', 'js/layouts.js',
+  var FILES = ['js/util.js', 'js/snapshot.js', 'js/theme.js', 'spellbook.css', 'js/roles.js', 'js/tmdl-parser.js', 'js/workspace-ui.js', 'js/canvas.js', 'js/layouts.js',
     'js/matrix.js', 'js/dax-format.js', 'js/measures.js', 'js/power-query-dependencies.js', 'js/power-query-graph-model.js', 'js/power-query-canvas.js', 'js/power-query-inspector.js', 'js/power-query-workspace.js', 'js/power-query-lineage.js', 'js/power-query.js', 'js/sidebar.js', 'js/topbar.js', 'js/rules.js', 'js/relationships.js', 'js/explorer.js', 'js/app.js', 'explorer.css', 'measures.css', 'power-query.css', 'power-query-canvas.css', 'power-query-inspector.css', 'power-query-workspace.css', 'power-query-lineage.css'];
   var CSP = "default-src 'none'; script-src 'unsafe-inline'; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
   function clone(value) { return value == null ? null : JSON.parse(JSON.stringify(value)); }
@@ -55,7 +55,7 @@
     var tableView=app.captureTableView?clone(app.captureTableView()):{version:2,name:'Snapshot starting view',tables:cv.workspaceNames?Array.from(cv.workspaceNames):model.tables.map(function(t){return t.name;}),
       pos:clone(cv.pos),view:clone(app.state.viewMode==='graph'?cv.view:(app._tableViewport||cv.view)),focus:cv.captureFocus(),display:cv.captureDisplay()};
     return {format:FORMAT,version:VERSION,name:model.name,createdAt:new Date().toISOString(),model:model,usage:usageData(app),
-      settings:{roleRules:app.getRules?app.getRules().map(function(r){return pick(r,['role','name','sides','measures','kind']);}):[]},
+      settings:{theme:g.ViewerTheme?g.ViewerTheme.get():'classic',roleRules:app.getRules?app.getRules().map(function(r){return pick(r,['role','name','sides','measures','kind']);}):[]},
       workspace:{viewMode:app.state.viewMode,powerQuery:app.powerQueryWorkspace&&app.powerQueryWorkspace.captureSnapshot?app.powerQueryWorkspace.captureSnapshot():null,tableView:tableView,presets:clone(cv.getPresets()),matrix:app.captureMatrix?clone(app.captureMatrix()):null,
         explorer:ex?{query:ex.query,filter:ex.filter,direction:ex.direction,depth:ex.depth,includeInactive:!!ex.includeInactive,mapHidden:!!ex.mapHidden,libraryHidden:!!ex.libraryHidden,inspectorHidden:!!ex.inspectorHidden}:{},
         domains:app.captureDomains?clone(app.captureDomains()):{expandedGroups:Array.from(cv.expandedGroups || []),positions:Object.keys(cv.groups || {}).map(function(key){var group=cv.groups[key];return {key:key,x:group.x,y:group.y};}),tablePositions:clone(cv.cpos || {}),view:clone(cv.view)}},
@@ -75,6 +75,7 @@
   }
   function seedStorage(payload) {
     var ws=payload.workspace||{},tv=ws.tableView||{},d=tv.display||{},mv=payload.measures||{},prefs=mv.preferences||{},seed={};
+    seed['smv-theme']=payload.settings&&payload.settings.theme==='spellbook'?'spellbook':'classic';
     seed.smv_presets_snapshot=JSON.stringify(ws.presets||[]);
     seed.smv_layout_snapshot=JSON.stringify(tv.pos||{});
     seed.smv_workspace_v1_snapshot=JSON.stringify({tables:tv.tables||[]});
