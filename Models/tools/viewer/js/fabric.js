@@ -5,7 +5,7 @@
   function sourceOf(value) {
     var s = value || {};
     if (!s.tenantId || !s.workspaceId || !s.modelId) throw new Error('Fabric did not return a complete model identity.');
-    return {kind:'fabric',tenantId:String(s.tenantId),workspaceId:String(s.workspaceId),modelId:String(s.modelId),fetchedAt:s.fetchedAt || new Date().toISOString(),method:s.method || '',accountId:s.accountId?String(s.accountId):'',coverage:typeof s.coverage==='string'?s.coverage:'',warnings:Array.isArray(s.warnings)?s.warnings.filter(function(w){return typeof w==='string';}).slice(0,20):[]};
+    return {kind:'fabric',tenantId:String(s.tenantId),workspaceId:String(s.workspaceId),modelId:String(s.modelId),fetchedAt:typeof s.fetchedAt==='string' && Number.isFinite(Date.parse(s.fetchedAt))?s.fetchedAt:new Date().toISOString(),method:typeof s.method==='string'?s.method:'',accountId:s.accountId?String(s.accountId):'',coverage:typeof s.coverage==='string'?s.coverage:'',warnings:Array.isArray(s.warnings)?s.warnings.filter(function(w){return typeof w==='string';}).slice(0,20):[]};
   }
   function key(s) { return 'fabric:' + [s.tenantId,s.workspaceId,s.modelId].map(encodeURIComponent).join(':'); }
   function FabricConnection(app) { this.app=app; this.generation=0; this.items=[]; this.account=null; this.busy=false;this.transport='xmla'; }
@@ -89,6 +89,7 @@
     if(cached.length){dialog.appendChild(el('h3',{text:'Saved models (available offline)'}));cached.forEach(function(r){dialog.appendChild(button(r.name,function(){self.activate(r);self.close();},self.busy));dialog.appendChild(button('Remove '+r.name,function(){self.remove(r);},self.busy));});}
     document.body.appendChild(overlay);this.overlay=overlay;var focus=dialog.querySelector('input, button:not(:disabled)');if(focus)focus.focus();
   };
+  FabricConnection.sourceOf=sourceOf;FabricConnection.key=key;
   g.FabricConnection=FabricConnection;
   if(typeof module==='object'&&module.exports)module.exports={FabricConnection:FabricConnection,sourceOf:sourceOf,key:key};
 })(typeof window==='undefined'?globalThis:window);

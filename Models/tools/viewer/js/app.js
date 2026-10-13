@@ -268,6 +268,7 @@
     /* ---------- fact/dim role setup ---------- */
     roleRepo: function () {
       var key = this.modelKey;
+      if (/^fabric:/.test(key)) return null;
       return this._repoLive && (this.repoModels || []).find(function (r) { return r.handle && 'repo:' + r.path === key; });
     },
     assignRole: async function (name, role) {
@@ -541,6 +542,15 @@
     /* The VS Code host supplies files; the core parser, canvas and measures stay shared. */
     hostOpenModel: function (record) {
       if (!record || !record.model || !Array.isArray(record.model.tables)) throw new Error('The selected model could not be read.');
+      if (record.source && record.source.kind === 'fabric') {
+        if (!g.FabricConnection) throw new Error('Fabric metadata support is unavailable. Reload the viewer.');
+        var source = g.FabricConnection.sourceOf(record.source);
+        var cached = { id: g.FabricConnection.key(source), name: record.name || record.model.name || 'Semantic model', at: Date.now(), source: source, model: JSON.parse(JSON.stringify(record.model)) };
+        var records = this.getStore().filter(function (r) { return r.id !== cached.id; }); records.push(cached);
+        if (!this.setStore(records)) throw new Error('Could not cache this Fabric model. Free local storage and try again. Your current model is unchanged.');
+        record = cached;
+        store.set('smv_current_v1', record.id);
+      }
       var self = this, same = this.state.loaded && record.id === this.modelKey;
       var saved = same ? { table: this.captureTableView(), measures: this.measures.captureSnapshot(),
         viewMode: this.state.viewMode, domains: this.captureDomains(), matrix: this.captureMatrix() } : null;
