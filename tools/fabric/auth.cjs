@@ -10,7 +10,7 @@ const scopesFor = (audience, purpose) => {
 function createAuth({ clientId, openBrowser, loadTokens = async () => null, saveTokens = async () => {}, msalFactory }) {
   let client; let pending; let interactiveBusy = false; let selectedId; let generation = 0;
   async function init() {
-    if (!clientId || !/^[0-9a-f-]{36}$/i.test(clientId)) throw new FabricError('NotConfigured', 'Fabric sign-in is awaiting application setup by the Semantic Model Viewer maintainers.');
+    if (!clientId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(clientId)) throw new FabricError('NotConfigured', 'Fabric sign-in is awaiting application setup by the Semantic Model Viewer maintainers.');
     if (!client) {
       const factory = msalFactory || (configuration => new (require('@azure/msal-node').PublicClientApplication)(configuration));
       client = factory({ auth: { clientId, authority: 'https://login.microsoftonline.com/organizations' }, cache: { cachePlugin: {
