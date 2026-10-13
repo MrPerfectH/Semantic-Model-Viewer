@@ -4,11 +4,37 @@
 
 Open local TMDL / PBIP files or `model.bim` in VS Code. Trace a measure through its DAX,
 build a focused table canvas, and see how queries feed your tables. No Power BI Desktop,
-Fabric connection, or Python is required.
+Fabric connection, or Python is required for local files.
 
 [Try the live demo](https://MrPerfectH.github.io/Semantic-Model-Viewer/) before installing.
 The screenshots below use only the synthetic **Contoso Retail** demo. Select an image to
 open it at full size.
+
+## Fabric connection (unreleased feature branch)
+
+Run **Semantic Model Viewer: Connect to Fabric…**, sign in with a Microsoft work account,
+choose a workspace and semantic model, then choose the metadata connection method.
+**Standard XMLA** requires Read + Build permission and an enabled XMLA endpoint on supported
+capacity. **Fabric definition API** requires model edit access. Neither path writes to Fabric
+or executes model queries. Metadata coverage depends on what the selected endpoint exposes.
+
+This preview requires the publisher's Microsoft application registration, configured in the
+build through `SMV_FABRIC_CLIENT_ID`; no third-party application ID is included. Tenant policy
+may still require consent or administrator approval. The build must include MSAL and a published
+.NET XMLA helper for the host platform. A missing configuration or helper produces an explicit
+error. Live tenant sign-in and permission validation remain release prerequisites.
+
+The extension runs on the desktop UI host, including when the workspace is remote. VS Code
+for the Web is unsupported. XMLA helper support depends on the binaries included in the build;
+source builds require the .NET SDK to publish the helper before packaging.
+
+Saved metadata opens offline and displays its fetch time. **Refresh Model** downloads a new
+copy using the same connection method and account; a failed refresh preserves the saved copy.
+**Switch Fabric Account…** and **Sign Out of Fabric** control the session. Tokens stay in VS Code
+SecretStorage and never enter the viewer webview or snapshots. Signing out retains offline
+metadata; **Remove Saved Fabric Model…** removes the saved metadata and associated viewer layout.
+HTML snapshots can be shared without a Fabric connection and contain the model metadata you
+choose to export, including available definitions.
 
 ## Measures
 

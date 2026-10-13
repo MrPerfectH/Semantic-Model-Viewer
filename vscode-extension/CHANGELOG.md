@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — Fabric feature branch
+
+- Add work-account sign-in, workspace/model browsing, and explicit XMLA or Fabric definition API metadata access.
+- Cache metadata for offline reopening and support refresh, account switching, sign-out, removal, and existing HTML snapshots.
+- Keep authentication in the extension host with VS Code SecretStorage.
+- Require publisher authentication setup, packaged platform helpers, and live tenant acceptance before release.
+
 ## 0.3.8
 
 - Find SemanticModel folders before reading repository imports to avoid freezing on unrelated JSON dumps.

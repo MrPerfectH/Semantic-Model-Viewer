@@ -22,8 +22,8 @@ class FabricConnection {
   }
   entries() { return (this.context.globalState || this.context.workspaceState).get(CACHE_KEY, []) || []; }
   async save(entries) { await (this.context.globalState || this.context.workspaceState).update(CACHE_KEY, entries); if (this.onChange) this.onChange(); }
-  async open(workspace, model, accountId) {
-    const result = await this.request({ action: 'openModel', workspaceId: workspace.id, modelId: model.id, workspaceName: workspace.name, modelName: model.name, accountId });
+  async open(workspace, model, accountId, transport) {
+    const result = await this.request({ action: 'openModel', workspaceId: workspace.id, modelId: model.id, workspaceName: workspace.name, modelName: model.name, accountId, transport });
     const entry = this.fromResult(result, workspace, model);
     await this.save(this.entries().filter(e => e.id !== entry.id).concat(entry));
     return entry;
@@ -45,7 +45,7 @@ class FabricConnection {
     if (!status.account) await this.request({ action: 'signIn' });
     const signed = await this.request({ action: 'status' });
     if (!signed.account || signed.account.tenantId !== entry.tenantId || (entry.accountId && signed.account.id !== entry.accountId)) throw new Error('Sign in to the account and tenant that own this saved Fabric model.');
-    return this.open({ id: entry.workspaceId, name: entry.workspaceName }, { id: entry.modelId, name: entry.name }, entry.accountId);
+    return this.open({ id: entry.workspaceId, name: entry.workspaceName }, { id: entry.modelId, name: entry.name }, entry.accountId, entry.method === 'rest' ? 'rest' : 'xmla');
   }
   async remove(id) {
     const entry = this.entries().find(e => e.id === id);
@@ -95,7 +95,12 @@ class FabricConnection {
     const workspace = await this.choose('listWorkspaces', {}, 'Choose a Fabric workspace');
     if (!workspace) return null;
     const model = await this.choose('listModels', { workspaceId: workspace.id }, 'Choose a semantic model');
-    return model ? this.open(workspace, model) : null;
+    if (!model) return null;
+    const choice = await vscode.window.showQuickPick([
+      { label: 'Standard XMLA', description: 'Read + Build access; XMLA endpoint must be enabled', transport: 'xmla' },
+      { label: 'Fabric definition API', description: 'Requires edit access to the model', transport: 'rest' }
+    ], { placeHolder: 'Choose how to read the model metadata' });
+    return choice ? this.open(workspace, model, undefined, choice.transport) : null;
   }
 }
 module.exports = { FabricConnection, CACHE_KEY, TOKEN_KEY };
