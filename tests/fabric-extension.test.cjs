@@ -45,3 +45,23 @@ test('sign-out retains explicitly saved offline metadata', async () => {
   assert.equal(calls.at(-1).action, 'signOut');
   assert.equal(connection.entries().length, 1);
 });
+test('refresh rejects another work account in the same tenant', async () => {
+  const { connection, calls } = fixture();
+  const entry = await connection.open({ id: 'workspace', name: 'Workspace' }, { id: 'model', name: 'Model' });
+  entry.accountId = 'original-account';
+  await assert.rejects(connection.refresh(entry), /account and tenant/);
+  assert.equal(calls.filter(call => call.action === 'openModel').length, 1);
+});
+test('removal clears matching viewer metadata and layouts without touching other models', async () => {
+  const { connection } = fixture();
+  const state = new Map();
+  connection.context.workspaceState = { get: key => state.get(key), update: async (key, value) => value === undefined ? state.delete(key) : state.set(key, value) };
+  const source = { kind: 'fabric', tenantId: 'tenant-one', workspaceId: 'workspace', modelId: 'model' };
+  state.set('smv:smv_models_v1', JSON.stringify([{ id: 'remote', source }, { id: 'local', source: { kind: 'local' } }]));
+  state.set('smv:smv_layout_remote', '{"position":1}');
+  state.set('smv:smv_layout_local', '{"position":2}');
+  await connection.removeSource(source);
+  assert.deepEqual(JSON.parse(state.get('smv:smv_models_v1')).map(record => record.id), ['local']);
+  assert.equal(state.has('smv:smv_layout_remote'), false);
+  assert.equal(state.has('smv:smv_layout_local'), true);
+});
