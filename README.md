@@ -29,6 +29,10 @@ No install needed. The demo opens with a synthetic "Contoso Retail" model alread
 It reads TMDL (`*.SemanticModel` folders and `.pbip` repos) and `model.bim`. It also renders a
 relationship matrix and a domain map of the whole model.
 
+## Fabric connection (unreleased)
+
+The dedicated Fabric feature branch adds work-account sign-in, workspace/model browsing, read-only metadata inspection, cached reopening, and manual refresh in the standalone app and desktop VS Code. Publisher-owned Microsoft application setup and live-tenant/platform acceptance are still required before release. See [Fabric connection status and setup](docs/fabric-connection.md). Read + Build access may expose limited internal metadata.
+
 ## Install (2 minutes)
 
 The viewer runs on your own computer from a copy of this repo. A small local app

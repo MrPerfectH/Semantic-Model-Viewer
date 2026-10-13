@@ -191,3 +191,24 @@ test('serve.py starts again on the same port right after it stopped', { skip: !p
   const second = await run(); // macOS refuses to bind while the old connections sit in TIME_WAIT unless SO_REUSEADDR is set
   second.kill();
 });
+
+test('Fabric bridge requires same-origin JSON and the per-server session nonce', { skip: !python && 'python3 not installed' }, async () => {
+  const s = await start();
+  const post = (body, headers = {}) => fetch(s.url + '/api/fabric', { method: 'POST', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify(body) });
+  try {
+    const ping = await get(s.url + '/api/ping');
+    const token = ping.body.fabricSession;
+    assert.ok(token.length >= 32);
+    assert.equal((await post({ action: 'status' })).status, 403);
+    assert.equal((await post({ action: 'status' }, { 'X-SMV-Fabric-Session': token, Origin: 'https://evil.example' })).status, 403);
+    assert.equal((await post({ action: 'status' }, { 'X-SMV-Fabric-Session': token, 'Content-Type': 'text/plain' })).status, 415);
+    assert.equal((await post({ action: 'deleteModel' }, { 'X-SMV-Fabric-Session': token })).status, 400);
+    const status = await post({ action: 'status' }, { 'X-SMV-Fabric-Session': token });
+    assert.equal(status.status, 200);
+    assert.equal(status.headers.get('cache-control'), 'no-store');
+    assert.equal((await status.json()).available, false, 'unconfigured registration is explicitly unavailable');
+    const other = await start();
+    try { assert.equal((await fetch(other.url + '/api/fabric', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-SMV-Fabric-Session': token }, body: '{"action":"status"}' })).status, 403); }
+    finally { other.stop(); }
+  } finally { s.stop(); }
+});
