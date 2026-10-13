@@ -45,7 +45,7 @@ test('measure snapshots preserve DAX, select the measure and fit its graph', t =
   assert.equal(data.measures.graph.autoFit, true);
   assert.match(data.model.tables.flatMap(t => t.measures).find(m => m.name === 'Sales LY').dax, /SAMEPERIODLASTYEAR/);
 });
-test('TMDL special characters remain data and source queries are excluded', t => {
+test('TMDL special characters remain data and exact M is included', t => {
   const dir = workspace(t), model = path.join(dir, 'Sample.SemanticModel'), output = path.join(dir, 'review.html');
   fs.mkdirSync(model);
   fs.writeFileSync(path.join(model, 'model.tmdl'), 'model Model');
@@ -58,7 +58,8 @@ test('TMDL special characters remain data and source queries are excluded', t =>
   const data = payload(output);
   assert.equal(data.measures.selectedMeasure, name);
   assert.equal(data.model.tables[0].measures[0].dax, dax);
-  assert.doesNotMatch(JSON.stringify(data), /private-host|private-db|Sql.Database/);
+  assert.equal(data.model.powerQuery.nodes[0].code, 'Sql.Database("private-host", "private-db")');
+  assert.equal(data.model.tables[0].source.server, undefined);
   assert.equal(fs.readFileSync(file, 'utf8'), source);
 });
 test('invalid input and removed commands fail without writing or overwriting files', t => {

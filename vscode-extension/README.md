@@ -43,7 +43,7 @@ See how queries, parameters, functions, and table partitions feed each other. Fo
 | --- | --- |
 | [![Environment, StartYear, and RawSales feed StageSales, with ServerName upstream of RawSales](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/power-query-flow.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/power-query-flow.png) | [![StageSales input flow beside its inputs, consumer, and complete read-only M expression](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/power-query-inspector.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/power-query-inspector.png) |
 
-Links come from static analysis of M. No query runs and no source data is read. Unconfirmed links remain explicit; raw M is excluded from shared snapshots.
+Links come from static analysis of M. No query runs and no source data is read. Unconfirmed links remain explicit; snapshots include available query definitions.
 
 ## Additional (Domains and Matrix)
 
@@ -68,13 +68,13 @@ their model.
 ## Share an interactive snapshot
 
 Use **Save snapshot** to create one self-contained HTML file with the model metadata,
-DAX, and current workspace and view. The recipient opens it in a browser without VS Code,
+DAX, available Power Query definitions, and current workspace and view. The recipient opens it in a browser without VS Code,
 the repository, or a model connection. Changes in an opened snapshot remain in that tab;
 save another snapshot to keep them.
 
-Snapshots include analytical names, schema information, and DAX. They omit source
-connection endpoints, raw partition queries, and repository handles. Review the model
-metadata and formulas before sharing: DAX can itself contain sensitive text. Snapshot
+Snapshots include analytical names, schema information, DAX and exact available M.
+Endpoint strings and parameter values written in M are included; separate connection
+settings and repository handles are omitted. Share definitions with their intended audience. Snapshot
 files make no network requests. The extension package includes no sample business model
 or report-usage dataset.
 

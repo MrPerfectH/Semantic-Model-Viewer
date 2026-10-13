@@ -478,8 +478,10 @@ and worker failure do not imply absent dependencies. Static findings remain part
 dynamic/missing/ambiguous references, unsupported syntax, cycles and analysis notices
 remain explicit and do not establish execution order or complete lineage.
 
-Raw M and PQ workspace/context/history stay excluded from **Save snapshot**. Offline
-snapshots explain that code is unavailable. Pre-generated JSON may also omit M.
+**Save snapshot** includes available Power Query definitions with exact M and the
+current Flow/Canvas presentation. Offline files support static dependency inspection,
+clickable references and the full M reader without executing queries or connecting
+to sources. Older snapshots and pre-generated JSON may omit M.
 See [metadata limitations](docs/power-query-contract.md), the
 [presentation contract](docs/power-query-redesign/interface-contract-v2.md), and
 [filter policy](docs/power-query-redesign/filter-addendum.md). Original verification

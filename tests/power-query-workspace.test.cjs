@@ -137,7 +137,7 @@ test('ordinary inspection preserves pan/zoom and scroll while deliberate follow 
  await w.back();assert.equal(w.selectedId,'B');assert.deepEqual(view,before.viewport);events.length=0;w.navigate('A',true);assert(events.some(e=>e[0]==='reveal'));
 });
 test('dock preference persists source-free geometry and survives model invalidation',()=>{
- const saved=[],g=harness({localStorage:{setItem:(k,v)=>saved.push([k,JSON.parse(v)])}}),w=Object.create(g.PowerQueryWorkspace.prototype);Object.assign(w,{width:440,height:320,dock(){}});w.setDockPreference('bottom');assert.deepEqual(saved,[['smv.pq.inspector.v1',{dock:'bottom',width:440,height:320}]]);w.setDockPreference('invalid');assert.equal(saved.length,1);
+ const saved=[],g=harness({U:{el(){},store:{setJSON:(k,v)=>saved.push([k,JSON.parse(JSON.stringify(v))])}}}),w=Object.create(g.PowerQueryWorkspace.prototype);Object.assign(w,{width:440,height:320,dock(){}});w.setDockPreference('bottom');assert.deepEqual(saved,[['smv.pq.inspector.v1',{dock:'bottom',width:440,height:320}]]);w.setDockPreference('invalid');assert.equal(saved.length,1);
  const j=jobHarness();j.w.dockPreference='bottom';j.w.width=440;j.w.height=320;j.w.invalidate();assert.equal(j.w.dockPreference,'bottom');assert.equal(j.w.width,440);assert.equal(j.w.height,320);
 });
 
@@ -193,3 +193,24 @@ test('opening a full flow retains Fit framing without recentering and cropping a
 });
 
 test('model generation resets mode snapshots, root and Canvas Undo to initial Flow',()=>{const {w}=jobHarness();w.viewMode='canvas';w.modeStates={canvas:{selectedId:'Secret'},flow:{analyzedId:'Secret'}};w.analyzedId='Secret';w.layoutHistory=[{membership:['Secret']}];w.invalidate();assert.equal(w.viewMode,'flow');assert.deepEqual(Object.keys(w.modeStates),[]);assert.equal(w.analyzedId,null);assert.equal(w.layoutHistory.length,0);});
+
+test('snapshot presentation roundtrips JSON maps, unlimited depth, both modes and reader state without runtime history',async()=>{
+ const {w}=stateHarness();w.phase='ready';w.ensureState();w.depth=Infinity;w.flowRootId='B';w.width=440;w.height=330;w.dockPreference='bottom';w.libraryOpen=false;w.mapHidden=true;
+ w.canvas.captureLayout=()=>new Map([['A',{x:12,y:34}],['B',{x:210,y:34}]]);
+ w.modeStates={flow:{...w.captureNavigation(true),viewMode:'flow',analyzedId:'B'}};
+ const saved=JSON.parse(JSON.stringify(w.captureSnapshot()));
+ assert.equal(saved.navigation.depth,'all');assert.equal(saved.navigation.layout.length,2);assert.equal(saved.navigation.generation,undefined);assert.equal(saved.history,undefined);
+ w.restoreSnapshot(saved);assert.deepEqual(JSON.parse(JSON.stringify(w.captureSnapshot())),saved);
+ w.library={};w.toggle={setAttribute(){}};w.host={classList:{toggle(){}}};w.displayMenu={querySelector(){return null;}};
+ let layout;w.canvas.restoreLayout=m=>layout=m;w.selectedId=null;await w.applySnapshot();
+ assert.equal(w.selectedId,'B');assert.equal(w.depth,Infinity);assert.equal(w.flowRootId,'B');assert.equal(w.libraryOpen,false);assert.equal(w.dockPreference,'bottom');
+ assert.equal(w.modeStates.flow.generation,w.generation);assert.equal(w.modeStates.flow.depth,Infinity);assert.equal(w.modeStates.flow.layout.get('A').x,12);assert.equal(layout.get('B').x,210);
+ assert.equal(w.pendingSnapshot,null);
+});
+test('pending snapshot does not follow a replacement model',()=>{
+ const {w}=stateHarness();w.ensureState();const saved=w.captureSnapshot();w.restoreSnapshot(saved);w.app.model=model([row('Replacement')]);w.reset=()=>{w.pendingSnapshot=null;};assert.equal(w.captureSnapshot(),null);
+});
+test('snapshot metadata starts the real worker; legacy missing metadata reports unavailable',async()=>{
+ const {w,workers}=jobHarness();w.app.snapshotMode=true;w.start();await tick();assert.equal(workers.length,1);assert.equal(w.phase,'building');w.cancel();
+ delete w.app.model.powerQuery;w.start();assert.equal(w.phase,'ready');assert.equal(w.context,null);assert.match(w.message.textContent,/older snapshot/);
+});

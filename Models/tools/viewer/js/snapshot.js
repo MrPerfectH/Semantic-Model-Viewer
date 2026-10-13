@@ -1,11 +1,11 @@
-/* Portable model snapshots. Only analytical metadata is included; runtime handles,
-   raw import files and data-source connection settings never enter the package. */
+/* Portable model snapshots. Analytical metadata includes exact Power Query definitions.
+   Runtime handles, raw import files and separate connection settings are excluded. */
 (function (g) {
   'use strict';
   var FORMAT = 'semantic-model-viewer', VERSION = 1;
   var FILES = ['js/util.js', 'js/snapshot.js', 'js/roles.js', 'js/tmdl-parser.js', 'js/workspace-ui.js', 'js/canvas.js', 'js/layouts.js',
     'js/matrix.js', 'js/dax-format.js', 'js/measures.js', 'js/power-query-dependencies.js', 'js/power-query-graph-model.js', 'js/power-query-canvas.js', 'js/power-query-inspector.js', 'js/power-query-workspace.js', 'js/power-query-lineage.js', 'js/power-query.js', 'js/sidebar.js', 'js/topbar.js', 'js/rules.js', 'js/relationships.js', 'js/explorer.js', 'js/app.js', 'explorer.css', 'measures.css', 'power-query.css', 'power-query-canvas.css', 'power-query-inspector.css', 'power-query-workspace.css', 'power-query-lineage.css'];
-  var CSP = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
+  var CSP = "default-src 'none'; script-src 'unsafe-inline'; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
   function clone(value) { return value == null ? null : JSON.parse(JSON.stringify(value)); }
   function pick(value, keys) {
     var out = {};
@@ -16,18 +16,29 @@
   function safeJSON(value) { return JSON.stringify(value).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029'); }
   function assetPath(url) { return String(url).replace(/^\.\//, '').split(/[?#]/)[0]; }
   function modelData(model) {
-    return { name: String(model.name || ''), tables: model.tables.map(function(t){
+    var result = { name: String(model.name || ''), tables: model.tables.map(function(t){
       var row = pick(t, ['name','domain','role','baseRole','autoRole','roleVia','ann','description','hidden']);
       row.columns = (t.columns || []).map(function(c){return pick(c,['name','dataType','hidden','isCalc','isKey','rel','description','dax']);});
       row.measures = (t.measures || []).map(function(m){var measure=pick(m,['name','dax','fmt','folder','h','description']);measure.dax=String(measure.dax||'');return measure;});
       if (typeof t.dax === 'string' && t.dax) row.dax = t.dax;
       if (Array.isArray(t.calcItems)) row.calcItems = t.calcItems.map(function(ci){return pick(ci,['name','dax','fmt']);});
       row.colCount = row.columns.length; row.measureCount = row.measures.length;
-      // Human-readable source identity is useful; endpoints and raw query text are not required to explore the model.
+      // Separate connection settings are omitted; endpoints written in M remain in the query definitions.
       row.source = pick(t.source, ['kind','schema','table','via']);
       if (!row.source.kind) row.source.kind = 'other';
       return row;
     }), relationships: (model.relationships || []).map(function(r){return pick(r,['name','from','to','fromCol','toCol','fromCard','toCard','both','inactive','isActive','crossFilteringBehavior']);}) };
+    if (model.powerQuery && Array.isArray(model.powerQuery.nodes)) {
+      result.powerQuery = {version: model.powerQuery.version || 1, nodes: model.powerQuery.nodes.map(function(n) {
+        var row = pick(n, ['id','kind','table','name','type','code','classification','basis','state','queryGroup','groupPath']);
+        // Null and absent are distinct metadata states; never infer or normalize M.
+        ['table','code','queryGroup','groupPath'].forEach(function(key) {
+          if (Object.prototype.hasOwnProperty.call(n,key) && n[key] === null) row[key] = null;
+        });
+        return row;
+      }), warnings: (model.powerQuery.warnings || []).filter(function(w){return typeof w === 'string';})};
+    }
+    return result;
   }
   function usageData(app) {
     if (!app._usage) return null;
@@ -45,7 +56,7 @@
       pos:clone(cv.pos),view:clone(app.state.viewMode==='graph'?cv.view:(app._tableViewport||cv.view)),focus:cv.captureFocus(),display:cv.captureDisplay()};
     return {format:FORMAT,version:VERSION,name:model.name,createdAt:new Date().toISOString(),model:model,usage:usageData(app),
       settings:{roleRules:app.getRules?app.getRules().map(function(r){return pick(r,['role','name','sides','measures','kind']);}):[]},
-      workspace:{viewMode:app.state.viewMode,tableView:tableView,presets:clone(cv.getPresets()),matrix:app.captureMatrix?clone(app.captureMatrix()):null,
+      workspace:{viewMode:app.state.viewMode,powerQuery:app.powerQueryWorkspace&&app.powerQueryWorkspace.captureSnapshot?app.powerQueryWorkspace.captureSnapshot():null,tableView:tableView,presets:clone(cv.getPresets()),matrix:app.captureMatrix?clone(app.captureMatrix()):null,
         explorer:ex?{query:ex.query,filter:ex.filter,direction:ex.direction,depth:ex.depth,includeInactive:!!ex.includeInactive,mapHidden:!!ex.mapHidden,libraryHidden:!!ex.libraryHidden,inspectorHidden:!!ex.inspectorHidden}:{},
         domains:app.captureDomains?clone(app.captureDomains()):{expandedGroups:Array.from(cv.expandedGroups || []),positions:Object.keys(cv.groups || {}).map(function(key){var group=cv.groups[key];return {key:key,x:group.x,y:group.y};}),tablePositions:clone(cv.cpos || {}),view:clone(cv.view)}},
       measures:app.measures.captureSnapshot?app.measures.captureSnapshot():null};

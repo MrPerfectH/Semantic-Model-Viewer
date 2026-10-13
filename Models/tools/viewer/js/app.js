@@ -1297,6 +1297,7 @@
       if (this.measures.restoreSnapshot) this.measures.restoreSnapshot(payload.measures);
       this._domainWorkspace = workspace.domains || null;
       this._matrixWorkspace = workspace.matrix || null;
+      if (this.powerQueryWorkspace) this.powerQueryWorkspace.restoreSnapshot(workspace.powerQuery);
       this.state.viewMode = ['graph', 'measures', 'clusters', 'matrix', 'power-query'].includes(workspace.viewMode) ? workspace.viewMode : 'graph';
       this.matrix._key = null; this.sidebar._key = null;
       this.render(true);

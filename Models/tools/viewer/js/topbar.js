@@ -46,9 +46,9 @@
     this.host.appendChild(nav);
     var actions=el('div',{cls:'ex-header-actions'});
     actions.appendChild(el('span',{cls:offline?'ex-snapshot-badge':'ex-local-badge',text:offline?'Offline snapshot':app.host?'VS Code workspace':'Local analysis',
-      title:offline?'Includes model metadata and DAX. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'}));
+      title:offline?'Includes model metadata, DAX and available Power Query definitions. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'}));
     actions.appendChild(el('button',{cls:'ex-button ex-snapshot-export',text:st.snapshotSaving?'Saving snapshot…':'Save snapshot',disabled:!st.loaded||!!st.snapshotSaving,
-      title:'Download an offline copy of the app, including this model, DAX, and your current views',onClick:function(){app.saveSnapshot();}}));
+      title:'Download an offline copy of the app, including this model, DAX, available Power Query definitions, and your current views',onClick:function(){app.saveSnapshot();}}));
     if(!offline&&app.host){
       actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Choose model',onClick:function(){app.hostSelectModel();}}));
     }
