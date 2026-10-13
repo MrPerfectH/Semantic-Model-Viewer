@@ -64,3 +64,19 @@ if (fs.existsSync(fabricSource)) {
     for (const file of runtime) fs.copyFileSync(path.join(fabricSource, file), path.join(fabricTarget, file));
   }
 }
+
+const xmlaPublish = path.join(fabricSource, 'xmla', 'publish');
+if (fs.existsSync(xmlaPublish)) {
+  const packagedPublish = path.join(fabricTarget, 'xmla', 'publish');
+  if (!check) fs.cpSync(xmlaPublish, packagedPublish, { recursive: true });
+  else {
+    const verifyHelper = (source, target) => {
+      for (const item of fs.readdirSync(source, { withFileTypes: true })) {
+        const sourcePath = path.join(source, item.name), targetPath = path.join(target, item.name);
+        if (item.isDirectory()) verifyHelper(sourcePath, targetPath);
+        else if (!fs.existsSync(targetPath) || !fs.readFileSync(sourcePath).equals(fs.readFileSync(targetPath))) throw new Error('XMLA helper is stale: ' + item.name);
+      }
+    };
+    verifyHelper(xmlaPublish, packagedPublish);
+  }
+}

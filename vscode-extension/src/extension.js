@@ -58,7 +58,7 @@ function activate(context) {
     vscode.commands.registerCommand('semanticModelViewer.refreshModels', () => tree.refresh()),
     vscode.window.registerTreeDataProvider('semanticModelViewer.models', tree),
     vscode.workspace.onDidChangeWorkspaceFolders(() => tree.refresh()),
-    { dispose: () => { panel.dispose(); tree.dispose(); } }
+    { dispose: () => { panel.dispose(); tree.dispose(); fabric.dispose(); } }
   );
   return { panel, tree };
 }

@@ -71,6 +71,7 @@ class FabricConnection {
     await this.save(this.entries().filter(e => !matches(e)));
     await this.removeViewerRecord(source);
   }
+  dispose() { if (this.service && this.service.dispose) this.service.dispose(); this.service = null; }
   async signOut() { await this.request({ action: 'signOut' }); }
   async choose(action, args, placeholder) {
     const response = await this.request(Object.assign({ action }, args));
