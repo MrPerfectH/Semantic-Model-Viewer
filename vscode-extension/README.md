@@ -12,6 +12,8 @@ open it at full size.
 
 ## Fabric connection (unreleased feature branch)
 
+Requires desktop VS Code 1.101 or later for its Node.js 22 extension host.
+
 Run **Semantic Model Viewer: Connect to Fabric…**, sign in with a Microsoft work account,
 choose a workspace and semantic model, then choose the metadata connection method.
 **Standard XMLA** requires Read + Build permission and an enabled XMLA endpoint on supported

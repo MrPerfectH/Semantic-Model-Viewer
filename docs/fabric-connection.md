@@ -20,6 +20,8 @@ The publisher must provision its own multitenant Microsoft Entra public-client r
 
 For standalone development, install Node.js 22 or later in addition to Python, run `npm ci --prefix tools/fabric`, and build the self-contained XMLA helpers using the .NET 8 SDK and `tools/fabric/xmla/publish.sh`. Set `SMV_FABRIC_CLIENT_ID` in the native host environment to the publisher-owned registration's public client ID, then launch the existing Python server. These are maintainer/developer steps; packaged distributions must provision the ID and runtime dependencies before release. Standalone tokens remain in the helper process memory, so reopening the process may require Microsoft sign-in. VS Code uses SecretStorage for the MSAL cache.
 
+Desktop VS Code 1.101 or later is required for the Node.js 22 host runtime ([VS Code release notes](https://code.visualstudio.com/updates/v1_101)).
+
 The VS Code packaging sync includes the shared native-host JavaScript and any published XMLA helpers outside webview resource roots. Production MSAL is bundled by the extension. The extension runs in the desktop UI host; VS Code web is unsupported. Cross-platform binaries can be compiled here, but successful compilation does not establish Windows/macOS behavior.
 
 See [transport details](../tools/fabric/README.md) for scopes, supported endpoints, dependency versions, build instructions, and authoritative Microsoft references.

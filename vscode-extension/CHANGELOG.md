@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased — Fabric feature branch
+## Unreleased
+
+- Require VS Code 1.101 or later for the Fabric host runtime. — Fabric feature branch
 
 - Add work-account sign-in, workspace/model browsing, and explicit XMLA or Fabric definition API metadata access.
 - Cache metadata for offline reopening and support refresh, account switching, sign-out, removal, and existing HTML snapshots.
