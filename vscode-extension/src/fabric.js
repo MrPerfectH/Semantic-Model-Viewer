@@ -38,7 +38,9 @@ class FabricConnection {
     return { id: `fabric:${result.tenantId}:${workspace.id}:${model.id}`, kind: 'fabric', name: result.name || model.name,
       path: `Fabric / ${workspace.name} / ${model.name}`, tenantId: result.tenantId, accountId: result.accountId,
       workspaceId: workspace.id, workspaceName: workspace.name, modelId: model.id,
-      fetchedAt: result.fetchedAt || new Date().toISOString(), method: result.method, files };
+      fetchedAt: result.fetchedAt || new Date().toISOString(), method: result.method,
+      coverage: typeof result.coverage === 'string' ? result.coverage.slice(0, 512) : '',
+      warnings: Array.isArray(result.warnings) ? result.warnings.filter(value => typeof value === 'string').slice(0, 20).map(value => value.slice(0, 4096)) : [], files };
   }
   async refresh(entry) {
     const status = await this.request({ action: 'status' });

@@ -134,7 +134,7 @@ class ViewerPanel {
 
   async modelMessage(entry) {
     const files = entry.kind === 'fabric' ? entry.files : await readModelFiles(entry);
-    return { type: 'model', modelId: entry.id, name: entry.name, path: entry.path, files, source: entry.kind === 'fabric' ? { kind: 'fabric', tenantId: entry.tenantId, accountId: entry.accountId, workspaceId: entry.workspaceId, modelId: entry.modelId, fetchedAt: entry.fetchedAt, method: entry.method } : undefined };
+    return { type: 'model', modelId: entry.id, name: entry.name, path: entry.path, files, source: entry.kind === 'fabric' ? { kind: 'fabric', tenantId: entry.tenantId, accountId: entry.accountId, workspaceId: entry.workspaceId, modelId: entry.modelId, fetchedAt: entry.fetchedAt, method: entry.method, coverage: entry.coverage, warnings: entry.warnings } : undefined };
   }
 
   afterOpen(entry, panel, epoch) {

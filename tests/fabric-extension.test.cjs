@@ -72,3 +72,11 @@ test('refresh preserves the explicitly selected REST metadata method', async () 
   await connection.refresh(entry);
   assert.equal(calls.at(-1).transport, 'rest');
 });
+test('native metadata cache preserves permission coverage using allowlisted warnings', async () => {
+  const { connection } = fixture();
+  connection.service = { request: async () => ({ tenantId: 'tenant-one', files: [{ path: 'model.bim', text: '{}' }], coverage: 'permission-dependent', warnings: ['Expressions may be hidden.', { accessToken: 'secret' }, 4] }) };
+  const entry = await connection.open({ id: 'workspace', name: 'Workspace' }, { id: 'model', name: 'Model' });
+  assert.equal(entry.coverage, 'permission-dependent');
+  assert.deepEqual(entry.warnings, ['Expressions may be hidden.']);
+  assert.equal(JSON.stringify(connection.entries()).includes('secret'), false);
+});
