@@ -65,3 +65,10 @@ test('removal clears matching viewer metadata and layouts without touching other
   assert.equal(state.has('smv:smv_layout_remote'), false);
   assert.equal(state.has('smv:smv_layout_local'), true);
 });
+test('refresh preserves the explicitly selected REST metadata method', async () => {
+  const { connection, calls } = fixture();
+  const entry = await connection.open({ id: 'workspace', name: 'Workspace' }, { id: 'model', name: 'Model' }, undefined, 'rest');
+  entry.method = 'rest';
+  await connection.refresh(entry);
+  assert.equal(calls.at(-1).transport, 'rest');
+});
