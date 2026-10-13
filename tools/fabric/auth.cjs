@@ -8,7 +8,7 @@ const scopesFor = (audience, purpose) => {
   throw new FabricError('InvalidAudience', 'Unsupported Microsoft token audience.');
 };
 function createAuth({ clientId, openBrowser, loadTokens = async () => null, saveTokens = async () => {}, msalFactory }) {
-  let client; let pending; let selectedId; let generation = 0;
+  let client; let pending; let interactiveBusy = false; let selectedId; let generation = 0;
   async function init() {
     if (!clientId || !/^[0-9a-f-]{36}$/i.test(clientId)) throw new FabricError('NotConfigured', 'Fabric sign-in is awaiting application setup by the Semantic Model Viewer maintainers.');
     if (!client) {
@@ -23,9 +23,11 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
   function accountInfo(account) { return account ? { id: account.homeAccountId, name: account.username, tenantId: account.tenantId } : null; }
   async function account() { const accounts = await (await init()).getTokenCache().getAllAccounts(); return accounts.find(a => a.homeAccountId === selectedId) || accounts[0] || null; }
   async function interactive(audience, prompt, purpose) {
-    if (pending) throw new FabricError('SignInInProgress', 'Microsoft sign-in is already in progress.');
+    if (interactiveBusy) throw new FabricError('SignInInProgress', 'Microsoft sign-in is already in progress.');
+    interactiveBusy = true;
     const currentGeneration = generation;
-    const app = await init();
+    let app;
+    try { app = await init(); if (currentGeneration !== generation) throw new FabricError('Cancelled', 'Microsoft sign-in cancelled.'); } catch (error) { interactiveBusy = false; throw error; }
     const verifier = crypto.randomBytes(32).toString('base64url');
     const state = crypto.randomBytes(32).toString('base64url');
     let server; let timer; let rejectPending;
@@ -50,24 +52,29 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
       timer = setTimeout(() => rejectPending(new FabricError('SignInTimeout', 'Microsoft sign-in timed out.')), 5 * 60 * 1000);
       const scopes = scopesFor(audience, purpose);
       const url = await app.getAuthCodeUrl({ scopes, redirectUri, codeChallenge: crypto.createHash('sha256').update(verifier).digest('base64url'), codeChallengeMethod: 'S256', state, prompt });
+      if (generation !== currentGeneration) throw new FabricError('Cancelled', 'Microsoft sign-in cancelled.');
       await openBrowser(url);
       const code = await callback;
       const result = await app.acquireTokenByCode({ code, scopes, redirectUri, codeVerifier: verifier });
       if (prompt !== 'select_account' && selectedId && result.account.homeAccountId !== selectedId) { await app.getTokenCache().removeAccount(result.account); throw new FabricError('AccountMismatch', 'Use the same Microsoft account, or switch accounts in the viewer first.'); }
       if (generation !== currentGeneration) { await app.getTokenCache().removeAccount(result.account); throw new FabricError('Cancelled', 'Microsoft sign-in cancelled.'); }
+      if (prompt === 'select_account') { for (const previous of await app.getTokenCache().getAllAccounts()) { if (previous.homeAccountId !== result.account.homeAccountId) await app.getTokenCache().removeAccount(previous); } }
       selectedId = result.account.homeAccountId;
       return result;
-    } finally { clearTimeout(timer); server?.close(); server?.closeAllConnections(); pending = null; }
+    } finally { clearTimeout(timer); server?.close(); server?.closeAllConnections(); pending = null; interactiveBusy = false; }
   }
   return {
     async status() { if (!clientId) return { configured: false, account: null }; return { configured: true, account: accountInfo(await account()) }; },
     async signIn() { return accountInfo((await interactive(FABRIC_AUDIENCE, 'select_account')).account); },
     async getAccessToken(audience, purpose) {
+      const currentGeneration = generation;
       const app = await init(); const selected = await account();
       if (!selected) throw new FabricError('NotSignedIn', 'Sign in with your Microsoft work account.');
+      if (generation !== currentGeneration) throw new FabricError('Cancelled', 'Microsoft token request cancelled.');
       selectedId = selected.homeAccountId;
-      try { const currentGeneration = generation; const result = await app.acquireTokenSilent({ account: selected, scopes: scopesFor(audience, purpose) }); if (generation !== currentGeneration) { await app.getTokenCache().removeAccount(selected); throw new FabricError('Cancelled', 'Microsoft token request cancelled.'); } return result.accessToken; }
+      try { const result = await app.acquireTokenSilent({ account: selected, scopes: scopesFor(audience, purpose) }); if (generation !== currentGeneration) { await app.getTokenCache().removeAccount(selected); throw new FabricError('Cancelled', 'Microsoft token request cancelled.'); } return result.accessToken; }
       catch (error) {
+        if (generation !== currentGeneration) throw new FabricError('Cancelled', 'Microsoft token request cancelled.');
         if (error instanceof FabricError) throw error;
         if (error.name !== 'InteractionRequiredAuthError') throw new FabricError('TokenFailed', 'Microsoft could not renew this session. Sign in again.');
         return (await interactive(audience, undefined, purpose)).accessToken;

@@ -21,3 +21,5 @@ test('token consent cannot silently switch selected account',async()=>{
 });
 test('sign-out removes all local accounts and saves null',async()=>{const m=mock();await m.auth.signOut();assert.deepEqual(m.removed,['a']);assert.equal(m.saved,null);});
 test('cancel during silent token acquisition discards result',async()=>{let resolve;const m=mock({silent:()=>new Promise(r=>{resolve=r;})});const result=m.auth.getAccessToken('https://api.fabric.microsoft.com');while(!resolve)await new Promise(r=>setImmediate(r));m.auth.cancel();resolve({accessToken:'obsolete'});await assert.rejects(result,{code:'Cancelled'});assert.deepEqual(m.removed,['a']);});
+test('two simultaneous sign-ins do not create competing listeners',async()=>{const m=mock();const first=m.auth.signIn();await assert.rejects(m.auth.signIn(),{code:'SignInInProgress'});await first;});
+test('cancel before cached-account lookup cannot start token consent',async()=>{const m=mock();const result=m.auth.getAccessToken('https://api.fabric.microsoft.com');m.auth.cancel();await assert.rejects(result,{code:'Cancelled'});});

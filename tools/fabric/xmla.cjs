@@ -17,7 +17,10 @@ function createXmlaReader({ executable = process.env.SMV_FABRIC_XMLA_HELPER || p
     child.stdin.on('error', () => {});
     child.stdout.on('data', data => { chunks.push(data); bytes += data.length; if (bytes > 96 * 1024 * 1024) finish(new FabricError('DefinitionTooLarge', 'XMLA model metadata exceeds the supported size.')); });
     child.on('close', code => {
-      try { const result = JSON.parse(Buffer.concat(chunks).toString('utf8')); if (code || result.error) throw new FabricError(result.error?.code || 'XmlaFailed', result.error?.message || 'XMLA metadata retrieval failed.'); if (result.transport !== 'xmla' || !Array.isArray(result.parts)) throw new Error(); finish(null, result); }
+      try { const result = JSON.parse(Buffer.concat(chunks).toString('utf8')); if (code || result.error) throw new FabricError(result.error?.code || 'XmlaFailed', result.error?.message || 'XMLA metadata retrieval failed.'); if (result.transport !== 'xmla' || result.parts?.length !== 1 || result.parts[0].path !== 'model.bim' || typeof result.parts[0].content !== 'string') throw new Error();
+        // Validate model structure before any host consumes the helper response.
+        const bim = JSON.parse(result.parts[0].content); if (!bim.model || !Array.isArray(bim.model.tables)) throw new Error();
+        result.coverage = 'permission-dependent'; result.warnings = ['XMLA metadata depends on account permissions. Read + Build access may hide expressions and partitions; empty fields do not prove those objects are absent.']; finish(null, result); }
       catch (error) { finish(error instanceof FabricError ? error : new FabricError('XmlaFailed', 'The XMLA helper returned invalid metadata.')); }
     });
     child.stdin.end(JSON.stringify({ workspaceId: request.workspaceId, workspaceName: request.workspaceName, modelId: request.modelId, accessToken: request.accessToken }));
