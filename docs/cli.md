@@ -31,11 +31,13 @@ smv snapshot "Sales.SemanticModel" --measure "Total Sales" --out artifacts/measu
 - `--name`: override the displayed model name.
 - `--force`: replace an existing output file. Without it, existing files are preserved.
 
-All snapshots retain the full Viewer model metadata and DAX, including objects
-outside the starting view. They omit usage analysis and source connection details.
+All snapshots retain the full Viewer model metadata, DAX and available Power Query
+definitions, including objects outside the starting view. Exact M includes any endpoint
+strings or parameter values written in the queries. Separate connection settings and
+usage analysis are omitted.
 They are exploration artifacts, not backups of every TMDL property. See
 [snapshot contents](snapshots.md) for details.
 
 Open the generated HTML directly in a browser. You can save it in the repository
 or attach it as a build artifact for reviewers. The CLI does not commit, upload,
-or attach files to a PR. It does not modify the TMDL source or execute DAX.
+or attach files to a PR. It does not modify the TMDL source or execute M or DAX.

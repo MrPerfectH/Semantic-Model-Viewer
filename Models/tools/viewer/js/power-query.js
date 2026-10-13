@@ -27,7 +27,7 @@
     overlay.appendChild(dialog);document.body.appendChild(overlay);app._powerQueryOverlay=overlay;app._powerQueryClose=dismiss;
     function valid(){if(app.model!==model||app.model.powerQuery!==metadataIdentity||app._powerQueryOverlay!==overlay){if(app._powerQueryOverlay===overlay)close(app);else overlay.remove();return false;}return true;}
     var head=el('header',{},[el('h2',{text:'Power Query metadata'}),el('button',{text:'Close',onClick:dismiss})]);dialog.appendChild(head);
-    dialog.appendChild(el('p',{cls:'pq-note',text:'Read-only metadata. M is never executed. Raw M is excluded from shared snapshots. Dependencies are partial static findings.'}));
+    dialog.appendChild(el('p',{cls:'pq-note',text:'Read-only metadata. M is never executed. Snapshots include query definitions. Dependencies are partial static findings.'}));
     var content=el('div',{cls:'pq-content'}),library=el('aside',{cls:'pq-library'}),main=el('main',{cls:'pq-main'});content.appendChild(library);content.appendChild(main);dialog.appendChild(content);
     var tableSelect=el('select',{'aria-label':'Power Query table',onChange:function(e){chooseTable(e.target.value);}});
     tableSelect.appendChild(el('option',{value:'',text:'Choose a table…'}));(app.model.tables||[]).forEach(function(t){tableSelect.appendChild(el('option',{value:t.name,text:t.name}));});library.appendChild(tableSelect);
@@ -45,7 +45,7 @@
     function highlight(pre,code){U.clear(pre);var lex=g.PowerQuery.tokens(code),at=0;function add(text,cls){var span=el('span',{cls:cls});if(!codeQuery)span.textContent=text;else{var offset=0,low=text.toLowerCase(),q=codeQuery.toLowerCase(),found;while((found=low.indexOf(q,offset))>=0){span.appendChild(document.createTextNode(text.slice(offset,found)));span.appendChild(el('mark',{text:text.slice(found,found+q.length)}));offset=found+q.length;}span.appendChild(document.createTextNode(text.slice(offset)));}pre.appendChild(span);}
       lex.tokens.forEach(function(t){add(code.slice(at,t.start),'pq-comment');add(code.slice(t.start,t.end),t.kind==='string'?'pq-string':/^(let|in|each|if|then|else|meta|as|type)$/.test(t.value)?'pq-keyword':'');at=t.end;});add(code.slice(at),'pq-comment');
     }
-    function render(){U.clear(main);if(!selected){main.appendChild(el('p',{text:app.snapshotMode?'Power Query metadata is excluded from shared snapshots. Open the original TMDL or model.bim to inspect M.':'No partition metadata is available. Choose another table or a shared expression. Pre-generated viewer JSON may omit M.'}));return;}
+    function render(){U.clear(main);if(!selected){main.appendChild(el('p',{text:app.snapshotMode?'No Power Query definitions are available for this selection. Older snapshots may omit M.':'No partition metadata is available. Choose another table or a shared expression. Pre-generated viewer JSON may omit M.'}));return;}
       main.appendChild(el('h3',{text:(selected.table?selected.table+' / ':'')+selected.name}));main.appendChild(el('p',{cls:'pq-note',text:selected.kind+' · '+selected.classification+' · '+selected.basis}));
       if(selected.state!=='available')main.appendChild(el('p',{role:'status',text:selected.state==='non-m'?'This partition is '+selected.type+', not an M partition.':'M source metadata is missing.'}));
       else{

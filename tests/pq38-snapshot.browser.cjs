@@ -1,6 +1,6 @@
 /* Helper adapted from existing snapshot browser test; exact exported-file acceptance: use the real download button, stop the server, and open the
    actual HTML file in Chrome with networking and browser storage unavailable.
-   Run: node --test tests/snapshot.browser.cjs */
+   Run: node --test tests/pq38-snapshot.browser.cjs */
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -44,7 +44,7 @@ async function waitFor(check, message) {
 function payloadAt(file) {
   return JSON.parse(fs.readFileSync(file,'utf8').match(/<script id="smv-snapshot-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
 }
-test('actual PQ38 exports open and re-export offline without raw M or source access', {skip:!chrome&&'Chrome unavailable',timeout:60000},async t=>{
+test('actual exported files retain available Power Query metadata when reopened and re-exported offline', {skip:!chrome&&'Chrome unavailable',timeout:60000},async t=>{
   const inputs=[process.env.PQ38_SNAPSHOT_PATH,process.env.PQ38_NATIVE_SNAPSHOT_PATH].filter(Boolean);
   assert.ok(inputs.length,'Supply actual exported HTML paths; never generate a substitute snapshot here');
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'pq38-offline-'));
@@ -55,20 +55,20 @@ test('actual PQ38 exports open and re-export offline without raw M or source acc
   await b.send('Page.addScriptToEvaluateOnNewDocument',{source:`window.pq38Access={network:0,storage:0,errors:[]};window.fetch=()=>{pq38Access.network++;throw Error('offline')};XMLHttpRequest.prototype.open=function(){pq38Access.network++;throw Error('offline')};Object.defineProperty(window,'localStorage',{get(){pq38Access.storage++;throw Error('storage disabled')}});window.addEventListener('error',e=>pq38Access.errors.push(e.message));window.addEventListener('unhandledrejection',e=>pq38Access.errors.push(String(e.reason)));`});
   for(let i=0;i<inputs.length;i++){
     const file=path.join(dir,'input-'+i+'.html');fs.copyFileSync(inputs[i],file);
-    const assertPrivacy=text=>{for(const marker of ['PQ_RAW_ONLY_38','PQ_SHARED_ONLY_38','PQ_CREDENTIAL_ONLY_38','pq-private-38.invalid'])assert.equal(text.includes(marker),false,marker);};
-    assertPrivacy(fs.readFileSync(file,'utf8'));
+    const original=payloadAt(file).model.powerQuery;
     await b.send('Page.navigate',{url:pathToFileURL(file).href});
     await waitFor(()=>b.evaluate('!!window.app&&app.state.loaded'),'Snapshot failed to load');
     assert.equal(await b.evaluate('app.snapshotMode'),true);
-    assert.equal(await b.evaluate('!!app.model.powerQuery'),false);
+    assert.deepEqual(await b.evaluate('app.model.powerQuery'),original);
     await b.evaluate(`[...document.querySelectorAll('nav button')].find(b=>b.textContent==='Power Query').click()`);
-    assert.match(await b.evaluate(`document.querySelector('.pq-main').textContent`),/excluded from shared snapshots/);
-    await b.evaluate(`document.querySelector('.pq-dialog header button').click()`);
+    if(original){await waitFor(()=>b.evaluate('!!app.powerQueryWorkspace.context'),'Offline dependency inspection did not finish');}
+    else if(await b.evaluate('!!app.powerQueryWorkspace'))assert.match(await b.evaluate('app.powerQueryWorkspace.message.textContent'),/unavailable/);
+    else {assert.match(await b.evaluate('document.querySelector(".pq-main").textContent'),/excluded|unavailable/);await b.evaluate('document.querySelector(".pq-dialog header button").click()');}
     for(const label of ['Measures','Domains','Matrix','Tables'])await b.evaluate(`[...document.querySelectorAll('nav button')].find(b=>b.textContent===${JSON.stringify(label)}).click()`);
     const before=new Set(b.downloads.keys());await b.evaluate(`document.querySelector('button.ex-snapshot-export').click()`);
     let download;await waitFor(()=>{download=[...b.downloads.values()].find(d=>!before.has(d.guid)&&d.state==='completed');return !!download;},'Re-export failed');
-    const bytes=fs.readFileSync(path.join(dir,download.guid),'utf8');assertPrivacy(bytes);
-    assert.equal(!!payloadAt(path.join(dir,download.guid)).model.powerQuery,false);
+    const bytes=fs.readFileSync(path.join(dir,download.guid),'utf8');
+    assert.deepEqual(payloadAt(path.join(dir,download.guid)).model.powerQuery,original);
     assert.deepEqual(await b.evaluate('pq38Access'),{network:0,storage:0,errors:[]});
     t.diagnostic(JSON.stringify({input:inputs[i],reexportBytes:Buffer.byteLength(bytes),access:await b.evaluate('pq38Access')}));
   }

@@ -30,9 +30,10 @@ test('independent scope/lexical/dynamic oracle and cycles',()=>{
   }
   assert.ok(g.PowerQueryDependencies.graph(md).cycles.some(ids=>ids.length===2));
 });
-test('snapshot analytical allowlist excludes all acceptance raw-code sentinels',()=>{
-  const text=JSON.stringify(g.Snapshots.modelData(bim()));
-  for(const marker of ['PQ_RAW_ONLY_38','PQ_SHARED_ONLY_38','PQ_CREDENTIAL_ONLY_38','pq-private-38.invalid','powerQuery'])assert.equal(text.includes(marker),false,marker);
+test('snapshot includes the independently authored Power Query metadata exactly',()=>{
+  const model=bim(), exported=g.Snapshots.modelData(model);
+  assert.deepEqual(JSON.parse(JSON.stringify(exported.powerQuery)),JSON.parse(JSON.stringify(model.powerQuery)));
+  assert.equal(exported.tables.some(t=>t.source.credentials||t.source.server),false);
 });
 test('replacement metadata contains no previous query identities',()=>{
   const m=g.TMDLParser.parseBIM(JSON.parse(fs.readFileSync(path.join(base,'reset/model.bim'))));

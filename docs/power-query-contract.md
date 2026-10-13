@@ -92,9 +92,12 @@ and parser. Do not infer certainty from the highlighting lexer.
 
 ## Export and safety boundary
 
-`Snapshots.modelData(model)` uses its existing analytical allowlist and excludes
-`powerQuery`, raw M, endpoints and other unknown metadata. No opt-in export of M is
-introduced. Adding runtime JS/CSS to offline snapshots does not add model M content.
+`Snapshots.modelData(model)` includes available `powerQuery` nodes, exact M, groups,
+classification, missing/non-M states and metadata warnings. Unknown runtime fields,
+separate connection settings and repository handles remain excluded. Endpoint strings
+and parameter values explicitly written in M travel with the definitions.
+Offline snapshots rebuild static dependency findings in an embedded blob worker under
+`connect-src 'none'`. Older payloads without M show a truthful unavailable state.
 No M execution, source data reads or source-model edits are authorized.
 
 ## Preserved draft, not implementation
@@ -121,8 +124,8 @@ Dependency workers should use the [M language specification](https://learn.micro
 
 Owned worker commit: `d5ded3113f1bbc6a1ea120e7e204152bacb1f1ab`.
 `js/power-query-dependencies.js` is registered before the inspector and included in
-`Snapshots.files`. The metadata export allowlist remains unchanged: including
-runtime analysis code does not export raw M.
+`Snapshots.files`. At that integration point the metadata export allowlist excluded
+raw M; the current snapshot boundary is described above.
 
 Public API v1: `PowerQueryDependencies.analyze(node, metadata)` returns
 `{dependencies: [{id, name, at}], uncertainty: [string], partial: true}`.
