@@ -48,13 +48,18 @@
     });
     return { measures: measures, meta: pick(app._usageMeta,['report','model','pageCount','scanned']) };
   }
+  function sourceData(app) {
+    var record=app.fabric && app.fabric.current(), source=record && record.source || app.snapshotInfo && app.snapshotInfo.source;
+    if(!source)return null;
+    return {fetchedAt:typeof source.fetchedAt==='string'?source.fetchedAt:'',method:typeof source.method==='string'?source.method:'',coverage:typeof source.coverage==='string'?source.coverage:'',warnings:Array.isArray(source.warnings)?source.warnings.filter(function(w){return typeof w==='string';}).slice(0,20):[]};
+  }
   function capture(app) {
     if (!app.model || !Array.isArray(app.model.tables)) throw new Error('Open a model before saving a snapshot.');
     var cv=app.canvas,ex=app.explorer,model=modelData(app.model);
     model.name=String(app.state.modelName || model.name || 'Semantic model');
     var tableView=app.captureTableView?clone(app.captureTableView()):{version:2,name:'Snapshot starting view',tables:cv.workspaceNames?Array.from(cv.workspaceNames):model.tables.map(function(t){return t.name;}),
       pos:clone(cv.pos),view:clone(app.state.viewMode==='graph'?cv.view:(app._tableViewport||cv.view)),focus:cv.captureFocus(),display:cv.captureDisplay()};
-    return {format:FORMAT,version:VERSION,name:model.name,createdAt:new Date().toISOString(),model:model,usage:usageData(app),
+    return {format:FORMAT,version:VERSION,name:model.name,createdAt:new Date().toISOString(),source:sourceData(app),model:model,usage:usageData(app),
       settings:{roleRules:app.getRules?app.getRules().map(function(r){return pick(r,['role','name','sides','measures','kind']);}):[]},
       workspace:{viewMode:app.state.viewMode,powerQuery:app.powerQueryWorkspace&&app.powerQueryWorkspace.captureSnapshot?app.powerQueryWorkspace.captureSnapshot():null,tableView:tableView,presets:clone(cv.getPresets()),matrix:app.captureMatrix?clone(app.captureMatrix()):null,
         explorer:ex?{query:ex.query,filter:ex.filter,direction:ex.direction,depth:ex.depth,includeInactive:!!ex.includeInactive,mapHidden:!!ex.mapHidden,libraryHidden:!!ex.libraryHidden,inspectorHidden:!!ex.inspectorHidden}:{},
@@ -102,7 +107,7 @@
       used.add(path);
       return '<script data-smv-asset="'+path+'">'+sources[path].replace(/<\/script/gi,'<\\/script')+'</script>';
     });
-    if(!used.has('js/snapshot.js')||!used.has('js/fabric.js', 'js/app.js'))throw new Error('This viewer version cannot create interactive snapshots.');
+    if(!used.has('js/snapshot.js')||!used.has('js/fabric.js')||!used.has('js/app.js'))throw new Error('This viewer version cannot create interactive snapshots.');
     // Callback replacements keep dollar sequences in model text and embedded JSON literal.
     html=html.replace(/<title>[\s\S]*?<\/title>/i,function(){return '<title>'+escapeHTML(payload.name)+' — interactive snapshot</title>';});
     html=html.replace('<head>',function(){return '<head>\n<meta http-equiv="Content-Security-Policy" content="'+CSP+'">';});

@@ -264,3 +264,12 @@ test('older payloads without Power Query stay valid and do not gain invented M o
   assert.equal(Snapshots.validate(payload),payload);
   assert.equal(Snapshots.modelData(payload.model).powerQuery,undefined);
 });
+
+test('Fabric snapshots keep acquisition coverage and exclude connection identity',()=>{
+  const app=appFixture();app.fabric={current:()=>({source:{kind:'fabric',tenantId:'private-tenant',accountId:'private-account',workspaceId:'private-workspace',modelId:'private-model',accessToken:'private-token',fetchedAt:'2026-10-13T12:00:00Z',method:'xmla',coverage:'permission-dependent',warnings:['Partitions unavailable',123]}})};
+  const payload=Snapshots.capture(app);
+  assert.deepEqual(payload.source,{fetchedAt:'2026-10-13T12:00:00Z',method:'xmla',coverage:'permission-dependent',warnings:['Partitions unavailable']});
+  assert.ok(!JSON.stringify(payload).includes('private-'));
+  const reexport=appFixture();reexport.snapshotInfo={source:payload.source};
+  assert.deepEqual(Snapshots.capture(reexport).source,payload.source);
+});

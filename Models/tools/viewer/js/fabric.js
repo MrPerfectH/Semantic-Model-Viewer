@@ -5,7 +5,7 @@
   function sourceOf(value) {
     var s = value || {};
     if (!s.tenantId || !s.workspaceId || !s.modelId) throw new Error('Fabric did not return a complete model identity.');
-    return {kind:'fabric',tenantId:String(s.tenantId),workspaceId:String(s.workspaceId),modelId:String(s.modelId),fetchedAt:s.fetchedAt || new Date().toISOString(),method:s.method || '',accountId:s.accountId?String(s.accountId):''};
+    return {kind:'fabric',tenantId:String(s.tenantId),workspaceId:String(s.workspaceId),modelId:String(s.modelId),fetchedAt:s.fetchedAt || new Date().toISOString(),method:s.method || '',accountId:s.accountId?String(s.accountId):'',coverage:typeof s.coverage==='string'?s.coverage:'',warnings:Array.isArray(s.warnings)?s.warnings.filter(function(w){return typeof w==='string';}).slice(0,20):[]};
   }
   function key(s) { return 'fabric:' + [s.tenantId,s.workspaceId,s.modelId].map(encodeURIComponent).join(':'); }
   function FabricConnection(app) { this.app=app; this.generation=0; this.items=[]; this.account=null; this.busy=false;this.transport='xmla'; }
@@ -66,7 +66,7 @@
     if(this.overlay)this.overlay.remove();
     var overlay=el('div',{style:'position:fixed;inset:0;background:rgba(20,30,50,.35);z-index:100;display:flex;align-items:center;justify-content:center;'});
     var dialog=el('section',{role:'dialog','aria-modal':'true','aria-label':'Connect to Fabric',style:'background:#fff;border-radius:12px;padding:22px;width:520px;max-width:90vw;max-height:85vh;overflow:auto;font:14px "IBM Plex Sans",sans-serif;'});overlay.appendChild(dialog);
-    dialog.addEventListener('keydown',function(e){if(e.key==='Escape'){e.preventDefault();self.close();}if(e.key==='Tab'){var nodes=dialog.querySelectorAll('button:not(:disabled), input:not(:disabled)');if(!nodes.length)return;var first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey && document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey && document.activeElement===last){e.preventDefault();first.focus();}}});
+    dialog.addEventListener('keydown',function(e){if(e.key==='Escape'){e.preventDefault();self.close();}if(e.key==='Tab'){var nodes=dialog.querySelectorAll('button:not(:disabled), input:not(:disabled), select:not(:disabled)');if(!nodes.length)return;var first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey && document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey && document.activeElement===last){e.preventDefault();first.focus();}}});
     function button(text,fn,disabled){return el('button',{cls:'ex-button',text:text,onClick:fn,disabled:!!disabled,style:'margin:4px;'});}
     dialog.appendChild(el('h2',{text:'Connect to Fabric'}));
     dialog.appendChild(el('label',{text:'Connection method',for:'fabric-transport'}));

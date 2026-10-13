@@ -69,6 +69,14 @@
       actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Open model',onClick:function(){app.setState({showImport:true,importError:'',importReady:false});}}));
     }
     this.host.appendChild(actions);
+    var acquisition=offline?info.source:fabricSource;
+    if(acquisition){
+      var acquired=Number.isFinite(Date.parse(acquisition.fetchedAt))?new Date(acquisition.fetchedAt).toLocaleString():'unknown';
+      var notices=Array.isArray(acquisition.warnings)?acquisition.warnings:[];
+      var metadataText='Fabric metadata fetched '+acquired+(acquisition.method?' · '+acquisition.method.toUpperCase():'')+(acquisition.coverage?' · Coverage: '+acquisition.coverage:'');
+      if(notices.length)metadataText+=' · '+notices.join(' ');
+      this.host.appendChild(el('div',{role:'status',text:metadataText,style:'width:100%;font-size:11px;line-height:1.5;color:#64748b;'}));
+    }
     /* Domains keeps Fit in its own toolbar row (see TableExplorer.renderClusterToolbar),
        next to Expand all / Collapse all, so both canvases carry the same controls. */
     if(st.snapshotMessage||st.snapshotError){
