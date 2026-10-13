@@ -128,6 +128,7 @@
     this._usage = null; this._usageMeta = null;
     this._importModel = null; this._importHandle = null;
     this.repoHandle = null; this.repoPath = null; this.repoModels = null; this._repoLive = false;
+    this.fabric = g.FabricConnection ? new g.FabricConnection(this) : null;
     this.server = null;   // local app server (scripts/serve.py), detected at boot
     this._cbs = [];
 
@@ -485,6 +486,10 @@
 
     loadModel: function (key) {
       if (this.snapshotMode) return Promise.resolve();
+      if (this.fabric && /^fabric:/.test(key)) {
+        var cachedFabric = this.getStore().find(function (r) { return r.id === key && r.source && r.source.kind === 'fabric'; });
+        if (cachedFabric) { this.fabric.activate(cachedFabric); return Promise.resolve(); }
+      }
       if (this.host) return this.hostChooseModel(key);
       var self = this;
       var request = this._modelLoadRequest = (this._modelLoadRequest || 0) + 1;
@@ -1040,7 +1045,7 @@
     },
     /* ---------- refresh the open model from its source folder ---------- */
     canRefreshSource: function () {
-      return !this.host && !this.snapshotMode && !!this.state.loaded && !!this.modelKey && this.modelKey !== 'builtin' && (this.canFS() || !!this.server);
+      return !(this.fabric && this.fabric.current() && this.fabric.current().source) && !this.host && !this.snapshotMode && !!this.state.loaded && !!this.modelKey && this.modelKey !== 'builtin' && (this.canFS() || !!this.server);
     },
     /* Folder imports remember their handle (IndexedDB), so refresh only re-confirms access.
        Models imported as loose files have no folder link: the first refresh asks for it once. */
@@ -1331,6 +1336,8 @@
       }
       if (this.host) {
         this.host.attach(this);
+        var cachedFabric = this.getStore().find(function (r) { return r.id === store.get('smv_current_v1') && r.source && r.source.kind === 'fabric'; });
+        if (cachedFabric && this.fabric) { this.fabric.activate(cachedFabric); return; }
         var initial = await this.host.loadDefault();
         if (initial) this.hostOpenModel(initial);
         else {

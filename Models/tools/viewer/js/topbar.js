@@ -31,8 +31,9 @@
 
   TopBar.prototype.update = function () {
     var self=this,app=this.app,st=app.state,cv=app.canvas,offline=!!app.snapshotMode,info=app.snapshotInfo||{};
-    var key=[app.modelKey,st.modelName,st.loaded,st.viewMode,st.showModelMenu,st.pngLabel,st.repoScanning,st.repoError,app._repoLive,offline,st.snapshotSaving,st.refreshing,st.snapshotMessage,st.snapshotError,!!app.server].join('|');
+    var key=[app.modelKey,st.modelName,st.loaded,st.viewMode,st.showModelMenu,st.pngLabel,st.repoScanning,st.repoError,app._repoLive,offline,st.snapshotSaving,st.refreshing,st.snapshotMessage,st.snapshotError,!!app.server,app.fabric && app.fabric.busy].join('|');
     if(key===this._key)return;this._key=key;U.clear(this.host);
+    var fabricRecord=app.fabric && app.fabric.current(),fabricSource=fabricRecord && fabricRecord.source;
     var count=(app.model?app.model.tables.length:0)+' tables · '+(app.model?app.model.relationships.length:0)+' relationships';
     var created=Number.isFinite(Date.parse(info.createdAt))?new Date(info.createdAt).toLocaleString():'';
     var identity=el(offline?'div':'button',{cls:'ex-model-button'+(offline?' ex-snapshot-identity':''),title:offline?count:'Switch or import a model',
@@ -45,7 +46,14 @@
     [['graph','Tables'],['measures','Measures'],['power-query','Power Query'],['clusters','Domains'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
     this.host.appendChild(nav);
     var actions=el('div',{cls:'ex-header-actions'});
-    actions.appendChild(el('span',{cls:offline?'ex-snapshot-badge':'ex-local-badge',text:offline?'Offline snapshot':app.host?'VS Code workspace':'Local analysis',
+    if(!offline && app.fabric && app.fabric.available()){
+      actions.appendChild(el('button',{cls:'ex-button',text:'Connect to Fabric',onClick:function(){app.fabric.show();}}));
+      if(fabricSource){
+        actions.appendChild(el('span',{text:'Last fetched '+new Date(fabricSource.fetchedAt).toLocaleString(),title:'Read-only Fabric metadata cache',style:'font-size:11px;color:#64748b;'}));
+        actions.appendChild(el('button',{cls:'ex-button',text:app.fabric.busy?'Refreshing…':'Refresh Fabric',disabled:app.fabric.busy,onClick:function(){app.fabric.refresh();}}));
+      }
+    }
+    actions.appendChild(el('span',{cls:offline?'ex-snapshot-badge':'ex-local-badge',text:offline?'Offline snapshot':fabricSource?'Fabric · read-only':app.host?'VS Code workspace':'Local analysis',
       title:offline?'Includes model metadata, DAX and available Power Query definitions. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'}));
     actions.appendChild(el('button',{cls:'ex-button ex-snapshot-export',text:st.snapshotSaving?'Saving snapshot…':'Save snapshot',disabled:!st.loaded||!!st.snapshotSaving,
       title:'Download an offline copy of the app, including this model, DAX, available Power Query definitions, and your current views',onClick:function(){app.saveSnapshot();}}));
@@ -86,7 +94,7 @@
     if (!(app.host.models||[]).length) menu.appendChild(el('p',{text:'Open a workspace containing a .SemanticModel folder or model.bim, then refresh this list.',style:'padding:0 8px;font-size:12px;line-height:1.6;color:#64748b;'}));
     if(app.state.repoError)menu.appendChild(el('p',{role:'alert',text:app.state.repoError,style:'padding:8px;color:#b91c1c;font-size:12px;'}));
     menu.appendChild(el('button',{cls:'ex-button',role:'menuitem',text:'Refresh model list',onClick:function(){app.hostSelectModel();}}));
-    if (app.state.loaded) {
+    if (app.state.loaded && !(app.fabric && app.fabric.current() && app.fabric.current().source)) {
       menu.appendChild(el('button',{cls:'ex-button',role:'menuitem',text:'Refresh model',onClick:function(){app.hostRefreshModel();}}));
     }
     return wrap;
@@ -103,7 +111,7 @@
     var store = app.getStore();
     var items = [{ id: 'builtin', name: 'Contoso Retail', meta: 'built-in' }]
       .concat(store.filter(function (m) { return String(m.id).indexOf('repo:') !== 0; })
-        .map(function (m) { return { id: m.id, name: m.name, meta: m.model.tables.length + ' tables · imported' }; }));
+        .map(function (m) { return { id: m.id, name: m.name, meta: m.model.tables.length + ' tables · ' + (m.source && m.source.kind==='fabric'?'Fabric cache':'imported') }; }));
     var row = function (item, canDelete, onPick, onDel) {
       var active = app.modelKey === item.id;
       var r = el('div', { style: 'display:flex;align-items:center;border-radius:7px;' + (active ? 'background:#eef4ff;' : '') });

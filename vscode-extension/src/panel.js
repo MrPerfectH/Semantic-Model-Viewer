@@ -10,7 +10,7 @@ const { findModels, readModelFiles } = require('./workspace');
 const STORAGE_PREFIX = 'smv:';
 const VIEW_TYPE = 'semanticModelViewer';
 const MAX_SNAPSHOT_BYTES = 100 * 1024 * 1024;
-const REQUESTS = new Set(['listModels', 'openModel', 'refreshModel', 'snapshotAssets', 'saveSnapshot']);
+const REQUESTS = new Set(['listModels', 'openModel', 'refreshModel', 'snapshotAssets', 'saveSnapshot', 'fabricRequest']);
 const EVENTS = new Set(['ready', 'storage', 'notify', 'openFile']);
 const storageKey = (key) => typeof key === 'string' && key.length <= 1024 && /^(?:smv[_-].+|lsa_model_layout_v1)$/.test(key) && !/[\u0000-\u001f]/.test(key);
 const requestId = (id) => (typeof id === 'number' && Number.isSafeInteger(id) && id >= 0) || (typeof id === 'string' && id.length > 0 && id.length <= 128);
@@ -78,7 +78,8 @@ function modelFileUri(entry, relativePath) {
 }
 
 class ViewerPanel {
-  constructor(context) {
+  constructor(context, fabric) {
+    this.fabric = fabric;
     this.context = context;
     this.panel = null;
     this.current = null;
@@ -132,8 +133,8 @@ class ViewerPanel {
   }
 
   async modelMessage(entry) {
-    const files = await readModelFiles(entry);
-    return { type: 'model', modelId: entry.id, name: entry.name, path: entry.path, files };
+    const files = entry.kind === 'fabric' ? entry.files : await readModelFiles(entry);
+    return { type: 'model', modelId: entry.id, name: entry.name, path: entry.path, files, source: entry.kind === 'fabric' ? { kind: 'fabric', tenantId: entry.tenantId, accountId: entry.accountId, workspaceId: entry.workspaceId, modelId: entry.modelId, fetchedAt: entry.fetchedAt, method: entry.method } : undefined };
   }
 
   afterOpen(entry, panel, epoch) {
@@ -156,7 +157,7 @@ class ViewerPanel {
         if (this.ready || this.initializing === panel) return;
         this.initializing = panel;
         try {
-          const models = await findModels();
+          const models = await this.listModels();
           while (this.panel === panel) {
             const epoch = this.epoch, entry = this.pendingOpen || this.current;
             let open = null;
@@ -166,7 +167,7 @@ class ViewerPanel {
             }
             if (!this.isCurrent(panel, epoch)) continue;
             this.pendingOpen = null; this.ready = true;
-            await this.post({ type: 'init', storage: this.storageDump(), models: models.map(pub), caps: {}, open }, panel);
+            await this.post({ type: 'init', storage: this.storageDump(), models: models.map(pub), caps: { fabric: true }, open }, panel);
             if (open) this.afterOpen(entry, panel, epoch);
             return;
           }
@@ -177,11 +178,18 @@ class ViewerPanel {
         if (!storageKey(msg.key) || (msg.value !== null && typeof msg.value !== 'string') || (typeof msg.value === 'string' && msg.value.length > MAX_SNAPSHOT_BYTES)) throw new Error('Invalid viewer storage value.');
         await this.context.workspaceState.update(STORAGE_PREFIX + msg.key, msg.value === null ? undefined : msg.value);
         return;
-      case 'listModels': return reply({ models: (await findModels()).map(pub) });
+      case 'listModels': return reply({ models: (await this.listModels()).map(pub) });
+      case 'fabricRequest': {
+        if (msg.payload && msg.payload.action === 'removeModel') {
+          await this.fabric.removeSource(msg.payload);
+          return reply({ removed: true });
+        }
+        return reply(await this.fabric.request(msg.payload));
+      }
       case 'openModel': {
         if (typeof msg.modelId !== 'string' || !msg.modelId || msg.modelId.length > 8192) throw new Error('Invalid model identifier.');
         const epoch = ++this.epoch;
-        const models = await findModels();
+        const models = await this.listModels();
         if (!this.isCurrent(panel, epoch)) return reply({ cancelled: true });
         const entry = models.find((m) => m.id === msg.modelId);
         if (!entry) throw new Error('Model not found in the workspace: ' + msg.modelId);
@@ -215,6 +223,13 @@ class ViewerPanel {
       }
       case 'openFile': {
         if (!this.current) throw new Error('Open a model first.');
+        if (this.current.kind === 'fabric') {
+          const file = this.current.files.find(f => f.path === msg.path);
+          if (!file) throw new Error('Model source file not found.');
+          const doc = await vscode.workspace.openTextDocument({ content: file.text, language: /\.tmdl$/i.test(file.path) ? 'plaintext' : 'json' });
+          await vscode.window.showTextDocument(doc, { preview: true, viewColumn: vscode.ViewColumn.Beside });
+          return;
+        }
         const epoch = this.epoch, uri = modelFileUri(this.current, msg.path);
         const doc = await vscode.workspace.openTextDocument(uri);
         if (this.isCurrent(panel, epoch)) await vscode.window.showTextDocument(doc, { preview: true, viewColumn: vscode.ViewColumn.Beside });
@@ -222,6 +237,8 @@ class ViewerPanel {
       }
     }
   }
+
+  async listModels() { return (await findModels()).concat(this.fabric ? this.fabric.entries() : []); }
 
   storageDump() {
     const out = {};
@@ -235,8 +252,10 @@ class ViewerPanel {
     if (!this.panel || !this.current) { vscode.window.showInformationMessage('Semantic Model Viewer: no model is open.'); return { cancelled: true }; }
     const panel = this.panel, entry = this.current, epoch = ++this.epoch;
     try {
-      const message = await this.modelMessage(entry);
+      const refreshed = entry.kind === 'fabric' ? await this.fabric.refresh(entry) : entry;
+      const message = await this.modelMessage(refreshed);
       if (!this.isCurrent(panel, epoch)) return { cancelled: true };
+      this.current = refreshed;
       await this.post(message, panel);
       this.afterOpen(entry, panel, epoch);
       return { refreshed: true, modelId: entry.id };
@@ -249,6 +268,7 @@ class ViewerPanel {
 
   setupWatcher(entry) {
     this.disposeWatcher();
+    if (entry.kind === 'fabric') return;
     const panel = this.panel;
     const bump = () => {
       clearTimeout(this.watchTimer);

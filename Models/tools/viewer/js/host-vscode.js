@@ -29,6 +29,8 @@
 
   var host = {
     kind: 'vscode',
+    fabricAvailable: true,
+    fabricRequest: function (payload) { return request('fabricRequest', { payload: payload }); },
     caps: { drop: false, pickFiles: false, connectRepo: false, workspace: true, png: false },
     storage: {
       get: function (k) { return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null; },
@@ -63,7 +65,7 @@
       if (!m || !m.files) return null;
       var model = g.TMDLParser.parseAny(m.files);
       var name = m.name || model.name || 'Model';
-      return { id: m.modelId, name: name, path: m.path, model: model };
+      return { id: m.modelId, name: name, path: m.path, source: m.source, model: model };
     }
   };
 

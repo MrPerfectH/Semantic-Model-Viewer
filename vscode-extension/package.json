@@ -36,7 +36,7 @@
     "commands": [
       {
         "command": "semanticModelViewer.open",
-        "title": "Open Model…",
+        "title": "Open Model\u2026",
         "category": "Semantic Model Viewer",
         "icon": "$(type-hierarchy)"
       },
@@ -60,6 +60,27 @@
         "title": "Refresh Model List",
         "category": "Semantic Model Viewer",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "semanticModelViewer.connectFabric",
+        "title": "Connect to Fabric\u2026",
+        "category": "Semantic Model Viewer",
+        "icon": "$(cloud)"
+      },
+      {
+        "command": "semanticModelViewer.fabricSignOut",
+        "title": "Sign Out of Fabric",
+        "category": "Semantic Model Viewer"
+      },
+      {
+        "command": "semanticModelViewer.removeFabricModel",
+        "title": "Remove Saved Fabric Model\u2026",
+        "category": "Semantic Model Viewer"
+      },
+      {
+        "command": "semanticModelViewer.fabricSwitchAccount",
+        "title": "Switch Fabric Account\u2026",
+        "category": "Semantic Model Viewer"
       }
     ],
     "menus": {
@@ -90,6 +111,11 @@
           "command": "semanticModelViewer.open",
           "when": "view == semanticModelViewer.models",
           "group": "navigation@2"
+        },
+        {
+          "command": "semanticModelViewer.connectFabric",
+          "when": "view == semanticModelViewer.models",
+          "group": "navigation@3"
         }
       ]
     },
@@ -107,7 +133,7 @@
             "type": "string"
           },
           "default": [],
-          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**`. Hidden folders (`.worktrees`, `.pbi`, `.venv`…), `node_modules` and `.git` are always skipped."
+          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**`. Hidden folders (`.worktrees`, `.pbi`, `.venv`\u2026), `node_modules` and `.git` are always skipped."
         }
       }
     },
@@ -133,7 +159,7 @@
     "viewsWelcome": [
       {
         "view": "semanticModelViewer.models",
-        "contents": "No *.SemanticModel folder or model.bim found in the open workspace.\n\nOpen a folder that contains a Power BI project (.pbip) and the models appear here.\n[Refresh](command:semanticModelViewer.refreshModels)"
+        "contents": "No *.SemanticModel folder or model.bim found in the open workspace.\n\nOpen a folder that contains a Power BI project (.pbip) and the models appear here.\n[Refresh](command:semanticModelViewer.refreshModels)\n[Connect to Fabric](command:semanticModelViewer.connectFabric)"
       }
     ]
   },
@@ -148,5 +174,8 @@
     "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^4.0.0"
   },
-  "icon": "images/icon.png"
+  "icon": "images/icon.png",
+  "dependencies": {
+    "@azure/msal-node": "^7.0.1"
+  }
 }

@@ -4,7 +4,7 @@
   'use strict';
   var FORMAT = 'semantic-model-viewer', VERSION = 1;
   var FILES = ['js/util.js', 'js/snapshot.js', 'js/roles.js', 'js/tmdl-parser.js', 'js/workspace-ui.js', 'js/canvas.js', 'js/layouts.js',
-    'js/matrix.js', 'js/dax-format.js', 'js/measures.js', 'js/power-query-dependencies.js', 'js/power-query-graph-model.js', 'js/power-query-canvas.js', 'js/power-query-inspector.js', 'js/power-query-workspace.js', 'js/power-query-lineage.js', 'js/power-query.js', 'js/sidebar.js', 'js/topbar.js', 'js/rules.js', 'js/relationships.js', 'js/explorer.js', 'js/app.js', 'explorer.css', 'measures.css', 'power-query.css', 'power-query-canvas.css', 'power-query-inspector.css', 'power-query-workspace.css', 'power-query-lineage.css'];
+    'js/matrix.js', 'js/dax-format.js', 'js/measures.js', 'js/power-query-dependencies.js', 'js/power-query-graph-model.js', 'js/power-query-canvas.js', 'js/power-query-inspector.js', 'js/power-query-workspace.js', 'js/power-query-lineage.js', 'js/power-query.js', 'js/sidebar.js', 'js/topbar.js', 'js/rules.js', 'js/relationships.js', 'js/explorer.js', 'js/fabric.js', 'js/app.js', 'explorer.css', 'measures.css', 'power-query.css', 'power-query-canvas.css', 'power-query-inspector.css', 'power-query-workspace.css', 'power-query-lineage.css'];
   var CSP = "default-src 'none'; script-src 'unsafe-inline'; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
   function clone(value) { return value == null ? null : JSON.parse(JSON.stringify(value)); }
   function pick(value, keys) {
@@ -102,7 +102,7 @@
       used.add(path);
       return '<script data-smv-asset="'+path+'">'+sources[path].replace(/<\/script/gi,'<\\/script')+'</script>';
     });
-    if(!used.has('js/snapshot.js')||!used.has('js/app.js'))throw new Error('This viewer version cannot create interactive snapshots.');
+    if(!used.has('js/snapshot.js')||!used.has('js/fabric.js', 'js/app.js'))throw new Error('This viewer version cannot create interactive snapshots.');
     // Callback replacements keep dollar sequences in model text and embedded JSON literal.
     html=html.replace(/<title>[\s\S]*?<\/title>/i,function(){return '<title>'+escapeHTML(payload.name)+' — interactive snapshot</title>';});
     html=html.replace('<head>',function(){return '<head>\n<meta http-equiv="Content-Security-Policy" content="'+CSP+'">';});
