@@ -883,7 +883,9 @@
     api: async function (path, params) {
       var q = Object.keys(params || {}).map(function (k) { return k + '=' + encodeURIComponent(params[k]); }).join('&');
       var r = await fetch('api/' + path + (q ? '?' + q : ''), { cache: 'no-store' });
-      var j = null; try { j = await r.json(); } catch (e) { }
+      var j = null;
+      try { j = await r.json(); }
+      catch (e) { if (r.ok) throw new Error('The local app response could not be read completely. Try opening the folder again.'); }
       if (!r.ok) throw new Error((j && j.error) || ('The local app returned ' + r.status + '.'));
       return j;
     },
@@ -1006,7 +1008,24 @@
       this.setState({ repoScanning: false, repoError: found.length ? '' : ('No *.SemanticModel folders found in “' + handle.name + '”.') });
     },
     readModelDir: async function (h) {
-      if (h.dir) { var r = await this.api('model', { path: h.dir }); return r.files || []; }
+      if (!/\.SemanticModel$/i.test(h.dir ? this.baseName(h.dir) : h.name)) {
+        var found = await this._findModelDirs(h);
+        if (found.length) {
+          var combined = [];
+          for (var model of found) {
+            var modelFiles = await this.readModelDir(model.handle || { dir: model.dir, name: this.baseName(model.dir) });
+            modelFiles.forEach(function (f) { combined.push(Object.assign({}, f, { path: model.path + '/' + f.path })); });
+          }
+          return combined;
+        }
+      }
+      if (h.dir) {
+        var r = await this.api('model', { path: h.dir });
+        if (!r || !Array.isArray(r.files) || r.files.some(function (f) { return !f || typeof f.name !== 'string' || typeof f.path !== 'string' || typeof f.text !== 'string'; })) {
+          throw new Error('The local app did not return a readable model. Try opening the folder again.');
+        }
+        return r.files;
+      }
       var files = [];
       var walk = async function (dir, path) {
         for await (var ent of dir.entries()) {

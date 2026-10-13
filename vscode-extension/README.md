@@ -1,49 +1,57 @@
 # Semantic Model Viewer for VS Code
 
-![Semantic Model Viewer: build a table canvas, follow a measure through its DAX, browse domains and the fact matrix](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/demo.gif)
+**Explore your measures, model relationships, and Power Query flow in one place.**
 
-Explore Power BI semantic models from local TMDL / PBIP files or `model.bim`. Build a
-working canvas from a table library, inspect relationships and filter direction, and trace
-measure dependencies alongside the complete DAX expression, and see how Power Query queries,
-parameters and functions feed each table. The viewer needs no Power BI Desktop, Fabric
-connection, or Python.
+Open local TMDL / PBIP files or `model.bim` in VS Code. Trace a measure through its DAX,
+build a focused table canvas, and see how queries feed your tables. No Power BI Desktop,
+Fabric connection, or Python is required.
 
-## Power Query lineage
+[Try the live demo](https://MrPerfectH.github.io/Semantic-Model-Viewer/) before installing.
+The screenshots below use only the synthetic **Contoso Retail** demo. Select an image to
+open it at full size.
 
-See how your queries feed each other. The **Power Query** tab draws parameters, functions, shared queries and every table's partition as a flow from input to consumer.
+## Measures
 
-![Walkthrough: pick a query, follow its inputs and consumers, read its M and jump to a referenced query](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/power-query.gif)
+Follow the logic behind a measure. Trace what feeds it and what depends on it, then compare the DAX without losing your place.
 
-- **Follow the flow.** Pick any query, parameter, function or table. See everything it reads from (**Inputs**) and everything that uses it (**Used by**).
-- **Read the M.** A read-only panel shows the code with line numbers. Click a reference inside the code to jump to the query it uses. **Open full query** gives a wide reader, and **Copy M** copies the text exactly.
-- **Stay oriented.** Search, filter connected or disconnected objects, and use **Back** to return to where you were.
-- **Nothing runs.** Links come from reading the M text only. No query is executed and no source data is read. Links the viewer cannot confirm are listed, not guessed. Snapshots include available query definitions.
+- Search by name, folder, home table, or DAX; spot hidden measures and report usage.
+- Switch between dependencies, DAX, and split view. Select a related measure to compare formulas.
 
-![Inputs of a query: two parameters and a source query flow into Stage Sales](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/power-query-flow.png)
+| Dependency flow | DAX comparison |
+| --- | --- |
+| [![Gross Margin % dependency flow at 100% zoom, with upstream measures in purple and a downstream measure in blue](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-flow.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-flow.png) | [![Gross Margin % and Gross Profit formulas beside their dependency graph](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-dax.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-dax.png) |
 
-![The M of a query, with its inputs and consumers beside it](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/power-query-inspector.png)
+## Tables
 
-## What you get
+Build a canvas around the tables you care about. Read cardinality and filter direction on the relationship lines, and inspect the selected table beside the diagram.
 
-**Tables.** Start from a blank canvas and add only the tables you care about.
+- Add tables from the library or follow direct and indirect filter paths to related tables.
+- Arrange, focus, and pin tables; save named views and navigate with the minimap.
 
-![A canvas of fact and dimension tables with their relationships](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/tables.png)
+| Relationship canvas | Table inspector |
+| --- | --- |
+| [![Sales and seven dimensions with cardinality pills, filter arrows, and a dashed inactive Date relationship](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/tables.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/tables.png) | [![A closer Sales neighborhood with the table source and relationship details in the inspector](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/table-inspector.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/table-inspector.png) |
 
-**Table inspector.** See a table's columns and relationships, and add its related tables by filter direction.
+## Power Query
 
-![The table inspector next to the canvas](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/table-inspector.png)
+See how queries, parameters, functions, and table partitions feed each other. Follow a flow from input to consumer and read the M behind it.
 
-**Measures.** Follow a measure through everything that feeds it and everything built on it, next to its full DAX.
+- Select a query for **Inputs** or a parameter for **Used by**. Inspect references and use **Back** to return.
+- Read line-numbered M beside the flow, jump through highlighted references, or use **Open full query** and **Copy M**.
 
-![The dependency flow of a measure](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/measure-flow.png)
+| Input flow | M and query details |
+| --- | --- |
+| [![Environment, StartYear, and RawSales feed StageSales, with ServerName upstream of RawSales](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/power-query-flow.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/power-query-flow.png) | [![StageSales input flow beside its inputs, consumer, and complete read-only M expression](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/power-query-inspector.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/power-query-inspector.png) |
 
-**Domains and matrix.** Group tables into domains, and compare every fact table with the tables around it.
+Links come from static analysis of M. No query runs and no source data is read. Unconfirmed links remain explicit; snapshots include available query definitions.
 
-![Model domains](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/domains.png)
+## Additional (Domains and Matrix)
 
-![The fact relationship matrix](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/main/docs/img/matrix.png)
+Step back to see the model as a whole. **Domains** groups related tables into a map you can expand; **Matrix** compares fact tables with their related tables across the model.
 
-Want to look first? [Try the live demo](https://MrPerfectH.github.io/Semantic-Model-Viewer/) in your browser. It needs no install.
+| Domains | Fact relationship matrix |
+| --- | --- |
+| [![All eleven Contoso Retail domains with table counts and connections between domains](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/domains.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/domains.png) | [![Fact tables across the matrix with related tables down the rows and active, bidirectional, and multiple relationship indicators](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/matrix.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/matrix.png) |
 
 ## Open a model
 
@@ -57,23 +65,12 @@ The extension refreshes models when their definition files change. Layouts and v
 settings are saved in VS Code workspace state; table workspaces and saved views belong to
 their model.
 
-## Explore and share
+## Share an interactive snapshot
 
-- **Tables:** start with a blank canvas, add or drag tables from the library, and expand
-  related tables by incoming filters, outgoing filters, or all connections. Choose direct
-  relationships or follow indirect paths. Focus and pin tables, save views, and use the
-  minimap to navigate larger diagrams. Hide the table library or the table inspector from
-  the canvas toolbar when you want the full width for the diagram.
-- **Measures:** search the library, inspect dependencies and dependents, and compare the
-  graph with full DAX in graph, split, or DAX views.
-- **Power Query:** follow queries, parameters, functions and table partitions from input to
-  consumer, and read their M next to the flow.
-- **Domains:** inspect model groups and expand their member tables.
-- **Matrix:** compare fact tables with their related tables.
-- **Save snapshot:** create one self-contained HTML file containing the complete model
-  metadata, DAX and available Power Query definitions, plus the current workspace and view. The recipient opens it in a
-  browser without VS Code, the repository, or a model connection. Changes in an opened
-  snapshot remain in that tab; save another snapshot to keep them.
+Use **Save snapshot** to create one self-contained HTML file with the model metadata,
+DAX, available Power Query definitions, and current workspace and view. The recipient opens it in a browser without VS Code,
+the repository, or a model connection. Changes in an opened snapshot remain in that tab;
+save another snapshot to keep them.
 
 Snapshots include analytical names, schema information, DAX and exact available M.
 Endpoint strings and parameter values written in M are included; separate connection
@@ -91,7 +88,8 @@ or report-usage dataset.
 The command palette also provides **Refresh Model** and **Refresh Model List**. PNG export
 is unavailable in the VS Code webview; use an interactive HTML snapshot to share a view.
 
-## Development and local packaging
+<details>
+<summary>Development and local packaging</summary>
 
 Use Node.js 22 or later for the packaging tools. From the repository root:
 
@@ -104,8 +102,8 @@ npm run package
 
 The package is `semantic-model-viewer-<version>.vsix`. This command builds locally; it does not
 publish or install the extension. Pushing a `vX.Y.Z` tag (matching `package.json`) makes the
-GitHub release workflow build, test and attach the `.vsix` to a GitHub Release, which is the
-supported way to install it until a Marketplace listing exists.
+GitHub release workflow build, test and attach the `.vsix` to a GitHub Release for
+manual installation.
 
 To test interactively, open either the repository root or `vscode-extension/` in VS Code
 and press F5 using **Run Semantic Model Viewer extension**. The pre-launch task syncs the
@@ -123,8 +121,10 @@ The extension host is plain CommonJS in `src/`. Its VS Code adapter connects the
 viewer to workspace discovery, model reading, persistence, and export. Edit the canonical
 viewer rather than generated `media/`.
 
-## Provenance
+### Provenance
 
 Version 0.2.0 integrates the VS Code extension work recovered from
 `origin/claude/model-viewer-vsc-plugin-dfmn8c` with the current shared viewer. It supersedes
 the earlier 0.1.0 package, which targeted the former `viewer/` source directory.
+
+</details>

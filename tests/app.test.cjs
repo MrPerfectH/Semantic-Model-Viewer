@@ -478,6 +478,87 @@ test('refresh is unavailable for the built-in model, hosts, and browsers without
 });
 
 /* ---------- local app server (scripts/serve.py) ---------- */
+function directory(name, children) {
+  return { name, kind: 'directory', async *entries() { yield* Object.entries(children); } };
+}
+function sourceFile(name, text, reads) {
+  return { name, kind: 'file', getFile: async () => ({ text: async () => { reads.push(name); return text; } }) };
+}
+
+test('repo import discovers first, reads only models, and keeps nested paths and multiple model names', async () => {
+  const { app, context } = harness();
+  const calls = [], reads = [], raw = 'table Sales\r\n\tcolumn A\r\n';
+  const directFiles = [{ name: 'Sales.tmdl', path: 'definition/tables/Sales.tmdl', text: raw }];
+  context.fetch = async url => {
+    calls.push(url);
+    if (url === 'api/find?path=%2Frepo') return { ok: true, json: async () => ({ models: [
+      { name: 'Demo', path: 'Sub/Demo.SemanticModel', dir: '/repo/Sub/Demo.SemanticModel' },
+      { name: 'Perf', path: 'Perf.SemanticModel', dir: '/repo/Perf.SemanticModel' },
+    ] }) };
+    assert.ok(['api/model?path=%2Frepo%2FSub%2FDemo.SemanticModel', 'api/model?path=%2Frepo%2FPerf.SemanticModel'].includes(url));
+    return { ok: true, json: async () => ({ files: directFiles }) };
+  };
+  const serverFiles = await app.readModelDir({ dir: '/repo' });
+  assert.deepEqual(calls, ['api/find?path=%2Frepo', 'api/model?path=%2Frepo%2FSub%2FDemo.SemanticModel', 'api/model?path=%2Frepo%2FPerf.SemanticModel']);
+  const nativeModel = name => directory(name, { definition: directory('definition', {
+    tables: directory('tables', { 'Sales.tmdl': sourceFile('Sales.tmdl', raw, reads) }),
+  }) });
+  const outside = { kind: 'file', getFile: async () => assert.fail('outside model content must not be read') };
+  const nativeFiles = await app.readModelDir(directory('repo', {
+    analysis: directory('analysis', { 'unrelated.json': outside }), 'outside.tmdl': outside,
+    Sub: directory('Sub', { 'Demo.SemanticModel': nativeModel('Demo.SemanticModel') }),
+    'Perf.SemanticModel': nativeModel('Perf.SemanticModel'),
+    node_modules: directory('node_modules', { 'Skipped.SemanticModel': directory('Skipped.SemanticModel', { 'model.bim': outside }) }),
+    '.hidden': directory('.hidden', { 'Skipped.SemanticModel': directory('Skipped.SemanticModel', { 'model.bim': outside }) }),
+  }));
+  assert.deepEqual(reads, ['Sales.tmdl', 'Sales.tmdl']);
+  assert.deepEqual(plain(nativeFiles.map(({ handle, ...file }) => file)), plain(serverFiles));
+  assert.deepEqual(plain(serverFiles.map(f => f.path)), ['Sub/Demo.SemanticModel/definition/tables/Sales.tmdl', 'Perf.SemanticModel/definition/tables/Sales.tmdl']);
+  await app.handleFiles(serverFiles.map(f => ({ name: f.name, p: f.path, text: f.text })));
+  assert.deepEqual(plain(app.getStore().map(m => ({ id: m.id, name: m.name, tables: m.model.tables.map(t => t.name) }))), [
+    { id: 'repo:Sub/Demo.SemanticModel', name: 'Demo', tables: ['Sales'] },
+    { id: 'repo:Perf.SemanticModel', name: 'Perf', tables: ['Sales'] },
+  ]);
+});
+
+test('direct model readers skip discovery and flat TMDL/BIM folders fall back after discovery', async () => {
+  const { app, context } = harness(); const calls = [], reads = [];
+  const files = [{ name: 'Sales.tmdl', path: 'Sales.tmdl', text: 'table Sales\r\n' },
+    { name: 'model.bim', path: 'model.bim', text: '{"model":{"tables":[]}}' }];
+  context.fetch = async url => {
+    calls.push(url);
+    return { ok: true, json: async () => url.startsWith('api/find?') ? { models: [] } : { files } };
+  };
+  assert.deepEqual(plain(await app.readModelDir({ dir: '/Demo.SemanticModel', name: 'Demo' })), files);
+  assert.deepEqual(calls, ['api/model?path=%2FDemo.SemanticModel']);
+  calls.length = 0;
+  assert.deepEqual(plain(await app.readModelDir({ dir: '/flat', name: 'flat' })), files);
+  assert.deepEqual(calls, ['api/find?path=%2Fflat', 'api/model?path=%2Fflat']);
+  const children = Object.fromEntries(files.map(f => [f.name, sourceFile(f.name, f.text, reads)]));
+  app._findModelDirs = async () => assert.fail('direct model must not discover itself');
+  const direct = await app.readModelDir(directory('Demo.SemanticModel', children));
+  app._findModelDirs = context.TestApp.prototype._findModelDirs;
+  const flat = await app.readModelDir(directory('flat', children));
+  assert.deepEqual(plain(direct.map(({ handle, ...file }) => file)), files);
+  assert.deepEqual(plain(flat.map(({ handle, ...file }) => file)), files);
+});
+
+test('successful unreadable JSON and invalid model responses report actionable transport errors', async () => {
+  const { app, context } = harness();
+  context.fetch = async () => ({ ok: true, status: 200, json: async () => { throw new Error('terminated'); } });
+  await assert.rejects(app.readModelDir({ dir: '/Demo.SemanticModel' }), /The local app response could not be read completely\. Try opening the folder again\./i);
+  for (const response of [null, {}, { files: null }, { files: {} }, { files: [null] }, { files: [{ name: 'Sales.tmdl' }] }]) {
+    context.fetch = async () => ({ ok: true, json: async () => response });
+    await assert.rejects(app.readModelDir({ dir: '/Demo.SemanticModel' }), /The local app did not return a readable model\. Try opening the folder again\./i);
+  }
+  context.fetch = async () => ({ ok: false, status: 400, json: async () => ({ error: 'Not a folder' }) });
+  await assert.rejects(app.api('model', {}), /Not a folder/);
+  context.fetch = async () => ({ ok: false, status: 502, json: async () => { throw new Error('bad JSON'); } });
+  await assert.rejects(app.api('model', {}), /local app returned 502/);
+  context.fetch = async () => ({ ok: true, json: async () => ({ ok: true, home: '/home' }) });
+  assert.deepEqual(plain(await app.api('ping')), { ok: true, home: '/home' });
+});
+
 function serverFixture() {
   const h = harness(); const { app, context } = h;
   app.server = { ok: true, home: '/home/u', sep: '/' };

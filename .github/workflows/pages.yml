@@ -26,7 +26,7 @@ jobs:
         run: |
           mkdir site
           cd Models/tools/viewer
-          cp -r index.html explorer.css measures.css js icons sw.js manifest.webmanifest \
+          cp -r index.html *.css js icons sw.js manifest.webmanifest \
             model-data.json report-usage.json ../../../site/
           touch ../../../site/.nojekyll
       - uses: actions/configure-pages@v5

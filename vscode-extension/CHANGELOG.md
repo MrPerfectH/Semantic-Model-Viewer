@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.8
+
+- Find SemanticModel folders before reading repository imports to avoid freezing on unrelated JSON dumps.
+- Show clear errors when a model transfer fails.
+- Release the diagram transform hint after panning or zooming.
+- Include all Power Query styles in the web demo release.
+
+## 0.3.7
+
+- Organize the Marketplace page into Measures, Tables, Power Query and Additional sections, with eight screenshots.
+- Include Power Query metadata in the built-in demo model.
+
 ## 0.3.6
 
 - Include the license in the extension package, so the Marketplace page shows it.
