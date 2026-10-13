@@ -692,7 +692,7 @@
         var vm = self.state.viewMode;
         var host = vm === 'matrix' ? (self.matrix.el ? (self.matrix.el.firstElementChild || self.matrix.el) : null)
           : (vm === 'measures' ? document.getElementById('measures') : self.canvas.host);
-        return h2i.toPng(host, { pixelRatio: 2, backgroundColor: '#f4f5f7', filter: function (n) { return n !== self.canvas.tip; } });
+        return h2i.toPng(host, { pixelRatio: 2, backgroundColor: g.ViewerTheme && g.ViewerTheme.get() === 'spellbook' ? '#f7efdf' : '#f4f5f7', filter: function (n) { return n !== self.canvas.tip; } });
       }).then(function (url) {
         var a = document.createElement('a');
         a.href = url; a.download = (self.state.modelName || 'model') + ' diagram.png';
@@ -1375,7 +1375,7 @@
   if (typeof module === 'object' && module.exports) module.exports = App;
 
   window.addEventListener('DOMContentLoaded', function () {
-    function start() { var app = new App(); window.app = app; app.render(); return app.init(); }
+    function start() { if (g.ViewerTheme) g.ViewerTheme.init(); var app = new App(); window.app = app; app.render(); return app.init(); }
     if (g.SMVHost && g.SMVHost.kind === 'vscode') {
       g.SMVHost.boot().then(function () { U.store.useAdapter(g.SMVHost.storage); return start(); }).catch(function (error) {
         var root = document.getElementById('root'); U.clear(root);

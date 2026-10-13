@@ -97,6 +97,11 @@ first visit; the system font is used if they cannot be loaded) and loads the PNG
 library on demand. Interactive snapshots bundle their own scripts/styles, use system fonts,
 and run entirely offline.
 
+Use the **Appearance** selector in the top bar to switch between **Classic** and
+**Spellbook**, a parchment theme with burgundy controls and book-inspired headings.
+The choice is remembered in your browser or VS Code workspace. Interactive snapshots
+include the chosen theme and its artwork; changing it in a snapshot stays in that tab.
+
 ```
 Models/tools/viewer/
 ├── index.html            entry point
@@ -145,7 +150,7 @@ Open your model, choose the starting view, and click **Save snapshot**. Share th
 single downloaded HTML file. The recipient opens it in a desktop browser and can
 explore **Tables, Measures, Domains, and Matrix** without installing anything or
 connecting to the semantic model. Saved table views, formulas, comparisons, focus,
-layout preferences, and graph positions travel with the file.
+layout preferences, appearance, and graph positions travel with the file.
 
 ### Generate a snapshot from TMDL
 

@@ -264,7 +264,7 @@
       var fact = app.isFact(t);
       var chrome = g.WorkspaceUI ? g.WorkspaceUI.cardStyles({fact:fact,color:app.tableColor(t),headerTint:U.tint(app.tableColor(t),.1)}) : {};
       var card = el('div', {
-        data: { name: t.name },
+        data: { name: t.name, fact: String(fact) },
         style: 'position:absolute;width:' + this.CARD_W + 'px;background:#fff;border:1px solid #e4e7ec;border-radius:' + (fact ? '7px' : '13px') +
           ';box-shadow:0 1px 2px rgba(20,30,50,.05),0 4px 12px rgba(20,30,50,.07);font-family:\'IBM Plex Sans\',sans-serif;overflow:hidden;transition:box-shadow .15s,opacity .15s,border-color .15s;'
       });
@@ -1453,6 +1453,7 @@
       Object.keys(this.cards).forEach(function (n) {
         var c = self.cards[n];
         var t = c.table; var col = app.tableColor(t); var fact = app.isFact(t);
+        c.el.setAttribute('data-fact', String(fact));
         var head = c.head, role = c.roleEl, caretSvg = c.caret.firstChild;
         if (c.rm) c.rm.style.color = fact ? 'rgba(255,255,255,.85)' : '#6b7280';
         head.style.boxShadow = 'none';
