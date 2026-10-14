@@ -1,3 +1,8 @@
 node_modules/
 .DS_Store
 *.log
+
+__pycache__/
+.smv-rename-recovery/
+.smv-rename-*.tmp
+*.vsix

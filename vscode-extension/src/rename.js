@@ -54,11 +54,12 @@ function createRenameController(vscode, panel, options={}) {
         documents.set(before.toString(),change.original);documents.set(after.toString(),change.text);
         await vscode.commands.executeCommand('vscode.diff',before,after,'Rename review: '+change.path,{preview:false});
       }
-      const answer=await vscode.window.showWarningMessage('Review all '+preview.changes.length+' file diffs before applying. '+preview.notice,{modal:true},'Apply reviewed rename');
+      const answer=await vscode.window.showWarningMessage('Review all '+preview.changes.length+' file diffs before applying. '+preview.notice,'Apply reviewed rename');
       if(answer!=='Apply reviewed rename')return;
       assertClean(root);
       if(panel.current!==entry)throw new Error('The open model changed. Start a new rename review.');
       getService().apply(token,{beforeApply:()=>assertClean(root)});token=null;
+      if(panel.post)await panel.post({type:'renameApplied',rename:{...object.object,newName}});
       await panel.refresh();
       await vscode.window.showInformationMessage('Renamed '+object.object.name+' to '+newName+' in '+preview.changes.length+' source files.');
     } catch(error) {await vscode.window.showErrorMessage('Semantic Model Viewer rename: '+error.message);} finally {if(token)getService().cancel(token);busy=false;}

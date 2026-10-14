@@ -83,6 +83,9 @@
         host._open = msg.open || null;
         initialized = true; g.clearTimeout(bootTimer); initResolve();
         break;
+      case 'renameApplied':
+        if(app&&g.ModelRenameState){g.ModelRenameState.remember(app,msg.rename);app._renameRestore=g.ModelRenameState.capture(app,msg.rename);}
+        break;
       case 'model':      // pushed by the extension: open / refresh a model
         if (app) { try { app.hostOpenModel(host.parseModelMessage(msg)); } catch (error) { app.setState({ repoError: error.message }); } }
         break;

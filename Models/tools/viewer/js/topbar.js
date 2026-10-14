@@ -50,6 +50,7 @@
         el('option',{value:'classic',text:'Classic'}),el('option',{value:'spellbook',text:'Spellbook'})]);
       theme.value=g.ViewerTheme.get();actions.appendChild(theme);
     }
+    if(!offline && g.ModelRenameUI && g.ModelRenameUI.available(app)) actions.appendChild(el('button',{cls:'ex-button',text:'Rename object…',onClick:function(){g.ModelRenameUI.show(app);}}));
     actions.appendChild(el('span',{cls:offline?'ex-snapshot-badge':'ex-local-badge',text:offline?'Offline snapshot':app.host?'VS Code workspace':'Local analysis',
       title:offline?'Includes model metadata, DAX and available Power Query definitions. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'}));
     actions.appendChild(el('button',{cls:'ex-button ex-snapshot-export',text:st.snapshotSaving?'Saving snapshot…':'Save snapshot',disabled:!st.loaded||!!st.snapshotSaving,

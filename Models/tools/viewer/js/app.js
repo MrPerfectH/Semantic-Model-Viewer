@@ -560,6 +560,7 @@
           self.measures.restoreSnapshot(saved.measures); self._domainWorkspace = saved.domains; self._matrixWorkspace = saved.matrix;
           self.setViewMode(saved.viewMode);
         }
+        if(self._renameRestore&&g.ModelRenameState){var restored=self._renameRestore;self._renameRestore=null;g.ModelRenameState.restore(self,restored);}
       });
     },
     hostChooseModel: async function (id) {
