@@ -21,7 +21,7 @@
   function request(type, payload) {
     var id = ++seq;
     return new Promise(function (res, rej) {
-      var timer = g.setTimeout(function () { delete pending[id]; rej(new Error('VS Code did not respond. Close and reopen the viewer to retry.')); }, 120000);
+      var timer = g.setTimeout(function () { delete pending[id]; rej(new Error('VS Code did not respond. Close and reopen the viewer to retry.')); }, type === 'renameReferences' ? 15 * 60 * 1000 : 120000);
       pending[id] = { res: res, rej: rej, timer: timer };
       post(Object.assign({ type: type, id: id }, payload || {}));
     });
@@ -56,6 +56,7 @@
     snapshotAssets: function () { return request('snapshotAssets'); },
     saveSnapshot: function (data) { return request('saveSnapshot', data); },
     refreshModel: function () { return request('refreshModel'); },
+    renameReferences: function () { return request('renameReferences'); },
     openFile: function (path) { post({ type: 'openFile', path: path }); },
     notify: function (level, message) { post({ type: 'notify', level: level, message: message }); },
 

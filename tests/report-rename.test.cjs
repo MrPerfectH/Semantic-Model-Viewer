@@ -46,3 +46,6 @@ test('unknown aggregation wrapper and unresolved semantic alias block',()=>{
  assert.ok(plan('{"queryRef":"Unknown(Sales.Total)"}').blockers.length);
  assert.ok(plan('{"Measure":{"Expression":{"SourceRef":{"Source":"missing"}},"Property":"Total"}}').blockers.length);
 });
+test('UTF-8 BOM is retained with exact token offsets',()=>{
+ const input='\uFEFF { "queryRef": "Sales.Total", "label": "Total" }';const result=plan(input);assert.deepEqual(result.blockers,[]);assert.equal(result.changes[0].text,'\uFEFF { "queryRef": "Sales.Revenue", "label": "Total" }');
+});

@@ -4,7 +4,7 @@ const path = require('node:path').posix;
 // Parse JSON while retaining the exact source range of every scalar. Replacements
 // change only known reference tokens, leaving formatting and display text intact.
 function parseLossless(text) {
-  JSON.parse(text);
+  JSON.parse(text.replace(/^\uFEFF/,''));
   let i = 0;
   const ws = () => { while (/\s/.test(text[i] || '') && i < text.length) i++; };
   function value() {

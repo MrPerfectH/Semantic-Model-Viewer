@@ -10,7 +10,7 @@ const { findModels, readModelFiles } = require('./workspace');
 const STORAGE_PREFIX = 'smv:';
 const VIEW_TYPE = 'semanticModelViewer';
 const MAX_SNAPSHOT_BYTES = 100 * 1024 * 1024;
-const REQUESTS = new Set(['listModels', 'openModel', 'refreshModel', 'snapshotAssets', 'saveSnapshot']);
+const REQUESTS = new Set(['listModels', 'openModel', 'refreshModel', 'snapshotAssets', 'saveSnapshot', 'renameReferences']);
 const EVENTS = new Set(['ready', 'storage', 'notify', 'openFile']);
 const storageKey = (key) => typeof key === 'string' && key.length <= 1024 && /^(?:smv[_-].+|lsa_model_layout_v1)$/.test(key) && !/[\u0000-\u001f]/.test(key);
 const requestId = (id) => (typeof id === 'number' && Number.isSafeInteger(id) && id >= 0) || (typeof id === 'string' && id.length > 0 && id.length <= 128);
@@ -192,6 +192,12 @@ class ViewerPanel {
         await reply(message);
         this.afterOpen(entry, panel, epoch);
         return;
+      }
+      case 'renameReferences': {
+        // Ignore all caller payloads: the native command derives trusted scope
+        // and owns object selection, review tokens, and the apply confirmation.
+        await vscode.commands.executeCommand('semanticModelViewer.renameReferences');
+        return reply({done:true});
       }
       case 'refreshModel': return reply(await this.refresh());
       case 'snapshotAssets': return reply(snapshotAssets(this.mediaUri));
