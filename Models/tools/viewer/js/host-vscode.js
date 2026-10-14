@@ -21,7 +21,7 @@
   function request(type, payload) {
     var id = ++seq;
     return new Promise(function (res, rej) {
-      var timer = g.setTimeout(function () { delete pending[id]; rej(new Error('VS Code did not respond. Close and reopen the viewer to retry.')); }, 120000);
+      var timer = g.setTimeout(function () { delete pending[id]; rej(new Error('VS Code did not respond. Close and reopen the viewer to retry.')); }, type === 'renameReferences' ? 15 * 60 * 1000 : 120000);
       pending[id] = { res: res, rej: rej, timer: timer };
       post(Object.assign({ type: type, id: id }, payload || {}));
     });
@@ -56,6 +56,7 @@
     snapshotAssets: function () { return request('snapshotAssets'); },
     saveSnapshot: function (data) { return request('saveSnapshot', data); },
     refreshModel: function () { return request('refreshModel'); },
+    renameReferences: function () { return request('renameReferences'); },
     openFile: function (path) { post({ type: 'openFile', path: path }); },
     notify: function (level, message) { post({ type: 'notify', level: level, message: message }); },
 
@@ -81,6 +82,9 @@
         if (msg.caps) Object.assign(host.caps, msg.caps);
         host._open = msg.open || null;
         initialized = true; g.clearTimeout(bootTimer); initResolve();
+        break;
+      case 'renameApplied':
+        if(app&&g.ModelRenameState){g.ModelRenameState.remember(app,msg.rename);app._renameRestore=g.ModelRenameState.capture(app,msg.rename);}
         break;
       case 'model':      // pushed by the extension: open / refresh a model
         if (app) { try { app.hostOpenModel(host.parseModelMessage(msg)); } catch (error) { app.setState({ repoError: error.message }); } }

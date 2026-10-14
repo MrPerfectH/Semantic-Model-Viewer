@@ -35,6 +35,11 @@
   "contributes": {
     "commands": [
       {
+        "command": "semanticModelViewer.renameReferences",
+        "title": "Rename Object and References…",
+        "category": "Semantic Model Viewer"
+      },
+      {
         "command": "semanticModelViewer.open",
         "title": "Open Model…",
         "category": "Semantic Model Viewer",

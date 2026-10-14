@@ -191,3 +191,19 @@ test('serve.py starts again on the same port right after it stopped', { skip: !p
   const second = await run(); // macOS refuses to bind while the old connections sit in TIME_WAIT unless SO_REUSEADDR is set
   second.kill();
 });
+
+test('reviewed rename endpoint requires local session and refuses unreviewed writes', { skip: !python && 'python3 not installed' }, async () => {
+ const s=await start(),root=fs.mkdtempSync(path.join(os.tmpdir(),'smv-rename-server-'));
+ try{
+  const modelPath=path.join(root,'Demo.SemanticModel');fs.mkdirSync(modelPath);fs.writeFileSync(path.join(modelPath,'Sales.tmdl'),"table Sales\n\tcolumn Amount\n\tmeasure Revenue = SUM(Sales[Amount])\n");
+  const ping=await get(s.url+'/api/ping'),session=ping.body.renameSession;
+  const post=async(payload,headers={})=>{const r=await fetch(s.url+'/api/rename',{method:'POST',headers:{'Content-Type':'application/json','X-SMV-Rename-Session':session,...headers},body:JSON.stringify(payload)});return{status:r.status,body:await r.json()};};
+  assert.equal((await post({action:'objects',root,modelPath},{'X-SMV-Rename-Session':''})).status,403);
+  assert.equal((await post({action:'objects',root,modelPath},{Origin:'https://evil.example'})).status,403);
+  assert.equal((await post({action:'apply',token:'fake'})).status,400);
+  const preview=await post({action:'preview',root,modelPath,rename:{kind:'column',table:'Sales',name:'Amount',newName:'Value'}});
+  assert.equal(preview.status,200);assert.deepEqual(preview.body.blockers,[]);assert.match(fs.readFileSync(path.join(modelPath,'Sales.tmdl'),'utf8'),/Amount/);
+  const applied=await post({action:'apply',token:preview.body.token});assert.equal(applied.status,200);assert.match(fs.readFileSync(path.join(modelPath,'Sales.tmdl'),'utf8'),/column 'Value'/);
+  assert.equal((await post({action:'apply',token:preview.body.token})).status,400);
+ }finally{s.stop();fs.rmSync(root,{recursive:true,force:true});}
+});

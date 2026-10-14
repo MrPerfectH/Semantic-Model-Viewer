@@ -29,6 +29,10 @@ No install needed. The demo opens with a synthetic "Contoso Retail" model alread
 It reads TMDL (`*.SemanticModel` folders and `.pbip` repos) and `model.bim`. It also renders a
 relationship matrix and a domain map of the whole model.
 
+## Repository renaming (unreleased)
+
+The dedicated rename branch adds **Rename object…** for local TMDL models in the standalone app and desktop VS Code. It previews supported model and bound PBIR report changes together before writing original source files. Unsupported references block saving; external reports/consumers are outside repository coverage. See [supported scope, review, and recovery](docs/reference-aware-renaming.md). The broader editing redesign remains deferred.
+
 ## Install (2 minutes)
 
 The viewer runs on your own computer from a copy of this repo. A small local app
@@ -57,7 +61,7 @@ because it came from the internet. On Mac, right-click `Install on Mac.command` 
 on Windows, choose **More info → Run anyway**. Cloning with git avoids the warning.
 
 **What the local app does:** it listens on `http://localhost:8931` on this computer only,
-only ever reads files (`.tmdl`, `.bim`, `.json`), refuses requests from other websites
+reads model files and applies only explicitly reviewed repository rename transactions, refuses requests from other websites
 open in your browser, and stops itself a few minutes after you close the window.
 Nothing runs at login.
 

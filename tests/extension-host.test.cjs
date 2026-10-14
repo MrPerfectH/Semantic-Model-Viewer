@@ -207,3 +207,10 @@ test('disposing the panel clears pending watcher refresh and prevents old reads 
   assert.equal(webview.posted.filter((m) => m.type === 'model').length, 0);
   assert.equal(h.vscode._watchers[0].disposed, true);
 });
+test('rename webview request invokes only native command and ignores arbitrary patches', async (t) => {
+  const h=harness(t);await h.panel.show(null);const wv=h.vscode._panels[0];const calls=[];
+  h.vscode.commands.executeCommand=async(...args)=>calls.push(args);
+  await wv.webview.receive({type:'renameReferences',id:91,root:'/outside',patches:[{path:'bad',text:'bad'}],token:'forged'});
+  assert.deepEqual(calls,[['semanticModelViewer.renameReferences']]);
+  assert.ok(wv.webview.posted.some(m=>m.id===91 && m.done===true));
+});
