@@ -72,3 +72,7 @@ test('M partitions and shared expressions never rewrite query identifiers or rec
  assert.match(result.files[0].text,/sourceColumn: Sales\n\t\tdescription: Sales/);
  assert.match(result.files[0].text,/let Sales = \[Amount = 1\] in Sales/);
 });
+test('source object inventory uses original quoted identities and excludes M body declarations',()=>{
+ const {listObjects}=require('../Models/tools/viewer/js/model-rename.js');
+ assert.deepEqual(listObjects([file("table 'Bob''s Sales'\n\tcolumn 'A]B'\n\tmeasure 'It''s Total' = 1\n\tpartition P = m\n\t\tsource =\n\t\t\tcolumn Fake\n")]),[{kind:'table',table:"Bob's Sales",name:"Bob's Sales"},{kind:'column',table:"Bob's Sales",name:'A]B'},{kind:'measure',table:"Bob's Sales",name:"It's Total"}]);
+});

@@ -124,7 +124,10 @@
             }
         });
         blockers = Array.from(new Set(blockers));
-        return { files: blockers.length ? [] : output, changes: blockers.length ? [] : changes, diagnostics: diagnostics, blockers: blockers };
+        return { files: blockers.length ? [] : output, changes: blockers.length ? [] : changes, diagnostics: diagnostics, blockers: blockers, objects: objects.map(function (o) { return {kind:o.kind,table:o.table,name:o.name}; }) };
     }
-    return { planModelRename: planModelRename };
+    function listObjects(files) {
+        return planModelRename(files, {kind:'table',name:'__smv_inventory_probe__',newName:'__smv_inventory_destination__'}).objects || [];
+    }
+    return { planModelRename: planModelRename, listObjects: listObjects };
 }));
