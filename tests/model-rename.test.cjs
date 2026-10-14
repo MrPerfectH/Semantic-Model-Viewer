@@ -115,3 +115,11 @@ test('unsupported declaration syntax blocks instead of omitting inventory or col
  assert.equal(result.files.length,0);
  assert.match(result.blockers.join(),/unsupported object declaration/);
 });
+test('new measure names collide across home tables while columns remain table-scoped',()=>{
+ const files=[file('table Sales\n\tcolumn Total\n\tmeasure TotalMeasure = 1\n'),file('table Other\n\tcolumn Revenue\n\tmeasure Revenue = 2\n','tables/Other.tmdl')];
+ const measure=plan(files,{kind:'measure',table:'Sales',name:'TotalMeasure',newName:'Revenue'});
+ assert.equal(measure.files.length,0);
+ assert.match(measure.blockers.join(),/collides/);
+ const column=plan(files,{kind:'column',table:'Sales',name:'Total',newName:'Revenue'});
+ assert.deepEqual(column.blockers,[]);
+});

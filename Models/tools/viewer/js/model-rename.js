@@ -82,7 +82,7 @@
         var targets = objects.filter(function (o) { return o.kind === r.kind && same(o.name, r.name) && (r.kind === 'table' || same(o.table, r.table)); });
         if (targets.length !== 1) blockers.push('Target must resolve to exactly one original declaration.');
         objects.forEach(function (o) {
-            if (same(o.name, r.newName) && ((r.kind === 'table' && o.kind === 'table') || (r.kind !== 'table' && o.kind !== 'table' && same(o.table, r.table)))) blockers.push('New name collides with an existing object.');
+            if (same(o.name, r.newName) && ((r.kind === 'table' && o.kind === 'table') || (r.kind === 'measure' && o.kind === 'measure') || (r.kind !== 'table' && o.kind !== 'table' && same(o.table, r.table)))) blockers.push('New name collides with an existing object.');
         });
         parsed.forEach(function (entry) {
             var patches = [];
