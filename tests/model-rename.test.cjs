@@ -76,3 +76,8 @@ test('source object inventory uses original quoted identities and excludes M bod
  const {listObjects}=require('../Models/tools/viewer/js/model-rename.js');
  assert.deepEqual(listObjects([file("table 'Bob''s Sales'\n\tcolumn 'A]B'\n\tmeasure 'It''s Total' = 1\n\tpartition P = m\n\t\tsource =\n\t\t\tcolumn Fake\n")]),[{kind:'table',table:"Bob's Sales",name:"Bob's Sales"},{kind:'column',table:"Bob's Sales",name:'A]B'},{kind:'measure',table:"Bob's Sales",name:"It's Total"}]);
 });
+test('metadata-looking comment text cannot terminate a DAX expression',()=>{
+ const result=plan([file('table Sales\n\tmeasure Total = 1\n\tmeasure X =\n\t\t/*\n\t\tsourceColumn: Total\n\t\t*/ [Total]\n')],rename);
+ assert.deepEqual(result.blockers,[]);
+ assert.match(result.files[0].text,/sourceColumn: Total\n\t\t\*\/ \[Revenue\]/);
+});

@@ -21,6 +21,18 @@
         }
         return tokens;
     }
+    function blockCommentState(text, open) {
+        for (var i=0;i<text.length;i++) {
+            if (open) { if (text.slice(i,i+2)==='*/') {open=false;i++;} continue; }
+            if (text.slice(i,i+2)==='/*') {open=true;i++;continue;}
+            if (text.slice(i,i+2)==='//' || text.slice(i,i+2)==='--') break;
+            if (text[i]==='"' || text[i] === "'") {
+                var delimiter=text[i];
+                while (++i<text.length) { if(text[i]===delimiter){if(text[i+1]===delimiter)i++;else break;} }
+            }
+        }
+        return open;
+    }
     function planModelRename(files, request) {
         var blockers = [], diagnostics = [], output = [], changes = [], objects = [], parsed = [];
         if (!request || !['table', 'column', 'measure'].includes(request.kind)) return { files: [], changes: [], diagnostics: [], blockers: ['Unsupported rename kind.'] };
@@ -51,7 +63,7 @@
                 if (permission) table = decode(permission[1]);
                 if (/^(perspective|culture)\s+/.test(trimmed)) blockers.push(file.path + ': perspectives/translations require a dedicated reference parser.');
                 if (expression && expression.fenced && trimmed === '```') { lines.push({text:line,offset:offset,table:table,dax:true,begin:0,expression:expression}); expression=null; offset+=raw.length; return; }
-                if (expression && !expression.fenced && trimmed && (indent <= expression.indent || /^[A-Za-z][A-Za-z0-9]*\s*:/.test(trimmed) || /^(formatStringDefinition|annotation|lineageTag)\b/.test(trimmed))) expression = null;
+                if (expression && !expression.fenced && !expression.comment && trimmed && (indent <= expression.indent || /^[A-Za-z][A-Za-z0-9]*\s*:/.test(trimmed) || /^(formatStringDefinition|annotation|lineageTag)\b/.test(trimmed))) expression = null;
                 var exprStart = /^(measure|column|calculationItem)\s+/.test(trimmed) && line.includes('=');
                 exprStart = exprStart || /^(filterExpression|formatStringDefinition|expression)\s*=/.test(trimmed);
                 if (/^partition\s+.*=\s*calculated\s*$/.test(trimmed)) expression = { indent: indent, calculated: true };
@@ -59,9 +71,11 @@
                 var dax = false, begin = 0;
                 if (exprStart || sourceStart) { expression = { indent: indent, fenced: /```\s*$/.test(line) }; dax = true; begin = line.indexOf('=') + 1; }
                 else if (expression && !expression.calculated && (!trimmed || indent > expression.indent || trimmed === '```')) dax = true;
+                if (dax && expression) expression.comment=blockCommentState(line.slice(begin), expression.comment);
                 lines.push({ text: line, offset: offset, table: table, dax: dax, begin: begin, expression: dax ? expression : null });
                 offset += raw.length;
             });
+            if (expression && (expression.fenced || expression.comment)) blockers.push(file.path + ': unterminated DAX fence or comment.');
             parsed.push({ file: file, lines: lines });
         });
         var targets = objects.filter(function (o) { return o.kind === r.kind && same(o.name, r.name) && (r.kind === 'table' || same(o.table, r.table)); });
