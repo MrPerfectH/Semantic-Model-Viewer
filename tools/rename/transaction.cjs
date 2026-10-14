@@ -25,6 +25,7 @@ function inventory(root, modelRelative) {
       const file = path.join(dir,item.name);
       if (item.isSymbolicLink()) throw new Error('Symbolic links in rename source folders are unsupported.');
       if (item.isDirectory()) walk(file, report);
+      else if (item.isFile() && /\.(?:pbix|rdl)$/i.test(item.name)) throw new Error('Unsupported repository report format: '+item.name);
       else if (item.isFile() && /\.(?:tmdl|bim|json|pbir)$/i.test(item.name)) {
         const relative = path.relative(root,file).split(path.sep).join('/');
         const bytes = fs.readFileSync(file);
@@ -43,6 +44,7 @@ function inventory(root, modelRelative) {
       if (item.name.startsWith('.') || ['node_modules','bin','obj'].includes(item.name)) continue;
       const child = path.join(dir,item.name);
       if (item.isSymbolicLink()) throw new Error('Repository discovery encountered a symbolic link.');
+      if(item.isFile() && /\.(?:pbix|rdl)$/i.test(item.name))throw new Error('Unsupported repository report format: '+item.name);
       if (!item.isDirectory() || child === model) continue;
       if (/\.Report$/i.test(item.name)) walk(child,true); else reports(child,depth+1);
     }
@@ -71,6 +73,7 @@ function apply(root, plan, {beforeWrite = ()=>{}}={}) {
     if(seen.has(change.path))throw new Error('Duplicate source change.');seen.add(change.path);
     const file=target(root,change.path),bytes=fs.readFileSync(file);
     if(!plan.consulted.some(source=>source.path===change.path))throw new Error('Source was not part of the reviewed inventory.');
+    if((fs.statSync(file).mode&0o222)===0)throw new Error('Rename source is read-only.');
     if(bytes.toString('utf8')!==change.original)throw new Error('Source changed after review.');
     return {path:change.path,original:bytes.toString('base64'),replacement:Buffer.from(change.text,'utf8').toString('base64'),oldHash:sha(bytes),newHash:sha(Buffer.from(change.text,'utf8')),mode:fs.statSync(file).mode&0o777};
   });
