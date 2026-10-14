@@ -1,0 +1,36 @@
+✖ Power Query source lines keep their reader background under VS Code host themes (342.816671ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 410.58403
+
+✖ failing tests:
+
+test at ../../../../../../tmp/smv-pq-native-fix/tests/power-query-host-theme.browser.cjs:33:1
+✖ Power Query source lines keep their reader background under VS Code host themes (342.816671ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   background: 'rgb(38, 38, 38)',
+  -   background: 'rgba(0, 0, 0, 0)',
+      color: 'rgb(51, 65, 85)',
+      padding: '0px 12px',
+  +   radius: '4px'
+  -   radius: '0px'
+    }
+  
+      at TestContext.<anonymous> (/tmp/smv-pq-native-fix/tests/power-query-host-theme.browser.cjs:47:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { background: 'rgb(38, 38, 38)', color: 'rgb(51, 65, 85)', radius: '4px', padding: '0px 12px' },
+    expected: { background: 'rgba(0, 0, 0, 0)', color: 'rgb(51, 65, 85)', radius: '0px', padding: '0px 12px' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
