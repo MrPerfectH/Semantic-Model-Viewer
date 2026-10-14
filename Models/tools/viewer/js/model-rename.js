@@ -117,14 +117,17 @@
                 }
                 var structural = new RegExp('^(\\s*(?:fromColumn|toColumn)\\s*:\\s*)(' + identifier + ')\\.(' + identifier + ')\\s*$').exec(line.text);
                 if (structural) {
+                    structural[2]=structural[2].trimEnd(); structural[3]=structural[3].trimEnd();
                     var tableName = decode(structural[2]), columnName = decode(structural[3]);
                     if (r.kind === 'table' && same(tableName, r.name)) patch(line.offset + structural[1].length, line.offset + structural[1].length + structural[2].length, quote(r.newName));
                     if (r.kind === 'column' && same(tableName, r.table) && same(columnName, r.name)) { var start = line.offset + structural[1].length + structural[2].length + 1; patch(start, start + structural[3].length, quote(r.newName)); }
                     return;
                 }
                 var binding = new RegExp('^(\\s*(?:sortByColumn|column)\\s*:\\s*)(' + identifier + ')\\s*$').exec(line.text);
+                if (binding) binding[2]=binding[2].trimEnd();
                 if (binding && r.kind === 'column' && same(line.table, r.table) && same(decode(binding[2]), r.name)) patch(line.offset + binding[1].length, line.offset + binding[1].length + binding[2].length, quote(r.newName));
                 var ref = new RegExp('^(\\s*(?:ref table|tablePermission)\\s+)(' + identifier + ')\\s*$').exec(line.text);
+                if (ref) ref[2]=ref[2].trimEnd();
                 if (ref && r.kind === 'table' && same(decode(ref[2]), r.name)) patch(line.offset + ref[1].length, line.offset + ref[1].length + ref[2].length, quote(r.newName));
                 if (/^\s*(fromColumn|toColumn|sortByColumn|column)\s*:/.test(line.text) && !structural && !binding) blockers.push(entry.file.path + ': unsupported structural binding.');
                 if (/^\s*(object|detailRowsDefinition|alternateOf|groupByColumns|variation)\b/.test(line.text)) blockers.push(entry.file.path + ': unsupported name-bearing construct.');
