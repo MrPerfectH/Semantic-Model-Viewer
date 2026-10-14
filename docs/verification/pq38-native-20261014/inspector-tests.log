@@ -1,0 +1,34 @@
+✔ exact CRLF/quoted/repeated/non-BMP source slices are separate from numbered gutter; Copy original source (23.907718ms)
+✔ invalid/overlapping/missing-target spans never create guessed links (7.44217ms)
+✔ opaque uncertainty is neutral disclosure; presentation diagnostics are review; no regex classification (1.711488ms)
+✔ duplicate graph IDs select exactly supplied rows; status rows have no invented M (2.126105ms)
+✔ capture/restore contains both scroll axes, wrap and stable occurrence descriptor (2.98963ms)
+✔ new selection, same-ID select, close, suspend, reset and destroy cancel queued restores (8.147548ms)
+✔ newer restore/direct focus wins within same generation (1.389918ms)
+✔ same-generation context and hide/reopen preserve view; generation reset clears hidden source and callbacks (2.049902ms)
+✔ clipboard completion after close/reopen or reset cannot repaint code/status (1.509839ms)
+✔ focus controls emit only generation/selected-ID actions; Infinity serializes without changing source/view (2.650949ms)
+✔ history restores focused controls by descriptor and never keeps old control DOM (1.902037ms)
+✔ Back retains strict 325px scroll with always-visible options; unrelated disclosures stay closed (4.187929ms)
+✔ all four optional disclosure combinations restore exact scroll and booleans across source selection (10.491523ms)
+✔ legacy and partial disclosure state leave absent, invalid and unknown sections untouched (2.981295ms)
+✔ restored primary focus preserves scroll, and focus-triggered navigation cannot receive old scroll (2.449109ms)
+✔ stale disclosure restores cannot reopen prior or current source after any lifecycle cancellation (10.109679ms)
+✔ primary neighborhood controls stay visible, default wrap is true and explicit saved false survives history (1.646635ms)
+✔ expanded reader moves exact code DOM, copies original CRLF/UTF16 source, Escape closes reader first and returns focus (2.398905ms)
+✔ expanded history restores source focus/scroll and cannot reopen after stale lifecycle work (7.958456ms)
+✔ reader keyboard boundary stays inside, and native-dialog autofocus navigation cancels old view restore (2.540107ms)
+✔ full-query entry precedes all focus controls and source without duplicating or reformatting code (4.520231ms)
+✔ direct input and consumer buttons emit supplied IDs without requiring or inventing source ranges (1.60909ms)
+✔ declined restoration ownership preserves newer focus, scroll and disclosures (1.456827ms)
+✔ focus lock exposes pressed state and selected identity, rejects detached and stale controls (1.748364ms)
+✔ Analyze full flow is explicit, source-preserving and rejects stale controls (1.698783ms)
+✔ Flow inspector keeps source reader and Analyze while omitting Canvas controls; stale controls cannot act (1.654478ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 197.164319
