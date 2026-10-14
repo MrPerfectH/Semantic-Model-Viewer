@@ -77,7 +77,10 @@ function planReportRename(files, modelBinding, rename) {
         if (rename.kind==='table' && v.SourceRef?.Entity===rename.table) replace(n.children.SourceRef.children.Entity,rename.newName);
         if (rename.kind==='table' && v.Entity===rename.table && typeof v.Name==='string') replace(n.children.Entity,rename.newName);
         for (const type of ['Measure','Column','Hierarchy']) {
-          const typed=v[type];if(!typed || entity(typed.Expression)!==rename.table) continue;
+          const typed=v[type];if(!typed) continue;
+          const resolved=entity(typed.Expression); const targetProperty=typed[type==='Hierarchy'?'Hierarchy':'Property'];
+          if(!resolved && (targetProperty===rename.name || rename.kind==='table')) block(file.path,'unresolved-source','Typed reference has an unresolved source alias');
+          if(resolved!==rename.table) continue;
           const targetKind=type.toLowerCase(); const propertyKey=type==='Hierarchy'?'Hierarchy':'Property'; const property=typed[propertyKey];
           if ((rename.kind===targetKind && property===rename.name) || rename.kind==='table') {
             const old=rename.table+'.'+property;
@@ -90,17 +93,28 @@ function planReportRename(files, modelBinding, rename) {
         }
       });
       if(rename.kind!=='table') references.set(rename.table+'.'+rename.name,rename.table+'.'+rename.newName);
+      function rewriteQueryRef(value, depth=0) {
+        if(typeof value!=='string' || depth>8) return null;
+        if(references.has(value)) return references.get(value);
+        const wrapper=/^(Sum|Min|Max|CountNonNull|Count|Avg|Average|Median|DistinctCount|StandardDeviation|Variance)\((.*)\)$/.exec(value);
+        if(wrapper) {const inner=rewriteQueryRef(wrapper[2],depth+1);return inner===null?null:wrapper[1]+'('+inner+')';}
+        if(rename.kind==='table' && value.startsWith(rename.table+'.')) return rename.newName+value.slice(rename.table.length);
+        return null;
+      }
+      function rewriteRef(node) {
+        const next=rewriteQueryRef(node.value);
+        if(next!==null) replace(node,next);
+        else if(typeof node.value==='string' && (node.value.includes(rename.table+'.'+rename.name) || (rename.kind==='table' && node.value.includes(rename.table+'.')) || [...references.keys()].some(key=>node.value.includes(key)))) block(file.path,'unknown-query-reference','Compound query reference cannot be safely renamed');
+      }
       visit(root,n=>{
         if (!n.children || Array.isArray(n.children)) return;
         for(const [key,child] of Object.entries(n.children)) {
-          if(key==='queryRefs' && Array.isArray(child.children)) {for(const item of child.children) {const next=references.get(item.value); if(next) replace(item,next);else if(typeof item.value==='string' && item.value.includes(rename.table+'.'+rename.name)) block(file.path,'unknown-query-reference','Compound query reference cannot be safely renamed');}}
+          if(key==='queryRefs' && Array.isArray(child.children)) child.children.forEach(rewriteRef);
           if(typeof child.value!=='string') continue;
-          if(['queryRef','QueryRef'].includes(key)) {
-            let next=references.get(child.value);
-            if(rename.kind==='table' && child.value.startsWith(rename.table+'.')) next=rename.newName+child.value.slice(rename.table.length);
-            if(next) replace(child,next);
-            else if(child.value.includes(rename.table+'.'+rename.name) || (rename.kind==='table' && child.value.includes(rename.table+'.'))) block(file.path,'unknown-query-reference','Compound query reference cannot be safely renamed');
-          }
+          if(['queryRef','QueryRef'].includes(key)) rewriteRef(child);
+          // Select.Name is a query reference only when this same object contains
+          // a typed semantic expression; display names elsewhere are untouched.
+          if(key==='Name' && ['Measure','Column','Hierarchy','Aggregation'].some(type=>n.value[type])) rewriteRef(child);
           if (['Dax','DAX','Expression','expression'].includes(key) && (child.value.includes('['+rename.name+']') || child.value.includes(rename.table))) block(file.path,'embedded-expression','Embedded expression requires semantic DAX analysis');
           if (['Property','Entity','Hierarchy'].includes(key) && (child.value===rename.name || child.value===rename.table) && !edits.has(child.start)) {
             // References to other objects remain untouched. A typed reference is

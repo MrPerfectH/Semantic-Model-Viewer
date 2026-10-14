@@ -36,3 +36,13 @@ test('hierarchy and queryRefs arrays use schema reference names',()=>{
 test('unknown properties are blocked even when another typed reference exists',()=>{
  assert.ok(plan('{"Measure":{"Expression":{"SourceRef":{"Entity":"Sales"}},"Property":"Total"},"unknown":{"Property":"Total"}}').blockers.length);
 });
+test('standard aggregation wrappers and semantic Select names are rewritten losslessly',()=>{
+ for(const fn of ['Sum','Min','Max','CountNonNull','Count','Avg','Average','Median','DistinctCount','StandardDeviation','Variance']) {
+ const input=JSON.stringify({From:[{Name:'s',Entity:'Sales'}],Select:[{Aggregation:{Expression:{Column:{Expression:{SourceRef:{Source:'s'}},Property:'Total'}},Function:0},Name:fn+'(s.Total)'}],queryRef:fn+'(Sales.Total)',queryRefs:[fn+'(s.Total)'],label:fn+'(Sales.Total)'});
+ const result=plan(input,{kind:'column',table:'Sales',name:'Total',newName:'Net'});assert.deepEqual(result.blockers,[]);const output=JSON.parse(result.changes[0].text);assert.equal(output.Select[0].Name,fn+'(s.Net)');assert.equal(output.queryRef,fn+'(Sales.Net)');assert.equal(output.queryRefs[0],fn+'(s.Net)');assert.equal(output.label,fn+'(Sales.Total)');
+ }
+});
+test('unknown aggregation wrapper and unresolved semantic alias block',()=>{
+ assert.ok(plan('{"queryRef":"Unknown(Sales.Total)"}').blockers.length);
+ assert.ok(plan('{"Measure":{"Expression":{"SourceRef":{"Source":"missing"}},"Property":"Total"}}').blockers.length);
+});
