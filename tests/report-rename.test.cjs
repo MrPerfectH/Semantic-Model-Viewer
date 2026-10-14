@@ -49,3 +49,16 @@ test('unknown aggregation wrapper and unresolved semantic alias block',()=>{
 test('UTF-8 BOM is retained with exact token offsets',()=>{
  const input='\uFEFF { "queryRef": "Sales.Total", "label": "Total" }';const result=plan(input);assert.deepEqual(result.blockers,[]);assert.equal(result.changes[0].text,'\uFEFF { "queryRef": "Sales.Revenue", "label": "Total" }');
 });
+test('case-insensitive model identities update references while preserving literal labels',()=>{
+ const input=JSON.stringify({Measure:{Expression:{SourceRef:{Entity:'sales'}},Property:'TOTAL SALES'},queryRef:'sales.total sales',queryRefs:['sum(sales.TOTAL SALES)'],label:'TOTAL SALES'});
+ const result=plan(input,{kind:'measure',table:'Sales',name:'Total Sales',newName:'Revenue'});assert.deepEqual(result.blockers,[]);const out=JSON.parse(result.changes[0].text);assert.equal(out.Measure.Property,'Revenue');assert.equal(out.queryRef,'Sales.Revenue');assert.equal(out.queryRefs[0],'sum(Sales.Revenue)');assert.equal(out.label,'TOTAL SALES');
+});
+test('table rename supports lowercase entities and mixed case query refs',()=>{
+ const result=plan('{"SourceRef":{"Entity":"sales"},"queryRef":"MAX(SALES.Amount)","label":"sales"}',{kind:'table',table:'Sales',name:'Sales',newName:'Orders'});assert.deepEqual(result.blockers,[]);const out=JSON.parse(result.changes[0].text);assert.equal(out.SourceRef.Entity,'Orders');assert.equal(out.queryRef,'MAX(Orders.Amount)');assert.equal(out.label,'sales');
+});
+test('case-variant unknown or embedded references block instead of being skipped',()=>{
+ for(const text of ['{"Property":"tOtAl"}','{"queryRef":"Unknown(sales.TOTAL)"}','{"expression":"[total]"}','{"Measure":{"Expression":{"SourceRef":{"Source":"unknown"}},"Property":"total"}}']) assert.ok(plan(text).blockers.length,text);
+});
+test('malformed target reference fields block',()=>{
+ for(const text of ['{"Measure":{"Expression":{"SourceRef":{"Entity":"sAlEs"}},"Property":null}}','{"queryRefs":[9]}','{"queryRef":null}']) assert.ok(plan(text).blockers.length,text);
+});
