@@ -81,3 +81,15 @@ test('metadata-looking comment text cannot terminate a DAX expression',()=>{
  assert.deepEqual(result.blockers,[]);
  assert.match(result.files[0].text,/sourceColumn: Total\n\t\t\*\/ \[Revenue\]/);
 });
+test('virtual DAX columns shadowing model names block bare reference rewrites',()=>{
+ for(const constructor of ['SELECTCOLUMNS','ADDCOLUMNS','ROW','SUMMARIZE','SUMMARIZECOLUMNS','GROUPBY']) {
+  const result=plan([file('table Sales\n\tcolumn Amount\n\tmeasure Total = 1\n\tmeasure X =\n\t\tVAR x = '+constructor+'(Sales, "Total", Sales[Amount])\n\t\tRETURN SUMX(x, [Total])\n')],rename);
+  assert.equal(result.files.length,0);
+  assert.match(result.blockers.join(),/virtual DAX column/);
+ }
+});
+test('qualified model references remain supported inside virtual table constructor expressions',()=>{
+ const result=plan([file('table Sales\n\tcolumn Amount\n\tmeasure Total = 1\n\tmeasure X = SELECTCOLUMNS(Sales, "Total", Sales[Total])\n')],rename);
+ assert.deepEqual(result.blockers,[]);
+ assert.match(result.files[0].text,/"Total", Sales\[Revenue\]/);
+});

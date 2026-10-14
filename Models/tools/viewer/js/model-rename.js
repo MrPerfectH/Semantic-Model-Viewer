@@ -98,6 +98,7 @@
                 if (line.dax) {
                     var tokens = lex(line.text.slice(line.begin)), vars = new Set();
                     tokens.forEach(function (t, i) { if (same(t.value, 'VAR') && tokens[i + 1]) vars.add(tokens[i + 1].value.toLowerCase()); });
+                    var hasVirtualColumns = tokens.some(function(t,i) { return /^(SELECTCOLUMNS|ADDCOLUMNS|ROW|SUMMARIZE|SUMMARIZECOLUMNS|GROUPBY)$/i.test(t.value) && tokens[i+1] && tokens[i+1].value === '('; });
                     if (r.kind === 'table' && vars.has(r.name.toLowerCase())) blockers.push(entry.file.path + ': table name collides with a local DAX variable; scope cannot be proven.');
                     tokens.forEach(function (t, i) {
                         var next = tokens[i + 1], prev = tokens[i - 1];
@@ -108,6 +109,7 @@
                         if (!same(member, r.name)) return;
                         var qualified = prev && (prev.value[0] === "'" || /^[A-Za-z_]/.test(prev.value)) && !/^(RETURN|IN|AND|OR|NOT|VAR)$/i.test(prev.value);
                         if (qualified && prev.value[0] !== "'" && vars.has(prev.value.toLowerCase())) { blockers.push(entry.file.path + ': variable-qualified member cannot be resolved safely.'); return; }
+                        if (!qualified && hasVirtualColumns) { blockers.push(entry.file.path + ': bare reference may refer to a virtual DAX column; scope cannot be proven.'); return; }
                         var candidates = objects.filter(function (o) { return o.kind !== 'table' && same(o.name, member) && (qualified ? same(o.table, decode(prev.value)) : (o.kind === 'measure' || same(o.table, line.table))); });
                         if (!candidates.length) { blockers.push(entry.file.path + ': unresolved DAX reference ' + t.value); return; }
                         if (candidates.length > 1) { blockers.push(entry.file.path + ': ambiguous DAX reference ' + t.value); return; }
