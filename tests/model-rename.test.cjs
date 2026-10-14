@@ -1,0 +1,62 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const { planModelRename: plan } = require('../Models/tools/viewer/js/model-rename.js');
+const file = (text, path = 'tables/Sales.tmdl') => ({ path, text });
+const rename = { kind: 'measure', table: 'Sales', name: 'Total', newName: 'Revenue' };
+test('updates original multi-file qualified and bare measure references without strings/comments', () => {
+ const files = [file('table Sales\r\n\tmeasure Total = 1\r\n\tmeasure Next = [Total] + Sales[Total] + "[Total]" // [Total]\r\n'), file('table Other\n\tmeasure Copy = [Total]\n', 'Other.tmdl')];
+ const result = plan(files, rename);
+ assert.deepEqual(result.blockers, []);
+ assert.equal(result.files[0].text, 'table Sales\r\n\tmeasure \'Revenue\' = 1\r\n\tmeasure Next = [Revenue] + Sales[Revenue] + "[Total]" // [Total]\r\n');
+ assert.match(result.files[1].text, /\[Revenue\]/);
+});
+test('multiline block comments preserve text, table VAR shadows do not rename', () => {
+ const result = plan([file("table Sales\n\tcolumn Amount\n\tmeasure X =\n\t\tVAR Sales = 1\n\t\tRETURN Sales + SUM('Sales'[Amount]) /*\n\t\t Sales[Amount]\n\t\t*/\n")], {kind:'table', name:'Sales', newName:'New Sales'});
+ assert.deepEqual(result.blockers, []);
+ assert.match(result.files[0].text, /RETURN Sales/);
+ assert.match(result.files[0].text, /SUM\('New Sales'/);
+ assert.match(result.files[0].text, /\n\t\t Sales\[Amount\]/);
+});
+test('column declaration, NAMEOF, hierarchy, sortBy and relationships use exact identity', () => {
+ const result = plan([file("table Sales\n\tcolumn 'Old Name'\n\tcolumn Sorted\n\t\tsortByColumn: 'Old Name'\n\thierarchy H\n\t\tlevel L\n\t\t\tcolumn: 'Old Name'\n\tmeasure X = NAMEOF(Sales[Old Name])\n"), file("relationship r\n\tfromColumn: Sales.'Old Name'\n\ttoColumn: Other.Id\n", 'relationships.tmdl')], {kind:'column',table:'Sales',name:'Old Name',newName:"It's New"});
+ assert.deepEqual(result.blockers, []);
+ assert.match(result.files[0].text, /column 'It''s New'/);
+ assert.match(result.files[0].text, /Sales\[It's New\]/);
+ assert.match(result.files[1].text, /Sales\.'It''s New'/);
+});
+test('blocks ambiguous bare column/measure and collisions without proposed writes', () => {
+ const source = file('table Sales\n\tcolumn Total\n\tmeasure Total = 1\n\tmeasure X = [Total]\n');
+ assert.equal(plan([source], rename).files.length, 0);
+ assert.match(plan([source], rename).blockers.join(), /ambiguous/);
+ assert.match(plan([file('table Sales\n\tmeasure Total = 1\n\tmeasure Revenue = 2\n')], rename).blockers.join(), /collides/);
+});
+test('blocks BIM, translations and unfamiliar structural syntax', () => {
+ for (const unsupported of [file('{}', 'model.bim'), file('culture en-US\n'), file('relationship R\n\tfromColumn: weird syntax\n')]) {
+  const result = plan([file('table Sales\n\tmeasure Total = 1\n'), unsupported], rename);
+  assert.equal(result.files.length, 0);
+  assert.ok(result.blockers.length);
+ }
+});
+test('calculated partition and dynamic expression references renamed', () => {
+ const result = plan([file('table Sales\n\tmeasure Total = 1\n\tmeasure X = 1\n\t\tformatStringDefinition = IF([Total], "0", "")\n\tpartition P = calculated\n\t\tsource =\n\t\t\t{ [Total] }\n')], rename);
+ assert.deepEqual(result.blockers, []);
+ assert.equal((result.files[0].text.match(/\[Revenue\]/g)||[]).length, 2);
+});
+test('role filters resolve columns in their permission table', () => {
+ const result = plan([file('table Sales\n\tcolumn Region\n'),file("role R\n\ttablePermission Sales\n\t\tfilterExpression = [Region] = \"Region\"\n",'roles/R.tmdl')], {kind:'column',table:'Sales',name:'Region',newName:'Area'});
+ assert.deepEqual(result.blockers,[]);
+ assert.match(result.files[1].text,/\[Area\] = "Region"/);
+});
+test('table rename updates permission and model references without partition or source column labels', () => {
+ const result=plan([file('table Sales\n\tcolumn Id\n\t\tsourceColumn: Sales\n\tpartition Sales = m\n\t\tsource = Sales\n'),file('ref table Sales\n','model.tmdl'),file('role R\n\ttablePermission Sales\n\t\tfilterExpression = Sales[Id] > 0\n','roles/R.tmdl')],{kind:'table',name:'Sales',newName:'Revenue'});
+ assert.deepEqual(result.blockers,[]);
+ assert.match(result.files[0].text,/sourceColumn: Sales/);
+ assert.match(result.files[1].text,/ref table 'Revenue'/);
+ assert.match(result.files[2].text,/tablePermission 'Revenue'/);
+});
+test('escaped identifiers and adjacent expressions preserve unrelated bytes', () => {
+ const result=plan([file("table 'Bob''s Sales'\n\tcolumn 'A]B'\n\tmeasure X = 'Bob''s Sales'[A]]B]\n\tmeasure Y = \"literal\"\n")],{kind:'column',table:"Bob's Sales",name:'A]B',newName:'C]D'});
+ assert.deepEqual(result.blockers,[]);
+ assert.match(result.files[0].text,/\[C\]\]D\]/);
+ assert.match(result.files[0].text,/measure Y = "literal"/);
+});
