@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.9
+
+- Add an optional Spellbook theme with parchment surfaces and burgundy accents. Use the Classic dropdown in the top toolbar to select Spellbook.
+- Remember the selected theme and preserve it in offline snapshots.
+- Include Power Query definitions and workspace state in offline snapshots.
+
 ## 0.3.8
 
 - Find SemanticModel folders before reading repository imports to avoid freezing on unrelated JSON dumps.
