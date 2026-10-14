@@ -93,3 +93,25 @@ test('qualified model references remain supported inside virtual table construct
  assert.deepEqual(result.blockers,[]);
  assert.match(result.files[0].text,/"Total", Sales\[Revenue\]/);
 });
+test('Unicode bare DAX table references remain qualified and rename as complete identifiers',()=>{
+ const files=[file("table Sales\n\tcolumn Amount\n\tmeasure X = SUM(Żółć[Amount])\n"),file("table 'Żółć'\n\tcolumn Amount\n",'tables/Unicode.tmdl')];
+ const column=plan(files,{kind:'column',table:'Sales',name:'Amount',newName:'Value'});
+ assert.deepEqual(column.blockers,[]);
+ assert.equal(column.files.length,1);
+ assert.match(column.files[0].text,/SUM\(Żółć\[Amount\]\)/);
+ const table=plan(files,{kind:'table',name:'Żółć',newName:'Unicode Sales'});
+ assert.deepEqual(table.blockers,[]);
+ assert.match(table.files.find(f=>f.path==='tables/Sales.tmdl').text,/SUM\('Unicode Sales'\[Amount\]\)/);
+});
+test('Unicode original declarations participate in identity and collision validation',()=>{
+ const files=[file('table Żółć\n\tcolumn Amount\n\tmeasure ŻółćTotal = SUM(Żółć[Amount])\n\tmeasure Revenue = 1\n')];
+ const inventory=require('../Models/tools/viewer/js/model-rename.js').listObjects(files);
+ assert.equal(inventory[0].name,'Żółć');
+ const result=plan(files,{kind:'measure',table:'Żółć',name:'ŻółćTotal',newName:'Revenue'});
+ assert.match(result.blockers.join(),/collides/);
+});
+test('unsupported declaration syntax blocks instead of omitting inventory or collisions',()=>{
+ const result=plan([file('table Sales\n\tmeasure Total = 1\n\tcolumn unsupported-name\n')],rename);
+ assert.equal(result.files.length,0);
+ assert.match(result.blockers.join(),/unsupported object declaration/);
+});

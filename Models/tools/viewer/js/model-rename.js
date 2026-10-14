@@ -8,12 +8,12 @@
     else root.ModelRename = api;
 }(typeof globalThis !== 'undefined' ? globalThis : this, function () {
     'use strict';
-    var identifier = "(?:'(?:[^']|'')*'|[A-Za-z_][A-Za-z0-9_ ]*)";
+    var identifier = "(?:'(?:[^']|'')*'|[\\p{L}_][\\p{L}\\p{M}\\p{N}_ ]*)";
     function decode(s) { s = s.trim(); return s[0] === "'" ? s.slice(1, -1).replace(/''/g, "'") : s; }
     function quote(s) { return "'" + s.replace(/'/g, "''") + "'"; }
     function same(a, b) { return typeof a === 'string' && typeof b === 'string' && a.toLowerCase() === b.toLowerCase(); }
     function lex(text) {
-        var re = /\/\*[\s\S]*?\*\/|\/\/[^\r\n]*|--[^\r\n]*|"(?:[^"]|"")*"|'(?:[^']|'')*'|\[(?:[^\]]|\]\])*\]|[A-Za-z_][A-Za-z0-9_]*|\s+|./g;
+        var re = /\/\*[\s\S]*?\*\/|\/\/[^\r\n]*|--[^\r\n]*|"(?:[^"]|"")*"|'(?:[^']|'')*'|\[(?:[^\]]|\]\])*\]|[\p{L}_][\p{L}\p{M}\p{N}_]*|\s+|./gu;
         var tokens = [], m;
         while ((m = re.exec(text))) {
             if (/^\s+$/.test(m[0]) || /^(\/\*|\/\/|--|\")/.test(m[0])) continue;
@@ -52,14 +52,15 @@
                     mBlock = {indent: indent}; expression = null;
                     lines.push({text: line, offset: offset, table: table, skip: true}); offset += raw.length; return;
                 }
-                var declaration = new RegExp('^\\s*(table|column|measure)\\s+(' + identifier + ')(?=\\s*=|\\s*$)').exec(line);
+                var declaration = new RegExp('^\\s*(table|column|measure)\\s+(' + identifier + ')(?=\\s*=|\\s*$)', 'u').exec(line);
+                if (/^\s*(table|column|measure)\s+/.test(line) && !declaration) blockers.push(file.path + ': unsupported object declaration syntax.');
                 if (declaration) {
                     declaration[2] = declaration[2].trimEnd();
                     var name = decode(declaration[2]);
                     if (declaration[1] === 'table') table = name;
                     objects.push({ kind: declaration[1], table: table, name: name, path: file.path, start: offset + line.indexOf(declaration[2]), end: offset + line.indexOf(declaration[2]) + declaration[2].length });
                 }
-                var permission = new RegExp('^\\s*tablePermission\\s+(' + identifier + ')\\s*$').exec(line);
+                var permission = new RegExp('^\\s*tablePermission\\s+(' + identifier + ')\\s*$', 'u').exec(line);
                 if (permission) table = decode(permission[1]);
                 if (/^(perspective|culture)\s+/.test(trimmed)) blockers.push(file.path + ': perspectives/translations require a dedicated reference parser.');
                 if (expression && expression.fenced && trimmed === '```') { lines.push({text:line,offset:offset,table:table,dax:true,begin:0,expression:expression}); expression=null; offset+=raw.length; return; }
@@ -107,7 +108,7 @@
                         if (r.kind === 'table' || t.value[0] !== '[') return;
                         var member = t.value.slice(1, -1).replace(/\]\]/g, ']');
                         if (!same(member, r.name)) return;
-                        var qualified = prev && (prev.value[0] === "'" || /^[A-Za-z_]/.test(prev.value)) && !/^(RETURN|IN|AND|OR|NOT|VAR)$/i.test(prev.value);
+                        var qualified = prev && (prev.value[0] === "'" || /^[\p{L}_]/u.test(prev.value)) && !/^(RETURN|IN|AND|OR|NOT|VAR)$/i.test(prev.value);
                         if (qualified && prev.value[0] !== "'" && vars.has(prev.value.toLowerCase())) { blockers.push(entry.file.path + ': variable-qualified member cannot be resolved safely.'); return; }
                         if (!qualified && hasVirtualColumns) { blockers.push(entry.file.path + ': bare reference may refer to a virtual DAX column; scope cannot be proven.'); return; }
                         var candidates = objects.filter(function (o) { return o.kind !== 'table' && same(o.name, member) && (qualified ? same(o.table, decode(prev.value)) : (o.kind === 'measure' || same(o.table, line.table))); });
@@ -117,7 +118,7 @@
                     });
                     return;
                 }
-                var structural = new RegExp('^(\\s*(?:fromColumn|toColumn)\\s*:\\s*)(' + identifier + ')\\.(' + identifier + ')\\s*$').exec(line.text);
+                var structural = new RegExp('^(\\s*(?:fromColumn|toColumn)\\s*:\\s*)(' + identifier + ')\\.(' + identifier + ')\\s*$', 'u').exec(line.text);
                 if (structural) {
                     structural[2]=structural[2].trimEnd(); structural[3]=structural[3].trimEnd();
                     var tableName = decode(structural[2]), columnName = decode(structural[3]);
@@ -125,10 +126,10 @@
                     if (r.kind === 'column' && same(tableName, r.table) && same(columnName, r.name)) { var start = line.offset + structural[1].length + structural[2].length + 1; patch(start, start + structural[3].length, quote(r.newName)); }
                     return;
                 }
-                var binding = new RegExp('^(\\s*(?:sortByColumn|column)\\s*:\\s*)(' + identifier + ')\\s*$').exec(line.text);
+                var binding = new RegExp('^(\\s*(?:sortByColumn|column)\\s*:\\s*)(' + identifier + ')\\s*$', 'u').exec(line.text);
                 if (binding) binding[2]=binding[2].trimEnd();
                 if (binding && r.kind === 'column' && same(line.table, r.table) && same(decode(binding[2]), r.name)) patch(line.offset + binding[1].length, line.offset + binding[1].length + binding[2].length, quote(r.newName));
-                var ref = new RegExp('^(\\s*(?:ref table|tablePermission)\\s+)(' + identifier + ')\\s*$').exec(line.text);
+                var ref = new RegExp('^(\\s*(?:ref table|tablePermission)\\s+)(' + identifier + ')\\s*$', 'u').exec(line.text);
                 if (ref) ref[2]=ref[2].trimEnd();
                 if (ref && r.kind === 'table' && same(decode(ref[2]), r.name)) patch(line.offset + ref[1].length, line.offset + ref[1].length + ref[2].length, quote(r.newName));
                 if (/^\s*(fromColumn|toColumn|sortByColumn|column)\s*:/.test(line.text) && !structural && !binding) blockers.push(entry.file.path + ': unsupported structural binding.');
