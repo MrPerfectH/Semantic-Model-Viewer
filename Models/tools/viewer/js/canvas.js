@@ -273,8 +273,8 @@
       var rmap = { fact: 'FACT', dim: 'DIM', helper: 'HLP', calcgroup: 'CG', fieldparam: 'FP', measures: 'M', standalone: 'STD', unknown: 'UNK' };
       var role = el('span', { text: rmap[t.role] || 'TBL', style: 'font:700 8.5px/1 "IBM Plex Mono",monospace;letter-spacing:.4px;padding:4px 5px;border-radius:4px;flex:none;color:#fff;margin-top:1px;' });
       var titleWrap = el('div', { style: chrome.titleWrap || 'flex:1;min-width:0;' });
-      var nm = el('div', { text: t.name, title: t.name, style: 'font:600 13.5px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:-.2px;color:#1f2430;word-break:break-word;' });
-      var src = el('div', {
+      var nm = el('div', { data:{title:'1'}, text: t.name, title: t.name, style: 'font:600 13.5px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:-.2px;color:#1f2430;word-break:break-word;' });
+      var src = el('div', { data:{src:'1'},
         title: sm.kind + (sm.detail && sm.detail !== '—' ? ' · ' + sm.detail : '') + (sm.via ? '\nvia ' + sm.via : '') + (sm.server ? '\n' + sm.server : ''),
         html: '<span style="margin-right:4px;opacity:.85;">' + sm.icon + '</span>' + U.esc(sm.detail && sm.detail !== '—' ? sm.detail : sm.kind),
         style: 'font:500 10px/1.4 "IBM Plex Mono",monospace;color:' + sm.color + ';overflow-wrap:anywhere;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;'
@@ -303,7 +303,7 @@
       var meta = el('div', { data: { meta: '1' }, style: chrome.meta || 'display:flex;align-items:center;gap:6px;padding:9px 11px 10px 16px;border-top:1px solid #eef0f3;' });
       var chip = function (num, label) {
         return el('span', {
-          html: '<b style="font-weight:600;color:#5b6472;">' + num + '</b> <span style="color:#9aa1ad;">' + label + '</span>',
+          html: '<b style="font-weight:600;color:var(--smv-muted,#5b6472);">' + num + '</b> <span style="color:var(--smv-muted,#9aa1ad);">' + label + '</span>',
           style: 'font:500 10px/1 "IBM Plex Mono",monospace;background:#f3f5f8;border-radius:5px;padding:4px 7px;'
         });
       };
@@ -351,18 +351,18 @@
             style: 'display:flex;align-items:center;gap:7px;width:100%;text-align:left;height:24px;padding:0 11px 0 14px;border:none;background:transparent;cursor:pointer;'
           });
           row.appendChild(el('span', {
-            html: '<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:#c9a3d6;"></span>',
+            html: '<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--smv-up-border,#c9a3d6);"></span>',
             style: 'flex:none;width:12px;display:flex;align-items:center;justify-content:center;'
           }));
           row.appendChild(el('span', {
-            text: m.name, style: 'flex:1;min-width:0;font:500 11px/1.3 "IBM Plex Mono",monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:' + (m.h ? '#b3b9c2' : '#7c2d92') + ';'
+            text: m.name, style: 'flex:1;min-width:0;font:500 11px/1.3 "IBM Plex Mono",monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:' + (m.h ? '#b3b9c2' : 'var(--smv-plum,#7c2d92)') + ';'
           }));
           if (m.h) row.appendChild(el('span', {
-            title: 'Hidden in the model (isHidden)', style: 'flex:none;display:flex;color:#9aa1ad;', html: U.icon('eyeOff', 10)
+            title: 'Hidden in the model (isHidden)', style: 'flex:none;display:flex;color:var(--smv-muted,#9aa1ad);', html: U.icon('eyeOff', 10)
           }));
           if (u) row.appendChild(el('span', {
             title: app.useTip(u), text: u.length + ' pg',
-            style: "flex:none;font:600 8.5px/1 'IBM Plex Mono',monospace;color:#2563eb;background:#f2f7ff;border:1px solid #d4e3fb;border-radius:4px;padding:2px 4px;cursor:help;"
+            style: "flex:none;font:600 8.5px/1 'IBM Plex Mono',monospace;color:var(--smv-burgundy,#2563eb);background:var(--smv-accent-soft,#f2f7ff);border:1px solid var(--smv-line,#d4e3fb);border-radius:4px;padding:2px 4px;cursor:help;"
           }));
           row.addEventListener('click', function (e) {
             e.stopPropagation();
@@ -1510,9 +1510,9 @@
         });
         row.appendChild(el('span', { text: rmap[t.role] || 'TBL', style: 'font:700 8.5px/1 "IBM Plex Mono",monospace;letter-spacing:.4px;padding:4px 5px;border-radius:4px;color:#fff;background:' + col + ';flex:none;' }));
         row.appendChild(el('span', { style: 'flex:1;min-width:0;' }, [
-          el('span', { style: 'display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:#9aa1ad;font-weight:600;', text: label }),
+          el('span', { style: 'display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--smv-muted,#9aa1ad);font-weight:600;', text: label }),
           el('span', { style: 'display:block;font-size:12.5px;font-weight:600;color:#1f2430;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', text: t.name }),
-          el('span', { style: 'display:block;font:500 10.5px/1.3 "IBM Plex Mono",monospace;color:#5b6472;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;', text: colName })
+          el('span', { style: 'display:block;font:500 10.5px/1.3 "IBM Plex Mono",monospace;color:var(--smv-muted,#5b6472);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;', text: colName })
         ]));
         row.appendChild(el('span', { text: card, style: 'flex:none;width:24px;height:24px;border-radius:7px;background:#eef0f3;color:#1f2430;font:700 13px/24px "IBM Plex Sans",sans-serif;text-align:center;' }));
         return row;
@@ -1532,12 +1532,12 @@
         el('div', { style: 'display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#1f2430;white-space:nowrap;' }, [
           el('span', { text: self.cardText(r), style: 'min-width:0;overflow:hidden;text-overflow:ellipsis;' }),
           el('span', { style: 'flex:1;' }),
-          el('span', { text: r.both ? '⇄' : '→', style: 'font-size:14px;color:#5b6472;' })
+          el('span', { text: r.both ? '⇄' : '→', style: 'font-size:14px;color:var(--smv-muted,#5b6472);' })
         ]),
-        el('div', { style: 'font-size:11px;color:#5b6472;line-height:1.4;', text: dirTxt })
+        el('div', { style: 'font-size:11px;color:var(--smv-muted,#5b6472);line-height:1.4;', text: dirTxt })
       ]));
       pop.appendChild(tableRow(tt, r.toCol, r.toCard === 'many' ? '*' : '1', 'to'));
-      pop.appendChild(el('div', { style: 'padding:6px 12px 9px;font-size:10px;color:#9aa1ad;', text: 'Click a table to focus it · Esc closes' }));
+      pop.appendChild(el('div', { style: 'padding:6px 12px 9px;font-size:10px;color:var(--smv-muted,#9aa1ad);', text: 'Click a table to focus it · Esc closes' }));
       pop.style.display = 'block';
       this.positionRelPopover();
     },
@@ -1612,7 +1612,7 @@
           var c = self.cards[n];
           var isSel = sel === c.table.name;
           c.el.style.opacity = '1';
-          c.el.style.boxShadow = isSel ? '0 0 0 2px #2563eb,0 10px 26px rgba(37,99,235,.24)' : '0 1px 2px rgba(20,30,50,.05),0 3px 10px rgba(20,30,50,.06)';
+          c.el.style.boxShadow = isSel ? '0 0 0 2px var(--smv-burgundy,#2563eb),0 10px 26px var(--smv-accent-halo,rgba(37,99,235,.24))' : '0 1px 2px rgba(20,30,50,.05),0 3px 10px rgba(20,30,50,.06)';
           c.el.style.zIndex = isSel ? '6' : '';
         });
         this.refreshVisibility(); this.renderLines(); return;
@@ -1636,7 +1636,7 @@
         var isSel = sel === name, isPin = self.pinned.has(name), isLock = self.locked === name;
         var ring = SHADOW_BASE;
         if (isLock) ring = '0 0 0 2.5px ' + EDGE.lock + ',0 10px 26px rgba(31,36,48,.28)';
-        else if (isSel) ring = '0 0 0 2px ' + EDGE.out + ',0 10px 26px rgba(37,99,235,.24)';
+        else if (isSel) ring = '0 0 0 2px ' + EDGE.out + ',0 10px 26px var(--smv-accent-halo,rgba(37,99,235,.24))';
         else if (isPin) ring = '0 0 0 2px ' + EDGE.pin + ',0 8px 22px rgba(124,58,237,.2)';
         else if (dist && dist.get(name) === 1) ring = '0 0 0 1.5px ' + EDGE[side[name] || 'out'] + ',0 3px 10px rgba(20,30,50,.06)';
         else if (dist && dist.get(name) >= 2) ring = '0 0 0 1.5px ' + EDGE.hop + ',0 3px 10px rgba(20,30,50,.06)';
