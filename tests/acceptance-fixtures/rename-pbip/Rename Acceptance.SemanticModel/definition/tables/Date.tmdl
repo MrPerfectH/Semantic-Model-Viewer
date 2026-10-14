@@ -1,0 +1,26 @@
+table Date
+
+	column DateKey
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: [DateKey]
+
+	column Month
+		dataType: string
+		summarizeBy: none
+		sourceColumn: [Month]
+		sortByColumn: MonthOrder
+
+	column MonthOrder
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: [MonthOrder]
+
+	hierarchy Calendar
+		level Month
+			ordinal: 0
+			column: Month
+
+	partition Date = calculated
+		mode: import
+		source = DATATABLE("DateKey", INTEGER, "Month", STRING, "MonthOrder", INTEGER, {{1, "January", 1}, {2, "February", 2}, {3, "March", 3}})

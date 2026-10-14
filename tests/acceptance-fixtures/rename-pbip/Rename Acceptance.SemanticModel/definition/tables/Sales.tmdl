@@ -1,0 +1,31 @@
+table Sales
+
+	measure 'Total Sales' = SUM(Sales[Amount])
+		formatString: 0.00
+
+	measure Margin = [Total Sales] - SUM(Sales[Cost])
+		formatString: 0.00
+
+	column DateKey
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: [DateKey]
+
+	column Product
+		dataType: string
+		summarizeBy: none
+		sourceColumn: [Product]
+
+	column Amount
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: [Amount]
+
+	column Cost
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: [Cost]
+
+	partition Sales = calculated
+		mode: import
+		source = DATATABLE("DateKey", INTEGER, "Product", STRING, "Amount", INTEGER, "Cost", INTEGER, {{1, "Alpha", 10, 2}, {2, "Beta", 20, 4}, {3, "Alpha", 30, 6}})
