@@ -63,7 +63,7 @@
                 if (permission) table = decode(permission[1]);
                 if (/^(perspective|culture)\s+/.test(trimmed)) blockers.push(file.path + ': perspectives/translations require a dedicated reference parser.');
                 if (expression && expression.fenced && trimmed === '```') { lines.push({text:line,offset:offset,table:table,dax:true,begin:0,expression:expression}); expression=null; offset+=raw.length; return; }
-                if (expression && !expression.fenced && !expression.comment && trimmed && (indent <= expression.indent || /^[A-Za-z][A-Za-z0-9]*\s*:/.test(trimmed) || /^(formatStringDefinition|annotation|lineageTag)\b/.test(trimmed))) expression = null;
+                if (expression && !expression.fenced && !expression.comment && trimmed && (indent <= expression.indent || (!expression.calculated && (/^[A-Za-z][A-Za-z0-9]*\s*:/.test(trimmed) || /^(formatStringDefinition|annotation|lineageTag)\b/.test(trimmed))))) expression = null;
                 var exprStart = /^(measure|column|calculationItem)\s+/.test(trimmed) && line.includes('=');
                 exprStart = exprStart || /^(filterExpression|formatStringDefinition|expression)\s*=/.test(trimmed);
                 if (/^partition\s+.*=\s*calculated\s*$/.test(trimmed)) expression = { indent: indent, calculated: true };

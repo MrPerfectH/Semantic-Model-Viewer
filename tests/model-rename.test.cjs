@@ -41,7 +41,7 @@ test('blocks BIM, translations and unfamiliar structural syntax', () => {
  }
 });
 test('calculated partition and dynamic expression references renamed', () => {
- const result = plan([file('table Sales\n\tmeasure Total = 1\n\tmeasure X = 1\n\t\tformatStringDefinition = IF([Total], "0", "")\n\tpartition P = calculated\n\t\tsource =\n\t\t\t{ [Total] }\n')], rename);
+ const result = plan([file('table Sales\n\tmeasure Total = 1\n\tmeasure X = 1\n\t\tformatStringDefinition = IF([Total], "0", "")\n\tpartition P = calculated\n\t\tmode: import\n\t\tsource =\n\t\t\t{ [Total] }\n')], rename);
  assert.deepEqual(result.blockers, []);
  assert.equal((result.files[0].text.match(/\[Revenue\]/g)||[]).length, 2);
 });
