@@ -9,6 +9,8 @@ const root = path.resolve(__dirname, '..');
 const src = path.resolve(root, '..', 'Models', 'tools', 'viewer');
 const dst = path.join(root, 'media');
 const check = process.argv.includes('--check');
+const renameSrc=path.resolve(root,'..','tools','rename'),renameDst=path.join(root,'rename');
+const renameFiles=fs.readdirSync(renameSrc).filter(file=>file.endsWith('.cjs')).sort();
 const required = ['index.html', 'explorer.css', 'measures.css', 'js/app.js',
   'js/host-vscode.js', 'js/snapshot.js'];
 
@@ -40,11 +42,15 @@ if (check) {
       throw new Error('Viewer media is stale: ' + file + '. Run npm run sync-viewer.');
     }
   }
+  if(!fs.existsSync(renameDst) || JSON.stringify(fs.readdirSync(renameDst).sort())!==JSON.stringify(renameFiles)) throw new Error('Rename runtime bundle is missing or unexpected. Run npm run sync-viewer.');
+  for(const file of renameFiles) if(!fs.readFileSync(path.join(renameSrc,file)).equals(fs.readFileSync(path.join(renameDst,file)))) throw new Error('Rename runtime bundle is stale: '+file);
   console.log('verified ' + files.length + ' viewer runtime assets; no model or report data bundled');
 } else {
   // Validate the source before replacing generated output.
   fs.rmSync(dst, { recursive: true, force: true });
   fs.mkdirSync(path.join(dst, 'js'), { recursive: true });
   for (const file of files) fs.copyFileSync(path.join(src, file), path.join(dst, file));
+  fs.rmSync(renameDst,{recursive:true,force:true});fs.mkdirSync(renameDst,{recursive:true});
+  for(const file of renameFiles)fs.copyFileSync(path.join(renameSrc,file),path.join(renameDst,file));
   console.log('synced ' + files.length + ' viewer runtime assets from Models/tools/viewer into media/');
 }

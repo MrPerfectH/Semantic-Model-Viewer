@@ -6,6 +6,7 @@ const vscode = require('vscode');
 const { findModels, modelFromUri, resolveDefaultModel } = require('./workspace');
 const { ViewerPanel } = require('./panel');
 const { ModelsTree } = require('./tree');
+const { createRenameController } = require('./rename');
 
 let panel = null;
 let tree = null;
@@ -37,11 +38,14 @@ async function openUriCommand(uri) {
 function activate(context) {
   panel = new ViewerPanel(context);
   tree = new ModelsTree();
+  const rename = createRenameController(vscode, panel);
   context.subscriptions.push(
     vscode.commands.registerCommand('semanticModelViewer.open', openCommand),
     vscode.commands.registerCommand('semanticModelViewer.openFolder', openUriCommand),
     vscode.commands.registerCommand('semanticModelViewer.openEntry', (entry) => (entry && entry.uri ? panel.show(entry) : openCommand())),
     vscode.commands.registerCommand('semanticModelViewer.refresh', () => panel.refresh()),
+    vscode.commands.registerCommand('semanticModelViewer.renameReferences', () => rename.run()),
+    rename,
     vscode.commands.registerCommand('semanticModelViewer.refreshModels', () => tree.refresh()),
     vscode.window.registerTreeDataProvider('semanticModelViewer.models', tree),
     vscode.workspace.onDidChangeWorkspaceFolders(() => tree.refresh()),

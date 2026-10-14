@@ -9,3 +9,5 @@
 !media/index.html
 !media/*.css
 !media/js/*.js
+
+!rename/*.cjs
