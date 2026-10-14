@@ -26,7 +26,7 @@ function createRenameController(vscode, panel, options={}) {
       const initial=getService().objects(root,modelPath);
       if(initial.recovery) {
         const answer=await vscode.window.showWarningMessage('An interrupted rename needs recovery before another rename. Restore the original files?',{modal:true},'Restore originals');
-        if(answer==='Restore originals') {getService().recover(root);await panel.refresh();await vscode.window.showInformationMessage('Original files restored. Start rename again.');} return;
+        if(answer==='Restore originals') {getService().recover(root);await panel.refresh();void vscode.window.showInformationMessage('Original files restored. Start rename again.');} return;
       }
       const objects=Array.isArray(initial)?initial:initial.objects;
       const object=await vscode.window.showQuickPick(objects.map(o=>({label:o.name,description:o.kind+(o.table?' · '+o.table:''),object:o})),{placeHolder:'Object to rename — updates model and repository reports',matchOnDescription:true});
@@ -61,8 +61,8 @@ function createRenameController(vscode, panel, options={}) {
       getService().apply(token,{beforeApply:()=>assertClean(root)});token=null;
       if(panel.post)await panel.post({type:'renameApplied',rename:{...object.object,newName}});
       await panel.refresh();
-      await vscode.window.showInformationMessage('Renamed '+object.object.name+' to '+newName+' in '+preview.changes.length+' source files.');
-    } catch(error) {await vscode.window.showErrorMessage('Semantic Model Viewer rename: '+error.message);} finally {if(token)getService().cancel(token);busy=false;}
+      void vscode.window.showInformationMessage('Renamed '+object.object.name+' to '+newName+' in '+preview.changes.length+' source files.');
+    } catch(error) {void vscode.window.showErrorMessage('Semantic Model Viewer rename: '+error.message);} finally {if(token)getService().cancel(token);busy=false;}
   }
   return {run,dispose(){documents.clear();providerRegistration?.dispose();service?.dispose();}};
 }
