@@ -30,9 +30,16 @@
         (files || []).forEach(function (file) {
             if (/\.bim$/i.test(file.path)) { blockers.push('BIM source renaming is unsupported.'); return; }
             if (!/\.tmdl$/i.test(file.path)) return;
-            var lines = [], offset = 0, table = null, expression = null;
+            var lines = [], offset = 0, table = null, expression = null, mBlock = null;
             file.text.split(/(?<=\n)/).forEach(function (raw) {
                 var line = raw.replace(/[\r\n]+$/, ''), indent = (line.match(/^\s*/) || [''])[0].length;
+                var trimmed = line.trim();
+                if (mBlock && trimmed && indent <= mBlock.indent) mBlock = null;
+                if (mBlock) { lines.push({text: line, offset: offset, table: table, skip: true}); offset += raw.length; return; }
+                if (/^expression\s+.+\s*=/.test(trimmed) || /^partition\s+.*=\s*m\s*$/.test(trimmed)) {
+                    mBlock = {indent: indent}; expression = null;
+                    lines.push({text: line, offset: offset, table: table, skip: true}); offset += raw.length; return;
+                }
                 var declaration = new RegExp('^\\s*(table|column|measure)\\s+(' + identifier + ')(?=\\s*=|\\s*$)').exec(line);
                 if (declaration) {
                     declaration[2] = declaration[2].trimEnd();
@@ -40,17 +47,17 @@
                     if (declaration[1] === 'table') table = name;
                     objects.push({ kind: declaration[1], table: table, name: name, path: file.path, start: offset + line.indexOf(declaration[2]), end: offset + line.indexOf(declaration[2]) + declaration[2].length });
                 }
-                var trimmed = line.trim();
                 var permission = new RegExp('^\\s*tablePermission\\s+(' + identifier + ')\\s*$').exec(line);
                 if (permission) table = decode(permission[1]);
                 if (/^(perspective|culture)\s+/.test(trimmed)) blockers.push(file.path + ': perspectives/translations require a dedicated reference parser.');
-                if (expression && trimmed && indent <= expression.indent && trimmed !== '```') expression = null;
+                if (expression && expression.fenced && trimmed === '```') { lines.push({text:line,offset:offset,table:table,dax:true,begin:0,expression:expression}); expression=null; offset+=raw.length; return; }
+                if (expression && !expression.fenced && trimmed && (indent <= expression.indent || /^[A-Za-z][A-Za-z0-9]*\s*:/.test(trimmed) || /^(formatStringDefinition|annotation|lineageTag)\b/.test(trimmed))) expression = null;
                 var exprStart = /^(measure|column|calculationItem)\s+/.test(trimmed) && line.includes('=');
                 exprStart = exprStart || /^(filterExpression|formatStringDefinition|expression)\s*=/.test(trimmed);
                 if (/^partition\s+.*=\s*calculated\s*$/.test(trimmed)) expression = { indent: indent, calculated: true };
                 var sourceStart = expression && expression.calculated && /^source\s*=/.test(trimmed);
                 var dax = false, begin = 0;
-                if (exprStart || sourceStart) { expression = { indent: indent }; dax = true; begin = line.indexOf('=') + 1; }
+                if (exprStart || sourceStart) { expression = { indent: indent, fenced: /```\s*$/.test(line) }; dax = true; begin = line.indexOf('=') + 1; }
                 else if (expression && !expression.calculated && (!trimmed || indent > expression.indent || trimmed === '```')) dax = true;
                 lines.push({ text: line, offset: offset, table: table, dax: dax, begin: begin, expression: dax ? expression : null });
                 offset += raw.length;
@@ -73,9 +80,11 @@
                 else processingLines.push(Object.assign({}, line));
             });
             processingLines.forEach(function (line) {
+                if (line.skip) return;
                 if (line.dax) {
                     var tokens = lex(line.text.slice(line.begin)), vars = new Set();
                     tokens.forEach(function (t, i) { if (same(t.value, 'VAR') && tokens[i + 1]) vars.add(tokens[i + 1].value.toLowerCase()); });
+                    if (r.kind === 'table' && vars.has(r.name.toLowerCase())) blockers.push(entry.file.path + ': table name collides with a local DAX variable; scope cannot be proven.');
                     tokens.forEach(function (t, i) {
                         var next = tokens[i + 1], prev = tokens[i - 1];
                         var value = t.value[0] === "'" ? decode(t.value) : t.value;
@@ -84,6 +93,7 @@
                         var member = t.value.slice(1, -1).replace(/\]\]/g, ']');
                         if (!same(member, r.name)) return;
                         var qualified = prev && (prev.value[0] === "'" || /^[A-Za-z_]/.test(prev.value)) && !/^(RETURN|IN|AND|OR|NOT|VAR)$/i.test(prev.value);
+                        if (qualified && prev.value[0] !== "'" && vars.has(prev.value.toLowerCase())) { blockers.push(entry.file.path + ': variable-qualified member cannot be resolved safely.'); return; }
                         var candidates = objects.filter(function (o) { return o.kind !== 'table' && same(o.name, member) && (qualified ? same(o.table, decode(prev.value)) : (o.kind === 'measure' || same(o.table, line.table))); });
                         if (!candidates.length) { blockers.push(entry.file.path + ': unresolved DAX reference ' + t.value); return; }
                         if (candidates.length > 1) { blockers.push(entry.file.path + ': ambiguous DAX reference ' + t.value); return; }

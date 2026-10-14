@@ -10,12 +10,15 @@ test('updates original multi-file qualified and bare measure references without 
  assert.equal(result.files[0].text, 'table Sales\r\n\tmeasure \'Revenue\' = 1\r\n\tmeasure Next = [Revenue] + Sales[Revenue] + "[Total]" // [Total]\r\n');
  assert.match(result.files[1].text, /\[Revenue\]/);
 });
-test('multiline block comments preserve text, table VAR shadows do not rename', () => {
- const result = plan([file("table Sales\n\tcolumn Amount\n\tmeasure X =\n\t\tVAR Sales = 1\n\t\tRETURN Sales + SUM('Sales'[Amount]) /*\n\t\t Sales[Amount]\n\t\t*/\n")], {kind:'table', name:'Sales', newName:'New Sales'});
- assert.deepEqual(result.blockers, []);
- assert.match(result.files[0].text, /RETURN Sales/);
- assert.match(result.files[0].text, /SUM\('New Sales'/);
- assert.match(result.files[0].text, /\n\t\t Sales\[Amount\]/);
+test('table VAR shadowing blocks unresolved scope and block comments remain untouched', () => {
+ const source = "table Sales\n\tcolumn Amount\n\tmeasure X =\n\t\tVAR Sales = 1\n\t\tRETURN Sales + SUM('Sales'[Amount]) /*\n\t\t Sales[Amount]\n\t\t*/\n";
+ const result = plan([file(source)], {kind:'table', name:'Sales', newName:'New Sales'});
+ assert.match(result.blockers.join(), /local DAX variable/);
+ assert.equal(result.files.length,0);
+ const safe = plan([file(source.replace('VAR Sales = 1','VAR Value = 1').replace('RETURN Sales','RETURN Value'))],{kind:'table', name:'Sales',newName:'New Sales'});
+ assert.deepEqual(safe.blockers,[]);
+ assert.match(safe.files[0].text,/SUM\('New Sales'/);
+ assert.match(safe.files[0].text,/\n\t\t Sales\[Amount\]/);
 });
 test('column declaration, NAMEOF, hierarchy, sortBy and relationships use exact identity', () => {
  const result = plan([file("table Sales\n\tcolumn 'Old Name'\n\tcolumn Sorted\n\t\tsortByColumn: 'Old Name'\n\thierarchy H\n\t\tlevel L\n\t\t\tcolumn: 'Old Name'\n\tmeasure X = NAMEOF(Sales[Old Name])\n"), file("relationship r\n\tfromColumn: Sales.'Old Name'\n\ttoColumn: Other.Id\n", 'relationships.tmdl')], {kind:'column',table:'Sales',name:'Old Name',newName:"It's New"});
@@ -59,4 +62,13 @@ test('escaped identifiers and adjacent expressions preserve unrelated bytes', ()
  assert.deepEqual(result.blockers,[]);
  assert.match(result.files[0].text,/\[C\]\]D\]/);
  assert.match(result.files[0].text,/measure Y = "literal"/);
+});
+test('M partitions and shared expressions never rewrite query identifiers or records', () => {
+ const source = "table Sales\n\tcolumn Amount = Sales[Id]\n\t\tsourceColumn: Sales\n\t\tdescription: Sales\n\tcolumn Id\n\tpartition Sales = m\n\t\tsource =\n\t\t\tlet Sales = [Amount = 1] in Sales\n";
+ const result=plan([file(source),file('expression Query =\n\tlet Sales = 1 in Sales\n','expressions.tmdl')],{kind:'table',name:'Sales',newName:'Revenue'});
+ assert.deepEqual(result.blockers,[]);
+ assert.equal(result.files.length,1);
+ assert.match(result.files[0].text,/column Amount = 'Revenue'\[Id\]/);
+ assert.match(result.files[0].text,/sourceColumn: Sales\n\t\tdescription: Sales/);
+ assert.match(result.files[0].text,/let Sales = \[Amount = 1\] in Sales/);
 });
