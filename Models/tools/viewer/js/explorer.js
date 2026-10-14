@@ -319,8 +319,10 @@
       var self=this,app=this.app,cv=app.canvas;U.clear(this.toolbar);
       this.toolbar.appendChild(paneToggle('library',!this.libraryHidden,this.libraryHidden?'Show the table library':'Hide the table library',function(){self.toggleLibrary();}));
       this.toolbar.appendChild(el('div',{cls:'ex-workspace-title'},[el('strong',{text:'Model canvas'}),el('span',{text:this.names.size+' / '+app.model.tables.length+' tables'})]));
-      this.toolbar.appendChild(button('Blank layout',function(){self.blank();}));this.toolbar.appendChild(button('Show all',function(){self.showAll();}));
-      var undo=button('Undo',function(){self.undo();});undo.disabled=!this.history.length;this.toolbar.appendChild(undo);
+      var editing=el('div',{cls:'ex-toolbar-group ex-toolbar-editing'});
+      this.toolbar.appendChild(editing);
+      editing.appendChild(button('Blank layout',function(){self.blank();}));editing.appendChild(button('Show all',function(){self.showAll();}));
+      var undo=button('Undo',function(){self.undo();});undo.disabled=!this.history.length;editing.appendChild(undo);
       this.toolbar.appendChild(el('div',{cls:'ex-spacer'}));
       this.toolbar.appendChild(button('Arrange',function(){self.arrangeSubset(true);}));
       this.toolbar.appendChild(button('Save view',function(){app.setState({showPresets:true});requestAnimationFrame(function(){var input=document.getElementById('saved-view-name');if(input){input.focus();input.select();}});},true));
@@ -332,7 +334,7 @@
       this.displayBtn.setAttribute('aria-expanded',String(!!this.optionsOpen));
       var options=el('div',{cls:'ex-menu-anchor'},[this.displayBtn]);
       if(this.optionsOpen){var box=el('div',{cls:'ex-display-menu'});
-        [['Auto layout',cv.layoutAlgo,[['star','Star'],['constellation','Constellation'],['layered','Layered'],['galaxy','Galaxy rows'],['columns','Star columns'],['waterfall','Waterfall'],['grid','Grid']],function(v){cv.setLayoutAlgo(v);self.arrangeSubset(true);} ],['Detail',cv.detailMode,[['auto','Auto'],['names','Names'],['cards','Cards']],function(v){cv.setDetailMode(v);} ],['Lines',cv.lineStyle,[['ortho','Straight'],['curve','Curved']],function(v){cv.setLineStyle(v);} ],['Color',app.colorBy,[['domain','Domain'],['source','Source']],function(v){cv.setColorMode(v);}],['Palette',app.paletteName,[['muted','Muted'],['vivid','Vivid']],function(v){app.setPalette(v);}]].forEach(function(p){var sel=el('select',{'aria-label':p[0],onChange:function(e){p[3](e.target.value);self._key=null;self.update();}},p[2].map(function(o){return el('option',{value:o[0],text:o[1]});}));sel.value=p[1];box.appendChild(el('label',{},[p[0],sel]));});
+        [['Auto layout',cv.layoutAlgo,[['star','Star'],['constellation','Constellation'],['layered','Layered'],['galaxy','Galaxy rows'],['columns','Star columns'],['waterfall','Waterfall'],['grid','Grid']],function(v){cv.setLayoutAlgo(v);self.arrangeSubset(true);} ],['Detail',cv.detailMode,[['auto','Auto'],['names','Names'],['cards','Cards']],function(v){cv.setDetailMode(v);} ],['Lines',cv.lineStyle,[['ortho','Straight'],['curve','Curved']],function(v){cv.setLineStyle(v);} ],['Color',app.colorBy,[['domain','Domain'],['source','Source']],function(v){cv.setColorMode(v);}],['Palette',app.paletteName,[['muted','Muted'],['vivid','Vivid']],function(v){app.setPalette(v);}]].forEach(function(p){var themed=p[0]==='Palette'&&g.ViewerTheme&&g.ViewerTheme.get()==='spellbook';if(themed){p[1]='spellbook';p[2]=[['spellbook','Spellbook']];}var sel=el('select',{disabled:themed,'aria-label':p[0],onChange:function(e){p[3](e.target.value);self._key=null;self.update();}},p[2].map(function(o){return el('option',{value:o[0],text:o[1]});}));sel.value=p[1];box.appendChild(el('label',{},[p[0],sel]));});
         box.appendChild(button(app.state.allExpanded?'Collapse all cards':'Expand all cards',function(){cv.toggleExpandAll();self.optionsOpen=false;self._key=null;self.update();}));
         box.appendChild(button(this.mapHidden?'Show overview map':'Hide overview map',function(){self.mapHidden=!self.mapHidden;self._key=null;self.update();}));
         box.appendChild(button('Table role rules',function(){app.setState({showRules:true});self.optionsOpen=false;self._key=null;self.update();}));
@@ -410,10 +412,10 @@
         x0=Math.min(x0,b.x);y0=Math.min(y0,b.y);x1=Math.max(x1,b.x+b.w);y1=Math.max(y1,b.y+b.h);
       });
       var scale=Math.min(184/Math.max(1,x1-x0),96/Math.max(1,y1-y0)),ox=(200-(x1-x0)*scale)/2,oy=(112-(y1-y0)*scale)/2;
-      this.mapBounds={x:x0,y:y0,scale:scale,ox:ox,oy:oy};ctx.strokeStyle='#d4dbe8';ctx.lineWidth=.7;
+      this.mapBounds={x:x0,y:y0,scale:scale,ox:ox,oy:oy};ctx.strokeStyle=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'#cfb992':'#d4dbe8';ctx.lineWidth=.7;
       app.model.relationships.forEach(function(r){var a=boxes[r.from],b=boxes[r.to];if(!a||!b)return;ctx.beginPath();ctx.moveTo(ox+(a.x+a.w/2-x0)*scale,oy+(a.y+35-y0)*scale);ctx.lineTo(ox+(b.x+b.w/2-x0)*scale,oy+(b.y+35-y0)*scale);ctx.stroke();});
       ns.forEach(function(n){var p=boxes[n];ctx.fillStyle=app.tableColor(app.model.byName[n]);ctx.fillRect(ox+(p.x-x0)*scale,oy+(p.y-y0)*scale,Math.max(3,p.w*scale),Math.max(2,p.h*scale));});
-      ctx.fillStyle='rgba(37,99,235,.07)';ctx.strokeStyle='#2563eb';ctx.lineWidth=1.5;var bx=ox+(view.x-x0)*scale,by=oy+(view.y-y0)*scale;ctx.fillRect(bx,by,view.w*scale,view.h*scale);ctx.strokeRect(bx,by,view.w*scale,view.h*scale);
+      ctx.fillStyle=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'rgba(113,59,67,.07)':'rgba(37,99,235,.07)';ctx.strokeStyle=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'#713b43':'#2563eb';ctx.lineWidth=1.5;var bx=ox+(view.x-x0)*scale,by=oy+(view.y-y0)*scale;ctx.fillRect(bx,by,view.w*scale,view.h*scale);ctx.strokeRect(bx,by,view.w*scale,view.h*scale);
     },
     navigateMap:function(e){var b=this.mapBounds;if(!b)return;var r=this.map.getBoundingClientRect(),cv=this.app.canvas;var x=((e.clientX-r.left)*200/r.width-b.ox)/b.scale+b.x,y=((e.clientY-r.top)*112/r.height-b.oy)/b.scale+b.y;cv.view.x=cv.host.clientWidth/2-x*cv.view.k;cv.view.y=cv.host.clientHeight/2-y*cv.view.k;cv.updateTransform();}
   };

@@ -42,3 +42,17 @@ test('legacy neutral tokens retain original fallback and semantic colors',()=>{
   const semantic='background:#2563eb;color:#fff;border-color:#dc2626;';
   assert.equal(c.ViewerTheme.inlineStyle(semantic),semantic);
 });
+
+test('Spellbook palette preserves axes and Classic preference without mutating source colors',()=>{
+  const {context:c,storage}=runtime({'smv-palette':'vivid'});
+  const base={domain:{Commercial:'#0d9488',Vena:'#7c3aed'},schema:{finance:'#2563eb'},source:{other:'#64748b',calculated:'#c026d3'},list:['#2563eb'],edge:{out:'#2563eb',in:'#0d9488'},fallback:'#64748b'};
+  const original=JSON.stringify(base);
+  c.ViewerTheme.init();assert.equal(c.ViewerTheme.palette(base),base);
+  c.ViewerTheme.set('spellbook');const themed=c.ViewerTheme.palette(base);
+  for(const axis of ['domain','schema','source'])assert.deepEqual(Object.keys(themed[axis]),Object.keys(base[axis]));
+  assert.equal(themed.domain.Commercial,'#68734d');assert.equal(themed.domain.Vena,'#67576e');
+  assert.notEqual(themed.edge.in,themed.edge.out);
+  assert.ok(themed.list.every(color=>/^#[0-9a-f]{6}$/.test(color)));
+  assert.equal(JSON.stringify(base),original);assert.equal(storage.get('smv-palette'),'vivid');
+  c.ViewerTheme.set('classic');assert.equal(c.ViewerTheme.palette(base),base);
+});

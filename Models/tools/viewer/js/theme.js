@@ -10,7 +10,24 @@
     if (meta) meta.setAttribute('content', current === 'spellbook' ? '#632d32' : '#4f46e5');
   }
   function init() { apply(g.U.store.get(KEY, 'classic')); }
-  function set(value) { apply(value); g.U.store.set(KEY, current); }
+  function set(value) { apply(value); g.U.store.set(KEY, current); if (g.app && g.app.refreshAppearance) g.app.refreshAppearance(); }
+
+
+  /* The theme owns presentation, not the saved Classic palette preference. Return
+     real hex colors because diagram tinting and Canvas2D need numeric RGB values. */
+  var pigments = ['#806679', '#68734d', '#80612f', '#713b43', '#76614c', '#53624b', '#98634e', '#67576e'];
+  function palette(base) {
+    if (current !== 'spellbook') return base;
+    var result = {domain:{}, schema:{}, source:{}, list:pigments.slice(),
+      edge:{base:'#a08045',out:'#68734d',in:'#806679',hop:'#a08045',pin:'#713b43',lock:'#713b43',marked:'#98634e'}, fallback:'#76614c'};
+    var domains = {'Finance / Supply':'#806679',Commercial:'#68734d',Vena:'#67576e',
+      'Profit & Loss':'#80612f','Core Dims':'#76614c','Scenario / Helper':'#98634e',
+      'Calc Groups':'#80612f','Field Params':'#53624b',Measures:'#713b43',Other:'#76614c'};
+    ['domain','schema','source'].forEach(function(axis) {
+      Object.keys(base[axis]).forEach(function(key,i) { result[axis][key] = axis === 'domain' ? domains[key] || pigments[i % pigments.length] : pigments[i % pigments.length]; });
+    });
+    return result;
+  }
 
   /* Legacy panels use inline styles. Give their neutral surfaces semantic tokens
      at creation time, with the original value as fallback for Classic. Domain,
@@ -37,5 +54,5 @@
         return all;
       });
   }
-  g.ViewerTheme = { init:init, set:set, get:function () { return current; }, normalize:normalize, inlineStyle:inlineStyle };
+  g.ViewerTheme = { init:init, set:set, get:function () { return current; }, normalize:normalize, palette:palette, inlineStyle:inlineStyle };
 })(window);

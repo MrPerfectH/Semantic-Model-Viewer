@@ -385,7 +385,7 @@
           var top = Math.min(A.y, B.y) - 64;
           d = 'M' + (A.x + A.w / 2) + ',' + A.y + ' C' + (A.x + A.w / 2) + ',' + top + ' ' + (B.x + B.w / 2) + ',' + top + ' ' + (B.x + B.w / 2) + ',' + B.y;
         }
-        var base = b === root || rUp.has(b) ? '#c3b1ee' : (a === root || rDn.has(a) ? '#a8c5ef' : '#d4d9e2');
+        var base = b === root || rUp.has(b) ? 'var(--smv-up-line,#c3b1ee)' : (a === root || rDn.has(a) ? 'var(--smv-down-line,#a8c5ef)' : 'var(--smv-line,#d4d9e2)');
         return { a: a, b: b, d: d, back: back, base: base };
       });
       var relM = {}; Array.from(new Set([].concat(Array.from(upSet), Array.from(dnSet), names))).forEach(function (nm) { relM[nm] = nm === root ? 'root' : (upSet.has(nm) ? 'up' : (dnSet.has(nm) ? 'dn' : 'x')); });
@@ -408,7 +408,7 @@
         var onUp = upR && (e.b === hov || upR.has(e.b));
         var onDn = dnR && (e.a === hov || dnR.has(e.a));
         var rel = !!(onUp || onDn);
-        var c = e.back ? '#e58f5a' : (rel ? (onUp ? '#6d28d9' : '#2563eb') : (hov ? '#cdd3dd' : e.base));
+        var c = e.back ? 'var(--smv-gold,#e58f5a)' : (rel ? (onUp ? 'var(--smv-up,#6d28d9)' : 'var(--smv-down,#2563eb)') : (hov ? 'var(--smv-line,#cdd3dd)' : e.base));
         var wd = rel ? (e.a === hov || e.b === hov ? 2 : 1.6) : 1.2, o = hov ? (rel ? 1 : .45) : .85;
         return {
           key: e.a + '\u0001' + e.b, d: e.d, da: e.back ? '5 4' : 'none',
@@ -419,8 +419,8 @@
       this._gGroupOf = G.groupOf; this._gHiddenByGroup = G.hiddenByGroup;
       var nodes = G.names.map(function (n) {
         var p = G.xy[n], m = app.msrOf(n);
-        var P = G.upSet.has(n) && n !== root ? ['#6d28d9', '#f7f5ff', '#d9cffa']
-          : (G.dnSet.has(n) && n !== root ? ['#2563eb', '#f2f7ff', '#c7dbfa'] : ['#5b6472', '#fff', '#dfe3e9']);
+        var P = G.upSet.has(n) && n !== root ? ['var(--smv-up,#6d28d9)', 'var(--smv-up-soft,#f7f5ff)', 'var(--smv-up-border,#d9cffa)']
+          : (G.dnSet.has(n) && n !== root ? ['var(--smv-down,#2563eb)', 'var(--smv-down-soft,#f2f7ff)', 'var(--smv-down-border,#c7dbfa)'] : ['var(--smv-muted,#5b6472)', '#fff', 'var(--smv-line,#dfe3e9)']);
         var dim = !!(hov && n !== hov && n !== root && !(upR && upR.has(n)) && !(dnR && dnR.has(n)));
         var removable = function (x) { return extra[x] && !G.upSet.has(x) && !G.dnSet.has(x); };
         var exU = G.deps[n].filter(removable), exD = G.cons[n].filter(removable);
@@ -432,7 +432,7 @@
         var upLbl = upN ? '+' + upN : (exU.length ? '−' + exU.length : ''), dnLbl = dnN ? '+' + dnN : (exD.length ? '−' + exD.length : '');
         var pin = pinN === n;
         var base = (n === root
-          ? 'border:1.5px solid #1f2430;background:#1f2430;color:#fff;font:600 12px/31px "IBM Plex Sans",sans-serif;box-shadow:0 4px 14px rgba(20,30,50,.30);'
+          ? 'border:1.5px solid var(--smv-burgundy,#1f2430);background:var(--smv-burgundy,#1f2430);color:#fff;font:600 12px/31px "IBM Plex Sans",sans-serif;box-shadow:0 4px 14px rgba(20,30,50,.30);'
           : 'border:1px solid ' + P[2] + ';background:' + P[1] + ';color:' + P[0] + ';font:500 12px/32px "IBM Plex Mono",monospace;')
           + (pin ? 'outline:2px solid ' + P[0] + ';outline-offset:1px;' : '');
         return {
@@ -511,9 +511,9 @@
       this.setGraphExtras(this.buildGraph().allExtra(), [], true);
     },
     gBadge: function (lbl, minus) {
-      return 'border:1px solid ' + (minus ? '#c9cfd9' : '#d8dce3') + ';background:' + (minus ? '#eef1f5' : '#fff') +
+      return 'border:1px solid ' + (minus ? 'var(--smv-line,#c9cfd9)' : 'var(--smv-line,#d8dce3)') + ';background:' + (minus ? 'var(--smv-soft,#eef1f5)' : '#fff') +
         ';border-radius:9px;height:18px;padding:0 6px;cursor:pointer;font:600 9px/16px "IBM Plex Mono",monospace;color:' +
-        (minus ? '#3a414d' : '#7a8290') + ';' + (lbl ? '' : 'visibility:hidden;');
+        (minus ? 'var(--smv-ink,#3a414d)' : 'var(--smv-muted,#7a8290)') + ';' + (lbl ? '' : 'visibility:hidden;');
     },
     gShow: function (name) {
       var self = this, app = this.app;
@@ -610,8 +610,8 @@
       return out;
     },
     /* One colour per inlining level: the analyzed measure is purple, each level below it gets its own hue. */
-    DEPTH_COLORS: [['#6d28d9', '#f2edfd', '#dcd0f7'], ['#2563eb', '#eef4fe', '#c9dcf8'], ['#0f766e', '#ecfaf7', '#bfe6df'],
-      ['#b45309', '#fdf5e8', '#f1d9b0'], ['#be185d', '#fdeef5', '#f4c5da'], ['#475569', '#f1f3f6', '#d5dae2']],
+    DEPTH_COLORS: [['var(--smv-up,#6d28d9)', 'var(--smv-up-soft,#f2edfd)', 'var(--smv-up-border,#dcd0f7)'], ['var(--smv-down,#2563eb)', 'var(--smv-down-soft,#eef4fe)', 'var(--smv-down-border,#c9dcf8)'], ['var(--smv-olive,#0f766e)', 'var(--smv-down-soft,#ecfaf7)', 'var(--smv-down-border,#bfe6df)'],
+      ['var(--smv-gold-ink,#b45309)', 'var(--smv-soft,#fdf5e8)', 'var(--smv-line,#f1d9b0)'], ['var(--smv-burgundy,#be185d)', 'var(--smv-accent-soft,#fdeef5)', 'var(--smv-line,#f4c5da)'], ['var(--smv-muted,#475569)', 'var(--smv-soft,#f1f3f6)', 'var(--smv-line,#d5dae2)']],
     depthColor: function (d) { return this.DEPTH_COLORS[d % this.DEPTH_COLORS.length]; },
     depthChipStyle: function (d) {
       var P = this.depthColor(d);
@@ -619,7 +619,7 @@
     },
     refStyle: function (name) {
       var r = (this._gRel || {})[name];
-      var P = r === 'up' ? ['#6d28d9', '#f2edfd', '#dcd0f7'] : (r === 'dn' ? ['#2563eb', '#eef4fe', '#c9dcf8'] : ['#3a414d', '#f1f3f6', '#d5dae2']);
+      var P = r === 'up' ? ['var(--smv-up,#6d28d9)', 'var(--smv-up-soft,#f2edfd)', 'var(--smv-up-border,#dcd0f7)'] : (r === 'dn' ? ['var(--smv-down,#2563eb)', 'var(--smv-down-soft,#eef4fe)', 'var(--smv-down-border,#c9dcf8)'] : ['var(--smv-ink,#3a414d)', 'var(--smv-soft,#f1f3f6)', 'var(--smv-line,#d5dae2)']);
       return 'display:inline;border:1px solid ' + P[2] + ';background:' + P[1] + ';color:' + P[0] + ';border-radius:4px;padding:0 3px;margin:0 1px;cursor:pointer;font:600 12px/1.7 "IBM Plex Mono",monospace;vertical-align:baseline;';
     },
     /* Format a measure's DAX with the local formatter; `inline` also splices in every measure it uses. */
@@ -639,7 +639,7 @@
       var rel = this._gRel || {}, dax = (m.dax || '').trim();
       var u = app.msrUse(name);
       var flags = { hid: !!m.h, hasUse: !!u, useN: u ? u.length : 0, useTip: app.useTip(u) };
-      if (!dax) return Object.assign({ name: name, table: app.model.msrHome[name] || '', toks: [{ isM: false, isT: true, txt: '— no expression —', s: 'color:#9aa1ad;' }] }, flags);
+      if (!dax) return Object.assign({ name: name, table: app.model.msrHome[name] || '', toks: [{ isM: false, isT: true, txt: '— no expression —', s: 'color:var(--smv-muted,#9aa1ad);' }] }, flags);
       var style = this._fmt || 'long';
       if (typeof DaxFormat !== 'undefined' && (style !== 'original' || inline)) {
         var printed = this.formatDax(name, dax, inline, style === 'original' ? 'long' : style);
@@ -654,12 +654,12 @@
             pick: function () { self.gShow(t.msr); }
           };
         }
-        var s = 'color:#3a414d;', txt = t.txt;
-        if (t.cmt != null) { s = 'color:#94a0b0;font-style:italic;'; txt = t.cmt; }
-        else if (t.str != null) { s = 'color:#b45309;'; txt = t.str; }
-        else if (t.col != null) { s = 'color:#0f766e;'; txt = t.col; }
-        else if (t.fn != null) { s = 'color:#0e7490;font-weight:600;'; txt = t.fn; }
-        else if (t.kw != null) { s = 'color:#334155;font-weight:700;'; txt = t.kw; }
+        var s = 'color:var(--smv-ink,#3a414d);', txt = t.txt;
+        if (t.cmt != null) { s = 'color:var(--smv-muted,#94a0b0);font-style:italic;'; txt = t.cmt; }
+        else if (t.str != null) { s = 'color:var(--smv-gold-ink,#b45309);'; txt = t.str; }
+        else if (t.col != null) { s = 'color:var(--smv-olive,#0f766e);'; txt = t.col; }
+        else if (t.fn != null) { s = 'color:var(--smv-olive,#0e7490);font-weight:600;'; txt = t.fn; }
+        else if (t.kw != null) { s = 'color:var(--smv-ink,#334155);font-weight:700;'; txt = t.kw; }
         return { isM: false, isT: true, txt: txt, s: s };
       });
       return Object.assign({ name: name, table: app.model.msrHome[name] || '', toks: toks }, flags);
@@ -1228,8 +1228,8 @@
        keyed by measure, layout and inline mode, so it survives a redraw but not a layout switch. */
     printedBody: function (card) {
       var self = this, P = card.printed, STYLE = {
-        fn: 'color:#0e7490;font-weight:600;', kw: 'color:#334155;font-weight:700;', str: 'color:#b45309;',
-        cmt: 'color:#94a0b0;font-style:italic;', num: 'color:#3a414d;', op: 'color:#3a414d;', txt: 'color:#3a414d;' };
+        fn: 'color:var(--smv-olive,#0e7490);font-weight:600;', kw: 'color:var(--smv-ink,#334155);font-weight:700;', str: 'color:var(--smv-gold-ink,#b45309);',
+        cmt: 'color:var(--smv-muted,#94a0b0);font-style:italic;', num: 'color:var(--smv-ink,#3a414d);', op: 'color:var(--smv-ink,#3a414d);', txt: 'color:var(--smv-ink,#3a414d);' };
       var plain = !!(card.inlined && this._plainDax);
       var foldKey = [card.name, this._fmt, card.inlined ? 'i' : 'n'].join('|');
       var set = this._folds[foldKey] || (this._folds[foldKey] = {});
@@ -1252,7 +1252,7 @@
             return el('button', { cls: 'mv-dax-ref', style: self.refStyle(t.msr), text: p.v,
               title: 'Show ' + t.msr + ' on the flow', onClick: function () { self.gShow(t.msr); } });
           }
-          return el('span', { style: 'color:#0f766e;', text: p.v });
+          return el('span', { style: 'color:var(--smv-olive,#0f766e);', text: p.v });
         }
         return el('span', { style: STYLE[p.k] || STYLE.txt, text: p.v });
       };
@@ -1400,14 +1400,14 @@
       if (!left) return;
       var leftBody = this.daxBody(left);
       this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card' }, [
-        this.daxHeader(left, 'Analyzed measure', 'width:8px;height:8px;border-radius:2px;background:#1f2430;flex:none;', null, true),
+        this.daxHeader(left, 'Analyzed measure', 'width:8px;height:8px;border-radius:2px;background:var(--smv-burgundy,#1f2430);flex:none;', null, true),
         leftBody
       ]));
       var pinCard = pinName ? this.daxCard(pinName) : null;
       this.daxGrid.setAttribute('data-comparing', String(!!pinCard));
       if (pinCard) {
         var pr = (this._gRel || {})[pinName];
-        var pinColor = pr === 'up' ? '#6d28d9' : (pr === 'dn' ? '#2563eb' : '#3a414d');
+        var pinColor = pr === 'up' ? 'var(--smv-up,#6d28d9)' : (pr === 'dn' ? 'var(--smv-down,#2563eb)' : 'var(--smv-ink,#3a414d)');
         var pinBody = this.daxBody(pinCard);
         this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card mv-comparison-card' }, [
           this.daxHeader(pinCard, 'Comparing · ' + (pr === 'up' ? 'upstream' : pr === 'dn' ? 'downstream' : 'related measure'), 'width:8px;height:8px;border-radius:2px;flex:none;background:' + pinColor + ';', function () { app.setState({ gPin: null, gHover: null }); }),
