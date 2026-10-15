@@ -24,6 +24,7 @@ check(app.state.selMeasure==='Sales LY','native analyzed measure');
 check(app.measures._explanationContext.direction==='up','bounded upstream context');
 check(app.measures._g.nodes.some(n=>n.name==='Total Sales'),'upstream included');check(!app.measures._g.nodes.some(n=>n.name==='Sales YoY'),'downstream excluded');
 check(app.measures._wrapDax===true,'formula wrapping enabled');
+const formula=document.querySelector('.mv-dax-body');check(formula.scrollWidth<=formula.clientWidth+1,'wrapped formula fits capture width');
 await smv.apply({...{"version": 2, "mode": "measures", "focus": {"kind": "measure", "table": "Measures", "name": "Sales LY"}, "context": {"direction": "up", "depth": 0, "limit": 1}}});
 check(app.measures._g.nodes.length===1,'initial cap respected');app.setState({gExtra:{'Total Sales':1}});await frame();check(app.measures._g.nodes.some(n=>n.name==='Total Sales'),'explicit expansion works beyond initial limit');
 app.measures.pickMeasure('Total Sales');await frame();check(app.state.selMeasure==='Total Sales','real dependency navigation');

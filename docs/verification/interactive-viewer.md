@@ -22,6 +22,8 @@ Feature #93, implementation tickets #94–#107. Branch: `feature/interactive-vie
 - Final npm package installed in an isolated directory. Installed stdio MCP tools opened the real demo model and returned the packaged MCP Apps resource.
 - Synthetic Contoso walkthrough built using only the CLI and a declarative specification.
 - Git whitespace checks passed.
+- A fresh agent used the installed npm package and packaged skill to inspect the bundled Contoso model, start a new Sales/Date session, update to Sales LY with annotations, export HTML/PNG, and stop it. No checkout-only resources or custom presentation code were needed. Its visual review caught formula clipping with Wrap lines enabled; the formula row now wraps within its panel, with a browser regression that failed before the fix.
+- The T3 browser pane acknowledged a CLI update from Tables revision 1 to Measures revision 2. Selecting Total Sales returned its qualified identity and timestamp separately from authored focus Sales LY; current HTML/PNG exports retained that explored selection and the source revision. Generated views expose model/authored-instruction provenance and the actual declarative specification in About this view.
 
 The official AppBridge browser test runs the actual UI in a sandboxed iframe with the actual MCP tools behind a test relay. It verifies actual-model synchronization, dark theme tokens, fullscreen requests and an offline download retaining Contoso model metadata and explanation state. This is protocol/integration evidence, not a claim that every vendor host was exercised.
 
@@ -34,9 +36,23 @@ The official AppBridge browser test runs the actual UI in a sandboxed iframe wit
 
 Additional regression tests reproduce mid-capture source mutation and preservation of prior output. The source fingerprint and session revision are checked again before a staged artifact is renamed into place.
 
+## Compatibility evidence
+
+| Runtime / host | Version / environment | Result |
+| --- | --- | --- |
+| Local shell and installed npm package | Linux 7.2.5-3-omarchy, Node 26.8.2 | Inspect, serve, revisioned update, selection, authored/current export, stop |
+| Local capture browser | Chromium 152.0.7977.82 | Real viewer captures, offline walkthrough and interactive tests |
+| T3 Code native browser pane | Installed development host; no public version exposed | Local loopback viewer and applied revision/selection exercised |
+| GitHub Actions | Node 22; ubuntu-latest, macos-latest, windows-latest | All checks passed on 2ba934f; subsequent acceptance fixes require the new head's checks |
+| MCP tools / client | Official server and client SDK 2.3.1 | Installed stdio and shared-service integration tests |
+| MCP Apps bridge | ext-apps 2.0.3 | Official AppBridge with sandboxed real viewer; vendor-native host unavailable |
+| Remote harness without loopback access | Host-dependent | Export interactive HTML/PNG; no automatic network publication |
+
+Temporary acceptance sessions are stopped after testing. Offline HTML retains full model metadata, including objects outside the starting focus. The demo contains no executed business values: annotations are authored interpretations and model formulas are metadata. Optional externally supplied evidence and arithmetic retain the existing validated provenance contract.
+
 ## Outstanding acceptance and limitations
 
-- Linux/macOS/Windows GitHub Actions validation of the new branch is pending.
+- Linux/macOS/Windows GitHub Actions passed on 2ba934f. The final acceptance changes are checked again on their own head before handoff.
 - Actual vendor-native MCP Apps host smoke tests remain unverified. The T3 browser-pane path was exercised; T3 custom HTML rendering is not treated as MCP Apps compatibility evidence.
 - MCP Apps support is host-dependent. Unsupported/remote hosts use a reachable browser or exported HTML/PNG; local models are never automatically published to force embedding.
 - The viewer rejects duplicate measure names rather than guessing. Source revision changes require reopening the session. Current-state export is limited to Tables and Measures; authored export remains available for other supported modes.

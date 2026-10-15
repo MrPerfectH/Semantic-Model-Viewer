@@ -111,4 +111,6 @@ Tested bridge libraries are pinned in the root lockfile. Source references: [MCP
 | Remote browser unable to reach CLI loopback | Exported interactive HTML or PNG | Explicit reachability fallback; no automatic publication |
 | Inline UI unsupported or blocked | PNG plus open-view/offline artifact link | Portable artifact path; host must support the chosen attachment type |
 
+Generated views include an **About this view** disclosure: model content comes from parsed metadata; focus, highlights, annotations and step captions come from the authored specification. The specification itself is inspectable. The CLI packages these instructions with the real viewer and does not execute DAX, SQL or M.
+
 No claim is made that every harness embeds interactive HTML or that T3's custom HTML renderer proves MCP Apps compatibility. Prefer a persistent browser pane for exploration and a focused inline view only when the host supports it. The shipped skill documents that choice. Additional vendor-native installation/host verification is a release limitation to report, not a reason to recreate the viewer by hand.
