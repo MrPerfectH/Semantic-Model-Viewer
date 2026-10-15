@@ -45,3 +45,5 @@ or attach files to a PR. It does not modify the TMDL source or execute M or DAX.
 ## Visual explanations
 
 Use `smv shot` for an annotated image, `smv explain build` for a walkthrough, and `smv results import` to attach numbers from existing tools. Calculations, proposed changes, and local exploration are described in [the visual explanations guide](visual-explanations.md). These commands extend the existing snapshot CLI; they do not execute model queries.
+
+For focused live views, revisioned session updates, selection feedback and MCP setup, see [Interactive viewer](interactive-viewer.md).

@@ -35,4 +35,12 @@ Proposals illustrate suggestions; they do not edit the source or simulate model 
 
 Present the PNG with the host's supported image mechanism. For multi-step HTML in T3, use its available HTML preview/render tools; otherwise provide artifact links or Markdown images. Do not assume every host can embed HTML. Local publishing or sending artifacts to another service is a separate action governed by the user's request.
 
-Use `smv open <model> --view view.json --session state.json` only when a live view helps. Stop sessions started for temporary work with `smv session stop state.json`. Source watching refreshes the served artifact; reload the browser to see the new view.
+Prefer the actual interactive viewer for exploration. Consult `docs/interactive-viewer.md` for version 2 dependency context, revisioned session updates, current selection, export basis and MCP setup. Never recreate the viewer in answer-specific HTML, SVG or JavaScript. Use CLI-generated artifacts and the app's own interactions.
+
+Use `smv serve <model> --view view.json --background --session state.json --json` to obtain a local view URL without choosing a browser for the host. Use the harness's native browser/right pane if the URL is reachable. `smv open <model> --view view.json --session state.json` also launches the machine's browser. Check host ownership before operating a user's tab. Do not infer that remote hosts can reach localhost.
+
+Use `smv session status` to read the current requested revision. Send `smv session update <state.json> --revision <n> --view <file> --json`; `awaiting-viewer` is not an applied acknowledgement. Respect Apply/Keep exploring. Read `smv session selection <state.json> --json` to identify “this one”; use `--client` when several tabs are active. Do not guess from labels. Export with an explicit `--basis authored|current` and the current `--revision`.
+
+In an MCP harness, use the corresponding `smv_*` tools. Inline UI requires MCP Apps capability support, not merely MCP support. Use the actual UI resource when supported; otherwise use a screenshot plus a reachable open-view link or offline artifact. The MCP App selection-context action is explicit. Closing the MCP connection stops its owned sessions. Do not disable protections or publish local models to force embedding.
+
+`smv explain build` produces an `interactive.html` walkthrough with actual viewer steps as well as static outputs. Stop sessions started for temporary work with `smv session stop state.json`. Source watching refreshes the served artifact; reload the browser to see the new view.

@@ -1,0 +1,8 @@
+{
+  "version":2,"mode":"measures",
+  "focus":{"kind":"measure","table":"Measures","name":"Sales LY"},
+  "context":{"depth":1,"direction":"up","limit":25},
+  "highlights":[{"kind":"measure","table":"Measures","name":"Total Sales"}],
+  "callouts":[{"object":{"kind":"measure","table":"Measures","name":"Sales LY"},"text":"Sales LY shifts Date context to last year. Select Total Sales to inspect the underlying formula; these are metadata, not executed values."}],
+  "width":1440,"height":1000,"chrome":false
+}
