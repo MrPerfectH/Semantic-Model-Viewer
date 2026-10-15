@@ -43,3 +43,21 @@ test('browser startup supports stderr and retains failure diagnostics',async t=>
   const c=child(),exited=waitForEndpoint(c,profile,1000);c.stderr.write('startup failed');c.emit('exit',1,null);
   await assert.rejects(exited,/Browser exited 1: startup failed/);
 });
+
+test('capture cleanup terminates descendants even after the launcher exits',{skip:process.platform==='win32'},async t=>{
+  const {spawn}=require('node:child_process');
+  const {stopBrowser}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+  const temp=fs.mkdtempSync(path.join(os.tmpdir(),'smv-process-tree-'));
+  const marker=path.join(temp,'alive');
+  const descendant="require('node:fs').writeFileSync(process.argv[1],'ready');setInterval(()=>require('node:fs').writeFileSync(process.argv[1],'alive'),20)";
+  const launcher="const c=require('node:child_process').spawn(process.execPath,['-e',process.argv[1],process.argv[2]],{stdio:'ignore'});c.unref()";
+  const child=spawn(process.execPath,['-e',launcher,descendant,marker],{detached:true,stdio:'ignore'});
+  t.after(async()=>{await stopBrowser(child);fs.rmSync(temp,{recursive:true,force:true});});
+  await new Promise((resolve,reject)=>{child.once('exit',resolve);child.once('error',reject);});
+  const deadline=Date.now()+3000;
+  while(!fs.existsSync(marker)){assert.ok(Date.now()<deadline,'descendant started');await new Promise(r=>setTimeout(r,20));}
+  await stopBrowser(child);
+  fs.rmSync(marker,{force:true});
+  await new Promise(r=>setTimeout(r,150));
+  assert.equal(fs.existsSync(marker),false,'no descendant continues writing after cleanup');
+});

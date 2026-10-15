@@ -42,13 +42,35 @@ function waitForEndpoint(child, profile, timeoutMs=30000) {
     readPort();
   });
 }
+async function stopBrowser(child) {
+  if(!child || !child.pid)return;
+  const running=()=>child.exitCode===null && child.signalCode===null;
+  const wait=ms=>new Promise(resolve=>{
+    if(!running())return resolve();
+    const done=()=>{clearTimeout(timer);child.removeListener('exit',done);resolve();};
+    const timer=setTimeout(done,ms);child.once('exit',done);
+  });
+  const signal=kind=>{
+    try {
+      // Each POSIX capture owns a process group, including launcher descendants.
+      if(process.platform!=='win32')process.kill(-child.pid,kind);
+      else if(running())child.kill(kind);
+    } catch(error) {if(error.code!=='ESRCH')throw error;}
+  };
+  await wait(2000); // Browser.close normally shuts down cleanly.
+  signal('SIGTERM');
+  await wait(1000);
+  // A launcher can exit before its browser descendants; signal the group as well.
+  signal('SIGKILL');
+  await wait(1000);
+}
 async function capture(html, output, view, options={}) {
   const executable=browserPath(options.browser);
   const temp=fs.mkdtempSync(path.join(os.tmpdir(),'smv-capture-'));
   const input=path.join(temp,'view.html');fs.writeFileSync(input,html);
   let child, socket; const pending=new Map();let sequence=0;
   try {
-    child=spawn(executable,['--headless=new','--disable-gpu','--disable-lcd-text','--force-color-profile=srgb','--run-all-compositor-stages-before-draw','--no-first-run','--no-default-browser-check','--disable-background-networking','--disable-extensions','--hide-scrollbars','--remote-debugging-port=0','--user-data-dir='+path.join(temp,'profile'),'about:blank'],{stdio:['ignore','ignore','pipe']});
+    child=spawn(executable,['--headless=new','--disable-gpu','--disable-lcd-text','--force-color-profile=srgb','--run-all-compositor-stages-before-draw','--no-first-run','--no-default-browser-check','--disable-background-networking','--disable-extensions','--hide-scrollbars','--remote-debugging-port=0','--user-data-dir='+path.join(temp,'profile'),'about:blank'],{stdio:['ignore','ignore','pipe'],detached:process.platform!=='win32'});
     const endpoint=await waitForEndpoint(child,path.join(temp,'profile'));
     const targets=await (await fetch('http://127.0.0.1:'+new URL(endpoint).port+'/json/list',{signal:AbortSignal.timeout(10000)})).json();
     const target=targets.find(t=>t.type==='page');if(!target)throw new Error('Browser has no page target');
@@ -70,10 +92,13 @@ async function capture(html, output, view, options={}) {
     const version=await send('Browser.getVersion');
     return {path:path.resolve(output),browser:version.product,viewport:{width:view.width,height:view.height,scale:view.scale},objects:ready.objects};
   } catch(error) {error.code=error.code||'CAPTURE_FAILED';throw error;} finally {
+    if(socket && socket.readyState===WebSocket.OPEN){
+      try {socket.send(JSON.stringify({id:++sequence,method:'Browser.close'}));} catch(_) {}
+    }
+    await stopBrowser(child);
     for(const item of pending.values()){clearTimeout(item.timer);item.reject(new Error('Capture closed'));}pending.clear();
     if(socket)socket.close();
-    if(child && child.pid && child.exitCode===null && child.signalCode===null){const done=new Promise(resolve=>child.once('exit',resolve));child.kill('SIGTERM');const timer=setTimeout(()=>child.kill('SIGKILL'),2000);await done;clearTimeout(timer);}
-    fs.rmSync(temp,{recursive:true,force:true,maxRetries:5,retryDelay:100});
+    await fs.promises.rm(temp,{recursive:true,force:true,maxRetries:10,retryDelay:100});
   }
 }
-module.exports={capture,browserPath,waitForEndpoint};
+module.exports={capture,browserPath,waitForEndpoint,stopBrowser};

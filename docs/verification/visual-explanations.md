@@ -40,3 +40,9 @@ Captures illustrate an authored explanation; they do not certify the model or ex
 On `46766f5`, Windows and macOS explanation jobs passed and the required repository check passed. Ubuntu still timed out during browser startup. The PR was mergeable, but the feature validation gate remained unmet.
 
 Startup now accepts Chrome's `DevToolsActivePort` file as well as the stderr banner, allows 30 seconds, and includes bounded stderr diagnostics on timeout. Unit coverage verifies silent startup, partial endpoint files, stderr startup, timeout diagnostics and early browser exit. The previous timeout did not include diagnostics, so its underlying cause is not yet confirmed; another Ubuntu run is required.
+
+## Third CI follow-up
+
+On `0219bbb`, macOS and Windows passed again. Ubuntu reached the browser captures, but temporary profile removal failed with `ENOTEMPTY`: browser descendants were still writing after the launcher exited.
+
+Capture cleanup now requests `Browser.close`, waits for graceful exit, and terminates the capture's dedicated POSIX process group before asynchronous profile removal with bounded retries. A process-tree regression test verifies that a descendant cannot keep writing after its launcher exits and cleanup runs. No unrelated browser process is targeted.
