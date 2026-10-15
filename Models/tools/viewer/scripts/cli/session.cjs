@@ -39,7 +39,7 @@ async function serve(source,options={}){
   const status=()=>({...state,revision,inputFingerprint:lastAttempt,error});
   let closing=false;
   const server=http.createServer((req,res)=>{
-    const url=new URL(req.url,'http://127.0.0.1');
+    let url;try{url=new URL(req.url,'http://127.0.0.1');}catch{res.writeHead(400);res.end('Malformed URL');return;}
     if(req.headers.host!=='127.0.0.1:'+server.address().port||url.searchParams.get('token')!==token){res.writeHead(403);res.end('Forbidden');return;}
     res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');
     if(url.pathname==='/status'&&req.method==='GET'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(status()));return;}

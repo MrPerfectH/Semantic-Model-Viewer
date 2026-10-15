@@ -66,9 +66,9 @@ function calculate(definitions,datasets){
     if(def.op!=='sum'&&def.inputs.length!==2)throw new Error(def.op+' requires two inputs');
     const places=def.decimals??2;if(!Number.isInteger(places)||places<0||places>12)throw new Error('Calculation decimals must be 0 to 12');
     const inputs=def.inputs.map(input=>{
-      if(input.calculation){const prev=run(input.calculation);return {value:prev.value,unit:prev.unit,origin:{kind:'calculated',calculation:input.calculation},exactValue:prev.exact?{numerator:String(prev.exact.n),denominator:String(prev.exact.d)}:null,exact:prev.exact};}
-      if(Object.hasOwn(input,'value')){if(input.kind!=='illustrative')throw new Error('Constants must have kind illustrative');return {value:input.value,unit:input.unit||'',origin:{kind:'illustrative'}};}
-      const data=datasets[input.dataset];if(!data)throw new Error('Missing dataset '+input.dataset);const col=data.columns.findIndex(c=>c.name===input.column);if(col<0||data.columns[col].type!=='number'||!Number.isInteger(input.row)||input.row<0||input.row>=data.rows.length)throw new Error('Invalid calculation input '+JSON.stringify(input));return {value:data.rows[input.row][col],unit:data.columns[col].unit||'',origin:data.origin};
+      if(input.calculation){const prev=run(input.calculation);return {reference:{calculation:input.calculation},value:prev.value,unit:prev.unit,origin:{kind:'calculated',calculation:input.calculation},exactValue:prev.exact?{numerator:String(prev.exact.n),denominator:String(prev.exact.d)}:null,exact:prev.exact};}
+      if(Object.hasOwn(input,'value')){if(input.kind!=='illustrative')throw new Error('Constants must have kind illustrative');return {reference:{kind:'illustrative',value:input.value},value:input.value,unit:input.unit||'',origin:{kind:'illustrative'}};}
+      const data=datasets[input.dataset];if(!data)throw new Error('Missing dataset '+input.dataset);const col=data.columns.findIndex(c=>c.name===input.column);if(col<0||data.columns[col].type!=='number'||!Number.isInteger(input.row)||input.row<0||input.row>=data.rows.length)throw new Error('Invalid calculation input '+JSON.stringify(input));return {reference:{dataset:input.dataset,row:input.row,column:input.column},value:data.rows[input.row][col],unit:data.columns[col].unit||'',origin:data.origin};
     });
     let unit=inputs[0].unit;
     if(['sum','subtract','ratio','percentChange'].includes(def.op)&&inputs.some(x=>x.unit!==unit))throw new Error('Incompatible calculation units');
@@ -95,4 +95,5 @@ function renderCalculation(c){
   const formula=c.op==='percentChange'?'('+values[1]+' − '+values[0]+') ÷ '+values[0]+' × 100':values.join(symbols[c.op]);
   return '<section class="result"><p><strong>Calculated here · '+esc(c.op)+'</strong></p><p>'+esc(formula)+'</p><p class="result-scalar">= '+esc(display(c.value))+' '+esc(c.unit)+'</p><details><summary>Inputs and calculation</summary><pre>'+esc(JSON.stringify(c,null,2))+'</pre></details></section>';
 }
-module.exports={validate,load,parseCSV,fromCSV,render,calculate,renderCalculation};
+function guarded(fn,code){return function(...args){try{return fn(...args);}catch(e){e.code=e.code||code;throw e;}};}
+module.exports={validate:guarded(validate,'DATASET_INVALID'),load:guarded(load,'DATASET_INVALID'),parseCSV:guarded(parseCSV,'DATASET_INVALID'),fromCSV:guarded(fromCSV,'DATASET_INVALID'),render:guarded(render,'DATASET_INVALID'),calculate:guarded(calculate,'CALCULATION_INVALID'),renderCalculation};

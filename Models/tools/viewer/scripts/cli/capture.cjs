@@ -49,7 +49,7 @@ async function capture(html, output, view, options={}) {
     fs.writeFileSync(output,Buffer.from(image.data,'base64'),{flag:options.force?'w':'wx'});
     const version=await send('Browser.getVersion');
     return {path:path.resolve(output),browser:version.product,viewport:{width:view.width,height:view.height,scale:view.scale},objects:ready.objects};
-  } finally {
+  } catch(error) {error.code=error.code||'CAPTURE_FAILED';throw error;} finally {
     for(const item of pending.values()){clearTimeout(item.timer);item.reject(new Error('Capture closed'));}pending.clear();
     if(socket)socket.close();
     if(child && child.pid && child.exitCode===null && child.signalCode===null){const done=new Promise(resolve=>child.once('exit',resolve));child.kill('SIGTERM');const timer=setTimeout(()=>child.kill('SIGKILL'),2000);await done;clearTimeout(timer);}

@@ -7,6 +7,7 @@ test('discovery returns stable IDs and detects ambiguous names',t=>{const {root,
 test('BIM concept models use the same offline rendering path',t=>{const {root}=fixture(t),file=path.join(root,'concept.bim');fs.writeFileSync(file,JSON.stringify({name:'Concept',model:{tables:[{name:'A',columns:[{name:'ID',dataType:'int64'}],measures:[]}],relationships:[]}}));const p=prepare(file,{version:1,highlights:[{kind:'table',name:'A'}]});assert.equal(p.model.tables[0].name,'A');assert.match(p.html,/SMVExplanation.start/);});
 test('local session protects access, reuses matching inputs, refreshes and stops',{timeout:15000},async t=>{const {root,model}=fixture(t),file=path.join(root,'session.json'),view=path.join(root,'view.json');fs.writeFileSync(view,JSON.stringify({version:1,highlights:[{kind:'table',name:'A'}]}));const server=await serve(model,{view,session:file,watch:true});t.after(server.close);
   assert.equal((await fetch(server.url)).status,200);
+  const malformed=await new Promise((resolve,reject)=>{const req=require('node:http').request({hostname:'127.0.0.1',port:new URL(server.url).port,path:'//'},res=>{res.resume();resolve(res.statusCode);});req.on('error',reject);req.end();});assert.equal(malformed,400);assert.equal((await request(file,'status')).pid,process.pid);
   assert.equal((await fetch(server.url.split('?')[0])).status,403);
   assert.equal((await serve(model,{view,session:file,watch:true})).reused,true);
   await assert.rejects(serve(model,{view,session:file}),/different inputs/);

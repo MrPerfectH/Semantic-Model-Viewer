@@ -73,7 +73,7 @@ The example uses the synthetic Contoso model, illustrative numbers, and a calcul
 
 Each step has a unique ID containing letters, digits, underscores or hyphens, a caption, and exactly one `view`, `result`, or `calculation`. `summary` is optional. Paths inside the specification resolve relative to that file. `report` can name one explicit `.Report` folder bound to the selected model; the existing scanner supplies usage context to measure views. `shot` also accepts `--report`.
 
-Output includes `explanation.html`, `explanation.md`, `explanation.json`, `source.json`, `images/`, and `views/`. The HTML contains embedded images and numeric evidence; its reading content works as one offline file. Interactive view links need the companion `views/` directory. Markdown uses relative image links. The manifest retains complete supplied result data, calculation provenance, model hash, effective views, and browser version. Source JSON records an absolute model path for rebuilding on the same machine; update it when moving the source.
+Output includes `explanation.html`, `explanation.md`, `explanation.json`, `source.json`, `images/`, and `views/`. The HTML contains embedded images and numeric evidence; its reading content works as one offline file. Interactive view links need the companion `views/` directory. Markdown uses relative image links. The manifest retains complete supplied result data, calculation provenance, model hash, effective views, and browser version, and renderer source hash. Source JSON records an absolute model path for rebuilding on the same machine; update it when moving the source.
 
 Build validates before capture and publishes the directory only after every step succeeds. Use a new directory for each revision. `shot --force` explicitly replaces an image; walkthrough builds never replace an existing directory.
 
@@ -99,6 +99,8 @@ smv results import result.csv --format csv --metadata columns.json --out normali
 ```
 
 CSV metadata contains `columns` and `origin`; headers must match columns in order. Empty numeric/boolean cells become null; empty strings stay strings. Booleans are `true` or `false`. JSON output is written to stdout unless `--out` is supplied; output files are never silently overwritten.
+
+With `--json`, capture and build failures emit `{ok:false,error:{code,message,details}}` on stderr and exit nonzero. Validation, inspection, discovery, and result-import errors use that envelope by default. Codes distinguish `VIEW_INVALID`, `JSON_INVALID`, `DATASET_INVALID`, `CALCULATION_INVALID`, `CAPTURE_FAILED`, and other invalid input or filesystem errors. Unknown object errors include the object reference; JSON parse errors include the file path.
 
 In an explanation, add `datasets: {"amounts":"normalized.json"}` or use an inline dataset. A result step names `result: "amounts"` and `render: "table"`, `"scalar"`, or `"bars"`. Scalar requires one cell. Bars require a string label column followed by a numeric column, with negative values drawn to the left of zero.
 
@@ -128,11 +130,13 @@ Sum, subtraction, ratio, and percentage change require matching units. Multiplic
 
 ## Illustrate proposals
 
-A view's optional `proposals` array supports `relationship`, `formula`, `note`, and `removal`. Every proposal needs explanatory `text`. Formulas, notes, and removals have an `object` reference. A relationship has `from` and `to` column references and requires graph mode.
+A view's optional `proposals` array supports `relationship`, `formula`, `note`, `removal`, `arrow`, and `group`. Every proposal needs explanatory `text`. Formulas, notes, and removals have an `object` reference. A relationship has `from` and `to` column references and requires graph mode.
 
 ```json
 {"kind":"relationship","from":{"kind":"column","table":"Sales","name":"Order Date"},"to":{"kind":"column","table":"Date","name":"Date"},"text":"Discuss this candidate relationship; it has not been applied."}
 ```
+
+General arrows use `from` and `to` object references and have arrowheads. Groups use an `objects` array of at least two references and a dashed enclosure.
 
 Relationships appear as dashed purple overlays. Other proposals appear as labeled callouts; a formula's text is displayed without evaluation. The proposal toggle hides their overlays to reveal the underlying model. None of these operations modifies model files or changes the snapshot's model metadata. For concept lessons, use a small synthetic BIM file such as [the concept example](../examples/explanations/concept.bim).
 

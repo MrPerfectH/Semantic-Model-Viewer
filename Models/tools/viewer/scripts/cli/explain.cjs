@@ -9,7 +9,7 @@ const {validate}=require('../../js/explanation-view.js');
 const {capture}=require('./capture.cjs');
 const results=require('./results.cjs');
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function readJSON(file){try{return JSON.parse(fs.readFileSync(file,'utf8'));}catch(e){throw new Error('Cannot read JSON '+file+': '+e.message);}}
+function readJSON(file){try{return JSON.parse(fs.readFileSync(file,'utf8'));}catch(e){const error=new Error('Cannot read JSON '+file+': '+e.message);error.code='JSON_INVALID';error.details={file:path.resolve(file)};throw error;}}
 function reportUsage(report,model){
   const target=path.resolve(report);if(!target.endsWith('.Report')||!fs.statSync(target).isDirectory())throw new Error('Select one explicit .Report folder');
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'smv-report-'));
@@ -25,13 +25,17 @@ function prepare(source,input,options={}){
   const adapter=fs.readFileSync(path.join(__dirname,'../../js/explanation-view.js'),'utf8').replace(/<\/script/gi,'<\\/script');
   const json=JSON.stringify(view).replace(/</g,'\\u003c');
   html=html.replace('</body>','<script>'+adapter+'\nSMVExplanation.start('+json+');</script></body>');
-  return {html,view,model,hash:crypto.createHash('sha256').update(JSON.stringify(context.Snapshots.modelData(model))).digest('hex')};
+  const rendererHash=crypto.createHash('sha256');
+  const root=path.resolve(__dirname,'../..');
+  [...context.Snapshots.files,'index.html','js/explanation-view.js','scripts/cli/explain.cjs','scripts/cli/results.cjs','scripts/cli/model.cjs','scripts/cli/capture.cjs'].sort().forEach(file=>rendererHash.update(file).update(fs.readFileSync(path.join(root,file))));
+  const renderer={format:'smv-explanation',version:1,sha256:rendererHash.digest('hex')};
+  return {html,view,model,renderer,hash:crypto.createHash('sha256').update(JSON.stringify(context.Snapshots.modelData(model))).digest('hex')};
 }
 async function shot(source,input,output,options={}){
   if(path.extname(output).toLowerCase()!=='.png')throw new Error('Image output must use .png');
   if(fs.existsSync(output)&&!options.force)throw new Error('Output exists; use --force: '+output);
   const p=prepare(source,input,options);fs.mkdirSync(path.dirname(path.resolve(output)),{recursive:true});
-  const result=await capture(p.html,output,p.view,options);return {...result,modelHash:p.hash};
+  const result=await capture(p.html,output,p.view,options);return {...result,modelHash:p.hash,renderer:p.renderer};
 }
 function validateExplanation(spec){
   if(!spec || spec.version!==1)throw new Error('Explanation version must be 1');
@@ -75,7 +79,7 @@ async function build(file,output,options={}){
       fragments.push('<figure><img alt="'+escape(step.caption)+'" src="data:image/png;base64,'+data+'"><figcaption><strong>'+(i+1)+'.</strong> '+escape(step.caption)+'</figcaption><a href="'+live+'">Explore this view offline</a></figure>');
       markdown.push('## '+(i+1)+'. '+step.id,'','![Annotated model view]('+image+')','',step.caption,'','[Explore this view offline]('+live+')','');
     }
-    const manifest={version:1,title:spec.title,model:{source,hash:baseline.hash},datasets,calculations,steps,summary:spec.summary||''};
+    const manifest={version:1,renderer:baseline.renderer,title:spec.title,model:{source,hash:baseline.hash},datasets,calculations,steps,summary:spec.summary||''};
     fs.writeFileSync(path.join(temp,'explanation.html'),'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+escape(spec.title)+'</title><style>'+css+'</style><body><small>Model explanation</small><h1>'+escape(spec.title)+'</h1>'+fragments.join('')+'<p>'+escape(spec.summary||'')+'</p></body></html>');
     fs.writeFileSync(path.join(temp,'explanation.md'),markdown.concat(spec.summary||'').join('\n'));
     fs.writeFileSync(path.join(temp,'explanation.json'),JSON.stringify(manifest,null,2)+'\n');
