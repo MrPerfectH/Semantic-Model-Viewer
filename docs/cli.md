@@ -17,8 +17,8 @@ node bin/smv.cjs --help
 Or install from this repository with `npm install --global .` to use `smv`.
 There is no published npm release.
 
-Input must be one TMDL `.SemanticModel` folder or its `definition` folder containing
-`model.tmdl`. Relative paths resolve from the current working directory.
+Input may be one TMDL `.SemanticModel` folder, its `definition` folder containing
+`model.tmdl`, or a `.bim` file. Relative paths resolve from the current working directory.
 
 ```bash
 smv snapshot "Sales.SemanticModel" --out artifacts/model.html

@@ -165,3 +165,5 @@ Branch: `feature/visual-explanations`. Tasks remain open until the complete feat
 - https://github.com/MrPerfectH/Semantic-Model-Viewer/issues/89 — Refresh local explanation sessions safely
 - https://github.com/MrPerfectH/Semantic-Model-Viewer/issues/90 — Document and package the agent explanation workflow
 - https://github.com/MrPerfectH/Semantic-Model-Viewer/issues/91 — Validate the complete feature before main merge
+
+Implementation for tasks #79–#90 is present on the feature branch. Task #91 remains in validation pending cross-platform CI and owner review. See [validation evidence](verification/visual-explanations.md).
