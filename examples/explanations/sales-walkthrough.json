@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "title": "Discussing sales over time",
+  "model": "../../Models/demo/Contoso Retail.SemanticModel",
+  "steps": [
+    {
+      "id": "date-context",
+      "caption": "The Date table provides context for discussing time filters on Sales. Both active and inactive relationships deserve inspection.",
+      "view": {
+        "version": 1,
+        "mode": "graph",
+        "tables": [
+          "Sales",
+          "Date"
+        ],
+        "highlights": [
+          {
+            "kind": "table",
+            "name": "Sales"
+          },
+          {
+            "kind": "table",
+            "name": "Date"
+          }
+        ],
+        "crop": "highlights",
+        "chrome": false
+      }
+    },
+    {
+      "id": "sales-ly",
+      "caption": "Sales LY wraps Total Sales with SAMEPERIODLASTYEAR. This illustrates the formula, without executing it.",
+      "view": {
+        "version": 1,
+        "mode": "measures",
+        "focus": {
+          "kind": "measure",
+          "table": "Measures",
+          "name": "Sales LY"
+        },
+        "highlights": [
+          {
+            "kind": "measure",
+            "table": "Measures",
+            "name": "Total Sales"
+          }
+        ],
+        "crop": "highlights"
+      }
+    },
+    {
+      "id": "example-values",
+      "caption": "Illustrative amounts make the proposed calculation concrete; these are not query results.",
+      "result": "amounts",
+      "render": "bars"
+    },
+    {
+      "id": "difference",
+      "caption": "Subtract the ordered value from the delivered value.",
+      "calculation": "gap"
+    }
+  ],
+  "summary": "Use these views to discuss which date relationship and filter context the calculation is intended to use.",
+  "datasets": {
+    "amounts": {
+      "version": 1,
+      "columns": [
+        {
+          "name": "Stage",
+          "type": "string"
+        },
+        {
+          "name": "Amount",
+          "type": "number",
+          "unit": "PLN"
+        }
+      ],
+      "rows": [
+        [
+          "Ordered",
+          "100.10"
+        ],
+        [
+          "Delivered",
+          "85.05"
+        ]
+      ],
+      "origin": {
+        "kind": "illustrative",
+        "scope": {
+          "year": 2026
+        },
+        "executedAt": null
+      }
+    }
+  },
+  "calculations": {
+    "gap": {
+      "op": "subtract",
+      "inputs": [
+        {
+          "dataset": "amounts",
+          "row": 1,
+          "column": "Amount"
+        },
+        {
+          "dataset": "amounts",
+          "row": 0,
+          "column": "Amount"
+        }
+      ]
+    }
+  }
+}

@@ -264,7 +264,7 @@
       var fact = app.isFact(t);
       var chrome = g.WorkspaceUI ? g.WorkspaceUI.cardStyles({fact:fact,color:app.tableColor(t),headerTint:U.tint(app.tableColor(t),.1)}) : {};
       var card = el('div', {
-        data: { name: t.name, fact: String(fact) },
+        data: { name: t.name, fact: String(fact), smvKind: 'table', smvName: t.name },
         style: 'position:absolute;width:' + this.CARD_W + 'px;background:#fff;border:1px solid #e4e7ec;border-radius:' + (fact ? '7px' : '13px') +
           ';box-shadow:0 1px 2px rgba(20,30,50,.05),0 4px 12px rgba(20,30,50,.07);font-family:\'IBM Plex Sans\',sans-serif;overflow:hidden;transition:box-shadow .15s,opacity .15s,border-color .15s;'
       });
@@ -323,7 +323,7 @@
       var colRows = {};
       t.columns.forEach(function (c) {
         var row = el('div', {
-          data: { col: c.name },
+          data: { col: c.name, smvKind: 'column', smvName: c.name, smvTable: t.name },
           style: 'display:flex;align-items:center;gap:8px;height:25px;padding:0 11px 0 14px;' + (c.rel ? ('background:' + tint('#f59e0b', 0.08) + ';') : '')
         });
         var ic = el('span', {
@@ -347,7 +347,7 @@
         t.measures.forEach(function (m) {
           var u = app.msrUse(m.name);
           var row = el('button', {
-            cls: 'hv-f5f7f9', title: (m.dax || '').trim(),
+            cls: 'hv-f5f7f9', data: {smvKind:'measure',smvName:m.name,smvTable:t.name}, title: (m.dax || '').trim(),
             style: 'display:flex;align-items:center;gap:7px;width:100%;text-align:left;height:24px;padding:0 11px 0 14px;border:none;background:transparent;cursor:pointer;'
           });
           row.appendChild(el('span', {
@@ -1356,6 +1356,8 @@
         if (r.inactive) path.setAttribute('stroke-dasharray', (baseW * 1.9).toFixed(1) + ' ' + (baseW * 1.6).toFixed(1));
         var baseOp = dim ? 0.12 : ((active || isSel) ? 1 : (hop ? 0.9 : (r.inactive ? (chip ? 0.68 : 0.6) : (chip ? 0.82 : 0.72))));
         path.setAttribute('opacity', baseOp);
+        path.setAttribute('data-smv-kind', 'relationship');
+        path.setAttribute('data-smv-name', r.name || '');
         self.svg.appendChild(path);
         var op = dim ? 0.12 : 1;
         var dot = Math.max(2.6 / self.view.k, active || isSel ? 3.4 : 2.6);

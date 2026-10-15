@@ -16,7 +16,7 @@ The same workflow supports teaching concepts, explaining existing logic, and pre
 
 - Extend the existing Node.js `smv` entry point in `bin/smv.cjs` and `Models/tools/viewer/scripts/cli/`. Preserve `smv snapshot` and its dependency-free export path.
 - Reuse the shipped parser, model preparation, layout, and snapshot code. Add a shared view specification consumed by the viewer and CLI rather than a second rendering implementation.
-- Keep the viewer vanilla JavaScript. Browser automation is an optional CLI dependency used for image capture, with an explicit setup command and actionable missing-dependency errors.
+- Keep the viewer vanilla JavaScript. Image capture uses installed Chrome/Chromium through the local DevTools protocol, with actionable missing-browser errors. No browser npm package is needed.
 - Use versioned JSON for explanation, view, and result contracts initially. Agents can write JSON directly; YAML can be an optional adapter later.
 - Keep artifacts local and source models read-only. Publishing is a separate agent action.
 - Preserve snapshot mode and the VS Code host. Capture settings apply to the explanation session, not the user's saved workspace.

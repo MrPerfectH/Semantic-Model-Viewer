@@ -1399,7 +1399,7 @@
       var left = this.daxCard(sn, this._inlineDax);
       if (!left) return;
       var leftBody = this.daxBody(left);
-      this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card' }, [
+      this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card', data: { smvKind: 'measure', smvName: left.name, smvTable: left.table } }, [
         this.daxHeader(left, 'Analyzed measure', 'width:8px;height:8px;border-radius:2px;background:#1f2430;flex:none;', null, true),
         leftBody
       ]));
