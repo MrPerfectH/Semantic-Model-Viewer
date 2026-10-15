@@ -146,6 +146,8 @@
     if(view.proposals.length){var toggle=document.createElement('button');toggle.dataset.smvToggle='1';toggle.textContent='Hide proposals';toggle.style.cssText='position:fixed;top:8px;right:8px;z-index:9999;padding:8px';toggle.onclick=function(){var hidden=toggle.textContent==='Hide proposals';document.querySelectorAll('.smv-proposal').forEach(function(n){n.style.visibility=hidden?'hidden':'';});toggle.textContent=hidden?'Show proposals':'Hide proposals';};document.body.appendChild(toggle);}
     var clip={x:0,y:0,width:innerWidth,height:innerHeight};
     if(view.crop==='highlights'&&boxes.length){var x=Math.max(0,Math.min.apply(null,boxes.map(function(b){return b.left;}))-24),y=Math.max(0,Math.min.apply(null,boxes.map(function(b){return b.top;}))-24);clip={x:x,y:y,width:Math.min(innerWidth,Math.max.apply(null,boxes.map(function(b){return b.right;}))+24)-x,height:Math.min(innerHeight,Math.max.apply(null,boxes.map(function(b){return b.bottom;}))+24)-y};}
+    // Flush paint and relationship-line work queued while applying the final overlays.
+    await frame(); await frame();
     document.body.dataset.smvReady='1';return {view:view,clip:clip,objects:Array.from(seen)};
   }
   function start(input){

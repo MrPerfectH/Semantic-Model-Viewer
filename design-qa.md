@@ -1,52 +1,63 @@
-# Spellbook theme verification
+# Spellbook palette and compact toolbar verification
 
-Date: 2026-10-13
+Date: 2026-10-14
 
 final result: passed
 
-## Visual target and scope
+## Approved scope
 
-Selected target: option 2, the parchment Spellbook concept.
+Use the shared burgundy, olive, muted-plum and antique-gold palette across Tables,
+Measures, Power Query, Domains and Matrix. Use the compact Tables toolbar direction.
+Keep the existing Measures layout. Its floating-controls alternative is tracked in
+[backlog issue #76](https://github.com/MrPerfectH/Semantic-Model-Viewer/issues/76).
 
-Source visual truth: `/home/harry/.codex/generated_images/01a134a7-d6ee-7f92-89dc-caa30aad5909/exec-93827b33-2ee5-4b18-ae09-a378a6af25e0.png` (1586 × 992 pixels).
+Visual reference: `/home/harry/.codex/generated_images/01a134a7-d6ee-7f92-89dc-caa30aad5909/exec-3b506a58-acd2-4a02-bbbc-deb9edaf8f45.png`.
+Compared this concept with the actual Tables capture in one combined T3 HTML preview.
+The concept is illustrative and uses a different model; geometry and invented diagram
+contents were not treated as implementation requirements. Existing zoom controls stay
+in their established lower-left location. Measures geometry is explicitly excluded
+from the concept target by the user's instruction.
 
-Implementation: `http://localhost:8765/Models/tools/viewer/?spellbook=4`.
-Browser viewport: 1600 × 1000 CSS pixels; screenshot: 1600 × 1000 pixels, density 1.
-Final table screenshot: `/home/harry/.t3/userdata/browser-artifacts/browser-screenshot-localhost-mv6sdgqr-fe6a9b4e.png`.
+## Visual checks and fixes
 
-State: built-in Contoso Retail, Tables, eight tables on canvas, Spellbook selected.
-Compared the source and browser captures together in T3 HTML preview at 1000 pixels wide, preserving each image's aspect ratio. Used full-view comparison plus separate inspector, measure/DAX, Power Query, Domains and Matrix captures to check individual panels.
+- Consistent pigments now cover badges, source names, graph nodes/edges, legends,
+  selection/focus, minimaps, code references, Matrix cells and domain groups.
+- Tables toolbar groups the existing actions with light separators and a single Save
+  view primary action. Existing actions and popovers remain available.
+- P2: inspector toggle overflowed the toolbar at 850px. Hide its redundant title below
+  1000px. Post-fix bounds check: no overflowing controls.
+- P2: wrapped toolbar overlapped the canvas by 5px at 580px. Allocate 72px to the row
+  and align the canvas/inspector offsets. Post-fix toolbar bottom equals canvas top,
+  with no controls overflowing horizontally or vertically.
+- Retained darker gold for small badge text contrast; lighter gold remains an accent.
+- No remaining P0/P1/P2 findings in the requested scope.
 
-This implements an optional theme within the existing application. It intentionally retains the actual application's navigation (including Power Query), filters, domain/source colors, graph routing, and readable sans-serif technical text. The generated concept is not used to replace the working layout. Canvas zoom and positions are user-controlled; Fit was used for the final capture.
+## Evidence
 
-## Comparison history
+Browser viewport 1672 × 940; browser saves fitted screenshots at 1280 × 720.
 
-- Initial implementation had a cool-gray Matrix background and table inspector header (P2). Added scoped appearance rules; the final Matrix and inspector captures show warm surfaces.
-- Initial canvas corner flourishes were offset by the library width even though the canvas was already inset (P2). Moved them to the canvas corners and placed diagram content above them. They cannot intercept pointer input.
-- Added the generated book emblem and tightened secondary text colors in the Measures workspace.
-- Final full-view comparison: no remaining P0/P1/P2 findings for the theme scope.
+- Tables: `/home/harry/.t3/userdata/browser-artifacts/browser-screenshot-localhost-mv81vlwc-c1d0b18a.png`.
+- Measures: `/home/harry/.t3/userdata/browser-artifacts/browser-screenshot-localhost-mv81wdor-43a9370e.png`.
+- Power Query: `/home/harry/.t3/userdata/browser-artifacts/browser-screenshot-localhost-mv81srlm-d3f582fe.png`.
+- Domains: `/home/harry/.t3/userdata/browser-artifacts/browser-screenshot-localhost-mv81tdhs-323dba19.png`.
+- Matrix inspected directly in the collaborative browser.
+- Narrow-toolbar post-fix bounds verified at 850px and 580px.
 
-Post-fix Matrix evidence: `/home/harry/.t3/userdata/browser-artifacts/browser-screenshot-localhost-mv6s8usy-59079534.png`.
-Post-fix inspector evidence: `/home/harry/.t3/userdata/browser-artifacts/browser-screenshot-localhost-mv6sbqo6-40fe1388.png`.
-Snapshot evidence: `/home/harry/.t3/userdata/browser-artifacts/browser-screenshot-localhost-mv6s9lvp-b2f1327e.png`.
+## Functional verification
 
-## Functional checks
+- 675 tests passed, including a regression for palette-axis preservation, numeric
+  RGB colors, non-mutation and restoration of the saved Classic palette preference.
+- Extension packaging passed; 34 runtime assets verified without business data.
+- Browser: theme switching preserved Tables layout and saved palette preference,
+  Measures snapshot state, Power Query viewport/positions/selection/history, and
+  expanded Domains state and coordinates (after pending fit animations settled).
+- Exercised all five views. No uncaught application errors in the instrumented pass.
+- Real exported snapshot loads 43 demo tables in an embedded browser preview;
+  navigated all five tabs, including Power Query worker analysis. No application
+  errors or HTTP resource requests from the snapshot.
+- Preview is standalone HTML, uses only the demo model, and needs no extension install.
 
-- Classic → Spellbook → Classic switches immediately; theme switching leaves the captured table layout unchanged.
-- Spellbook restores on reload. Classic remains the default for an unset or unknown preference.
-- Navigated all five views; exercised a measure's dependency/DAX view, Sales query flow, table selection and inspector, Arrange and Fit.
-- No uncaught application errors or unhandled rejections in the instrumented five-view navigation pass.
-- Appearance selector remains in bounds at 1600, 850 and 580 pixels wide; navigation also checked at 850 pixels.
-- Saved and reopened an HTML snapshot: all 43 tables load, Spellbook and embedded artwork restore, no HTTP resource requests occur, toggling does not write the recipient's local storage, and recapture retains the chosen theme.
-- All eight visible cards are inside the canvas bounds after Fit.
-- `npm test` in `vscode-extension`: 674 passed, 0 failed after integrating the latest `main` Power Query snapshot changes.
-- `npm run package` in `vscode-extension`: VSIX created successfully.
-- `sync-viewer.js --check`: 34 runtime assets verified, no model/report data bundled.
-- `git diff --check`: passed.
+## Limits
 
-## Follow-up polish and limits
-
-- The concept's elaborate full perimeter and minimap ornamentation is simplified to corner flourishes (P3).
-- PNG export uses the parchment background, but an actual PNG download was not part of this verification.
-- VS Code packaging and host tests passed; no manual VS Code GUI session was performed.
-- Paper, corner and book artwork were generated, resized and WebP-encoded into the stylesheet so exports need no additional files.
+No manual VS Code GUI session or PNG-export check. No Marketplace release or merge.
+Generated concept labels are not model truth; original roles and relationships remain.

@@ -17,5 +17,15 @@ jobs:
           node-version: 22
       - name: CLI, data contracts, and local session tests
         run: npm test
+      - name: Use the system Chrome sandbox on Linux
+        if: runner.os == 'Linux'
+        run: echo "SMV_BROWSER=/usr/bin/google-chrome" >> "$GITHUB_ENV"
       - name: Capture the real viewer and build walkthroughs
         run: npm run test:browser
+        env:
+          SMV_TEST_ARTIFACTS: ${{ runner.temp }}/explanation-artifacts
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: explanation-${{ matrix.os }}
+          path: ${{ runner.temp }}/explanation-artifacts

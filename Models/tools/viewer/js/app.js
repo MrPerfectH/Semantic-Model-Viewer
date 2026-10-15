@@ -225,6 +225,7 @@
     /* ---------- color / source helpers ---------- */
     applyPalette: function (name) {
       var self = this, P = PALETTES[name] || PALETTES.muted;
+      if (g.ViewerTheme) P = g.ViewerTheme.palette(P);
       this.paletteName = PALETTES[name] ? name : 'muted';
       this.DOMAIN_COLORS = P.domain; this.SCHEMA_COLORS = P.schema; this.PALETTE = P.list;
       this.FALLBACK_COLOR = P.fallback;
@@ -233,20 +234,27 @@
         var c = P.source[k] || P.source.other;
         self.SOURCE_KINDS[k].color = c; self.SOURCE_COLORS[k] = c;
       });
-      if (g.GraphCanvas && g.GraphCanvas.EDGE) Object.assign(g.GraphCanvas.EDGE, P.edge);
+      if (g.GraphCanvas && g.GraphCanvas.EDGE) Object.assign(g.GraphCanvas.EDGE, {base:'#9aa3b2',lock:'#1f2430',marked:'#b4584f'}, P.edge);
     },
     /* Switch look without touching the model, selection or layout. */
     setPalette: function (name) {
       if (!PALETTES[name] || name === this.paletteName) return;
       store.set('smv-palette', name);
       this.applyPalette(name);
+      this.refreshAppearance();
+    },
+    refreshAppearance: function () {
+      this.applyPalette(this.paletteName);
       this.rebuildColorMaps();
       var cv = this.canvas;
       if (cv && this.model) {
         cv.recolor(); cv.renderLines(); cv.applyHighlight();
-        if (cv.clusterOn) cv.buildClusters();
+        if (cv.clusterOn) { var domains = this.captureDomains(); this.restoreDomains(domains); }
       }
       this.sidebar._key = null;
+      this.matrix._key = null;
+      if (this.explorer) { this.explorer._key = null; this.explorer._clusterKey = null; }
+      if (this.powerQueryWorkspace) this.powerQueryWorkspace.refreshAppearance();
       this.render(true);
     },
     rebuildColorMaps: function () {

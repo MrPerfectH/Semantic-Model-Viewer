@@ -23,12 +23,12 @@ async function capture(html, output, view, options={}) {
   const input=path.join(temp,'view.html');fs.writeFileSync(input,html);
   let child, socket; const pending=new Map();let sequence=0;
   try {
-    child=spawn(executable,['--headless=new','--disable-gpu','--no-first-run','--no-default-browser-check','--disable-background-networking','--disable-extensions','--hide-scrollbars','--remote-debugging-port=0','--user-data-dir='+path.join(temp,'profile'),'about:blank'],{stdio:['ignore','ignore','pipe']});
+    child=spawn(executable,['--headless=new','--disable-gpu','--disable-lcd-text','--force-color-profile=srgb','--run-all-compositor-stages-before-draw','--no-first-run','--no-default-browser-check','--disable-background-networking','--disable-extensions','--hide-scrollbars','--remote-debugging-port=0','--user-data-dir='+path.join(temp,'profile'),'about:blank'],{stdio:['ignore','ignore','pipe']});
     const endpoint=await new Promise((resolve,reject)=>{
       let log='';const timer=setTimeout(()=>reject(new Error('Browser startup timed out')),15000);
-      child.stderr.on('data',chunk=>{log+=chunk;const m=log.match(/DevTools listening on (ws:\/\/\S+)/);if(m){clearTimeout(timer);resolve(m[1]);}});
+      child.stderr.on('data',chunk=>{log=(log+chunk).slice(-16000);const m=log.match(/DevTools listening on (ws:\/\/\S+)/);if(m){clearTimeout(timer);resolve(m[1]);}});
       child.once('error',e=>{clearTimeout(timer);reject(e);});
-      child.once('exit',code=>{clearTimeout(timer);reject(new Error('Browser exited '+code+': '+log.slice(-2000)));});
+      child.once('exit',code=>{clearTimeout(timer);reject(new Error('Browser exited '+code+': '+log));});
     });
     const targets=await (await fetch('http://127.0.0.1:'+new URL(endpoint).port+'/json/list',{signal:AbortSignal.timeout(10000)})).json();
     const target=targets.find(t=>t.type==='page');if(!target)throw new Error('Browser has no page target');

@@ -27,3 +27,10 @@ These reviews are scoped evidence, not a guarantee of correctness.
 Linux, macOS and Windows GitHub Actions runs remain pending. The draft PR stays isolated until CI succeeds and the owner reviews the complete feature. No merge or automatic merge is enabled. Tasks stay open until complete-feature review.
 
 Captures illustrate an authored explanation; they do not certify the model or execute DAX/M. External query tools supply actual results. Chromium is required for image capture, and Python is required for optional report-usage scanning.
+
+## First CI follow-up
+
+- macOS passed. Ubuntu failed during Chromium sandbox initialization; the Linux job now explicitly selects the runner's system Google Chrome, retaining its sandbox.
+- Windows reported an allocation error. Screenshot comparisons now use SHA-256 strings instead of formatting entire image buffers on failure, and CI uploads capture artifacts for diagnosis.
+- A repeated-capture mismatch was reproduced locally after incorporating main. Captures now wait for final queued frames, disable LCD text rasterization, use sRGB and run compositor stages before drawing. The real-browser suite passed after these changes; Windows confirmation remains pending.
+- Merged main's theme update into the feature branch while retaining semantic object hooks. All 691 regression tests and 20 CLI tests passed after conflict resolution.

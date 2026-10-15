@@ -99,6 +99,9 @@ and run entirely offline.
 
 Use the **Appearance** selector in the top bar to switch between **Classic** and
 **Spellbook**, a parchment theme with burgundy controls and book-inspired headings.
+Spellbook uses a coordinated olive, muted-plum and antique-gold palette across all five
+views, including table badges, measure dependencies and Power Query. The Classic
+Muted/Vivid palette preference is retained when switching back.
 The choice is remembered in your browser or VS Code workspace. Interactive snapshots
 include the chosen theme and its artwork; changing it in a snapshot stays in that tab.
 
