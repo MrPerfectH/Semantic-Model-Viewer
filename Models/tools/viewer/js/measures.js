@@ -256,9 +256,11 @@
         return seen;
       };
       var upSet = bfs('up'), dnSet = bfs('down');
-      if(this._explanationContext)cap=Math.min(cap,this._explanationContext.limit);
-      var names = Array.from(new Set([].concat(Array.from(upSet), Array.from(dnSet),
-        Object.keys(extra).filter(function (n) { return self.app.msrOf(n); }))));
+      var initial=Array.from(new Set([].concat(Array.from(upSet),Array.from(dnSet))));
+      if(this._explanationContext){initial.sort(function(a,b){return (dist[a]-dist[b])||a.localeCompare(b);});initial=initial.slice(0,this._explanationContext.limit);}
+      // The authored limit bounds only the opening neighborhood. Explicit branch
+      // expansion remains usable up to the viewer's ordinary global cap.
+      var names=Array.from(new Set(initial.concat(Object.keys(extra).filter(function(n){return self.app.msrOf(n);})))) ;
       var capped = false;
       if (names.length > cap) {
         capped = true;

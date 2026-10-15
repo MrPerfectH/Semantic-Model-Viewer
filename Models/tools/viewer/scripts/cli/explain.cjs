@@ -26,7 +26,7 @@ function prepare(source,input,options={}){
   const adapter=fs.readFileSync(path.join(__dirname,'../../js/explanation-view.js'),'utf8').replace(/<\/script/gi,'<\\/script');
   const json=JSON.stringify(view).replace(/</g,'\\u003c');
   const sourceHash=crypto.createHash('sha256').update(JSON.stringify(context.Snapshots.modelData(model))).digest('hex');
-  html=html.replace('</body>',()=>'<script>'+interactive+'\n'+adapter+'\nwindow.SMV_SOURCE_REVISION='+JSON.stringify(sourceHash)+';SMVExplanation.start('+json+');</script></body>');
+  html=html.replace('</body>',()=>'<script data-smv-explanation-adapter>'+interactive+'\n'+adapter+'</script><script>window.SMV_SOURCE_REVISION='+JSON.stringify(sourceHash)+';SMVExplanation.start('+json+');</script></body>');
   const rendererHash=crypto.createHash('sha256');
   const root=path.resolve(__dirname,'../..');
   [...context.Snapshots.files,'index.html','js/explanation-view.js','js/interactive-view.js','scripts/cli/explain.cjs','scripts/cli/results.cjs','scripts/cli/model.cjs','scripts/cli/capture.cjs'].sort().forEach(file=>rendererHash.update(file).update(fs.readFileSync(path.join(root,file))));

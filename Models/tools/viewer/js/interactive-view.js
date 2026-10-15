@@ -34,9 +34,11 @@ body[data-smv-interactive] .mv-dax-body pre,body[data-smv-interactive] .mv-dax-c
     document.querySelectorAll('.smv-hl,.smv-callout,.smv-proposal,.smv-annotation-lines,.smv-explanation-controls').forEach(function(n){n.remove();});
     var controls=node('aside',null,'smv-explanation-controls');controls.setAttribute('aria-label','Explanation controls');
     var label=node('strong','Explanation · attention highlights');controls.appendChild(label);
+    if(g.SMV_EXPAND_WORKSPACE)controls.appendChild(button('Expand workspace',function(){g.SMV_EXPAND_WORKSPACE().catch(function(e){status.textContent=e.message;});}));
+    if(g.SMV_SAVE_OFFLINE)controls.appendChild(button('Save offline view',function(){g.SMV_SAVE_OFFLINE().catch(function(e){status.textContent=e.message;});}));
     if(g.SMV_SEND_CONTEXT)controls.appendChild(button('Use selection in conversation',function(){g.SMV_SEND_CONTEXT().catch(function(e){status.textContent=e.message;});}));
     controls.appendChild(button('Reset explanation',function(){if(api)api.reset();}));
-    var hidden=view.annotationsVisible===false,toggle=button('Hide annotations',function(){hidden=!hidden;toggle.textContent=hidden?'Show annotations':'Hide annotations';paint(true);});toggle.textContent=hidden?'Show annotations':'Hide annotations';controls.appendChild(toggle);
+    var hidden=view.annotationsVisible===false,toggle=button('Hide annotations',function(){dirty=true;hidden=!hidden;toggle.textContent=hidden?'Show annotations':'Hide annotations';paint(true);});toggle.textContent=hidden?'Show annotations':'Hide annotations';controls.appendChild(toggle);
     var status=node('span','', 'smv-status');status.setAttribute('aria-live','polite');controls.appendChild(status);
     var notes=node('div',null,'smv-notes');
     view.callouts.forEach(function(c){notes.appendChild(node('p',c.text));});
@@ -97,12 +99,12 @@ body[data-smv-interactive] .mv-dax-body pre,body[data-smv-interactive] .mv-dax-c
   function receipt(){return {version:1,revision:revision,sourceRevision:g.SMV_SOURCE_REVISION||null,view:clone(authored),explored:dirty,selection:selection(g.app),selectedAt:selectedAt,workspace:g.app.state.viewMode,currentView:snapshot(),pendingRevision:pending?pending.revision:null,clientId:clientId};}
   var clientId=typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():String(Math.random());
   function connect(smv,input){
-    api=smv;authored=clone(input);
-    var baseApply=smv.apply;
-    smv.apply=async function(v){busy=true;try{var result=await baseApply(v);selected=null;dirty=false;return result;}finally{busy=false;}};
+    api=smv;authored=clone(input);selected=input.state&&input.state.selection||input.focus||null;
+    var baseApply=smv.apply,applyQueue=smv.ready().catch(function(){});
+    smv.apply=function(v){var requested=clone(v);var task=applyQueue.then(async function(){busy=true;try{var result=await baseApply(requested);selected=requested.state&&requested.state.selection||requested.focus||null;dirty=false;return result;}finally{busy=false;}});applyQueue=task.catch(function(){});return task;};
     smv.reset=async function(){return smv.apply(authored);};
     smv.step=async function(i){if(!g.SMV_STEPS||!g.SMV_STEPS[i])throw new Error('Unknown step');currentStep=i;authored=clone(g.SMV_STEPS[i].view);return smv.reset();};
-    smv.reveal=async function(r){var v=clone(authored);v.focus=r;if(r.kind==='measure')v.mode='measures';else if(r.kind==='query')v.mode='power-query';else if(v.mode==='measures'||v.mode==='power-query')v.mode='graph';if(v.mode!=='measures')delete v.context;delete v.state;return smv.apply(v);};
+    smv.reveal=async function(r){var v=clone(authored);v.focus=r;if(r.kind==='measure')v.mode='measures';else if(r.kind==='query')v.mode='power-query';else if(v.mode==='measures'||v.mode==='power-query')v.mode='graph';if(v.mode!=='measures')delete v.context;delete v.state;await smv.apply(v);dirty=true;return smv.inspect();};
     smv.loadView=async function(v,nextRevision){authored=clone(v);revision=nextRevision;dirty=false;pending=null;selected=null;return smv.reset();};
     smv.inspect=receipt;
     smv.offer=async function(update){
@@ -118,10 +120,17 @@ body[data-smv-interactive] .mv-dax-body pre,body[data-smv-interactive] .mv-dax-c
     function interacted(e){if(busy||e.target.closest&&e.target.closest('.smv-explanation-controls'))return;dirty=true;selectedAt=new Date().toISOString();var el=e.target.closest&&e.target.closest('[data-smv-kind]');if(el){selected={kind:el.dataset.smvKind,name:el.dataset.smvName};if(el.dataset.smvTable)selected.table=el.dataset.smvTable;}else selected=null;}
     ['pointerdown','wheel','keydown'].forEach(function(name){document.addEventListener(name,interacted,{capture:true,passive:true});});
     function endpoint(action){var url=new URL(g.SMV_SESSION_URL);url.pathname='/'+action;return url;}
-    async function report(){if(!g.app||!g.app.state.loaded)return;if(g.SMV_MCP_SYNC)return g.SMV_MCP_SYNC(receipt());if(!g.SMV_SESSION_URL)return;await fetch(endpoint('client'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(receipt())});}
+    async function report(){if(!g.app||!g.app.state.loaded)return;if(g.SMV_MCP_SYNC)return g.SMV_MCP_SYNC(receipt());if(!g.SMV_SESSION_URL)return;var response=await fetch(endpoint('client'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(receipt())});if(!response.ok){var data=await response.json();throw new Error(data.error?.message||'Viewer acknowledgement failed');}}
     var pollBusy=false;
-    async function poll(){if(pollBusy||busy||(!g.SMV_SESSION_URL&&!g.SMV_MCP_SYNC))return;pollBusy=true;try{if(g.SMV_MCP_SYNC){var data=await report();if(data)await smv.offer(data);showStatus('Inline · view '+revision);return;}var res=await fetch(endpoint('view'));if(!res.ok)throw new Error('Session unavailable ('+res.status+')');var update=await res.json();if(update.error)throw new Error(update.error);await smv.offer(update);await report();showStatus('Live · view '+revision);}catch(e){showStatus(e.message);}finally{pollBusy=false;}}
+    async function poll(){if(pollBusy||busy||(!g.SMV_SESSION_URL&&!g.SMV_MCP_SYNC))return;pollBusy=true;try{if(g.SMV_MCP_SYNC){var data=await report();if(data)await smv.offer(data);showStatus('Inline · view '+revision);return;}var res=await fetch(endpoint('view'));if(!res.ok)throw new Error('Session unavailable ('+res.status+')');var update=await res.json();if(update.error)throw new Error(update.error);await smv.offer(update);await report();showStatus('Live · view '+revision);}catch(e){showStatus('Disconnected: '+e.message+'. The loaded model remains interactive. Save an offline view or reopen this session through the agent.');}finally{pollBusy=false;}}
     smv.ready().then(function(){revision=g.SMV_SESSION_REVISION||1;poll();if(g.SMV_SESSION_URL||g.SMV_MCP_SYNC)setInterval(poll,750);}).catch(function(){});
   }
-  g.SMVInteractive={annotations:annotations,connect:connect};
+  function appearance(context){
+    style();var dark=context&&context.theme==='dark';document.documentElement.dataset.smvColorScheme=dark?'dark':'light';document.documentElement.style.colorScheme=dark?'dark':'light';
+    var vars=dark?{'paper':'#151923','surface':'#1e2532','soft':'#293243','ink':'#e4e9f3','muted':'#a8b4ca','line':'#45516a'}:{'paper':'#f4f5f7','surface':'#ffffff','soft':'#f0f3fa','ink':'#25334c','muted':'#59667b','line':'#cbd2df'};
+    Object.keys(vars).forEach(function(k){document.documentElement.style.setProperty('--smv-'+k,vars[k]);});
+    var darkStyle=document.getElementById('smv-host-appearance');if(!darkStyle){darkStyle=node('style');darkStyle.id='smv-host-appearance';document.head.appendChild(darkStyle);}
+    darkStyle.textContent='[data-smv-color-scheme=dark] body,[data-smv-color-scheme=dark] #root,[data-smv-color-scheme=dark] #topbar,[data-smv-color-scheme=dark] .mv-library,[data-smv-color-scheme=dark] .mv-dax-card,[data-smv-color-scheme=dark] .mv-analysis-header,[data-smv-color-scheme=dark] .mv-graph-panel{background:var(--smv-surface)!important;color:var(--smv-ink)!important}';
+  }
+  g.SMVInteractive={annotations:annotations,connect:connect,appearance:appearance};
 })(window);

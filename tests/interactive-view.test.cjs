@@ -35,3 +35,12 @@ test('presentation does not infer remote reachability or inline support',()=>{
   assert.equal(presentation({url:'http://127.0.0.1:1',revision:1},{localBrowser:true}).preferred,'browser');
   assert.equal(presentation({}).inline.available,false);
 });
+
+test('source mutation during capture rejects the export and preserves the previous file',async t=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'smv-export-race-')),modelFile=path.join(root,'model.bim'),session=path.join(root,'session.json'),out=path.join(root,'capture.png');
+  const data={name:'Race',model:{tables:[{name:'A',columns:[],measures:[{name:'Amount',expression:'1'}]}],relationships:[]}};fs.writeFileSync(modelFile,JSON.stringify(data));fs.writeFileSync(out,'previous artifact');
+  const server=await serve(modelFile,{session});t.after(()=>{server.close();fs.rmSync(root,{recursive:true,force:true});});
+  t.mock.method(require('../Models/tools/viewer/scripts/cli/capture.cjs'),'capture',async(html,output)=>{data.model.tables[0].measures[0].expression='2';fs.writeFileSync(modelFile,JSON.stringify(data));fs.writeFileSync(output,'new capture');});
+  await assert.rejects(exportSession(session,{basis:'authored',revision:1,out,force:true}),e=>e.code==='SOURCE_CHANGED');
+  assert.equal(fs.readFileSync(out,'utf8'),'previous artifact');assert.ok(!fs.readdirSync(root).some(n=>n.startsWith('.smv-export-')));
+});

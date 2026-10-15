@@ -20,5 +20,20 @@ host.ontoolresult=async result=>{
     await window.smv.loadView(data.view,data.revision);
   }else await window.smv.offer(data);
 };
-host.onhostcontextchanged=context=>{if(context.theme&&window.app?.theme)window.app.theme.set(context.theme);};
-host.connect().catch(error=>{const status=document.querySelector('.smv-status');if(status)status.textContent='Inline host connection unavailable: '+error.message;});
+host.onhostcontextchanged=context=>window.SMVInteractive.appearance(context);
+window.SMV_EXPAND_WORKSPACE=async()=>{
+  const context=host.getHostContext();
+  if(context?.availableDisplayModes?.includes('fullscreen'))await host.requestDisplayMode({mode:'fullscreen'});
+  else throw new Error('This host does not offer a fullscreen workspace. Save the offline view and open it in your browser.');
+};
+window.SMV_SAVE_OFFLINE=async()=>{
+  const payload=window.Snapshots.capture(window.app),assets=await window.Snapshots.loadAssets(document);
+  let html=window.Snapshots.buildHTML(assets.template,assets.sources,payload);
+  const adapter=document.querySelector('[data-smv-explanation-adapter]').textContent;
+  const view=JSON.stringify(window.smv.inspect().currentView).replace(/</g,'\\u003c');
+  const boot='window.SMV_SOURCE_REVISION='+JSON.stringify(window.SMV_SOURCE_REVISION)+';SMVExplanation.start('+view+');';
+  html=html.replace('</body>',()=>'<script data-smv-explanation-adapter>'+adapter.replace(/<\/script/gi,'<\\/script')+'</script><script>'+boot+'</script></body>');
+  const response=await host.downloadFile({contents:[{type:'resource',resource:{uri:'file:///semantic-model-explanation.html',mimeType:'text/html',text:html}}]});
+  if(response.isError)throw new Error('Download was declined or is unsupported. Ask the agent to export an offline HTML view.');
+};
+host.connect().then(()=>window.SMVInteractive.appearance(host.getHostContext()||{})).catch(error=>{const status=document.querySelector('.smv-status');if(status)status.textContent='Inline host connection unavailable: '+error.message;});

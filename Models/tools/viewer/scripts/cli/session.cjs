@@ -104,10 +104,16 @@ async function exportSession(file,options){
   const p=prepare(info.source,info.view,{report:info.report});if(p.hash!==info.sourceRevision)throw fault('SOURCE_CHANGED','Source changed before export');
   const output=path.resolve(options.out);fs.mkdirSync(path.dirname(output),{recursive:true});
   if(fs.existsSync(output)&&!options.force)throw fault('OUTPUT_EXISTS','Output exists');
-  if(path.extname(output)==='.png')await require('./capture.cjs').capture(p.html,output,p.view,options);
-  else if(path.extname(output)==='.html')fs.writeFileSync(output,p.html,{flag:options.force?'w':'wx'});
-  else throw fault('OUTPUT_INVALID','Session export requires .html or .png');
-  const now=await request(file,'status');if(now.revision!==info.revision||now.sourceRevision!==info.sourceRevision){fs.rmSync(output,{force:true});throw fault('REVISION_CONFLICT','Session changed during export; retry');}
+  if(!['.png','.html'].includes(path.extname(output)))throw fault('OUTPUT_INVALID','Session export requires .html or .png');
+  const temp=fs.mkdtempSync(path.join(path.dirname(output),'.smv-export-')),artifact=path.join(temp,path.basename(output));
+  try{
+    if(path.extname(output)==='.png')await require('./capture.cjs').capture(p.html,artifact,p.view,options);
+    else fs.writeFileSync(artifact,p.html,{flag:'wx'});
+    // Revalidate the actual source fingerprint even when source watching is off.
+    await request(file,'snapshot',{basis:'authored',expectedRevision:info.revision});
+    if(fs.existsSync(output)&&!options.force)throw fault('OUTPUT_EXISTS','Output exists');
+    fs.renameSync(artifact,output);
+  }finally{fs.rmSync(temp,{recursive:true,force:true});}
   return {...info,path:output,containsFullMetadata:true};
 }
 if(require.main===module)serve(process.argv[2],JSON.parse(process.argv[3])).then(s=>process.stdout.write(s.url+'\n')).catch(e=>{console.error(e.message);process.exitCode=1;});
