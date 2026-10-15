@@ -4,7 +4,7 @@ const {McpServer}=require('@modelcontextprotocol/server');
 const {StdioServerTransport}=require('@modelcontextprotocol/server/stdio');
 const {z}=require('zod');
 const {registerAppTool,registerAppResource,getUiCapability,RESOURCE_MIME_TYPE}=require('@modelcontextprotocol/ext-apps/server');
-const sessions=require('./session.cjs'),explain=require('./explain.cjs');
+const sessions=require('../../Models/tools/viewer/scripts/cli/session.cjs'),explain=require('../../Models/tools/viewer/scripts/cli/explain.cjs');
 const URI='ui://smv/viewer.html';
 function createServer(options={}){
   const server=new McpServer({name:'semantic-model-viewer',version:'0.2.0'});
@@ -14,7 +14,7 @@ function createServer(options={}){
   const result=(data,meta)=>({content:[{type:'text',text:JSON.stringify(data)}],structuredContent:data,...(meta?{_meta:meta}:{})});
   const safe=fn=>async(...args)=>{try{return await fn(...args);}catch(e){return {isError:true,content:[{type:'text',text:JSON.stringify({error:{code:e.code||'VIEWER_ERROR',message:e.message,details:e.details||{}}})}]};}};
   const id=z.string(),view=z.record(z.string(),z.unknown());
-  server.registerTool('smv_inspect',{description:'Inspect actual model metadata. Does not execute queries.',inputSchema:z.object({model:z.string()})},safe(async({model})=>{const {runtime,readModel}=require('./model.cjs'),context=runtime();return result(context.Snapshots.modelData(readModel(context,local(model)).model));}));
+  server.registerTool('smv_inspect',{description:'Inspect actual model metadata. Does not execute queries.',inputSchema:z.object({model:z.string()})},safe(async({model})=>{const {runtime,readModel}=require('../../Models/tools/viewer/scripts/cli/model.cjs'),context=runtime();return result(context.Snapshots.modelData(readModel(context,local(model)).model));}));
   registerAppTool(server,'smv_open',{description:'Open a real focused viewer. Use returned local URL in a reachable browser or export artifacts. Inline UI requires MCP Apps support.',inputSchema:z.object({model:z.string(),view}),_meta:{ui:{resourceUri:URI}}},safe(async(args)=>{
     const model=local(args.model),p=explain.prepare(model,args.view),session=crypto.randomUUID(),stateFile=path.join(directory,session+'.json'),viewFile=path.join(directory,session+'-view.json');fs.writeFileSync(viewFile,JSON.stringify(args.view));
     const state=await sessions.serve(model,{view:viewFile,session:stateFile});registry.set(session,{stateFile,close:state.close});
@@ -31,8 +31,8 @@ function createServer(options={}){
   server.registerTool('smv_stop',{description:'Stop a viewer session owned by this MCP connection.',inputSchema:z.object({session:id})},safe(async({session})=>{const owned=file(session);owned.close();registry.delete(session);return result({stopped:true,session});}));
   registerAppTool(server,'smv_app_sync',{description:'Synchronize embedded real-viewer state without localhost access.',inputSchema:z.object({session:id,receipt:view}),_meta:{ui:{visibility:['app']}}},safe(async({session,receipt})=>{const owned=file(session);await sessions.request(owned.stateFile,'client',receipt);return result(await sessions.request(owned.stateFile,'view'));}));
   registerAppResource(server,'semantic-viewer',URI,{description:'Actual Semantic Model Viewer with MCP Apps bridge'},async()=>{
-    const p=explain.prepare(path.resolve(__dirname,'../../../../../examples/explanations/concept.bim'),{version:2,chrome:false});
-    const bridge=fs.readFileSync(path.join(__dirname,'mcp-app.bundle.js'),'utf8').replace(/<\/script/gi,'<\\/script');
+    const p=explain.prepare(path.resolve(__dirname,'../../examples/explanations/concept.bim'),{version:2,chrome:false});
+    const bridge=fs.readFileSync(path.join(__dirname,'app.bundle.js'),'utf8').replace(/<\/script/gi,'<\\/script');
     return {contents:[{uri:URI,mimeType:RESOURCE_MIME_TYPE,text:p.html.replace('</body>',()=>'<script>'+bridge+'</script></body>'),_meta:{ui:{csp:{connectDomains:[],resourceDomains:[]},prefersBorder:true}}}]};
   });
   function cleanup(){for(const entry of registry.values())entry.close();registry.clear();fs.rmSync(directory,{recursive:true,force:true});}

@@ -1,7 +1,7 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict'),path=require('node:path');
 const {Client,InMemoryTransport}=require('@modelcontextprotocol/client');
-const {createServer,URI}=require('../Models/tools/viewer/scripts/cli/mcp.cjs');
+const {createServer,URI}=require('../integrations/mcp/server.cjs');
 const view=require('../examples/explanations/interactive-tables.json');
 async function fixture(t,ui=false){const {server,cleanup}=createServer({root:path.resolve(__dirname,'..')}),[a,b]=InMemoryTransport.createLinkedPair();const client=new Client({name:'viewer-test',version:'1'},{capabilities:ui?{extensions:{'io.modelcontextprotocol/ui':{mimeTypes:['text/html;profile=mcp-app']}}}:{}});t.after(async()=>{await client.close();cleanup();});await Promise.all([server.connect(a),client.connect(b)]);return client;}
 test('MCP controls the shared session path and refuses out-of-root models',async t=>{

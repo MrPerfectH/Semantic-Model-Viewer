@@ -38,7 +38,7 @@ Source files are read locally and never modified. No DAX execution is performed.
 `;
 
 async function main(args) {
-  if (args[0] === 'mcp')return require('./mcp.cjs').start();
+  if (args[0] === 'mcp')return require('../../../../../integrations/mcp/server.cjs').start();
   if (args[0] === 'inspect') {if(args.length!==2)throw new Error('Expected inspect <model>');const context=runtime(),{model}=readModel(context,args[1]);process.stdout.write(JSON.stringify(context.Snapshots.modelData(model),null,2)+'\n');return;}
   if (['serve','open','session'].includes(args[0]))return sessionCommand(args);
   if (args[0] === 'discover') { if(args.length<2)throw new Error('discover requires at least one folder');process.stdout.write(JSON.stringify(require('./discover.cjs').discover(args.slice(1)),null,2)+'\n');return; }

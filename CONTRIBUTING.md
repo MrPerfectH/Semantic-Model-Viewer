@@ -25,13 +25,16 @@ Use `--port` to pick another port. Edit files in `Models/tools/viewer/` and relo
 
 The app is plain vanilla JS, HTML and CSS. There is no bundler, no transpiler and no
 runtime dependency. Please keep it that way: do not add a framework, a build tool or an
-npm package to `Models/tools/viewer/`.
+npm package to the core browser viewer. The optional MCP integration lives in
+`integrations/mcp/`; its official SDK bridge is bundled with `npm run build:mcp-app`.
+The core app and CLI snapshot/HTML export remain usable without that build or loading MCP dependencies.
 
 ## Run the tests
 
 You need Node.js 22. From the repo root:
 
 ```bash
+npm ci
 node vscode-extension/scripts/sync-viewer.js
 node --test tests/*.test.cjs Models/tools/viewer/tests/*.test.js tests/extension.test.js
 ```

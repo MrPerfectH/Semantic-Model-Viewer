@@ -29,7 +29,8 @@
     "skills/smv-explain/",
     "examples/explanations/",
     "Models/demo/",
-    "docs/interactive-viewer.md"
+    "docs/interactive-viewer.md",
+    "integrations/mcp/"
   ],
   "dependencies": {
     "@modelcontextprotocol/client": "2.3.1",

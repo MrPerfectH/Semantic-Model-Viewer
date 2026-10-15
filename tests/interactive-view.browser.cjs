@@ -43,7 +43,7 @@ test('offline walkthrough uses one real viewer and navigates steps',{skip:!brows
 });
 
 test('MCP App runs the real viewer through the official host bridge',{skip:!browser,timeout:30000},async t=>{
-  const {createServer,URI}=require('../Models/tools/viewer/scripts/cli/mcp.cjs');
+  const {createServer,URI}=require('../integrations/mcp/server.cjs');
   const {Client,InMemoryTransport}=require('@modelcontextprotocol/client');
   const owned=createServer({root:path.resolve(__dirname,'..')}),[a,b]=InMemoryTransport.createLinkedPair();
   const client=new Client({name:'bridge-browser-test',version:'1'},{capabilities:{extensions:{'io.modelcontextprotocol/ui':{mimeTypes:['text/html;profile=mcp-app']}}}});
