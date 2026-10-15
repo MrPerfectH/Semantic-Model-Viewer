@@ -8,6 +8,7 @@ async function verify(t,view,code,html){const root=fs.mkdtempSync(path.join(os.t
 test('native focus, semantic annotations and explored state survive pan/expand/reset',{skip:!browser},async t=>verify(t,tables,`
 check(app.canvas.selRel.name===${JSON.stringify(tables.focus.name)},'native relationship selection');
 check(app.explorer.names.size===2,'focused visible tables');
+const source=document.querySelector('.smv-view-provenance');check(source.textContent.includes('Model content: Contoso Retail'),'metadata provenance');check(source.textContent.includes('Authored instructions:'),'author provenance');check(JSON.parse(source.querySelector('pre').textContent).focus.name===app.canvas.selRel.name,'inspectable actual view specification');
 const before=document.querySelector('.smv-hl').getBoundingClientRect().x;
 app.canvas.view.x+=40;app.canvas.updateTransform();await frame();await frame();
 const after=document.querySelector('.smv-hl').getBoundingClientRect().x;check(Math.abs(after-before-40)<2,'annotation tracks pan');
