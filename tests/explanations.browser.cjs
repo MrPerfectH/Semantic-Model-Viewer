@@ -22,6 +22,18 @@ test('real viewer captures are repeatable and all explanation surfaces render',{
     ['clusters',{version:1,mode:'clusters',tables:['Sales','Date'],highlights:[{kind:'table',name:'Sales'}]}],
     ['proposal',{version:1,tables:['Sales','Date'],proposals:[{kind:'relationship',from:{kind:'column',table:'Sales',name:'Order Date'},to:{kind:'column',table:'Date',name:'Date'},text:'Illustrative alternate relationship'}]}]
   ])await t.test(name,async()=>{await shot(model,view,path.join(temp,name+'.png'));assert.ok(fs.statSync(path.join(temp,name+'.png')).size>10000);await shot(model,view,path.join(temp,name+'-repeat.png'));assert.equal(digest(path.join(temp,name+'.png')),digest(path.join(temp,name+'-repeat.png')),name+' repeats identically');});
+  await t.test('ready releases the gesture layer before capture',async()=>{
+    const {capture}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+    const p=prepare(model,{version:1,mode:'clusters',highlights:[{kind:'table',name:'Sales'}]});
+    // Keep the gesture timer pending long enough to make the readiness check deterministic.
+    const held=p.html.replace('}, 160);','}, 2000);');
+    assert.notEqual(held,p.html);
+    for(const delay of [0,250]){
+      const check=`<script>{const ready=window.smv.ready;window.smv.ready=async()=>{const result=await ready();if(window.app.canvas._gestureHold!=null||window.app.canvas.world.style.willChange)throw new Error('Gesture layer still active at ready');await new Promise(r=>setTimeout(r,${delay}));return result;};}</script>`;
+      await capture(held.replace('</body>',check+'</body>'),path.join(temp,'settled-'+delay+'.png'),p.view);
+    }
+    assert.equal(digest(path.join(temp,'settled-0.png')),digest(path.join(temp,'settled-250.png')),'capture is unchanged past the old gesture timeout');
+  });
   await t.test('offscreen matrix focus and general concept annotations',async()=>{
     const dimensions=Array.from({length:35},(_,i)=>({name:'Dimension '+String(i).padStart(2,'0'),columns:[{name:'ID',dataType:'int64'}]}));
     const file=path.join(temp,'large.bim');fs.writeFileSync(file,JSON.stringify({name:'Large',model:{tables:[{name:'Fact',columns:[{name:'ID',dataType:'int64'}]},...dimensions],relationships:dimensions.map((d,i)=>({name:'R'+i,fromTable:'Fact',fromColumn:'ID',toTable:d.name,toColumn:'ID'}))}}));

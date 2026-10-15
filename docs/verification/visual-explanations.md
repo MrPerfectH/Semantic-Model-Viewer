@@ -50,3 +50,9 @@ Capture cleanup now requests `Browser.close`, waits for graceful exit, and termi
 ## Fourth CI follow-up
 
 On `4826eb8`, Ubuntu and macOS passed. Windows failed one capture when reading `DevToolsActivePort` returned `EBUSY` during Chrome's write. Endpoint-file polling now retries temporary file-lock/access errors within the existing startup deadline and includes the last file error in timeout diagnostics. A regression test covers recovery from a lock and bounded failure for a persistent lock.
+
+## Fifth CI follow-up
+
+On `785d4ed`, Ubuntu and macOS passed. Windows completed startup and cleanup but failed byte-for-byte cluster capture repeatability. Downloaded artifacts show the same layout with rasterization differences across the transformed canvas.
+
+The canvas promotes its rendering layer during Fit, then releases it on a 160ms gesture timer. Explanation readiness now explicitly releases that layer and flushes frames before capture. The regression test extends the timer to keep it pending deterministically, checks it is cleared at readiness, and compares immediate and delayed captures. Exact image equality remains required.
