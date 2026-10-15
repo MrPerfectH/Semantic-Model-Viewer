@@ -56,8 +56,15 @@ function New-NamedShortcut {
 $desktopShortcut = New-NamedShortcut -FolderSpecialName "Desktop" -Label "Desktop icon"
 $startMenuShortcut = New-NamedShortcut -FolderSpecialName "Programs" -Label "Start menu entry"
 
+# Adds a "Semantic Model Viewer" button to the External Tools ribbon of Power BI Desktop
+# (takes effect the next time Power BI Desktop starts).
+. (Join-Path $here "power-bi-external-tool.ps1")
+$iconPng = Join-Path $here "..\..\icons\favicon-32.png"
+$powerBiTool = Install-PbiExternalTool -StartScript $startScript -IconPng $iconPng
+
 if ($desktopShortcut) { Write-Host "Desktop icon created: $desktopShortcut" }
 if ($startMenuShortcut) { Write-Host "Start menu entry:     $startMenuShortcut" }
+if ($powerBiTool) { Write-Host "Power BI button added: $powerBiTool (restart Power BI Desktop to see it under External Tools)" }
 Write-Host "To update, run 'git pull' in the repo and reopen the app."
 if ($desktopShortcut -or $startMenuShortcut) {
     Write-Host "Opening it now..."
