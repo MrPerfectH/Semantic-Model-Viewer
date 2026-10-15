@@ -20,7 +20,7 @@ function browserPath(explicit) {
 // Chrome may publish its endpoint file without emitting the stderr banner.
 function waitForEndpoint(child, profile, timeoutMs=30000) {
   return new Promise((resolve,reject)=>{
-    let log='', finished=false;
+    let log='', finished=false, portError='';
     const finish=(error,endpoint)=>{
       if(finished)return;finished=true;clearTimeout(timer);clearInterval(poll);
       child.stderr.removeListener('data',onData);child.removeListener('error',onError);child.removeListener('exit',onExit);
@@ -34,9 +34,12 @@ function waitForEndpoint(child, profile, timeoutMs=30000) {
       try {
         const [port,endpoint]=fs.readFileSync(path.join(profile,'DevToolsActivePort'),'utf8').trim().split(/\r?\n/);
         if(/^\d+$/.test(port)&&Number(port)>0&&Number(port)<=65535&&/^\/devtools\/browser\/[^\s]+$/.test(endpoint))finish(null,'ws://127.0.0.1:'+port+endpoint);
-      } catch(error) {if(error.code!=='ENOENT')finish(error);}
+      } catch(error) {
+        if(['ENOENT','EBUSY','EACCES','EPERM'].includes(error.code))portError=error.code+': '+error.message;
+        else finish(error);
+      }
     };
-    const timer=setTimeout(()=>finish(new Error('Browser startup timed out after '+timeoutMs+'ms. Diagnostics: '+(log||'(no stderr output)'))),timeoutMs);
+    const timer=setTimeout(()=>finish(new Error('Browser startup timed out after '+timeoutMs+'ms. Diagnostics: '+(log||'(no stderr output)')+(portError?' Endpoint file: '+portError:''))),timeoutMs);
     const poll=setInterval(readPort,50);
     child.stderr.on('data',onData);child.once('error',onError);child.once('exit',onExit);
     readPort();

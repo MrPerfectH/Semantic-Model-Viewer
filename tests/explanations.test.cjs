@@ -61,3 +61,22 @@ test('capture cleanup terminates descendants even after the launcher exits',{ski
   await new Promise(r=>setTimeout(r,150));
   assert.equal(fs.existsSync(marker),false,'no descendant continues writing after cleanup');
 });
+
+test('browser startup retries a locked endpoint file and reports a persistent lock',async t=>{
+  const {EventEmitter}=require('node:events'),{PassThrough}=require('node:stream');
+  const {waitForEndpoint}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+  const profile=fs.mkdtempSync(path.join(os.tmpdir(),'smv-locked-endpoint-'));t.after(()=>fs.rmSync(profile,{recursive:true,force:true}));
+  const file=path.join(profile,'DevToolsActivePort'),read=fs.readFileSync;
+  let attempts=0,locked=true;
+  t.mock.method(fs,'readFileSync',function(name,...args){
+    if(name!==file)return read.call(this,name,...args);
+    attempts++;
+    if(locked)throw Object.assign(new Error('endpoint is locked'),{code:'EBUSY'});
+    return '12345\n/devtools/browser/recovered';
+  });
+  const child=()=>{const c=new EventEmitter();c.stderr=new PassThrough();return c;};
+  const recovered=waitForEndpoint(child(),profile,1000);locked=false;
+  assert.equal(await recovered,'ws://127.0.0.1:12345/devtools/browser/recovered');assert.ok(attempts>=2);
+  locked=true;
+  await assert.rejects(waitForEndpoint(child(),profile,80),/startup timed out.*EBUSY: endpoint is locked/);
+});

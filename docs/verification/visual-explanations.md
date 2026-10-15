@@ -46,3 +46,7 @@ Startup now accepts Chrome's `DevToolsActivePort` file as well as the stderr ban
 On `0219bbb`, macOS and Windows passed again. Ubuntu reached the browser captures, but temporary profile removal failed with `ENOTEMPTY`: browser descendants were still writing after the launcher exited.
 
 Capture cleanup now requests `Browser.close`, waits for graceful exit, and terminates the capture's dedicated POSIX process group before asynchronous profile removal with bounded retries. A process-tree regression test verifies that a descendant cannot keep writing after its launcher exits and cleanup runs. No unrelated browser process is targeted.
+
+## Fourth CI follow-up
+
+On `4826eb8`, Ubuntu and macOS passed. Windows failed one capture when reading `DevToolsActivePort` returned `EBUSY` during Chrome's write. Endpoint-file polling now retries temporary file-lock/access errors within the existing startup deadline and includes the last file error in timeout diagnostics. A regression test covers recovery from a lock and bounded failure for a persistent lock.
