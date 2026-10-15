@@ -44,6 +44,13 @@ test('offline walkthrough uses one real viewer and navigates steps',{skip:!brows
   await verify(t,tables,`check(SMV_STEPS.length===2,'two steps');await smv.step(1);check(app.state.selMeasure==='Sales LY','step switches actual workspace');await smv.step(0);check(app.state.viewMode==='graph'&&app.explorer.names.size===2,'previous restores tables');`,html);
 });
 
+test('focused measures remain navigable in a narrow light/dark viewport',{skip:!browser},async t=>verify(t,{...measure,width:360,height:900},`
+check(document.documentElement.scrollWidth<=innerWidth,'no page horizontal overflow');
+check(getComputedStyle(document.querySelector('.mv-library')).display==='none','library initially collapsed');
+const browse=[...document.querySelectorAll('.smv-explanation-controls button')].find(b=>b.textContent==='Browse measures');check(browse,'browse control');browse.click();check(getComputedStyle(document.querySelector('.mv-library')).display!=='none','library opens');browse.click();
+SMVInteractive.appearance({theme:'dark'});check(getComputedStyle(document.documentElement).getPropertyValue('--smv-ink').trim()==='#e4e9f3','dark appearance');SMVInteractive.appearance({theme:'light'});check(document.documentElement.dataset.smvColorScheme==='light','light appearance');
+`));
+
 test('MCP App runs the real viewer through the official host bridge',{skip:!browser,timeout:30000},async t=>{
   const {createServer,URI}=require('../integrations/mcp/server.cjs');
   const {Client,InMemoryTransport}=require('@modelcontextprotocol/client');
