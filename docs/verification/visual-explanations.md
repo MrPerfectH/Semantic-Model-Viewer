@@ -34,3 +34,9 @@ Captures illustrate an authored explanation; they do not certify the model or ex
 - Windows reported an allocation error. Screenshot comparisons now use SHA-256 strings instead of formatting entire image buffers on failure, and CI uploads capture artifacts for diagnosis.
 - A repeated-capture mismatch was reproduced locally after incorporating main. Captures now wait for final queued frames, disable LCD text rasterization, use sRGB and run compositor stages before drawing. The real-browser suite passed after these changes; Windows confirmation remains pending.
 - Merged main's theme update into the feature branch while retaining semantic object hooks. All 691 regression tests and 20 CLI tests passed after conflict resolution.
+
+## Second CI follow-up
+
+On `46766f5`, Windows and macOS explanation jobs passed and the required repository check passed. Ubuntu still timed out during browser startup. The PR was mergeable, but the feature validation gate remained unmet.
+
+Startup now accepts Chrome's `DevToolsActivePort` file as well as the stderr banner, allows 30 seconds, and includes bounded stderr diagnostics on timeout. Unit coverage verifies silent startup, partial endpoint files, stderr startup, timeout diagnostics and early browser exit. The previous timeout did not include diagnostics, so its underlying cause is not yet confirmed; another Ubuntu run is required.

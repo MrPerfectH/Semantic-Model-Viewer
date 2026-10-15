@@ -18,3 +18,28 @@ test('calculations reject cycles, incompatible units, unlabelled constants and z
 test('null propagates and chained calculations retain unrounded precision',()=>{const defs={third:{op:'divide',inputs:[{value:1,kind:'illustrative'},{value:3,kind:'illustrative'}],decimals:2},whole:{op:'multiply',inputs:[{calculation:'third'},{value:3,kind:'illustrative'}]},missing:{op:'sum',inputs:[{dataset:'a',row:2,column:'Amount'}]}};const c=results.calculate(defs,{a:results.validate(amounts)});assert.equal(c.third.value,'0.33');assert.equal(c.whole.value,'1.00');assert.equal(c.missing.value,null);});
 test('calculation metadata preserves the exact source cell reference',()=>{const c=results.calculate({x:{op:'sum',inputs:[{dataset:'amounts',row:1,column:'Amount'}]}},{amounts:results.validate(amounts)});assert.deepEqual(c.x.inputs[0].reference,{dataset:'amounts',row:1,column:'Amount'});});
 test('CLI validation errors expose structured object context',t=>{const {spawnSync}=require('node:child_process');const root=fs.mkdtempSync(path.join(os.tmpdir(),'smv-errors-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));const file=path.join(root,'view.json');fs.writeFileSync(file,JSON.stringify({version:1,highlights:[{kind:'table',name:'Missing'}]}));const r=spawnSync(process.execPath,[path.join(__dirname,'../bin/smv.cjs'),'shot',demo,'--view',file,'--out',path.join(root,'image.png'),'--json'],{encoding:'utf8'});assert.equal(r.status,1);const out=JSON.parse(r.stderr);assert.equal(out.error.code,'VIEW_INVALID');assert.equal(out.error.details.object.name,'Missing');assert.ok(!fs.existsSync(path.join(root,'image.png')));});
+
+test('browser startup accepts an endpoint file without a stderr banner',async t=>{
+  const {EventEmitter}=require('node:events'),{PassThrough}=require('node:stream');
+  const {waitForEndpoint}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+  const profile=fs.mkdtempSync(path.join(os.tmpdir(),'smv-endpoint-'));t.after(()=>fs.rmSync(profile,{recursive:true,force:true}));
+  const child=new EventEmitter();child.stderr=new PassThrough();
+  // A partial write must not resolve to an invalid endpoint.
+  fs.writeFileSync(path.join(profile,'DevToolsActivePort'),'12345\n');
+  const endpoint=waitForEndpoint(child,profile,1000);
+  fs.writeFileSync(path.join(profile,'DevToolsActivePort'),'12345\n/devtools/browser/test-id\n');
+  assert.equal(await endpoint,'ws://127.0.0.1:12345/devtools/browser/test-id');
+  assert.equal(child.listenerCount('exit'),0);assert.equal(child.stderr.listenerCount('data'),0);
+});
+test('browser startup supports stderr and retains failure diagnostics',async t=>{
+  const {EventEmitter}=require('node:events'),{PassThrough}=require('node:stream');
+  const {waitForEndpoint}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+  const profile=fs.mkdtempSync(path.join(os.tmpdir(),'smv-endpoint-'));t.after(()=>fs.rmSync(profile,{recursive:true,force:true}));
+  const child=()=>{const c=new EventEmitter();c.stderr=new PassThrough();return c;};
+  const a=child(),ready=waitForEndpoint(a,profile,1000);a.stderr.write('DevTools listening on ws://127.0.0.1:1234/devtools/browser/test\n');
+  assert.equal(await ready,'ws://127.0.0.1:1234/devtools/browser/test');
+  const b=child(),timeout=waitForEndpoint(b,profile,30);b.stderr.write('sandbox diagnostic');
+  await assert.rejects(timeout,/startup timed out.*sandbox diagnostic/);
+  const c=child(),exited=waitForEndpoint(c,profile,1000);c.stderr.write('startup failed');c.emit('exit',1,null);
+  await assert.rejects(exited,/Browser exited 1: startup failed/);
+});

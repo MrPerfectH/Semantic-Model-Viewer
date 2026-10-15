@@ -17,6 +17,31 @@ function browserPath(explicit) {
   if (!result) throw new Error('Image capture needs Chrome or Chromium. Install a browser and set SMV_BROWSER to its executable path. Snapshot export needs no browser.');
   return result;
 }
+// Chrome may publish its endpoint file without emitting the stderr banner.
+function waitForEndpoint(child, profile, timeoutMs=30000) {
+  return new Promise((resolve,reject)=>{
+    let log='', finished=false;
+    const finish=(error,endpoint)=>{
+      if(finished)return;finished=true;clearTimeout(timer);clearInterval(poll);
+      child.stderr.removeListener('data',onData);child.removeListener('error',onError);child.removeListener('exit',onExit);
+      // Continue draining stderr while the browser is running.
+      child.stderr.resume();error?reject(error):resolve(endpoint);
+    };
+    const onData=chunk=>{log=(log+chunk).slice(-16000);const m=log.match(/DevTools listening on (ws:\/\/\S+)/);if(m)finish(null,m[1]);};
+    const onError=error=>finish(error);
+    const onExit=(code,signal)=>finish(new Error('Browser exited '+(signal||code)+': '+log));
+    const readPort=()=>{
+      try {
+        const [port,endpoint]=fs.readFileSync(path.join(profile,'DevToolsActivePort'),'utf8').trim().split(/\r?\n/);
+        if(/^\d+$/.test(port)&&Number(port)>0&&Number(port)<=65535&&/^\/devtools\/browser\/[^\s]+$/.test(endpoint))finish(null,'ws://127.0.0.1:'+port+endpoint);
+      } catch(error) {if(error.code!=='ENOENT')finish(error);}
+    };
+    const timer=setTimeout(()=>finish(new Error('Browser startup timed out after '+timeoutMs+'ms. Diagnostics: '+(log||'(no stderr output)'))),timeoutMs);
+    const poll=setInterval(readPort,50);
+    child.stderr.on('data',onData);child.once('error',onError);child.once('exit',onExit);
+    readPort();
+  });
+}
 async function capture(html, output, view, options={}) {
   const executable=browserPath(options.browser);
   const temp=fs.mkdtempSync(path.join(os.tmpdir(),'smv-capture-'));
@@ -24,12 +49,7 @@ async function capture(html, output, view, options={}) {
   let child, socket; const pending=new Map();let sequence=0;
   try {
     child=spawn(executable,['--headless=new','--disable-gpu','--disable-lcd-text','--force-color-profile=srgb','--run-all-compositor-stages-before-draw','--no-first-run','--no-default-browser-check','--disable-background-networking','--disable-extensions','--hide-scrollbars','--remote-debugging-port=0','--user-data-dir='+path.join(temp,'profile'),'about:blank'],{stdio:['ignore','ignore','pipe']});
-    const endpoint=await new Promise((resolve,reject)=>{
-      let log='';const timer=setTimeout(()=>reject(new Error('Browser startup timed out')),15000);
-      child.stderr.on('data',chunk=>{log=(log+chunk).slice(-16000);const m=log.match(/DevTools listening on (ws:\/\/\S+)/);if(m){clearTimeout(timer);resolve(m[1]);}});
-      child.once('error',e=>{clearTimeout(timer);reject(e);});
-      child.once('exit',code=>{clearTimeout(timer);reject(new Error('Browser exited '+code+': '+log));});
-    });
+    const endpoint=await waitForEndpoint(child,path.join(temp,'profile'));
     const targets=await (await fetch('http://127.0.0.1:'+new URL(endpoint).port+'/json/list',{signal:AbortSignal.timeout(10000)})).json();
     const target=targets.find(t=>t.type==='page');if(!target)throw new Error('Browser has no page target');
     socket=new WebSocket(target.webSocketDebuggerUrl);
@@ -56,4 +76,4 @@ async function capture(html, output, view, options={}) {
     fs.rmSync(temp,{recursive:true,force:true,maxRetries:5,retryDelay:100});
   }
 }
-module.exports={capture,browserPath};
+module.exports={capture,browserPath,waitForEndpoint};
