@@ -21,10 +21,11 @@ function runtime() {
 function readModel(context, source, name) {
   let target = path.resolve(source);
   if (!fs.existsSync(target)) throw new Error('Model does not exist: ' + target);
-  if (!fs.statSync(target).isDirectory()) throw new Error('Select one TMDL .SemanticModel folder or its definition folder.');
+  const bim = fs.statSync(target).isFile() && path.extname(target).toLowerCase() === '.bim';
+  if (!bim && !fs.statSync(target).isDirectory()) throw new Error('Select one TMDL .SemanticModel folder, definition folder, or model.bim.');
   if (fs.existsSync(path.join(target, 'definition'))) target = path.join(target, 'definition');
   // Do not accidentally combine several models from a repository into one.
-  if (!fs.existsSync(path.join(target, 'model.tmdl'))) throw new Error('Select one .SemanticModel folder or its definition folder (model.tmdl is required).');
+  if (!bim && !fs.existsSync(path.join(target, 'model.tmdl'))) throw new Error('Select one .SemanticModel folder or its definition folder (model.tmdl is required).');
   const files = [];
   function walk(directory) {
     for (const entry of fs.readdirSync(directory, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
@@ -33,8 +34,8 @@ function readModel(context, source, name) {
       else if (entry.isFile() && /\.tmdl$/i.test(entry.name)) files.push({ name: entry.name, text: fs.readFileSync(file, 'utf8') });
     }
   }
-  walk(target);
-  const model = context.TMDLParser.parseTMDL(files, { strictRelationships: true });
+  if (!bim) walk(target);
+  const model = bim ? context.TMDLParser.parseBIM(JSON.parse(fs.readFileSync(target,'utf8'))) : context.TMDLParser.parseTMDL(files, { strictRelationships: true });
   if (!model.tables.length) throw new Error('No tables found in the model.');
   const folder = path.basename(target) === 'definition' ? path.dirname(target) : target;
   model.name = name || model.name || path.basename(folder).replace(/\.SemanticModel$/i, '');
@@ -81,10 +82,10 @@ function tablePositions(context, app, names) {
   return canvas.pos;
 }
 
-function snapshot(context, app, focus) {
+function snapshot(context, app, focus, options = {}) {
   const payload = {
     format: 'semantic-model-viewer', version: 1, name: app.model.name,
-    createdAt: new Date().toISOString(), model: context.Snapshots.modelData(app.model), usage: null,
+    createdAt: new Date().toISOString(), model: context.Snapshots.modelData(app.model), usage: options.usage || null,
     settings: { roleRules: context.Roles.defaults() },
     workspace: {
       viewMode: focus.measure ? 'measures' : 'graph', presets: [],

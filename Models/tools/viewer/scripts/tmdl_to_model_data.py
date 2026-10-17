@@ -81,7 +81,7 @@ def parse_rel_text(text: str):
         if not t:
             continue
         if re.match(r"^relationship\s", t) and not raw.startswith("\t"):
-            cur = {"fromCard": "many", "toCard": "one", "inactive": False, "both": False}
+            cur = {"name": unq(re.sub(r"^relationship\s+", "", t)), "fromCard": "many", "toCard": "one", "inactive": False, "both": False}
             out.append(cur)
             continue
         if cur is None:
@@ -708,7 +708,7 @@ def parse_bim(j: dict, rules: list = None) -> dict:
     for r in mdl.get("relationships", []):
         if skip.match(r.get("fromTable", "")) or skip.match(r.get("toTable", "")):
             continue
-        rels.append({"from": r.get("fromTable"), "fromCol": r.get("fromColumn"),
+        rels.append({"name": r.get("name") or "", "from": r.get("fromTable"), "fromCol": r.get("fromColumn"),
                      "to": r.get("toTable"), "toCol": r.get("toColumn"),
                      "fromCard": str(r.get("fromCardinality", "many")).lower(),
                      "toCard": str(r.get("toCardinality", "one")).lower(),

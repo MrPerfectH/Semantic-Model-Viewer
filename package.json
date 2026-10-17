@@ -2,7 +2,7 @@
   "name": "semantic-model-viewer-cli",
   "version": "0.1.0",
   "private": true,
-  "description": "Offline interactive HTML snapshots from TMDL semantic models",
+  "description": "Offline semantic model snapshots and agent-authored visual explanations",
   "bin": {
     "smv": "bin/smv.cjs"
   },
@@ -10,7 +10,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/cli.test.cjs"
+    "test": "node --test tests/cli.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs",
+    "test:browser": "node --test tests/explanations.browser.cjs"
   },
   "files": [
     "bin/",
@@ -19,6 +20,11 @@
     "Models/tools/viewer/js/",
     "Models/tools/viewer/scripts/cli/",
     "docs/cli.md",
-    "docs/snapshots.md"
+    "docs/snapshots.md",
+    "Models/tools/viewer/scripts/scan_report_usage.py",
+    "docs/visual-explanations.md",
+    "skills/smv-explain/",
+    "examples/explanations/",
+    "Models/demo/"
   ]
 }

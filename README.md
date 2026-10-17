@@ -167,6 +167,8 @@ Open the file in a browser to explore the model. Optionally use `--tables` or
 `--measure` to choose the starting view; the full model remains available.
 No extra packages or browser are needed to export. See [CLI usage](docs/cli.md).
 
+Agents can also capture annotated views and build walkthroughs with imported numbers, transparent calculations, and proposed changes. See [visual explanations](docs/visual-explanations.md). Image capture uses an installed Chrome/Chromium; snapshot export still needs no browser.
+
 A snapshot contains the **full model metadata and DAX**, even if the starting canvas
 is empty or focused on a few tables. It is frozen at the displayed creation time.
 Recipients can use **Save snapshot** again to keep their presentation changes in a
