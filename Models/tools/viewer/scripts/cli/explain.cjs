@@ -22,12 +22,14 @@ function prepare(source,input,options={}){
   const context=runtime(),{model,app}=readModel(context,source),view=validate(model,input);
   const focus={tables:view.tables || model.tables.map(t=>t.name),measure:view.mode==='measures'?view.focus.name:null};
   let html=snapshot(context,app,focus,{usage:options.report?reportUsage(options.report,model):null});
+  const interactive=fs.readFileSync(path.join(__dirname,'../../js/interactive-view.js'),'utf8').replace(/<\/script/gi,'<\\/script');
   const adapter=fs.readFileSync(path.join(__dirname,'../../js/explanation-view.js'),'utf8').replace(/<\/script/gi,'<\\/script');
   const json=JSON.stringify(view).replace(/</g,'\\u003c');
-  html=html.replace('</body>','<script>'+adapter+'\nSMVExplanation.start('+json+');</script></body>');
+  const sourceHash=crypto.createHash('sha256').update(JSON.stringify(context.Snapshots.modelData(model))).digest('hex');
+  html=html.replace('</body>',()=>'<script data-smv-explanation-adapter>'+interactive+'\n'+adapter+'</script><script>window.SMV_SOURCE_REVISION='+JSON.stringify(sourceHash)+';SMVExplanation.start('+json+');</script></body>');
   const rendererHash=crypto.createHash('sha256');
   const root=path.resolve(__dirname,'../..');
-  [...context.Snapshots.files,'index.html','js/explanation-view.js','scripts/cli/explain.cjs','scripts/cli/results.cjs','scripts/cli/model.cjs','scripts/cli/capture.cjs'].sort().forEach(file=>rendererHash.update(file).update(fs.readFileSync(path.join(root,file))));
+  [...context.Snapshots.files,'index.html','js/explanation-view.js','js/interactive-view.js','scripts/cli/explain.cjs','scripts/cli/results.cjs','scripts/cli/model.cjs','scripts/cli/capture.cjs'].sort().forEach(file=>rendererHash.update(file).update(fs.readFileSync(path.join(root,file))));
   const renderer={format:'smv-explanation',version:1,sha256:rendererHash.digest('hex')};
   return {html,view,model,renderer,hash:crypto.createHash('sha256').update(JSON.stringify(context.Snapshots.modelData(model))).digest('hex')};
 }
@@ -79,12 +81,17 @@ async function build(file,output,options={}){
       fragments.push('<figure><img alt="'+escape(step.caption)+'" src="data:image/png;base64,'+data+'"><figcaption><strong>'+(i+1)+'.</strong> '+escape(step.caption)+'</figcaption><a href="'+live+'">Explore this view offline</a></figure>');
       markdown.push('## '+(i+1)+'. '+step.id,'','![Annotated model view]('+image+')','',step.caption,'','[Explore this view offline]('+live+')','');
     }
-    const manifest={version:1,renderer:baseline.renderer,title:spec.title,model:{source,hash:baseline.hash},datasets,calculations,steps,summary:spec.summary||''};
+    var lastView=prepared.find(p=>p.view)?.view||baseline.view;
+    const interactiveSteps=spec.steps.map((step,i)=>{if(prepared[i].view)lastView=prepared[i].view;return {id:step.id,caption:step.caption,view:lastView,evidence:prepared[i].content||null};});
+    const start=prepare(source,interactiveSteps[0].view,{report:spec.report?path.resolve(base,spec.report):undefined});
+    const interactiveHTML=start.html.replace('SMVExplanation.start(',()=>'window.SMV_STEPS='+JSON.stringify(interactiveSteps).replace(/</g,'\\u003c')+';SMVExplanation.start(');
+    fs.writeFileSync(path.join(temp,'interactive.html'),interactiveHTML);
+    const manifest={version:1,interactiveArtifact:'interactive.html',renderer:baseline.renderer,title:spec.title,model:{source,hash:baseline.hash},datasets,calculations,steps,summary:spec.summary||''};
     fs.writeFileSync(path.join(temp,'explanation.html'),'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+escape(spec.title)+'</title><style>'+css+'</style><body><small>Model explanation</small><h1>'+escape(spec.title)+'</h1>'+fragments.join('')+'<p>'+escape(spec.summary||'')+'</p></body></html>');
     fs.writeFileSync(path.join(temp,'explanation.md'),markdown.concat(spec.summary||'').join('\n'));
     fs.writeFileSync(path.join(temp,'explanation.json'),JSON.stringify(manifest,null,2)+'\n');
     fs.writeFileSync(path.join(temp,'source.json'),JSON.stringify({...spec,model:source,report:spec.report?path.resolve(base,spec.report):undefined,datasets},null,2)+'\n');
-    fs.renameSync(temp,output);return {directory:output,html:path.join(output,'explanation.html'),markdown:path.join(output,'explanation.md'),manifest:path.join(output,'explanation.json')};
+    fs.renameSync(temp,output);return {directory:output,interactive:path.join(output,'interactive.html'),html:path.join(output,'explanation.html'),markdown:path.join(output,'explanation.md'),manifest:path.join(output,'explanation.json')};
   }catch(e){fs.rmSync(temp,{recursive:true,force:true});throw e;}
 }
 function validateFile(file){

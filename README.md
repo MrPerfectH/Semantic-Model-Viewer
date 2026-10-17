@@ -511,3 +511,5 @@ distance apply to the target. **Back** restores navigation, filters and reader s
 also restores the complete layout membership. Arrange remains input → consumer and
 preserves positions until explicitly invoked. Static analysis is partial; cycles and
 uncertainty remain visible. No M is executed or included in default shared snapshots.
+
+The [interactive agent workflow](docs/interactive-viewer.md) opens focused Tables and Measures views through CLI or MCP, keeps annotations attached during exploration, and exports the acknowledged viewer state. Inline MCP Apps are host-dependent.

@@ -243,10 +243,12 @@
       var vertical = orientation !== 'lr', direction = orientation === 'bt' ? -1 : 1;
       var dist = {}; dist[root] = 0;
       var bfs = function (dir) {
-        var seen = new Set([root]); var q = [root], __g = 0;
+        var seen = new Set([root]); var q = [root], __g = 0, context=self._explanationContext;
+        if(context&&context.direction!=='both'&&context.direction!==dir)return seen;
         while (q.length) {
           if (++__g > 200000) throw new Error('LOOP-GUARD: gLayout bfs');
           var n = q.shift();
+          if(context&&dist[n]>=context.depth)continue;
           self.flowKids(n, dir).forEach(function (k) {
             if (!seen.has(k)) { seen.add(k); if (dist[k] == null || dist[n] + 1 < dist[k]) dist[k] = dist[n] + 1; q.push(k); }
           });
@@ -254,8 +256,11 @@
         return seen;
       };
       var upSet = bfs('up'), dnSet = bfs('down');
-      var names = Array.from(new Set([].concat(Array.from(upSet), Array.from(dnSet),
-        Object.keys(extra).filter(function (n) { return self.app.msrOf(n); }))));
+      var initial=Array.from(new Set([].concat(Array.from(upSet),Array.from(dnSet))));
+      if(this._explanationContext){initial.sort(function(a,b){return (dist[a]-dist[b])||a.localeCompare(b);});initial=initial.slice(0,this._explanationContext.limit);}
+      // The authored limit bounds only the opening neighborhood. Explicit branch
+      // expansion remains usable up to the viewer's ordinary global cap.
+      var names=Array.from(new Set(initial.concat(Object.keys(extra).filter(function(n){return self.app.msrOf(n);})))) ;
       var capped = false;
       if (names.length > cap) {
         capped = true;
@@ -396,7 +401,7 @@
     buildGraph: function () {
       var self = this, app = this.app;
       var root = app.state.selMeasure, extra = app.state.gExtra || {};
-      var key = (app.modelKey || '') + '|' + root + '|' + this._graphOrientation + '|' + Object.keys(extra).sort().join('\u0001')
+      var key = (app.modelKey || '') + '|' + JSON.stringify(this._explanationContext) + '|' + root + '|' + this._graphOrientation + '|' + Object.keys(extra).sort().join('\u0001')
         + '|' + Object.keys(this.graphGroupState(root)).sort().join('\u0001');
       if (!this._gC || this._gC.k !== key) this._gC = { k: key, g: this.gLayout(root, extra, CAP) };
       var G = this._gC.g;

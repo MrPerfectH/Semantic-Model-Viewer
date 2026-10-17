@@ -2,7 +2,7 @@ name: Visual explanations
 on:
   pull_request:
   push:
-    branches: [feature/visual-explanations]
+    branches: [feature/visual-explanations, feature/interactive-viewer]
 jobs:
   explanation:
     strategy:
@@ -15,6 +15,8 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
+      - name: Install CLI and MCP dependencies
+        run: npm ci
       - name: CLI, data contracts, and local session tests
         run: npm test
       - name: Use the system Chrome sandbox on Linux
@@ -24,6 +26,8 @@ jobs:
         run: npm run test:browser
         env:
           SMV_TEST_ARTIFACTS: ${{ runner.temp }}/explanation-artifacts
+      - name: Exercise interactive viewer and MCP Apps bridge
+        run: npm run test:interactive
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
