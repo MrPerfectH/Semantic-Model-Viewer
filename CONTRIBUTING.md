@@ -125,6 +125,19 @@ code --user-data-dir ../smv-preview-data --extensions-dir ../smv-preview-extensi
 code --user-data-dir ../smv-preview-data --extensions-dir ../smv-preview-extensions .
 ```
 
+A simpler option is a VS Code Profile, which keeps its own installed extensions. Keep
+the stable extension in your Default profile and install the preview only in a `Beta`
+profile:
+
+1. Gear icon (bottom left) → **Profiles** → **Create Profile…**.
+2. Name it `Beta`, choose **Create (Empty)**, then **Create**.
+3. In the `Beta` profile, run **Extensions: Install from VSIX…** and select the
+   `.vsix` file.
+4. Switch between `Default` and `Beta` from the same **Profiles** menu. Install a newer
+   preview the same way; it replaces the old one in `Beta` only.
+
+The `Beta` profile starts empty, so install any other extensions you need there as well.
+
 Use those same directory arguments whenever launching the test instance. If you installed
 the preview normally, uninstall it and install the stable Marketplace version or release
 `.vsix` to return to stable. No Marketplace preview channel or GitHub Release is created
