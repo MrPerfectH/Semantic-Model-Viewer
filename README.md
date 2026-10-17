@@ -46,7 +46,10 @@ Needs **Python 3** and **Chrome or Edge** (other browsers work, in a normal tab)
 3. Double-click the installer in the repo folder:
    - **Mac:** `Install on Mac.command`. It adds **Semantic Model Viewer** to
      `~/Applications`; drag it to the Dock.
-   - **Windows:** `Install on Windows.cmd`. It adds a Desktop icon and a Start menu entry.
+   - **Windows:** `Install on Windows.cmd`. It adds a Desktop icon and a Start menu entry,
+     and a **Semantic Model Viewer** button in the **External Tools** ribbon of Power BI
+     Desktop (restart Power BI Desktop to see it). Windows asks for administrator approval
+     once for that button. The button opens the app; it does not load the open model yet.
 4. The app opens in its own window. Use **Open model → Import model → Browse folder…**
    or **Connect repo folder…** and pick a `*.SemanticModel` folder, a `.pbip` repo folder
    (every model inside is found) or a folder holding `model.bim`. Dragging a folder onto the
