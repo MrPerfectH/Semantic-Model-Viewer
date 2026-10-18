@@ -1,0 +1,2 @@
+# Preserve exact tool logs, including intentional whitespace in failure diffs.
+*.log -text whitespace=-blank-at-eol,-blank-at-eof

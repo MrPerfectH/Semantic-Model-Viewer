@@ -1,0 +1,30 @@
+{
+  "edges": 77,
+  "missing": 28,
+  "nodes": 84,
+  "parameterRoutes": [
+    {
+      "consumer": "VerticaPath",
+      "detected": true,
+      "drawn": false,
+      "parameter": "ServerName",
+      "status": "no-clear-route"
+    },
+    {
+      "consumer": "VerticaPath",
+      "detected": true,
+      "drawn": false,
+      "parameter": "DBName",
+      "status": "no-clear-route"
+    },
+    {
+      "consumer": "VerticaPath",
+      "detected": true,
+      "drawn": false,
+      "parameter": "SchemaName",
+      "status": "no-clear-route"
+    }
+  ],
+  "relationships": 40,
+  "tables": 38
+}

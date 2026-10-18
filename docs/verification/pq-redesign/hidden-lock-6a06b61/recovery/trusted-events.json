@@ -1,0 +1,178 @@
+[
+  {
+    "type": "keydown",
+    "trusted": true,
+    "target": "ex-button",
+    "label": null,
+    "key": "Enter"
+  },
+  {
+    "type": "change",
+    "trusted": false,
+    "target": "",
+    "label": "Power Query group filter"
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "ex-table-name pqw-library-row",
+    "label": null,
+    "x": 118.88999938964844,
+    "y": 242.5399932861328
+  },
+  {
+    "type": "keydown",
+    "trusted": true,
+    "target": "ex-button",
+    "label": null,
+    "key": "Enter"
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "ex-table-name pqw-library-row",
+    "label": null,
+    "x": 118.88999938964844,
+    "y": 571.9299926757812
+  },
+  {
+    "type": "change",
+    "trusted": false,
+    "target": "",
+    "label": "Power Query connectivity filter"
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "ex-table-name pqw-library-row",
+    "label": null,
+    "x": 118.88999938964844,
+    "y": 329.44000244140625
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "ex-button",
+    "label": "Back",
+    "x": 490.1000061035156,
+    "y": 94.5
+  },
+  {
+    "type": "keydown",
+    "trusted": true,
+    "target": "ex-button",
+    "label": "Blank layout",
+    "key": "Enter"
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "ex-button",
+    "label": "Undo",
+    "x": 714.1900024414062,
+    "y": 94.5
+  },
+  {
+    "type": "keydown",
+    "trusted": true,
+    "target": "ex-button pqi-lock",
+    "label": "Unlock query focus",
+    "key": "Enter"
+  },
+  {
+    "type": "keydown",
+    "trusted": true,
+    "target": "ex-button pqi-lock",
+    "label": "Lock focus on Standalone",
+    "key": "Enter"
+  },
+  {
+    "type": "change",
+    "trusted": false,
+    "target": "",
+    "label": "Power Query group filter"
+  },
+  {
+    "type": "keydown",
+    "trusted": true,
+    "target": "ex-button",
+    "label": null,
+    "key": "Enter"
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "",
+    "label": null,
+    "x": 118.88999938964844,
+    "y": 660.72998046875
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "ex-button pqi-lock",
+    "label": "Unlock query focus",
+    "x": 1238,
+    "y": 499.989990234375
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "ex-button pqi-lock",
+    "label": "Lock focus on FinalOutput",
+    "x": 1238,
+    "y": 499.989990234375
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "ex-table-name pqw-library-row",
+    "label": null,
+    "x": 118.88999938964844,
+    "y": 673.4299926757812
+  },
+  {
+    "type": "change",
+    "trusted": false,
+    "target": "",
+    "label": "Power Query connectivity filter"
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "ex-button ex-primary",
+    "label": null,
+    "x": 1214.699951171875,
+    "y": 31.5
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "",
+    "label": null,
+    "x": 694.8099975585938,
+    "y": 409.7799987792969
+  },
+  {
+    "type": "change",
+    "trusted": true,
+    "target": "",
+    "label": null
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "",
+    "label": null,
+    "x": 794.9299926757812,
+    "y": 508.6700134277344
+  },
+  {
+    "type": "pointerdown",
+    "trusted": true,
+    "target": "",
+    "label": null,
+    "x": 513.9500122070312,
+    "y": 31.5
+  }
+]

@@ -1,0 +1,120 @@
+{
+  "race": {
+    "expected": {
+      "membership": [
+        "[\"partition\",\"Report\",\"Report\"]",
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        "[\"expression\",\"\",\"Standalone\"]",
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "focusMode": "hide",
+      "direction": "inputs",
+      "depth": null,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 5,
+      "selectedId": "[\"expression\",\"\",\"Server\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": 37,
+        "y": 43,
+        "k": 1.05
+      },
+      "bodyScroll": {
+        "x": 0,
+        "y": 0
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null,
+        "disclosures": {
+          "provenance": false
+        },
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    },
+    "actual": {
+      "membership": [
+        "[\"partition\",\"Report\",\"Report\"]",
+        "[\"partition\",\"Lookup\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Raw West\"]",
+        "[\"expression\",\"\",\"Raw East\"]",
+        "[\"expression\",\"\",\"Prepared\"]",
+        "[\"expression\",\"\",\"Merged Query\"]",
+        "[\"expression\",\"\",\"FinalOutput\"]",
+        "[\"expression\",\"\",\"Downstream\"]",
+        "[\"expression\",\"\",\"CoConsumer\"]",
+        "[\"expression\",\"\",\"Standalone\"]",
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+      "focusMode": "hide",
+      "direction": "inputs",
+      "depth": null,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 5,
+      "selectedId": "[\"expression\",\"\",\"Server\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": 37,
+        "y": 43,
+        "k": 1.05
+      },
+      "bodyScroll": {
+        "x": 0,
+        "y": 0
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null,
+        "disclosures": {
+          "provenance": false
+        },
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    },
+    "reader": false
+  },
+  "copy": {
+    "selected": "[\"expression\",\"\",\"Server\"]",
+    "reader": false,
+    "status": ""
+  },
+  "reset": {
+    "generationBefore": 5,
+    "generation": 7,
+    "selected": null,
+    "flow": null,
+    "history": [],
+    "group": "all",
+    "query": "",
+    "reader": 0,
+    "source": 0,
+    "launcher": 0
+  }
+}

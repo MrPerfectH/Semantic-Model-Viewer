@@ -1,0 +1,228 @@
+{
+  "candidate": "dbd0e49dc7470db58865d6e0d8d77824d58335dc",
+  "boundary": "authorized isolated capability fallback",
+  "rows": [
+    {
+      "width": 1280,
+      "setting": {
+        "value": "2",
+        "options": [
+          {
+            "value": "0.25",
+            "text": "\n            25%\n          ",
+            "selected": false
+          },
+          {
+            "value": "0.3333333333333333",
+            "text": "\n            33%\n          ",
+            "selected": false
+          },
+          {
+            "value": "0.5",
+            "text": "\n            50%\n          ",
+            "selected": false
+          },
+          {
+            "value": "0.6666666666666666",
+            "text": "\n            67%\n          ",
+            "selected": false
+          },
+          {
+            "value": "0.75",
+            "text": "\n            75%\n          ",
+            "selected": false
+          },
+          {
+            "value": "0.8",
+            "text": "\n            80%\n          ",
+            "selected": false
+          },
+          {
+            "value": "0.9",
+            "text": "\n            90%\n          ",
+            "selected": false
+          },
+          {
+            "value": "1",
+            "text": "\n            100%\n          ",
+            "selected": false
+          },
+          {
+            "value": "1.1",
+            "text": "\n            110%\n          ",
+            "selected": false
+          },
+          {
+            "value": "1.25",
+            "text": "\n            125%\n          ",
+            "selected": false
+          },
+          {
+            "value": "1.5",
+            "text": "\n            150%\n          ",
+            "selected": false
+          },
+          {
+            "value": "1.75",
+            "text": "\n            175%\n          ",
+            "selected": false
+          },
+          {
+            "value": "2",
+            "text": "\n            200%\n          ",
+            "selected": true
+          },
+          {
+            "value": "2.5",
+            "text": "\n            250%\n          ",
+            "selected": false
+          },
+          {
+            "value": "3",
+            "text": "\n            300%\n          ",
+            "selected": false
+          },
+          {
+            "value": "4",
+            "text": "\n            400%\n          ",
+            "selected": false
+          },
+          {
+            "value": "5",
+            "text": "\n            500%\n          ",
+            "selected": false
+          }
+        ]
+      },
+      "state": {
+        "innerWidth": 640,
+        "outerWidth": 1280,
+        "dpr": 2,
+        "scale": 1,
+        "reader": {
+          "x": 20,
+          "y": 20,
+          "width": 600,
+          "height": 460,
+          "top": 20,
+          "right": 620,
+          "bottom": 480,
+          "left": 20
+        },
+        "code": "let\r\n  Emoji = \"😀\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n",
+        "font": "13px"
+      }
+    },
+    {
+      "width": 1440,
+      "setting": {
+        "value": "2",
+        "options": [
+          {
+            "value": "0.25",
+            "text": "\n            25%\n          ",
+            "selected": false
+          },
+          {
+            "value": "0.3333333333333333",
+            "text": "\n            33%\n          ",
+            "selected": false
+          },
+          {
+            "value": "0.5",
+            "text": "\n            50%\n          ",
+            "selected": false
+          },
+          {
+            "value": "0.6666666666666666",
+            "text": "\n            67%\n          ",
+            "selected": false
+          },
+          {
+            "value": "0.75",
+            "text": "\n            75%\n          ",
+            "selected": false
+          },
+          {
+            "value": "0.8",
+            "text": "\n            80%\n          ",
+            "selected": false
+          },
+          {
+            "value": "0.9",
+            "text": "\n            90%\n          ",
+            "selected": false
+          },
+          {
+            "value": "1",
+            "text": "\n            100%\n          ",
+            "selected": false
+          },
+          {
+            "value": "1.1",
+            "text": "\n            110%\n          ",
+            "selected": false
+          },
+          {
+            "value": "1.25",
+            "text": "\n            125%\n          ",
+            "selected": false
+          },
+          {
+            "value": "1.5",
+            "text": "\n            150%\n          ",
+            "selected": false
+          },
+          {
+            "value": "1.75",
+            "text": "\n            175%\n          ",
+            "selected": false
+          },
+          {
+            "value": "2",
+            "text": "\n            200%\n          ",
+            "selected": true
+          },
+          {
+            "value": "2.5",
+            "text": "\n            250%\n          ",
+            "selected": false
+          },
+          {
+            "value": "3",
+            "text": "\n            300%\n          ",
+            "selected": false
+          },
+          {
+            "value": "4",
+            "text": "\n            400%\n          ",
+            "selected": false
+          },
+          {
+            "value": "5",
+            "text": "\n            500%\n          ",
+            "selected": false
+          }
+        ]
+      },
+      "state": {
+        "innerWidth": 720,
+        "outerWidth": 1440,
+        "dpr": 2,
+        "scale": 1,
+        "reader": {
+          "x": 20,
+          "y": 20,
+          "width": 680,
+          "height": 460,
+          "top": 20,
+          "right": 700,
+          "bottom": 480,
+          "left": 20
+        },
+        "code": "let\r\n  Emoji = \"😀\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n",
+        "font": "13px"
+      }
+    }
+  ]
+}

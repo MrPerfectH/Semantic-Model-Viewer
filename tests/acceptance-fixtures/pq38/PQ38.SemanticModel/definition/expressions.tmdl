@@ -1,0 +1,12 @@
+expression 'Base Query' = let Source = CycleA in Source
+expression 'CycleA' = CycleB
+expression 'CycleB' = CycleA
+expression 'pRegion' = "PQ_CREDENTIAL_ONLY_38" meta [IsParameterQuery=true]
+expression 'Scalar' = 42
+expression 'Function' = (SharedValue as number) => SharedValue + 1
+expression 'SharedValue' = 7
+expression 'Shadow' = let SharedValue = 1 in SharedValue
+expression 'Lexical' = let x = #"Base Query", s = "SharedValue" /* CycleA */ in x
+expression 'Dynamic' = Expression.Evaluate("Base Query", #shared)
+expression 'Missing' = AbsentQuery
+expression 'UnsafeText' = "</script> PQ_SHARED_ONLY_38 https://pq-private-38.invalid/"

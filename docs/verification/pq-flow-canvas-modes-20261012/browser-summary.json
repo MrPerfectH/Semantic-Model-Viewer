@@ -1,0 +1,122 @@
+{
+  "runtime": "7c973673d1dc1d4e50d5d8967aa863cd6f8bd309",
+  "boundary": "Fresh parent-operated T3 collaborative browser, user-authorized local TMDL model. API import preparation, trusted click/double-click/key/select/drag controls. No private model or M source in this receipt.",
+  "checks": {
+    "complete_upstream": {
+      "mode": "flow",
+      "complete": true,
+      "count": 9,
+      "k": 0.63671875,
+      "titles": [
+        {
+          "ownHit": true
+        },
+        {
+          "ownHit": true
+        },
+        {
+          "ownHit": true
+        },
+        {
+          "ownHit": true
+        },
+        {
+          "ownHit": true
+        },
+        {
+          "ownHit": true
+        },
+        {
+          "ownHit": true
+        },
+        {
+          "ownHit": true
+        },
+        {
+          "ownHit": true
+        }
+      ]
+    },
+    "near_right_double_click": {
+      "rootChanged": true,
+      "ancestorCount": 7,
+      "inspectorClosed": true
+    },
+    "ordinary_inspection": {
+      "reader": true,
+      "viewPreserved": true,
+      "layoutPreserved": true,
+      "membersPreserved": true
+    },
+    "library_filter": {
+      "flowUnchanged": true,
+      "viewUnchanged": true,
+      "libraryCount": 21
+    },
+    "expanded_reader": {
+      "expanded": true,
+      "dialogOpen": true,
+      "exact": true
+    },
+    "mode_roundtrip": {
+      "equal": true,
+      "mode": "canvas"
+    },
+    "keyboard_enter": {
+      "mode": "flow",
+      "ancestorCount": 7,
+      "inspectorClosed": true
+    },
+    "back": {
+      "equal": true,
+      "mode": "canvas"
+    },
+    "remove_undo": {
+      "equal": true,
+      "mode": "canvas"
+    },
+    "drag_undo": {
+      "layoutRestored": true,
+      "viewRestored": true,
+      "mode": "canvas"
+    },
+    "wide_framing": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "count": 9,
+      "k": 0.79296875,
+      "allCardsInHost": true,
+      "allTitlesOwnHit": true
+    }
+  },
+  "preserved_findings": [
+    {
+      "candidate": "61e17b8",
+      "finding": "Native dblclick retargeted to captured .pqc-surface; root unchanged.",
+      "repair": "5f5f711 same-card completed tap identity; fresh T3 passed."
+    },
+    {
+      "candidate": "5f5f711",
+      "finding": "First click on near-right card opened right inspector over second click; root unchanged.",
+      "repair": "7c97367 immediate selection with cancellable delayed closed-reader opening; fresh near-right T3 double-click passed."
+    },
+    {
+      "candidate": "61e17b8",
+      "finding": "Routing warning covered top-row title centers after initial Flow fit.",
+      "repair": "efcfd9e measured legend/status inset in explicit Fit; all nine title own-hits pass at 1280 and 1440."
+    }
+  ],
+  "harness_corrections": [
+    "Unsupported role-selector exact attribute removed before successful navigation.",
+    "Nonexistent .pqw-nav selector timed out; corrected to existing .pqw Fit overview button.",
+    "Expanded reader is native dialog[open], not an element with explicit role=dialog; captureViewState.expanded and exact source equality verified."
+  ],
+  "not_claimed": [
+    "Fresh installed VS Code acceptance",
+    "Fresh true browser 200% zoom",
+    "OS clipboard readback",
+    "User product-fit approval"
+  ]
+}

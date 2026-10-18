@@ -1,0 +1,46 @@
+
+> semantic-model-viewer@0.3.3 package
+> vsce package --out /tmp/pq-cycle-routing-20261009.vsix
+
+Executing prepublish script 'npm run vscode:prepublish'...
+
+> semantic-model-viewer@0.3.3 vscode:prepublish
+> npm run sync-viewer
+
+
+> semantic-model-viewer@0.3.3 sync-viewer
+> node scripts/sync-viewer.js
+
+synced 33 viewer runtime assets from Models/tools/viewer into media/
+ WARNING  LICENSE, LICENSE.md, or LICENSE.txt not found
+ INFO  Files included in the VSIX:
+pq-cycle-routing-20261009.vsix
+├─ [Content_Types].xml 
+├─ extension.vsixmanifest 
+└─ extension/
+   ├─ changelog.md [4.02 KB]
+   ├─ package.json [6.31 KB]
+   ├─ readme.md [5.78 KB]
+   ├─ images/
+   │  ├─ activity.svg [0.31 KB]
+   │  └─ icon.png [1.68 KB]
+   ├─ media/
+   │  ├─ explorer.css [14.01 KB]
+   │  ├─ index.html [6.68 KB]
+   │  ├─ measures.css [15.02 KB]
+   │  ├─ power-query-canvas.css [3.75 KB]
+   │  ├─ power-query-inspector.css [7.24 KB]
+   │  ├─ power-query-lineage.css [1.7 KB]
+   │  ├─ power-query-workspace.css [4.27 KB]
+   │  ├─ power-query.css [1.71 KB]
+   │  └─ js/ (25 files) [679.51 KB]
+   └─ src/
+      ├─ cleaner.js [5.49 KB]
+      ├─ extension.js [2.44 KB]
+      ├─ panel.js [15.71 KB]
+      ├─ tree.js [1.22 KB]
+      └─ workspace.js [4.8 KB]
+
+=> Run vsce ls --tree to see all included files.
+
+ DONE  Packaged: /tmp/pq-cycle-routing-20261009.vsix (45 files, 243.96 KB)

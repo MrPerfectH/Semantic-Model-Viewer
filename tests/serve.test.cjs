@@ -20,6 +20,10 @@ function fixture() {
   fs.writeFileSync(path.join(model, 'notes.txt'), 'not a model file');
   fs.mkdirSync(path.join(root, 'Repo', '.git', 'Hidden.SemanticModel'), { recursive: true });
   fs.mkdirSync(path.join(root, 'Repo', 'node_modules', 'Dep.SemanticModel'), { recursive: true });
+  fs.mkdirSync(path.join(root, 'Repo', 'analysis'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'Repo', 'analysis', 'unrelated.json'), '{"unrelated":true}');
+  fs.writeFileSync(path.join(root, 'Repo', '.git', 'Hidden.SemanticModel', 'model.bim'), '{}');
+  fs.writeFileSync(path.join(root, 'Repo', 'node_modules', 'Dep.SemanticModel', 'model.bim'), '{}');
   return { root, model };
 }
 
@@ -57,7 +61,7 @@ test('serve.py answers the page: ping, browse, find, model, static files', { ski
 
     const browse = await get(s.url + '/api/browse?path=' + encodeURIComponent(path.join(root, 'Repo')));
     assert.equal(browse.status, 200);
-    assert.deepEqual(browse.body.dirs.map(d => d.name), ['node_modules', 'Sub'], 'hidden folders are not listed');
+    assert.deepEqual(browse.body.dirs.map(d => d.name), ['analysis', 'node_modules', 'Sub'], 'hidden folders are not listed');
     assert.equal(browse.body.parent, root);
     assert.ok(browse.body.roots.length >= 1);
     const sub = await get(s.url + '/api/browse?path=' + encodeURIComponent(path.join(root, 'Repo', 'Sub')));
@@ -72,6 +76,27 @@ test('serve.py answers the page: ping, browse, find, model, static files', { ski
     const read = await get(s.url + '/api/model?path=' + encodeURIComponent(model));
     assert.deepEqual(read.body.files, [{ name: 'Sales.tmdl', path: 'definition/tables/Sales.tmdl', text: 'table Sales\n\tcolumn A\n' }],
       'only model files, BOM stripped, paths with forward slashes');
+    const repoRead = await get(s.url + '/api/model?path=' + encodeURIComponent(path.join(root, 'Repo')));
+    assert.equal(repoRead.status, 200);
+    assert.deepEqual(repoRead.body.files, [{ name: 'Sales.tmdl', path: 'Sub/Demo.SemanticModel/definition/tables/Sales.tmdl', text: 'table Sales\n\tcolumn A\n' }],
+      'repo roots read only discovered models, excluding analysis JSON and skipped model directories');
+    const perf = path.join(root, 'Repo', 'Perf.SemanticModel');
+    fs.mkdirSync(perf);
+    fs.writeFileSync(path.join(perf, 'model.bim'), '{"model":{"tables":[]}}');
+    const multiRead = await get(s.url + '/api/model?path=' + encodeURIComponent(path.join(root, 'Repo')));
+    assert.deepEqual(multiRead.body.files, [
+      { name: 'model.bim', path: 'Perf.SemanticModel/model.bim', text: '{"model":{"tables":[]}}' },
+      ...repoRead.body.files,
+    ], 'multiple discovered models retain their separate relative paths');
+    const flat = path.join(root, 'Flat');
+    fs.mkdirSync(flat);
+    fs.writeFileSync(path.join(flat, 'Sales.tmdl'), 'table Sales\r\n');
+    fs.writeFileSync(path.join(flat, 'model.bim'), '{"model":{"tables":[]}}');
+    const flatRead = await get(s.url + '/api/model?path=' + encodeURIComponent(flat));
+    assert.deepEqual(flatRead.body.files, [
+      { name: 'model.bim', path: 'model.bim', text: '{"model":{"tables":[]}}' },
+      { name: 'Sales.tmdl', path: 'Sales.tmdl', text: 'table Sales\r\n' },
+    ], 'genuine flat model folders retain supported file content and paths');
 
     const index = await fetch(s.url + '/index.html');
     assert.equal(index.status, 200);
@@ -86,6 +111,43 @@ test('serve.py answers the page: ping, browse, find, model, static files', { ski
   } finally { s.stop(); fs.rmSync(root, { recursive: true, force: true }); }
 });
 
+test('serve.py preserves raw fenced TMDL newlines and whitespace through metadata parsing', { skip: !python && 'python3 not installed' }, async () => {
+  const { root, model } = fixture();
+  const file = path.join(model, 'definition', 'tables', 'Sales.tmdl');
+  // Exact expression oracle from #38's independent raw-fenced transport reproduction.
+  const code = 'let\r\n  Source = #"Base Query",\r\n  Text = "PQ_RAW_ONLY_38 ""quoted"" λ"  \r\nin Source\r\n';
+  // Store raw fixture bytes as base64 so Git/platform text conversion cannot change the oracle.
+  const raw = Buffer.from(fs.readFileSync(path.join(__dirname, 'fixtures/power-query/fenced-crlf.tmdl.base64'), 'utf8').trim(), 'base64').toString('utf8');
+  assert.equal(require('node:crypto').createHash('sha256').update(raw, 'utf8').digest('hex'),
+    'dd5e5fc71672c14dfab54484d5a195ca48caf7da43a8b7030cd2f794948da21a', '#38 unchanged raw fixture');
+  const bytes = Buffer.from('\ufeff' + raw, 'utf8');
+  fs.writeFileSync(file, bytes);
+  // Existing decoding policy strips a UTF-8 BOM and replaces invalid bytes, without normalizing CR/LF.
+  fs.writeFileSync(path.join(model, 'Replacement.json'), Buffer.concat([
+    Buffer.from('\ufeffvalue\r\n', 'utf8'), Buffer.from([0xff]), Buffer.from('\rtrailing\n', 'utf8')
+  ]));
+  const s = await start();
+  try {
+    const read = await get(s.url + '/api/model?path=' + encodeURIComponent(model));
+    assert.equal(read.status, 200);
+    const transported = read.body.files.find(f => f.name === 'Sales.tmdl');
+    assert.equal(transported.text, raw, 'GET /api/model preserves exact decoded fenced TMDL, including CRLF and trailing whitespace');
+    assert.equal(read.body.files.find(f => f.name === 'Replacement.json').text, 'value\r\n\ufffd\rtrailing\n');
+    const vm = require('node:vm'), context = {};
+    context.window = context;
+    vm.createContext(context);
+    for (const name of ['roles.js', 'tmdl-parser.js']) {
+      vm.runInContext(fs.readFileSync(path.join(__dirname, '../Models/tools/viewer/js', name), 'utf8'), context);
+    }
+    const metadata = context.TMDLParser.parseTMDL([transported]).powerQuery;
+    assert.equal(metadata.nodes[0].code, code, 'transported metadata retains exact M CRLF, quoted content, trailing spaces and blank line');
+    assert.equal(Buffer.byteLength(metadata.nodes[0].code, 'utf8'), 86);
+    assert.equal(require('node:crypto').createHash('sha256').update(metadata.nodes[0].code, 'utf8').digest('hex'),
+      '0ca26d7ff5746665d15af9014936598df9e4374eb7d766dffa2858d9f99fec42', '#38 exact expression byte oracle');
+    assert.deepEqual(fs.readFileSync(file), bytes, 'model GET does not modify source bytes');
+  } finally { s.stop(); fs.rmSync(root, { recursive: true, force: true }); }
+});
+
 test('serve.py refuses requests from other websites and never writes', { skip: !python && 'python3 not installed' }, async () => {
   const { root } = fixture();
   const s = await start();
@@ -95,6 +157,15 @@ test('serve.py refuses requests from other websites and never writes', { skip: !
     assert.equal((await get(s.url + '/api/ping', { 'Sec-Fetch-Site': 'same-origin' })).status, 200);
     const post = await fetch(s.url + '/api/model?path=' + encodeURIComponent(root), { method: 'POST', body: 'x' });
     assert.equal(post.status, 501, 'only GET is implemented');
+    // DNS rebinding: a foreign host name that resolves to 127.0.0.1 must not reach the server.
+    const withHost = (host) => new Promise((resolve, reject) => {
+      const u = new URL(s.url + '/api/ping');
+      require('node:http').get({ hostname: u.hostname, port: u.port, path: u.pathname, headers: { Host: host } },
+        res => { res.resume(); resolve(res.statusCode); }).on('error', reject);
+    });
+    assert.equal(await withHost('evil.example:' + new URL(s.url).port), 403);
+    assert.equal(await withHost('localhost:' + new URL(s.url).port), 200);
+    assert.equal(await withHost('[::1]:' + new URL(s.url).port), 200);
   } finally { s.stop(); fs.rmSync(root, { recursive: true, force: true }); }
 });
 

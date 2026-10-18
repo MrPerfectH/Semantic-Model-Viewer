@@ -1,0 +1,10 @@
+{
+  "out": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/runtime-d3d8360/browser-navigation-corrected",
+  "passed": 2,
+  "failures": [
+    {
+      "name": "A3 frozen hidden-selection/reference/Back/reset workflow",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    k: 1.3,\n    x: -152.5,\n+   y: 351.55\n-   y: 312.55\n  }\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:70:172\n    at async check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:14:36)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360.browser.cjs:57:3"
+    }
+  ]
+}

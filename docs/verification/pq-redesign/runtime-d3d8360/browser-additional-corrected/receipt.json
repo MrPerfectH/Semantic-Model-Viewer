@@ -1,0 +1,34 @@
+{
+  "candidate": "d3d8360e4ee6e003d187f34118099e4327dd91cd",
+  "startedAt": "2026-10-09T09:11:29.193Z",
+  "boundary": "fresh authorized CDP Chrome registered app, not installed/native",
+  "cases": [],
+  "checks": [
+    {
+      "name": "A2 parameter five consumer highlighting and input-to-result geometry",
+      "status": "pass"
+    },
+    {
+      "name": "A5 keyboard pan zoom fit search keys Escape focus Tab exit and inspector resize",
+      "status": "pass"
+    },
+    {
+      "name": "A7 exact multipartition duplicate and uncertainty inspectors",
+      "status": "pass"
+    }
+  ],
+  "failures": [
+    {
+      "name": "A8 model metadata generation reset suspended state and stale callback rejection",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   k: 1,\n+   x: 0,\n+   y: 0\n-   k: 0.9,\n-   x: 137,\n-   y: 93\n  }\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-scenarios.cjs:68:38\n    at async Object.check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-additional.browser.cjs:14:36)\n    at async module.exports (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-scenarios.cjs:60:1)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-additional.browser.cjs:36:3"
+    }
+  ],
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "endedAt": "2026-10-09T09:11:34.472Z"
+}

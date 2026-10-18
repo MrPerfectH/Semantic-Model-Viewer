@@ -1,0 +1,12 @@
+{
+  "toolIcon": {
+    "_tag": "website",
+    "pageUrl": "http://localhost:8945/"
+  },
+  "value": {
+    "selectedHidden": true,
+    "disabled": true,
+    "title": "Select a visible canvas object to center.",
+    "centerResult": false
+  }
+}

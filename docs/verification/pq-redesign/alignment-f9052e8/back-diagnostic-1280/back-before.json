@@ -1,0 +1,167 @@
+{
+  "navigation": {
+    "membership": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "focusMode": "hide",
+    "direction": "inputs",
+    "depth": 0,
+    "listFacet": "canvas",
+    "generation": 4,
+    "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": 123,
+      "y": 87,
+      "k": 1.3
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 325,
+      "wrap": false,
+      "focus": {
+        "kind": "reference",
+        "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+        "at": 32,
+        "end": 44
+      }
+    },
+    "category": "disconnected",
+    "query": "Occurrence"
+  },
+  "phase": "ready",
+  "generation": 4,
+  "selected": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+  "code": "let\r\n  Emoji = \"😀\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n",
+  "visible": [],
+  "dimmed": [],
+  "layout": [
+    [
+      "[\"expression\",\"\",\"OccurrenceProbe\"]",
+      {
+        "x": 352,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      {
+        "x": 0,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      {
+        "x": 0,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Server\"]",
+      {
+        "x": 0,
+        "y": 252
+      }
+    ],
+    [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      {
+        "x": 0,
+        "y": 426
+      }
+    ]
+  ],
+  "history": [
+    {
+      "membership": [
+        "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Quote\\\"Query\"]",
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "generation": 4,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 246.98932384341634,
+        "y": 53.15302491103202,
+        "k": 0.8576512455516014
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": ""
+    }
+  ],
+  "undo": 1,
+  "registry": [
+    "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+    "[\"expression\",\"\",\"Sales Raw\"]",
+    "[\"expression\",\"\",\"Quote\\\"Query\"]",
+    "[\"expression\",\"\",\"Server\"]",
+    "[\"expression\",\"\",\"OccurrenceProbe\"]"
+  ],
+  "edges": [
+    [
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ]
+  ],
+  "sets": {
+    "all": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]"
+    ],
+    "connected": [
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]"
+    ],
+    "disconnected": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]"
+    ]
+  },
+  "library": [],
+  "banner": "Selected object hidden by filter. Inspector retained.Show all",
+  "note": "Zero resolved incident references; static uncertainty remains. Disconnected does not prove independence.",
+  "mapCount": 5,
+  "map": "0 visible / 5 objects",
+  "focus": {
+    "tag": "BUTTON",
+    "cls": "pqi-reference"
+  },
+  "options": [
+    "All (5)",
+    "Connected (4)",
+    "Disconnected (1)"
+  ]
+}

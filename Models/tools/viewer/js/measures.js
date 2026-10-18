@@ -32,6 +32,8 @@
     this._splitShares = { beside: share(prefs.besideShare, .55), below: share(prefs.belowShare, .52) };
     this._wrapDax = prefs.wrap !== false;
     this._showSources = prefs.sources === true;
+    this._fmt = choice(prefs.fmt, ['original', 'long', 'short'], 'long');
+    this._folds = {};
   }
 
   MeasuresView.prototype = {
@@ -290,10 +292,12 @@
       var vertical = orientation !== 'lr', direction = orientation === 'bt' ? -1 : 1;
       var dist = {}; dist[root] = 0;
       var bfs = function (dir) {
-        var seen = new Set([root]); var q = [root], __g = 0;
+        var seen = new Set([root]); var q = [root], __g = 0, context=self._explanationContext;
+        if(context&&context.direction!=='both'&&context.direction!==dir)return seen;
         while (q.length) {
           if (++__g > 200000) throw new Error('LOOP-GUARD: gLayout bfs');
           var n = q.shift();
+          if(context&&dist[n]>=context.depth)continue;
           self.flowKids(n, dir).forEach(function (k) {
             if (!seen.has(k)) { seen.add(k); if (dist[k] == null || dist[n] + 1 < dist[k]) dist[k] = dist[n] + 1; q.push(k); }
           });
@@ -301,8 +305,11 @@
         return seen;
       };
       var upSet = bfs('up'), dnSet = bfs('down');
-      var names = Array.from(new Set([].concat(Array.from(upSet), Array.from(dnSet),
-        Object.keys(extra).filter(function (n) { return self.app.msrOf(n); }))));
+      var initial=Array.from(new Set([].concat(Array.from(upSet),Array.from(dnSet))));
+      if(this._explanationContext){initial.sort(function(a,b){return (dist[a]-dist[b])||a.localeCompare(b);});initial=initial.slice(0,this._explanationContext.limit);}
+      // The authored limit bounds only the opening neighborhood. Explicit branch
+      // expansion remains usable up to the viewer's ordinary global cap.
+      var names=Array.from(new Set(initial.concat(Object.keys(extra).filter(function(n){return self.app.msrOf(n);})))) ;
       var capped = false;
       if (names.length > cap) {
         capped = true;
@@ -432,7 +439,7 @@
           var top = Math.min(A.y, B.y) - 64;
           d = 'M' + (A.x + A.w / 2) + ',' + A.y + ' C' + (A.x + A.w / 2) + ',' + top + ' ' + (B.x + B.w / 2) + ',' + top + ' ' + (B.x + B.w / 2) + ',' + B.y;
         }
-        var base = b === root || rUp.has(b) ? '#c3b1ee' : (a === root || rDn.has(a) ? '#a8c5ef' : '#d4d9e2');
+        var base = b === root || rUp.has(b) ? 'var(--smv-up-line,#c3b1ee)' : (a === root || rDn.has(a) ? 'var(--smv-down-line,#a8c5ef)' : 'var(--smv-line,#d4d9e2)');
         return { a: a, b: b, d: d, back: back, base: base };
       });
       var relM = {}; Array.from(new Set([].concat(Array.from(upSet), Array.from(dnSet), names))).forEach(function (nm) { relM[nm] = nm === root ? 'root' : (upSet.has(nm) ? 'up' : (dnSet.has(nm) ? 'dn' : 'x')); });
@@ -541,7 +548,7 @@
     buildGraph: function () {
       var self = this, app = this.app;
       var root = this.graphRoot(), extra = app.state.gExtra || {};
-      var key = (app.modelKey || '') + '|' + root + '|' + this._showSources + '|' + !!app.state.dependencyDirectOnly + '|' + this._graphOrientation + '|' + Object.keys(extra).sort().join('\u0001')
+      var key = (app.modelKey || '') + '|' + JSON.stringify(this._explanationContext) + '|' + root + '|' + this._showSources + '|' + !!app.state.dependencyDirectOnly + '|' + this._graphOrientation + '|' + Object.keys(extra).sort().join('\u0001')
         + '|' + Object.keys(this.graphGroupState(root)).sort().join('\u0001') + '|' + app.colorBy + '|' + app.paletteName;
       if (!this._gC || this._gC.k !== key) {
         var layout = this.gLayout(root, extra, CAP);
@@ -556,7 +563,7 @@
         var onUp = upR && (e.b === hov || upR.has(e.b));
         var onDn = dnR && (e.a === hov || dnR.has(e.a));
         var rel = !!(onUp || onDn);
-        var c = e.source ? e.base : e.back ? '#e58f5a' : (rel ? (onUp ? '#6d28d9' : '#2563eb') : (hov ? '#cdd3dd' : e.base));
+        var c = e.source ? e.base : e.back ? 'var(--smv-gold,#e58f5a)' : (rel ? (onUp ? 'var(--smv-up,#6d28d9)' : 'var(--smv-down,#2563eb)') : (hov ? 'var(--smv-line,#cdd3dd)' : e.base));
         var wd = rel ? (e.a === hov || e.b === hov ? 2 : 1.6) : 1.2, o = hov ? (rel ? 1 : .45) : .85;
         return {
           key: e.a + '\u0001' + e.b, d: e.d, da: e.back || e.whole ? '5 4' : 'none',
@@ -568,8 +575,8 @@
       this._gGroupOf = G.groupOf; this._gHiddenByGroup = G.hiddenByGroup;
       var nodes = G.names.map(function (n) {
         var p = G.xy[n], m = app.msrOf(n);
-        var P = G.upSet.has(n) && n !== root ? ['#6d28d9', '#f7f5ff', '#d9cffa']
-          : (G.dnSet.has(n) && n !== root ? ['#2563eb', '#f2f7ff', '#c7dbfa'] : ['#5b6472', '#fff', '#dfe3e9']);
+        var P = G.upSet.has(n) && n !== root ? ['var(--smv-up,#6d28d9)', 'var(--smv-up-soft,#f7f5ff)', 'var(--smv-up-border,#d9cffa)']
+          : (G.dnSet.has(n) && n !== root ? ['var(--smv-down,#2563eb)', 'var(--smv-down-soft,#f2f7ff)', 'var(--smv-down-border,#c7dbfa)'] : ['var(--smv-muted,#5b6472)', '#fff', 'var(--smv-line,#dfe3e9)']);
         var dim = !!(hov && n !== hov && n !== root && !(upR && upR.has(n)) && !(dnR && dnR.has(n)));
         var removable = function (x) { return extra[x] && !G.upSet.has(x) && !G.dnSet.has(x); };
         var exU = G.deps[n].filter(removable), exD = G.cons[n].filter(removable);
@@ -581,7 +588,7 @@
         var upLbl = upN ? '+' + upN : (exU.length ? '−' + exU.length : ''), dnLbl = dnN ? '+' + dnN : (exD.length ? '−' + exD.length : '');
         var pin = pinN === n;
         var base = (n === root
-          ? 'border:1.5px solid #1f2430;background:#1f2430;color:#fff;font:600 12px/31px "IBM Plex Sans",sans-serif;box-shadow:0 4px 14px rgba(20,30,50,.30);'
+          ? 'border:1.5px solid var(--smv-burgundy,#1f2430);background:var(--smv-burgundy,#1f2430);color:#fff;font:600 12px/31px "IBM Plex Sans",sans-serif;box-shadow:0 4px 14px rgba(20,30,50,.30);'
           : 'border:1px solid ' + P[2] + ';background:' + P[1] + ';color:' + P[0] + ';font:500 12px/32px "IBM Plex Mono",monospace;')
           + (pin ? 'outline:2px solid ' + P[0] + ';outline-offset:1px;' : '');
         return {
@@ -660,9 +667,9 @@
       this.setGraphExtras(this.buildGraph().allExtra(), [], true);
     },
     gBadge: function (lbl, minus) {
-      return 'border:1px solid ' + (minus ? '#c9cfd9' : '#d8dce3') + ';background:' + (minus ? '#eef1f5' : '#fff') +
+      return 'border:1px solid ' + (minus ? 'var(--smv-line,#c9cfd9)' : 'var(--smv-line,#d8dce3)') + ';background:' + (minus ? 'var(--smv-soft,#eef1f5)' : '#fff') +
         ';border-radius:9px;height:18px;padding:0 6px;cursor:pointer;font:600 9px/16px "IBM Plex Mono",monospace;color:' +
-        (minus ? '#3a414d' : '#7a8290') + ';' + (lbl ? '' : 'visibility:hidden;');
+        (minus ? 'var(--smv-ink,#3a414d)' : 'var(--smv-muted,#7a8290)') + ';' + (lbl ? '' : 'visibility:hidden;');
     },
     gShow: function (name) {
       var self = this, app = this.app;
@@ -681,6 +688,7 @@
     },
     pickMeasure: function (n) {
       var self = this, app = this.app;
+      if (typeof document !== 'undefined' && document.body) document.body.classList.remove('smv-browse-open');
       this.cancelSnapshotViewport();
       app.setState({ selMeasure: n, dependencySource: null, mvOpen: app.mvOpenFor(n), gExtra: {}, gHover: null, gPin: null });
     },
@@ -759,30 +767,57 @@
       if (last < dax.length) pushTxt(dax.slice(last));
       return out;
     },
-    daxCard: function (name) {
+    /* One colour per inlining level: the analyzed measure is purple, each level below it gets its own hue. */
+    DEPTH_COLORS: [['var(--smv-up,#6d28d9)', 'var(--smv-up-soft,#f2edfd)', 'var(--smv-up-border,#dcd0f7)'], ['var(--smv-down,#2563eb)', 'var(--smv-down-soft,#eef4fe)', 'var(--smv-down-border,#c9dcf8)'], ['var(--smv-olive,#0f766e)', 'var(--smv-down-soft,#ecfaf7)', 'var(--smv-down-border,#bfe6df)'],
+      ['var(--smv-gold-ink,#b45309)', 'var(--smv-soft,#fdf5e8)', 'var(--smv-line,#f1d9b0)'], ['var(--smv-burgundy,#be185d)', 'var(--smv-accent-soft,#fdeef5)', 'var(--smv-line,#f4c5da)'], ['var(--smv-muted,#475569)', 'var(--smv-soft,#f1f3f6)', 'var(--smv-line,#d5dae2)']],
+    depthColor: function (d) { return this.DEPTH_COLORS[d % this.DEPTH_COLORS.length]; },
+    depthChipStyle: function (d) {
+      var P = this.depthColor(d);
+      return 'display:inline;border:1px solid ' + P[2] + ';background:' + P[1] + ';color:' + P[0] + ';border-radius:4px;padding:0 3px;margin:0 1px;cursor:pointer;font:600 12px/1.7 "IBM Plex Mono",monospace;vertical-align:baseline;';
+    },
+    refStyle: function (name) {
+      var r = (this._gRel || {})[name];
+      var P = r === 'up' ? ['var(--smv-up,#6d28d9)', 'var(--smv-up-soft,#f2edfd)', 'var(--smv-up-border,#dcd0f7)'] : (r === 'dn' ? ['var(--smv-down,#2563eb)', 'var(--smv-down-soft,#eef4fe)', 'var(--smv-down-border,#c9dcf8)'] : ['var(--smv-ink,#3a414d)', 'var(--smv-soft,#f1f3f6)', 'var(--smv-line,#d5dae2)']);
+      return 'display:inline;border:1px solid ' + P[2] + ';background:' + P[1] + ';color:' + P[0] + ';border-radius:4px;padding:0 3px;margin:0 1px;cursor:pointer;font:600 12px/1.7 "IBM Plex Mono",monospace;vertical-align:baseline;';
+    },
+    /* Format a measure's DAX with the local formatter; `inline` also splices in every measure it uses. */
+    formatDax: function (name, dax, inline, style) {
+      var self = this, app = this.app, opts = { style: style };
+      if (!inline) return DaxFormat.format(dax, opts);
+      return DaxFormat.formatInlined(dax, name, function (ref) {
+        var t = self.daxToks(ref)[0];
+        if (!t || !t.msr) return null;
+        var m = app.msrOf(t.msr);
+        return m ? { name: t.msr, dax: m.dax } : null;
+      }, opts);
+    },
+    daxCard: function (name, inline) {
       var self = this, app = this.app;
       var m = app.msrOf(name); if (!m) return null;
       var rel = this._gRel || {}, dax = (m.dax || '').trim();
       var u = app.msrUse(name);
-      var flags = { hid: !!m.h, hasUse: !!u, useN: u ? u.length : 0, useTip: app.useTip(u),
-        pill: app.statusPill ? app.statusPill(app.msrStatus(name), !!u, false) : null };
-      if (!dax) return Object.assign({ name: name, table: app.model.msrHome[name] || '', toks: [{ isM: false, isT: true, txt: '— no expression —', s: 'color:#9aa1ad;' }] }, flags);
+      var flags = { hid: !!m.h, hasUse: !!u, useN: u ? u.length : 0, useTip: app.useTip(u) };
+      if (!dax) return Object.assign({ name: name, table: app.model.msrHome[name] || '', toks: [{ isM: false, isT: true, txt: '— no expression —', s: 'color:var(--smv-muted,#9aa1ad);' }] }, flags);
+      var style = this._fmt || 'long';
+      if (typeof DaxFormat !== 'undefined' && (style !== 'original' || inline)) {
+        var printed = this.formatDax(name, dax, inline, style === 'original' ? 'long' : style);
+        return Object.assign({ name: name, table: app.model.msrHome[name] || '', printed: printed, text: DaxFormat.toText(printed),
+          inlined: inline ? { count: printed.count, cycles: printed.cycles, capped: printed.capped } : null }, flags);
+      }
       var toks = this.daxToks(dax).map(function (t) {
         if (t.msr) {
-          var r = rel[t.msr];
-          var P = r === 'up' ? ['#6d28d9', '#f2edfd', '#dcd0f7'] : (r === 'dn' ? ['#2563eb', '#eef4fe', '#c9dcf8'] : ['#3a414d', '#f1f3f6', '#d5dae2']);
           return {
             isM: true, isT: false, txt: t.raw || '[' + t.msr + ']', tip: 'Show ' + t.msr + ' on the flow',
-            s: 'display:inline;border:1px solid ' + P[2] + ';background:' + P[1] + ';color:' + P[0] + ';border-radius:4px;padding:0 3px;margin:0 1px;cursor:pointer;font:600 12px/1.7 "IBM Plex Mono",monospace;vertical-align:baseline;',
+            s: self.refStyle(t.msr),
             pick: function () { self.gShow(t.msr); }
           };
         }
-        var s = 'color:#3a414d;', txt = t.txt;
-        if (t.cmt != null) { s = 'color:#94a0b0;font-style:italic;'; txt = t.cmt; }
-        else if (t.str != null) { s = 'color:#b45309;'; txt = t.str; }
-        else if (t.col != null) { s = 'color:#0f766e;'; txt = t.col; }
-        else if (t.fn != null) { s = 'color:#0e7490;font-weight:600;'; txt = t.fn; }
-        else if (t.kw != null) { s = 'color:#334155;font-weight:700;'; txt = t.kw; }
+        var s = 'color:var(--smv-ink,#3a414d);', txt = t.txt;
+        if (t.cmt != null) { s = 'color:var(--smv-muted,#94a0b0);font-style:italic;'; txt = t.cmt; }
+        else if (t.str != null) { s = 'color:var(--smv-gold-ink,#b45309);'; txt = t.str; }
+        else if (t.col != null) { s = 'color:var(--smv-olive,#0f766e);'; txt = t.col; }
+        else if (t.fn != null) { s = 'color:var(--smv-olive,#0e7490);font-weight:600;'; txt = t.fn; }
+        else if (t.kw != null) { s = 'color:var(--smv-ink,#334155);font-weight:700;'; txt = t.kw; }
         return { isM: false, isT: true, txt: txt, s: s };
       });
       return Object.assign({ name: name, table: app.model.msrHome[name] || '', toks: toks }, flags);
@@ -795,16 +830,18 @@
       var filter = app.state.mvFilter || 'all';
       var table = M.byName[app.state.mvTable] ? app.state.mvTable : '';
       var open = app.state.mvOpen || {}, rows = [], total = 0, modelTotal = 0;
-      var root = { sub: {}, items: [] };
+      var root = { sub: {}, items: [] }, daxRoot = { sub: {}, items: [] }, daxOnly = 0;
       M.tables.forEach(function (t) {
         t.measures.forEach(function (m) {
           modelTotal++;
           if (table && t.name !== table) return;
           if (filter === 'hidden' && !m.h || filter === 'visible' && m.h) return;
-          if (q && ![m.name, m.folder, t.name, m.dax].join(' ').toLowerCase().includes(q)) return;
+          var inLabel = !q || [m.name, m.folder, t.name].join(' ').toLowerCase().includes(q);
+          if (!inLabel && !String(m.dax || '').toLowerCase().includes(q)) return;
           total++;
+          if (!inLabel) daxOnly++;
           String(m.folder || '').split(';').forEach(function (fp) {
-            var node = root;
+            var node = inLabel ? root : daxRoot;
             fp.split('\\').map(function (s) { return s.trim(); }).filter(Boolean).forEach(function (seg) {
               node = (node.sub[seg] = node.sub[seg] || { sub: {}, items: [] });
             });
@@ -820,7 +857,6 @@
           key: 'measure:' + item.table + ':' + m.name + ':' + rows.length,
           isFolder: false, name: m.name, table: item.table, selected: on, hid: !!m.h,
           hasUse: !!u, use: u ? u.length : 0, useTip: app.useTip(u),
-          pill: app.statusPill ? app.statusPill(app.msrStatus(m.name), !!u, true) : null,
           meta: deps + ' / ' + consumers,
           tip: m.name + '\n' + item.table + '\nUses ' + deps + ' measures · used by ' + consumers + ' measures',
           depth: depth, click: function () { self.pickMeasure(m.name); }
@@ -837,7 +873,15 @@
         });
         node.items.slice().sort(function (a, b) { return a.measure.name.localeCompare(b.measure.name); }).forEach(function (m) { pushM(m, depth); });
       };
+      // Name, folder and table matches come first; measures that only mention the text in their DAX follow.
+      var heading = function (key, name, count) { rows.push({ key: 'section:' + key, isFolder: false, isHeader: true, name: name, meta: String(count), depth: 0 }); };
+      var split = daxOnly > 0 && daxOnly < total;
+      if (split) heading('name', 'Name matches', total - daxOnly);
       walk(root, 0, '');
+      if (daxOnly) {
+        if (split) heading('dax', 'Found in DAX', daxOnly);
+        walk(daxRoot, 0, 'dax:');
+      }
       return { rows: rows, total: total, modelTotal: modelTotal };
     },
 
@@ -930,6 +974,10 @@
       }
       var frag = document.createDocumentFragment(), restore;
       built.rows.forEach(function (R) {
+        if (R.isHeader) {
+          frag.appendChild(el('div', { cls: 'mv-section-head' }, [el('span', { text: R.name }), el('span', { text: R.meta })]));
+          return;
+        }
         var kids = [];
         if (R.isFolder) kids.push(el('span', { cls: 'mv-folder-caret', text: R.expanded ? '▾' : '▸', 'aria-hidden': 'true' }));
         else kids.push(el('span', { cls: 'mv-measure-icon', text: 'ƒ', 'aria-hidden': 'true' }));
@@ -939,7 +987,6 @@
         ]));
         if (R.hid) kids.push(el('span', { title: 'Hidden in the model', cls: 'mv-hidden-icon', 'aria-label': 'Hidden', html: U.icon('eyeOff', 12) }));
         if (R.hasUse) kids.push(el('span', { cls: 'mv-usage-badge', title: R.useTip, text: R.use + ' pg' }));
-        if (R.pill) kids.push(el('span', R.pill));
         kids.push(el('span', { cls: 'mv-row-count', text: R.meta, 'aria-hidden': 'true' }));
         var button = el('button', { cls: 'mv-library-row' + (R.isFolder ? ' mv-folder' : '') + (R.selected ? ' is-selected' : ''),
           title: R.tip || R.name, 'aria-label': R.tip || R.name, 'aria-current': R.selected ? 'true' : null,
@@ -958,7 +1005,7 @@
       var self = this, app = this.app, M = app.model;
       var sn = app.state.selMeasure;
       var m = app.msrOf(sn), source = app.state.dependencySource;
-      var key = [app.modelKey, sn || '', JSON.stringify(source), this._showSources, app._usage ? 1 : 0].join('|');
+      var key = [app.modelKey, sn || '', JSON.stringify(source), this._showSources, app._usage ? 1 : 0, m || source ? '' : [app.state.mvQuery, app.state.mvFilter, app.state.mvTable].join('|')].join('|');
       if (key !== this._mainKey) {
         this._mainKey = key;
         this._flowKey = null; this._daxKey = null; this._nodeEls = {}; this._edgeEls = {}; this._edgeLabels = {}; this._groupEls = {}; this._sourceLayer = null;
@@ -974,6 +1021,27 @@
 
     buildEmptyMain: function () {
       var self = this, app = this.app, M = app.model, all = [], hidden = 0, links = 0;
+      var filtered = !!(app.state.mvQuery || app.state.mvTable || (app.state.mvFilter && app.state.mvFilter !== 'all'));
+      if (filtered) {
+        var matches = new Map();
+        this.buildRows().rows.forEach(function (row) { if (!row.isFolder && !row.isHeader) matches.set(row.name, row); });
+        var results = el('div', { cls: 'mv-starters' });
+        matches.forEach(function (row) {
+          var measure = app.msrOf(row.name);
+          results.appendChild(el('button', { cls: 'mv-starter', data: { measure: row.name }, onClick: function () { self.pickMeasure(row.name); } }, [
+            el('span', { cls: 'mv-row-label' }, [
+              el('strong', { text: row.name }), el('span', { cls: 'mv-row-table', text: row.table }),
+              el('code', { cls: 'mv-starter-dax', text: measure.dax || '— no expression —' })
+            ]), el('span', { text: '→', 'aria-hidden': 'true' })
+          ]));
+        });
+        this.mainEl.appendChild(el('section', { cls: 'mv-overview', 'aria-label': 'Matching measures' }, [
+          el('h1', { text: matches.size + ' matching measures' }),
+          el('p', { cls: 'mv-overview-intro', text: app.state.mvQuery ? 'Filter: ' + app.state.mvQuery : 'Current library filters' }),
+          results, !matches.size ? el('p', { text: 'No measures match these filters.' }) : null
+        ]));
+        return;
+      }
       M.tables.forEach(function (t) { t.measures.forEach(function (m) {
         all.push({ name: m.name, table: t.name, n: (M.msrUsedBy[m.name] || []).length });
         if (m.h) hidden++; links += (m._deps || []).length;
@@ -1015,9 +1083,8 @@
       ]);
       if (nCols) metadata.appendChild(el('span', { cls: 'mv-chip', text: nCols + (nCols === 1 ? ' column reference' : ' column references'), title: colGs.map(function (cg) { return cg.t + ': ' + cg.cs.join(', '); }).join('\n') }));
       if (m.h) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'Hidden in model' }));
-      var usage = app.msrUse(sn), status = app.statusPill ? app.statusPill(app.msrStatus(sn), !!usage, false) : null;
-      if (usage) metadata.appendChild(el('span', { cls: 'mv-chip mv-chip-blue', text: usage.length + ' report pages', title: app.useTip(usage) }));
-      if (status) metadata.appendChild(el('span', status));
+      var usage = app.msrUse(sn);
+      if (usage) metadata.appendChild(el('span', { cls: 'mv-chip mv-chip-blue', text: usage.length + (usage.length === 1 ? ' report page' : ' report pages'), title: app.useTip(usage) }));
       else if (!usage && app._usage) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'No direct report usage', title: 'Not directly referenced in ' + ((app._usageMeta && app._usageMeta.report) || 'the scanned report') + '. It may feed other measures that are used.' }));
       var header = el('header', { cls: 'mv-analysis-header' });
       var heading = el('div', { cls: 'mv-heading-block' }, [el('div', { cls: 'mv-eyebrow', text: 'ANALYZING MEASURE' }), el('h1', { text: sn }), metadata]);
@@ -1133,7 +1200,7 @@
     },
     savePreferences: function () {
       store.setJSON(PREF_KEY, { mode: this._workspaceMode, split: this._splitLayout, orientation: this._graphOrientation,
-        besideShare: this._splitShares.beside, belowShare: this._splitShares.below, wrap: this._wrapDax, sources: this._showSources });
+        besideShare: this._splitShares.beside, belowShare: this._splitShares.below, wrap: this._wrapDax, sources: this._showSources, fmt: this._fmt });
     },
     setWorkspaceMode: function (mode, persist) {
       if (mode === 'dax' && this._workspaceMode !== 'dax') this.rememberGraphViewport();
@@ -1383,6 +1450,7 @@
     },
 
     daxBody: function (card) {
+      if (card.printed) return this.printedBody(card);
       var code = el('code', { cls: 'mv-dax-code' });
       card.toks.forEach(function (T) {
         if (T.isM) code.appendChild(el('button', { cls: 'mv-dax-ref', style: T.s, title: T.tip, text: T.txt, onClick: T.pick }));
@@ -1390,17 +1458,153 @@
       });
       return el('pre', { cls: 'mv-dax-body', tabindex: '0', 'aria-label': 'DAX formula for ' + card.name }, code);
     },
-    daxHeader: function (card, label, dotStyle, onClose) {
-      var self = this, m = this.app.msrOf(card.name), raw = ((m && m.dax) || '').trim();
-      var copy = el('button', { cls: 'mv-button', text: 'Copy DAX', 'aria-label': 'Copy DAX for ' + card.name });
+    /* Formatted DAX as rows with a fold arrow in the left margin. Fold state lives in this._folds,
+       keyed by measure, layout and inline mode, so it survives a redraw but not a layout switch. */
+    printedBody: function (card) {
+      var self = this, P = card.printed, STYLE = {
+        fn: 'color:var(--smv-olive,#0e7490);font-weight:600;', kw: 'color:var(--smv-ink,#334155);font-weight:700;', str: 'color:var(--smv-gold-ink,#b45309);',
+        cmt: 'color:var(--smv-muted,#94a0b0);font-style:italic;', num: 'color:var(--smv-ink,#3a414d);', op: 'color:var(--smv-ink,#3a414d);', txt: 'color:var(--smv-ink,#3a414d);' };
+      var plain = !!(card.inlined && this._plainDax);
+      var foldKey = [card.name, this._fmt, card.inlined ? 'i' : 'n'].join('|');
+      var set = this._folds[foldKey] || (this._folds[foldKey] = {});
+      var seen = {}, byFrom = {};
+      P.regions.forEach(function (r) {
+        var base = r.kind + ':' + r.label; seen[base] = (seen[base] || 0) + 1; r.key = base + '#' + seen[base];
+        (byFrom[r.from] = byFrom[r.from] || []).push(r);
+      });
+      var body = el('pre', { cls: 'mv-dax-body mv-dax-fold' + (plain ? ' mv-dax-plain' : ''), tabindex: '0', 'aria-label': 'DAX formula for ' + card.name });
+      var refCache = {};
+      var segment = function (p) {
+        if (p.k === 'inl') {
+          return el('button', { cls: 'mv-dax-ref mv-dax-chip', style: self.depthChipStyle(p.depth || 0), text: p.v,
+            title: (p.depth ? 'Inlined measure, level ' + p.depth : 'The analyzed measure') + '. Click to show it on the flow.',
+            onClick: function () { var t = refCache[p.v] || (refCache[p.v] = self.daxToks(p.v)[0] || {}); if (t.msr) self.gShow(t.msr); } });
+        }
+        if (p.k === 'ref') {
+          var t = refCache[p.v] || (refCache[p.v] = self.daxToks(p.v)[0] || {});
+          if (t.msr) {
+            return el('button', { cls: 'mv-dax-ref', style: self.refStyle(t.msr), text: p.v,
+              title: 'Show ' + t.msr + ' on the flow', onClick: function () { self.gShow(t.msr); } });
+          }
+          return el('span', { style: 'color:var(--smv-olive,#0f766e);', text: p.v });
+        }
+        return el('span', { style: STYLE[p.k] || STYLE.txt, text: p.v });
+      };
+      var foldButton = function (reg, collapsed) {
+        return el('button', { cls: 'mv-dax-fold-btn', text: collapsed ? '▸' : '▾', 'aria-expanded': String(!collapsed),
+          title: (collapsed ? 'Expand ' : 'Collapse ') + reg.label, 'aria-label': (collapsed ? 'Expand ' : 'Collapse ') + reg.label,
+          onClick: function () { if (set[reg.key]) delete set[reg.key]; else set[reg.key] = true; draw(); } });
+      };
+      var moreButton = function (reg) {
+        return el('button', { cls: 'mv-dax-more', text: '⋯', title: 'Expand ' + reg.label, 'aria-label': 'Expand ' + reg.label,
+          onClick: function () { delete set[reg.key]; draw(); } });
+      };
+      /* The innermost inlined measure that holds each line sets the colour of that line's left edge. */
+      var lineDepth = [];
+      P.regions.forEach(function (r) {
+        if (r.kind !== 'measure') return;
+        for (var k = r.from; k <= r.to; k++) if (!lineDepth[k] || lineDepth[k] < r.depth) lineDepth[k] = r.depth;
+      });
+      var tint = function (row, i) {
+        var P2 = self.depthColor(lineDepth[i] || 0);
+        row.style.cssText = 'border-left:3px solid ' + P2[2] + ';background:' + P2[1] + '66;';
+        row.setAttribute('data-level', String(lineDepth[i] || 0));
+      };
+      if (plain) {
+        DaxFormat.plainLines(P).forEach(function (L) {
+          var parts = L.parts;
+          var row = el('div', { cls: 'mv-dax-row' });
+          var code = el('span', { cls: 'mv-dax-line' });
+          if (L.indent) code.appendChild(document.createTextNode(Array(L.indent + 1).join('    ')));
+          parts.forEach(function (p) { code.appendChild(segment(p)); });
+          row.appendChild(code); body.appendChild(row);
+        });
+        return body;
+      }
+      var draw = function () {
+        U.clear(body);
+        var i = 0;
+        while (i < P.lines.length) {
+          var L = P.lines[i], opens = byFrom[i] || [];
+          var coll = opens.filter(function (r) { return set[r.key]; }).sort(function (x, y) { return y.to - x.to; })[0];
+          var row = el('div', { cls: 'mv-dax-row' });
+          var gutter = el('span', { cls: 'mv-dax-gutter' });
+          var reg = coll || opens[0];
+          if (reg) gutter.appendChild(foldButton(reg, !!coll));
+          var code = el('span', { cls: 'mv-dax-line' });
+          if (L.indent) code.appendChild(document.createTextNode(Array(L.indent + 1).join('    ')));
+          /* A collapsed measure shows its label, then "(", then the ⋯ button, then ")". */
+          var split = coll && coll.openLine > coll.from;
+          var upTo = coll && !split ? coll.openPart + 1 : L.parts.length;
+          L.parts.slice(0, upTo).forEach(function (p) { code.appendChild(segment(p)); });
+          if (split) {
+            code.appendChild(document.createTextNode(' '));
+            P.lines[coll.openLine].parts.slice(0, coll.openPart + 1).forEach(function (p) { code.appendChild(segment(p)); });
+          }
+          if (coll) {
+            code.appendChild(moreButton(coll));
+            P.lines[coll.to].parts.slice(coll.closePart).forEach(function (p) { code.appendChild(segment(p)); });
+          }
+          if (card.inlined) tint(row, i);
+          row.appendChild(gutter); row.appendChild(code); body.appendChild(row);
+          i = coll ? coll.to + 1 : i + 1;
+        }
+      };
+      card.fold = {
+        count: P.regions.length,
+        measures: P.regions.filter(function (r) { return r.kind === 'measure'; }).length,
+        collapse: function (kind) {
+          P.regions.forEach(function (r) { if (!kind || r.kind === kind) set[r.key] = true; });
+          draw();
+        },
+        expand: function () { Object.keys(set).forEach(function (k) { delete set[k]; }); draw(); }
+      };
+      draw();
+      return body;
+    },
+    daxHeader: function (card, label, dotStyle, onClose, canInline) {
+      var self = this, m = this.app.msrOf(card.name), raw = card.text || ((m && m.dax) || '').trim();
+      var inl = !!card.inlined;
+      var copy = el('button', { cls: 'mv-button', text: inl ? 'Copy inlined DAX' : 'Copy DAX', 'aria-label': (inl ? 'Copy inlined DAX for ' : 'Copy DAX for ') + card.name,
+        title: inl ? 'Copies plain DAX with every measure replaced by its DAX. No labels, nothing folded. Paste it into Tabular Editor as a measure expression.' : 'Copies the DAX as shown' });
       var status = el('span', { cls: 'mv-copy-status', role: 'status', 'aria-live': 'polite' });
-      copy.addEventListener('click', function () {
+      var copyText = function (text) {
         if (!navigator.clipboard || !navigator.clipboard.writeText) {
           status.textContent = 'Copy unavailable. Select the formula to copy.'; return;
         }
-        navigator.clipboard.writeText(raw).then(function () { status.textContent = 'Copied'; }, function () { status.textContent = 'Copy unavailable. Select the formula to copy.'; });
-      });
+        navigator.clipboard.writeText(text).then(function () { status.textContent = 'Copied'; }, function () { status.textContent = 'Copy unavailable. Select the formula to copy.'; });
+      };
+      copy.addEventListener('click', function () { copyText(raw); });
       var actions = el('div', { cls: 'mv-dax-actions' }, [status, copy]);
+      if (inl) {
+        var asQuery = el('button', { cls: 'mv-button', text: 'Copy as query', 'aria-label': 'Copy inlined DAX for ' + card.name + ' as a query',
+          title: 'Copies EVALUATE ROW ( "Value", ... ). Paste it into DAX Studio and run it.',
+          onClick: function () { copyText('EVALUATE\nROW (\n    "Value",\n' + raw.replace(/^/gm, '    ') + '\n)'); } });
+        actions.insertBefore(asQuery, copy.nextSibling);
+      }
+      if (card.fold && card.fold.count && !(card.inlined && this._plainDax)) {
+        var F = card.fold;
+        if (F.measures) actions.insertBefore(el('button', { cls: 'mv-button', text: 'Collapse measures', title: 'Fold every inlined measure so only the top-level formula shows', onClick: function () { F.collapse('measure'); } }), copy);
+        actions.insertBefore(el('button', { cls: 'mv-button', text: 'Collapse all', onClick: function () { F.collapse(); } }), copy);
+        actions.insertBefore(el('button', { cls: 'mv-button', text: 'Expand all', onClick: function () { F.expand(); } }), copy);
+      }
+      if (canInline && raw) {
+        var layout = el('select', { cls: 'mv-layout-select', 'aria-label': 'DAX layout', title: 'DAX layout: original text, or SQLBI-style short or long lines',
+          onChange: function () { self._fmt = layout.value; self.savePreferences(); self._daxKey = null; self.renderDax(); } },
+          [['original', 'Original'], ['long', 'Long lines'], ['short', 'Short lines']].map(function (o) { return el('option', { value: o[0], text: o[1] }); }));
+        layout.value = this._fmt;
+        var inlineBtn = el('button', { cls: 'mv-button', text: 'Inline measures', 'aria-pressed': String(!!this._inlineDax),
+          title: 'Replace every measure reference with that measure\'s DAX. A reference used in a row context loses its implicit context transition.',
+          onClick: function () { self._inlineDax = !self._inlineDax; self._daxKey = null; self.renderDax(); } });
+        actions.insertBefore(layout, actions.firstChild);
+        if (this._inlineDax) {
+          var plainBtn = el('button', { cls: 'mv-button', text: 'Plain text', 'aria-pressed': String(!!this._plainDax),
+            title: 'Show the full inlined DAX as plain text: no labels, no folding. This is what Copy inlined DAX copies.',
+            onClick: function () { self._plainDax = !self._plainDax; self._daxKey = null; self.renderDax(); } });
+          actions.insertBefore(plainBtn, layout);
+        }
+        actions.insertBefore(inlineBtn, actions.firstChild);
+      }
       if (onClose) {
         actions.appendChild(el('button', { cls: 'mv-button mv-button-primary', text: 'Analyze this measure', onClick: function () { self.pickMeasure(card.name); } }));
         actions.appendChild(el('button', { cls: 'mv-text-button', title: 'Clear comparison', 'aria-label': 'Clear comparison with ' + card.name, text: 'Clear', onClick: onClose }));
@@ -1410,7 +1614,9 @@
         el('h3', { text: card.name }),
         el('div', { cls: 'mv-dax-card-meta' }, [
           el('span', { text: card.table + (m && m.fmt ? ' · Format: ' + m.fmt : '') }),
-          card.pill ? el('span', Object.assign({}, card.pill, { style: card.pill.style + 'margin-left:8px;' })) : null
+          card.inlined ? el('span', { cls: 'mv-inline-note', text: ' · Inlined ' + card.inlined.count + (card.inlined.count === 1 ? ' measure' : ' measures') +
+            (card.inlined.cycles.length ? ' · Circular, kept as reference: ' + card.inlined.cycles.join(', ') : '') +
+            (card.inlined.capped ? ' · Too large, some references kept' : '') }) : null
         ]),
         actions
       ]);
@@ -1419,12 +1625,12 @@
     renderImpactDax: function () {
       var self = this, app = this.app, source = app.state.dependencySource, impact = this.currentImpact();
       var names = app.state.dependencyDirectOnly ? impact.direct : impact.all;
-      var pin = app.state.gPin, key = JSON.stringify([source, !!app.state.dependencyDirectOnly, pin]);
+      var pin = app.state.gPin, key = JSON.stringify([source, !!app.state.dependencyDirectOnly, pin, this._inlineDax, this._plainDax, this._fmt]);
       if (this._daxKey === key) return;
       this._daxKey = key; U.clear(this.daxGrid); this.daxGrid.setAttribute('data-comparing', 'false');
-      var card = pin ? this.daxCard(pin) : null;
+      var card = pin ? this.daxCard(pin, this._inlineDax) : null;
       if (card) this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card' }, [
-        this.daxHeader(card, 'Inspecting measure', 'width:8px;height:8px;background:#2563eb;border-radius:2px;', function () { app.setState({ gPin: null }); }), this.daxBody(card)
+        this.daxHeader(card, 'Inspecting measure', 'width:8px;height:8px;background:#2563eb;border-radius:2px;', function () { app.setState({ gPin: null }); }, true), this.daxBody(card)
       ]));
       this.daxGrid.appendChild(el('h3', { cls: 'mv-impact-heading', text: 'Dependent measures (' + names.length + ')' }));
       this.daxGrid.appendChild(el('p', { cls: 'mv-impact-note', text: 'Detected DAX references. Column formulas and relationship filter propagation are not expanded.' }));
@@ -1463,24 +1669,26 @@
       if (app.state.dependencySource) { this.renderImpactDax(); return; }
       var sn = app.state.selMeasure;
       var pinName = app.state.gPin && app.state.gPin !== sn ? app.state.gPin : null;
-      var key = [app.modelKey, sn, pinName || '', app._usage ? 1 : 0, JSON.stringify(app.state.gExtra || {})].join('|');
+      var key = [app.modelKey, sn, pinName || '', this._inlineDax ? 1 : 0, this._plainDax ? 1 : 0, this._fmt, app._usage ? 1 : 0, JSON.stringify(app.state.gExtra || {})].join('|');
       if (key === this._daxKey) return;
       this._daxKey = key;
       U.clear(this.daxGrid);
-      var left = this.daxCard(sn);
+      var left = this.daxCard(sn, this._inlineDax);
       if (!left) return;
-      this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card' }, [
-        this.daxHeader(left, 'Analyzed measure', 'width:8px;height:8px;border-radius:2px;background:#1f2430;flex:none;', null),
-        this.daxBody(left)
+      var leftBody = this.daxBody(left);
+      this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card', data: { smvKind: 'measure', smvName: left.name, smvTable: left.table } }, [
+        this.daxHeader(left, 'Analyzed measure', 'width:8px;height:8px;border-radius:2px;background:var(--smv-burgundy,#1f2430);flex:none;', null, true),
+        leftBody
       ]));
       var pinCard = pinName ? this.daxCard(pinName) : null;
       this.daxGrid.setAttribute('data-comparing', String(!!pinCard));
       if (pinCard) {
         var pr = (this._gRel || {})[pinName];
-        var pinColor = pr === 'up' ? '#6d28d9' : (pr === 'dn' ? '#2563eb' : '#3a414d');
+        var pinColor = pr === 'up' ? 'var(--smv-up,#6d28d9)' : (pr === 'dn' ? 'var(--smv-down,#2563eb)' : 'var(--smv-ink,#3a414d)');
+        var pinBody = this.daxBody(pinCard);
         this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card mv-comparison-card' }, [
           this.daxHeader(pinCard, 'Comparing · ' + (pr === 'up' ? 'upstream' : pr === 'dn' ? 'downstream' : 'related measure'), 'width:8px;height:8px;border-radius:2px;flex:none;background:' + pinColor + ';', function () { app.setState({ gPin: null, gHover: null }); }),
-          this.daxBody(pinCard)
+          pinBody
         ]));
       } else {
         this.daxGrid.appendChild(el('div', { cls: 'mv-compare-empty' }, [

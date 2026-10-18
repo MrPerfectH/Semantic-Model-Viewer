@@ -1,0 +1,16 @@
+{
+  "boundary": "T3 available; explicitly authorized true Chrome zoom and pointer resize audit; no native acceptance",
+  "checks": [
+    "1280-1-right",
+    "1280-1-bottom"
+  ],
+  "failures": [
+    "AssertionError [ERR_ASSERTION]: 1280-2-right body scroll\n+ actual - expected\n\n  [\n    0,\n+   133.5\n-   23\n  ]\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/tests/pq-selection-docking-r9.browser.cjs:27:408"
+  ],
+  "source": {
+    "index.html": "0669e26ca931439d6b0b1021f542b43b57e0c5718c31ea147bb94af12cec4c4e",
+    "js/power-query-workspace.js": "c27ea4ff7b830af3b9d14cdb84929da06ae5e406f7ef1ac692d8b6198e09e995",
+    "js/power-query-canvas.js": "d7d573822b21b987da6eea9d588479aae51dec46f4138c0a7b82bbd75664c28d",
+    "power-query-workspace.css": "8f69cb0d2d52e998482141a4bbc65685426cf827ecd0272eeacf6a2ce400e10d"
+  }
+}

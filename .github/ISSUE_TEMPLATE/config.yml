@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Try the live demo
+    url: https://mrperfecth.github.io/Semantic-Model-Viewer/
+    about: Opens the viewer with a synthetic "Contoso Retail" model. Check if the problem happens there first.
+  - name: Report a security problem privately
+    url: https://github.com/MrPerfectH/Semantic-Model-Viewer/security/advisories/new
+    about: Do not open a public issue for security problems.

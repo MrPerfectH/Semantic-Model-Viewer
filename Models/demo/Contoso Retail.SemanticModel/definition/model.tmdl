@@ -46,3 +46,16 @@ ref table 'Time Grain Selector'
 ref table Scenario
 ref table 'Exchange Rates'
 ref table 'Report Notes'
+
+ref expression Environment
+ref expression ServerName
+ref expression StartYear
+ref expression fnCleanText
+ref expression RawSales
+ref expression StageSales
+ref expression RawCustomers
+ref expression CleanCustomers
+ref expression RawProducts
+ref expression CleanProducts
+ref expression RawStores
+ref expression CleanStores

@@ -38,9 +38,4 @@ table Store
 	partition Store = m
 		mode: import
 		source =
-				let
-				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
-				    db = Source{[Name="retail",Kind="Schema"]}[Data],
-				    tbl = db{[Name="dim_store",Kind="Table"]}[Data]
-				in
-				    tbl
+				CleanStores

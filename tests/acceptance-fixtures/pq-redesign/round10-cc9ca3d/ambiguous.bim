@@ -1,0 +1,34 @@
+{
+  "name": "Independent r10 ambiguous source name",
+  "model": {
+    "tables": [
+      {
+        "name": "Sql.Database",
+        "columns": [],
+        "partitions": [
+          {
+            "name": "P1",
+            "source": {
+              "type": "m",
+              "expression": "1"
+            }
+          },
+          {
+            "name": "P2",
+            "source": {
+              "type": "m",
+              "expression": "2"
+            }
+          }
+        ]
+      }
+    ],
+    "expressions": [
+      {
+        "name": "Probe",
+        "kind": "m",
+        "expression": "Sql.Database(\"R10_PROVIDER_PRIVATE_AMBIGUOUS\",\"db\")"
+      }
+    ]
+  }
+}

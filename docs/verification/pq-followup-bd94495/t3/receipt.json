@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "name": "local placement, exact drop, Undo and visible-only minimap",
+      "pass": true
+    },
+    {
+      "name": "actual repeated Center selected dispatch with pan and zoom",
+      "pass": true
+    },
+    {
+      "name": "explicit nested groups, Unassigned, Back reset and model invalidation",
+      "pass": true
+    },
+    {
+      "name": "readable controls and exact expanded M source/reference/copy/history",
+      "pass": true
+    },
+    {
+      "name": "model switch clears group filters and both history stacks",
+      "pass": true
+    }
+  ],
+  "failures": []
+}

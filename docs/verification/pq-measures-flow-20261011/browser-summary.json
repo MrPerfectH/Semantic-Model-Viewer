@@ -1,0 +1,69 @@
+{
+  "runtime": "95dc83d1ea78dc62918246610b89a5ba4a619e47",
+  "boundary": "Actual Chrome registered-app fallback after two T3 snapshot timeouts and explicit no-host. Local actual model; no source text in evidence.",
+  "checks": [
+    {
+      "name": "Actual two-object flow is compact, readable and complete",
+      "pass": true
+    },
+    {
+      "name": "Card inspection keeps analyzed root, positions and viewport; explicit Analyze and Back restore them",
+      "pass": true
+    },
+    {
+      "name": "Tables add/remove/Undo retain existing positions and flow",
+      "pass": true
+    },
+    {
+      "name": "Actual SchemaName flow contains its consumer, not sibling parameters; Hide compacts direct flow; Undo restores",
+      "pass": true
+    },
+    {
+      "name": "Explicit lock preserves analyzed flow across library selection; Back restores inspection",
+      "pass": true
+    },
+    {
+      "name": "Show all restores registry; Blank plus manual additions remains Tables-style; wide exact M reader",
+      "pass": true
+    }
+  ],
+  "runtimeExceptions": [],
+  "actualModel": {
+    "objects": 84,
+    "resolvedEdges": 77,
+    "renderedEdges": 77
+  },
+  "twoObjectFlow": {
+    "objects": 2,
+    "edges": 1,
+    "zoom": 1.0965189873417722,
+    "cardRects": [
+      {
+        "x": 319.35125732421875,
+        "y": 414.1170959472656,
+        "width": 276.32281494140625,
+        "height": 105.26583862304688,
+        "top": 414.1170959472656,
+        "right": 595.674072265625,
+        "bottom": 519.3829345703125,
+        "left": 319.35125732421875
+      },
+      {
+        "x": 705.325927734375,
+        "y": 414.1170959472656,
+        "width": 276.32281494140625,
+        "height": 105.26583862304688,
+        "top": 414.1170959472656,
+        "right": 981.6487426757812,
+        "bottom": 519.3829345703125,
+        "left": 705.325927734375
+      }
+    ]
+  },
+  "parameterFlow": {
+    "objects": 26,
+    "zoom": 0.85,
+    "siblingParametersExcluded": true
+  },
+  "evidencePrivacy": "Local screenshots and full state captures were inspected; raw M, model files and actual-model screenshots are not copied into this report."
+}

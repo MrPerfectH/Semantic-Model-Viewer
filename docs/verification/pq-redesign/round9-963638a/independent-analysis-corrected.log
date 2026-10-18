@@ -1,0 +1,316 @@
+TAP version 13
+# Subtest: exact catalog Table.TransformColumnTypes cannot emit model reference
+ok 1 - exact catalog Table.TransformColumnTypes cannot emit model reference
+  ---
+  duration_ms: 4.662833
+  type: 'test'
+  ...
+# Subtest: model collision wins for Table.TransformColumnTypes
+ok 2 - model collision wins for Table.TransformColumnTypes
+  ---
+  duration_ms: 0.411833
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Table.TransformColumnTypes
+ok 3 - local and parameter shadow win for Table.TransformColumnTypes
+  ---
+  duration_ms: 5.17225
+  type: 'test'
+  ...
+# Subtest: exact catalog Int64.Type cannot emit model reference
+ok 4 - exact catalog Int64.Type cannot emit model reference
+  ---
+  duration_ms: 0.3305
+  type: 'test'
+  ...
+# Subtest: model collision wins for Int64.Type
+ok 5 - model collision wins for Int64.Type
+  ---
+  duration_ms: 0.332791
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Int64.Type
+ok 6 - local and parameter shadow win for Int64.Type
+  ---
+  duration_ms: 0.82425
+  type: 'test'
+  ...
+# Subtest: exact catalog Byte.Type cannot emit model reference
+ok 7 - exact catalog Byte.Type cannot emit model reference
+  ---
+  duration_ms: 0.273875
+  type: 'test'
+  ...
+# Subtest: model collision wins for Byte.Type
+ok 8 - model collision wins for Byte.Type
+  ---
+  duration_ms: 0.252084
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Byte.Type
+ok 9 - local and parameter shadow win for Byte.Type
+  ---
+  duration_ms: 1.403375
+  type: 'test'
+  ...
+# Subtest: exact catalog Int8.Type cannot emit model reference
+ok 10 - exact catalog Int8.Type cannot emit model reference
+  ---
+  duration_ms: 0.509
+  type: 'test'
+  ...
+# Subtest: model collision wins for Int8.Type
+ok 11 - model collision wins for Int8.Type
+  ---
+  duration_ms: 0.302375
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Int8.Type
+ok 12 - local and parameter shadow win for Int8.Type
+  ---
+  duration_ms: 0.814833
+  type: 'test'
+  ...
+# Subtest: exact catalog Int16.Type cannot emit model reference
+ok 13 - exact catalog Int16.Type cannot emit model reference
+  ---
+  duration_ms: 0.260625
+  type: 'test'
+  ...
+# Subtest: model collision wins for Int16.Type
+ok 14 - model collision wins for Int16.Type
+  ---
+  duration_ms: 0.287
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Int16.Type
+ok 15 - local and parameter shadow win for Int16.Type
+  ---
+  duration_ms: 0.748208
+  type: 'test'
+  ...
+# Subtest: exact catalog Int32.Type cannot emit model reference
+ok 16 - exact catalog Int32.Type cannot emit model reference
+  ---
+  duration_ms: 0.234042
+  type: 'test'
+  ...
+# Subtest: model collision wins for Int32.Type
+ok 17 - model collision wins for Int32.Type
+  ---
+  duration_ms: 0.213542
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Int32.Type
+ok 18 - local and parameter shadow win for Int32.Type
+  ---
+  duration_ms: 0.642875
+  type: 'test'
+  ...
+# Subtest: exact catalog Single.Type cannot emit model reference
+ok 19 - exact catalog Single.Type cannot emit model reference
+  ---
+  duration_ms: 0.225292
+  type: 'test'
+  ...
+# Subtest: model collision wins for Single.Type
+ok 20 - model collision wins for Single.Type
+  ---
+  duration_ms: 0.215458
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Single.Type
+ok 21 - local and parameter shadow win for Single.Type
+  ---
+  duration_ms: 0.967166
+  type: 'test'
+  ...
+# Subtest: exact catalog Double.Type cannot emit model reference
+ok 22 - exact catalog Double.Type cannot emit model reference
+  ---
+  duration_ms: 0.244333
+  type: 'test'
+  ...
+# Subtest: model collision wins for Double.Type
+ok 23 - model collision wins for Double.Type
+  ---
+  duration_ms: 0.217125
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Double.Type
+ok 24 - local and parameter shadow win for Double.Type
+  ---
+  duration_ms: 0.6325
+  type: 'test'
+  ...
+# Subtest: exact catalog Decimal.Type cannot emit model reference
+ok 25 - exact catalog Decimal.Type cannot emit model reference
+  ---
+  duration_ms: 0.216041
+  type: 'test'
+  ...
+# Subtest: model collision wins for Decimal.Type
+ok 26 - model collision wins for Decimal.Type
+  ---
+  duration_ms: 0.244709
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Decimal.Type
+ok 27 - local and parameter shadow win for Decimal.Type
+  ---
+  duration_ms: 0.800417
+  type: 'test'
+  ...
+# Subtest: exact catalog Currency.Type cannot emit model reference
+ok 28 - exact catalog Currency.Type cannot emit model reference
+  ---
+  duration_ms: 0.233875
+  type: 'test'
+  ...
+# Subtest: model collision wins for Currency.Type
+ok 29 - model collision wins for Currency.Type
+  ---
+  duration_ms: 0.232667
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Currency.Type
+ok 30 - local and parameter shadow win for Currency.Type
+  ---
+  duration_ms: 0.630875
+  type: 'test'
+  ...
+# Subtest: exact catalog Percentage.Type cannot emit model reference
+ok 31 - exact catalog Percentage.Type cannot emit model reference
+  ---
+  duration_ms: 0.242041
+  type: 'test'
+  ...
+# Subtest: model collision wins for Percentage.Type
+ok 32 - model collision wins for Percentage.Type
+  ---
+  duration_ms: 0.509833
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Percentage.Type
+ok 33 - local and parameter shadow win for Percentage.Type
+  ---
+  duration_ms: 0.760042
+  type: 'test'
+  ...
+# Subtest: exact catalog Guid.Type cannot emit model reference
+ok 34 - exact catalog Guid.Type cannot emit model reference
+  ---
+  duration_ms: 0.231208
+  type: 'test'
+  ...
+# Subtest: model collision wins for Guid.Type
+ok 35 - model collision wins for Guid.Type
+  ---
+  duration_ms: 0.209583
+  type: 'test'
+  ...
+# Subtest: local and parameter shadow win for Guid.Type
+ok 36 - local and parameter shadow win for Guid.Type
+  ---
+  duration_ms: 0.624917
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty table.TransformColumnTypes
+ok 37 - uncatalogued exact spelling remains uncertainty table.TransformColumnTypes
+  ---
+  duration_ms: 0.267417
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty Table.TransformColumnTypesX
+ok 38 - uncatalogued exact spelling remains uncertainty Table.TransformColumnTypesX
+  ---
+  duration_ms: 0.201167
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty Int64.TypeX
+ok 39 - uncatalogued exact spelling remains uncertainty Int64.TypeX
+  ---
+  duration_ms: 0.206875
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty int64.Type
+ok 40 - uncatalogued exact spelling remains uncertainty int64.Type
+  ---
+  duration_ms: 0.19925
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty Table.SelectRows
+ok 41 - uncatalogued exact spelling remains uncertainty Table.SelectRows
+  ---
+  duration_ms: 0.20625
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty Unknown.Library
+ok 42 - uncatalogued exact spelling remains uncertainty Unknown.Library
+  ---
+  duration_ms: 0.209125
+  type: 'test'
+  ...
+# Subtest: uncatalogued exact spelling remains uncertainty Number.Type
+ok 43 - uncatalogued exact spelling remains uncertainty Number.Type
+  ---
+  duration_ms: 0.201834
+  type: 'test'
+  ...
+# Subtest: quoted repeated CRLF UTF16 references resolve twice, function shadow does not
+ok 44 - quoted repeated CRLF UTF16 references resolve twice, function shadow does not
+  ---
+  duration_ms: 1.163042
+  type: 'test'
+  ...
+# Subtest: duplicate model names, identities and table partitions never fall through to catalog
+ok 45 - duplicate model names, identities and table partitions never fall through to catalog
+  ---
+  duration_ms: 0.8685
+  type: 'test'
+  ...
+# Subtest: one model partition wins over language name
+ok 46 - one model partition wins over language name
+  ---
+  duration_ms: 0.220958
+  type: 'test'
+  ...
+# Subtest: exclusive initialization and duplicate local bindings remain uncertainty
+ok 47 - exclusive initialization and duplicate local bindings remain uncertainty
+  ---
+  duration_ms: 0.455542
+  type: 'test'
+  ...
+# Subtest: mixed standard, dynamic and unknown remain separately classified without guessed edges
+ok 48 - mixed standard, dynamic and unknown remain separately classified without guessed edges
+  ---
+  duration_ms: 0.312959
+  type: 'test'
+  ...
+# Subtest: incomplete/non-M/missing never leak successful catalog classification
+ok 49 - incomplete/non-M/missing never leak successful catalog classification
+  ---
+  duration_ms: 1.226
+  type: 'test'
+  ...
+# Subtest: graph forwards opaque uncertainty strings, with no text-based classification
+ok 50 - graph forwards opaque uncertainty strings, with no text-based classification
+  ---
+  duration_ms: 0.374167
+  type: 'test'
+  ...
+# Subtest: model graph IDs, edges and every exact occurrence equal prior runtime despite informational issue change
+ok 51 - model graph IDs, edges and every exact occurrence equal prior runtime despite informational issue change
+  ---
+  duration_ms: 3.086625
+  type: 'test'
+  ...
+1..51
+# tests 51
+# suites 0
+# pass 51
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 82.302

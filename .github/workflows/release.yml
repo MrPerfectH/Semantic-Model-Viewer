@@ -12,7 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+        with:
+          fetch-depth: 0
+      - name: Require a commit from main
+        run: |
+          if ! git merge-base --is-ancestor HEAD origin/main; then
+            echo "Release tags must point to a commit in main. Merge the release PR first." >&2
+            exit 1
+          fi
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -37,7 +45,7 @@ jobs:
         run: |
           mkdir -p dist/semantic-model-viewer-web
           cd Models/tools/viewer
-          cp -r index.html explorer.css measures.css js icons sw.js manifest.webmanifest \
+          cp -r index.html *.css js icons sw.js manifest.webmanifest \
             model-data.json report-usage.json ../../../dist/semantic-model-viewer-web/
           cd ../../../dist
           zip -r "semantic-model-viewer-web-${GITHUB_REF_NAME#v}.zip" semantic-model-viewer-web
@@ -50,3 +58,10 @@ jobs:
             --generate-notes \
             vscode-extension/*.vsix \
             dist/*.zip
+      - name: Publish to the VS Code Marketplace
+        # Skipped until the VSCE_PAT repository secret exists.
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        if: env.VSCE_PAT != ''
+        working-directory: vscode-extension
+        run: npx vsce publish --packagePath *.vsix --skip-duplicate

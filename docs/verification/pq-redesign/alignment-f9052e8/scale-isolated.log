@@ -1,0 +1,13 @@
+{
+  "candidate": "f9052e8f269cd097f687eb7a9428b7b105a2803d",
+  "transport": "authorized fresh isolated Chrome CDP fallback",
+  "startedAt": "2026-10-09T10:40:35.216Z",
+  "checks": [
+    {
+      "name": "scale",
+      "status": "pass"
+    }
+  ],
+  "failures": [],
+  "endedAt": "2026-10-09T10:40:36.930Z"
+}

@@ -105,26 +105,30 @@ test('blank canvas and table membership persist separately for each model', () =
    restored saved view is. Until one of those happens, Explore all runs the chosen layout. */
 test('Explore all keeps laying the model out until the reader actually arranges it', () => {
   const { explorer, cv } = fixture();
+  /* One Explore all may run the layout more than once — the arrange loop re-cuts the lanes
+     for the zoom Fit lands on — so count whether it ran at all, not how many passes it took. */
   const runs = [];
   cv.untangle = opts => { runs.push(opts); };
+  let before = 0;
+  const ran = () => { const yes = runs.length > before; before = runs.length; return yes; };
 
   explorer.add(['A']);                       // adding a table persists positions...
   explorer.showAll();
-  assert.equal(runs.length, 1, '...but that is not an arrangement, so the layout still runs');
+  assert.ok(ran(), '...but that is not an arrangement, so the layout still runs');
 
   explorer.blank();
   explorer.showAll();
-  assert.equal(runs.length, 2);
+  assert.ok(ran());
 
   cv.markArranged();                         // a drag, Arrange, or a restored view
   explorer.blank();
   explorer.showAll();
-  assert.equal(runs.length, 2, 'an arranged model keeps the positions the reader gave it');
+  assert.equal(ran(), false, 'an arranged model keeps the positions the reader gave it');
 
   cv.clearArranged();                        // Reset layout puts it back
   explorer.blank();
   explorer.showAll();
-  assert.equal(runs.length, 3);
+  assert.ok(ran());
 });
 
 test('saved membership ignores deleted table names', () => {
@@ -618,4 +622,69 @@ test('saved views restore filter path direction, distance and inactive setting',
   assert.equal(explorer.direction, 'incoming');
   assert.equal(explorer.depth, 'direct');
   assert.equal(explorer.includeInactive, true);
+});
+
+test('the table library filters by domain and by source, alongside search and the canvas filter', () => {
+  const { explorer, app } = fixture();
+  const [a, b, c] = app.model.tables;
+  Object.assign(a, { domain: 'Sales', source: { kind: 'databricks', schema: 'gold' } });
+  Object.assign(b, { domain: 'Sales', source: { kind: 'excel' } });
+  Object.assign(c, { domain: 'Finance', source: { kind: 'databricks', schema: 'gold' } });
+  app.srcKeyOf = t => (t.source.kind === 'databricks' ? t.source.schema : t.source.kind);
+  app.SOURCE_KINDS = { excel: { label: 'Excel' } };
+  const shown = () => app.model.tables.filter(t => explorer.matchesLibrary(t)).map(t => t.name);
+  assert.deepEqual(shown(), ['A', 'B', 'C']);
+  explorer.domain = 'Sales';
+  assert.deepEqual(shown(), ['A', 'B']);
+  explorer.source = 'gold';
+  assert.deepEqual(shown(), ['A']);
+  explorer.domain = '';
+  assert.deepEqual(shown(), ['A', 'C']);
+  explorer.add(['C']); explorer.filter = 'available';
+  assert.deepEqual(shown(), ['A'], 'facets combine with the On canvas / Available switch');
+  explorer.filter = 'all'; explorer.query = 'finance';
+  assert.deepEqual(shown(), ['C'], 'facets combine with search');
+  assert.deepEqual(copy(explorer.facetOptions('domain').map(o => [o.key, o.count])), [['Sales', 2], ['Finance', 1]]);
+  assert.deepEqual(copy(explorer.facetOptions('source').map(o => [o.label, o.count])), [['gold', 2], ['Excel', 1]]);
+  explorer.loadModel();
+  assert.equal(explorer.domain + explorer.source, '', 'opening another model clears the facets');
+});
+
+/* The library and the inspector are reading preferences, not layout: hiding either gives
+   the canvas the full width, the choice is shared by every model, and it survives a reload. */
+test('library and inspector rails can be hidden and the choice persists across models', () => {
+  const { explorer, app, cv, storage } = fixture();
+  const widths = [];
+  explorer.update = Object.getPrototypeOf(explorer).update;
+  explorer.renderLibrary = explorer.renderToolbar = explorer.renderEmpty = explorer.renderNavigation = explorer.drawMap = () => {};
+  const main = cv.host.parentNode; // #main: the fixture parks the canvas host there
+  main.style.setProperty = (name, value) => { widths.push(name + '=' + value); };
+  app.state.loaded = true; app.sidebar = { _key: 'stale' };
+  explorer.showAll(); cv.selectTable('A');
+
+  explorer.update();
+  assert.ok(widths.includes('--library-width=268px'));
+  assert.ok(widths.includes('--inspector-width=330px'));
+  assert.equal(explorer.library.hidden, false);
+
+  widths.length = 0;
+  explorer.toggleLibrary();
+  assert.ok(widths.includes('--library-width=0px'));
+  assert.equal(explorer.library.hidden, true, 'the library rail is gone');
+  assert.equal(cv.host.style.left, '0px', 'the canvas takes the width the rail had');
+
+  widths.length = 0;
+  explorer.toggleInspector();
+  assert.ok(widths.includes('--inspector-width=0px'));
+  assert.equal(cv.host.style.right, '0px');
+  assert.equal(app.state.selected, 'A', 'hiding the inspector keeps the selection');
+  assert.equal(app.sidebar._key, null, 'the drawer is asked to re-render');
+
+  const other = fixture(storage, 'second');
+  assert.equal(other.explorer.libraryHidden, true);
+  assert.equal(other.explorer.inspectorHidden, true);
+
+  explorer.toggleLibrary(); explorer.toggleInspector();
+  assert.equal(fixture(storage).explorer.libraryHidden, false);
+  assert.equal(fixture(storage).explorer.inspectorHidden, false);
 });

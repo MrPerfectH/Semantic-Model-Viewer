@@ -1,0 +1,14 @@
+{
+  "head": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4",
+  "implementation": "99f605b759a23d159f1f03ce7d0515b2e7eb3a46",
+  "base": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7",
+  "ownedFiles": [
+    "Models/tools/viewer/index.html",
+    "Models/tools/viewer/js/power-query-workspace.js",
+    "docs/verification/pq-redesign/hidden-lock-windows-20261011.md",
+    "tests/power-query-hidden-lock.test.cjs"
+  ],
+  "transportFilesVerified": 532,
+  "bundleSHA256": "2c15fc58b67eeab6186a220e05757c3369571f5dd93a2b1e7d6f30bec735d4c0",
+  "vsixSHA256": "a837f35af0a2277298451c9d55cc2b9a80f8c328fa191111128dbad34d340754"
+}

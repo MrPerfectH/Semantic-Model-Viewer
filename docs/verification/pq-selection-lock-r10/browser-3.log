@@ -1,0 +1,7 @@
+CASE 1280-1
+{
+  "checks": [],
+  "failures": [
+    "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(Number(edge.width)>=1.8)\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/tests/pq-selection-lock-r10.browser.cjs:35:562"
+  ]
+}

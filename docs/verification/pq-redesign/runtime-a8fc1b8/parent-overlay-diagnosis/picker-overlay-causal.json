@@ -1,0 +1,245 @@
+{
+  "before": {
+    "innerWidth": 1440,
+    "innerHeight": 1000,
+    "outerWidth": 1440,
+    "outerHeight": 1087,
+    "dpr": 1,
+    "below": false,
+    "width": 420,
+    "height": 400,
+    "inspectorOpen": true,
+    "selectedId": "[\"expression\",\"\",\"MergeResult\"]",
+    "inspector": {
+      "x": 1020,
+      "y": 164.5,
+      "width": 420,
+      "height": 804.5,
+      "top": 164.5,
+      "right": 1440,
+      "bottom": 969,
+      "left": 1020
+    },
+    "separator": {
+      "x": 1013,
+      "y": 164.5,
+      "width": 7,
+      "height": 804.5,
+      "top": 164.5,
+      "right": 1020,
+      "bottom": 969,
+      "left": 1013
+    },
+    "surface": {
+      "x": 220,
+      "y": 164.5,
+      "width": 793,
+      "height": 804.5,
+      "top": 164.5,
+      "right": 1013,
+      "bottom": 969,
+      "left": 220
+    },
+    "aria": {
+      "orientation": "vertical",
+      "value": "420"
+    },
+    "hit": {
+      "tag": "DIV",
+      "cls": "",
+      "html": "<div style=\"position: fixed; inset: 0px; z-index: 58;\"></div>"
+    },
+    "visualViewport": {
+      "offsetLeft": 0,
+      "offsetTop": 0,
+      "pageLeft": 0,
+      "pageTop": 0,
+      "width": 1440,
+      "height": 1000,
+      "scale": 1
+    },
+    "scroll": {
+      "windowX": 0,
+      "windowY": 0,
+      "documentX": 0,
+      "documentY": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "pqBodyX": 0,
+      "pqBodyY": 0,
+      "inspectorHostY": 0,
+      "inspectorRootY": 0
+    },
+    "active": {
+      "tag": "DIV",
+      "cls": "pqw-resizer"
+    },
+    "pointer": []
+  },
+  "overlay": {
+    "showModelMenu": true,
+    "hit": "<div style=\"position: fixed; inset: 0px; z-index: 58;\"></div>",
+    "computed": {
+      "position": "fixed",
+      "zIndex": "58"
+    },
+    "viewMode": "power-query"
+  },
+  "sent": {
+    "x": 1016.5,
+    "y": 566.75,
+    "dx": -40,
+    "dy": 0
+  },
+  "after": {
+    "innerWidth": 1440,
+    "innerHeight": 1000,
+    "outerWidth": 1440,
+    "outerHeight": 1087,
+    "dpr": 1,
+    "below": false,
+    "width": 420,
+    "height": 400,
+    "inspectorOpen": true,
+    "selectedId": "[\"expression\",\"\",\"MergeResult\"]",
+    "inspector": {
+      "x": 1020,
+      "y": 164.5,
+      "width": 420,
+      "height": 804.5,
+      "top": 164.5,
+      "right": 1440,
+      "bottom": 969,
+      "left": 1020
+    },
+    "separator": {
+      "x": 1013,
+      "y": 164.5,
+      "width": 7,
+      "height": 804.5,
+      "top": 164.5,
+      "right": 1020,
+      "bottom": 969,
+      "left": 1013
+    },
+    "surface": {
+      "x": 220,
+      "y": 164.5,
+      "width": 793,
+      "height": 804.5,
+      "top": 164.5,
+      "right": 1013,
+      "bottom": 969,
+      "left": 220
+    },
+    "aria": {
+      "orientation": "vertical",
+      "value": "420"
+    },
+    "hit": {
+      "tag": "DIV",
+      "cls": "pqw-resizer",
+      "html": "<div class=\"pqw-resizer\" role=\"separator\" tabindex=\"0\" aria-label=\"Resize Power Query inspector\" aria-orientation=\"vertical\" aria-valuemin=\"300\" aria-valuemax=\"650\" aria-valuenow=\"420\"></div>"
+    },
+    "visualViewport": {
+      "offsetLeft": 0,
+      "offsetTop": 0,
+      "pageLeft": 0,
+      "pageTop": 0,
+      "width": 1440,
+      "height": 1000,
+      "scale": 1
+    },
+    "scroll": {
+      "windowX": 0,
+      "windowY": 0,
+      "documentX": 0,
+      "documentY": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "pqBodyX": 0,
+      "pqBodyY": 0,
+      "inspectorHostY": 0,
+      "inspectorRootY": 0
+    },
+    "active": {
+      "tag": "BODY",
+      "cls": ""
+    },
+    "pointer": [
+      {
+        "type": "pointermove",
+        "target": {
+          "tag": "DIV",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 1016.5,
+        "clientY": 566.75,
+        "pageX": 1016.5,
+        "pageY": 566.75,
+        "screenX": 1038.5,
+        "screenY": 675.75,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 151.80000001192093
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "DIV",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 1016.5,
+        "clientY": 566.75,
+        "pageX": 1016.5,
+        "pageY": 566.75,
+        "screenX": 1038.5,
+        "screenY": 675.75,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 152.59999999403954
+      },
+      {
+        "type": "pointermove",
+        "target": {
+          "tag": "DIV",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 976.5,
+        "clientY": 566.75,
+        "pageX": 976.5,
+        "pageY": 566.75,
+        "screenX": 998.5,
+        "screenY": 675.75,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 168.09999999403954
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "DIV",
+          "cls": "",
+          "id": ""
+        },
+        "clientX": 976.5,
+        "clientY": 566.75,
+        "pageX": 976.5,
+        "pageY": 566.75,
+        "screenX": 998.5,
+        "screenY": 675.75,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 169
+      }
+    ]
+  },
+  "afterMenu": false
+}

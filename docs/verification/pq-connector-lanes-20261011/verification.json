@@ -1,0 +1,375 @@
+{
+  "baseline": "737eae446e51604b2b1175376973d0f6110f07c4",
+  "branch": "fix/pq-tables-connectors-20261011",
+  "node": "v22.23.3",
+  "platform": "linux",
+  "focused": {
+    "tests": 104,
+    "passed": 104,
+    "failed": 0,
+    "skipped": 0,
+    "log": "focused-route-cache.log"
+  },
+  "full": {
+    "tests": 641,
+    "passed": 641,
+    "failed": 0,
+    "skipped": 0,
+    "log": "full-node22-route-cache.log",
+    "note": "Includes four mocked Mac launcher tests on Linux, no macOS execution"
+  },
+  "package": {
+    "package": "/home/harry/pq-tables-connectors-20261011/semantic-model-viewer-pq-lanes.vsix",
+    "packageSHA256": "be377b5f74b2647f4324cb4bec0ff65d9d44fc3eb802a489f3d35ced7cd6407d",
+    "packageBytes": 262263,
+    "zipEntries": 45,
+    "runtimeManifestSHA256": "f6d7183288564f828967f618116585a974a7312ae10f6c38edce8c7fa9bf03a1",
+    "round9OriginalRestored": true
+  },
+  "runtimeAssetCount": 33,
+  "allRuntimeBytesAndCacheKeysMatch": true,
+  "tablesCanvasByteIdenticalToBaseline": true,
+  "runtimeAudit": {
+    "boundary": "Linux Node VM and static asset checks only; no browser/native acceptance",
+    "node": "v22.23.3",
+    "platform": "linux",
+    "snapshotSHA256": "0d1208528d35dafc81b9d4870bebd089412619492c54293c3ef72284ddd3f5ad",
+    "snapshotPrivacy": true,
+    "runtimes": [
+      {
+        "name": "canonical",
+        "loadOrder": true,
+        "mounted": true,
+        "assets": {
+          "js/canvas.js": "6760f5a3c6c6d38ae5463afa3cc8e241664671629521459630333224fe564a40",
+          "js/power-query-canvas.js": "0de5ac964456010703b4d0b4a877a831207d90769b39265e34b35b327e524ab5",
+          "power-query-canvas.css": "dbabc303ca987557b661846644afa88c08f4630fc739601898b57758b61bdc01"
+        }
+      },
+      {
+        "name": "media",
+        "loadOrder": true,
+        "mounted": true,
+        "assets": {
+          "js/canvas.js": "6760f5a3c6c6d38ae5463afa3cc8e241664671629521459630333224fe564a40",
+          "js/power-query-canvas.js": "0de5ac964456010703b4d0b4a877a831207d90769b39265e34b35b327e524ab5",
+          "power-query-canvas.css": "dbabc303ca987557b661846644afa88c08f4630fc739601898b57758b61bdc01"
+        }
+      },
+      {
+        "name": "snapshot",
+        "loadOrder": true,
+        "mounted": true,
+        "assets": {
+          "js/canvas.js": "6760f5a3c6c6d38ae5463afa3cc8e241664671629521459630333224fe564a40",
+          "js/power-query-canvas.js": "0de5ac964456010703b4d0b4a877a831207d90769b39265e34b35b327e524ab5",
+          "power-query-canvas.css": "dbabc303ca987557b661846644afa88c08f4630fc739601898b57758b61bdc01"
+        }
+      }
+    ],
+    "tablesComparison": {
+      "baseline": "7ba3abe52ad8fa6dedd35de2ee798971d4b4a471",
+      "unchanged": [
+        "orthoPath",
+        "edgeGeom",
+        "edgeArrow"
+      ],
+      "renderLines": "Only width formula replaced with shared method call; formula parity covered by owned test"
+    }
+  },
+  "scaleMeasurements": [
+    {
+      "count": 300,
+      "graphEdges": 250,
+      "mountLayoutMs": 384.238689,
+      "fitMs": 0.2565649999999664,
+      "searchRevealMs": 130.27261300000004,
+      "nodes": 300,
+      "routed": 250,
+      "unrouted": 0,
+      "crowded": 250,
+      "collisionChecks": 260219,
+      "maxEdgeCollisionChecks": 1892,
+      "graphAndPositionsUnchanged": true
+    },
+    {
+      "count": 301,
+      "graphEdges": 250,
+      "mountLayoutMs": 391.10017300000004,
+      "fitMs": 0.5252690000000939,
+      "searchRevealMs": 130.75313499999993,
+      "nodes": 301,
+      "routed": 250,
+      "unrouted": 0,
+      "crowded": 250,
+      "collisionChecks": 260219,
+      "maxEdgeCollisionChecks": 1892,
+      "graphAndPositionsUnchanged": true
+    },
+    {
+      "count": 350,
+      "graphEdges": 250,
+      "mountLayoutMs": 390.9078360000001,
+      "fitMs": 0.49444900000003145,
+      "searchRevealMs": 132.14193699999987,
+      "nodes": 350,
+      "routed": 250,
+      "unrouted": 0,
+      "crowded": 250,
+      "collisionChecks": 260219,
+      "maxEdgeCollisionChecks": 1892,
+      "graphAndPositionsUnchanged": true
+    },
+    {
+      "count": 1000,
+      "graphEdges": 250,
+      "mountLayoutMs": 438.7541289999999,
+      "fitMs": 0.731373000000076,
+      "searchRevealMs": 142.24960299999975,
+      "nodes": 1000,
+      "routed": 250,
+      "unrouted": 0,
+      "crowded": 250,
+      "collisionChecks": 260219,
+      "maxEdgeCollisionChecks": 1892,
+      "graphAndPositionsUnchanged": true
+    }
+  ],
+  "fanInZooms": [
+    0.58,
+    0.47,
+    0.37,
+    0.3,
+    0.85,
+    1,
+    2
+  ],
+  "completeChain": {
+    "nodes": 1000,
+    "edges": 999,
+    "zooms": [
+      0.47,
+      0.85
+    ],
+    "allPathsAndArrows": true,
+    "warnings": 0,
+    "localCollisionChecksPerPass": 7992
+  },
+  "fanout": {
+    "edges": 250,
+    "zooms": [
+      0.58,
+      0.47,
+      0.37,
+      0.3,
+      0.85,
+      1,
+      2
+    ],
+    "allPaths": true,
+    "missing": 0,
+    "crowdedPortWarning": true
+  },
+  "limits": {
+    "totalEdgeCutoff": null,
+    "sharedSearchBudget": null,
+    "perEdgeSegmentChecks": 8000,
+    "perEdgeCollisionChecks": 50000,
+    "gridAxes": 48,
+    "browserNativeAcceptance": false
+  },
+  "externalDirectory": "/home/harry/pq-tables-connectors-20261011",
+  "logs": {
+    "fanin-router-2.log": {
+      "sha256": "933d3743bfb6d60dac06c8767883dd7e1ad4e850f97c8eac0979ef38d25c3ce3",
+      "bytes": 400,
+      "tapSummary": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "focused-1.log": {
+      "sha256": "e81663b31840c7f2df9af6ea345545736487a33f2876f27bd0bc0c7dd3103c44",
+      "bytes": 23346,
+      "tapSummary": {
+        "tests": 101,
+        "pass": 101,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "focused-final.log": {
+      "sha256": "19fbff079d3e3a20caa1b8e7417408ad91acaf512fa3796b1b55537a1fa1ef51",
+      "bytes": 25080,
+      "tapSummary": {
+        "tests": 104,
+        "pass": 104,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "focused-route-cache.log": {
+      "sha256": "947d17e4c0a367e94507ab09b1348060e855a492dfbf4691b5ab4a377072a211",
+      "bytes": 25093,
+      "tapSummary": {
+        "tests": 104,
+        "pass": 104,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "focused-spatial-1.log": {
+      "sha256": "26f8f830b74663b18000fe8e770c58633f93f75c32899ee19b38973c70255574",
+      "bytes": 24528,
+      "tapSummary": {
+        "tests": 104,
+        "pass": 104,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "full-node22-1.log": {
+      "sha256": "ff7f4cf8db9d89c8f50f4c3d69b2d5c2890f902abff615de94f02d550b379b15",
+      "bytes": 47333
+    },
+    "full-node22-final.log": {
+      "sha256": "08d295d49461310d05ecbbac521fa15eedaae92295d620664a553cdb18493737",
+      "bytes": 133171,
+      "tapSummary": {
+        "tests": 641,
+        "pass": 641,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "full-node22-route-cache.log": {
+      "sha256": "4a5d685f7742d86f17da432aea5b9aafdf3a7217d92521e1e19ae6495813fd40",
+      "bytes": 133184,
+      "tapSummary": {
+        "tests": 641,
+        "pass": 641,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "geometry-complete.log": {
+      "sha256": "17cb188fe24e93b9932a079c8f6b39e565b2390451dbd0bb8f0e17b0f73bd7dc",
+      "bytes": 1491,
+      "tapSummary": {
+        "tests": 5,
+        "pass": 5,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "initial-router.log": {
+      "sha256": "7cb03ab03edf5190a8aa546c78285344395fad3d42d4011cd224f934aef96b3f",
+      "bytes": 15
+    },
+    "package-audit-index-final.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "package-audit-index.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "package-route-cache.log": {
+      "sha256": "2670b2b2a347f238d66d54c4a2c6b335d71732ee6d64ed1ae0f48f72f2d53102",
+      "bytes": 1549
+    },
+    "package.log": {
+      "sha256": "8053452fca2a27eae9355a0d2ba202f3d3f284a3d27e8eaab43683f4d18ebb67",
+      "bytes": 1549
+    },
+    "red-chain.log": {
+      "sha256": "7355ebd1e6205492b92a75d99d870460f09d3c949de11dd2e0d7efe498d34e7f",
+      "bytes": 1090,
+      "tapSummary": {
+        "tests": 1,
+        "pass": 0,
+        "fail": 1,
+        "skipped": 0
+      }
+    },
+    "red-fanin.log": {
+      "sha256": "c24e420b77bcd8c43c26f1ba04375e2bf5b24240ba4306b98762a9c34483f04b",
+      "bytes": 1236,
+      "tapSummary": {
+        "tests": 1,
+        "pass": 0,
+        "fail": 1,
+        "skipped": 0
+      }
+    },
+    "router-2.log": {
+      "sha256": "b85344a0d56e9f7c6cdb20d480e58e4cbb9457b09b1c1c82da0be8097500b2a8",
+      "bytes": 13292,
+      "tapSummary": {
+        "tests": 37,
+        "pass": 33,
+        "fail": 4,
+        "skipped": 0
+      }
+    },
+    "router-3.log": {
+      "sha256": "bbc09745b67ec1f7767a31d4d907c92ee65906cd7f436ce05ad009b304096d92",
+      "bytes": 10861,
+      "tapSummary": {
+        "tests": 37,
+        "pass": 36,
+        "fail": 1,
+        "skipped": 0
+      }
+    },
+    "routing-measurements-route-cache.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "routing-measurements.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "runtime-audit-final.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "runtime-audit.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "spatial-1.log": {
+      "sha256": "e3def8d0ffda2f6dbfe3670be4b6eb3c72def486456322f44a60413d19872137",
+      "bytes": 10940,
+      "tapSummary": {
+        "tests": 38,
+        "pass": 37,
+        "fail": 1,
+        "skipped": 0
+      }
+    },
+    "spatial-2.log": {
+      "sha256": "2904d86d75a61ddcf9ba29d9cfaea1c8bc904d80a0878d786e1fec0ff392b394",
+      "bytes": 12048,
+      "tapSummary": {
+        "tests": 40,
+        "pass": 39,
+        "fail": 1,
+        "skipped": 0
+      }
+    },
+    "sync-check-final.log": {
+      "sha256": "c69e24999e732fcc4e713e89b337e7de43ff2ee4482d7aa8f30123a8a6418dd9",
+      "bytes": 150
+    },
+    "sync-check.log": {
+      "sha256": "c69e24999e732fcc4e713e89b337e7de43ff2ee4482d7aa8f30123a8a6418dd9",
+      "bytes": 150
+    }
+  },
+  "resultsDirectory": "lanes-results",
+  "finalAuditAfterCommit": "lanes-results/package-audit-commit.json",
+  "finalCandidateReceipt": "lanes-results/candidate.json"
+}

@@ -1,0 +1,1325 @@
+{
+  "candidate": "0d964fc97273cca8626e3cc4e9b39f73620b7e24",
+  "verdict": "BLOCKER: displayed zoom stale after changed-scale Arrange Undo",
+  "entries": [
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/REVIEW.md",
+      "bytes": 13738,
+      "sha256": "996857b06345c253109c9926aa9cf5b7122364c67e64b4542cd4b8cb0298d548"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/arrange-undo-diagnostic/receipt.json",
+      "bytes": 1329,
+      "sha256": "430b2b27468fb4a68739d7281455baf0d7514c9f1c01786a513df9d1c93d5226"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/arrange-undo-replay/network.json",
+      "bytes": 216761,
+      "sha256": "9a4994d80d6745617d331f5896a7e66d97cdb5bebb665fe0f2efb066275d740b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/arrange-undo-replay/observed.json",
+      "bytes": 5685,
+      "sha256": "6a3b7b2fe9c43804db569c06b23d18edc321731141b7cbe1f7b0eb8489a28a0e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/arrange-undo-replay/receipt.json",
+      "bytes": 285,
+      "sha256": "061b5d3250974ab1e3de76d51410581291f07094232e6c012e716be89311b0fb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/arrange-undo-replay/undone.png",
+      "bytes": 142487,
+      "sha256": "71583060b6417539af3b750d8fc0b70bea0e54135d25aed983b792f7ed530a01"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/arrange-undo-replay.log",
+      "bytes": 285,
+      "sha256": "061b5d3250974ab1e3de76d51410581291f07094232e6c012e716be89311b0fb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/arrange-undo-run.log",
+      "bytes": 1329,
+      "sha256": "430b2b27468fb4a68739d7281455baf0d7514c9f1c01786a513df9d1c93d5226"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/arrange-undo-zoomed/network.json",
+      "bytes": 216754,
+      "sha256": "b80daa247475d2573dcd6fccc75b26265d3178b47dae9b129bedf4542283ff4b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/arrange-undo-zoomed/observed.json",
+      "bytes": 5631,
+      "sha256": "6946ab4cb826b5b1cb4e71e6c489be08c8acdc1e69d5d13cbde11e28325940b5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/arrange-undo-zoomed/receipt.json",
+      "bytes": 539,
+      "sha256": "e9162bd8ba5c7feffb270c458cd320b7af652d5cbf1d79e11f3c99031319ab2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/arrange-undo-zoomed/undone.png",
+      "bytes": 142150,
+      "sha256": "25a681f72b6a7713656eb1c8ea6d271404830dbda4619fa31f56f382b928cfd5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/arrange-undo-zoomed.log",
+      "bytes": 539,
+      "sha256": "e9162bd8ba5c7feffb270c458cd320b7af652d5cbf1d79e11f3c99031319ab2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/artifact-path-collision.json",
+      "bytes": 618,
+      "sha256": "a2ff485edd8fd382d9dd8e54a9435da6a3866f79d3d303d97cbef2f4db7ef363"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/cache-proof.json",
+      "bytes": 4642,
+      "sha256": "719eef2b6d95de0034b7b6cb2db4bd99c02c595e6da39bab60a44fd6a1e45da7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/chain-fallback/centered.json",
+      "bytes": 474,
+      "sha256": "1635286ce93dec6823e1a0064e80aeaf95d1170eceeedfbbe42c75da6364be96"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/chain-fallback/fit.json",
+      "bytes": 19368,
+      "sha256": "8e1c5fe67cbc28b99a958d0cf1316459e87a34cb7eab04a2b614ce9910617b2f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/chain-fallback/fit.png",
+      "bytes": 130785,
+      "sha256": "2de0845fa3f616a03663737f4cfe475f00ca14752510a668e486d86d8a8d66ae"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/chain-fallback/receipt.json",
+      "bytes": 474,
+      "sha256": "b6dd031300ae98e6d4bcc5c4e799ce3eb22f28a9756bdb5e730eb859fc4d10ec"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/chain-run.log",
+      "bytes": 474,
+      "sha256": "b6dd031300ae98e6d4bcc5c4e799ce3eb22f28a9756bdb5e730eb859fc4d10ec"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/cleanup.json",
+      "bytes": 491,
+      "sha256": "08a5b6dc02202eb3407289383803fd35e3fe255e09f4fc78152fbb8d892c07c0"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/measures-stable-comparison.json",
+      "bytes": 899,
+      "sha256": "33e1f7ee1428d64d19ba8b1b624cba8ef84a26888210201b75bf6bb4031269f1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/node-mapped/Models/tools/viewer",
+      "symlink": "../../../served"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/node-mapped/tests/power-query-canvas.test.cjs",
+      "bytes": 23497,
+      "sha256": "96f5e6a27fe9a97e17ad3ddd807a9c7b2fe17792b3b9680d05e92c91a6f1b3e0"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/node-mapped/tests/power-query-dependencies.test.cjs",
+      "bytes": 7496,
+      "sha256": "f15dc4dd318acfb594a5da240087b85a47c90a15712e68a44840d3b25995742c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/node-mapped/tests/power-query-graph-model.test.cjs",
+      "bytes": 10760,
+      "sha256": "c1fbde0a5f99ee7f9400d03424177d8898f5e30f3254c3dacf1400d078733d27"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/node-mapped/tests/power-query-inspector.test.cjs",
+      "bytes": 24279,
+      "sha256": "f4ec47f1e23abced6fa8835d52fec1a6e06a774766dfae27eb8b2578f5edc943"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/node-mapped/tests/power-query-lineage.test.cjs",
+      "bytes": 7852,
+      "sha256": "4870b5b6205fcc9957c46fff93911382b6a9a583f7d06fb4246c007bb687ff64"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/node-mapped/tests/power-query-reference-ranges.test.cjs",
+      "bytes": 4367,
+      "sha256": "0d8ab95161724a5dd1628d4fb8e3e848a8d816ff16aa2b38f5e31df8ffd77c1e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/node-mapped/tests/power-query-ui-harness.cjs",
+      "bytes": 6323,
+      "sha256": "880d35bc2dd75ad70dc843729ebf55deb355db7067b6562a1a9c0c9802d25a95"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/node-mapped/tests/power-query-workspace-ui.test.cjs",
+      "bytes": 1009,
+      "sha256": "0974d420665ecf7049f77da87c47d16d84741b918a1a9fa19d876a984c3bde09"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/node-mapped/tests/power-query-workspace.test.cjs",
+      "bytes": 20682,
+      "sha256": "1b9136eb749607ac76dd016758e4868e32eedfb3ead1a349b091149fe2dc812e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/node22-targeted.log",
+      "bytes": 19041,
+      "sha256": "5a3339de61720abba71240afdfd9445bd59fc44068f149700a432fdbded864e7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/offline/measures.json",
+      "bytes": 265,
+      "sha256": "2945de2e044e2638713b938197250e1cd882d5ec437d12bb10e0de565a3d2177"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/offline/network.json",
+      "bytes": 1273,
+      "sha256": "698adca1a6d006ebbfee1ee1e1a0afeaa6043b36a511b6fcd47dca8c86de41f7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/offline/offline.png",
+      "bytes": 70080,
+      "sha256": "6bb4408bbe54262d42186d690cd4ea17fbb168e1b5820e11d641409307999ac8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/offline/pq-unavailable.json",
+      "bytes": 200,
+      "sha256": "3e98d7d0d27d61767f71313817ffb658dabf9fe1f1dead043ae662ec78062469"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/offline/re-export/Independent stable flow 0d964fc snapshot 2026-10-10.html",
+      "bytes": 763761,
+      "sha256": "f90f18a41b8fd43ddb89554edf756aef1bfa33a432eee17f2f4102dd2e72f106"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/offline/re-export-proof.json",
+      "bytes": 5468,
+      "sha256": "4ffa3999c6f01717096ae8eed960fa6f337f130e1d8372f2b71fc5d94b786963"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/offline/receipt.json",
+      "bytes": 562,
+      "sha256": "a88ab5f27a73eb3a907bf0158ce08deca2ff5e15d6c6e940d9fce41325ab7d62"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/offline-run.log",
+      "bytes": 562,
+      "sha256": "a88ab5f27a73eb3a907bf0158ce08deca2ff5e15d6c6e940d9fce41325ab7d62"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/owner-REVIEW.md",
+      "bytes": 12007,
+      "sha256": "62d8a3ad806255566b349a2cde09eb8e4c00614634113c979bdd58ddc808f098"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/owner-final-runtime.json",
+      "bytes": 7940,
+      "sha256": "0ac0f76477060c1e452d968a30eb8acd498df93ad988870faa4592629d06b9f5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/owner-package-runtime-proof.json",
+      "bytes": 6311,
+      "sha256": "8e6b0d538006fcce9d76db1e7c709f3675e09b6709607d987eeaf7f214dea3f8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/package-proof.json",
+      "bytes": 2085,
+      "sha256": "c7d1684e14a06158afc26a522af9d8f5d82e2b32b3d1e9bc81f008a106bf9b7a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/privacy/downloaded.html",
+      "bytes": 763767,
+      "sha256": "75d828eb80c653e8a4b0cf08dc15a6214390036f5cb37b47fbe12f999e2d2d24"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/privacy/export-proof.json",
+      "bytes": 5498,
+      "sha256": "4e807d7a39aa66dc9bc72b176ed69f510afadd48c4f931efefe0f3b97dc6405d"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/runtime-mapping.json",
+      "bytes": 7913,
+      "sha256": "49fcc4c30fe056db80d020ed91eb234b6a0c20126074b6c05f593ac89d9845dc"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/explorer.css",
+      "bytes": 14350,
+      "sha256": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/index.html",
+      "bytes": 6844,
+      "sha256": "80a5284a8e80ca47d3d5f0aa62704a80a341a8c5df2ac7d1de7305b82e9d366f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/app.js",
+      "bytes": 79235,
+      "sha256": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/canvas.js",
+      "bytes": 113321,
+      "sha256": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/dax-format.js",
+      "bytes": 18659,
+      "sha256": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/explorer.js",
+      "bytes": 36750,
+      "sha256": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/host-vscode.js",
+      "bytes": 5220,
+      "sha256": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/layouts.js",
+      "bytes": 67455,
+      "sha256": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/matrix.js",
+      "bytes": 9560,
+      "sha256": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/measures.js",
+      "bytes": 93980,
+      "sha256": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/power-query-canvas.js",
+      "bytes": 33363,
+      "sha256": "fe9988ed74f6ff6f4cd0b75ee438d439165dfe072d665c20864ee93094f7d640"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/power-query-dependencies.js",
+      "bytes": 12773,
+      "sha256": "44e2b21a9287e5e7569f9d70d02fe8ce2b6c19815d24fcf88ae53a0994ba72c6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/power-query-graph-model.js",
+      "bytes": 6368,
+      "sha256": "8c48f7ada3e7725e22ffb63835412105255054148d537722ada89efb53caaeaa"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/power-query-inspector.js",
+      "bytes": 28193,
+      "sha256": "4f59024b1820769bf43c6836bc845ac6982fc3a5b0e729d40ea2c374ec20cc92"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/power-query-lineage.js",
+      "bytes": 10472,
+      "sha256": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/power-query-workspace.js",
+      "bytes": 43006,
+      "sha256": "6ed1f75d68968f062c6894873994bea163000ebd674d8e31b4bedeb84fe673d1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/power-query.js",
+      "bytes": 8661,
+      "sha256": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/relationships.js",
+      "bytes": 4847,
+      "sha256": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/roles.js",
+      "bytes": 7657,
+      "sha256": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/rules.js",
+      "bytes": 7610,
+      "sha256": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/sidebar.js",
+      "bytes": 22525,
+      "sha256": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/snapshot.js",
+      "bytes": 12521,
+      "sha256": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/tmdl-parser.js",
+      "bytes": 27971,
+      "sha256": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/topbar.js",
+      "bytes": 36001,
+      "sha256": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/usage-adapter.js",
+      "bytes": 3298,
+      "sha256": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/util.js",
+      "bytes": 8761,
+      "sha256": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/js/workspace-ui.js",
+      "bytes": 3688,
+      "sha256": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/measures.css",
+      "bytes": 15377,
+      "sha256": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/power-query-canvas.css",
+      "bytes": 4071,
+      "sha256": "80017a35953eed80c98dcd186a81607105569f50024b8346e51d8fd38715f020"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/power-query-inspector.css",
+      "bytes": 7842,
+      "sha256": "948395db366b55550575357ab62de473340b3b6b878b8291adf32e7513ad3c4b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/power-query-lineage.css",
+      "bytes": 1741,
+      "sha256": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/power-query-workspace.css",
+      "bytes": 4806,
+      "sha256": "40c8cc004cd02eabb06bc961b2ff572fea71a11902cccb329283424d5c600361"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/served/power-query.css",
+      "bytes": 1754,
+      "sha256": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/stale-generation-related.json",
+      "bytes": 1640,
+      "sha256": "d268d704565d1eb2ba9bda1b7f3beaf2860e5d38978acf1c27ac5292c66fe3df"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-core/controls.json",
+      "bytes": 18901,
+      "sha256": "be41839e9b220251e515ebaafd9b1bab364708f6e505e65ea2c8438ac60d8682"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-core/flow-history.json",
+      "bytes": 18931,
+      "sha256": "e813b44a9cf3ac716841f2319a55abeacabbcbea5cdccdaf3dbd8118e834c05b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-core/flow-target-branches.json",
+      "bytes": 32092,
+      "sha256": "b369b180e7ff01db4b3859da502862fccbed181621a5fea690672cfb5e97155f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-core/receipt.json",
+      "bytes": 375,
+      "sha256": "6755ddb207251214846982ed2d2e895087414213d1d3d08557ed45c8ed4f4c17"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-cycle/identity-oracle.json",
+      "bytes": 480,
+      "sha256": "fcfe38fe5467a94e8b2ef78208afc39bc785e28be44022a23155c72b14176b0c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-cycle/model-replacement-ready.json",
+      "bytes": 102,
+      "sha256": "5814e4fac4eb7c4bd1762030578a837ff36f9c8e39111644600adabb21bf1f6e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-cycle/observed.json",
+      "bytes": 110166,
+      "sha256": "18a92048a7cd40f358cc7f88d087673a6bce0ae64d5b37e27021b8bb320733c2"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-cycle/receipt.json",
+      "bytes": 313,
+      "sha256": "1353f0c8cc9b51c8165bb9b441b84b668a1c533661d6685e31fdb6d047825fba"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-cycle/semantic-clicks.json",
+      "bytes": 803,
+      "sha256": "a78c0deebc2d1e89020e4fec9288fd65bd6227449131aa22f1fb43fd45d837cb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-history/exact-source-history.json",
+      "bytes": 6085,
+      "sha256": "01d65b405476c1b98d58974bbbec641f3487e7348111877bafc93fbf8d96e2ca"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-history/failure-state.json",
+      "bytes": 781,
+      "sha256": "0804f88f0d1f93897c6929204f7b495b851fcb6298581ae1b56fde96d424409b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-history/receipt.json",
+      "bytes": 1913,
+      "sha256": "7bcac1aa11dda69e2135a09be714618917054ef7cef01cd828bdef7d0b229213"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-history/stale-related.json",
+      "bytes": 2544,
+      "sha256": "1e6d8b8b2fcdcca8a11245c78b99ff7b900d69672b543149936c6e0091fbd38c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-lifecycle/lifecycle.json",
+      "bytes": 2687,
+      "sha256": "11138540950c42bf8a0c30d65c4e1858521d239130493b5442e4c30d75d59a2b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-lifecycle/receipt.json",
+      "bytes": 406,
+      "sha256": "11612416902bba230434f222b591836e8330fd0a059f4e169e86a571eb14ee19"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-lifecycle/tables-measures.json",
+      "bytes": 937,
+      "sha256": "e9b35c064b3287c12a6987c40be2ba4ea35b5450f150f7f4454bbe9e8e2e1aa2"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-membership/add-undo.json",
+      "bytes": 2689,
+      "sha256": "b35b4ba9520962ce61bd58a49c230133bb40c0ef47ff2f054249e431e190b6f7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-membership/parameter-fanout.json",
+      "bytes": 1811,
+      "sha256": "796296011620097321f85e9086483b5474fa3df9220be35940331a6827e4f031"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-membership/receipt.json",
+      "bytes": 304,
+      "sha256": "480bb0028b32eee636dba9db9551a3dc67803b86f09e52a42f3aa4e9e938fb90"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-membership/remove-undo.json",
+      "bytes": 3512,
+      "sha256": "1260986d4ab1b8eee07a415bd1763ad3c08544ddabe03c22013c07930464f953"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-post-core.png",
+      "bytes": 148144,
+      "sha256": "430fa304277522568771c1cbe171b834b216ea7ff4df12e906f25a322df8a7bf"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-regression/batch.json",
+      "bytes": 12480,
+      "sha256": "4909450de443b1202adf648e3aab4e7d283a00792b42a4cebaa6319b343ec4ac"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-regression/centers.json",
+      "bytes": 21153,
+      "sha256": "13e500a7188086e033530d7af947a4bcc104dc64c6e94f712a90d51ad4019199"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-regression/explicit-drop-undo.json",
+      "bytes": 9449,
+      "sha256": "c94c95f84f88c7282b75d9b43810bd9152ebd901a1b5ef034c34f4498dfd7985"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-regression/group-history-reset.json",
+      "bytes": 36755,
+      "sha256": "9520d3089db1e3e3403d21b92e0146f5aecf014a602e8c705e3e82bd476dbf7c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-regression/nested-group.json",
+      "bytes": 5570,
+      "sha256": "179ba420a7ee0ddd23900f82e821300cdeb767aa36281d146e7520d17a1ecbc4"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-regression/placement-controls.png",
+      "bytes": 168038,
+      "sha256": "b1f0fe78b2e478ec444dcbaa9d25b4836517b7d9b319ee2f4715d4e5c6443222"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-regression/placement.json",
+      "bytes": 13138,
+      "sha256": "eeaa0e90b1beac7245bb5a126407a901ac1e99433f536ec4e3c7dc963dcaa3ee"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-regression/receipt.json",
+      "bytes": 381,
+      "sha256": "fbd3a107c1c4760086e49119043b17afb2432e6dc3430f2d053e57c8d21a0cde"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-regression/unassigned.json",
+      "bytes": 5581,
+      "sha256": "54519f9c81375e1a66ffef72d73463708a52f2ee04b1f11fffebe31f04a29bf6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-regression/undefined-group.json",
+      "bytes": 4964,
+      "sha256": "58ce069166bd711c650050565159ecfafa121ec6d6e2067ae0bf441663bf733e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/t3-unavailable.json",
+      "bytes": 1024,
+      "sha256": "57937ee8c63043debf84dba561b007b68a88c5e57946e4c66386a97ec4bd742f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/actual-browser-setting-1.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/actual-browser-setting-2.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/actual-browser-setting-3.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/actual-browser-setting-4.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/actual-browser-setting-5.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/actual-browser-setting-6.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/actual-browser-setting-7.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/actual-browser-setting-8.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/before-additional.json",
+      "bytes": 16071,
+      "sha256": "a58144c6be1ad40b7858cfbaeb71199f14262f76cbaedac687b58c1718337171"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/cached-model-1280.json",
+      "bytes": 35,
+      "sha256": "37c55395d183847428a78dc0c63796ed2825af009cf63b4087b64b70ee3708c6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/cached-model-1440.json",
+      "bytes": 35,
+      "sha256": "37c55395d183847428a78dc0c63796ed2825af009cf63b4087b64b70ee3708c6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/expanded-reader-1280-1-1.png",
+      "bytes": 299012,
+      "sha256": "753e56c39587abc54f6de6da73151222496ce7faa812309b5cbef0d10a94f563"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/expanded-reader-1440-1-1.png",
+      "bytes": 270087,
+      "sha256": "a0f6f9962c32f4951e2a16d1dcb541f40322e2297ef1eaffeba2a7988e5d6ee2"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/failure-1.json",
+      "bytes": 15622,
+      "sha256": "b79c3d5523cea69311b2521e5fc1959d5350df8b42fec8289df1be17cb1ade2b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/failure-1.png",
+      "bytes": 120650,
+      "sha256": "569675f4e98b38436272f4951f662a88a6f240f331fe7edd0f6aed55f9bec3ff"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/failure-2.json",
+      "bytes": 15622,
+      "sha256": "b79c3d5523cea69311b2521e5fc1959d5350df8b42fec8289df1be17cb1ade2b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/failure-2.png",
+      "bytes": 120650,
+      "sha256": "569675f4e98b38436272f4951f662a88a6f240f331fe7edd0f6aed55f9bec3ff"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/failure-3.json",
+      "bytes": 16071,
+      "sha256": "a58144c6be1ad40b7858cfbaeb71199f14262f76cbaedac687b58c1718337171"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/failure-3.png",
+      "bytes": 110003,
+      "sha256": "e4e0d5a8f57851031901bf256f9e6a9b799bee10e0b92db65c1f43e41980dea1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/failure-4.json",
+      "bytes": 16071,
+      "sha256": "a58144c6be1ad40b7858cfbaeb71199f14262f76cbaedac687b58c1718337171"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/failure-4.png",
+      "bytes": 109980,
+      "sha256": "e0f4a61759b452b95c80fb6620dd3f40faaf9bd52e58d92dd19848c654be5184"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/flow-1280-1-1.json",
+      "bytes": 940,
+      "sha256": "44301544823a833d0646e07b76f1c3430f0e4104aee6242c5bd7af0c215fc68a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/flow-1440-1-1.json",
+      "bytes": 941,
+      "sha256": "3ce5203bb2997cc56300303fed8cfd3cc20f40897e4c7e1b163eb110420f7f3e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/network.json",
+      "bytes": 1367628,
+      "sha256": "8c3059621571c9e9d53703a603f66abd2d163e07e05a3a4db8919e922c7f5121"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/reader-1280-1-1.json",
+      "bytes": 36806,
+      "sha256": "a1b7930d006bd97e86b6a495570fe22cb6f0f1865810f327ef36e521dcd9a531"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/reader-1440-1-1.json",
+      "bytes": 36806,
+      "sha256": "69bf567ee00fab574f9603ee4f6d3ab6e4de1caf865a3ce948f1192d6c980893"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/reader-closed-1280-1-1.png",
+      "bytes": 165137,
+      "sha256": "ea2e045ecc2d09b3dbcd6b6b6c1afba7a5a1d5bad5c14bb010cef7635fa32530"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/reader-closed-1440-1-1.png",
+      "bytes": 170447,
+      "sha256": "ca5a95180b6f9a0c7ba5ec40e42335522ced7e936aec90fce42d97bf7ae59594"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/receipt.json",
+      "bytes": 4037,
+      "sha256": "494383620666e7ce5e53defaf2a3a85a92f26302b744e2a99f51bbd512179bf8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/transition-1280-1-1.json",
+      "bytes": 40296,
+      "sha256": "1fe9d66de16cb3188088045cf861aba3afe3d2672d6cd1b490f892ea177f3890"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/transition-1280-1-1.png",
+      "bytes": 165443,
+      "sha256": "0792a1b00b9dd39142e327a68e0748d8951975e764e31037a30f196d91a4a409"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/transition-1440-1-1.json",
+      "bytes": 40375,
+      "sha256": "9ec222d0f89e96c5703ca08fc6158078817e173f1f5536e4eb6eb2323620e3fc"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-cache-replay/transition-1440-1-1.png",
+      "bytes": 170531,
+      "sha256": "4ffd380f4ad0034e03fd818fec27efcb95d72f9989c3afdcfa41b80bc3064c39"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-diagnostic.log",
+      "bytes": 1868,
+      "sha256": "55aac3879de79787d14fbe5c2a3fd13a68ae66c5a346061723c3aecce96bae03"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/actual-browser-setting-1.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/actual-browser-setting-2.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/actual-browser-setting-3.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/actual-browser-setting-4.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/actual-target-1280.json",
+      "bytes": 114,
+      "sha256": "c3d3d1c47777164dc6243fe86ab617accb65f2b197fdab3d2d799769e02df8f1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/actual-target-1440.json",
+      "bytes": 113,
+      "sha256": "08b7866eaf148229b6081e098fbda69a521de39b3f9bf51e2ea870c20465d185"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/after-trace-1280.png",
+      "bytes": 152455,
+      "sha256": "587f40530c1a45f70efc5b27e688c743437dda05d4dfb4a59ae341bf16d4ded9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/after-trace-1440.png",
+      "bytes": 162621,
+      "sha256": "a0264918844707003a1db1c0cd00806804411322f86088177b38709924614dc9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/before-additional.json",
+      "bytes": 17459,
+      "sha256": "a3462b14325fe0d945f9e01e6934019a11abc519fbb396b4f0a11c31dd545ef2"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/before-trace-1280.png",
+      "bytes": 154857,
+      "sha256": "921dc2264633bc418eb9b824dfe4b9990d5314958913f52beeec1e6fc59712bf"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/before-trace-1440.png",
+      "bytes": 159990,
+      "sha256": "dab382f7b0660c52ca9b89fddd7301219d10f6e68c6eeee868b1e148a95a77c7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/network.json",
+      "bytes": 631186,
+      "sha256": "089baca47da5980cf2c3443e1a8d4c772db4dcd0430b7b353543584e21f2e8a5"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/occlusion-1280.json",
+      "bytes": 22473,
+      "sha256": "1e7fd325c373d90684e1d7135f0e4a59c14e521f379ab19925626eed032ce089"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/occlusion-1440.json",
+      "bytes": 22729,
+      "sha256": "2f7d95dd4133c3231959f48e5a1d1bbd52cf5449c048056a43961d671cf2b3c4"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/receipt.json",
+      "bytes": 841,
+      "sha256": "3af94d2fbb914cc9fb9b806d8c66e9b06d63bd5ef5088f8bbaa0f2fdd2f34670"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/trace-pointer-1280.json",
+      "bytes": 15752,
+      "sha256": "71a9b6d0c2292097166619f158f89bc56ffaeba19116bfde2f385d898bd99381"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion-diagnostic/trace-pointer-1440.json",
+      "bytes": 15955,
+      "sha256": "5bc8344849901cdfb851cc94500350803034bc3d85c64e8e582529f48c331deb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-occlusion.log",
+      "bytes": 214,
+      "sha256": "340a1af962ef4ec1d361dd6a2725eaf18e8b02cf5b929a853ff5fbfc31b03513"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-run.log",
+      "bytes": 3402,
+      "sha256": "e932db1575ee17aaa21e0e8ed080c0cebb8a8f0d1175e16cec8ba27bea60cb8a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/actual-browser-setting-1.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/actual-browser-setting-2.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/actual-browser-setting-3.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/actual-browser-setting-4.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/after-trace-1280.png",
+      "bytes": 120650,
+      "sha256": "569675f4e98b38436272f4951f662a88a6f240f331fe7edd0f6aed55f9bec3ff"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/after-trace-1440.png",
+      "bytes": 110090,
+      "sha256": "d83670bfb0e7e92b382397b95c2ffdf13d50ad16e0f27dfa568064c7ecd6a8a1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/before-additional.json",
+      "bytes": 16071,
+      "sha256": "a58144c6be1ad40b7858cfbaeb71199f14262f76cbaedac687b58c1718337171"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/before-trace-1280.png",
+      "bytes": 141620,
+      "sha256": "6df97c77a6f0a461e06a6c4b154d793a65d607e42bf543dea832d680507d17bf"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/before-trace-1440.png",
+      "bytes": 143670,
+      "sha256": "95ed5ef2729a077db69b39458422fb975e0f066bb8de6d583a53c72fcb6c302a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/failure-1.json",
+      "bytes": 15622,
+      "sha256": "b79c3d5523cea69311b2521e5fc1959d5350df8b42fec8289df1be17cb1ade2b"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/failure-1.png",
+      "bytes": 120650,
+      "sha256": "569675f4e98b38436272f4951f662a88a6f240f331fe7edd0f6aed55f9bec3ff"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/failure-2.json",
+      "bytes": 16071,
+      "sha256": "a58144c6be1ad40b7858cfbaeb71199f14262f76cbaedac687b58c1718337171"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/failure-2.png",
+      "bytes": 110090,
+      "sha256": "d83670bfb0e7e92b382397b95c2ffdf13d50ad16e0f27dfa568064c7ecd6a8a1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/network.json",
+      "bytes": 626314,
+      "sha256": "41080638436dc64df52a4b7ced6f8588770b5f57bf9b2bedf090a363db495547"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/receipt.json",
+      "bytes": 2306,
+      "sha256": "4bc17ccaaec0ee3652bdb3b42aa1eb743ad4768ded5cc59e0c91309938768d27"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/trace-pointer-1280.json",
+      "bytes": 17416,
+      "sha256": "9d4ff20f0d5bc58492691b2a49e3040ddfbec1409d29eb923c0bfb25fb96c664"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-target-diagnostic/trace-pointer-1440.json",
+      "bytes": 17452,
+      "sha256": "a70d1cd9cb81fd8072eac856f4c4d05241f809b094e0190287ba44a30820b5bd"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/actual-browser-setting-1.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/actual-browser-setting-2.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/actual-browser-setting-3.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/actual-browser-setting-4.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/actual-browser-setting-5.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/actual-browser-setting-6.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/actual-browser-setting-7.json",
+      "bytes": 67,
+      "sha256": "f4015b3f0dd4a8a09f67135a6552948513390128c8c28642a5a1769c2a629f2e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/actual-browser-setting-8.json",
+      "bytes": 67,
+      "sha256": "3298e49f174bae96c34a965805060f868f81d7bf1fd9ed644ce0b4c7b7bd7820"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/before-additional.json",
+      "bytes": 35588,
+      "sha256": "8856386f97dc05dbeafc6c56c8954956723aa9ec5950908be05c8e33debe3d2c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/cached-model-1280.json",
+      "bytes": 35,
+      "sha256": "37c55395d183847428a78dc0c63796ed2825af009cf63b4087b64b70ee3708c6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/cached-model-1440.json",
+      "bytes": 35,
+      "sha256": "37c55395d183847428a78dc0c63796ed2825af009cf63b4087b64b70ee3708c6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/expanded-reader-1280-0-2.png",
+      "bytes": 165685,
+      "sha256": "699492e99b6d7e9df2eb204e4ec095dde5ca3b2f3b9cbdfaa06741b134c16a04"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/expanded-reader-1280-1-1.png",
+      "bytes": 299012,
+      "sha256": "753e56c39587abc54f6de6da73151222496ce7faa812309b5cbef0d10a94f563"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/expanded-reader-1280-2-2.png",
+      "bytes": 165685,
+      "sha256": "699492e99b6d7e9df2eb204e4ec095dde5ca3b2f3b9cbdfaa06741b134c16a04"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/expanded-reader-1440-0-2.png",
+      "bytes": 172613,
+      "sha256": "8a2bd03cd67a888657323808fddf361ddd9e94539cf1b1dcabccbe3f1cb0f945"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/expanded-reader-1440-1-1.png",
+      "bytes": 270087,
+      "sha256": "a0f6f9962c32f4951e2a16d1dcb541f40322e2297ef1eaffeba2a7988e5d6ee2"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/expanded-reader-1440-2-2.png",
+      "bytes": 172613,
+      "sha256": "8a2bd03cd67a888657323808fddf361ddd9e94539cf1b1dcabccbe3f1cb0f945"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/flow-1280-0-2.json",
+      "bytes": 940,
+      "sha256": "c216454e534156ed06a40e1949209160abbd247457796164c84ff092b78e37bf"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/flow-1280-1-1.json",
+      "bytes": 940,
+      "sha256": "44301544823a833d0646e07b76f1c3430f0e4104aee6242c5bd7af0c215fc68a"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/flow-1280-2-2.json",
+      "bytes": 940,
+      "sha256": "c216454e534156ed06a40e1949209160abbd247457796164c84ff092b78e37bf"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/flow-1440-0-2.json",
+      "bytes": 950,
+      "sha256": "77e67e2f1487c8866a57f0724b0a44dc41789f2c9c7939155a80f98f4b55bf11"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/flow-1440-1-1.json",
+      "bytes": 941,
+      "sha256": "3ce5203bb2997cc56300303fed8cfd3cc20f40897e4c7e1b163eb110420f7f3e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/flow-1440-2-2.json",
+      "bytes": 950,
+      "sha256": "77e67e2f1487c8866a57f0724b0a44dc41789f2c9c7939155a80f98f4b55bf11"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/network.json",
+      "bytes": 1370423,
+      "sha256": "6a2cb844249de724906179287f48ef73f3eb28f2acd25b93edcf8bedef442255"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/reader-1280-0-2.json",
+      "bytes": 36802,
+      "sha256": "660d865083fd1d15581cabfe4fdc70918994eb5c3279296a2cf6088877dbca1f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/reader-1280-1-1.json",
+      "bytes": 36806,
+      "sha256": "a1b7930d006bd97e86b6a495570fe22cb6f0f1865810f327ef36e521dcd9a531"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/reader-1280-2-2.json",
+      "bytes": 36802,
+      "sha256": "660d865083fd1d15581cabfe4fdc70918994eb5c3279296a2cf6088877dbca1f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/reader-1440-0-2.json",
+      "bytes": 36802,
+      "sha256": "b46df45f4b0bc7ed9f994143387c4934f152c9ff96043f76ee38c7e005d9a7aa"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/reader-1440-1-1.json",
+      "bytes": 36806,
+      "sha256": "69bf567ee00fab574f9603ee4f6d3ab6e4de1caf865a3ce948f1192d6c980893"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/reader-1440-2-2.json",
+      "bytes": 36802,
+      "sha256": "b46df45f4b0bc7ed9f994143387c4934f152c9ff96043f76ee38c7e005d9a7aa"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/reader-closed-1280-0-2.png",
+      "bytes": 140662,
+      "sha256": "d7a1d2b7d1be3ec4f5686e6fec0ecc5b793f0974115f0f8d92f92e14c788829e"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/reader-closed-1280-1-1.png",
+      "bytes": 165135,
+      "sha256": "b4453319fc951ac77ee8b90f309d581275cc71955d3a2bc5f3ebbea72fc2eb63"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/reader-closed-1280-2-2.png",
+      "bytes": 140661,
+      "sha256": "f3463c5f268fc5df44f274f7a92af02965ab93e1fd43ceca6668c2005d08922c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/reader-closed-1440-0-2.png",
+      "bytes": 144782,
+      "sha256": "9721fc503d614d9261812f79661e461a5153d8e05f3c89e758398d0bb4ce15cb"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/reader-closed-1440-1-1.png",
+      "bytes": 170458,
+      "sha256": "628351655f62828223bd60273ffcb1bc5709055728196736abefd489cd4a7524"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/reader-closed-1440-2-2.png",
+      "bytes": 144782,
+      "sha256": "319e5bca14955f1a29c6b37c73ac5ac955866ae62b5b2c86ea1caa5eacc9d250"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/receipt.json",
+      "bytes": 1221,
+      "sha256": "6abf4f84dd778de8146343faa361309841fd0d6390dc42d3df988ef0924de1c2"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/transition-1280-0-2.json",
+      "bytes": 44272,
+      "sha256": "a142246e7eca0778c152621ff71ec06eb6bd82362dac5c64e1a83f6b4aa55ad1"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/transition-1280-0-2.png",
+      "bytes": 139361,
+      "sha256": "84c6d9fcddfb30f2089ea03991ef51fd1dc23c690bf429fe8fedf32c1ac2b0b8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/transition-1280-1-1.json",
+      "bytes": 35697,
+      "sha256": "11a1c27c1ed5e5ed1dbcf82cd380a3df89bf1e4f06e554b24525eb2945ac188f"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/transition-1280-1-1.png",
+      "bytes": 165425,
+      "sha256": "3c7b23400cd41f4c7d420aec0aaedd0ec37784c722a6616fbb3bc1310abf19db"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/transition-1280-2-2.json",
+      "bytes": 44515,
+      "sha256": "567bc38ae0012b379d4d4cb3d79dd48c0055b384de7beaf48dc047a06f534d26"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/transition-1280-2-2.png",
+      "bytes": 139355,
+      "sha256": "91072121ca8c8d15ed8c0a2ed334adecb9e3b56b019671a9000e39be4f0fff4d"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/transition-1440-0-2.json",
+      "bytes": 44475,
+      "sha256": "f44d90f147b718314bd36e78e878196458c1628b2302c46f2a3e8366b8ab567c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/transition-1440-0-2.png",
+      "bytes": 143489,
+      "sha256": "23bce7e43b9a098729efe940791b4d3ba7d1ce8593a5923cd05c33c1a89593ac"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/transition-1440-1-1.json",
+      "bytes": 35737,
+      "sha256": "d6ea2927f4d2626e8440010a52b319d530c451728470ebc0bc092d7d029e26b8"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/transition-1440-1-1.png",
+      "bytes": 170540,
+      "sha256": "e7dd895ce18771f0eed117523b090f53e77eae588e0b7d3ecdcc89d129b2d24c"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/transition-1440-2-2.json",
+      "bytes": 44519,
+      "sha256": "803a3690bd9c68845f2971f2acadd3b65928e99fd56a6f4a445e874efa4094d9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/transition-1440-2-2.png",
+      "bytes": 143489,
+      "sha256": "19f9a3fa7a374e4ee5c8d68d88e2ea8851c21faa5194674c8680ef707478dea0"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/trusted-flow-target-1280-0-2.json",
+      "bytes": 84,
+      "sha256": "841161e0b308c90f0eb02c226036afb7cae4affcddf1276522035eb0947c36b9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/trusted-flow-target-1280-1-1.json",
+      "bytes": 81,
+      "sha256": "fdbfa164a731ca19bf19e5a970f8d6c060e9de399c39a2e3fa5806d3480cac47"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/trusted-flow-target-1280-2-2.json",
+      "bytes": 84,
+      "sha256": "841161e0b308c90f0eb02c226036afb7cae4affcddf1276522035eb0947c36b9"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/trusted-flow-target-1440-0-2.json",
+      "bytes": 83,
+      "sha256": "9a6b0073125d7cf4a290bb36812913aa09043c48a6e48ff3f75e3759ab0e81e7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/trusted-flow-target-1440-1-1.json",
+      "bytes": 81,
+      "sha256": "ccd713f99d9fbd2d6061b47642f2773f06779e88275255c89a7bcb3c8376ecaa"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/trusted-flow-target-1440-2-2.json",
+      "bytes": 83,
+      "sha256": "9a6b0073125d7cf4a290bb36812913aa09043c48a6e48ff3f75e3759ab0e81e7"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/visible-target-1280-0-2.json",
+      "bytes": 245,
+      "sha256": "f6bdd95d59e403a455b750ad6f44dd89fbf605d391c1ea60d4813dd40ca2a632"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/visible-target-1280-1-1.json",
+      "bytes": 239,
+      "sha256": "fe691de46b40e75235e8b3334a65b647f0e41d078b4a3d03904711d0adeab4d6"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/visible-target-1280-2-2.json",
+      "bytes": 245,
+      "sha256": "f6bdd95d59e403a455b750ad6f44dd89fbf605d391c1ea60d4813dd40ca2a632"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/visible-target-1440-0-2.json",
+      "bytes": 224,
+      "sha256": "4b84ff3825abbd8fc47d59561e7350be15aa3aa970a916e4f2c60ec0a6dad165"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/visible-target-1440-1-1.json",
+      "bytes": 239,
+      "sha256": "32b8d88b454e09ddb2d0e968d7cbbf2cf2f9fffcb1b04539c80f118ed4299d10"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible-controls/visible-target-1440-2-2.json",
+      "bytes": 224,
+      "sha256": "4b84ff3825abbd8fc47d59561e7350be15aa3aa970a916e4f2c60ec0a6dad165"
+    },
+    {
+      "path": "docs/verification/pq-redesign/flow-0d964fc/zoom-visible.log",
+      "bytes": 210,
+      "sha256": "37d516571197fd19f4a75fcddc313a2924b169dbb4de72c2ffef679e1478c4c0"
+    },
+    {
+      "path": "tests/acceptance-fixtures/pq-redesign/flow-0d964fc/chain52.bim",
+      "bytes": 6566,
+      "sha256": "f98449aa57f725fbe138e7e4702e98b96c9350be91bea82b86201655d57d1d53"
+    },
+    {
+      "path": "tests/acceptance-fixtures/pq-redesign/flow-0d964fc/exact-source.m",
+      "bytes": 17953,
+      "sha256": "0d1c48091d38f3929eeb703d494272711878f57407ad3d5627ba255aa8c14d6f"
+    },
+    {
+      "path": "tests/acceptance-fixtures/pq-redesign/flow-0d964fc/expected.json",
+      "bytes": 2429,
+      "sha256": "80656b8b86cb8be1956ac4d3c0c6d221b3853ff2d5fd0239aa6656c0598cca1d"
+    },
+    {
+      "path": "tests/acceptance-fixtures/pq-redesign/flow-0d964fc/model.bim",
+      "bytes": 21451,
+      "sha256": "daeca60759645e58814916165ba69dbfb23ce3695c2c45b10732ae6bd0b7940c"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-arrange-undo-replay.browser.cjs",
+      "bytes": 3314,
+      "sha256": "a39d8dda3d35d15b6411994d22bfe666742a7b087dcc683e0612b2e0324891e4"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-arrange-undo-zoomed.browser.cjs",
+      "bytes": 3355,
+      "sha256": "ef4481e55e6b407f885f30f6e0744eed7dcc227b5d05462d9f89e7ddd89585d5"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-arrange-undo.browser.cjs",
+      "bytes": 3320,
+      "sha256": "8879685e6e369a19da45eb1abcc42c7a18437e233b70251ca362d487375a5942"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-chain.browser.cjs",
+      "bytes": 4240,
+      "sha256": "6c12ce95678a1f78b998e5c5e635f8ae9728cc0832b7e885c10d2c6f7a3b2673"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-history.scenarios.cjs",
+      "bytes": 5716,
+      "sha256": "de03a18ed1ad03cb8eb7500371cb5905210a50b3bc4d2d3504eb0136dc4c3356"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-lifecycle.scenarios.cjs",
+      "bytes": 9214,
+      "sha256": "ba4853b592875ad52cc54d8d3c07dcffca9176742dc220a3a637dd0e49c558c1"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-membership.scenarios.cjs",
+      "bytes": 3331,
+      "sha256": "a61303b010d54cffcd69cdd577b20f9e3442a9584d47c76ea0dda5d4894c8caf"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-offline.browser.cjs",
+      "bytes": 4710,
+      "sha256": "5e6f44dcc108e37e7faa5ac20ee300772adb823637a54b49e31c8c4f4eae2ceb"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-regression.scenarios.cjs",
+      "bytes": 12945,
+      "sha256": "b4b89529473b6b3d89d604e0853087db67ad52eb29f6b21234b207196c99fe10"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-zoom-diagnostic.browser.cjs",
+      "bytes": 16364,
+      "sha256": "49b6d9a9364f1912b5fe1bb40f12dac481eb7f9f541cfb38f74a3bb774dbc8b4"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-zoom-occlusion.browser.cjs",
+      "bytes": 17057,
+      "sha256": "3b0e4f8f75532a216516fa7e3f89872cee0624110f6e28b5632b42790ba73edd"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-zoom-visible.browser.cjs",
+      "bytes": 16280,
+      "sha256": "144ae2c8a36e795f531d5546cb978bf8b439b028548c3e2ef21f107df5ba6925"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs",
+      "bytes": 15348,
+      "sha256": "80bcccde0525b4e22d7316d89402c7831dcf227fb5e7c604b4ee17dd1d2c43f0"
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc.scenarios.cjs",
+      "bytes": 9242,
+      "sha256": "54139a2d24b9dd6fdcf4e3e0653c4adcc85da73011ca8ecaa127f91cd494c765"
+    }
+  ]
+}

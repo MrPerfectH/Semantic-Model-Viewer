@@ -1,0 +1,178 @@
+{
+  "name": "Independent r10 model name collisions",
+  "model": {
+    "tables": [],
+    "relationships": [],
+    "expressions": [
+      {
+        "name": "PowerPlatform.Dataflows",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "PowerBI.Dataflows",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "Databricks.Catalogs",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "Databricks.Contents",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "Sql.Database",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "Sql.Databases",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "Snowflake.Databases",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "OData.Feed",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "AzureStorage.DataLake",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "Excel.Workbook",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "Web.Contents",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "File.Contents",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "Table.FromRows",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "#table",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "Int64.Type",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "Table.TransformColumnTypes",
+        "kind": "m",
+        "expression": "42"
+      },
+      {
+        "name": "Probe0",
+        "kind": "m",
+        "expression": "#\"PowerPlatform.Dataflows\"(1)"
+      },
+      {
+        "name": "Probe1",
+        "kind": "m",
+        "expression": "#\"PowerBI.Dataflows\"(1)"
+      },
+      {
+        "name": "Probe2",
+        "kind": "m",
+        "expression": "#\"Databricks.Catalogs\"(1)"
+      },
+      {
+        "name": "Probe3",
+        "kind": "m",
+        "expression": "#\"Databricks.Contents\"(1)"
+      },
+      {
+        "name": "Probe4",
+        "kind": "m",
+        "expression": "#\"Sql.Database\"(1)"
+      },
+      {
+        "name": "Probe5",
+        "kind": "m",
+        "expression": "#\"Sql.Databases\"(1)"
+      },
+      {
+        "name": "Probe6",
+        "kind": "m",
+        "expression": "#\"Snowflake.Databases\"(1)"
+      },
+      {
+        "name": "Probe7",
+        "kind": "m",
+        "expression": "#\"OData.Feed\"(1)"
+      },
+      {
+        "name": "Probe8",
+        "kind": "m",
+        "expression": "#\"AzureStorage.DataLake\"(1)"
+      },
+      {
+        "name": "Probe9",
+        "kind": "m",
+        "expression": "#\"Excel.Workbook\"(1)"
+      },
+      {
+        "name": "Probe10",
+        "kind": "m",
+        "expression": "#\"Web.Contents\"(1)"
+      },
+      {
+        "name": "Probe11",
+        "kind": "m",
+        "expression": "#\"File.Contents\"(1)"
+      },
+      {
+        "name": "Probe12",
+        "kind": "m",
+        "expression": "#\"Table.FromRows\"(1)"
+      },
+      {
+        "name": "Probe13",
+        "kind": "m",
+        "expression": "#\"#table\"(1)"
+      },
+      {
+        "name": "BuiltinProbe",
+        "kind": "m",
+        "expression": "{Int64.Type, Table.TransformColumnTypes}"
+      }
+    ],
+    "queryGroups": [
+      {
+        "name": "Inputs",
+        "folder": "Landing/SQL"
+      },
+      {
+        "name": "Steps",
+        "folder": "Transform/Steps"
+      },
+      {
+        "name": "Results",
+        "folder": "Curated/Outputs"
+      }
+    ]
+  }
+}

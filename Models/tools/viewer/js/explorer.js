@@ -5,9 +5,23 @@
   function button(text, action, primary, title) {
     return el('button', {text:text, cls:'ex-button' + (primary ? ' ex-primary' : ''), title:title || text, onClick:action});
   }
+  /* A rail toggle: pressed while the rail is showing. The glyph is the rail's side of the
+     window, so the two read as a pair without a word of label each. */
+  function paneToggle(side, shown, title, action) {
+    var glyph = side === 'library'
+      ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="9" y1="4" x2="9" y2="20"></line></svg>'
+      : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="15" y1="4" x2="15" y2="20"></line></svg>';
+    var b = el('button', {cls:'ex-button ex-pane-toggle ex-pane-' + side, title:title, 'aria-label':title, html:glyph, onClick:action});
+    b.setAttribute('aria-pressed', String(!!shown));
+    return b;
+  }
   function TableExplorer(app) {
-    this.app = app; this.names = new Set(); this.query = ''; this.filter = 'all'; this.history = [];
+    this.app = app; this.names = new Set(); this.query = ''; this.filter = 'all'; this.domain = ''; this.source = ''; this.history = [];
     this.direction = 'connected'; this.depth = 'direct'; this.includeInactive = true; this.message = '';
+    /* Pane visibility is a reading preference, not part of a layout, so it is shared by
+       every model and survives a model switch. */
+    var panes = store.getJSON('smv_panes_v1', {}) || {};
+    this.libraryHidden = !!panes.libraryHidden; this.inspectorHidden = !!panes.inspectorHidden;
     this.library = document.getElementById('table-library'); this.toolbar = document.getElementById('workspace-toolbar');
     this.empty = document.getElementById('canvas-empty'); this.nav = document.getElementById('canvas-navigation');
     this.status = document.getElementById('workspace-status'); this.mapHost = document.getElementById('model-minimap');
@@ -31,8 +45,15 @@
     this.map.addEventListener('keydown', function(e){if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();var v=app.canvas.view;v.x += e.key==='ArrowLeft'?70:e.key==='ArrowRight'?-70:0;v.y += e.key==='ArrowUp'?70:e.key==='ArrowDown'?-70:0;app.canvas.updateTransform();});
     window.addEventListener('resize', function(){self.update();self.drawMap();});
     this.selbar=el('div',{id:'canvas-selection',hidden:true,role:'status'});dropSurface.appendChild(this.selbar);
+    /* A press anywhere outside an open toolbar popover closes it. Presses on the menu or on
+       its own button are left alone (the button toggles by itself). */
+    window.addEventListener('pointerdown', function(e){
+      if(!(self.legendOpen||self.optionsOpen||app.state.showPresets))return;
+      if(e.target&&e.target.closest&&e.target.closest('.ex-menu-anchor'))return;
+      self.closeMenus(true);
+    },true);
     window.addEventListener('keydown', function(e){
-      if(e.key==='Escape'){if(self.closeMenus())e.stopPropagation();else if(app.canvas.marked.size)app.canvas.setMarked([]);return;}
+      if(e.key==='Escape'){if(app.state.viewMode!=='graph')return;if(self.closeMenus())e.stopPropagation();else if(app.canvas.marked.size)app.canvas.setMarked([]);return;}
       if(e.key!=='Delete'&&e.key!=='Backspace')return;
       var t=e.target,tag=t&&t.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||(t&&t.isContentEditable))return;
       if(app.state.viewMode!=='graph'||!app.state.loaded)return;
@@ -44,11 +65,17 @@
     /* Escape closes the toolbar popovers and hands focus back to the button that opened
        them, so keyboard users are never left with focus inside a menu that is gone.
        Returns true when something was actually closed. */
-    closeMenus:function(){
-      var app=this.app;
+    closeMenus:function(outside){
+      var app=this.app,self=this;
+      if(outside){
+        var any=this.legendOpen||this.optionsOpen||app.state.showPresets;
+        this.legendOpen=false;this.optionsOpen=false;this._clusterKey=null;this._key=null;
+        if(app.state.showPresets)app.setState({showPresets:false});else if(any)this.update();
+        return any;
+      }
       if(this.legendOpen){this.legendOpen=false;this._clusterKey=null;this.update();if(this.legendBtn&&this.legendBtn.focus)this.legendBtn.focus();return true;}
       if(this.optionsOpen){this.optionsOpen=false;this._key=null;this.update();if(this.displayBtn&&this.displayBtn.focus)this.displayBtn.focus();return true;}
-      if(app.state.showPresets){var self=this;app.setState({showPresets:false},function(){if(self.presetsBtn&&self.presetsBtn.focus)self.presetsBtn.focus();});return true;}
+      if(app.state.showPresets){app.setState({showPresets:false},function(){if(self.presetsBtn&&self.presetsBtn.focus)self.presetsBtn.focus();});return true;}
       return false;
     },
     storageKey:function(){return 'smv_workspace_v1_'+this.app.modelKey;},
@@ -56,10 +83,20 @@
       var data=store.getJSON(this.storageKey(),null), M=this.app.model;
       this.names=new Set(data && Array.isArray(data.tables)?data.tables.filter(function(n){return !!M.byName[n];}):[]);
       this.direction='connected';this.depth='direct';this.includeInactive=true;this.app.state.focusDepth=1;
-      this.history=[];this.query='';this.filter='all';this.message='';this._key=null;this._relationKey=null;this.optionsOpen=false;
+      this.history=[];this.query='';this.filter='all';this.domain='';this.source='';this.message='';this._key=null;this._relationKey=null;this.optionsOpen=false;
       this.app.canvas.workspaceNames=this.names;this.app.state.isolate=false;this.app.state.showStandalone=true;this.app.canvas.showSA=true;
     },
     persist:function(){store.setJSON(this.storageKey(),{tables:Array.from(this.names)});},
+    /* Hide either rail to give the canvas the full width. The inspector preference keeps the
+       selection: the drawer comes straight back for the selected table when shown again. */
+    setPanes:function(patch){
+      if(patch.libraryHidden!==undefined)this.libraryHidden=!!patch.libraryHidden;
+      if(patch.inspectorHidden!==undefined)this.inspectorHidden=!!patch.inspectorHidden;
+      store.setJSON('smv_panes_v1',{libraryHidden:this.libraryHidden,inspectorHidden:this.inspectorHidden});
+      this._key=null;this.app.sidebar._key=null;this.update();this.app.setState({});
+    },
+    toggleLibrary:function(){this.setPanes({libraryHidden:!this.libraryHidden});},
+    toggleInspector:function(){this.setPanes({inspectorHidden:!this.inspectorHidden});},
     snapshot:function(){this.history.push({names:Array.from(this.names),pos:JSON.parse(JSON.stringify(this.app.canvas.pos)),view:Object.assign({},this.app.canvas.view),focus:this.app.canvas.captureFocus(),display:this.app.canvas.captureDisplay()});if(this.history.length>25)this.history.shift();},
     commit:function(message,fit){
       var app=this.app, cv=app.canvas, self=this;
@@ -198,16 +235,18 @@
       bar.appendChild(button('Clear',function(){cv.setMarked([]);},false,'Clear the selection (Esc)'));
     },
     update:function(){
-      var self=this,app=this.app,st=app.state,cv=app.canvas,graph=st.loaded&&st.viewMode==='graph';
+      var self=this,app=this.app,st=app.state,cv=app.canvas,graph=!!app.model&&(st.loaded||!app.snapshotMode)&&st.viewMode==='graph';
       this.renderSelection();
       /* Domains borrows the Tables chrome — the same toolbar row and status line — so the two
          canvases speak one visual language instead of the old floating chip plus legend. */
       var clusters=st.loaded&&st.viewMode==='clusters';
-      var width=window.innerWidth<1050?234:268,drawer=graph&&st.selected?330:0;
-      this.library.hidden=!graph;this.empty.hidden=!graph;this.nav.hidden=!graph;
+      var width=this.libraryHidden?0:window.innerWidth<1050?234:268,drawer=graph&&st.selected&&!this.inspectorHidden?330:0;
+      this.library.hidden=!graph||this.libraryHidden;this.empty.hidden=!graph;this.nav.hidden=!graph;
       this.toolbar.hidden=!graph&&!clusters;this.status.hidden=!graph&&!clusters;
       this.mapHost.hidden=!graph||!this.names.size||this.mapHidden;
       var main=document.getElementById('main');
+      var start=!!graph&&!app.modelKey&&!app.model.tables.length;
+      main.classList.toggle('ex-start',start);
       main.classList.toggle('ex-graph',!!graph);
       main.classList.toggle('ex-clusters',!!clusters);
       main.style.setProperty('--library-width',width+'px');
@@ -224,11 +263,34 @@
       }
       this._clusterKey=null;
       if(!graph)return;
+      if(start){this.library.hidden=true;this.toolbar.hidden=true;this.nav.hidden=true;this.status.hidden=true;this.empty.hidden=false;this.renderEmpty();return;}
       this.empty.hidden=!!this.names.size;
       this.status.textContent=this.message || 'Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several';
-      var key=[app.modelKey,this.query,this.filter,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,st.isolate,st.focusDepth].join('|');
+      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
       if(key!==this._key){this._key=key;this.renderLibrary();this.renderToolbar();this.renderEmpty();}
       this.renderNavigation();this.drawMap();
+    },
+    /* Domain / Source facets for the library. Source uses the same key as the colour legend
+       (connector kind, or the schema for Databricks / SQL), so the two always agree. */
+    facetKey:function(kind,t){return kind==='source'?this.app.srcKeyOf(t):t.domain;},
+    facetLabel:function(kind,key){
+      if(kind!=='source')return key;
+      var kinds=this.app.SOURCE_KINDS||{};
+      if(key==='manual')return 'Manual';if(key==='calculated')return 'Calculated';
+      return kinds[key]?kinds[key].label:key;
+    },
+    facetOptions:function(kind){
+      var self=this,counts={};
+      this.app.model.tables.forEach(function(t){var k=self.facetKey(kind,t);counts[k]=(counts[k]||0)+1;});
+      return Object.keys(counts).sort(function(a,b){return counts[b]-counts[a]||a.localeCompare(b);}).map(function(k){return {key:k,label:self.facetLabel(kind,k),count:counts[k]};});
+    },
+    matchesLibrary:function(t){
+      var q=this.query.trim().toLowerCase();
+      if(this.filter==='canvas'&&!this.names.has(t.name))return false;
+      if(this.filter==='available'&&this.names.has(t.name))return false;
+      if(this.domain&&this.facetKey('domain',t)!==this.domain)return false;
+      if(this.source&&this.facetKey('source',t)!==this.source)return false;
+      return !q||[t.name,t.domain,t.role].join(' ').toLowerCase().includes(q)||t.columns.some(function(c){return c.name.toLowerCase().includes(q);});
     },
     renderLibrary:function(){
       var self=this,app=this.app,active=document.activeElement,focus=active&&active===this.input,start=focus?active.selectionStart:0,scroll=this.list?this.list.scrollTop:0;
@@ -236,22 +298,34 @@
       this.library.appendChild(el('div',{cls:'ex-library-heading'},[el('div',{},[el('h2',{text:'Tables'}),el('p',{text:app.model.tables.length+' in this model'})]),el('span',{cls:'ex-count',text:String(this.names.size)+' on canvas'})]));
       this.input=el('input',{type:'search',placeholder:'Find tables or columns…','aria-label':'Search table library',value:this.query,onInput:function(e){self.query=e.target.value;self._key=null;self.update();}});this.library.appendChild(this.input);
       var filters=el('div',{cls:'ex-segments','aria-label':'Table library filter'});[['all','All tables'],['canvas','On canvas'],['available','Available']].forEach(function(p){var b=button(p[1],function(){self.filter=p[0];self._key=null;self.update();});b.setAttribute('aria-pressed',String(self.filter===p[0]));filters.appendChild(b);});this.library.appendChild(filters);
+      var facets=el('div',{cls:'ex-facets'});
+      [['domain','Domain','All domains'],['source','Source','All sources']].forEach(function(f){
+        var opts=self.facetOptions(f[0]);if(self[f[0]]&&!opts.some(function(o){return o.key===self[f[0]];}))self[f[0]]='';
+        if(opts.length<2&&!self[f[0]])return;
+        var sel=el('select',{'aria-label':'Filter tables by '+f[1].toLowerCase(),onChange:function(e){self[f[0]]=e.target.value;self._key=null;self.update();}},
+          [el('option',{value:'',text:f[2]})].concat(opts.map(function(o){return el('option',{value:o.key,text:o.label+' ('+o.count+')'});})));
+        sel.value=self[f[0]];facets.appendChild(sel);
+      });
+      if(facets.children.length)this.library.appendChild(facets);
       this.list=el('div',{cls:'ex-table-list'});this.library.appendChild(this.list);
-      var q=this.query.trim().toLowerCase(),ts=app.model.tables.filter(function(t){return(self.filter==='all'||self.filter==='canvas'&&self.names.has(t.name)||self.filter==='available'&&!self.names.has(t.name))&&(!q||[t.name,t.domain,t.role].join(' ').toLowerCase().includes(q)||t.columns.some(function(c){return c.name.toLowerCase().includes(q);}));}).sort(function(a,b){return a.name.localeCompare(b.name);});
+      var ts=app.model.tables.filter(function(t){return self.matchesLibrary(t);}).sort(function(a,b){return a.name.localeCompare(b.name);});
       ts.forEach(function(t){var on=self.names.has(t.name),row=el('div',{cls:'ex-table-row'+(app.state.selected===t.name?' selected':''),draggable:'true'});
         row.addEventListener('dragstart',function(e){document.getElementById('main').classList.add('ex-dragging');e.dataTransfer.setData(MIME,t.name);e.dataTransfer.effectAllowed='copy';});
         var name=el('button',{cls:'ex-table-name',title:t.name,onClick:function(){if(!on)self.add([t.name]);app.focusTable(t.name);}},[el('span',{cls:'ex-table-dot',style:'background:'+app.tableColor(t)}),el('span',{},[el('strong',{text:t.name}),el('small',{text:({dim:'Dimension',fact:'Fact',measures:'Measures',calcgroup:'Calculation group',fieldparam:'Field parameter'}[t.role]||'Table')+' · '+t.colCount+' columns'})])]);
         row.appendChild(name);var add=button(on?'−':'+',function(){if(on)self.remove(t.name);else self.add([t.name]);},false,(on?'Remove ':'Add ')+t.name+(on?' from layout':' to canvas'));add.setAttribute('aria-label',(on?'Remove ':'Add ')+t.name+(on?' from layout':' to canvas'));row.appendChild(add);self.list.appendChild(row);
       });
-      if(!ts.length)this.list.appendChild(el('div',{cls:'ex-list-empty'},[el('strong',{text:'No matching tables'}),el('p',{text:'Try another name or change the filter.'})]));
+      if(!ts.length)this.list.appendChild(el('div',{cls:'ex-list-empty'},[el('strong',{text:'No matching tables'}),el('p',{text:'Try another name or change the filters.'})]));
       this.library.appendChild(el('div',{cls:'ex-library-footer',text:app.snapshotMode?'Changes stay in this tab. Save snapshot downloads a copy with your changes.':app.host?'Add with + or drag onto the canvas. Save view keeps your arrangement and focus in this VS Code workspace.':'Add with + or drag onto the canvas. Save view keeps your arrangement and focus in this browser.'}));
       this.list.scrollTop=scroll;if(focus){this.input.focus();this.input.setSelectionRange(start,start);}
     },
     renderToolbar:function(){
       var self=this,app=this.app,cv=app.canvas;U.clear(this.toolbar);
+      this.toolbar.appendChild(paneToggle('library',!this.libraryHidden,this.libraryHidden?'Show the table library':'Hide the table library',function(){self.toggleLibrary();}));
       this.toolbar.appendChild(el('div',{cls:'ex-workspace-title'},[el('strong',{text:'Model canvas'}),el('span',{text:this.names.size+' / '+app.model.tables.length+' tables'})]));
-      this.toolbar.appendChild(button('Blank layout',function(){self.blank();}));this.toolbar.appendChild(button('Show all',function(){self.showAll();}));
-      var undo=button('Undo',function(){self.undo();});undo.disabled=!this.history.length;this.toolbar.appendChild(undo);
+      var editing=el('div',{cls:'ex-toolbar-group ex-toolbar-editing'});
+      this.toolbar.appendChild(editing);
+      editing.appendChild(button('Blank layout',function(){self.blank();}));editing.appendChild(button('Show all',function(){self.showAll();}));
+      var undo=button('Undo',function(){self.undo();});undo.disabled=!this.history.length;editing.appendChild(undo);
       this.toolbar.appendChild(el('div',{cls:'ex-spacer'}));
       this.toolbar.appendChild(button('Arrange',function(){self.arrangeSubset(true);}));
       this.toolbar.appendChild(button('Save view',function(){app.setState({showPresets:true});requestAnimationFrame(function(){var input=document.getElementById('saved-view-name');if(input){input.focus();input.select();}});},true));
@@ -263,12 +337,13 @@
       this.displayBtn.setAttribute('aria-expanded',String(!!this.optionsOpen));
       var options=el('div',{cls:'ex-menu-anchor'},[this.displayBtn]);
       if(this.optionsOpen){var box=el('div',{cls:'ex-display-menu'});
-        [['Auto layout',cv.layoutAlgo,[['star','Star'],['constellation','Constellation'],['layered','Layered'],['galaxy','Galaxy rows'],['columns','Star columns'],['waterfall','Waterfall'],['grid','Grid']],function(v){cv.setLayoutAlgo(v);self.arrangeSubset(true);} ],['Detail',cv.detailMode,[['auto','Auto'],['names','Names'],['cards','Cards']],function(v){cv.setDetailMode(v);} ],['Lines',cv.lineStyle,[['ortho','Straight'],['curve','Curved']],function(v){cv.setLineStyle(v);} ],['Color',app.colorBy,[['domain','Domain'],['source','Source']],function(v){cv.setColorMode(v);}],['Palette',app.paletteName,[['muted','Muted'],['vivid','Vivid']],function(v){app.setPalette(v);}]].forEach(function(p){var sel=el('select',{'aria-label':p[0],onChange:function(e){p[3](e.target.value);self._key=null;self.update();}},p[2].map(function(o){return el('option',{value:o[0],text:o[1]});}));sel.value=p[1];box.appendChild(el('label',{},[p[0],sel]));});
+        [['Auto layout',cv.layoutAlgo,[['star','Star'],['constellation','Constellation'],['layered','Layered'],['galaxy','Galaxy rows'],['columns','Star columns'],['waterfall','Waterfall'],['grid','Grid']],function(v){cv.setLayoutAlgo(v);self.arrangeSubset(true);} ],['Detail',cv.detailMode,[['auto','Auto'],['names','Names'],['cards','Cards']],function(v){cv.setDetailMode(v);} ],['Lines',cv.lineStyle,[['ortho','Straight'],['curve','Curved']],function(v){cv.setLineStyle(v);} ],['Color',app.colorBy,[['domain','Domain'],['source','Source']],function(v){cv.setColorMode(v);}],['Palette',app.paletteName,[['muted','Muted'],['vivid','Vivid']],function(v){app.setPalette(v);}]].forEach(function(p){var themed=p[0]==='Palette'&&g.ViewerTheme&&g.ViewerTheme.get()==='spellbook';if(themed){p[1]='spellbook';p[2]=[['spellbook','Spellbook']];}var sel=el('select',{disabled:themed,'aria-label':p[0],onChange:function(e){p[3](e.target.value);self._key=null;self.update();}},p[2].map(function(o){return el('option',{value:o[0],text:o[1]});}));sel.value=p[1];box.appendChild(el('label',{},[p[0],sel]));});
         box.appendChild(button(app.state.allExpanded?'Collapse all cards':'Expand all cards',function(){cv.toggleExpandAll();self.optionsOpen=false;self._key=null;self.update();}));
         box.appendChild(button(this.mapHidden?'Show overview map':'Hide overview map',function(){self.mapHidden=!self.mapHidden;self._key=null;self.update();}));
         box.appendChild(button('Table role rules',function(){app.setState({showRules:true});self.optionsOpen=false;self._key=null;self.update();}));
         box.appendChild(button('Close display settings',function(){self.optionsOpen=false;self._key=null;self.update();}));options.appendChild(box);
       }this.toolbar.appendChild(options);
+      this.toolbar.appendChild(paneToggle('inspector',!this.inspectorHidden,this.inspectorHidden?'Show the table inspector':'Hide the table inspector',function(){self.toggleInspector();}));
     },
     /* Domains toolbar: same row, same button language as Tables. The colour key lives in a
        popover here rather than a floating panel, and the old dark hint chip is now the
@@ -307,12 +382,16 @@
       var self=this,app=this.app;U.clear(this.empty);
       /* No model chosen yet (see app.js init) vs. a real model with an empty
          canvas: the first needs "pick a model", not "explore 0 tables". */
-      if(!app.model.tables.length&&app.state.modelName==='Choose a model'){
-        this.empty.appendChild(el('div',{cls:'ex-empty-card'},[
-          el('span',{cls:'ex-eyebrow',text:'SEMANTIC MODEL VIEWER'}),el('h1',{text:'No model selected.'}),
-          el('p',{text:'Open the built-in sample, import a model, or connect a repo folder to get started.'}),
-          button('Choose a model',function(){app.setState({showModelMenu:true});},true)
-        ]));
+      if(!app.state.loaded || (!app.model.tables.length && !app.modelKey)){
+        var card=el('div',{cls:'ex-empty-card'},[
+          el('span',{cls:'ex-eyebrow',text:'START HERE'}),el('h1',{text:'Open your first model.'}),
+          el('p',{text:app.host?'Open a folder in VS Code containing a *.SemanticModel folder or model.bim, then choose a model.':app.server?'Try the synthetic demo, or browse a local folder containing a *.SemanticModel definition or model.bim.':'Try the synthetic demo, or import a *.SemanticModel folder or model.bim. Your model is parsed in this browser.'})
+        ]);
+        if(!app.host)card.appendChild(button('Try the demo',function(){app.switchModel('builtin');},true));
+        else card.appendChild(el('a',{cls:'ex-button',text:'Try the demo in your browser',href:'https://MrPerfectH.github.io/Semantic-Model-Viewer/',target:'_blank',rel:'noopener'}));
+        card.appendChild(button(app.host?'Choose model':'Open model',function(){if(app.host)app.hostSelectModel();else app.setState({showImport:true,showModelMenu:false,importError:'',importReady:false});},true));
+        card.appendChild(el('p',{text:'No compatible model? Save your Power BI project as PBIP with TMDL definitions, or export model.bim. A .pbix file cannot be opened directly. Select the project folder, not just the .pbip file.'}));
+        this.empty.appendChild(card);
         return;
       }
       this.empty.appendChild(el('div',{cls:'ex-empty-card'},[
@@ -340,10 +419,10 @@
         x0=Math.min(x0,b.x);y0=Math.min(y0,b.y);x1=Math.max(x1,b.x+b.w);y1=Math.max(y1,b.y+b.h);
       });
       var scale=Math.min(184/Math.max(1,x1-x0),96/Math.max(1,y1-y0)),ox=(200-(x1-x0)*scale)/2,oy=(112-(y1-y0)*scale)/2;
-      this.mapBounds={x:x0,y:y0,scale:scale,ox:ox,oy:oy};ctx.strokeStyle='#d4dbe8';ctx.lineWidth=.7;
+      this.mapBounds={x:x0,y:y0,scale:scale,ox:ox,oy:oy};ctx.strokeStyle=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'#cfb992':'#d4dbe8';ctx.lineWidth=.7;
       app.model.relationships.forEach(function(r){var a=boxes[r.from],b=boxes[r.to];if(!a||!b)return;ctx.beginPath();ctx.moveTo(ox+(a.x+a.w/2-x0)*scale,oy+(a.y+35-y0)*scale);ctx.lineTo(ox+(b.x+b.w/2-x0)*scale,oy+(b.y+35-y0)*scale);ctx.stroke();});
       ns.forEach(function(n){var p=boxes[n];ctx.fillStyle=app.tableColor(app.model.byName[n]);ctx.fillRect(ox+(p.x-x0)*scale,oy+(p.y-y0)*scale,Math.max(3,p.w*scale),Math.max(2,p.h*scale));});
-      ctx.fillStyle='rgba(37,99,235,.07)';ctx.strokeStyle='#2563eb';ctx.lineWidth=1.5;var bx=ox+(view.x-x0)*scale,by=oy+(view.y-y0)*scale;ctx.fillRect(bx,by,view.w*scale,view.h*scale);ctx.strokeRect(bx,by,view.w*scale,view.h*scale);
+      ctx.fillStyle=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'rgba(113,59,67,.07)':'rgba(37,99,235,.07)';ctx.strokeStyle=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'#713b43':'#2563eb';ctx.lineWidth=1.5;var bx=ox+(view.x-x0)*scale,by=oy+(view.y-y0)*scale;ctx.fillRect(bx,by,view.w*scale,view.h*scale);ctx.strokeRect(bx,by,view.w*scale,view.h*scale);
     },
     navigateMap:function(e){var b=this.mapBounds;if(!b)return;var r=this.map.getBoundingClientRect(),cv=this.app.canvas;var x=((e.clientX-r.left)*200/r.width-b.ox)/b.scale+b.x,y=((e.clientY-r.top)*112/r.height-b.oy)/b.scale+b.y;cv.view.x=cv.host.clientWidth/2-x*cv.view.k;cv.view.y=cv.host.clientHeight/2-y*cv.view.k;cv.updateTransform();}
   };

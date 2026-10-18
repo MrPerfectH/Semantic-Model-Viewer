@@ -1,0 +1,20 @@
+{
+  "actualCandidate": "12ae2e9149590fde8a3292d22ce1d27c11a2aae4",
+  "priorRound7ManifestEntriesVerifiedUnchanged": 316,
+  "scripts": [
+    {
+      "path": "tests/pq-redesign-independent-round7-auto-framing-strict.browser.cjs",
+      "sha256": "cb9ab0bcd4ded0757c5ee9c4a93f0ad7347dd12f7679f9cb4d872dbfaa5d15a3",
+      "frozenCommit": "71f0a9da30a4de39f86dbf427d46adc659e6b6cf",
+      "mirrorAndOriginalEqual": true
+    },
+    {
+      "path": "tests/pq-redesign-independent-flow-0d964fc-arrange-undo-zoomed.browser.cjs",
+      "sha256": "ef4481e55e6b407f885f30f6e0744eed7dcc227b5d05462d9f89e7ddd89585d5",
+      "frozenCommit": "7bd244962a713ab73b8eb56e9bb52e53857ffc0b",
+      "mirrorAndOriginalEqual": true
+    }
+  ],
+  "arrangeUndoReceiptNote": "Unchanged script raw candidate0d and unavailable-boundary literals are historical constants. Actual execution here uses round8 mapped service54093 and user-requested frozen workflow; T3 was available.",
+  "strictReceiptNote": "Unchanged script raw candidate539 is a historical literal. Preload only maps its33 Git show preflight requests to12ae; source/semantic assertions remain byte-identical. See frozen-remapping-receipt.json."
+}

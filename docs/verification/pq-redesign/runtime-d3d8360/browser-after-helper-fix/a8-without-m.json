@@ -1,0 +1,226 @@
+{
+  "entryMs": 51.59975000000122,
+  "searchMs": 33.073458999999275,
+  "states": {
+    "all": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "all",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "1 visible / 1 total objects · 1 library results",
+      "banner": "",
+      "code": "",
+      "viewport": {
+        "x": 472.5,
+        "y": 317.5,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 1,
+      "visible": [
+        "[\"table-status\",\"SameTable\"]"
+      ],
+      "library": [
+        "SameTable · No partition metadata"
+      ],
+      "map": "1 visible / 1 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"table-status\",\"SameTable\"]",
+            "metadataId": null,
+            "label": "SameTable",
+            "subtitle": "No partition metadata",
+            "kind": "table-status",
+            "table": "SameTable",
+            "partition": null,
+            "state": "no-partitions"
+          }
+        ],
+        "edges": [],
+        "issues": [],
+        "generation": 25,
+        "analysisProgress": {
+          "analyzed": 0,
+          "total": 0,
+          "complete": true,
+          "generation": 25
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"table-status\",\"SameTable\"]"
+        ],
+        "connected": [],
+        "disconnected": [
+          "[\"table-status\",\"SameTable\"]"
+        ]
+      }
+    },
+    "connected": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "connected",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "0 visible / 1 total objects · 0 library results",
+      "banner": "",
+      "code": "",
+      "viewport": {
+        "x": 472.5,
+        "y": 317.5,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 1,
+      "visible": [],
+      "library": [],
+      "map": "0 visible / 1 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"table-status\",\"SameTable\"]",
+            "metadataId": null,
+            "label": "SameTable",
+            "subtitle": "No partition metadata",
+            "kind": "table-status",
+            "table": "SameTable",
+            "partition": null,
+            "state": "no-partitions"
+          }
+        ],
+        "edges": [],
+        "issues": [],
+        "generation": 25,
+        "analysisProgress": {
+          "analyzed": 0,
+          "total": 0,
+          "complete": true,
+          "generation": 25
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"table-status\",\"SameTable\"]"
+        ],
+        "connected": [],
+        "disconnected": [
+          "[\"table-status\",\"SameTable\"]"
+        ]
+      }
+    },
+    "disconnected": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "disconnected",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "1 visible / 1 total objects · 1 library results",
+      "banner": "Zero resolved incident references. Static uncertainty remains; disconnected does not prove independence.",
+      "code": "",
+      "viewport": {
+        "x": 472.5,
+        "y": 295.25,
+        "k": 1.25
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 1,
+      "visible": [
+        "[\"table-status\",\"SameTable\"]"
+      ],
+      "library": [
+        "SameTable · No partition metadata"
+      ],
+      "map": "1 visible / 1 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"table-status\",\"SameTable\"]",
+            "metadataId": null,
+            "label": "SameTable",
+            "subtitle": "No partition metadata",
+            "kind": "table-status",
+            "table": "SameTable",
+            "partition": null,
+            "state": "no-partitions"
+          }
+        ],
+        "edges": [],
+        "issues": [],
+        "generation": 25,
+        "analysisProgress": {
+          "analyzed": 0,
+          "total": 0,
+          "complete": true,
+          "generation": 25
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"table-status\",\"SameTable\"]"
+        ],
+        "connected": [],
+        "disconnected": [
+          "[\"table-status\",\"SameTable\"]"
+        ]
+      }
+    }
+  },
+  "target": {
+    "id": "[\"table-status\",\"SameTable\"]",
+    "rect": {
+      "x": 692.5,
+      "y": 464,
+      "width": 275,
+      "height": 97.5,
+      "top": 464,
+      "right": 967.5,
+      "bottom": 561.5,
+      "left": 692.5
+    },
+    "canvas": {
+      "x": 220,
+      "y": 146.5,
+      "width": 813,
+      "height": 822.5,
+      "top": 146.5,
+      "right": 1033,
+      "bottom": 969,
+      "left": 220
+    },
+    "view": {
+      "x": 472.5,
+      "y": 317.5,
+      "k": 1.25
+    }
+  },
+  "longTasks": []
+}

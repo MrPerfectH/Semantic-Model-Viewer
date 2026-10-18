@@ -1,0 +1,5 @@
+
+> semantic-model-viewer@0.3.3 package
+> vsce package --out /tmp/pq-reader-connectors-20261009.vsix
+
+sh: vsce: command not found

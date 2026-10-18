@@ -1,0 +1,43 @@
+{
+  "base": "e662a214d1621dc8c43b6310df57bfa504b146fc",
+  "runtime": "15509b4 plus overview display-only fix; exact 33 asset hashes in mapping.json",
+  "scripts": {
+    "pq-redesign-independent-runtime-transport.cjs": {
+      "originalSha256": "bd661ff1ad92c045094a95cd7450aa6c53798142e22bbda846ed84cdcc34c17a",
+      "adaptedSha256": "bd661ff1ad92c045094a95cd7450aa6c53798142e22bbda846ed84cdcc34c17a",
+      "adapted": false
+    },
+    "pq-redesign-independent-oracles.cjs": {
+      "originalSha256": "14d36cddfee371121d525d7dd59c68d4f9b821603ec7fda930a6276c6c845830",
+      "adaptedSha256": "14d36cddfee371121d525d7dd59c68d4f9b821603ec7fda930a6276c6c845830",
+      "adapted": false
+    },
+    "pq-redesign-independent-filters-v2.oracle.cjs": {
+      "originalSha256": "75dee4f6ae26920ae8a25cb4d7139b55eb24c5a3639026f9d8b06b77aa7b6bcb",
+      "adaptedSha256": "75dee4f6ae26920ae8a25cb4d7139b55eb24c5a3639026f9d8b06b77aa7b6bcb",
+      "adapted": false
+    },
+    "pq-redesign-independent-round7-auto-framing-strict.browser.cjs": {
+      "originalSha256": "cb9ab0bcd4ded0757c5ee9c4a93f0ad7347dd12f7679f9cb4d872dbfaa5d15a3",
+      "adaptedSha256": "91ada79e559d752fc37b9410379880218b1500fb9765979422fdfe9dc724c079",
+      "adapted": true
+    },
+    "pq-redesign-independent-round8-input-ownership.browser.cjs": {
+      "originalSha256": "ec78547fde106950c34ea38371a60a782878067e0d40b6c71202d60bd846e388",
+      "adaptedSha256": "2785ade6e909739a39d06c90f5b540f447f8ad5f62a6ac36cfaf5b652207ecc2",
+      "adapted": true
+    },
+    "pq-redesign-independent-flow-0d964fc-arrange-undo-zoomed.browser.cjs": {
+      "originalSha256": "ef4481e55e6b407f885f30f6e0744eed7dcc227b5d05462d9f89e7ddd89585d5",
+      "adaptedSha256": "ef4481e55e6b407f885f30f6e0744eed7dcc227b5d05462d9f89e7ddd89585d5",
+      "adapted": false
+    }
+  },
+  "adaptations": [
+    "explicit inputs/all depth replaces automatic first root",
+    "direct Inspect input replaces removed top Follow input",
+    "removed Trace action is superseded by viewport-preserving lock",
+    "removed top flow DOM diagnostics omitted"
+  ],
+  "otherAssertionsUnchanged": true
+}

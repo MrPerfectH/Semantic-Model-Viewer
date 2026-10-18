@@ -1,0 +1,673 @@
+{
+  "nav": {
+    "membership": [
+      "[\"partition\",\"Report\",\"Report\"]",
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"Raw West\"]",
+      "[\"expression\",\"\",\"Raw East\"]",
+      "[\"expression\",\"\",\"Prepared\"]",
+      "[\"expression\",\"\",\"Merged Query\"]",
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      "[\"expression\",\"\",\"Downstream\"]",
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      "[\"expression\",\"\",\"Standalone\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"Direct0\"]",
+      "[\"expression\",\"\",\"Local0\"]",
+      "[\"expression\",\"\",\"Function0\"]",
+      "[\"expression\",\"\",\"Direct1\"]",
+      "[\"expression\",\"\",\"Local1\"]",
+      "[\"expression\",\"\",\"Function1\"]",
+      "[\"expression\",\"\",\"Direct2\"]",
+      "[\"expression\",\"\",\"Local2\"]",
+      "[\"expression\",\"\",\"Function2\"]",
+      "[\"expression\",\"\",\"Direct3\"]",
+      "[\"expression\",\"\",\"Local3\"]",
+      "[\"expression\",\"\",\"Function3\"]",
+      "[\"expression\",\"\",\"Direct4\"]",
+      "[\"expression\",\"\",\"Local4\"]",
+      "[\"expression\",\"\",\"Function4\"]",
+      "[\"expression\",\"\",\"Direct5\"]",
+      "[\"expression\",\"\",\"Local5\"]",
+      "[\"expression\",\"\",\"Function5\"]",
+      "[\"expression\",\"\",\"Direct6\"]",
+      "[\"expression\",\"\",\"Local6\"]",
+      "[\"expression\",\"\",\"Function6\"]",
+      "[\"expression\",\"\",\"Direct7\"]",
+      "[\"expression\",\"\",\"Local7\"]",
+      "[\"expression\",\"\",\"Function7\"]",
+      "[\"expression\",\"\",\"Direct8\"]",
+      "[\"expression\",\"\",\"Local8\"]",
+      "[\"expression\",\"\",\"Function8\"]",
+      "[\"expression\",\"\",\"Direct9\"]",
+      "[\"expression\",\"\",\"Local9\"]",
+      "[\"expression\",\"\",\"Function9\"]",
+      "[\"expression\",\"\",\"Direct10\"]",
+      "[\"expression\",\"\",\"Local10\"]",
+      "[\"expression\",\"\",\"Function10\"]",
+      "[\"expression\",\"\",\"Direct11\"]",
+      "[\"expression\",\"\",\"Local11\"]",
+      "[\"expression\",\"\",\"Function11\"]",
+      "[\"expression\",\"\",\"Direct12\"]",
+      "[\"expression\",\"\",\"Local12\"]",
+      "[\"expression\",\"\",\"Function12\"]",
+      "[\"expression\",\"\",\"Direct13\"]",
+      "[\"expression\",\"\",\"Local13\"]",
+      "[\"expression\",\"\",\"Function13\"]",
+      "[\"expression\",\"\",\"RepeatedQuoted\"]",
+      "[\"expression\",\"\",\"Mixed\"]",
+      "[\"expression\",\"\",\"TransitiveOnly\"]",
+      "[\"expression\",\"\",\"Uncalled\"]",
+      "[\"expression\",\"\",\"AliasCall\"]",
+      "[\"expression\",\"\",\"FieldCall\"]",
+      "[\"expression\",\"\",\"ItemCall\"]",
+      "[\"expression\",\"\",\"StringComment\"]",
+      "[\"expression\",\"\",\"UnknownCall\"]",
+      "[\"expression\",\"\",\"DynamicCall\"]",
+      "[\"expression\",\"\",\"Incomplete\"]",
+      "[\"expression\",\"\",\"UnsupportedGeneratedEnterData\"]",
+      "[\"expression\",\"\",\"BuiltinTwelve\"]",
+      "[\"expression\",\"\",\"ConditionalCall\"]"
+    ],
+    "flowRootId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "focusMode": "dim",
+    "direction": "connected",
+    "depth": 1,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 9,
+    "selectedId": "[\"expression\",\"\",\"FinalOutput\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": 137,
+      "y": 93,
+      "k": 0.47
+    },
+    "bodyScroll": {
+      "x": 0,
+      "y": 0
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 410.5,
+      "wrap": true,
+      "focus": {
+        "kind": "related-[\"expression\",\"\",\"Merged Query\"]",
+        "nodeId": "[\"expression\",\"\",\"FinalOutput\"]"
+      },
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    },
+    "category": "all",
+    "query": ""
+  },
+  "layout": [
+    [
+      "[\"expression\",\"\",\"AliasCall\"]",
+      {
+        "x": 1764,
+        "y": 1234
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"BuiltinTwelve\"]",
+      {
+        "x": 1764,
+        "y": 1360
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CoConsumer\"]",
+      {
+        "x": 704,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"ConditionalCall\"]",
+      {
+        "x": 2058,
+        "y": 1360
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CycleA\"]",
+      {
+        "x": 0,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"CycleB\"]",
+      {
+        "x": 0,
+        "y": 252
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct0\"]",
+      {
+        "x": 588,
+        "y": 604
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct1\"]",
+      {
+        "x": 1470,
+        "y": 604
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct10\"]",
+      {
+        "x": 2058,
+        "y": 982
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct11\"]",
+      {
+        "x": 588,
+        "y": 1108
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct12\"]",
+      {
+        "x": 1470,
+        "y": 1108
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct13\"]",
+      {
+        "x": 0,
+        "y": 1234
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct2\"]",
+      {
+        "x": 0,
+        "y": 730
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct3\"]",
+      {
+        "x": 882,
+        "y": 730
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct4\"]",
+      {
+        "x": 0,
+        "y": 430
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct5\"]",
+      {
+        "x": 0,
+        "y": 856
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct6\"]",
+      {
+        "x": 882,
+        "y": 856
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct7\"]",
+      {
+        "x": 1764,
+        "y": 856
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct8\"]",
+      {
+        "x": 294,
+        "y": 982
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Direct9\"]",
+      {
+        "x": 1176,
+        "y": 982
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Downstream\"]",
+      {
+        "x": 1760,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"DynamicCall\"]",
+      {
+        "x": 882,
+        "y": 1360
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"FieldCall\"]",
+      {
+        "x": 2058,
+        "y": 1234
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"FinalOutput\"]",
+      {
+        "x": 1408,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function0\"]",
+      {
+        "x": 1176,
+        "y": 604
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function1\"]",
+      {
+        "x": 2058,
+        "y": 604
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function10\"]",
+      {
+        "x": 294,
+        "y": 1108
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function11\"]",
+      {
+        "x": 1176,
+        "y": 1108
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function12\"]",
+      {
+        "x": 2058,
+        "y": 1108
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function13\"]",
+      {
+        "x": 588,
+        "y": 1234
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function2\"]",
+      {
+        "x": 588,
+        "y": 730
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function3\"]",
+      {
+        "x": 1470,
+        "y": 730
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function4\"]",
+      {
+        "x": 2058,
+        "y": 730
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function5\"]",
+      {
+        "x": 588,
+        "y": 856
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function6\"]",
+      {
+        "x": 1470,
+        "y": 856
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function7\"]",
+      {
+        "x": 0,
+        "y": 982
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function8\"]",
+      {
+        "x": 882,
+        "y": 982
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Function9\"]",
+      {
+        "x": 1764,
+        "y": 982
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Incomplete\"]",
+      {
+        "x": 1176,
+        "y": 1360
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"ItemCall\"]",
+      {
+        "x": 0,
+        "y": 1360
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local0\"]",
+      {
+        "x": 882,
+        "y": 604
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local1\"]",
+      {
+        "x": 1764,
+        "y": 604
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local10\"]",
+      {
+        "x": 0,
+        "y": 1108
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local11\"]",
+      {
+        "x": 882,
+        "y": 1108
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local12\"]",
+      {
+        "x": 1764,
+        "y": 1108
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local13\"]",
+      {
+        "x": 294,
+        "y": 1234
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local2\"]",
+      {
+        "x": 294,
+        "y": 730
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local3\"]",
+      {
+        "x": 1176,
+        "y": 730
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local4\"]",
+      {
+        "x": 1764,
+        "y": 730
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local5\"]",
+      {
+        "x": 294,
+        "y": 856
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local6\"]",
+      {
+        "x": 1176,
+        "y": 856
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local7\"]",
+      {
+        "x": 2058,
+        "y": 856
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local8\"]",
+      {
+        "x": 588,
+        "y": 982
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Local9\"]",
+      {
+        "x": 1470,
+        "y": 982
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Merged Query\"]",
+      {
+        "x": 1056,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Mixed\"]",
+      {
+        "x": 1176,
+        "y": 1234
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Prepared\"]",
+      {
+        "x": 704,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Raw East\"]",
+      {
+        "x": 352,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Raw West\"]",
+      {
+        "x": 352,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"RepeatedQuoted\"]",
+      {
+        "x": 882,
+        "y": 1234
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Server\"]",
+      {
+        "x": 0,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Standalone\"]",
+      {
+        "x": 294,
+        "y": 604
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"StringComment\"]",
+      {
+        "x": 294,
+        "y": 1360
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"TransitiveOnly\"]",
+      {
+        "x": 352,
+        "y": 252
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Uncalled\"]",
+      {
+        "x": 1470,
+        "y": 1234
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"UnknownCall\"]",
+      {
+        "x": 588,
+        "y": 1360
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"UnsupportedGeneratedEnterData\"]",
+      {
+        "x": 1470,
+        "y": 1360
+      }
+    ],
+    [
+      "[\"partition\",\"Lookup\",\"Lookup\"]",
+      {
+        "x": 0,
+        "y": 604
+      }
+    ],
+    [
+      "[\"partition\",\"Report\",\"Report\"]",
+      {
+        "x": 1760,
+        "y": 0
+      }
+    ]
+  ],
+  "visible": [
+    "[\"expression\",\"\",\"AliasCall\"]",
+    "[\"expression\",\"\",\"BuiltinTwelve\"]",
+    "[\"expression\",\"\",\"CoConsumer\"]",
+    "[\"expression\",\"\",\"ConditionalCall\"]",
+    "[\"expression\",\"\",\"CycleA\"]",
+    "[\"expression\",\"\",\"CycleB\"]",
+    "[\"expression\",\"\",\"Direct0\"]",
+    "[\"expression\",\"\",\"Direct1\"]",
+    "[\"expression\",\"\",\"Direct10\"]",
+    "[\"expression\",\"\",\"Direct11\"]",
+    "[\"expression\",\"\",\"Direct12\"]",
+    "[\"expression\",\"\",\"Direct13\"]",
+    "[\"expression\",\"\",\"Direct2\"]",
+    "[\"expression\",\"\",\"Direct3\"]",
+    "[\"expression\",\"\",\"Direct4\"]",
+    "[\"expression\",\"\",\"Direct5\"]",
+    "[\"expression\",\"\",\"Direct6\"]",
+    "[\"expression\",\"\",\"Direct7\"]",
+    "[\"expression\",\"\",\"Direct8\"]",
+    "[\"expression\",\"\",\"Direct9\"]",
+    "[\"expression\",\"\",\"Downstream\"]",
+    "[\"expression\",\"\",\"DynamicCall\"]",
+    "[\"expression\",\"\",\"FieldCall\"]",
+    "[\"expression\",\"\",\"FinalOutput\"]",
+    "[\"expression\",\"\",\"Function0\"]",
+    "[\"expression\",\"\",\"Function1\"]",
+    "[\"expression\",\"\",\"Function10\"]",
+    "[\"expression\",\"\",\"Function11\"]",
+    "[\"expression\",\"\",\"Function12\"]",
+    "[\"expression\",\"\",\"Function13\"]",
+    "[\"expression\",\"\",\"Function2\"]",
+    "[\"expression\",\"\",\"Function3\"]",
+    "[\"expression\",\"\",\"Function4\"]",
+    "[\"expression\",\"\",\"Function5\"]",
+    "[\"expression\",\"\",\"Function6\"]",
+    "[\"expression\",\"\",\"Function7\"]",
+    "[\"expression\",\"\",\"Function8\"]",
+    "[\"expression\",\"\",\"Function9\"]",
+    "[\"expression\",\"\",\"Incomplete\"]",
+    "[\"expression\",\"\",\"ItemCall\"]",
+    "[\"expression\",\"\",\"Local0\"]",
+    "[\"expression\",\"\",\"Local1\"]",
+    "[\"expression\",\"\",\"Local10\"]",
+    "[\"expression\",\"\",\"Local11\"]",
+    "[\"expression\",\"\",\"Local12\"]",
+    "[\"expression\",\"\",\"Local13\"]",
+    "[\"expression\",\"\",\"Local2\"]",
+    "[\"expression\",\"\",\"Local3\"]",
+    "[\"expression\",\"\",\"Local4\"]",
+    "[\"expression\",\"\",\"Local5\"]",
+    "[\"expression\",\"\",\"Local6\"]",
+    "[\"expression\",\"\",\"Local7\"]",
+    "[\"expression\",\"\",\"Local8\"]",
+    "[\"expression\",\"\",\"Local9\"]",
+    "[\"expression\",\"\",\"Merged Query\"]",
+    "[\"expression\",\"\",\"Mixed\"]",
+    "[\"expression\",\"\",\"Prepared\"]",
+    "[\"expression\",\"\",\"Raw East\"]",
+    "[\"expression\",\"\",\"Raw West\"]",
+    "[\"expression\",\"\",\"RepeatedQuoted\"]",
+    "[\"expression\",\"\",\"Server\"]",
+    "[\"expression\",\"\",\"Standalone\"]",
+    "[\"expression\",\"\",\"StringComment\"]",
+    "[\"expression\",\"\",\"TransitiveOnly\"]",
+    "[\"expression\",\"\",\"Uncalled\"]",
+    "[\"expression\",\"\",\"UnknownCall\"]",
+    "[\"expression\",\"\",\"UnsupportedGeneratedEnterData\"]",
+    "[\"partition\",\"Lookup\",\"Lookup\"]",
+    "[\"partition\",\"Report\",\"Report\"]"
+  ],
+  "lock": {
+    "pressed": "true",
+    "label": "Unlock query focus",
+    "title": "Release FinalOutput; focus will follow the selected query."
+  },
+  "banner": "",
+  "inspector": "FinalOutputIntermediate query×1 inputs2 consumers? Source: UnknownOpen full queryM source · 42 lines · opens in a wide readerLocked focus · FinalOutput🔒Dim unrelatedHide unrelatedFocus stays on FinalOutput. Unlock to follow selection. Only resolved M references are shown.Query reference directionInputsConsumersAll connectedQuery reference distanceSelected onlyDirect onlyUp to 2 connectionsDirect + indirect4 objects in flow · 0 to addAdd 0 related to canvasRemove 65 unrelated from layoutRemove this object from layoutInputs · 1Merged QueryConsumers · 2ReportDownstreamMetadata and provenanceModel / kindIntermediate queryKind evidenceExpression metadata; loading or execution is not inferredSource providerUnknownSource evidenceNo recognized direct source call. Query references do not establish the source provider.KindqueryTypemBasisinferred from syntaxM · READ ONLYCopy MUnwrap lines1let\r\n2  emoji = \"😀\",\r\n3  first = #\"Merged Query\",\r\n4  again = #\"Merged Query\",\r\n5  pad0 = \"Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 Readable exact M source 0 \",\r\n6  pad1 = \"Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 Readable exact M source 1 \",\r\n7  pad2 = \"Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 Readable exact M source 2 \",\r\n8  pad3 = \"Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 Readable exact M source 3 \",\r\n9  pad4 = \"Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 Readable exact M source 4 \",\r\n10  pad5 = \"Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 Readable exact M source 5 \",\r\n11  pad6 = \"Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 Readable exact M source 6 \",\r\n12  pad7 = \"Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Readable exact M source 7 Re"
+}

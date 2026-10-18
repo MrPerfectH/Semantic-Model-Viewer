@@ -1,0 +1,13 @@
+{
+  "route": "http://127.0.0.1:8938/api/model?path=%2FUsers%2Fprzemek.harazny%2F.t3%2Fworktrees%2FSemantic-Model-Viewer%2Ffeat-pq-verification%2Ftests%2Facceptance-fixtures%2Fpq38%2FPQ38.SemanticModel",
+  "rawEqual": true,
+  "codeEqual": true,
+  "rawSHA256": "dd5e5fc71672c14dfab54484d5a195ca48caf7da43a8b7030cd2f794948da21a",
+  "transportSHA256": "dd5e5fc71672c14dfab54484d5a195ca48caf7da43a8b7030cd2f794948da21a",
+  "expectedCodeSHA256": "0ca26d7ff5746665d15af9014936598df9e4374eb7d766dffa2858d9f99fec42",
+  "actualCodeSHA256": "0ca26d7ff5746665d15af9014936598df9e4374eb7d766dffa2858d9f99fec42",
+  "rawCRLF": 19,
+  "transportCRLF": 19,
+  "expectedCodeBytes": 86,
+  "actualCodeBytes": 86
+}

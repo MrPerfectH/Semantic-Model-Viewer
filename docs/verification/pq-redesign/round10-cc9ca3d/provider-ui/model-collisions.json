@@ -1,0 +1,720 @@
+{
+  "phase": "ready",
+  "graph": [
+    {
+      "id": "[\"expression\",\"\",\"PowerPlatform.Dataflows\"]",
+      "label": "PowerPlatform.Dataflows",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"PowerBI.Dataflows\"]",
+      "label": "PowerBI.Dataflows",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Databricks.Catalogs\"]",
+      "label": "Databricks.Catalogs",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Databricks.Contents\"]",
+      "label": "Databricks.Contents",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Sql.Database\"]",
+      "label": "Sql.Database",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Sql.Databases\"]",
+      "label": "Sql.Databases",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Snowflake.Databases\"]",
+      "label": "Snowflake.Databases",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"OData.Feed\"]",
+      "label": "OData.Feed",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"AzureStorage.DataLake\"]",
+      "label": "AzureStorage.DataLake",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Excel.Workbook\"]",
+      "label": "Excel.Workbook",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Web.Contents\"]",
+      "label": "Web.Contents",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"File.Contents\"]",
+      "label": "File.Contents",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Table.FromRows\"]",
+      "label": "Table.FromRows",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"#table\"]",
+      "label": "#table",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Int64.Type\"]",
+      "label": "Int64.Type",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Table.TransformColumnTypes\"]",
+      "label": "Table.TransformColumnTypes",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe0\"]",
+      "label": "Probe0",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe1\"]",
+      "label": "Probe1",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe2\"]",
+      "label": "Probe2",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe3\"]",
+      "label": "Probe3",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe4\"]",
+      "label": "Probe4",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe5\"]",
+      "label": "Probe5",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe6\"]",
+      "label": "Probe6",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe7\"]",
+      "label": "Probe7",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe8\"]",
+      "label": "Probe8",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe9\"]",
+      "label": "Probe9",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe10\"]",
+      "label": "Probe10",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe11\"]",
+      "label": "Probe11",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe12\"]",
+      "label": "Probe12",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe13\"]",
+      "label": "Probe13",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"BuiltinProbe\"]",
+      "label": "BuiltinProbe",
+      "sourceEvidence": []
+    }
+  ],
+  "entries": [
+    {
+      "name": "PowerPlatform.Dataflows",
+      "id": "[\"expression\",\"\",\"PowerPlatform.Dataflows\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "PowerBI.Dataflows",
+      "id": "[\"expression\",\"\",\"PowerBI.Dataflows\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Databricks.Catalogs",
+      "id": "[\"expression\",\"\",\"Databricks.Catalogs\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Databricks.Contents",
+      "id": "[\"expression\",\"\",\"Databricks.Contents\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Sql.Database",
+      "id": "[\"expression\",\"\",\"Sql.Database\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Sql.Databases",
+      "id": "[\"expression\",\"\",\"Sql.Databases\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Snowflake.Databases",
+      "id": "[\"expression\",\"\",\"Snowflake.Databases\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "OData.Feed",
+      "id": "[\"expression\",\"\",\"OData.Feed\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "AzureStorage.DataLake",
+      "id": "[\"expression\",\"\",\"AzureStorage.DataLake\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Excel.Workbook",
+      "id": "[\"expression\",\"\",\"Excel.Workbook\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Web.Contents",
+      "id": "[\"expression\",\"\",\"Web.Contents\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "File.Contents",
+      "id": "[\"expression\",\"\",\"File.Contents\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Table.FromRows",
+      "id": "[\"expression\",\"\",\"Table.FromRows\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "#table",
+      "id": "[\"expression\",\"\",\"#table\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Int64.Type",
+      "id": "[\"expression\",\"\",\"Int64.Type\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Table.TransformColumnTypes",
+      "id": "[\"expression\",\"\",\"Table.TransformColumnTypes\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Probe0",
+      "id": "[\"expression\",\"\",\"Probe0\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "PowerPlatform.Dataflows"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe1",
+      "id": "[\"expression\",\"\",\"Probe1\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "PowerBI.Dataflows"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe2",
+      "id": "[\"expression\",\"\",\"Probe2\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "Databricks.Catalogs"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe3",
+      "id": "[\"expression\",\"\",\"Probe3\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "Databricks.Contents"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe4",
+      "id": "[\"expression\",\"\",\"Probe4\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "Sql.Database"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe5",
+      "id": "[\"expression\",\"\",\"Probe5\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "Sql.Databases"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe6",
+      "id": "[\"expression\",\"\",\"Probe6\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "Snowflake.Databases"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe7",
+      "id": "[\"expression\",\"\",\"Probe7\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "OData.Feed"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe8",
+      "id": "[\"expression\",\"\",\"Probe8\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "AzureStorage.DataLake"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe9",
+      "id": "[\"expression\",\"\",\"Probe9\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "Excel.Workbook"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe10",
+      "id": "[\"expression\",\"\",\"Probe10\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "Web.Contents"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe11",
+      "id": "[\"expression\",\"\",\"Probe11\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "File.Contents"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe12",
+      "id": "[\"expression\",\"\",\"Probe12\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "Table.FromRows"
+      ],
+      "issues": []
+    },
+    {
+      "name": "Probe13",
+      "id": "[\"expression\",\"\",\"Probe13\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "#table"
+      ],
+      "issues": []
+    },
+    {
+      "name": "BuiltinProbe",
+      "id": "[\"expression\",\"\",\"BuiltinProbe\"]",
+      "presentation": {
+        "status": "Intermediate query",
+        "kind": "Intermediate query",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [
+        "Int64.Type",
+        "Table.TransformColumnTypes"
+      ],
+      "issues": []
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "boundary": "T3 inspection worked; interactions failed; explicit user fallback authorization",
+  "click1": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Preview automation click timed out after 5000ms."
+      }
+    ],
+    "isError": true
+  },
+  "status": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"available\":true,\"visible\":false,\"tabId\":\"tab_25_9fb37a1a-9d5e-4eca-a366-3aa050ab491f\",\"url\":\"http://127.0.0.1:60017/\",\"title\":\"Semantic Model Viewer\",\"loading\":false,\"control\":{\"owner\":\"agent\",\"ownedByCaller\":true,\"generation\":0},\"dialog\":null,\"viewportSetting\":{\"_tag\":\"fill\"},\"viewport\":{\"width\":1280,\"height\":800},\"fileChooser\":null,\"downloads\":[],\"tabs\":[{\"tabId\":\"tab_25_9fb37a1a-9d5e-4eca-a366-3aa050ab491f\",\"url\":\"http://127.0.0.1:60017/\"}]}"
+      }
+    ],
+    "structuredContent": {
+      "available": true,
+      "visible": false,
+      "tabId": "tab_25_9fb37a1a-9d5e-4eca-a366-3aa050ab491f",
+      "url": "http://127.0.0.1:60017/",
+      "title": "Semantic Model Viewer",
+      "loading": false,
+      "control": {
+        "owner": "agent",
+        "ownedByCaller": true,
+        "generation": 0
+      },
+      "dialog": null,
+      "viewportSetting": {
+        "_tag": "fill"
+      },
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "fileChooser": null,
+      "downloads": [],
+      "tabs": [
+        {
+          "tabId": "tab_25_9fb37a1a-9d5e-4eca-a366-3aa050ab491f",
+          "url": "http://127.0.0.1:60017/"
+        }
+      ]
+    },
+    "isError": false
+  },
+  "evaluate": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"toolIcon\":{\"_tag\":\"website\",\"pageUrl\":\"http://127.0.0.1:60017/\"},\"value\":{\"url\":\"http://127.0.0.1:60017/\",\"buttons\":[{\"className\":\"ex-button ex-primary\",\"box\":{\"x\":1169.4140625,\"y\":15.5,\"width\":90.5859375,\"height\":32,\"top\":15.5,\"right\":1260,\"bottom\":47.5,\"left\":1169.4140625}}],\"showImport\":false}}"
+      }
+    ],
+    "structuredContent": {
+      "toolIcon": {
+        "_tag": "website",
+        "pageUrl": "http://127.0.0.1:60017/"
+      },
+      "value": {
+        "url": "http://127.0.0.1:60017/",
+        "buttons": [
+          {
+            "className": "ex-button ex-primary",
+            "box": {
+              "x": 1169.4140625,
+              "y": 15.5,
+              "width": 90.5859375,
+              "height": 32,
+              "top": 15.5,
+              "right": 1260,
+              "bottom": 47.5,
+              "left": 1169.4140625
+            }
+          }
+        ],
+        "showImport": false
+      }
+    },
+    "isError": false
+  },
+  "click2": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Preview automation click received an invalid selector (27 characters)."
+      }
+    ],
+    "isError": true
+  }
+}

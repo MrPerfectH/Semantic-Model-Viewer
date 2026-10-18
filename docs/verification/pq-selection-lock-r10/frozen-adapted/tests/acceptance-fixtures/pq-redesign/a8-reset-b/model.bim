@@ -1,0 +1,33 @@
+{
+  "name": "Independent PQ redesign a8-reset-b",
+  "model": {
+    "tables": [
+      {
+        "name": "SameTable",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Main",
+            "source": {
+              "type": "m",
+              "expression": "SameIdentity"
+            }
+          }
+        ]
+      }
+    ],
+    "expressions": [
+      {
+        "name": "SameIdentity",
+        "kind": "m",
+        "expression": "\"PQ_REDESIGN_RESET_B_ONLY\""
+      }
+    ],
+    "relationships": []
+  }
+}

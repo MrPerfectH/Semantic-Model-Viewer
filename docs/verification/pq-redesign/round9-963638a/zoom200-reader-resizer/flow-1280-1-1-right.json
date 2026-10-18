@@ -1,0 +1,85 @@
+{
+  "root": "[\"expression\",\"\",\"FinalOutput\"]",
+  "selected": "[\"expression\",\"\",\"Merged Query\"]",
+  "status": "Inspecting: Merged Query",
+  "buttons": [
+    {
+      "text": "Inspect target",
+      "rect": {
+        "x": 685.046875,
+        "y": 134,
+        "width": 80.734375,
+        "height": 32,
+        "top": 134,
+        "right": 765.78125,
+        "bottom": 166,
+        "left": 685.046875
+      }
+    },
+    {
+      "text": "Trace this query",
+      "rect": {
+        "x": 771.78125,
+        "y": 134,
+        "width": 89.21875,
+        "height": 32,
+        "top": 134,
+        "right": 861,
+        "bottom": 166,
+        "left": 771.78125
+      }
+    },
+    {
+      "text": "Frame related flow",
+      "rect": {
+        "x": 280,
+        "y": 172,
+        "width": 102.28125,
+        "height": 32,
+        "top": 172,
+        "right": 382.28125,
+        "bottom": 204,
+        "left": 280
+      }
+    },
+    {
+      "text": "Clear flow",
+      "rect": {
+        "x": 388.28125,
+        "y": 172,
+        "width": 62.203125,
+        "height": 32,
+        "top": 172,
+        "right": 450.484375,
+        "bottom": 204,
+        "left": 388.28125
+      }
+    },
+    {
+      "text": "← Follow input",
+      "rect": {
+        "x": 362,
+        "y": 210,
+        "width": 84.0625,
+        "height": 32,
+        "top": 210,
+        "right": 446.0625,
+        "bottom": 242,
+        "left": 362
+      }
+    },
+    {
+      "text": "→ Follow consumer FinalOutput",
+      "rect": {
+        "x": 452.0625,
+        "y": 210,
+        "width": 162.40625,
+        "height": 32,
+        "top": 210,
+        "right": 614.46875,
+        "bottom": 242,
+        "left": 452.0625
+      }
+    }
+  ]
+}

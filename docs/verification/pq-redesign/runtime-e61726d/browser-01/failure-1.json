@@ -1,0 +1,32 @@
+{
+  "phase": "idle",
+  "category": "all",
+  "query": "",
+  "selectedId": null,
+  "inspectorOpen": false,
+  "banner": "",
+  "message": "",
+  "code": "",
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "k": 1
+  },
+  "history": [],
+  "inspectorView": {
+    "codeX": 0,
+    "codeY": 0,
+    "inspectorX": 0,
+    "inspectorY": 0,
+    "wrap": false,
+    "focus": null
+  },
+  "visible": [],
+  "library": [],
+  "options": [
+    "All",
+    "Connected",
+    "Disconnected"
+  ],
+  "sets": {}
+}

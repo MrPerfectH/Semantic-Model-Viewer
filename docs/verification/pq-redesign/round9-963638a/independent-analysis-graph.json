@@ -1,0 +1,553 @@
+{
+  "current": {
+    "nodes": [
+      {
+        "id": "[\"expression\",\"\",\"Raw\"]",
+        "metadataId": "[\"expression\",\"\",\"Raw\"]",
+        "label": "Raw",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Transform\"]",
+        "metadataId": "[\"expression\",\"\",\"Transform\"]",
+        "label": "Transform",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Collision\"]",
+        "metadataId": "[\"expression\",\"\",\"Collision\"]",
+        "label": "Collision",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Int64.Type\"]",
+        "metadataId": "[\"expression\",\"\",\"Int64.Type\"]",
+        "label": "Int64.Type",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Unknown\"]",
+        "metadataId": "[\"expression\",\"\",\"Unknown\"]",
+        "label": "Unknown",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"CycleA\"]",
+        "metadataId": "[\"expression\",\"\",\"CycleA\"]",
+        "label": "CycleA",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"CycleB\"]",
+        "metadataId": "[\"expression\",\"\",\"CycleB\"]",
+        "label": "CycleB",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"table-status\",\"Empty\"]",
+        "metadataId": null,
+        "label": "Empty",
+        "subtitle": "No partition metadata",
+        "kind": "table-status",
+        "table": "Empty",
+        "partition": null,
+        "state": "no-partitions"
+      }
+    ],
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Transform\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Raw\"]",
+        "consumerId": "[\"expression\",\"\",\"Transform\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Raw\"]",
+            "name": "Raw",
+            "at": 35,
+            "end": 38
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Int64.Type\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Transform\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Int64.Type\"]",
+        "consumerId": "[\"expression\",\"\",\"Transform\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Int64.Type\"]",
+            "name": "Int64.Type",
+            "at": 51,
+            "end": 61
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Int64.Type\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Collision\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Int64.Type\"]",
+        "consumerId": "[\"expression\",\"\",\"Collision\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Int64.Type\"]",
+            "name": "Int64.Type",
+            "at": 0,
+            "end": 13
+          },
+          {
+            "id": "[\"expression\",\"\",\"Int64.Type\"]",
+            "name": "Int64.Type",
+            "at": 16,
+            "end": 29
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Unknown\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Raw\"]",
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Raw\"]",
+            "name": "Raw",
+            "at": 28,
+            "end": 31
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Int64.Type\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Unknown\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Int64.Type\"]",
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Int64.Type\"]",
+            "name": "Int64.Type",
+            "at": 37,
+            "end": 47
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"CycleB\"]",
+        "consumerId": "[\"expression\",\"\",\"CycleA\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"CycleB\"]",
+            "name": "CycleB",
+            "at": 0,
+            "end": 6
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"CycleA\"]",
+        "consumerId": "[\"expression\",\"\",\"CycleB\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"CycleA\"]",
+            "name": "CycleA",
+            "at": 0,
+            "end": 6
+          }
+        ]
+      }
+    ],
+    "issues": [
+      {
+        "consumerId": "[\"expression\",\"\",\"Transform\"]",
+        "kind": "standard-library",
+        "message": "Standard M functions and types: Table.TransformColumnTypes. These are language names, not missing model queries."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "standard-library",
+        "message": "Standard M functions and types: Table.TransformColumnTypes. These are language names, not missing model queries."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: MissingQuery. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: Unknown.Library. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Dynamic/environment reference: Expression.Evaluate; this can choose a query at run time, so reading the code cannot identify every target."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: Expression.Evaluate. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Dynamic/environment reference: #shared; this can choose a query at run time, so reading the code cannot identify every target."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: #shared. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Dynamic/environment reference: Record.Field; this can choose a query at run time, so reading the code cannot identify every target."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: Record.Field. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Dynamic/environment reference: #sections; this can choose a query at run time, so reading the code cannot identify every target."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved name: #sections. No matching query was found in this model; it may be a missing query or a library/external name this viewer does not recognize."
+      },
+      {
+        "consumerId": null,
+        "kind": "analysis-notice",
+        "message": "Links come from reading M text, without running queries. Some links may be missing; no arrow does not mean no dependency."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"CycleA\"]",
+        "kind": "cycle",
+        "message": "Cycle among resolved static references.",
+        "componentIds": [
+          "[\"expression\",\"\",\"CycleA\"]",
+          "[\"expression\",\"\",\"CycleB\"]"
+        ]
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"CycleB\"]",
+        "kind": "cycle",
+        "message": "Cycle among resolved static references.",
+        "componentIds": [
+          "[\"expression\",\"\",\"CycleA\"]",
+          "[\"expression\",\"\",\"CycleB\"]"
+        ]
+      }
+    ],
+    "generation": null,
+    "analysisProgress": {
+      "analyzed": 7,
+      "total": 7,
+      "complete": true,
+      "generation": null
+    }
+  },
+  "previous": {
+    "nodes": [
+      {
+        "id": "[\"expression\",\"\",\"Raw\"]",
+        "metadataId": "[\"expression\",\"\",\"Raw\"]",
+        "label": "Raw",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Transform\"]",
+        "metadataId": "[\"expression\",\"\",\"Transform\"]",
+        "label": "Transform",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Collision\"]",
+        "metadataId": "[\"expression\",\"\",\"Collision\"]",
+        "label": "Collision",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Int64.Type\"]",
+        "metadataId": "[\"expression\",\"\",\"Int64.Type\"]",
+        "label": "Int64.Type",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"Unknown\"]",
+        "metadataId": "[\"expression\",\"\",\"Unknown\"]",
+        "label": "Unknown",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"CycleA\"]",
+        "metadataId": "[\"expression\",\"\",\"CycleA\"]",
+        "label": "CycleA",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"expression\",\"\",\"CycleB\"]",
+        "metadataId": "[\"expression\",\"\",\"CycleB\"]",
+        "label": "CycleB",
+        "subtitle": "query",
+        "kind": "query",
+        "table": null,
+        "partition": null,
+        "state": "available"
+      },
+      {
+        "id": "[\"table-status\",\"Empty\"]",
+        "metadataId": null,
+        "label": "Empty",
+        "subtitle": "No partition metadata",
+        "kind": "table-status",
+        "table": "Empty",
+        "partition": null,
+        "state": "no-partitions"
+      }
+    ],
+    "edges": [
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Transform\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Raw\"]",
+        "consumerId": "[\"expression\",\"\",\"Transform\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Raw\"]",
+            "name": "Raw",
+            "at": 35,
+            "end": 38
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Int64.Type\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Transform\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Int64.Type\"]",
+        "consumerId": "[\"expression\",\"\",\"Transform\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Int64.Type\"]",
+            "name": "Int64.Type",
+            "at": 51,
+            "end": 61
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Int64.Type\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Collision\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Int64.Type\"]",
+        "consumerId": "[\"expression\",\"\",\"Collision\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Int64.Type\"]",
+            "name": "Int64.Type",
+            "at": 0,
+            "end": 13
+          },
+          {
+            "id": "[\"expression\",\"\",\"Int64.Type\"]",
+            "name": "Int64.Type",
+            "at": 16,
+            "end": 29
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Unknown\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Raw\"]",
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Raw\"]",
+            "name": "Raw",
+            "at": 28,
+            "end": 31
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Int64.Type\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Unknown\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"Int64.Type\"]",
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"Int64.Type\"]",
+            "name": "Int64.Type",
+            "at": 37,
+            "end": 47
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"CycleB\"]",
+        "consumerId": "[\"expression\",\"\",\"CycleA\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"CycleB\"]",
+            "name": "CycleB",
+            "at": 0,
+            "end": 6
+          }
+        ]
+      },
+      {
+        "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "inputId": "[\"expression\",\"\",\"CycleA\"]",
+        "consumerId": "[\"expression\",\"\",\"CycleB\"]",
+        "referenceOccurrences": [
+          {
+            "id": "[\"expression\",\"\",\"CycleA\"]",
+            "name": "CycleA",
+            "at": 0,
+            "end": 6
+          }
+        ]
+      }
+    ],
+    "issues": [
+      {
+        "consumerId": "[\"expression\",\"\",\"Transform\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved library/external symbol: Table.TransformColumnTypes"
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved library/external symbol: Table.TransformColumnTypes"
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved reference: MissingQuery"
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved library/external symbol: Unknown.Library"
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Dynamic/environment reference: Expression.Evaluate; targets cannot be established statically."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved library/external symbol: Expression.Evaluate"
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Dynamic/environment reference: #shared; targets cannot be established statically."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved reference: #shared"
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Dynamic/environment reference: Record.Field; targets cannot be established statically."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved library/external symbol: Record.Field"
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Dynamic/environment reference: #sections; targets cannot be established statically."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"Unknown\"]",
+        "kind": "analysis-uncertainty",
+        "message": "Unresolved reference: #sections"
+      },
+      {
+        "consumerId": null,
+        "kind": "analysis-notice",
+        "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"CycleA\"]",
+        "kind": "cycle",
+        "message": "Cycle among resolved static references.",
+        "componentIds": [
+          "[\"expression\",\"\",\"CycleA\"]",
+          "[\"expression\",\"\",\"CycleB\"]"
+        ]
+      },
+      {
+        "consumerId": "[\"expression\",\"\",\"CycleB\"]",
+        "kind": "cycle",
+        "message": "Cycle among resolved static references.",
+        "componentIds": [
+          "[\"expression\",\"\",\"CycleA\"]",
+          "[\"expression\",\"\",\"CycleB\"]"
+        ]
+      }
+    ],
+    "generation": null,
+    "analysisProgress": {
+      "analyzed": 7,
+      "total": 7,
+      "complete": true,
+      "generation": null
+    }
+  },
+  "modelInputUnchanged": true
+}

@@ -6,12 +6,11 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { findModels, readModelFiles } = require('./workspace');
-const { runCleaner, loadAnalysisInteractive } = require('./cleaner');
 
 const STORAGE_PREFIX = 'smv:';
 const VIEW_TYPE = 'semanticModelViewer';
 const MAX_SNAPSHOT_BYTES = 100 * 1024 * 1024;
-const REQUESTS = new Set(['listModels', 'openModel', 'loadAnalysis', 'refreshModel', 'snapshotAssets', 'saveSnapshot']);
+const REQUESTS = new Set(['listModels', 'openModel', 'refreshModel', 'snapshotAssets', 'saveSnapshot']);
 const EVENTS = new Set(['ready', 'storage', 'notify', 'openFile']);
 const storageKey = (key) => typeof key === 'string' && key.length <= 1024 && /^(?:smv[_-].+|lsa_model_layout_v1)$/.test(key) && !/[\u0000-\u001f]/.test(key);
 const requestId = (id) => (typeof id === 'number' && Number.isSafeInteger(id) && id >= 0) || (typeof id === 'string' && id.length > 0 && id.length <= 128);
@@ -41,7 +40,7 @@ function buildHtml(webview, mediaUri) {
     return `<script nonce="${nonce}" src="${assetUri(webview, mediaUri, './js/host-vscode.js')}"></script>\n` + script;
   });
   if (!injected) throw new Error('The packaged viewer scripts are missing.');
-  const csp = `default-src 'none'; img-src ${webview.cspSource} data: blob:; style-src ${webview.cspSource} 'unsafe-inline'; font-src ${webview.cspSource}; script-src 'nonce-${nonce}'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';`;
+  const csp = `default-src 'none'; img-src ${webview.cspSource} data: blob:; style-src ${webview.cspSource} 'unsafe-inline'; font-src ${webview.cspSource}; script-src 'nonce-${nonce}'; connect-src 'none'; worker-src blob:; object-src 'none'; base-uri 'none'; form-action 'none';`;
   return html.replace(/<head>/i, '<head>\n<meta http-equiv="Content-Security-Policy" content="' + escapeAttribute(csp) + '">');
 }
 
@@ -140,11 +139,6 @@ class ViewerPanel {
   afterOpen(entry, panel, epoch) {
     if (!this.isCurrent(panel, epoch)) return;
     this.setupWatcher(entry);
-    if (vscode.workspace.isTrusted === true && vscode.workspace.getConfiguration('semanticModelViewer').get('cleaner.autoRun')) {
-      runCleaner(entry, this.output).then((data) => {
-        if (data && this.isCurrent(panel, epoch)) this.post({ type: 'usage', modelId: entry.id, data }, panel);
-      }).catch((error) => { if (this.isCurrent(panel, epoch)) this.fail(error, panel); });
-    }
   }
 
   async onMessage(msg, panel = this.panel) {
@@ -181,7 +175,7 @@ class ViewerPanel {
       }
       case 'storage':
         if (!storageKey(msg.key) || (msg.value !== null && typeof msg.value !== 'string') || (typeof msg.value === 'string' && msg.value.length > MAX_SNAPSHOT_BYTES)) throw new Error('Invalid viewer storage value.');
-        await this.context.workspaceState.update(STORAGE_PREFIX + msg.key, msg.value === null ? undefined : msg.value);
+        await (msg.key === 'smv_onboarding_v1' ? this.context.globalState : this.context.workspaceState).update(STORAGE_PREFIX + msg.key, msg.value === null ? undefined : msg.value);
         return;
       case 'listModels': return reply({ models: (await findModels()).map(pub) });
       case 'openModel': {
@@ -200,12 +194,6 @@ class ViewerPanel {
         return;
       }
       case 'refreshModel': return reply(await this.refresh());
-      case 'loadAnalysis': {
-        if (!this.current) throw new Error('Open a model first.');
-        const entry = this.current, epoch = this.epoch;
-        const data = await loadAnalysisInteractive(entry, this.output);
-        return reply(this.isCurrent(panel, epoch) ? { data, modelId: entry.id } : { cancelled: true });
-      }
       case 'snapshotAssets': return reply(snapshotAssets(this.mediaUri));
       case 'saveSnapshot': {
         if (typeof msg.html !== 'string' || !msg.html.trim() || Buffer.byteLength(msg.html, 'utf8') > MAX_SNAPSHOT_BYTES || (msg.filename !== undefined && typeof msg.filename !== 'string')) throw new Error('Invalid HTML snapshot.');
@@ -240,6 +228,8 @@ class ViewerPanel {
     for (const key of this.context.workspaceState.keys()) {
       if (key.startsWith(STORAGE_PREFIX) && storageKey(key.slice(STORAGE_PREFIX.length))) out[key.slice(STORAGE_PREFIX.length)] = this.context.workspaceState.get(key);
     }
+    const onboarding = this.context.globalState.get(STORAGE_PREFIX + 'smv_onboarding_v1');
+    if (onboarding !== undefined) out.smv_onboarding_v1 = onboarding;
     return out;
   }
 
@@ -257,15 +247,6 @@ class ViewerPanel {
       await this.fail(error, panel);
       return { error: (error && error.message) || String(error) };
     }
-  }
-
-  async loadAnalysisCommand() {
-    if (!this.panel || !this.current) { vscode.window.showInformationMessage('Semantic Model Viewer: open a model first.'); return; }
-    const panel = this.panel, entry = this.current, epoch = this.epoch;
-    try {
-      const data = await loadAnalysisInteractive(entry, this.output);
-      if (data && this.isCurrent(panel, epoch)) await this.post({ type: 'usage', modelId: entry.id, data }, panel);
-    } catch (error) { if (this.isCurrent(panel, epoch)) this.fail(error, panel); }
   }
 
   setupWatcher(entry) {

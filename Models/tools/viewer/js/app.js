@@ -117,7 +117,7 @@
       isolate: false, focusDepth: 1, viewMode: 'graph',
       showModelMenu: false, showPresets: false, presetName: '',
       showImport: false, importError: '', importReady: false, importName: '', importSummary: '',
-      msrQuery: '', expandedMeasure: null, pngLabel: 'PNG',
+      msrQuery: '', expandedMeasure: null, calcOpen: {}, pngLabel: 'PNG',
       selMeasure: null, dependencySource: null, mvQuery: '', mvOpen: {}, gExtra: {}, gHover: null, gPin: null,
       mvW: Math.max(230, Math.min(600, parseInt(store.get('smv-mvw'), 10) || 296)),
       repoScanning: false, repoError: '', showRules: false,
@@ -130,7 +130,7 @@
     this.modelKey = 'builtin';
     this.colorBy = 'domain';
     this.model = null;
-    this._usage = null; this._usageMeta = null; this._usageStatus = null; this._usageCols = null;
+    this._usage = null; this._usageMeta = null;
     this._importModel = null; this._importHandle = null;
     this.repoHandle = null; this.repoPath = null; this.repoModels = null; this._repoLive = false;
     this.server = null;   // local app server (scripts/serve.py), detected at boot
@@ -176,6 +176,7 @@
     this.matrix = new g.MatrixView(this, document.getElementById('matrix'));
     this.measures = new g.MeasuresView(this, document.getElementById('measures'));
     this.sidebar = new g.Sidebar(this, document.getElementById('drawer'));
+    if (g.PowerQueryWorkspace && g.PowerQueryCanvas && g.PowerQueryInspector) this.powerQueryWorkspace = new g.PowerQueryWorkspace(this, document.getElementById('power-query-workspace'));
     if (g.TableExplorer) this.explorer = new g.TableExplorer(this);
     this.importModal = new g.ImportModal(this, document.getElementById('modal'));
     this.rulesModal = new g.RulesModal(this, document.getElementById('rolesetup'));
@@ -193,23 +194,7 @@
     window.addEventListener('resize', function () { self.canvas.renderLines(); });
   }
 
-  var installEvent = null;
-  window.addEventListener('beforeinstallprompt', function (e) {
-    e.preventDefault(); installEvent = e;
-    if (window.app) window.app.setState({ canInstall: true });
-  });
-  window.addEventListener('appinstalled', function () {
-    installEvent = null;
-    if (window.app) window.app.setState({ canInstall: false });
-  });
-
   App.prototype = {
-    canInstall: function () { return !!installEvent; },
-    installApp: function () {
-      var e = installEvent; if (!e) return;
-      installEvent = null; this.setState({ canInstall: false });
-      e.prompt();
-    },
     /* ---------- state ---------- */
     setState: function (patch, cb) {
       var self = this;
@@ -237,13 +222,16 @@
       this.measures.update();
       if (this.explorer) this.explorer.update();
       this.sidebar.update();
+      if (this.powerQueryWorkspace) this.powerQueryWorkspace.update();
       this.importModal.update();
       this.rulesModal.update();
+      if (this.onboarding) this.onboarding.update();
     },
 
     /* ---------- color / source helpers ---------- */
     applyPalette: function (name) {
       var self = this, P = PALETTES[name] || PALETTES.muted;
+      if (g.ViewerTheme) P = g.ViewerTheme.palette(P);
       this.paletteName = PALETTES[name] ? name : 'muted';
       this.DOMAIN_COLORS = P.domain; this.SCHEMA_COLORS = P.schema; this.PALETTE = P.list;
       this.FALLBACK_COLOR = P.fallback;
@@ -252,20 +240,27 @@
         var c = P.source[k] || P.source.other;
         self.SOURCE_KINDS[k].color = c; self.SOURCE_COLORS[k] = c;
       });
-      if (g.GraphCanvas && g.GraphCanvas.EDGE) Object.assign(g.GraphCanvas.EDGE, P.edge);
+      if (g.GraphCanvas && g.GraphCanvas.EDGE) Object.assign(g.GraphCanvas.EDGE, {base:'#9aa3b2',lock:'#1f2430',marked:'#b4584f'}, P.edge);
     },
     /* Switch look without touching the model, selection or layout. */
     setPalette: function (name) {
       if (!PALETTES[name] || name === this.paletteName) return;
       store.set('smv-palette', name);
       this.applyPalette(name);
+      this.refreshAppearance();
+    },
+    refreshAppearance: function () {
+      this.applyPalette(this.paletteName);
       this.rebuildColorMaps();
       var cv = this.canvas;
       if (cv && this.model) {
         cv.recolor(); cv.renderLines(); cv.applyHighlight();
-        if (cv.clusterOn) cv.buildClusters();
+        if (cv.clusterOn) { var domains = this.captureDomains(); this.restoreDomains(domains); }
       }
       this.sidebar._key = null;
+      this.matrix._key = null;
+      if (this.explorer) { this.explorer._key = null; this.explorer._clusterKey = null; }
+      if (this.powerQueryWorkspace) this.powerQueryWorkspace.refreshAppearance();
       this.render(true);
     },
     rebuildColorMaps: function () {
@@ -418,6 +413,8 @@
         tableNames.set(t.name.toLowerCase(), t.name);
         var names = new Map(); tableMeasures.set(t.name, names);
         t.measures.forEach(function (m) {
+          // models imported before the parser dropped TMDL ``` fences still carry them in storage
+          if (window.TMDLParser && window.TMDLParser.unfence) m.dax = window.TMDLParser.unfence(m.dax);
           names.set(m.name.toLowerCase(), m.name);
           if (!measureNames.has(m.name.toLowerCase())) {
             measureNames.set(m.name.toLowerCase(), m.name); msrHome[m.name] = t.name;
@@ -503,10 +500,11 @@
       var self = this;
       this.modelKey = key;
       this.canvas.setLayoutKey(key === 'builtin' ? 'lsa_model_layout_v1' : 'smv_layout_' + (key || 'none'));
-      this._usage = null; this._usageMeta = null; this._usageStatus = null; this._usageCols = null;
+      this._usage = null; this._usageMeta = null;
       if (opts.persist !== false) store.set('smv_current_v1', key);
       this.prepareModel(model);
       this.applyRoles(model, key);
+      if(this.powerQueryWorkspace)this.powerQueryWorkspace.reset(); if(g.PowerQuery)g.PowerQuery.close(this);
       this.model = model;
       this._tableWorkspace = null; this._tableViewport = null; this._domainWorkspace = null; this._matrixWorkspace = null;
       if (this.explorer) this.explorer.loadModel();
@@ -518,7 +516,7 @@
       this.matrix._key = null; this.sidebar._key = null;
       var state = {
         loaded: true, allExpanded: false, modelName: name, selected: null, activeFilter: null, search: '',
-        isolate: false, showModelMenu: !!opts.showModelMenu, msrQuery: '', expandedMeasure: null,
+        isolate: false, showModelMenu: !!opts.showModelMenu, msrQuery: '', expandedMeasure: null, calcOpen: {},
         selMeasure: null, dependencySource: null, mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, viewMode: 'graph',
         showRules: false
       };
@@ -526,12 +524,12 @@
     },
 
     /* An intentionally empty model for "nothing chosen yet" - same wiring as a
-       real load (see _applyModel above), so the picker opens over a properly
+       real load (see _applyModel above), so Start here appears over a properly
        built, if empty, canvas instead of a half-initialized screen. Does not
        touch smv_current_v1: only an actual choice (including the built-in
        sample itself) should make this the remembered default from now on. */
     loadEmptyModel: function () {
-      this._applyModel({ name: '', tables: [], relationships: [] }, 'Choose a model', null, { persist: false, showModelMenu: true });
+      this._applyModel({ name: '', tables: [], relationships: [] }, 'Choose a model', null, { persist: false, showModelMenu: false });
     },
 
     loadModel: function (key) {
@@ -593,8 +591,8 @@
       model.tables.forEach(function (table) { table.source = table.source || {kind:'other'}; table.domain = table.domain || 'Other'; });
       this.state.viewMode = 'graph';
       this.modelKey = record.id; this.canvas.setLayoutKey('smv_layout_' + record.id);
-      this._usage = null; this._usageMeta = null; this._usageStatus = null; this._usageCols = null;
-      this.prepareModel(model); this.applyRoles(model, record.id); this.model = model;
+      this._usage = null; this._usageMeta = null;
+      this.prepareModel(model); this.applyRoles(model, record.id); if(this.powerQueryWorkspace)this.powerQueryWorkspace.reset(); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
       this._tableWorkspace = null; this._tableViewport = null; this._domainWorkspace = null; this._matrixWorkspace = null;
       if (this.explorer) this.explorer.loadModel();
       var cv = this.canvas;
@@ -612,7 +610,6 @@
           self.setViewMode(saved.viewMode);
         }
       });
-      if (record.usage) this.setUsage(record.usage);
     },
     hostChooseModel: async function (id) {
       var request = this._hostRequest = (this._hostRequest || 0) + 1;
@@ -626,34 +623,16 @@
       try { await this.host.listModels(); this.render(true); }
       catch (error) { this.setState({ repoError: error.message }); }
     },
-    hostLoadAnalysis: async function () {
-      var model = this.model;
-      try { var data = await this.host.pickAnalysis(); if (data && this.model === model) this.setUsage(data); }
-      catch (error) { this.setState({ repoError: error.message, showModelMenu: true }); }
-    },
     hostRefreshModel: async function () {
       try { await this.host.refreshModel(); }
       catch (error) { this.setState({ repoError: error.message, showModelMenu: true }); }
     },
-    setUsage: function (data) {
-      if (!data) { this._usage = null; this._usageMeta = null; this._usageStatus = null; this._usageCols = null; }
-      else {
-        var usage = g.UsageAdapter.fromCleaner(data);
-        if (usage.models.length && !usage.models.includes(this.state.modelName)) throw new Error('This analysis belongs to a different model.');
-        this._usage = usage.measures; this._usageMeta = usage; this._usageStatus = usage.status; this._usageCols = usage.columns;
-      }
-      this.measures._railKey = null; this.measures._mainKey = null; this.measures._daxKey = null; this.sidebar._key = null;
-      this.render(true);
-    },
-
     /* ---------- measure helpers shared by views ---------- */
     msrOf: function (name) {
       var M = this.model, h = M && M.msrHome ? M.msrHome[name] : null;
       return h && M.byName[h] ? M.byName[h].measures.find(function (x) { return x.name === name; }) : null;
     },
     msrUse: function (n) { return (this._usage && this._usage[n]) || null; },
-    msrStatus: function (n) { return (this._usageStatus && this._usageStatus[n]) || null; },
-    colStatus: function (t, c) { return (this._usageCols && this._usageCols[t + '|' + c]) || null; },
     useTip: function (u) {
       if (!u) return '';
       var rep = (this._usageMeta && this._usageMeta.report) || 'report';
@@ -663,20 +642,6 @@
         if (e.f) p.push(e.f + ' filter' + (e.f > 1 ? 's' : ''));
         return '• ' + (e.r ? e.r + ' / ' : '') + e.p + ' — ' + p.join(', ');
       }).join('\n');
-    },
-    statusPill: function (rec, hasPages, small) {
-      if (!rec || (rec.status === 'used' && hasPages)) return null;
-      var P = {
-        unused: ['unused', '#b91c1c', '#fdecec', '#f6c9c9', 'Semantic Model Cleaner: not used in any scanned report'],
-        broken: ['broken', '#92400e', '#fef3c7', '#fcd34d', 'Semantic Model Cleaner: broken reference'],
-        indirect: ['indirect', '#5b6472', '#f1f3f6', '#d5dae2', 'Semantic Model Cleaner: used indirectly'],
-        used: ['used', '#166534', '#f0f7f1', '#cde5d2', 'Semantic Model Cleaner: used by the model']
-      }[rec.status] || null;
-      if (!P) return null;
-      return {
-        text: P[0], title: P[4] + (rec.raw ? '\n' + rec.raw : '') + (rec.risk ? '\nremoval risk: ' + rec.risk : ''),
-        style: 'flex:none;font:600 ' + (small ? '8.5px' : '9px') + "/1 'IBM Plex Mono',monospace;color:" + P[1] + ';background:' + P[2] + ';border:1px solid ' + P[3] + ';border-radius:4px;padding:2px ' + (small ? '4px' : '5px') + ';cursor:help;'
-      };
     },
     tipFlags: function (n) {
       var m = this.msrOf(n), u = this.msrUse(n), s = '';
@@ -747,7 +712,7 @@
         if (m === 'matrix') self.restoreMatrix(self._matrixWorkspace);
         if (m === 'graph') {
           self.canvas.applyHighlight();
-          if (self.snapshotMode && self._tableViewport) { self.canvas.view = Object.assign({}, self._tableViewport); self.canvas.updateTransform(); }
+          if ((self.snapshotMode || was === 'power-query') && self._tableViewport) { self.canvas.view = Object.assign({}, self._tableViewport); self.canvas.updateTransform(); }
           else self.canvas.fitView();
         }
       });
@@ -776,7 +741,7 @@
         var vm = self.state.viewMode;
         var host = vm === 'matrix' ? (self.matrix.el ? (self.matrix.el.firstElementChild || self.matrix.el) : null)
           : (vm === 'measures' ? document.getElementById('measures') : self.canvas.host);
-        return h2i.toPng(host, { pixelRatio: 2, backgroundColor: '#f4f5f7', filter: function (n) { return n !== self.canvas.tip; } });
+        return h2i.toPng(host, { pixelRatio: 2, backgroundColor: g.ViewerTheme && g.ViewerTheme.get() === 'spellbook' ? '#f7efdf' : '#f4f5f7', filter: function (n) { return n !== self.canvas.tip; } });
       }).then(function (url) {
         var a = document.createElement('a');
         a.href = url; a.download = (self.state.modelName || 'model') + ' diagram.png';
@@ -856,7 +821,7 @@
         if (!/\.(tmdl|bim|json)$/i.test(f.name)) continue;
         try { files.push({ name: f.name, path: p, text: await f.text() }); } catch (e) { }
       }
-      if (!files.length) { this.setState({ importError: 'No .tmdl / .bim / .json files found in the selection.', importReady: false }); return; }
+      if (!files.length) { this.setState({ importError: 'No .tmdl / .bim / .json files found in the selection. Choose the PBIP project folder or its *.SemanticModel folder, or export model.bim. A .pbix file cannot be opened directly.', importReady: false }); return; }
       // a repo folder was dropped: group files by *.SemanticModel folder
       var byModel = {};
       files.forEach(function (f) {
@@ -951,6 +916,8 @@
        the File System Access API when there is no server. */
     detectServer: async function () {
       if (this.host || this.snapshotMode || typeof location === 'undefined' || !/^https?:$/.test(location.protocol)) return null;
+      // The local app only answers on this computer; skip the probe on a hosted copy (it would just 404).
+      if (!/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) return null;
       try {
         var r = await fetch('api/ping', { cache: 'no-store' });
         if (!r.ok) return null;
@@ -965,7 +932,9 @@
     api: async function (path, params) {
       var q = Object.keys(params || {}).map(function (k) { return k + '=' + encodeURIComponent(params[k]); }).join('&');
       var r = await fetch('api/' + path + (q ? '?' + q : ''), { cache: 'no-store' });
-      var j = null; try { j = await r.json(); } catch (e) { }
+      var j = null;
+      try { j = await r.json(); }
+      catch (e) { if (r.ok) throw new Error('The local app response could not be read completely. Try opening the folder again.'); }
       if (!r.ok) throw new Error((j && j.error) || ('The local app returned ' + r.status + '.'));
       return j;
     },
@@ -1088,7 +1057,24 @@
       this.setState({ repoScanning: false, repoError: found.length ? '' : ('No *.SemanticModel folders found in “' + handle.name + '”.') });
     },
     readModelDir: async function (h) {
-      if (h.dir) { var r = await this.api('model', { path: h.dir }); return r.files || []; }
+      if (!/\.SemanticModel$/i.test(h.dir ? this.baseName(h.dir) : h.name)) {
+        var found = await this._findModelDirs(h);
+        if (found.length) {
+          var combined = [];
+          for (var model of found) {
+            var modelFiles = await this.readModelDir(model.handle || { dir: model.dir, name: this.baseName(model.dir) });
+            modelFiles.forEach(function (f) { combined.push(Object.assign({}, f, { path: model.path + '/' + f.path })); });
+          }
+          return combined;
+        }
+      }
+      if (h.dir) {
+        var r = await this.api('model', { path: h.dir });
+        if (!r || !Array.isArray(r.files) || r.files.some(function (f) { return !f || typeof f.name !== 'string' || typeof f.path !== 'string' || typeof f.text !== 'string'; })) {
+          throw new Error('The local app did not return a readable model. Try opening the folder again.');
+        }
+        return r.files;
+      }
       var files = [];
       var walk = async function (dir, path) {
         for await (var ent of dir.entries()) {
@@ -1328,10 +1314,9 @@
       var model = JSON.parse(JSON.stringify(payload.model)), workspace = payload.workspace || {}, cv = this.canvas, ex = this.explorer;
       model.tables.forEach(function (table) { table.source = table.source || { kind: 'other' }; table.domain = table.domain || 'Other'; });
       // Exported role decisions are part of the snapshot. Do not apply recipient rules.
-      this.prepareModel(model); this.model = model;
+      this.prepareModel(model); if(this.powerQueryWorkspace)this.powerQueryWorkspace.reset(); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
       this._usage = payload.usage && payload.usage.measures || null;
       this._usageMeta = payload.usage && payload.usage.meta || null;
-      this._usageStatus = payload.usage && payload.usage.status || null; this._usageCols = payload.usage && payload.usage.columns || null;
       this.repoHandle = null; this.repoModels = null; this._repoLive = false;
       Object.assign(this.state, { loaded: true, modelName: payload.name || model.name || 'Semantic model snapshot',
         viewMode: 'graph', selected: null, isolate: false, allExpanded: false, showImport: false, showModelMenu: false,
@@ -1343,6 +1328,8 @@
       cv.computeLayout(); this.render(true); cv.build();
       var tableView = workspace.tableView || { name: 'Snapshot', tables: model.tables.map(function (table) { return table.name; }), pos: {} };
       cv.applyPreset(tableView);
+      // CLI snapshots have positions but no sender viewport. Fit for the recipient.
+      if (tableView.autoFit === true) cv.fitView();
       this._tableViewport = Object.assign({}, cv.view);
       this._tableWorkspace = this.captureTableView();
       cv.setPresets(Array.isArray(workspace.presets) ? workspace.presets : []);
@@ -1353,12 +1340,14 @@
         ex.direction = ['incoming', 'outgoing', 'connected'].includes(library.direction) ? library.direction : 'incoming';
         ex.depth = library.depth === 'direct' ? 'direct' : 'all';
         ex.includeInactive = !!library.includeInactive; ex.mapHidden = !!library.mapHidden;
+        ex.libraryHidden = !!library.libraryHidden; ex.inspectorHidden = !!library.inspectorHidden;
         ex.history = []; ex.message = 'Offline snapshot. Changes stay in this tab; save a snapshot to keep them.'; ex._key = null;
       }
       if (this.measures.restoreSnapshot) this.measures.restoreSnapshot(payload.measures);
       this._domainWorkspace = workspace.domains || null;
       this._matrixWorkspace = workspace.matrix || null;
-      this.state.viewMode = ['graph', 'measures', 'clusters', 'matrix'].includes(workspace.viewMode) ? workspace.viewMode : 'graph';
+      if (this.powerQueryWorkspace) this.powerQueryWorkspace.restoreSnapshot(workspace.powerQuery);
+      this.state.viewMode = ['graph', 'measures', 'clusters', 'matrix', 'power-query'].includes(workspace.viewMode) ? workspace.viewMode : 'graph';
       this.matrix._key = null; this.sidebar._key = null;
       this.render(true);
       if (this.state.viewMode === 'clusters') this.restoreDomains(this._domainWorkspace);
@@ -1395,7 +1384,7 @@
         if (initial) this.hostOpenModel(initial);
         else {
           this.model = {name:'',tables:[],relationships:[]}; this.prepareModel(this.model);
-          this.setState({modelName:'Choose a model',showModelMenu:true});
+          this.setState({modelName:'Choose a model',showModelMenu:false});
         }
         return;
       }
@@ -1403,7 +1392,7 @@
       /* No stored choice yet (a genuinely first-ever open, or a fresh browser
          profile) -> don't silently load the bundled sample. Same idea as the
          VS Code host's own "nothing open yet" state above (an empty model,
-         picker already open), via loadEmptyModel() so the canvas/explorer get
+         Start here visible), via loadEmptyModel() so the canvas/explorer get
          the same full initialization a real model load gets - not a smaller,
          easy-to-drift-from copy of it. Once the user picks anything -
          including the bundled sample itself - `smv_current_v1` is set and
@@ -1431,8 +1420,20 @@
     }
   };
 
+  // The CLI reuses model preparation without constructing the browser application.
+  if (typeof module === 'object' && module.exports) module.exports = App;
+
   window.addEventListener('DOMContentLoaded', function () {
-    function start() { var app = new App(); window.app = app; app.render(); return app.init(); }
+    function start() {
+      if (g.ViewerTheme) g.ViewerTheme.init();
+      var app = new App(); window.app = app; app.render();
+      return app.init().then(function () {
+        // Storage and host initialization must finish before first-use preferences are read.
+        if (g.ViewerOnboarding && !app.snapshotMode) {
+          app.onboarding = new g.ViewerOnboarding(app); app.render(true);
+        }
+      });
+    }
     if (g.SMVHost && g.SMVHost.kind === 'vscode') {
       g.SMVHost.boot().then(function () { U.store.useAdapter(g.SMVHost.storage); return start(); }).catch(function (error) {
         var root = document.getElementById('root'); U.clear(root);

@@ -1,0 +1,622 @@
+{
+  "all": {
+    "navigation": {
+      "membership": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "generation": 4,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 51.16129032258061,
+        "y": 156.79262672811058,
+        "k": 1.0829493087557605
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": ""
+    },
+    "phase": "ready",
+    "generation": 4,
+    "selected": null,
+    "code": "",
+    "visible": [
+      "[\"partition\",\"Sales\",\"Main\"]",
+      "[\"partition\",\"Customer\",\"Main\"]",
+      "[\"partition\",\"Product\",\"Main\"]",
+      "[\"partition\",\"Calendar\",\"Main\"]",
+      "[\"partition\",\"Rates\",\"Main\"]",
+      "[\"partition\",\"Budget\",\"Main\"]"
+    ],
+    "dimmed": [],
+    "layout": [
+      [
+        "[\"partition\",\"Budget\",\"Main\"]",
+        {
+          "x": 588,
+          "y": 126
+        }
+      ],
+      [
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"partition\",\"Customer\",\"Main\"]",
+        {
+          "x": 294,
+          "y": 0
+        }
+      ],
+      [
+        "[\"partition\",\"Product\",\"Main\"]",
+        {
+          "x": 588,
+          "y": 0
+        }
+      ],
+      [
+        "[\"partition\",\"Rates\",\"Main\"]",
+        {
+          "x": 294,
+          "y": 126
+        }
+      ],
+      [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    ],
+    "history": [],
+    "undo": 0,
+    "registry": [
+      "[\"partition\",\"Sales\",\"Main\"]",
+      "[\"partition\",\"Customer\",\"Main\"]",
+      "[\"partition\",\"Product\",\"Main\"]",
+      "[\"partition\",\"Calendar\",\"Main\"]",
+      "[\"partition\",\"Rates\",\"Main\"]",
+      "[\"partition\",\"Budget\",\"Main\"]"
+    ],
+    "edges": [],
+    "sets": {
+      "all": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "connected": [],
+      "disconnected": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ]
+    },
+    "library": [
+      "Sales",
+      "Customer",
+      "Product",
+      "Calendar",
+      "Rates",
+      "Budget"
+    ],
+    "banner": "",
+    "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+    "mapCount": 6,
+    "map": "6 visible / 6 objects",
+    "focus": {
+      "tag": "BODY",
+      "cls": ""
+    },
+    "options": [
+      "All (6)",
+      "Connected (0)",
+      "Disconnected (6)"
+    ]
+  },
+  "empty": {
+    "navigation": {
+      "membership": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "generation": 4,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 51.16129032258061,
+        "y": 156.79262672811058,
+        "k": 1.0829493087557605
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "connected",
+      "query": ""
+    },
+    "phase": "ready",
+    "generation": 4,
+    "selected": null,
+    "code": "",
+    "visible": [],
+    "dimmed": [],
+    "layout": [
+      [
+        "[\"partition\",\"Budget\",\"Main\"]",
+        {
+          "x": 588,
+          "y": 126
+        }
+      ],
+      [
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"partition\",\"Customer\",\"Main\"]",
+        {
+          "x": 294,
+          "y": 0
+        }
+      ],
+      [
+        "[\"partition\",\"Product\",\"Main\"]",
+        {
+          "x": 588,
+          "y": 0
+        }
+      ],
+      [
+        "[\"partition\",\"Rates\",\"Main\"]",
+        {
+          "x": 294,
+          "y": 126
+        }
+      ],
+      [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    ],
+    "history": [],
+    "undo": 0,
+    "registry": [
+      "[\"partition\",\"Sales\",\"Main\"]",
+      "[\"partition\",\"Customer\",\"Main\"]",
+      "[\"partition\",\"Product\",\"Main\"]",
+      "[\"partition\",\"Calendar\",\"Main\"]",
+      "[\"partition\",\"Rates\",\"Main\"]",
+      "[\"partition\",\"Budget\",\"Main\"]"
+    ],
+    "edges": [],
+    "sets": {
+      "all": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "connected": [],
+      "disconnected": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ]
+    },
+    "library": [],
+    "banner": "",
+    "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+    "mapCount": 6,
+    "map": "0 visible / 6 objects",
+    "focus": {
+      "tag": "BODY",
+      "cls": ""
+    },
+    "options": [
+      "All (6)",
+      "Connected (0)",
+      "Disconnected (6)"
+    ]
+  },
+  "removed": {
+    "navigation": {
+      "membership": [
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "generation": 4,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 254.6612903225806,
+        "y": 156.79262672811058,
+        "k": 1.0829493087557605
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "disconnected",
+      "query": "Sales"
+    },
+    "phase": "ready",
+    "generation": 4,
+    "selected": null,
+    "code": "",
+    "visible": [
+      "[\"partition\",\"Customer\",\"Main\"]",
+      "[\"partition\",\"Product\",\"Main\"]",
+      "[\"partition\",\"Calendar\",\"Main\"]",
+      "[\"partition\",\"Rates\",\"Main\"]",
+      "[\"partition\",\"Budget\",\"Main\"]"
+    ],
+    "dimmed": [
+      "[\"partition\",\"Customer\",\"Main\"]",
+      "[\"partition\",\"Product\",\"Main\"]",
+      "[\"partition\",\"Calendar\",\"Main\"]",
+      "[\"partition\",\"Rates\",\"Main\"]",
+      "[\"partition\",\"Budget\",\"Main\"]"
+    ],
+    "layout": [
+      [
+        "[\"partition\",\"Budget\",\"Main\"]",
+        {
+          "x": 588,
+          "y": 126
+        }
+      ],
+      [
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"partition\",\"Customer\",\"Main\"]",
+        {
+          "x": 294,
+          "y": 0
+        }
+      ],
+      [
+        "[\"partition\",\"Product\",\"Main\"]",
+        {
+          "x": 588,
+          "y": 0
+        }
+      ],
+      [
+        "[\"partition\",\"Rates\",\"Main\"]",
+        {
+          "x": 294,
+          "y": 126
+        }
+      ],
+      [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    ],
+    "history": [
+      {
+        "membership": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ],
+        "focusMode": "dim",
+        "direction": "connected",
+        "depth": 1,
+        "listFacet": "all",
+        "generation": 4,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 51.16129032258061,
+          "y": 156.79262672811058,
+          "k": 1.0829493087557605
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null
+        },
+        "category": "disconnected",
+        "query": "Sales"
+      }
+    ],
+    "undo": 1,
+    "registry": [
+      "[\"partition\",\"Sales\",\"Main\"]",
+      "[\"partition\",\"Customer\",\"Main\"]",
+      "[\"partition\",\"Product\",\"Main\"]",
+      "[\"partition\",\"Calendar\",\"Main\"]",
+      "[\"partition\",\"Rates\",\"Main\"]",
+      "[\"partition\",\"Budget\",\"Main\"]"
+    ],
+    "edges": [],
+    "sets": {
+      "all": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "connected": [],
+      "disconnected": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ]
+    },
+    "library": [
+      "Sales"
+    ],
+    "banner": "",
+    "note": "Zero resolved incident references; static uncertainty remains. Disconnected does not prove independence.",
+    "mapCount": 6,
+    "map": "5 visible / 6 objects",
+    "focus": {
+      "tag": "BODY",
+      "cls": ""
+    },
+    "options": [
+      "All (6)",
+      "Connected (0)",
+      "Disconnected (6)"
+    ]
+  },
+  "undone": {
+    "navigation": {
+      "membership": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "generation": 4,
+      "selectedId": "[\"partition\",\"Sales\",\"Main\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": 51.16129032258061,
+        "y": 156.79262672811058,
+        "k": 1.0829493087557605
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "disconnected",
+      "query": "Sales"
+    },
+    "phase": "ready",
+    "generation": 4,
+    "selected": "[\"partition\",\"Sales\",\"Main\"]",
+    "code": "let Source = Sql.Database(\"same-sql.pq-redesign.invalid\", \"SameDB\"), Result = Source{[Schema=\"dbo\", Item=\"Sales\"]}[Data] in Result",
+    "visible": [
+      "[\"partition\",\"Sales\",\"Main\"]",
+      "[\"partition\",\"Customer\",\"Main\"]",
+      "[\"partition\",\"Product\",\"Main\"]",
+      "[\"partition\",\"Calendar\",\"Main\"]",
+      "[\"partition\",\"Rates\",\"Main\"]",
+      "[\"partition\",\"Budget\",\"Main\"]"
+    ],
+    "dimmed": [
+      "[\"partition\",\"Customer\",\"Main\"]",
+      "[\"partition\",\"Product\",\"Main\"]",
+      "[\"partition\",\"Calendar\",\"Main\"]",
+      "[\"partition\",\"Rates\",\"Main\"]",
+      "[\"partition\",\"Budget\",\"Main\"]"
+    ],
+    "layout": [
+      [
+        "[\"partition\",\"Budget\",\"Main\"]",
+        {
+          "x": 588,
+          "y": 126
+        }
+      ],
+      [
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        {
+          "x": 0,
+          "y": 126
+        }
+      ],
+      [
+        "[\"partition\",\"Customer\",\"Main\"]",
+        {
+          "x": 294,
+          "y": 0
+        }
+      ],
+      [
+        "[\"partition\",\"Product\",\"Main\"]",
+        {
+          "x": 588,
+          "y": 0
+        }
+      ],
+      [
+        "[\"partition\",\"Rates\",\"Main\"]",
+        {
+          "x": 294,
+          "y": 126
+        }
+      ],
+      [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    ],
+    "history": [
+      {
+        "membership": [
+          "[\"partition\",\"Sales\",\"Main\"]",
+          "[\"partition\",\"Customer\",\"Main\"]",
+          "[\"partition\",\"Product\",\"Main\"]",
+          "[\"partition\",\"Calendar\",\"Main\"]",
+          "[\"partition\",\"Rates\",\"Main\"]",
+          "[\"partition\",\"Budget\",\"Main\"]"
+        ],
+        "focusMode": "dim",
+        "direction": "connected",
+        "depth": 1,
+        "listFacet": "all",
+        "generation": 4,
+        "selectedId": null,
+        "inspectorOpen": false,
+        "viewport": {
+          "x": 51.16129032258061,
+          "y": 156.79262672811058,
+          "k": 1.0829493087557605
+        },
+        "inspectorView": {
+          "codeX": 0,
+          "codeY": 0,
+          "inspectorX": 0,
+          "inspectorY": 0,
+          "wrap": false,
+          "focus": null
+        },
+        "category": "disconnected",
+        "query": "Sales"
+      }
+    ],
+    "undo": 0,
+    "registry": [
+      "[\"partition\",\"Sales\",\"Main\"]",
+      "[\"partition\",\"Customer\",\"Main\"]",
+      "[\"partition\",\"Product\",\"Main\"]",
+      "[\"partition\",\"Calendar\",\"Main\"]",
+      "[\"partition\",\"Rates\",\"Main\"]",
+      "[\"partition\",\"Budget\",\"Main\"]"
+    ],
+    "edges": [],
+    "sets": {
+      "all": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ],
+      "connected": [],
+      "disconnected": [
+        "[\"partition\",\"Sales\",\"Main\"]",
+        "[\"partition\",\"Customer\",\"Main\"]",
+        "[\"partition\",\"Product\",\"Main\"]",
+        "[\"partition\",\"Calendar\",\"Main\"]",
+        "[\"partition\",\"Rates\",\"Main\"]",
+        "[\"partition\",\"Budget\",\"Main\"]"
+      ]
+    },
+    "library": [
+      "Sales"
+    ],
+    "banner": "",
+    "note": "Zero resolved incident references; static uncertainty remains. Disconnected does not prove independence.",
+    "mapCount": 6,
+    "map": "6 visible / 6 objects",
+    "focus": {
+      "tag": "BODY",
+      "cls": ""
+    },
+    "options": [
+      "All (6)",
+      "Connected (0)",
+      "Disconnected (6)"
+    ]
+  }
+}

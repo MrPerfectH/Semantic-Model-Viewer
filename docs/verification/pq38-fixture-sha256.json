@@ -1,0 +1,14 @@
+{
+  ".gitattributes": "f400e46ea40414c682207286374f5eeda3755ae4e46b8f32a10066e95ee3bf5f",
+  "PQ38.SemanticModel/definition/database.tmdl": "503dbc56cfc2b222b0476f4b4f85d37172cab0bbdbd217a0a39488d959fb52e7",
+  "PQ38.SemanticModel/definition/expressions.tmdl": "5d4a442716c25b23f96102bdb11b124aa84a1caae8329140153868b271f33d86",
+  "PQ38.SemanticModel/definition/model.tmdl": "4fb4784a2952f59da62329becf93ebdd903a2543843ccb37549a8560ed53b011",
+  "PQ38.SemanticModel/definition/tables/Sales.tmdl": "dd5e5fc71672c14dfab54484d5a195ca48caf7da43a8b7030cd2f794948da21a",
+  "bim/model.bim": "fa1f0096238906e0914c80aa10329750304c7698f3950b54ba6b65b27a4517d9",
+  "large-1000/model.bim": "aed60da51c9a7727e2ba5de98876007499f53582b689eff3701108b199cf6c2a",
+  "large-300/model.bim": "2ba98c6582eb6f64e776f991fc23ef8e1776f20fa410759088e70d7f737f048f",
+  "large-301/model.bim": "c9e29cb183f43d147b858ecb19d0a957800bd3e86570f3d0119c188625b245da",
+  "large-350/model.bim": "b8d89738e7705b8b4a3341eb66ac81f56b4d06574e89bd3d7d16258927a8ddc1",
+  "oracle/expected.json": "d4c2aefeae1185376711debbbe125e5617faecc49ec6417a8adadce06651aa26",
+  "reset/model.bim": "0fcd1abb57d995ff01a019c657bdc39e8c5d438f38d63979dd22dd019acba95c"
+}

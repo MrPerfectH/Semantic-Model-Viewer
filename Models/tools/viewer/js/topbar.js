@@ -31,7 +31,7 @@
 
   TopBar.prototype.update = function () {
     var self=this,app=this.app,st=app.state,cv=app.canvas,offline=!!app.snapshotMode,info=app.snapshotInfo||{};
-    var key=[app.modelKey,st.modelName,st.loaded,st.viewMode,st.showModelMenu,st.pngLabel,st.repoScanning,st.repoError,app._repoLive,offline,st.snapshotSaving,st.refreshing,st.snapshotMessage,st.snapshotError,app.canInstall&&app.canInstall()].join('|');
+    var key=[app.modelKey,st.modelName,st.loaded,st.viewMode,st.showModelMenu,st.pngLabel,st.repoScanning,st.repoError,app._repoLive,offline,st.snapshotSaving,st.refreshing,st.snapshotMessage,st.snapshotError,!!app.server].join('|');
     if(key===this._key)return;this._key=key;U.clear(this.host);
     var count=(app.model?app.model.tables.length:0)+' tables · '+(app.model?app.model.relationships.length:0)+' relationships';
     var created=Number.isFinite(Date.parse(info.createdAt))?new Date(info.createdAt).toLocaleString():'';
@@ -42,24 +42,30 @@
     var model=el('div',{cls:'ex-brand'},[el('span',{cls:'ex-logo',html:U.ICON.logo}),identity]);
     if(st.showModelMenu&&!offline)model.appendChild(this.modelMenu());this.host.appendChild(model);
     var nav=el('nav',{cls:'ex-main-nav','aria-label':'Analysis views'});
-    [['graph','Tables'],['measures','Measures'],['clusters','Domains'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
+    [['graph','Tables'],['measures','Measures'],['power-query','Power Query'],['clusters','Domains'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
     this.host.appendChild(nav);
     var actions=el('div',{cls:'ex-header-actions'});
+    if(g.ViewerTheme){
+      var theme=el('select',{cls:'ex-theme-select','aria-label':'Appearance',title:'Choose the viewer appearance',onChange:function(e){g.ViewerTheme.set(e.target.value);}},[
+        el('option',{value:'classic',text:'Classic'}),el('option',{value:'spellbook',text:'Spellbook'})]);
+      theme.value=g.ViewerTheme.get();actions.appendChild(theme);
+    }
     actions.appendChild(el('span',{cls:offline?'ex-snapshot-badge':'ex-local-badge',text:offline?'Offline snapshot':app.host?'VS Code workspace':'Local analysis',
-      title:offline?'Includes model metadata and DAX. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'}));
+      title:offline?'Includes model metadata, DAX and available Power Query definitions. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'}));
     actions.appendChild(el('button',{cls:'ex-button ex-snapshot-export',text:st.snapshotSaving?'Saving snapshot…':'Save snapshot',disabled:!st.loaded||!!st.snapshotSaving,
-      title:'Download an offline copy of the app, including this model, DAX, and your current views',onClick:function(){app.saveSnapshot();}}));
+      title:'Download an offline copy of the app, including this model, DAX, available Power Query definitions, and your current views',onClick:function(){app.saveSnapshot();}}));
     if(!offline&&app.host){
       actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Choose model',onClick:function(){app.hostSelectModel();}}));
     }
     if(!offline&&!app.host){
       if(app.canRefreshSource())actions.appendChild(el('button',{cls:'ex-button',text:st.refreshing?'Refreshing…':'Refresh',disabled:!!st.refreshing,
         title:'Re-read this model from its source folder. Your layout and saved views are kept.',onClick:function(){app.refreshSource();}}));
-      actions.appendChild(el('button',{cls:'ex-button',text:st.pngLabel,title:'Export current view as PNG',onClick:function(){app.exportPNG();}}));
-      if(app.canInstall&&app.canInstall())actions.appendChild(el('button',{cls:'ex-button',text:'Install app',
-        title:'Install Semantic Model Viewer as an app with its own icon and window; it also works offline',onClick:function(){app.installApp();}}));
+      if(st.viewMode!=='power-query')actions.appendChild(el('button',{cls:'ex-button',text:st.pngLabel,title:'Export current view as PNG',onClick:function(){app.exportPNG();}}));
+      if(!app.server)actions.appendChild(el('a',{cls:'ex-button',text:'Get the app',href:'https://github.com/MrPerfectH/Semantic-Model-Viewer#start-here',target:'_blank',rel:'noopener',
+        title:'Download the desktop app: it opens your model folders directly, with no browser permission prompt',style:'text-decoration:none;display:inline-flex;align-items:center;'}));
       actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Open model',onClick:function(){app.setState({showImport:true,importError:'',importReady:false});}}));
     }
+    if(!offline&&g.ViewerOnboarding)actions.appendChild(el('button',{cls:'ex-button',text:'Help', 'data-onboarding-help':'',onClick:function(){if(app.onboarding)app.onboarding.restart();}}));
     this.host.appendChild(actions);
     /* Domains keeps Fit in its own toolbar row (see TableExplorer.renderClusterToolbar),
        next to Expand all / Collapse all, so both canvases carry the same controls. */
@@ -88,7 +94,6 @@
     menu.appendChild(el('button',{cls:'ex-button',role:'menuitem',text:'Refresh model list',onClick:function(){app.hostSelectModel();}}));
     if (app.state.loaded) {
       menu.appendChild(el('button',{cls:'ex-button',role:'menuitem',text:'Refresh model',onClick:function(){app.hostRefreshModel();}}));
-      menu.appendChild(el('button',{cls:'ex-button',role:'menuitem',text:'Load Cleaner analysis',onClick:function(){app.hostLoadAnalysis();}}));
     }
     return wrap;
   };

@@ -1,0 +1,22 @@
+{
+  "filtered": {
+    "visible": [
+      "[\"expression\",\"\",\"FarA\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]"
+    ],
+    "map": [
+      "[\"expression\",\"\",\"FarA\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]"
+    ],
+    "library": [
+      "FarA",
+      "Sales Raw"
+    ]
+  },
+  "reader": {
+    "same": true,
+    "width": 1408,
+    "viewport": 1440,
+    "exact": true
+  }
+}

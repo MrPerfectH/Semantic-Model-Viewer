@@ -1,0 +1,8 @@
+{
+  "candidate": "0d964fc97273cca8626e3cc4e9b39f73620b7e24",
+  "boundary": "T3 explicit unavailable / Do not retry; isolated Chrome targeted Arrange Undo displayed-zoom reproduction",
+  "checks": [
+    "Arrange Undo restores viewport layout and displayed zoom"
+  ],
+  "failures": []
+}

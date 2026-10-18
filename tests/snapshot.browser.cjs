@@ -8,7 +8,7 @@ const path = require('node:path');
 const os = require('node:os');
 const http = require('node:http');
 const { pathToFileURL } = require('node:url');
-const { spawn } = require('node:child_process');
+const { spawn, execFileSync } = require('node:child_process');
 const sourceRoot = path.join(__dirname, '../Models/tools/viewer');
 const candidates = [process.env.CHROME_PATH, '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser'].filter(Boolean);
 const chrome = candidates.find(file => fs.existsSync(file));
@@ -33,7 +33,16 @@ async function openBrowser() {
   } const promise = waiting.get(data.id); if (!promise) return; waiting.delete(data.id); data.error ? promise.reject(new Error(data.error.message)) : promise.resolve(data.result); });
   const send = (method, params = {}) => new Promise((resolve, reject) => { const seq = ++id; waiting.set(seq, {resolve,reject}); socket.send(JSON.stringify({id:seq,method,params})); });
   const evaluate = async expression => { const result = await send('Runtime.evaluate', {expression, awaitPromise:true, returnByValue:true}); if (result.exceptionDetails) throw new Error(result.exceptionDetails.text + ': ' + JSON.stringify(result.exceptionDetails.exception)); return result.result.value; };
-  return { send, evaluate, downloads, async close() { socket.close(); child.kill('SIGTERM'); await new Promise(resolve => child.once('exit', resolve)); fs.rmSync(profile, {recursive:true,force:true}); } };
+  return { send, evaluate, downloads, async close() {
+    if (child.exitCode === null && child.signalCode === null) await new Promise(resolve => {
+      const timeout = setTimeout(() => child.kill('SIGKILL'), 5000);
+      child.once('exit', () => { clearTimeout(timeout); resolve(); });
+      if (socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify({id:++id,method:'Browser.close'}));
+      else child.kill('SIGTERM');
+    });
+    socket.close();
+    await fs.promises.rm(profile, {recursive:true,force:true,maxRetries:10,retryDelay:100});
+  } };
 }
 
 
@@ -62,6 +71,10 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
     await browser.send('Page.navigate',{url});
     await waitFor(()=>browser.evaluate('document.readyState!=="loading"&&!!window.app&&!!app.state.loaded'),'Viewer did not load');
     await settle();await settle();
+    if (await browser.evaluate('!!app.snapshotMode')) {
+      assert.equal(await browser.evaluate("!!document.querySelector('.smv-guide, [data-onboarding-help]')"),false);
+      assert.equal(await browser.evaluate('!!app.onboarding'),false);
+    }
   };
   const save=async label=>{
     const before=new Set(browser.downloads.keys());
@@ -84,9 +97,10 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
   };
   await load('http://127.0.0.1:'+server.address().port+'/');
   assert.equal(await browser.evaluate('app.model.tables.length'),0,'Fresh profiles start with no selected model');
-  await browser.evaluate("[...document.querySelectorAll('button')].find(button=>button.textContent.includes('Contoso Retail')&&button.textContent.includes('built-in')).click()");
+  await browser.evaluate("[...document.querySelectorAll('button')].find(button=>button.textContent==='Try the demo').click()");
   await waitFor(()=>browser.evaluate('app.modelKey==="builtin"&&app.model.tables.length===43'),'Built-in sample did not load');
   await settle();
+  await browser.evaluate("document.querySelector('.smv-guide')?.querySelectorAll('button')[1].click()");
   await browser.evaluate(`app.explorer.blank();app.explorer.add(['Date','Customer'],{x:160,y:180});app.canvas.selectTable('Date');
     app.canvas.view={x:-210,y:35,k:.9};app.canvas.updateTransform();app.canvas.savePreset('Date briefing');
     app.setViewMode('measures');app.setState({selMeasure:'Sales LY',gPin:'Total Sales'});`);
@@ -119,6 +133,14 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
   });
   await browser.evaluate("app.setViewMode('graph');app.explorer.blank()");await settle();
   files.blank=await save('blank-canvas');
+  // Exercise the public CLI, then open its artifacts with the same offline and
+  // storage-denied conditions as snapshots created through the UI.
+  const cliFiles = {};
+  for (const [label, args] of [['tables', ['--tables', 'Sales,Customer,Date']], ['measure', ['--measure', 'Sales LY']]]) {
+    cliFiles[label] = path.join(downloadDir, 'cli-' + label + '.html');
+    execFileSync(process.execPath, [path.join(__dirname, '../bin/smv.cjs'), 'snapshot',
+      path.join(__dirname, '../Models/demo/Contoso Retail.SemanticModel'), ...args, '--out', cliFiles[label]], { timeout: 10000 });
+  }
   // The sender is now completely unavailable; opening a file must not touch any browser persistence either.
   await new Promise(resolve=>server.close(resolve));
   await browser.send('Network.enable');
@@ -174,10 +196,10 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
     await browser.evaluate("document.querySelectorAll('.ex-main-nav button')[0].click();app.explorer.add(['Product'],{x:430,y:380});app.canvas.selectTable('Product')");await settle();
     assert.equal(await browser.evaluate('app.state.selected'),'Product');
     assert.ok(await browser.evaluate('app.canvas.workspaceNames.has("Product")'));
-    await browser.evaluate("document.querySelectorAll('.ex-main-nav button')[2].click()");await settle();
+    await browser.evaluate("[...document.querySelectorAll('.ex-main-nav button')].find(b=>b.textContent==='Domains').click()");await settle();
     assert.ok(await browser.evaluate('Object.keys(app.canvas.groups).length>0'));
     assert.deepEqual(await browser.evaluate('app.canvas.view'),payloads.clusters.workspace.domains.view);
-    await browser.evaluate("document.querySelectorAll('.ex-main-nav button')[3].click()");await settle();
+    await browser.evaluate("[...document.querySelectorAll('.ex-main-nav button')].find(b=>b.textContent==='Matrix').click()");await settle();
     assert.ok(await browser.evaluate('document.querySelectorAll("#matrix tbody tr").length>0'));
     await browser.evaluate('document.querySelector("#matrix tbody th button").click()');await settle();
     assert.equal(await browser.evaluate('app.state.viewMode'),'graph');
@@ -197,5 +219,24 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
     assert.equal(await browser.evaluate("app.msrOf('Total Sales').dax"),payloads.measures.model.tables.flatMap(t=>t.measures).find(m=>m.name==='Total Sales').dax);
     await assertOffline();
     if(process.env.SMV_SNAPSHOT_OUTPUT){fs.mkdirSync(process.env.SMV_SNAPSHOT_OUTPUT,{recursive:true});fs.copyFileSync(files.measures,path.join(process.env.SMV_SNAPSHOT_OUTPUT,'Contoso Retail interactive snapshot.html'));}
+  });
+  await t.test('CLI snapshots open focused, fit the viewport and remain fully explorable offline', async () => {
+    await load(pathToFileURL(cliFiles.tables).href);
+    assert.deepEqual(await browser.evaluate('[...app.canvas.workspaceNames].sort()'), ['Customer', 'Date', 'Sales']);
+    assert.equal(await browser.evaluate('app.model.tables.length'), 43);
+    assert.ok(await browser.evaluate(`(()=>{const host=app.canvas.host.getBoundingClientRect();return [...app.canvas.workspaceNames].every(name=>{const r=app.canvas.cards[name].el.getBoundingClientRect();return r.left>=host.left&&r.right<=host.right&&r.top>=host.top&&r.bottom<=host.bottom;});})()`));
+    await assertOffline();
+    await browser.evaluate("app.explorer.add(['Product'],{x:100,y:100})"); await settle();
+    assert.equal(await browser.evaluate('app.canvas.workspaceNames.has("Product")'), true);
+    await load(pathToFileURL(cliFiles.measure).href);
+    assert.equal(await browser.evaluate('app.state.viewMode'), 'measures');
+    assert.equal(await browser.evaluate('app.state.selMeasure'), 'Sales LY');
+    assert.ok(await browser.evaluate('document.querySelector(".mv-dax-card").textContent.includes("SAMEPERIODLASTYEAR")'));
+    assert.equal(await browser.evaluate('app.measures.captureSnapshot().graph.autoFit'), true);
+    await assertOffline();
+    const saved = await save('cli-recipient');
+    await load(pathToFileURL(saved).href);
+    assert.equal(await browser.evaluate('app.state.selMeasure'), 'Sales LY');
+    await assertOffline();
   });
 });

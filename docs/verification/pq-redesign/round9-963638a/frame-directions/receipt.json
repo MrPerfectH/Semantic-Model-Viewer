@@ -1,0 +1,7 @@
+{
+  "candidate": "963638aeb2d124460709374004ddcf0799268ada",
+  "checks": [],
+  "failures": [
+    "Error: exact target direction depth{\"a\":[\"FinalOutput\",\"Merged Query\",\"Raw West\"],\"b\":[\"FinalOutput\",\"Merged Query\"]}\n    at eq (eval at <anonymous> (exec_main.mjs:2:147), <anonymous>:1:638)\n    at eval (eval at <anonymous> (exec_main.mjs:2:147), <anonymous>:4:495)\n    at async exec_main.mjs:2:141"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "candidate": "62a4bcd30673449d4a0d3bf85365e4e9e83aaabf",
+  "gate": "Both opposing cycle edges retain independently clickable semantic identity after horizontal-separation drag",
+  "checks": [
+    "Both opposite edges independently hit-tested and clicked with correct semantic details"
+  ],
+  "failures": []
+}

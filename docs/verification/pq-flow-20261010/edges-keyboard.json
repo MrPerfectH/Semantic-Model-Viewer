@@ -1,0 +1,272 @@
+{
+  "ports": [
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Cycle B\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Cycle A\\\"]\"]",
+      "x": 680.5,
+      "y": 442.5,
+      "d": "M114,378 L114,335 L210,335 L210,316",
+      "top": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Cycle B\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Cycle A\\\"]\"]"
+    },
+    {
+      "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Cycle A\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Cycle B\\\"]\"]",
+      "x": 740.5,
+      "y": 472.5,
+      "d": "M234,316 L234,359 L138,359 L138,378",
+      "top": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Cycle A\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Cycle B\\\"]\"]"
+    }
+  ],
+  "opened": [
+    "Cycle B is referenced by Cycle A",
+    "Cycle A is referenced by Cycle B"
+  ],
+  "manualLayoutRestored": true,
+  "exactBack": {
+    "before": {
+      "root": "[\"partition\",\"Sales\",\"Sales\"]",
+      "selected": "[\"expression\",\"\",\"Prepared Sales\"]",
+      "visible": [
+        "[\"partition\",\"Sales\",\"Sales\"]",
+        "[\"expression\",\"\",\"Environment\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Prepared Sales\"]",
+        "[\"expression\",\"\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Merged Sales\"]"
+      ],
+      "membership": [
+        "[\"partition\",\"Sales\",\"Sales\"]",
+        "[\"partition\",\"Returns\",\"Returns\"]",
+        "[\"expression\",\"\",\"Environment\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Prepared Sales\"]",
+        "[\"expression\",\"\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Merged Sales\"]",
+        "[\"expression\",\"\",\"Cycle A\"]",
+        "[\"expression\",\"\",\"Cycle B\"]",
+        "[\"expression\",\"\",\"Standalone\"]"
+      ],
+      "view": {
+        "x": -323,
+        "y": 199.6,
+        "k": 0.85
+      },
+      "layout": [
+        [
+          "[\"partition\",\"Sales\",\"Sales\"]",
+          {
+            "x": 1408,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Returns\",\"Returns\"]",
+          {
+            "x": 704,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Environment\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Prepared Sales\"]",
+          {
+            "x": 704,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Lookup\"]",
+          {
+            "x": 0,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Merged Sales\"]",
+          {
+            "x": 1056,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Standalone\"]",
+          {
+            "x": 0,
+            "y": 580
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Cycle A\"]",
+          {
+            "x": 96,
+            "y": 220
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Cycle B\"]",
+          {
+            "x": 0,
+            "y": 378
+          }
+        ]
+      ],
+      "inspector": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 432,
+        "wrap": true,
+        "focus": {
+          "kind": "reference",
+          "nodeId": "[\"expression\",\"\",\"Prepared Sales\"]",
+          "at": 102,
+          "end": 114
+        },
+        "disclosures": {
+          "provenance": true,
+          "analysis": true
+        },
+        "expanded": false
+      },
+      "focus": "hide",
+      "direction": "inputs",
+      "depth": "Infinity",
+      "generation": 3
+    },
+    "after": {
+      "root": "[\"partition\",\"Sales\",\"Sales\"]",
+      "selected": "[\"expression\",\"\",\"Prepared Sales\"]",
+      "visible": [
+        "[\"partition\",\"Sales\",\"Sales\"]",
+        "[\"expression\",\"\",\"Environment\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Prepared Sales\"]",
+        "[\"expression\",\"\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Merged Sales\"]"
+      ],
+      "membership": [
+        "[\"partition\",\"Sales\",\"Sales\"]",
+        "[\"partition\",\"Returns\",\"Returns\"]",
+        "[\"expression\",\"\",\"Environment\"]",
+        "[\"expression\",\"\",\"Sales Raw\"]",
+        "[\"expression\",\"\",\"Prepared Sales\"]",
+        "[\"expression\",\"\",\"Lookup\"]",
+        "[\"expression\",\"\",\"Merged Sales\"]",
+        "[\"expression\",\"\",\"Cycle A\"]",
+        "[\"expression\",\"\",\"Cycle B\"]",
+        "[\"expression\",\"\",\"Standalone\"]"
+      ],
+      "view": {
+        "x": -323,
+        "y": 199.6,
+        "k": 0.85
+      },
+      "layout": [
+        [
+          "[\"partition\",\"Sales\",\"Sales\"]",
+          {
+            "x": 1408,
+            "y": 0
+          }
+        ],
+        [
+          "[\"partition\",\"Returns\",\"Returns\"]",
+          {
+            "x": 704,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Environment\"]",
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Sales Raw\"]",
+          {
+            "x": 352,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Prepared Sales\"]",
+          {
+            "x": 704,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Lookup\"]",
+          {
+            "x": 0,
+            "y": 126
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Merged Sales\"]",
+          {
+            "x": 1056,
+            "y": 0
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Standalone\"]",
+          {
+            "x": 0,
+            "y": 580
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Cycle A\"]",
+          {
+            "x": 96,
+            "y": 220
+          }
+        ],
+        [
+          "[\"expression\",\"\",\"Cycle B\"]",
+          {
+            "x": 0,
+            "y": 378
+          }
+        ]
+      ],
+      "inspector": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 432,
+        "wrap": true,
+        "focus": {
+          "kind": "reference",
+          "nodeId": "[\"expression\",\"\",\"Prepared Sales\"]",
+          "at": 102,
+          "end": 114
+        },
+        "disclosures": {
+          "provenance": true,
+          "analysis": true
+        },
+        "expanded": false
+      },
+      "focus": "hide",
+      "direction": "inputs",
+      "depth": "Infinity",
+      "generation": 3
+    }
+  },
+  "errors": []
+}

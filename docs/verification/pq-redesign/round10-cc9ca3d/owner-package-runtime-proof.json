@@ -1,0 +1,373 @@
+{
+  "runtime": "209c226c62a431522650104ded8011a73e8391f3",
+  "node": "v22.23.3",
+  "assets": {
+    "index.html": {
+      "sha256": "f9f6373320cd0ed112034e2120803151edec8f1fc08e3cf40827590572f0d1b3",
+      "bytes": 6844,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "measures.css": {
+      "sha256": "020a7d7d4ee6a452d9ee0228275c679f7d0ffcd14a7522e18989ca463da9aa86",
+      "bytes": 15377,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "power-query-lineage.css": {
+      "sha256": "3fa4fd33459f683dfdd9f72d24b26d71151ac93bcfed36e98a2dfae703e01d6b",
+      "bytes": 1741,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "power-query.css": {
+      "sha256": "4ff48db4389303b9e370f4722008f08564f1fd5ee5f8f64e41d2d5b920f438ee",
+      "bytes": 1754,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "power-query-canvas.css": {
+      "sha256": "d5a04586c5d10457674231444d0bdb16b3089aa68820b91349cfe37639e2cc20",
+      "bytes": 4796,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "power-query-inspector.css": {
+      "sha256": "cf4a86b4d7e6ca66b5275a02ca43dcc28b69e04263f653c5784a301cfd307cca",
+      "bytes": 8202,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "explorer.css": {
+      "sha256": "5699d561e3e1834549f272fcbc69f0b7450743dbbc6ae572b424d4b790e28011",
+      "bytes": 14350,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "power-query-workspace.css": {
+      "sha256": "8f69cb0d2d52e998482141a4bbc65685426cf827ecd0272eeacf6a2ce400e10d",
+      "bytes": 5871,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/util.js": {
+      "sha256": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960",
+      "bytes": 8761,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/host-vscode.js": {
+      "sha256": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb",
+      "bytes": 5220,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/rules.js": {
+      "sha256": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad",
+      "bytes": 7610,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/workspace-ui.js": {
+      "sha256": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43",
+      "bytes": 3688,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/power-query-lineage.js": {
+      "sha256": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1",
+      "bytes": 10472,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/tmdl-parser.js": {
+      "sha256": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399",
+      "bytes": 27971,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/power-query-inspector.js": {
+      "sha256": "7cd72f22ad9819317fcad0a4f9dab7f1f5e5d268be7d223ef68bce2b727020e2",
+      "bytes": 29790,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/matrix.js": {
+      "sha256": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1",
+      "bytes": 9560,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/sidebar.js": {
+      "sha256": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4",
+      "bytes": 22525,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/dax-format.js": {
+      "sha256": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8",
+      "bytes": 18659,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/power-query-canvas.js": {
+      "sha256": "d6faebb8d4fed43265e7abb4d9f2cfe7b4f993a34ae19bb56ea63bd913e25685",
+      "bytes": 34510,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/roles.js": {
+      "sha256": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1",
+      "bytes": 7657,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/layouts.js": {
+      "sha256": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1",
+      "bytes": 67455,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/topbar.js": {
+      "sha256": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9",
+      "bytes": 36001,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/relationships.js": {
+      "sha256": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5",
+      "bytes": 4847,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/snapshot.js": {
+      "sha256": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c",
+      "bytes": 12521,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/canvas.js": {
+      "sha256": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787",
+      "bytes": 113321,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/power-query.js": {
+      "sha256": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f",
+      "bytes": 8661,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/measures.js": {
+      "sha256": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179",
+      "bytes": 93980,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/explorer.js": {
+      "sha256": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0",
+      "bytes": 36750,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/usage-adapter.js": {
+      "sha256": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428",
+      "bytes": 3298,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/power-query-dependencies.js": {
+      "sha256": "27a8d4c15bfdd297b5a9ac88de3119b62033b69c0fe9690fc76810182df6d7c2",
+      "bytes": 15026,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/app.js": {
+      "sha256": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a",
+      "bytes": 79235,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/power-query-graph-model.js": {
+      "sha256": "317e10635857a8026513a499ff99ba8a3e39c4099266369b9d6d932a33ffd650",
+      "bytes": 6768,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    },
+    "js/power-query-workspace.js": {
+      "sha256": "96502a1a97b9bfc151a988c64cad72c2c8febf7e129608af60d47b7ed7fcb7c9",
+      "bytes": 52184,
+      "equal": [
+        "git",
+        "media",
+        "http8945",
+        "http54093",
+        "vsix"
+      ]
+    }
+  },
+  "cacheHashes": 31,
+  "historicalFilesUnchanged": 2771,
+  "archive": "/tmp/smv-pq-selection-lock-r10-final.vsix",
+  "archiveSHA256": "7d8547b60538ae96e61f2e2f2a8bdf7469152a9984b9d3c02ec5f3834aa37293"
+}

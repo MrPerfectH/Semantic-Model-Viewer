@@ -1,0 +1,72 @@
+{
+  "before": {
+    "membership": [
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]"
+    ],
+    "flowRootId": "[\"expression\",\"\",\"CycleA\"]",
+    "focusMode": "dim",
+    "direction": "inputs",
+    "depth": null,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 9,
+    "selectedId": "[\"expression\",\"\",\"CycleA\"]",
+    "inspectorOpen": false,
+    "viewport": {
+      "x": 156.9105504587156,
+      "y": 60.44954128440369,
+      "k": 1.2224770642201834
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": true,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    },
+    "category": "all",
+    "query": ""
+  },
+  "after": {
+    "membership": [
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]"
+    ],
+    "flowRootId": "[\"expression\",\"\",\"CycleA\"]",
+    "focusMode": "dim",
+    "direction": "inputs",
+    "depth": null,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 9,
+    "selectedId": "[\"expression\",\"\",\"CycleA\"]",
+    "inspectorOpen": false,
+    "viewport": {
+      "x": 156.9105504587156,
+      "y": 60.44954128440369,
+      "k": 1.2224770642201834
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": true,
+      "focus": null,
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    },
+    "category": "all",
+    "query": ""
+  },
+  "oldGeneration": 3,
+  "newGeneration": 9
+}

@@ -1,0 +1,64 @@
+{
+  "arranged": {
+    "viewport": {
+      "x": -15063.8,
+      "y": 223.95,
+      "k": 0.85
+    },
+    "label": "85%",
+    "registry": 52,
+    "visible": 52,
+    "root": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "direction": "inputs",
+    "depth": "Infinity",
+    "effectiveFont": 11.475,
+    "notice": "Readable view · 52 objects retained. Pan or follow inputs and consumers; Fit overview shows the whole layout."
+  },
+  "overview": {
+    "view": {
+      "x": 36.40928038613424,
+      "y": 218.34675296182536,
+      "k": 0.02923431329530496
+    },
+    "label": "3%",
+    "visible": 52,
+    "notice": "Overview · 52 objects. Select an object or Center selected to read it."
+  },
+  "parameter": {
+    "view": {
+      "x": 195.4,
+      "y": 223.95,
+      "k": 0.85
+    },
+    "selected": "[\"expression\",\"\",\"Parameter\"]",
+    "root": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "visible": 52,
+    "label": "85%"
+  },
+  "final": {
+    "view": {
+      "x": -15063.8,
+      "y": 223.95,
+      "k": 0.85
+    },
+    "selected": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "root": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "visible": 52,
+    "label": "85%"
+  },
+  "back": {
+    "view": {
+      "x": -103.80000000000001,
+      "y": 223.95,
+      "k": 0.85
+    },
+    "selected": "[\"expression\",\"\",\"Step00\"]",
+    "root": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "visible": 52,
+    "label": "85%"
+  },
+  "screenshot": {
+    "url": "http://127.0.0.1:8947/Models/tools/viewer/",
+    "screenshotPath": "/Users/przemek.harazny/.t3/userdata/browser-artifacts/browser-screenshot-127-0-0-1-mv25r86i-7f63760e.png"
+  }
+}

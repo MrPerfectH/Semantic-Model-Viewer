@@ -1,0 +1,115 @@
+{
+  "name": "PQ Reading Review (synthetic)",
+  "model": {
+    "queryGroups": [
+      {
+        "name": "Inputs",
+        "folder": "Review/Inputs"
+      },
+      {
+        "name": "Transformations",
+        "folder": "Review/Transformations"
+      }
+    ],
+    "expressions": [
+      {
+        "name": "Environment",
+        "kind": "m",
+        "expression": "\"synthetic\" meta [IsParameterQuery=true, Type=\"Text\"]",
+        "queryGroup": "Inputs"
+      },
+      {
+        "name": "Sales Raw",
+        "kind": "m",
+        "expression": "let\n    Region = Environment,\n    Source = #table({\"Amount\"}, {{1}, {2}})\nin Source",
+        "queryGroup": "Inputs"
+      },
+      {
+        "name": "Prepared Sales",
+        "kind": "m",
+        "expression": "let\r\n    // Synthetic review only. 😀 Exact CRLF and trailing spaces are intentional.  \r\n    Source = #\"Sales Raw\",\r\n    Again = #\"Sales Raw\",\r\n    Region = Environment,\r\n    Step01 = Table.AddColumn(Source, \"Synthetic analysis column 01\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step02 = Table.AddColumn(Step01, \"Synthetic analysis column 02\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step03 = Table.AddColumn(Step02, \"Synthetic analysis column 03\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step04 = Table.AddColumn(Step03, \"Synthetic analysis column 04\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step05 = Table.AddColumn(Step04, \"Synthetic analysis column 05\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step06 = Table.AddColumn(Step05, \"Synthetic analysis column 06\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step07 = Table.AddColumn(Step06, \"Synthetic analysis column 07\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step08 = Table.AddColumn(Step07, \"Synthetic analysis column 08\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step09 = Table.AddColumn(Step08, \"Synthetic analysis column 09\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step10 = Table.AddColumn(Step09, \"Synthetic analysis column 10\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step11 = Table.AddColumn(Step10, \"Synthetic analysis column 11\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step12 = Table.AddColumn(Step11, \"Synthetic analysis column 12\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step13 = Table.AddColumn(Step12, \"Synthetic analysis column 13\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step14 = Table.AddColumn(Step13, \"Synthetic analysis column 14\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step15 = Table.AddColumn(Step14, \"Synthetic analysis column 15\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step16 = Table.AddColumn(Step15, \"Synthetic analysis column 16\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step17 = Table.AddColumn(Step16, \"Synthetic analysis column 17\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step18 = Table.AddColumn(Step17, \"Synthetic analysis column 18\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step19 = Table.AddColumn(Step18, \"Synthetic analysis column 19\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step20 = Table.AddColumn(Step19, \"Synthetic analysis column 20\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step21 = Table.AddColumn(Step20, \"Synthetic analysis column 21\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step22 = Table.AddColumn(Step21, \"Synthetic analysis column 22\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step23 = Table.AddColumn(Step22, \"Synthetic analysis column 23\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step24 = Table.AddColumn(Step23, \"Synthetic analysis column 24\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step25 = Table.AddColumn(Step24, \"Synthetic analysis column 25\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step26 = Table.AddColumn(Step25, \"Synthetic analysis column 26\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step27 = Table.AddColumn(Step26, \"Synthetic analysis column 27\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step28 = Table.AddColumn(Step27, \"Synthetic analysis column 28\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step29 = Table.AddColumn(Step28, \"Synthetic analysis column 29\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step30 = Table.AddColumn(Step29, \"Synthetic analysis column 30\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step31 = Table.AddColumn(Step30, \"Synthetic analysis column 31\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Step32 = Table.AddColumn(Step31, \"Synthetic analysis column 32\", each \"A long illustrative value for reading the complete transformation without a narrow inspector wrapping every few words\", type text),\r\n    Result = Table.Combine({Step32, Again})\r\nin\r\n    Result  \r\n",
+        "queryGroup": "Transformations"
+      },
+      {
+        "name": "Cycle A",
+        "kind": "m",
+        "expression": "#\"Cycle B\""
+      },
+      {
+        "name": "Cycle B",
+        "kind": "m",
+        "expression": "#\"Cycle A\""
+      },
+      {
+        "name": "Standalone",
+        "kind": "m",
+        "expression": "#table({\"Note\"}, {{\"Synthetic\"}})"
+      }
+    ],
+    "tables": [
+      {
+        "name": "Sales",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Sales",
+            "source": {
+              "type": "m",
+              "expression": "#\"Prepared Sales\""
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Total Amount",
+            "expression": "SUM(Sales[Amount])"
+          },
+          {
+            "name": "Net Amount",
+            "expression": "[Total Amount] - SUM(Returns[Amount])"
+          }
+        ]
+      },
+      {
+        "name": "Returns",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Returns",
+            "source": {
+              "type": "m",
+              "expression": "#\"Sales Raw\""
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "Synthetic relationship",
+        "fromTable": "Returns",
+        "fromColumn": "ID",
+        "toTable": "Sales",
+        "toColumn": "ID"
+      }
+    ]
+  }
+}

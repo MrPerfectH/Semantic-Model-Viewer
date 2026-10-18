@@ -1,0 +1,11 @@
+{
+  "rawFixture": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-pq-verification/tests/fixtures/pq38/PQ38.SemanticModel/definition/tables/Sales.tmdl",
+  "rawSHA256": "dd5e5fc71672c14dfab54484d5a195ca48caf7da43a8b7030cd2f794948da21a",
+  "rawCRLFCount": 19,
+  "route": "http://127.0.0.1:8938/api/model?path=%2FUsers%2Fprzemek.harazny%2F.t3%2Fworktrees%2FSemantic-Model-Viewer%2Ffeat-pq-verification%2Ftests%2Ffixtures%2Fpq38%2FPQ38.SemanticModel",
+  "responseCRLFCount": 0,
+  "expectedDecodedCode": "let\r\n  Source = #\"Base Query\",\r\n  Text = \"PQ_RAW_ONLY_38 \"\"quoted\"\" \u03bb\"  \r\nin Source\r\n",
+  "expectedUTF8Hex": "6c65740d0a2020536f75726365203d20232242617365205175657279222c0d0a202054657874203d202250515f5241575f4f4e4c595f333820222271756f746564222220cebb2220200d0a696e20536f757263650d0a",
+  "expectedSHA256": "0ca26d7ff5746665d15af9014936598df9e4374eb7d766dffa2858d9f99fec42",
+  "expectedByteCount": 86
+}

@@ -1,0 +1,11 @@
+{
+  "candidate": "6a06b616b5385de3fd3c3fc1f6b453bb321fbca4",
+  "checks": [
+    "connectivity recovery preserves lock selection layout viewport and nonzero body",
+    "group exclusion reset and stale navigation recovery preserve current state",
+    "Back and Blank Undo restore filtered lock and full state",
+    "keyboard unlock relock and group selected-hidden notices are honest",
+    "actual synthetic model replacement clears lock and rejects stale recovery callback"
+  ],
+  "failures": []
+}

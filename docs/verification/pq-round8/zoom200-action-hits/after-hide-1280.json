@@ -1,0 +1,390 @@
+{
+  "title": {
+    "view": {
+      "x": -15184.8,
+      "y": 169.2,
+      "k": 0.85
+    },
+    "label": "85%",
+    "root": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "selected": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "registry": 52,
+    "edges": 51,
+    "visible": 52,
+    "title": {
+      "x": 387.025390625,
+      "y": 191.0500030517578,
+      "width": 159.375,
+      "height": 14.914840698242188,
+      "top": 191.0500030517578,
+      "right": 546.400390625,
+      "bottom": 205.96484375,
+      "left": 387.025390625
+    },
+    "hit": "<div class=\"wui-card-title pqc-node-title\" title=\"FinalChain\" style=\"font: 600 13.5px / 17.55px &quot;IBM Plex Sans&quot;, sans-serif; letter-spacing: -0.2px; color: rgb(31, 36, 48);\">FinalChain</div>",
+    "own": true,
+    "map": {
+      "x": 455,
+      "y": 269.5,
+      "width": 160,
+      "height": 147,
+      "top": 269.5,
+      "right": 615,
+      "bottom": 416.5,
+      "left": 455
+    },
+    "nav": {
+      "x": 286,
+      "y": 342.5,
+      "width": 327,
+      "height": 72,
+      "top": 342.5,
+      "right": 613,
+      "bottom": 414.5,
+      "left": 286
+    },
+    "canvas": {
+      "x": 268,
+      "y": 12.5,
+      "width": 363,
+      "height": 420,
+      "top": 12.5,
+      "right": 631,
+      "bottom": 432.5,
+      "left": 268
+    },
+    "bodyY": 320,
+    "flowButtons": [
+      {
+        "text": "Inspect target",
+        "r": {
+          "x": 280,
+          "y": -110.5,
+          "width": 80.734375,
+          "height": 32,
+          "top": -110.5,
+          "right": 360.734375,
+          "bottom": -78.5,
+          "left": 280
+        }
+      },
+      {
+        "text": "Trace this query",
+        "r": {
+          "x": 366.734375,
+          "y": -110.5,
+          "width": 89.21875,
+          "height": 32,
+          "top": -110.5,
+          "right": 455.953125,
+          "bottom": -78.5,
+          "left": 366.734375
+        }
+      },
+      {
+        "text": "Clear flow",
+        "r": {
+          "x": 461.953125,
+          "y": -110.5,
+          "width": 62.203125,
+          "height": 32,
+          "top": -110.5,
+          "right": 524.15625,
+          "bottom": -78.5,
+          "left": 461.953125
+        }
+      },
+      {
+        "text": "← Follow input Step49",
+        "r": {
+          "x": 280,
+          "y": -72.5,
+          "width": 119.46875,
+          "height": 32,
+          "top": -72.5,
+          "right": 399.46875,
+          "bottom": -40.5,
+          "left": 280
+        }
+      }
+    ]
+  },
+  "actual": {
+    "innerWidth": 640,
+    "innerHeight": 500,
+    "outerWidth": 1280,
+    "outerHeight": 1087,
+    "dpr": 2,
+    "below": true,
+    "width": 400,
+    "height": 400,
+    "inspectorOpen": true,
+    "selectedId": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+    "inspector": {
+      "x": 268,
+      "y": 439.5,
+      "width": 363,
+      "height": 400,
+      "top": 439.5,
+      "right": 631,
+      "bottom": 839.5,
+      "left": 268
+    },
+    "separator": {
+      "x": 268,
+      "y": 432.5,
+      "width": 363,
+      "height": 7,
+      "top": 432.5,
+      "right": 631,
+      "bottom": 439.5,
+      "left": 268
+    },
+    "surface": {
+      "x": 268,
+      "y": 12.5,
+      "width": 363,
+      "height": 420,
+      "top": 12.5,
+      "right": 631,
+      "bottom": 432.5,
+      "left": 268
+    },
+    "aria": {
+      "orientation": "horizontal",
+      "value": "400"
+    },
+    "hit": {
+      "tag": "DIV",
+      "cls": "pqw-resizer",
+      "html": "<div class=\"pqw-resizer\" role=\"separator\" tabindex=\"0\" aria-label=\"Resize Power Query inspector\" aria-orientation=\"horizontal\" aria-valuemin=\"300\" aria-valuemax=\"650\" aria-valuenow=\"400\"></div>"
+    },
+    "visualViewport": {
+      "offsetLeft": 0,
+      "offsetTop": 0,
+      "pageLeft": 0,
+      "pageTop": 0,
+      "width": 640,
+      "height": 500,
+      "scale": 1
+    },
+    "scroll": {
+      "windowX": 0,
+      "windowY": 0,
+      "documentX": 0,
+      "documentY": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "pqBodyX": 0,
+      "pqBodyY": 320,
+      "inspectorHostY": 0,
+      "inspectorRootY": 0
+    },
+    "active": {
+      "tag": "BUTTON",
+      "cls": "ex-button"
+    },
+    "pointer": [
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": "",
+          "aria": null,
+          "text": "Import model (TMDL / BIM)"
+        },
+        "clientX": 193,
+        "clientY": 218.5,
+        "pageX": 193,
+        "pageY": 218.5,
+        "screenX": 408,
+        "screenY": 546,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 109.69999998807907
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "hv-eef4ff",
+          "id": "",
+          "aria": null,
+          "text": "Import model (TMDL / BIM)"
+        },
+        "clientX": 193,
+        "clientY": 218.5,
+        "pageX": 193,
+        "pageY": 218.5,
+        "screenX": 408,
+        "screenY": 546,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 110.19999998807907
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Add model"
+        },
+        "clientX": 474.9375,
+        "clientY": 358.671875,
+        "pageX": 474.9375,
+        "pageY": 358.671875,
+        "screenX": 971.875,
+        "screenY": 826.34375,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 176.59999999403954
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Add model"
+        },
+        "clientX": 474.9375,
+        "clientY": 358.671875,
+        "pageX": 474.9375,
+        "pageY": 358.671875,
+        "screenX": 971.875,
+        "screenY": 826.34375,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 177
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Power Query"
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 326.40000000596046
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "",
+          "id": "",
+          "aria": null,
+          "text": "Power Query"
+        },
+        "clientX": 322.796875,
+        "clientY": 77,
+        "pageX": 322.796875,
+        "pageY": 77,
+        "screenX": 667.59375,
+        "screenY": 263,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 326.7999999821186
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-table-name pqw-library-row",
+          "id": "",
+          "aria": null,
+          "text": "FinalChainm · FinalChain"
+        },
+        "clientX": 109.8984375,
+        "clientY": 412.44921875,
+        "pageX": 109.8984375,
+        "pageY": 412.44921875,
+        "screenX": 241.796875,
+        "screenY": 933.8984375,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 443.19999998807907
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-table-name pqw-library-row",
+          "id": "",
+          "aria": null,
+          "text": "FinalChainm · FinalChain"
+        },
+        "clientX": 109.8984375,
+        "clientY": 412.44921875,
+        "pageX": 109.8984375,
+        "pageY": 412.44921875,
+        "screenX": 241.796875,
+        "screenY": 933.8984375,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 443.7999999821186
+      },
+      {
+        "type": "pointerdown",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-button",
+          "id": "",
+          "aria": null,
+          "text": "Hide unrelated"
+        },
+        "clientX": 527,
+        "clientY": 452.2421875,
+        "pageX": 527,
+        "pageY": 452.2421875,
+        "screenX": 1076,
+        "screenY": 1013.484375,
+        "isTrusted": true,
+        "buttons": 1,
+        "pointerId": 1,
+        "time": 527.5
+      },
+      {
+        "type": "pointerup",
+        "target": {
+          "tag": "BUTTON",
+          "cls": "ex-button",
+          "id": "",
+          "aria": null,
+          "text": "Hide unrelated"
+        },
+        "clientX": 527,
+        "clientY": 452.2421875,
+        "pageX": 527,
+        "pageY": 452.2421875,
+        "screenX": 1076,
+        "screenY": 1013.484375,
+        "isTrusted": true,
+        "buttons": 0,
+        "pointerId": 1,
+        "time": 528.6999999880791
+      }
+    ]
+  }
+}

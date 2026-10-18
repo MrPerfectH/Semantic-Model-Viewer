@@ -1,0 +1,10 @@
+{
+  "candidate": "0d964fc97273cca8626e3cc4e9b39f73620b7e24",
+  "checks": [
+    "exact raw CRLF UTF16 repeated references expanded full Back disclosures scroll target",
+    "old direct-neighbor callback rejected after source selection changes"
+  ],
+  "failures": [
+    "Error: Addrelated Undo fullstate {\"a\":{\"membership\":[\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\"],\"flowRootId\":\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\",\"focusMode\":\"dim\",\"direction\":\"inputs\",\"depth\":null,\"listFacet\":\"all\",\"groupFilter\":\"all\",\"generation\":3,\"selectedId\":\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\",\"inspectorOpen\":true,\"viewport\":{\"x\":-54.5,\"y\":-129.2,\"k\":0.85},\"inspectorView\":{\"codeX\":0,\"codeY\":0,\"inspectorX\":0,\"inspectorY\":24,\"wrap\":false,\"focus\":{\"kind\":\"add-related\",\"nodeId\":\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\"},\"disclosures\":{\"provenance\":false},\"expanded\":false},\"category\":\"all\",\"query\":\"\"},\"b\":{\"membership\":[\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\"],\"flowRootId\":\"[\\\"expression\\\",\\\"\\\",\\\"FinalOutput\\\"]\",\"focusMode\":\"dim\",\"direction\":\"inputs\",\"depth\":null,\"listFacet\":\"all\",\"groupFilter\":\"all\",\"generation\":3,\"selectedId\":\"[\\\"expression\\\",\\\"\\\",\\\"Raw West\\\"]\",\"inspectorOpen\":true,\"viewport\":{\"x\":-54.5,\"y\":-129.2,\"k\":0.85},\"inspectorView\":{\"codeX\":0,\"codeY\":0,\"inspectorX\":0,\"inspectorY\":0,\"wrap\":false,\"focus\":null,\"disclosures\":{\"provenance\":false},\"expanded\":false},\"category\":\"all\",\"query\":\"\"}}\n    at eq (eval at <anonymous> (exec_main.mjs:2:149), <anonymous>:4:263)\n    at eval (eval at <anonymous> (exec_main.mjs:2:149), <anonymous>:15:506)\n    at async exec_main.mjs:2:143"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "actual": "2e3839a3d2728c96450f7b849205ea0055e4e558",
+  "scripts": {
+    "pq-redesign-independent-round7-auto-framing-strict.browser.cjs": "cb9ab0bcd4ded0757c5ee9c4a93f0ad7347dd12f7679f9cb4d872dbfaa5d15a3",
+    "pq-redesign-independent-flow-0d964fc-arrange-undo-zoomed.browser.cjs": "ef4481e55e6b407f885f30f6e0744eed7dcc227b5d05462d9f89e7ddd89585d5",
+    "pq-redesign-independent-round8-input-ownership.browser.cjs": "ec78547fde106950c34ea38371a60a782878067e0d40b6c71202d60bd846e388",
+    "pq-redesign-independent-runtime-transport.cjs": "bd661ff1ad92c045094a95cd7450aa6c53798142e22bbda846ed84cdcc34c17a",
+    "pq-redesign-independent-oracles.cjs": "14d36cddfee371121d525d7dd59c68d4f9b821603ec7fda930a6276c6c845830",
+    "pq-redesign-independent-filters-v2.oracle.cjs": "75dee4f6ae26920ae8a25cb4d7139b55eb24c5a3639026f9d8b06b77aa7b6bcb"
+  },
+  "additionalByteIdenticalScripts": {
+    "pq-redesign-independent-round8-offline.browser.cjs": "92cfa227bbd5ea03c3894ae86168acacbc1f5d434a9532a7e49d6f0a6f5badf3"
+  }
+}

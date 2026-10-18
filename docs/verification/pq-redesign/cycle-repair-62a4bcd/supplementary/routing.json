@@ -1,0 +1,1184 @@
+[
+  {
+    "name": "exact-frozen",
+    "a": {
+      "x": 0,
+      "y": 0
+    },
+    "b": {
+      "x": 581.456005859375,
+      "y": 395.031982421875
+    },
+    "data": {
+      "marker": {
+        "width": "8",
+        "height": "8",
+        "orient": "auto",
+        "fill": "none",
+        "d": "M 3 1 L 8 5 L 3 9"
+      },
+      "visible": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "map": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "input": "CycleB",
+          "consumer": "CycleA",
+          "d": "M581.456005859375,431.031982421875 L404.7280029296875,431.031982421875 L404.7280029296875,36 L252,36",
+          "line": "M581.456005859375,431.031982421875 L404.7280029296875,431.031982421875 L404.7280029296875,36 L252,36",
+          "width": "14px",
+          "own": 191,
+          "points": [
+            {
+              "x": 1030.568359375,
+              "y": 656.3216552734375,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "x": 840.8482666015625,
+              "y": 453,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "input": "CycleA",
+          "consumer": "CycleB",
+          "d": "M252,60 L428.7280029296875,60 L428.7280029296875,455.031982421875 L581.456005859375,455.031982421875",
+          "line": "M252,60 L428.7280029296875,60 L428.7280029296875,455.031982421875 L581.456005859375,455.031982421875",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 677.431640625,
+              "y": 249.6783447265625,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "x": 867.1517333984375,
+              "y": 453,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            }
+          ]
+        }
+      ]
+    },
+    "clicks": [
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 1030.568359375,
+          "y": 656.3216552734375,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 1030.568359375,
+            "y": 656.3216552734375,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 840.8482666015625,
+          "y": 453,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 840.8482666015625,
+            "y": 453,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 677.431640625,
+          "y": 249.6783447265625,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 677.431640625,
+            "y": 249.6783447265625,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 867.1517333984375,
+          "y": 453,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 867.1517333984375,
+            "y": 453,
+            "target": "pqc-edge-hit"
+          }
+        }
+      }
+    ],
+    "unchanged": true
+  },
+  {
+    "name": "horizontal-right",
+    "a": {
+      "x": 0,
+      "y": 0
+    },
+    "b": {
+      "x": 650,
+      "y": 0
+    },
+    "data": {
+      "marker": {
+        "width": "8",
+        "height": "8",
+        "orient": "auto",
+        "fill": "none",
+        "d": "M 3 1 L 8 5 L 3 9"
+      },
+      "visible": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "map": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "input": "CycleB",
+          "consumer": "CycleA",
+          "d": "M650,36 L439,36 L439,36 L252,36",
+          "line": "M650,36 L439,36 L439,36 L252,36",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 1087.0225830078125,
+              "y": 438.80645751953125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "x": 854,
+              "y": 438.80645751953125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "input": "CycleA",
+          "consumer": "CycleB",
+          "d": "M252,60 L463,60 L463,60 L650,60",
+          "line": "M252,60 L463,60 L463,60 L650,60",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 620.9774169921875,
+              "y": 467.19354248046875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "x": 854,
+              "y": 467.19354248046875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            }
+          ]
+        }
+      ]
+    },
+    "clicks": [
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 1087.0225830078125,
+          "y": 438.80645751953125,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 1087.0225830078125,
+            "y": 438.80645751953125,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 854,
+          "y": 438.80645751953125,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 854,
+            "y": 438.80645751953125,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 620.9774169921875,
+          "y": 467.19354248046875,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 620.9774169921875,
+            "y": 467.19354248046875,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 854,
+          "y": 467.19354248046875,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 854,
+            "y": 467.19354248046875,
+            "target": "pqc-edge-hit"
+          }
+        }
+      }
+    ],
+    "unchanged": true
+  },
+  {
+    "name": "horizontal-left",
+    "a": {
+      "x": 650,
+      "y": 0
+    },
+    "b": {
+      "x": 0,
+      "y": 0
+    },
+    "data": {
+      "marker": {
+        "width": "8",
+        "height": "8",
+        "orient": "auto",
+        "fill": "none",
+        "d": "M 3 1 L 8 5 L 3 9"
+      },
+      "visible": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "map": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "input": "CycleB",
+          "consumer": "CycleA",
+          "d": "M252,60 L463,60 L463,60 L650,60",
+          "line": "M252,60 L463,60 L463,60 L650,60",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 620.9774169921875,
+              "y": 467.19354248046875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "x": 854,
+              "y": 467.19354248046875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "input": "CycleA",
+          "consumer": "CycleB",
+          "d": "M650,36 L439,36 L439,36 L252,36",
+          "line": "M650,36 L439,36 L439,36 L252,36",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 1087.0225830078125,
+              "y": 438.80645751953125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "x": 854,
+              "y": 438.80645751953125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            }
+          ]
+        }
+      ]
+    },
+    "clicks": [
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 620.9774169921875,
+          "y": 467.19354248046875,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 620.9774169921875,
+            "y": 467.19354248046875,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 854,
+          "y": 467.19354248046875,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 854,
+            "y": 467.19354248046875,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 1087.0225830078125,
+          "y": 438.80645751953125,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 1087.0225830078125,
+            "y": 438.80645751953125,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 854,
+          "y": 438.80645751953125,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 854,
+            "y": 438.80645751953125,
+            "target": "pqc-edge-hit"
+          }
+        }
+      }
+    ],
+    "unchanged": true
+  },
+  {
+    "name": "vertical-down",
+    "a": {
+      "x": 0,
+      "y": 0
+    },
+    "b": {
+      "x": 0,
+      "y": 350
+    },
+    "data": {
+      "marker": {
+        "width": "8",
+        "height": "8",
+        "orient": "auto",
+        "fill": "none",
+        "d": "M 3 1 L 8 5 L 3 9"
+      },
+      "visible": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "map": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "input": "CycleB",
+          "consumer": "CycleA",
+          "d": "M114,350 L114,211 L114,211 L114,96",
+          "line": "M114,350 L114,211 L114,211 L114,96",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 839.629638671875,
+              "y": 603.5655517578125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "x": 839.6295776367188,
+              "y": 453,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "input": "CycleA",
+          "consumer": "CycleB",
+          "d": "M138,96 L138,235 L138,235 L138,350",
+          "line": "M138,96 L138,235 L138,235 L138,350",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 868.370361328125,
+              "y": 302.4344482421875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "x": 868.370361328125,
+              "y": 453,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            }
+          ]
+        }
+      ]
+    },
+    "clicks": [
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 839.629638671875,
+          "y": 603.5655517578125,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 839.629638671875,
+            "y": 603.5655517578125,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 839.6295776367188,
+          "y": 453,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 839.6295776367188,
+            "y": 453,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 868.370361328125,
+          "y": 302.4344482421875,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 868.370361328125,
+            "y": 302.4344482421875,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 868.370361328125,
+          "y": 453,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 868.370361328125,
+            "y": 453,
+            "target": "pqc-edge-hit"
+          }
+        }
+      }
+    ],
+    "unchanged": true
+  },
+  {
+    "name": "vertical-up",
+    "a": {
+      "x": 0,
+      "y": 350
+    },
+    "b": {
+      "x": 0,
+      "y": 0
+    },
+    "data": {
+      "marker": {
+        "width": "8",
+        "height": "8",
+        "orient": "auto",
+        "fill": "none",
+        "d": "M 3 1 L 8 5 L 3 9"
+      },
+      "visible": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "map": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "input": "CycleB",
+          "consumer": "CycleA",
+          "d": "M138,96 L138,235 L138,235 L138,350",
+          "line": "M138,96 L138,235 L138,235 L138,350",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 868.370361328125,
+              "y": 302.4344482421875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "x": 868.370361328125,
+              "y": 453,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "input": "CycleA",
+          "consumer": "CycleB",
+          "d": "M114,350 L114,211 L114,211 L114,96",
+          "line": "M114,350 L114,211 L114,211 L114,96",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 839.629638671875,
+              "y": 603.5655517578125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "x": 839.6295776367188,
+              "y": 453,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            }
+          ]
+        }
+      ]
+    },
+    "clicks": [
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 868.370361328125,
+          "y": 302.4344482421875,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 868.370361328125,
+            "y": 302.4344482421875,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 868.370361328125,
+          "y": 453,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 868.370361328125,
+            "y": 453,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 839.629638671875,
+          "y": 603.5655517578125,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 839.629638671875,
+            "y": 603.5655517578125,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 839.6295776367188,
+          "y": 453,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 839.6295776367188,
+            "y": 453,
+            "target": "pqc-edge-hit"
+          }
+        }
+      }
+    ],
+    "unchanged": true
+  },
+  {
+    "name": "vertical-diagonal",
+    "a": {
+      "x": 0,
+      "y": 0
+    },
+    "b": {
+      "x": 100,
+      "y": 350
+    },
+    "data": {
+      "marker": {
+        "width": "8",
+        "height": "8",
+        "orient": "auto",
+        "fill": "none",
+        "d": "M 3 1 L 8 5 L 3 9"
+      },
+      "visible": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "map": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "input": "CycleB",
+          "consumer": "CycleA",
+          "d": "M214,350 L214,211 L114,211 L114,96",
+          "line": "M214,350 L214,211 L114,211 L114,96",
+          "width": "14px",
+          "own": 184,
+          "points": [
+            {
+              "x": 899.5061645507812,
+              "y": 602.966796875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "x": 854,
+              "y": 438.629638671875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "input": "CycleA",
+          "consumer": "CycleB",
+          "d": "M138,96 L138,235 L238,235 L238,350",
+          "line": "M138,96 L138,235 L238,235 L238,350",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 808.4938354492188,
+              "y": 303.0332336425781,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "x": 854,
+              "y": 467.370361328125,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            }
+          ]
+        }
+      ]
+    },
+    "clicks": [
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 899.5061645507812,
+          "y": 602.966796875,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 899.5061645507812,
+            "y": 602.966796875,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 854,
+          "y": 438.629638671875,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 854,
+            "y": 438.629638671875,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 808.4938354492188,
+          "y": 303.0332336425781,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 808.4938354492188,
+            "y": 303.0332336425781,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 854,
+          "y": 467.370361328125,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 854,
+            "y": 467.370361328125,
+            "target": "pqc-edge-hit"
+          }
+        }
+      }
+    ],
+    "unchanged": true
+  },
+  {
+    "name": "horizontal-diagonal-left",
+    "a": {
+      "x": 650,
+      "y": 0
+    },
+    "b": {
+      "x": 0,
+      "y": 250
+    },
+    "data": {
+      "marker": {
+        "width": "8",
+        "height": "8",
+        "orient": "auto",
+        "fill": "none",
+        "d": "M 3 1 L 8 5 L 3 9"
+      },
+      "visible": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "map": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "input": "CycleB",
+          "consumer": "CycleA",
+          "d": "M252,310 L463,310 L463,60 L650,60",
+          "line": "M252,310 L463,310 L463,60 L650,60",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 622.4559326171875,
+              "y": 615.04296875,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "x": 868.1935424804688,
+              "y": 481.3870849609375,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "input": "CycleA",
+          "consumer": "CycleB",
+          "d": "M650,36 L439,36 L439,286 L252,286",
+          "line": "M650,36 L439,36 L439,286 L252,286",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 1085.5440673828125,
+              "y": 290.9570007324219,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "x": 839.8064575195312,
+              "y": 424.6128845214844,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            }
+          ]
+        }
+      ]
+    },
+    "clicks": [
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 622.4559326171875,
+          "y": 615.04296875,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 622.4559326171875,
+            "y": 615.04296875,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 868.1935424804688,
+          "y": 481.3870849609375,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 868.1935424804688,
+            "y": 481.3870849609375,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 1085.5440673828125,
+          "y": 290.9570007324219,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 1085.5440673828125,
+            "y": 290.9570007324219,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 839.8064575195312,
+          "y": 424.6128845214844,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 839.8064575195312,
+            "y": 424.6128845214844,
+            "target": "pqc-edge-hit"
+          }
+        }
+      }
+    ],
+    "unchanged": true
+  },
+  {
+    "name": "reciprocal-obstacle",
+    "a": {
+      "x": 0,
+      "y": 0
+    },
+    "b": {
+      "x": 800,
+      "y": 0
+    },
+    "obstacle": {
+      "x": 400,
+      "y": 0
+    },
+    "data": {
+      "marker": {
+        "width": "8",
+        "height": "8",
+        "orient": "auto",
+        "fill": "none",
+        "d": "M 3 1 L 8 5 L 3 9"
+      },
+      "visible": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]",
+        "[\"expression\",\"\",\"FarA\"]"
+      ],
+      "map": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]",
+        "[\"expression\",\"\",\"FarA\"]"
+      ],
+      "edges": [
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+          "input": "CycleB",
+          "consumer": "CycleA",
+          "d": "M800,36 L760,36 L760,-42 L292,-42 L292,36 L252,36",
+          "line": "M800,36 L760,36 L760,-42 L292,-42 L292,36 L252,36",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 1129.4888916015625,
+              "y": 440.7778015136719,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            },
+            {
+              "x": 854,
+              "y": 361.3333435058594,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+            }
+          ]
+        },
+        {
+          "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+          "input": "CycleA",
+          "consumer": "CycleB",
+          "d": "M252,60 L268,60 L268,114 L784,114 L784,60 L800,60",
+          "line": "M252,60 L268,60 L268,114 L784,114 L784,60 L800,60",
+          "width": "14px",
+          "own": 199,
+          "points": [
+            {
+              "x": 578.2666625976562,
+              "y": 465.22222900390625,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            },
+            {
+              "x": 854,
+              "y": 520.2222290039062,
+              "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+            }
+          ]
+        }
+      ]
+    },
+    "clicks": [
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 1129.4888916015625,
+          "y": 440.7778015136719,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 1129.4888916015625,
+            "y": 440.7778015136719,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]",
+        "point": {
+          "x": 854,
+          "y": 361.3333435058594,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleB is referenced by CycleA",
+          "text": "CycleB is referenced by CycleAClose reference detailsLine 1, column 9 · CycleB",
+          "pointer": {
+            "trusted": true,
+            "x": 854,
+            "y": 361.3333435058594,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 578.2666625976562,
+          "y": 465.22222900390625,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 578.2666625976562,
+            "y": 465.22222900390625,
+            "target": "pqc-edge-hit"
+          }
+        }
+      },
+      {
+        "edge": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]",
+        "point": {
+          "x": 854,
+          "y": 520.2222290039062,
+          "hit": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleA\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"CycleB\\\"]\"]"
+        },
+        "detail": {
+          "heading": "CycleA is referenced by CycleB",
+          "text": "CycleA is referenced by CycleBClose reference detailsLine 1, column 9 · CycleA",
+          "pointer": {
+            "trusted": true,
+            "x": 854,
+            "y": 520.2222290039062,
+            "target": "pqc-edge-hit"
+          }
+        }
+      }
+    ],
+    "unchanged": true
+  }
+]

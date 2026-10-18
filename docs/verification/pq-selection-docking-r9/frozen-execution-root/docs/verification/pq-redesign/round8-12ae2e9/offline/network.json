@@ -1,0 +1,32 @@
+[
+  {
+    "method": "Network.requestWillBeSent",
+    "params": {
+      "requestId": "61ACC3AAE399A9B06A21CE03401EB0FA",
+      "loaderId": "61ACC3AAE399A9B06A21CE03401EB0FA",
+      "documentURL": "file:///Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/docs/verification/pq-selection-docking-r9/frozen-execution-root/docs/verification/pq-redesign/round8-12ae2e9/privacy/downloaded.html",
+      "request": {
+        "url": "file:///Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/docs/verification/pq-selection-docking-r9/frozen-execution-root/docs/verification/pq-redesign/round8-12ae2e9/privacy/downloaded.html",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"macOS\""
+        },
+        "mixedContentType": "none",
+        "initialPriority": "VeryHigh",
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "isSameSite": true
+      },
+      "timestamp": 259886.958769,
+      "wallTime": 1791628049.595451,
+      "initiator": {
+        "type": "other"
+      },
+      "redirectHasExtraInfo": false,
+      "type": "Document",
+      "frameId": "4114758F8A7FBFB28A68563DE3E0D4DE",
+      "hasUserGesture": false
+    }
+  }
+]

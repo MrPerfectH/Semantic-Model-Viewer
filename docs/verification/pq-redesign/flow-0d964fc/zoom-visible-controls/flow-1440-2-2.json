@@ -1,0 +1,46 @@
+{
+  "root": "[\"expression\",\"\",\"FinalOutput\"]",
+  "selected": "[\"expression\",\"\",\"Merged Query\"]",
+  "status": "Inspecting: Merged Query",
+  "buttons": [
+    {
+      "text": "Inspect target",
+      "rect": {
+        "x": 618.265625,
+        "y": -144.5,
+        "width": 80.734375,
+        "height": 32,
+        "top": -144.5,
+        "right": 699,
+        "bottom": -112.5,
+        "left": 618.265625
+      }
+    },
+    {
+      "text": "Trace this query",
+      "rect": {
+        "x": 280,
+        "y": -106.5,
+        "width": 89.21875,
+        "height": 32,
+        "top": -106.5,
+        "right": 369.21875,
+        "bottom": -74.5,
+        "left": 280
+      }
+    },
+    {
+      "text": "Clear flow",
+      "rect": {
+        "x": 375.21875,
+        "y": -106.5,
+        "width": 62.203125,
+        "height": 32,
+        "top": -106.5,
+        "right": 437.421875,
+        "bottom": -74.5,
+        "left": 375.21875
+      }
+    }
+  ]
+}

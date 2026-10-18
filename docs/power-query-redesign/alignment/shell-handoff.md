@@ -1,0 +1,9 @@
+# Tables alignment shell ownership
+
+Baseline 2f3b4d21bc2a937ba344594b107586665628f4c3. Current steering supersedes v2 shell styling; graph/source/worker/privacy semantics remain.
+
+Integration owns shell, ex-library selector promotion, table crosslinks, optional Tables helper style consumption, registration/cache hashes and generated assets. UI06 owns WorkspaceUI leaf and Canvas/Inspector modules. Agreed APIs: Canvas setFocusIds(Set|null), arrange(visibleIds) silent positions only; Inspector setFocusControls and generation/nodeId-gated onFocusChange/onMembershipAction. Entry.chrome contains exact table association presentation (no label guesses). Mode dim/hide, direction inputs/consumers/connected, depth 0/1/2/Infinity.
+
+State keeps registry, membership, connectivity, focus neighborhood and search separate. Initial membership is complete inventory. Back stores membership/focus/list/category/search/viewport/inspector context without restoring positions; layout Undo (25) restores positions plus membership/view/selection. Reset filters preserves membership/focus/code/view. Show all restores membership and dim; explicit Blank clears only layout/selection/code. Table entry selects a unique exact partition or presents choices; no absent metadata inference.
+
+Focused state tests 21/21 Node22: /tmp/pq-align-shell-focused-2.log. Old test stub missing captureLayout failure preserved /tmp/pq-align-shell-focused.log; assertions retained and stub expanded. UI geometry and helper integration remain pending owned module commit, followed by fresh registered browser/200%/scale/suite/package verification. Prior UX acceptance is not this redo's acceptance. T3 reconnect opened tab2c then click timed out and upload returned explicit no-host/do-not-retry; authorized existing Chrome fallback is the browser boundary. Native blank diagnosis remains separate/open; no new native edits.

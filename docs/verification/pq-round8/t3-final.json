@@ -1,0 +1,34 @@
+{
+  "url": "http://127.0.0.1:8947/Models/tools/viewer/?round8=final",
+  "registry": 52,
+  "edges": 51,
+  "view": {
+    "x": -15063.8,
+    "y": 223.95,
+    "k": 0.85
+  },
+  "label": "85%",
+  "root": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+  "selected": "[\"partition\",\"FinalChain\",\"FinalChain\"]",
+  "own": true,
+  "title": {
+    "x": 508.025390625,
+    "y": 473.79998779296875,
+    "width": 159.375,
+    "height": 14.91485595703125,
+    "top": 473.79998779296875,
+    "right": 667.400390625,
+    "bottom": 488.71484375,
+    "left": 508.025390625
+  },
+  "bodyY": 0,
+  "visualViewport": {
+    "width": 1280,
+    "height": 800,
+    "scale": 1
+  },
+  "assets": {
+    "workspace": "c9b5025302a4bb2f713d4e75ae8ae4b0f2ac44abd314ebad97f21d541d40fc51",
+    "inspector": "ae9963583ff1f0b9b280292cd112ebc55c274620055942f036c0d9cd3ab3e77d"
+  }
+}

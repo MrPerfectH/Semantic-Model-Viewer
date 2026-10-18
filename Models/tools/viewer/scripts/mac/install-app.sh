@@ -9,8 +9,8 @@
 #
 # The app window uses its OWN, separate Chrome/Edge profile (never your regular
 # browsing profile) so it never picks up - or leaves behind - unrelated
-# browsing data, and clicking the icon again reuses that one window instead
-# of piling up new ones. Your saved models and layouts live in that profile.
+# browsing data. Clicking the icon opens a viewer window, even if the browser is
+# still running in the background. Your saved models and layouts live in that profile.
 #
 # Usage:
 #   Models/tools/viewer/scripts/mac/install-app.sh
@@ -47,6 +47,8 @@ APPLESCRIPT
 
 cp "$HERE/SMV.icns" "$APP/Contents/Resources/applet.icns"
 touch "$APP"
+# Copying the icon changed the bundle after osacompile signed it; sign it again (ad hoc).
+codesign --force --deep -s - "$APP" >/dev/null 2>&1 || true
 
 echo "Installed: $APP"
 echo "  Runs:    $HERE/launch.sh  (local app on http://localhost:8931, this computer only)"

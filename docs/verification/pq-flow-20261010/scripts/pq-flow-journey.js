@@ -1,0 +1,16 @@
+await click('Import model (TMDL / BIM)');
+const chooser=page.waitForEvent('filechooser');await click('Choose files');await (await chooser).setFiles(path.join(out,'flow.bim'));await click('Add model');await click('Power Query');
+await page.getByText('Metadata inspected. Static analysis remains partial.',{exact:true}).waitFor();await click('Sales m · Sales');await click('Hide unrelated');await click('Show Merged Sales referenced by Sales');await click('Inspect input Prepared Sales');await click('Fit Power Query layout');
+await click('Open full query');
+const raw=(await page.locator('dialog[open] .pqi-source-line').allTextContents()).join('');
+assert.equal(raw,JSON.parse(fs.readFileSync(path.join(out,'flow.bim'))).model.expressions.find(x=>x.name==='Prepared Sales').expression);
+await click('Copy exact M source');assert.equal(await Promise.race([page.evaluate(()=>navigator.clipboard.readText()),new Promise((_,reject)=>setTimeout(()=>reject(new Error('clipboard timed out')),3000))]),raw);
+await click('Unwrap lines');await snap('after-reader');await page.keyboard.press('Escape');
+const before=await state();
+await click('Inspect input Sales Raw');await click('Inspect input Environment');await snap('after-parameter');await click('Inspect consumer Sales Raw');
+await click('Back');await click('Back');await click('Back');
+await page.waitForFunction(()=>app.powerQueryWorkspace.selectedId.includes('Prepared Sales'));
+await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+const after=await state();assert.equal(after.root,before.root);assert.equal(after.selected,before.selected);assert.deepEqual(after.view,before.view);
+fs.writeFileSync(path.join(out,'history-reader.json'),JSON.stringify({before,after,exactCopy:true},null,2));
+return {reader:'exact CRLF text and clipboard',history:'three Back restored root, query, viewport',errors};

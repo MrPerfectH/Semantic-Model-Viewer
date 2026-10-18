@@ -1,0 +1,15 @@
+{"before":{"innerWidth":720,"innerHeight":500,"dpr":2,"below":true,"width":400,"inspector":{"x":0,"y":355,"width":711,"height":400,"top":355,"right":711,"bottom":755,"left":0},"resizer":{"x":0,"y":348,"width":711,"height":7,"top":348,"right":711,"bottom":355,"left":0},"surface":{"x":220,"y":128,"width":491,"height":220,"top":128,"right":711,"bottom":348,"left":220},"hit":"pqw-resizer"}}
+{"after":{"innerWidth":720,"innerHeight":500,"dpr":2,"below":true,"width":400,"inspector":{"x":0,"y":355,"width":711,"height":440,"top":355,"right":711,"bottom":795,"left":0},"resizer":{"x":0,"y":348,"width":711,"height":7,"top":348,"right":711,"bottom":355,"left":0},"surface":{"x":220,"y":128,"width":491,"height":220,"top":128,"right":711,"bottom":348,"left":220},"hit":"pqw-resizer"}}
+{"pointer":{"innerWidth":720,"innerHeight":500,"dpr":2,"below":true,"width":400,"inspector":{"x":0,"y":355,"width":711,"height":480,"top":355,"right":711,"bottom":835,"left":0},"resizer":{"x":0,"y":348,"width":711,"height":7,"top":348,"right":711,"bottom":355,"left":0},"surface":{"x":220,"y":128,"width":491,"height":220,"top":128,"right":711,"bottom":348,"left":220},"hit":"pqw-resizer"}}
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+420 !== 460
+
+    at /private/tmp/pq-v2-zoom-dock-orientations.cjs:50:1805 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 420,
+  expected: 460,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

@@ -1,0 +1,842 @@
+{
+  "entryMs": 89.32158299999992,
+  "searchMs": 34.90920899999992,
+  "states": {
+    "all": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "all",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "9 visible / 9 total objects · 9 library results",
+      "banner": "",
+      "code": "",
+      "viewport": {
+        "x": 396.88574938574936,
+        "y": 51.786240786240796,
+        "k": 0.7893120393120393
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 9,
+      "visible": [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Consumer1\"]",
+        "[\"expression\",\"\",\"Consumer2\"]",
+        "[\"expression\",\"\",\"Consumer3\"]",
+        "[\"expression\",\"\",\"Consumer4\"]",
+        "[\"expression\",\"\",\"Consumer5\"]",
+        "[\"expression\",\"\",\"LocalShadow\"]",
+        "[\"expression\",\"\",\"FunctionShadow\"]",
+        "[\"expression\",\"\",\"FieldOnly\"]"
+      ],
+      "library": [
+        "Server · parameter",
+        "Consumer1 · query",
+        "Consumer2 · query",
+        "Consumer3 · query",
+        "Consumer4 · query",
+        "Consumer5 · query",
+        "LocalShadow · query",
+        "FunctionShadow · function",
+        "FieldOnly · query"
+      ],
+      "map": "9 visible / 9 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"expression\",\"\",\"Server\"]",
+            "metadataId": "[\"expression\",\"\",\"Server\"]",
+            "label": "Server",
+            "subtitle": "parameter",
+            "kind": "parameter",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer1\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer1\"]",
+            "label": "Consumer1",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer2\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer2\"]",
+            "label": "Consumer2",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer3\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer3\"]",
+            "label": "Consumer3",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer4\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer4\"]",
+            "label": "Consumer4",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer5\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer5\"]",
+            "label": "Consumer5",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"LocalShadow\"]",
+            "metadataId": "[\"expression\",\"\",\"LocalShadow\"]",
+            "label": "LocalShadow",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"FunctionShadow\"]",
+            "metadataId": "[\"expression\",\"\",\"FunctionShadow\"]",
+            "label": "FunctionShadow",
+            "subtitle": "function",
+            "kind": "function",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"FieldOnly\"]",
+            "metadataId": "[\"expression\",\"\",\"FieldOnly\"]",
+            "label": "FieldOnly",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          }
+        ],
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer1\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer1\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer2\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer2\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer3\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer3\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer4\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer4\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer5\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer5\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          }
+        ],
+        "issues": [
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer1\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer2\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer3\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer4\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer5\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 5,
+        "analysisProgress": {
+          "analyzed": 9,
+          "total": 9,
+          "complete": true,
+          "generation": 5
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"Consumer1\"]",
+          "[\"expression\",\"\",\"Consumer2\"]",
+          "[\"expression\",\"\",\"Consumer3\"]",
+          "[\"expression\",\"\",\"Consumer4\"]",
+          "[\"expression\",\"\",\"Consumer5\"]",
+          "[\"expression\",\"\",\"LocalShadow\"]",
+          "[\"expression\",\"\",\"FunctionShadow\"]",
+          "[\"expression\",\"\",\"FieldOnly\"]"
+        ],
+        "connected": [
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"Consumer1\"]",
+          "[\"expression\",\"\",\"Consumer2\"]",
+          "[\"expression\",\"\",\"Consumer3\"]",
+          "[\"expression\",\"\",\"Consumer4\"]",
+          "[\"expression\",\"\",\"Consumer5\"]"
+        ],
+        "disconnected": [
+          "[\"expression\",\"\",\"LocalShadow\"]",
+          "[\"expression\",\"\",\"FunctionShadow\"]",
+          "[\"expression\",\"\",\"FieldOnly\"]"
+        ]
+      }
+    },
+    "connected": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "connected",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "6 visible / 9 total objects · 6 library results",
+      "banner": "",
+      "code": "",
+      "viewport": {
+        "x": 396.88574938574936,
+        "y": 51.786240786240796,
+        "k": 0.7893120393120393
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 9,
+      "visible": [
+        "[\"expression\",\"\",\"Server\"]",
+        "[\"expression\",\"\",\"Consumer1\"]",
+        "[\"expression\",\"\",\"Consumer2\"]",
+        "[\"expression\",\"\",\"Consumer3\"]",
+        "[\"expression\",\"\",\"Consumer4\"]",
+        "[\"expression\",\"\",\"Consumer5\"]"
+      ],
+      "library": [
+        "Server · parameter",
+        "Consumer1 · query",
+        "Consumer2 · query",
+        "Consumer3 · query",
+        "Consumer4 · query",
+        "Consumer5 · query"
+      ],
+      "map": "6 visible / 9 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"expression\",\"\",\"Server\"]",
+            "metadataId": "[\"expression\",\"\",\"Server\"]",
+            "label": "Server",
+            "subtitle": "parameter",
+            "kind": "parameter",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer1\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer1\"]",
+            "label": "Consumer1",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer2\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer2\"]",
+            "label": "Consumer2",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer3\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer3\"]",
+            "label": "Consumer3",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer4\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer4\"]",
+            "label": "Consumer4",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer5\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer5\"]",
+            "label": "Consumer5",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"LocalShadow\"]",
+            "metadataId": "[\"expression\",\"\",\"LocalShadow\"]",
+            "label": "LocalShadow",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"FunctionShadow\"]",
+            "metadataId": "[\"expression\",\"\",\"FunctionShadow\"]",
+            "label": "FunctionShadow",
+            "subtitle": "function",
+            "kind": "function",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"FieldOnly\"]",
+            "metadataId": "[\"expression\",\"\",\"FieldOnly\"]",
+            "label": "FieldOnly",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          }
+        ],
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer1\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer1\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer2\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer2\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer3\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer3\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer4\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer4\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer5\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer5\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          }
+        ],
+        "issues": [
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer1\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer2\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer3\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer4\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer5\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 5,
+        "analysisProgress": {
+          "analyzed": 9,
+          "total": 9,
+          "complete": true,
+          "generation": 5
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"Consumer1\"]",
+          "[\"expression\",\"\",\"Consumer2\"]",
+          "[\"expression\",\"\",\"Consumer3\"]",
+          "[\"expression\",\"\",\"Consumer4\"]",
+          "[\"expression\",\"\",\"Consumer5\"]",
+          "[\"expression\",\"\",\"LocalShadow\"]",
+          "[\"expression\",\"\",\"FunctionShadow\"]",
+          "[\"expression\",\"\",\"FieldOnly\"]"
+        ],
+        "connected": [
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"Consumer1\"]",
+          "[\"expression\",\"\",\"Consumer2\"]",
+          "[\"expression\",\"\",\"Consumer3\"]",
+          "[\"expression\",\"\",\"Consumer4\"]",
+          "[\"expression\",\"\",\"Consumer5\"]"
+        ],
+        "disconnected": [
+          "[\"expression\",\"\",\"LocalShadow\"]",
+          "[\"expression\",\"\",\"FunctionShadow\"]",
+          "[\"expression\",\"\",\"FieldOnly\"]"
+        ]
+      }
+    },
+    "disconnected": {
+      "phase": "ready",
+      "message": "Metadata inspected. Static analysis remains partial.",
+      "category": "disconnected",
+      "query": "",
+      "selectedId": null,
+      "inspectorOpen": false,
+      "count": "3 visible / 9 total objects · 3 library results",
+      "banner": "Zero resolved incident references. Static uncertainty remains; disconnected does not prove independence.",
+      "code": "",
+      "viewport": {
+        "x": 396.88574938574936,
+        "y": 29.536240786240796,
+        "k": 0.7893120393120393
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "history": [],
+      "domNodes": 9,
+      "visible": [
+        "[\"expression\",\"\",\"LocalShadow\"]",
+        "[\"expression\",\"\",\"FunctionShadow\"]",
+        "[\"expression\",\"\",\"FieldOnly\"]"
+      ],
+      "library": [
+        "LocalShadow · query",
+        "FunctionShadow · function",
+        "FieldOnly · query"
+      ],
+      "map": "3 visible / 9 objects",
+      "graph": {
+        "nodes": [
+          {
+            "id": "[\"expression\",\"\",\"Server\"]",
+            "metadataId": "[\"expression\",\"\",\"Server\"]",
+            "label": "Server",
+            "subtitle": "parameter",
+            "kind": "parameter",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer1\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer1\"]",
+            "label": "Consumer1",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer2\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer2\"]",
+            "label": "Consumer2",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer3\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer3\"]",
+            "label": "Consumer3",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer4\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer4\"]",
+            "label": "Consumer4",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"Consumer5\"]",
+            "metadataId": "[\"expression\",\"\",\"Consumer5\"]",
+            "label": "Consumer5",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"LocalShadow\"]",
+            "metadataId": "[\"expression\",\"\",\"LocalShadow\"]",
+            "label": "LocalShadow",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"FunctionShadow\"]",
+            "metadataId": "[\"expression\",\"\",\"FunctionShadow\"]",
+            "label": "FunctionShadow",
+            "subtitle": "function",
+            "kind": "function",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          },
+          {
+            "id": "[\"expression\",\"\",\"FieldOnly\"]",
+            "metadataId": "[\"expression\",\"\",\"FieldOnly\"]",
+            "label": "FieldOnly",
+            "subtitle": "query",
+            "kind": "query",
+            "table": null,
+            "partition": null,
+            "state": "available"
+          }
+        ],
+        "edges": [
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer1\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer1\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer2\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer2\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer3\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer3\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer4\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer4\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          },
+          {
+            "id": "[\"reference\",\"[\\\"expression\\\",\\\"\\\",\\\"Server\\\"]\",\"[\\\"expression\\\",\\\"\\\",\\\"Consumer5\\\"]\"]",
+            "inputId": "[\"expression\",\"\",\"Server\"]",
+            "consumerId": "[\"expression\",\"\",\"Consumer5\"]",
+            "referenceOccurrences": [
+              {
+                "id": "[\"expression\",\"\",\"Server\"]",
+                "name": "Server",
+                "at": 13,
+                "end": 19
+              }
+            ]
+          }
+        ],
+        "issues": [
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer1\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer2\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer3\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer4\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": "[\"expression\",\"\",\"Consumer5\"]",
+            "kind": "analysis-uncertainty",
+            "message": "Unresolved library/external symbol: Sql.Database"
+          },
+          {
+            "consumerId": null,
+            "kind": "analysis-notice",
+            "message": "Partial static inspection; absence of an edge does not prove absence of a dependency."
+          }
+        ],
+        "generation": 5,
+        "analysisProgress": {
+          "analyzed": 9,
+          "total": 9,
+          "complete": true,
+          "generation": 5
+        }
+      },
+      "sets": {
+        "all": [
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"Consumer1\"]",
+          "[\"expression\",\"\",\"Consumer2\"]",
+          "[\"expression\",\"\",\"Consumer3\"]",
+          "[\"expression\",\"\",\"Consumer4\"]",
+          "[\"expression\",\"\",\"Consumer5\"]",
+          "[\"expression\",\"\",\"LocalShadow\"]",
+          "[\"expression\",\"\",\"FunctionShadow\"]",
+          "[\"expression\",\"\",\"FieldOnly\"]"
+        ],
+        "connected": [
+          "[\"expression\",\"\",\"Server\"]",
+          "[\"expression\",\"\",\"Consumer1\"]",
+          "[\"expression\",\"\",\"Consumer2\"]",
+          "[\"expression\",\"\",\"Consumer3\"]",
+          "[\"expression\",\"\",\"Consumer4\"]",
+          "[\"expression\",\"\",\"Consumer5\"]"
+        ],
+        "disconnected": [
+          "[\"expression\",\"\",\"LocalShadow\"]",
+          "[\"expression\",\"\",\"FunctionShadow\"]",
+          "[\"expression\",\"\",\"FieldOnly\"]"
+        ]
+      }
+    }
+  },
+  "target": {
+    "id": "[\"expression\",\"\",\"FieldOnly\"]",
+    "rect": {
+      "x": 533,
+      "y": 533.6000366210938,
+      "width": 187,
+      "height": 66.29998779296875,
+      "top": 533.6000366210938,
+      "right": 720,
+      "bottom": 599.9000244140625,
+      "left": 533
+    },
+    "canvas": {
+      "x": 220,
+      "y": 164.5,
+      "width": 813,
+      "height": 804.5,
+      "top": 164.5,
+      "right": 1033,
+      "bottom": 969,
+      "left": 220
+    },
+    "view": {
+      "x": 313,
+      "y": -222.5,
+      "k": 0.85
+    }
+  },
+  "longTasks": []
+}

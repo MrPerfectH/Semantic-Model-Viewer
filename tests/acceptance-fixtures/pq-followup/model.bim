@@ -1,0 +1,174 @@
+{
+  "name": "Independent main integration synthetic",
+  "model": {
+    "tables": [
+      {
+        "name": "SyntheticSales",
+        "columns": [
+          {
+            "name": "Amount",
+            "dataType": "int64",
+            "sourceColumn": "Amount"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Base Amount",
+            "expression": "SUM(SyntheticSales[Amount])"
+          },
+          {
+            "name": "Formatted Probe",
+            "expression": "VAR total=[Base Amount] RETURN DIVIDE(total,2,0)"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "SyntheticSales",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let Source = #table({\"Amount\"}, {{1}, {2}}), Marker = \"PQ_REDESIGN_MAIN_PRIVATE\" in Source"
+            },
+            "queryGroup": "Inputs"
+          }
+        ]
+      }
+    ],
+    "expressions": [
+      {
+        "name": "Sales Raw",
+        "kind": "m",
+        "expression": "1",
+        "queryGroup": "Stage"
+      },
+      {
+        "name": "Quote\"Query",
+        "kind": "m",
+        "expression": "2",
+        "queryGroup": "Stage"
+      },
+      {
+        "name": "Server",
+        "kind": "m",
+        "expression": "\"PQ_REDESIGN_PARAMETER_ONLY\" meta [IsParameterQuery=true]",
+        "queryGroup": "Inputs"
+      },
+      {
+        "name": "OccurrenceProbe",
+        "kind": "m",
+        "expression": "let\r\n  Emoji = \"😀\",\r\n  First = #\"Sales Raw\",\r\n  Again = #\"Sales Raw\",\r\n  Escaped = #\"Quote\"\"Query\",\r\n  EscapedCode = #\"Sales#(0020)Raw\",\r\n  Parameter = Server,\r\n  Text = \"Sales Raw Server\", // #\"Sales Raw\" Server\r\n  Local = (let #\"Sales Raw\" = 1 in #\"Sales Raw\"),\r\n  Lambda = (Server as text) => Server,\r\n  Field = [Server = \"field\"][Server]\r\nin {First, Again, Escaped, EscapedCode, Parameter, Local, Field}  \r\n"
+      },
+      {
+        "name": "Distant Synthetic 00",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 01",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 02",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 03",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 04",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 05",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 06",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 07",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 08",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 09",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 10",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 11",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 12",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 13",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 14",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 15",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 16",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 17",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 18",
+        "kind": "m",
+        "expression": "1"
+      },
+      {
+        "name": "Distant Synthetic 19",
+        "kind": "m",
+        "expression": "1"
+      }
+    ],
+    "relationships": [],
+    "queryGroups": [
+      {
+        "name": "Stage",
+        "folder": "Synthetic/Stage"
+      },
+      {
+        "name": "Inputs",
+        "folder": "Synthetic/Inputs"
+      }
+    ]
+  }
+}

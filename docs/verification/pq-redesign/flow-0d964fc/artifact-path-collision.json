@@ -1,0 +1,5 @@
+{
+  "cause": "Derived arrange scripts initially retained chain-fallback output path due too-specific replacement. Original log files, chain fit.json/fit.png/centered.json survived. Chain receipt and first failed arrange receipt restored from preserved console logs. Latest replay observed/screenshot/network moved to arrange-undo-replay.",
+  "limitation": "Original chain network capture and first missing-target network capture were overwritten and are not claimed preserved. Offline and all other failed logs/receipts unchanged.",
+  "repair": "Assign unique output paths to scripts; no runtime assertion changed."
+}

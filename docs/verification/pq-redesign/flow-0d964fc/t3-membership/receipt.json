@@ -1,0 +1,9 @@
+{
+  "candidate": "0d964fc97273cca8626e3cc4e9b39f73620b7e24",
+  "checks": [
+    "Add related target ancestors and strict activation-boundary Undo",
+    "Remove unrelated target depth and strict activation-boundary Undo",
+    "first parameter target defaults all consumers fanout9"
+  ],
+  "failures": []
+}

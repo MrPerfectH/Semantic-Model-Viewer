@@ -32,7 +32,7 @@ function harness(preferences = {}) {
   return { view: new context.MeasuresView(app, {}), app, saved, flushFrame() { const pending = [...frames.values()]; frames.clear(); pending.forEach(callback => callback()); } };
 }
 
-const rowNames = rows => Array.from(rows.filter(row => !row.isFolder), row => row.name);
+const rowNames = rows => Array.from(rows.filter(row => !row.isFolder && !row.isHeader), row => row.name);
 
 test('library search finds names, folders, home tables and DAX, expanding matching folders', () => {
   const { view, app } = harness();
@@ -551,4 +551,24 @@ test('source graphs start at readable scale and source display limits are disclo
   const capped=view.buildGraph();
   assert.equal(capped.sourcesCapped,true);
   assert.ok(capped.sources[0].omitted>0);
+});
+
+test('library search lists name matches before measures that only mention the text in DAX', () => {
+  const { view, app } = harness();
+  app.state.mvQuery = 'revenue';
+  const rows = view.buildRows().rows;
+  assert.deepEqual(Array.from(rows.filter(row => row.isHeader), row => row.name), ['Name matches', 'Found in DAX']);
+  assert.deepEqual(rowNames(rows), ['Revenue', 'Margin', 'Profit']);
+  app.state.mvQuery = 'profit';
+  assert.deepEqual(Array.from(view.buildRows().rows.filter(row => row.isHeader), row => row.name), ['Name matches', 'Found in DAX']);
+  app.state.mvQuery = 'divide(';
+  assert.equal(view.buildRows().rows.some(row => row.isHeader), false);
+});
+
+test('DAX code block resets the host <code> styling so tokens stay readable in VS Code themes', () => {
+  const css = fs.readFileSync(path.join(__dirname, '../Models/tools/viewer/measures.css'), 'utf8');
+  const rule = css.match(/\.mv-dax-code\{([^}]*)\}/);
+  assert.ok(rule, '.mv-dax-code rule exists');
+  assert.match(rule[1], /background:none/);
+  assert.match(rule[1], /color:inherit/);
 });

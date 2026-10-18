@@ -124,7 +124,7 @@
        the tallest chip the card becomes inside the band the fitted picture is read at, not
        the collapsed card: the renderer scales a chip by 1/zoom, so a lane cut to the card
        height is around 40% too short at the zoom a whole model actually lands on. */
-    _gapBox: function () { var K = this.chipBandBox(); return { x: K.w + 12, y: K.h + 12 }; },
+    _gapBox: function () { var K = this.chipBandBox(); return { x: K.w + this.laneGutterX(this.layoutK), y: K.h + 12 }; },
     /* Force-layout flavour: collapsed card boxes, one sweep, the caller's strength. */
     _separate: function (nodes, strength) {
       var B = this._box();
@@ -232,10 +232,11 @@
     /* ---------- build DOM ---------- */
     build: function () {
       var self = this, host = this.host; if (!host) return;
+      this.releaseLayer();
       U.clear(host);
       this._chip = null;
       this._bandBox = null;            // lane size follows this model's longest table name
-      var world = el('div', { style: 'position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;' });
+      var world = el('div', { style: 'position:absolute;left:0;top:0;transform-origin:0 0;' });
       host.appendChild(world); this.world = world;
       var svg = sv('svg', { width: '1', height: '1', style: 'position:absolute;overflow:visible;pointer-events:none;left:0;top:0;' });
       world.appendChild(svg); this.svg = svg;
@@ -247,7 +248,7 @@
       host.appendChild(pop); this.relPop = pop;
       if (!this._escBound) {
         this._escBound = true;
-        window.addEventListener('keydown', function (e) { if (e.key === 'Escape' && self.selRel) self.selectRel(null); });
+        window.addEventListener('keydown', function (e) { if (e.key === 'Escape' && self.selRel && ['graph', 'clusters'].includes(self.app.state.viewMode)) self.selectRel(null); });
       }
       this.cards = {};
       this.app.model.tables.forEach(function (t) { self.makeCard(world, t); });
@@ -261,18 +262,19 @@
     makeCard: function (world, t) {
       var self = this, app = this.app;
       var fact = app.isFact(t);
+      var chrome = g.WorkspaceUI ? g.WorkspaceUI.cardStyles({fact:fact,color:app.tableColor(t),headerTint:U.tint(app.tableColor(t),.1)}) : {};
       var card = el('div', {
-        data: { name: t.name },
+        data: { name: t.name, fact: String(fact), smvKind: 'table', smvName: t.name },
         style: 'position:absolute;width:' + this.CARD_W + 'px;background:#fff;border:1px solid #e4e7ec;border-radius:' + (fact ? '7px' : '13px') +
           ';box-shadow:0 1px 2px rgba(20,30,50,.05),0 4px 12px rgba(20,30,50,.07);font-family:\'IBM Plex Sans\',sans-serif;overflow:hidden;transition:box-shadow .15s,opacity .15s,border-color .15s;'
       });
       var sm = app.srcMeta(t);
-      var head = el('div', { data: { head: '1' }, style: 'display:flex;align-items:flex-start;gap:9px;padding:10px 11px 10px 12px;cursor:grab;border-left:4px solid transparent;' });
+      var head = el('div', { data: { head: '1' }, style: chrome.head || 'display:flex;align-items:flex-start;gap:9px;padding:10px 11px 10px 12px;cursor:grab;border-left:4px solid transparent;' });
       var rmap = { fact: 'FACT', dim: 'DIM', helper: 'HLP', calcgroup: 'CG', fieldparam: 'FP', measures: 'M', standalone: 'STD', unknown: 'UNK' };
       var role = el('span', { text: rmap[t.role] || 'TBL', style: 'font:700 8.5px/1 "IBM Plex Mono",monospace;letter-spacing:.4px;padding:4px 5px;border-radius:4px;flex:none;color:#fff;margin-top:1px;' });
-      var titleWrap = el('div', { style: 'flex:1;min-width:0;' });
-      var nm = el('div', { text: t.name, title: t.name, style: 'font:600 13.5px/1.2 "IBM Plex Sans";letter-spacing:-.2px;color:#1f2430;word-break:break-word;' });
-      var src = el('div', {
+      var titleWrap = el('div', { style: chrome.titleWrap || 'flex:1;min-width:0;' });
+      var nm = el('div', { data:{title:'1'}, text: t.name, title: t.name, style: 'font:600 13.5px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:-.2px;color:#1f2430;word-break:break-word;' });
+      var src = el('div', { data:{src:'1'},
         title: sm.kind + (sm.detail && sm.detail !== '—' ? ' · ' + sm.detail : '') + (sm.via ? '\nvia ' + sm.via : '') + (sm.server ? '\n' + sm.server : ''),
         html: '<span style="margin-right:4px;opacity:.85;">' + sm.icon + '</span>' + U.esc(sm.detail && sm.detail !== '—' ? sm.detail : sm.kind),
         style: 'font:500 10px/1.4 "IBM Plex Mono",monospace;color:' + sm.color + ';overflow-wrap:anywhere;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;'
@@ -298,10 +300,10 @@
       rm.addEventListener('click', function (e) { e.stopPropagation(); if (app.explorer) app.explorer.removeMany([t.name]); });
       head.appendChild(role); head.appendChild(titleWrap); head.appendChild(lock); head.appendChild(rm); head.appendChild(caret);
       card.appendChild(head);
-      var meta = el('div', { data: { meta: '1' }, style: 'display:flex;align-items:center;gap:6px;padding:9px 11px 10px 16px;border-top:1px solid #eef0f3;' });
+      var meta = el('div', { data: { meta: '1' }, style: chrome.meta || 'display:flex;align-items:center;gap:6px;padding:9px 11px 10px 16px;border-top:1px solid #eef0f3;' });
       var chip = function (num, label) {
         return el('span', {
-          html: '<b style="font-weight:600;color:#5b6472;">' + num + '</b> <span style="color:#9aa1ad;">' + label + '</span>',
+          html: '<b style="font-weight:600;color:var(--smv-muted,#5b6472);">' + num + '</b> <span style="color:var(--smv-muted,#9aa1ad);">' + label + '</span>',
           style: 'font:500 10px/1 "IBM Plex Mono",monospace;background:#f3f5f8;border-radius:5px;padding:4px 7px;'
         });
       };
@@ -321,7 +323,7 @@
       var colRows = {};
       t.columns.forEach(function (c) {
         var row = el('div', {
-          data: { col: c.name },
+          data: { col: c.name, smvKind: 'column', smvName: c.name, smvTable: t.name },
           style: 'display:flex;align-items:center;gap:8px;height:25px;padding:0 11px 0 14px;' + (c.rel ? ('background:' + tint('#f59e0b', 0.08) + ';') : '')
         });
         var ic = el('span', {
@@ -340,27 +342,27 @@
       });
       if (t.measures && t.measures.length) {
         body.appendChild(el('div', {
-          text: 'Measures', style: 'padding:7px 14px 4px;font:700 9px/1 "IBM Plex Sans";letter-spacing:.5px;text-transform:uppercase;color:#b3b9c2;border-top:1px solid #eef0f3;margin-top:2px;'
+          text: 'Measures', style: 'padding:7px 14px 4px;font:700 9px/1 "IBM Plex Sans",sans-serif;letter-spacing:.5px;text-transform:uppercase;color:#b3b9c2;border-top:1px solid #eef0f3;margin-top:2px;'
         }));
         t.measures.forEach(function (m) {
           var u = app.msrUse(m.name);
           var row = el('button', {
-            cls: 'hv-f5f7f9', title: (m.dax || '').trim(),
+            cls: 'hv-f5f7f9', data: {smvKind:'measure',smvName:m.name,smvTable:t.name}, title: (m.dax || '').trim(),
             style: 'display:flex;align-items:center;gap:7px;width:100%;text-align:left;height:24px;padding:0 11px 0 14px;border:none;background:transparent;cursor:pointer;'
           });
           row.appendChild(el('span', {
-            html: '<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:#c9a3d6;"></span>',
+            html: '<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--smv-up-border,#c9a3d6);"></span>',
             style: 'flex:none;width:12px;display:flex;align-items:center;justify-content:center;'
           }));
           row.appendChild(el('span', {
-            text: m.name, style: 'flex:1;min-width:0;font:500 11px/1.3 "IBM Plex Mono",monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:' + (m.h ? '#b3b9c2' : '#7c2d92') + ';'
+            text: m.name, style: 'flex:1;min-width:0;font:500 11px/1.3 "IBM Plex Mono",monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:' + (m.h ? '#b3b9c2' : 'var(--smv-plum,#7c2d92)') + ';'
           }));
           if (m.h) row.appendChild(el('span', {
-            title: 'Hidden in the model (isHidden)', style: 'flex:none;display:flex;color:#9aa1ad;', html: U.icon('eyeOff', 10)
+            title: 'Hidden in the model (isHidden)', style: 'flex:none;display:flex;color:var(--smv-muted,#9aa1ad);', html: U.icon('eyeOff', 10)
           }));
           if (u) row.appendChild(el('span', {
             title: app.useTip(u), text: u.length + ' pg',
-            style: "flex:none;font:600 8.5px/1 'IBM Plex Mono',monospace;color:#2563eb;background:#f2f7ff;border:1px solid #d4e3fb;border-radius:4px;padding:2px 4px;cursor:help;"
+            style: "flex:none;font:600 8.5px/1 'IBM Plex Mono',monospace;color:var(--smv-burgundy,#2563eb);background:var(--smv-accent-soft,#f2f7ff);border:1px solid var(--smv-line,#d4e3fb);border-radius:4px;padding:2px 4px;cursor:help;"
           }));
           row.addEventListener('click', function (e) {
             e.stopPropagation();
@@ -446,9 +448,10 @@
       window.addEventListener('mouseup', function (e) {
         if (!panning) return;
         panning = false; host.style.cursor = 'grab';
+        self.releaseLayer();
         if (!moved && Math.hypot(e.clientX - sx, e.clientY - sy) <= 4) self.clearSelection();
       });
-      window.addEventListener('blur', function () { panning = false; host.style.cursor = 'grab'; });
+      window.addEventListener('blur', function () { panning = false; host.style.cursor = 'grab'; self.releaseLayer(); });
       host.addEventListener('wheel', function (e) {
         e.preventDefault();
         var rect = host.getBoundingClientRect();
@@ -462,7 +465,20 @@
         self.view.k = k; self.updateTransform();
       }, { passive: false });
     },
+    holdLayer: function () {
+      if (!this.world) return;
+      if (this.world.style.willChange !== 'transform') this.world.style.willChange = 'transform';
+      if (this._gestureHold != null) clearTimeout(this._gestureHold);
+      var self = this;
+      this._gestureHold = setTimeout(function () { self.releaseLayer(); }, 160);
+    },
+    releaseLayer: function () {
+      if (this._gestureHold != null) clearTimeout(this._gestureHold);
+      this._gestureHold = null;
+      if (this.world) this.world.style.willChange = '';
+    },
     updateTransform: function () {
+      this.holdLayer();
       if (this.world) this.world.style.transform = 'translate(' + this.view.x + 'px,' + this.view.y + 'px) scale(' + this.view.k + ')';
       this.applyLOD();
       this.positionRelPopover();
@@ -546,7 +562,20 @@
     /* The lane: the chip box at zoom k plus the gutter a reader needs between two names. */
     cellFor: function (k) {
       var b = this.chipBoxAt(k);
-      return { w: b.w + 12, h: b.h + 12, cw: this.CARD_W, ch: b.h };
+      return { w: b.w + this.laneGutterX(k), h: b.h + 12, cw: this.CARD_W, ch: b.h };
+    },
+    /* Is a picture shown at zoom k one of full cards carrying relationship pills? Chips get the
+       12px gutter a reader needs between two names; full cards need room between them for the
+       `[ * ◂ 1 ]` pill on the stub that joins them, or every focused star packs its cards a
+       gutter apart and the pill has nowhere to sit. Below PILL_ZOOM there is no pill to make
+       room for, whatever the detail mode says. */
+    cardLanes: function (k) { return !this.chipOn(k) && k >= this.PILL_ZOOM; },
+    PILL_ROOM: 14,           /* screen px of clear line the pill wants on each side of it */
+    /* Horizontal gutter between two lanes, in world units at zoom k: the pill is a screen-pixel
+       size, so the room it needs in the model grows as the zoom drops. */
+    laneGutterX: function (k) {
+      if (!this.cardLanes(k)) return 12;
+      return Math.max(12, Math.ceil((this.PILL_W + 2 * this.PILL_ROOM) / Math.max(this.PILL_ZOOM, k)));
     },
     /* The zoom the positions on the canvas right now were laid out for. Every lane metric
        reads through it, and Fit never zooms out past it — showing a layout smaller than the
@@ -602,7 +631,7 @@
           /* -webkit-box + line-clamp is the one wrap that ellipsises the LAST line instead of
              cutting it: the name breaks over up to three lines and only what still does not
              fit is replaced by the ellipsis, so a reader always keeps the opening words. */
-          c.nm.style.font = '600 ' + m.font.toFixed(2) + 'px/' + m.lead + ' "IBM Plex Sans"';
+          c.nm.style.font = '600 ' + m.font.toFixed(2) + 'px/' + m.lead + ' "IBM Plex Sans",sans-serif';
           c.nm.style.display = '-webkit-box';
           c.nm.style.webkitLineClamp = String(m.lines);
           c.nm.style.webkitBoxOrient = 'vertical';
@@ -624,7 +653,7 @@
           c.caret.style.display = 'flex';
           c.meta.style.display = 'flex';
           c.body.style.display = c.expanded ? 'block' : 'none';
-          c.nm.style.font = '600 13.5px/1.2 "IBM Plex Sans"';
+          c.nm.style.font = '600 13.5px/1.2 "IBM Plex Sans",sans-serif';
           c.nm.style.display = '';
           c.nm.style.webkitLineClamp = '';
           c.nm.style.overflow = '';
@@ -886,7 +915,19 @@
         else { ax = ca.x; bx = cb.x; adir = -1; bdir = -1; }
         if (Math.abs(ay - by) < 30) { ax = ca.x + ca.w; bx = cb.x + cb.w; adir = 1; bdir = 1; }
       }
-      return { ax: ax, ay: ay, bx: bx, by: by, dir: adir, adir: adir, bdir: bdir, a: a, b: b };
+      // Pick the facing side independently at each endpoint. Normalize the
+      // center-to-center direction by each card's proportions, so a diagonal
+      // relationship can use a bottom port on one card and a side port on another.
+      // Expanded cards retain the horizontal anchors of their column rows.
+      var dx = cb.x + cb.w / 2 - ca.x - ca.w / 2;
+      var dy = cb.y + cb.h / 2 - ca.y - ca.h / 2;
+      var rowGap = cb.y >= ca.y + ca.h + 44 || ca.y >= cb.y + cb.h + 44;
+      var av = !this.cards[a].expanded && rowGap && Math.abs(dy) / ca.h > Math.abs(dx) / ca.w;
+      var bv = !this.cards[b].expanded && rowGap && Math.abs(dy) / cb.h > Math.abs(dx) / cb.w;
+      if (av) { ax = ca.x + ca.w / 2; ay = dy > 0 ? ca.y + ca.h : ca.y; adir = dy > 0 ? 1 : -1; }
+      if (bv) { bx = cb.x + cb.w / 2; by = dy > 0 ? cb.y : cb.y + cb.h; bdir = dy > 0 ? -1 : 1; }
+      return { ax: ax, ay: ay, bx: bx, by: by, dir: adir, adir: adir, bdir: bdir,
+        aaxis: av ? 'v' : 'h', baxis: bv ? 'v' : 'h', axis: av && bv ? 'v' : av || bv ? 'mixed' : undefined, a: a, b: b };
     },
     bezierPath: function (ax, ay, bx, by, adir, bdir) {
       if (bdir == null) bdir = -adir;
@@ -940,51 +981,167 @@
       }
       return clamp(base);
     },
-    /* Path + candidate label spots for one edge in the current line style. */
-    edgeGeom: function (g0, spread, slot, rects) {
+    /* Path + candidate label spots for one edge in the current line style. `bare` picks the
+       label the seats are cut for — the combined pill, or the bare arrow it falls back to —
+       and is stamped on every seat so the box reserved later is the box that gets drawn. */
+    edgeGeom: function (g0, spread, slot, rects, bare) {
+      bare = bare == null ? this.view.k < this.PILL_ZOOM : !!bare;
       if (this.lineStyle === 'curve') {
-        var cp = g0.adir === g0.bdir ? 70 : Math.max(46, Math.min(190, Math.abs(g0.bx - g0.ax) * 0.5));
-        var p1x = g0.ax + g0.adir * cp, p2x = g0.bx + g0.bdir * cp;
+        var cp = g0.adir === g0.bdir ? 70 : Math.max(46, Math.min(190, Math.abs(g0.axis === 'v' ? g0.by - g0.ay : g0.bx - g0.ax) * 0.5));
+        var av = (g0.aaxis || g0.axis) === 'v', bv = (g0.baxis || g0.axis) === 'v';
+        var p1x = g0.ax + (av ? 0 : g0.adir * cp), p2x = g0.bx + (bv ? 0 : g0.bdir * cp);
+        var p1y = g0.ay + (av ? g0.adir * cp : 0), p2y = g0.by + (bv ? g0.bdir * cp : 0);
         var B = function (t) {
           var u = 1 - t;
           /* tangent points towards B; table A lies the other way */
           var tx = 3 * u * u * (p1x - g0.ax) + 6 * u * t * (p2x - p1x) + 3 * t * t * (g0.bx - p2x);
-          var ty = 6 * u * t * (g0.by - g0.ay);
+          var ty = 3 * u * u * (p1y - g0.ay) + 6 * u * t * (p2y - p1y) + 3 * t * t * (g0.by - p2y);
           var vert = Math.abs(ty) > Math.abs(tx);
           return { x: u * u * u * g0.ax + 3 * u * u * t * p1x + 3 * u * t * t * p2x + t * t * t * g0.bx,
-                   y: u * u * u * g0.ay + 3 * u * u * t * g0.ay + 3 * u * t * t * g0.by + t * t * t * g0.by,
-                   orient: vert ? 'v' : 'h', toA: vert ? (ty > 0 ? -1 : 1) : (tx > 0 ? -1 : 1) };
+                   y: u * u * u * g0.ay + 3 * u * u * t * p1y + 3 * u * t * t * p2y + t * t * t * g0.by,
+                   orient: vert ? 'v' : 'h', toA: vert ? (ty > 0 ? -1 : 1) : (tx > 0 ? -1 : 1), bare: bare };
         };
-        return { d: this.bezierPath(g0.ax, g0.ay, g0.bx, g0.by, g0.adir, g0.bdir), spots: [B(0.5), B(0.35), B(0.65), B(0.2), B(0.8)] };
+        return { d: 'M ' + g0.ax + ' ' + g0.ay + ' C ' + p1x + ' ' + p1y + ', ' + p2x + ' ' + p2y + ', ' + g0.bx + ' ' + g0.by, spots: [B(0.5), B(0.35), B(0.65), B(0.2), B(0.8)] };
       }
-      var cx = this.channelX(g0, spread, rects);
-      var pts = [{ x: g0.ax, y: g0.ay }, { x: cx, y: g0.by === g0.ay ? g0.ay : g0.ay }, { x: cx, y: g0.by }, { x: g0.bx, y: g0.by }];
-      var S = this.chipScale();
-      var spots = [];
-      var vlen = Math.abs(g0.by - g0.ay);
-      /* on the vertical run the pill reads top-to-bottom; toA says which way table A lies */
-      var vToA = g0.ay > g0.by ? 1 : -1;
-      if (vlen >= 62 * S) {
-        /* stagger pills that share a channel along the vertical run so they never stack */
-        var lo = Math.min(g0.ay, g0.by) + 30 * S, hi = Math.max(g0.ay, g0.by) - 30 * S;
-        var y0 = (g0.ay + g0.by) / 2 + (slot || 0) * 58 * S;
-        spots.push({ x: cx, y: Math.max(lo, Math.min(hi, y0)), orient: 'v', toA: vToA });
-        [0.3, 0.7, 0.15, 0.85].forEach(function (t) { spots.push({ x: cx, y: Math.max(lo, Math.min(hi, Math.min(g0.ay, g0.by) + vlen * t)), orient: 'v', toA: vToA }); });
+      var pts = this.relationshipPoints(g0, spread, rects || []);
+      var L = this.labelDims(bare), need = L.w + 2 * L.m, spots = [], short = [];
+      var segments = pts.slice(1).map(function (b, i) { return { a: pts[i], b: b }; });
+      segments.sort(function (a, b) { return Number(b.a.x === b.b.x) - Number(a.a.x === a.b.x); });
+      for (var i = 0; i < segments.length; i++) {
+        var a = segments[i].a, b = segments[i].b, vertical = a.x === b.x;
+        var len = Math.abs(b.x - a.x) + Math.abs(b.y - a.y);
+        if (!len) continue;
+        var toA = vertical ? (a.y > b.y ? 1 : -1) : (a.x > b.x ? 1 : -1);
+        var seats = len >= need ? spots : short;
+        if (len < L.w * 0.6) continue;
+        [0.5, 0.3, 0.7].forEach(function (t) {
+          var margin = Math.min(0.5, (L.w / 2 + L.m) / len);
+          t = Math.max(margin, Math.min(1 - margin, t + (slot || 0) * need / len));
+          seats.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t,
+            orient: vertical ? 'v' : 'h', toA: toA, bare: bare });
+        });
       }
-      /* Horizontal runs only when the line actually crosses from one side to the other.
-         On a C-shaped hook both cards sit on the same side of the channel, so a left/right
-         arrow there points at the bend, not at a table — which reads as the wrong direction. */
-      var zShape = g0.adir !== g0.bdir;
-      if (zShape) {
-        var hA = Math.abs(cx - g0.ax), hB = Math.abs(g0.bx - cx);
-        if (hA >= 70 * S) spots.push({ x: (g0.ax + cx) / 2, y: g0.ay, orient: 'h', toA: g0.ax > cx ? 1 : -1 });
-        if (hB >= 70 * S) spots.push({ x: (cx + g0.bx) / 2, y: g0.by, orient: 'h', toA: cx > g0.bx ? 1 : -1 });
+      if (!spots.length) spots = short;
+      if (!spots.length) {
+        // Even a tiny connection must offer a seat for the bare filter arrow.
+        var longest = segments.slice().sort(function (a, b) {
+          return Math.abs(b.b.x - b.a.x) + Math.abs(b.b.y - b.a.y) - Math.abs(a.b.x - a.a.x) - Math.abs(a.b.y - a.a.y);
+        })[0] || { a: pts[0], b: pts[0] };
+        var v = longest.a.x === longest.b.x;
+        spots.push({ x: (longest.a.x + longest.b.x) / 2, y: (longest.a.y + longest.b.y) / 2,
+          orient: v ? 'v' : 'h', toA: v ? (longest.a.y > longest.b.y ? 1 : -1) : (longest.a.x > longest.b.x ? 1 : -1), bare: bare });
       }
-      if (vlen >= 30 * S && vlen < 62 * S) spots.push({ x: cx, y: (g0.ay + g0.by) / 2, orient: 'v', toA: vToA });
-      if (!spots.length) spots.push(zShape
-        ? { x: cx, y: (g0.ay + g0.by) / 2, orient: 'h', toA: g0.ax > g0.bx ? 1 : -1 }
-        : { x: cx, y: (g0.ay + g0.by) / 2, orient: 'v', toA: vToA });
-      return { d: this.orthoPath(pts, 9), spots: spots };
+      return { d: this.orthoPath(pts, 9), spots: spots, points: pts };
+    },
+    assignRelationshipPorts: function (vis) {
+      var self = this, ports = {};
+      vis.forEach(function (item) {
+        ['a', 'b'].forEach(function (end) {
+          var g0 = item.g0, name = g0[end], direction = g0[end + 'dir'];
+          if (self.cards[name].expanded) return;
+          var axis = g0[end + 'axis'] || (g0.axis === 'v' ? 'v' : 'h');
+          var key = name + '\n' + axis + direction;
+          (ports[key] = ports[key] || []).push({ g0: g0, end: end, axis: axis, otherX: g0[(end === 'a' ? 'b' : 'a') + (axis === 'v' ? 'x' : 'y')] });
+        });
+      });
+      Object.keys(ports).forEach(function (key) {
+        var arr = ports[key];
+        arr.sort(function (a, b) { return a.otherX - b.otherX; });
+        arr.forEach(function (port, i) {
+          var box = self.cardBox(port.g0[port.end]);
+          port.g0[port.end + 'degree'] = arr.length;
+          if (port.axis === 'v') port.g0[port.end + 'x'] = box.x + box.w * (i + 1) / (arr.length + 1);
+          else port.g0[port.end + 'y'] = box.y + box.h * (i + 1) / (arr.length + 1);
+        });
+      });
+    },
+    // Test every segment, including the horizontal approach to a card. Endpoint
+    // cards are obstacles too; only the short outward port stubs enter their gutter.
+    routeClear: function (pts, rects) {
+      for (var i = 1; i < pts.length; i++) {
+        var a = pts[i - 1], b = pts[i];
+        for (var j = 0; j < rects.length; j++) {
+          var r = rects[j];
+          if (a.x === b.x ? a.x > r.x0 && a.x < r.x1 && Math.max(a.y, b.y) > r.y0 && Math.min(a.y, b.y) < r.y1
+              : a.y > r.y0 && a.y < r.y1 && Math.max(a.x, b.x) > r.x0 && Math.min(a.x, b.x) < r.x1) return false;
+        }
+      }
+      return true;
+    },
+    relationshipPoints: function (g0, spread, rects) {
+      var vertical = g0.axis === 'v', av = (g0.aaxis || g0.axis) === 'v', bv = (g0.baxis || g0.axis) === 'v', stub = 22;
+      var a = { x: g0.ax, y: g0.ay }, b = { x: g0.bx, y: g0.by };
+      var sa = { x: a.x + (av ? 0 : g0.adir * stub), y: a.y + (av ? g0.adir * stub : 0) };
+      var sb = { x: b.x + (bv ? 0 : g0.bdir * stub), y: b.y + (bv ? g0.bdir * stub : 0) };
+      var channel = vertical ? (sa.y + sb.y) / 2 + (spread || 0) : this.channelX(g0, spread, rects);
+      var middle = vertical ? [sa, { x: sa.x, y: channel }, { x: sb.x, y: channel }, sb]
+        : [sa, { x: channel, y: sa.y }, { x: channel, y: sb.y }, sb];
+      if (av !== bv) middle = av ? [sa, { x: sa.x, y: sb.y }, sb] : [sa, { x: sb.x, y: sa.y }, sb];
+      if (!this.routeClear(middle, rects)) middle = this.obstacleRoute(sa, sb, rects) || middle;
+      var pts = [a].concat(middle, [b]), clean = [];
+      pts.forEach(function (p) {
+        var last = clean[clean.length - 1];
+        if (last && last.x === p.x && last.y === p.y) return;
+        while (clean.length > 1) {
+          var prev = clean[clean.length - 2]; last = clean[clean.length - 1];
+          if (!((prev.x === last.x && last.x === p.x) || (prev.y === last.y && last.y === p.y))) break;
+          clean.pop();
+        }
+        clean.push(p);
+      });
+      return clean;
+    },
+    // Rectilinear visibility grid, searched only when the simple route is blocked.
+    // Grid rails sit outside the inflated cards, leaving room for rounded corners.
+    obstacleRoute: function (a, b, rects) {
+      var xs = [a.x, b.x], ys = [a.y, b.y], self = this;
+      rects.forEach(function (r) { xs.push(r.x0 - 10, r.x1 + 10); ys.push(r.y0 - 10, r.y1 + 10); });
+      xs = Array.from(new Set(xs)).sort(function (a, b) { return a - b; });
+      ys = Array.from(new Set(ys)).sort(function (a, b) { return a - b; });
+      var width = xs.length, start = ys.indexOf(a.y) * width + xs.indexOf(a.x), goal = ys.indexOf(b.y) * width + xs.indexOf(b.x);
+      var dist = new Map([[start, 0]]), prev = new Map(), heap = [];
+      var point = function (id) { return { x: xs[id % width], y: ys[Math.floor(id / width)] }; };
+      var push = function (id, cost) {
+        var p = point(id), entry = { id: id, cost: cost, score: cost + Math.abs(p.x - b.x) + Math.abs(p.y - b.y) };
+        heap.push(entry); var i = heap.length - 1;
+        while (i > 0) { var parent = (i - 1) >> 1; if (heap[parent].score <= entry.score) break; heap[i] = heap[parent]; i = parent; }
+        heap[i] = entry;
+      };
+      var pop = function () {
+        var first = heap[0], last = heap.pop();
+        if (heap.length) {
+          var i = 0;
+          while (i * 2 + 1 < heap.length) {
+            var child = i * 2 + 1;
+            if (child + 1 < heap.length && heap[child + 1].score < heap[child].score) child++;
+            if (heap[child].score >= last.score) break;
+            heap[i] = heap[child]; i = child;
+          }
+          heap[i] = last;
+        }
+        return first;
+      };
+      push(start, 0);
+      while (heap.length) {
+        var current = pop(), id = current.id;
+        if (current.cost !== dist.get(id)) continue;
+        if (id === goal) {
+          var result = [point(id)];
+          while (prev.has(id)) { id = prev.get(id); result.push(point(id)); }
+          return result.reverse();
+        }
+        var x = id % width, y = Math.floor(id / width), neighbors = [];
+        if (x) neighbors.push(id - 1); if (x + 1 < width) neighbors.push(id + 1);
+        if (y) neighbors.push(id - width); if (y + 1 < ys.length) neighbors.push(id + width);
+        neighbors.forEach(function (next) {
+          var p = point(id), q = point(next);
+          if (!self.routeClear([p, q], rects)) return;
+          var cost = current.cost + Math.abs(p.x - q.x) + Math.abs(p.y - q.y);
+          if (dist.has(next) && dist.get(next) <= cost) return;
+          dist.set(next, cost); prev.set(next, id); push(next, cost);
+        });
+      }
+      return null; // Overlapping cards can leave an endpoint with no free exit.
     },
     /* Visible card rectangles in world space, slightly inflated. */
     cardRects: function () {
@@ -995,24 +1152,51 @@
       });
       return out;
     },
+    /* World units per screen pixel of label. Labels are sized for the reader, not the model:
+       like the bare arrow they are drawn in screen pixels and scaled by 1/zoom, so the pill is
+       the same size on screen whether the picture is at 50% or 200%. The chip view thickens
+       its lines and the label follows a little — not the full 1.6x the chip strokes take,
+       because the label already holds its on-screen size and a 30px pill beside an 11px
+       table name would be the loudest thing on the canvas. */
+    labelUnit: function () { return (this._chip ? 1.12 : 1) / Math.max(0.05, this.view.k); },
+    /* The label an edge carries, horizontal, in world units: the combined cardinality pill,
+       or (`bare`) the arrowhead on its own — below PILL_ZOOM always, above it when no run of
+       the line has room for the pill. `m` is the margin a seat has to leave on each side.
+       Seat eligibility, the stagger along a shared channel and the collision ledger all read
+       through here, so the box that is reserved is always the box that is drawn. */
+    labelDims: function (bare) {
+      var u = this.labelUnit();
+      if (bare == null) bare = this.view.k < this.PILL_ZOOM;
+      if (!bare) return { w: this.PILL_W * u, h: this.PILL_H * u, m: 10 * u };
+      return { w: 16 * u, h: 12 * u, m: 6 * u };
+    },
+    /* Collision box of the label at a seat: the pill reads along the line, so on a vertical
+       run it stands tall and narrow. The seat says which label it was cut for. */
     pillBox: function (sp) {
-      var S = this.chipScale();
-      var w = this.PILL_W * S, h = this.PILL_H * S;
-      return sp.orient === 'v' ? { w: h, h: w } : { w: w, h: h };
+      var d = this.labelDims(sp.bare);
+      return sp.orient === 'v' ? { w: d.h, h: d.w } : { w: d.w, h: d.h };
     },
-    pickSpot: function (spots, rects) {
+    /* First seat whose box clears every rect. When none does, the seat that overlaps least is
+       used anyway — unless `strict`, which lets the caller try a smaller label instead. */
+    pickSpot: function (spots, rects, strict) {
+      var best = null, bestArea = Infinity;
       for (var i = 0; i < spots.length; i++) {
-        var sp = spots[i], bx = this.pillBox(sp), clash = false;
-        for (var j = 0; j < rects.length && !clash; j++) {
+        var sp = spots[i], bx = this.pillBox(sp), area = 0;
+        for (var j = 0; j < rects.length; j++) {
           var R = rects[j];
-          clash = sp.x + bx.w / 2 > R.x0 && sp.x - bx.w / 2 < R.x1 && sp.y + bx.h / 2 > R.y0 && sp.y - bx.h / 2 < R.y1;
+          var ox = Math.min(sp.x + bx.w / 2, R.x1) - Math.max(sp.x - bx.w / 2, R.x0);
+          var oy = Math.min(sp.y + bx.h / 2, R.y1) - Math.max(sp.y - bx.h / 2, R.y0);
+          if (ox > 0 && oy > 0) area += ox * oy;
         }
-        if (!clash) return sp;
+        if (area === 0) return sp;
+        if (area < bestArea) { bestArea = area; best = sp; }
       }
-      return spots[0];
+      return strict ? null : best;
     },
-    PILL_W: 34, PILL_H: 20,
-    PILL_ZOOM: 0.5,          /* below this the cardinality pills are noise, the arrows are not */
+    /* Screen-pixel size of the pill: `[ * ◂ 1 ]` — a cardinality glyph, the filter arrowhead,
+       the other glyph. PILL_SIDE is how far from the centre each glyph sits. */
+    PILL_W: 50, PILL_H: 20, PILL_SIDE: 16,
+    PILL_ZOOM: 0.5,          /* below this the cardinality glyphs are noise, the arrow is not */
     /* Filter direction is the one thing an edge must say at every zoom, so the arrowhead is
        drawn on the line itself and sized in screen pixels: 6px wherever the zoom sits. The
        filter flows to -> from, i.e. towards table A; a bidirectional edge gets both heads. */
@@ -1035,55 +1219,62 @@
       g.appendChild(arrow);
       return g;
     },
-    /* Which ends of an edge earn a cardinality pill. On an ordinary star spoke only the many
-       side is worth the ink — the other end is always `1` and a pill there just repeats the
-       arrow. When both ends carry the *same* cardinality the reader cannot infer the other
-       one, so both are drawn: `*`…`*` for a many-to-many, `1`…`1` for a one-to-one. Pills
-       disappear below PILL_ZOOM, where they would be unreadable anyway. */
-    manyEnds: function (r) {
-      var a = { end: 'a', glyph: r.fromCard === 'one' ? '1' : '*' };
-      var b = { end: 'b', glyph: r.toCard === 'many' ? '*' : '1' };
-      if (a.glyph === b.glyph) return [a, b];
-      return [a.glyph === '*' ? a : b];
-    },
-    /* Candidate seats for one end's pill, walking out along the stub that leaves that table
-       — so a pill that would land on a card can step further out instead of covering it. */
-    pillSpots: function (g0, end, glyph) {
-      var atA = end === 'a', s = this.chipScale();
-      var x = atA ? g0.ax : g0.bx, y = atA ? g0.ay : g0.by, dir = atA ? g0.adir : g0.bdir;
-      var base = this.PILL_W * s / 2 + 12;
-      return [1, 1.6, 2.3, 3.1, 0.62].map(function (f) {
-        return { x: x + dir * base * f, y: y, orient: 'h', glyph: glyph };
-      });
-    },
-    edgeCard: function (r, spot, col, op, filled) {
-      var s = this.chipScale();
-      var box = this.pillBox(spot);
-      var g = sv('g', { transform: 'translate(' + spot.x.toFixed(1) + ',' + spot.y.toFixed(1) + ')', opacity: op, style: 'pointer-events:none;' });
+    /* The one label an edge carries once the zoom can hold it: `[ * ◂ 1 ]`. Each end's
+       cardinality sits on the side of the pill its table lies on, and the filter arrowhead
+       between them points the way the filter flows — to -> from, i.e. towards table A, exactly
+       as the bare arrow does; a bidirectional edge gets a head each way. Putting both glyphs
+       and the arrow in one pill is what fixes the stacking: four edges leaving one table used
+       to want the same seats for their end pills and ended up on top of each other, reading as
+       two asterisks instead of four. One label per edge means one seat per edge.
+       Built in screen pixels and scaled by 1/zoom like the arrow. On a vertical run the pill
+       stands upright — the glyphs stack and the head points up or down; text never rotates. */
+    edgeGlyph: function (r, spot, col, op, filled, heavy) {
+      var u = this.labelUnit();
+      var vert = spot.orient === 'v', toA = spot.toA || 1;
+      var W = this.PILL_W, H = this.PILL_H, SIDE = this.PILL_SIDE;
+      var g = sv('g', { transform: 'translate(' + spot.x.toFixed(1) + ',' + spot.y.toFixed(1) + ') scale(' + u.toFixed(4) + ')', opacity: op, style: 'pointer-events:none;' });
       g.appendChild(sv('rect', {
-        x: -box.w / 2, y: -box.h / 2, width: box.w, height: box.h, rx: Math.min(box.w, box.h) / 2,
-        fill: filled ? col : '#fff', stroke: col, 'stroke-width': 1.3 * s,
-        'stroke-dasharray': r.inactive ? (3 * s) + ' ' + (2.5 * s) : null
+        x: -(vert ? H : W) / 2, y: -(vert ? W : H) / 2, width: vert ? H : W, height: vert ? W : H, rx: H / 2,
+        fill: filled ? col : '#fff', stroke: col, 'stroke-width': heavy ? 1.7 : 1.3,
+        'stroke-dasharray': r.inactive ? '3 2.5' : null
       }));
       var ink = filled ? '#fff' : col;
-      if (spot.glyph === '1') {
-        var t = sv('text', {
-          x: 0, y: 0.5 * s, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: ink,
-          style: 'font:700 ' + (11.5 * s) + 'px "IBM Plex Sans",sans-serif;'
+      /* `s` is a distance along the line, positive towards table A */
+      var along = function (s) { return 'translate(' + (vert ? 0 : s).toFixed(1) + ',' + (vert ? s : 0).toFixed(1) + ')'; };
+      var glyph = function (ch, s) {
+        var holder = sv('g', { transform: along(s) });
+        if (ch === '1') {
+          var t = sv('text', {
+            x: 0, y: 0.5, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: ink,
+            style: 'font:700 11.5px "IBM Plex Sans",sans-serif;'
+          });
+          t.textContent = '1'; holder.appendChild(t);
+        } else {
+          var star = sv('g', { stroke: ink, 'stroke-width': 1.7, 'stroke-linecap': 'round' });
+          [90, 30, 150].forEach(function (deg) {
+            var a = deg * Math.PI / 180, dx = Math.cos(a) * 4, dy = Math.sin(a) * 4;
+            star.appendChild(sv('line', { x1: -dx, y1: -dy, x2: dx, y2: dy }));
+          });
+          holder.appendChild(star);
+        }
+        return holder;
+      };
+      g.appendChild(glyph(r.fromCard === 'one' ? '1' : '*', toA * SIDE));
+      g.appendChild(glyph(r.toCard === 'many' ? '*' : '1', -toA * SIDE));
+      /* a filled head, as long as the bare arrow; `off` shifts it off centre for the pair */
+      var L = this.ARROW_PX;
+      var head = function (sign, off) {
+        var hw = 3.6, tip = off + sign * L / 2, base = off - sign * L / 2;
+        var pts = vert ? [[hw, base], [0, tip], [-hw, base]] : [[base, hw], [tip, 0], [base, -hw]];
+        return sv('polyline', {
+          points: pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' '),
+          fill: ink, stroke: ink, 'stroke-width': 1, 'stroke-linejoin': 'round'
         });
-        t.textContent = '1'; g.appendChild(t);
-      } else {
-        var star = sv('g', { stroke: ink, 'stroke-width': 1.7 * s, 'stroke-linecap': 'round' });
-        var rr = 4 * s;
-        [90, 30, 150].forEach(function (deg) {
-          var a = deg * Math.PI / 180, dx = Math.cos(a) * rr, dy = Math.sin(a) * rr;
-          star.appendChild(sv('line', { x1: -dx, y1: -dy, x2: dx, y2: dy }));
-        });
-        g.appendChild(star);
-      }
+      };
+      if (r.both) { g.appendChild(head(toA, toA * 3.6)); g.appendChild(head(-toA, -toA * 3.6)); }
+      else g.appendChild(head(toA, 0));
       return g;
     },
-    chipScale: function () { return this._chip ? 1.6 : 1; },
     relTip: function (r) {
       var cd = (r.fromCard === 'one' ? '1' : '*') + ' : ' + (r.toCard === 'many' ? '*' : '1');
       var dirTxt = r.both ? '⇄ both directions' : ('filter: ' + U.esc(r.to) + ' → ' + U.esc(r.from));
@@ -1094,6 +1285,11 @@
       if (this.lineStyle === m) return;
       this.lineStyle = m; store.set('smv-lines', m);
       this.renderLines(); this.app.render(true);
+    },
+    /* Drawing-only width policy shared with the Power Query canvas. */
+    edgeStrokeWidth: function (zoom, isSel, active, hop, chip) {
+      var thin = Math.max(1.15, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : 1.15))) / zoom;
+      return Math.max(thin, isSel ? (chip ? 4.4 : 3.4) : (active ? (chip ? 3.4 : 2.6) : (hop ? (chip ? 2.8 : 2) : (chip ? 2.2 : 1.4))));
     },
     renderLines: function () {
       var self = this;
@@ -1120,16 +1316,23 @@
         item.g0 = self.routeOf(r); item.spread = 0; item.slot = 0;
         vis.push(item);
       });
+      this.assignRelationshipPorts(vis);
       if (this.lineStyle !== 'curve') {
         var buckets = {};
         vis.forEach(function (item) {
-          var key = Math.round(self.channelX(item.g0, 0) / 28);
+          if (item.g0.axis === 'mixed') return;
+          var key = item.g0.axis === 'v' ? 'v:' + Math.round((item.g0.ay + item.g0.by) / 56) : 'h:' + Math.round(self.channelX(item.g0, 0) / 28);
           (buckets[key] = buckets[key] || []).push(item);
         });
         Object.keys(buckets).forEach(function (k) {
           var arr = buckets[k]; if (arr.length < 2) return;
-          arr.sort(function (A, B) { return (A.g0.ay + A.g0.by) - (B.g0.ay + B.g0.by); });
-          arr.forEach(function (item, i) { item.spread = (i - (arr.length - 1) / 2) * 14; item.slot = i - (arr.length - 1) / 2; });
+          arr.sort(function (A, B) { return A.g0.axis === 'v'
+            ? Math.abs(A.g0.ax - A.g0.bx) - Math.abs(B.g0.ax - B.g0.bx)
+            : (A.g0.ay + A.g0.by) - (B.g0.ay + B.g0.by); });
+          arr.forEach(function (item, i) {
+            var g0 = item.g0, sign = g0.axis === 'v' ? -(g0.adegree >= g0.bdegree ? g0.adir : g0.bdir) : 1;
+            item.spread = sign * (i - (arr.length - 1) / 2) * 14; item.slot = i - (arr.length - 1) / 2;
+          });
         });
       }
       var rects = this.cardRects();
@@ -1145,8 +1348,7 @@
         var col = isSel ? EDGE.lock : (EDGE[kind] || EDGE.base);
         /* every line has to stay at least a pixel wide on screen, whatever the zoom is;
            the focused ones are drawn heavier so the selection reads at a glance */
-        var thin = Math.max(1.15, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : 1.15))) / self.view.k;
-        var baseW = Math.max(thin, isSel ? (chip ? 4.4 : 3.4) : (active ? (chip ? 3.4 : 2.6) : (hop ? (chip ? 2.8 : 2) : (chip ? 2.2 : 1.4))));
+        var baseW = self.edgeStrokeWidth(self.view.k, isSel, active, hop, chip);
         if (active || hop || isSel) {
           self.svg.appendChild(sv('path', { d: d, fill: 'none', stroke: '#fff', 'stroke-width': baseW * 2.1, 'stroke-linecap': 'round', opacity: 0.95 }));
         }
@@ -1154,6 +1356,8 @@
         if (r.inactive) path.setAttribute('stroke-dasharray', (baseW * 1.9).toFixed(1) + ' ' + (baseW * 1.6).toFixed(1));
         var baseOp = dim ? 0.12 : ((active || isSel) ? 1 : (hop ? 0.9 : (r.inactive ? (chip ? 0.68 : 0.6) : (chip ? 0.82 : 0.72))));
         path.setAttribute('opacity', baseOp);
+        path.setAttribute('data-smv-kind', 'relationship');
+        path.setAttribute('data-smv-name', r.name || '');
         self.svg.appendChild(path);
         var op = dim ? 0.12 : 1;
         var dot = Math.max(2.6 / self.view.k, active || isSel ? 3.4 : 2.6);
@@ -1181,35 +1385,35 @@
         if (!dim) {
           var ink = kind === 'base' && !isSel ? '#7d8593' : col;
           var op2 = active || hop || isSel ? 1 : (chip ? 0.95 : 0.85);
-          /* the filter arrow is never dropped — it is what tells the reader which way the
-             relationship points, and at 30% zoom it is the only label left on the line */
-          var spot = self.pickSpot(geom.spots, rects.concat(placed));
-          var bx = self.pillBox(spot);
-          placed.push({ x0: spot.x - bx.w / 2 - 3, y0: spot.y - bx.h / 2 - 3, x1: spot.x + bx.w / 2 + 3, y1: spot.y + bx.h / 2 + 3 });
+          /* One label per edge, through one seat picker and one `placed` ledger, so it can
+             never land on a card or on another edge's label. Above PILL_ZOOM it is the
+             combined cardinality pill — where the line has a run long enough to carry it;
+             a line boxed in by its cards (the focused star packs them a gutter apart) drops
+             to the bare filter arrow rather than hide a pill under a card. Below PILL_ZOOM
+             the arrow is all there is, and it is never dropped: it is what tells the reader
+             which way the relationship points, and at 30% zoom it is the only label left. */
+          var taken = rects.concat(placed);
+          var spot = self.pickSpot(geom.spots, taken, true);
+          if (!spot) {
+            /* the arrow's seats; if even those are boxed in, keeping clear of the other labels
+               matters more than the card inflation — an arrow drawn over a pill reads as a
+               second head on it, an arrow a few pixels into a chip's margin is still an arrow */
+            var bareSpots = self.edgeGeom(g0, item.spread, item.slot, rects, true).spots;
+            spot = self.pickSpot(bareSpots, taken, true) || self.pickSpot(bareSpots, placed);
+          }
+          var bx = self.pillBox(spot), pad = 4 * self.labelUnit();
+          placed.push({ x0: spot.x - bx.w / 2 - pad, y0: spot.y - bx.h / 2 - pad, x1: spot.x + bx.w / 2 + pad, y1: spot.y + bx.h / 2 + pad });
           self._relSpots[item.i] = spot;
-          item.arrow = self.edgeArrow(r, spot, ink, op2, isSel || active ? 1.15 : 1);
+          item.arrow = spot.bare
+            ? self.edgeArrow(r, spot, ink, op2, isSel || active ? 1.15 : 1)
+            : self.edgeGlyph(r, spot, ink, op2, isSel, active);
           item.arrow.style.pointerEvents = 'auto'; item.arrow.style.cursor = 'pointer';
           bind(item.arrow);
-          if (self.view.k >= self.PILL_ZOOM) {
-            item.pills = [];
-            self.manyEnds(r).forEach(function (e) {
-              /* the pill goes through the same seat picker and the same `placed` ledger as
-                 the arrow, so it can never be dropped on a card or on another label */
-              var seat = self.pickSpot(self.pillSpots(g0, e.end, e.glyph), rects.concat(placed));
-              var pb = self.pillBox(seat);
-              placed.push({ x0: seat.x - pb.w / 2 - 3, y0: seat.y - pb.h / 2 - 3, x1: seat.x + pb.w / 2 + 3, y1: seat.y + pb.h / 2 + 3 });
-              var pill = self.edgeCard(r, seat, ink, op2, isSel);
-              pill.style.pointerEvents = 'auto'; pill.style.cursor = 'pointer';
-              bind(pill);
-              item.pills.push(pill);
-            });
-          }
         }
       });
-      /* hit strokes above the lines, arrows and pills on top so a crossing line never cuts a label */
+      /* hit strokes above the lines, labels on top so a crossing line never cuts one */
       vis.forEach(function (item) { if (item.hit) self.svg.appendChild(item.hit); });
       vis.forEach(function (item) { if (item.arrow) self.svg.appendChild(item.arrow); });
-      vis.forEach(function (item) { (item.pills || []).forEach(function (p) { self.svg.appendChild(p); }); });
       this._lineK = this.view.k;
       this.positionRelPopover();
       if (this.app.explorer) this.app.explorer.drawMap();
@@ -1251,6 +1455,7 @@
       Object.keys(this.cards).forEach(function (n) {
         var c = self.cards[n];
         var t = c.table; var col = app.tableColor(t); var fact = app.isFact(t);
+        c.el.setAttribute('data-fact', String(fact));
         var head = c.head, role = c.roleEl, caretSvg = c.caret.firstChild;
         if (c.rm) c.rm.style.color = fact ? 'rgba(255,255,255,.85)' : '#6b7280';
         head.style.boxShadow = 'none';
@@ -1307,16 +1512,16 @@
         });
         row.appendChild(el('span', { text: rmap[t.role] || 'TBL', style: 'font:700 8.5px/1 "IBM Plex Mono",monospace;letter-spacing:.4px;padding:4px 5px;border-radius:4px;color:#fff;background:' + col + ';flex:none;' }));
         row.appendChild(el('span', { style: 'flex:1;min-width:0;' }, [
-          el('span', { style: 'display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:#9aa1ad;font-weight:600;', text: label }),
+          el('span', { style: 'display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--smv-muted,#9aa1ad);font-weight:600;', text: label }),
           el('span', { style: 'display:block;font-size:12.5px;font-weight:600;color:#1f2430;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', text: t.name }),
-          el('span', { style: 'display:block;font:500 10.5px/1.3 "IBM Plex Mono",monospace;color:#5b6472;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;', text: colName })
+          el('span', { style: 'display:block;font:500 10.5px/1.3 "IBM Plex Mono",monospace;color:var(--smv-muted,#5b6472);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;', text: colName })
         ]));
-        row.appendChild(el('span', { text: card, style: 'flex:none;width:24px;height:24px;border-radius:7px;background:#eef0f3;color:#1f2430;font:700 13px/24px "IBM Plex Sans";text-align:center;' }));
+        row.appendChild(el('span', { text: card, style: 'flex:none;width:24px;height:24px;border-radius:7px;background:#eef0f3;color:#1f2430;font:700 13px/24px "IBM Plex Sans",sans-serif;text-align:center;' }));
         return row;
       };
       var head = el('div', { style: 'display:flex;align-items:center;gap:8px;padding:9px 10px 8px 12px;background:#1f2430;color:#fff;' }, [
         el('span', { style: 'font-size:10px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;color:#c9ced8;flex:1;', text: 'Relationship' }),
-        r.inactive ? el('span', { text: 'inactive', style: 'font:600 9.5px/1 "IBM Plex Sans";padding:4px 6px;border-radius:5px;background:#fca5a5;color:#7f1d1d;' }) : null,
+        r.inactive ? el('span', { text: 'inactive', style: 'font:600 9.5px/1 "IBM Plex Sans",sans-serif;padding:4px 6px;border-radius:5px;background:#fca5a5;color:#7f1d1d;' }) : null,
         el('button', {
           text: '×', title: 'Close (Esc)', onClick: function () { self.selectRel(null); },
           style: 'width:22px;height:22px;border:none;background:rgba(255,255,255,.14);color:#fff;border-radius:6px;cursor:pointer;font-size:14px;line-height:1;flex:none;'
@@ -1329,12 +1534,12 @@
         el('div', { style: 'display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#1f2430;white-space:nowrap;' }, [
           el('span', { text: self.cardText(r), style: 'min-width:0;overflow:hidden;text-overflow:ellipsis;' }),
           el('span', { style: 'flex:1;' }),
-          el('span', { text: r.both ? '⇄' : '→', style: 'font-size:14px;color:#5b6472;' })
+          el('span', { text: r.both ? '⇄' : '→', style: 'font-size:14px;color:var(--smv-muted,#5b6472);' })
         ]),
-        el('div', { style: 'font-size:11px;color:#5b6472;line-height:1.4;', text: dirTxt })
+        el('div', { style: 'font-size:11px;color:var(--smv-muted,#5b6472);line-height:1.4;', text: dirTxt })
       ]));
       pop.appendChild(tableRow(tt, r.toCol, r.toCard === 'many' ? '*' : '1', 'to'));
-      pop.appendChild(el('div', { style: 'padding:6px 12px 9px;font-size:10px;color:#9aa1ad;', text: 'Click a table to focus it · Esc closes' }));
+      pop.appendChild(el('div', { style: 'padding:6px 12px 9px;font-size:10px;color:var(--smv-muted,#9aa1ad);', text: 'Click a table to focus it · Esc closes' }));
       pop.style.display = 'block';
       this.positionRelPopover();
     },
@@ -1409,7 +1614,7 @@
           var c = self.cards[n];
           var isSel = sel === c.table.name;
           c.el.style.opacity = '1';
-          c.el.style.boxShadow = isSel ? '0 0 0 2px #2563eb,0 10px 26px rgba(37,99,235,.24)' : '0 1px 2px rgba(20,30,50,.05),0 3px 10px rgba(20,30,50,.06)';
+          c.el.style.boxShadow = isSel ? '0 0 0 2px var(--smv-burgundy,#2563eb),0 10px 26px var(--smv-accent-halo,rgba(37,99,235,.24))' : '0 1px 2px rgba(20,30,50,.05),0 3px 10px rgba(20,30,50,.06)';
           c.el.style.zIndex = isSel ? '6' : '';
         });
         this.refreshVisibility(); this.renderLines(); return;
@@ -1433,7 +1638,7 @@
         var isSel = sel === name, isPin = self.pinned.has(name), isLock = self.locked === name;
         var ring = SHADOW_BASE;
         if (isLock) ring = '0 0 0 2.5px ' + EDGE.lock + ',0 10px 26px rgba(31,36,48,.28)';
-        else if (isSel) ring = '0 0 0 2px ' + EDGE.out + ',0 10px 26px rgba(37,99,235,.24)';
+        else if (isSel) ring = '0 0 0 2px ' + EDGE.out + ',0 10px 26px var(--smv-accent-halo,rgba(37,99,235,.24))';
         else if (isPin) ring = '0 0 0 2px ' + EDGE.pin + ',0 8px 22px rgba(124,58,237,.2)';
         else if (dist && dist.get(name) === 1) ring = '0 0 0 1.5px ' + EDGE[side[name] || 'out'] + ',0 3px 10px rgba(20,30,50,.06)';
         else if (dist && dist.get(name) >= 2) ring = '0 0 0 1.5px ' + EDGE.hop + ',0 3px 10px rgba(20,30,50,.06)';
@@ -1572,8 +1777,15 @@
            which is the widest lane a chip can ever need, rather than to the optimistic
            first guess: a layout cut for 0.5 and then shown at 0.3 is the old overlap. */
         if (next == null) { if (this.setLayoutK(ZOOM_FLOOR) !== k) run(); break; }
-        if (!(next < this.layoutK - 0.02)) break;
-        k = next;
+        if (next < this.layoutK - 0.02) { k = next; continue; }
+        /* Fit landed ABOVE the guess, at a zoom that draws full cards: the lanes were cut for
+           chips at k0, a gutter that leaves no room for the pill between two cards. Lay out
+           once more for the zoom the cards will actually be read at, so the card gutter
+           applies; if that wider picture then fits a little smaller, the next pass follows
+           it down as usual. Going up is safe only here — the picture is shown no smaller
+           than the lanes it gets. */
+        if (pass === 0 && next > this.layoutK + 0.02 && this.cardLanes(next)) { k = next; continue; }
+        break;
       }
       return this.layoutK;
     },

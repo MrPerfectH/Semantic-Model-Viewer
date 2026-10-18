@@ -1,0 +1,14 @@
+{
+  "runtime": "209c226c62a431522650104ded8011a73e8391f3",
+  "scenarios": {
+    "pq-redesign-independent-round9-reader.scenarios.cjs": "22470e4330760c1473cdd6f9a24440cb846dda92a4ad5d81a588d323cef172cb",
+    "pq-redesign-independent-round9-body-history.scenarios.cjs": "ff9198912bb911d452d36fa243bc0eff30358e2b5fd844b33f56c0613fcd8f89",
+    "pq-redesign-independent-reader-connectors-cycle-hit.scenarios.cjs": "602a304afcdb4fe56f95b5a7483746510d5e6ac0a89989a6659bd61a2c619449",
+    "pq-redesign-independent-round9-offline.browser.cjs": "928290342d067ae4b43643955e069dc065947220d7d0cf6fecdd9e3e71631d1b",
+    "pq-selection-docking-r9.browser.cjs": "53a8bd360f855154f1344c32585b3bfe23a1996fd115b5a69a98465d6ead2dfd"
+  },
+  "readerPreparation": "Explicitly lock FinalOutput through the inspector before the unchanged legacy root assertions. Same exact existing CRLF fixture.",
+  "bodyPreparation": "First attempt had zero body scroll range after strip removal. Prepare ephemeral panel height650 (within limits), run unchanged strict script, then restore original420; no preference persisted.",
+  "cycleBoundary": "T3 full result exceeded64000 bytes. Graph-hash wrapper also exceeded limit. Final isolated Chrome repeats all199 samples per edge and exact14px width, captures ownCount and trusted semantic click; no fake zero/positive inference.",
+  "offline": "Fresh T3 Save snapshot download with current33 runtime; unchanged offline script verifies actual network-offline open and re-export."
+}

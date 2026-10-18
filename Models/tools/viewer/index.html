@@ -4,6 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Semantic Model Viewer</title>
+<meta name="description" content="Explore Power BI semantic models: tables, relationships and measure dependency flow. Runs locally, so your models never leave your machine.">
+<link rel="canonical" href="https://mrperfecth.github.io/Semantic-Model-Viewer/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Semantic Model Viewer">
+<meta property="og:title" content="Semantic Model Viewer">
+<meta property="og:description" content="Explore Power BI semantic models: tables, relationships and measure dependency flow. Runs locally, so your models never leave your machine.">
+<meta property="og:url" content="https://mrperfecth.github.io/Semantic-Model-Viewer/">
+<meta property="og:image" content="https://mrperfecth.github.io/Semantic-Model-Viewer/icons/social-preview.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Semantic Model Viewer showing the tables and relationships of a Power BI semantic model on one canvas">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Semantic Model Viewer">
+<meta name="twitter:description" content="Explore Power BI semantic models: tables, relationships and measure dependency flow. Runs locally, so your models never leave your machine.">
+<meta name="twitter:image" content="https://mrperfecth.github.io/Semantic-Model-Viewer/icons/social-preview.png">
+<meta name="twitter:image:alt" content="Semantic Model Viewer showing the tables and relationships of a Power BI semantic model on one canvas">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -38,8 +55,14 @@
   .hv-resize:hover{background:#c8d6ee;}
   .hv-warn:hover{background:#faf1da;}
 </style>
-<link rel="stylesheet" href="./explorer.css?v=0b97144c3a">
-<link rel="stylesheet" href="./measures.css?v=202e17ca14">
+<link rel="stylesheet" href="./power-query.css?v=21a1ea5d57">
+<link rel="stylesheet" href="./power-query-canvas.css?v=a83ba7554b">
+<link rel="stylesheet" href="./power-query-inspector.css?v=39618d74fb">
+<link rel="stylesheet" href="./power-query-workspace.css?v=57477f3867">
+<link rel="stylesheet" href="./power-query-lineage.css?v=830863a623">
+<link rel="stylesheet" href="./explorer.css?v=9ea02a1e60">
+<link rel="stylesheet" href="./measures.css?v=2b8b133fcd">
+<link rel="stylesheet" href="./spellbook.css?v=e1f36070ef">
 </head>
 <body>
 <div id="root" style="position:fixed;inset:0;display:flex;flex-direction:column;background:#f4f5f7;color:#1f2430;overflow:hidden;">
@@ -57,24 +80,35 @@
     <div id="matrix"></div>
     <div id="measures"></div>
     <div id="drawer"></div>
+    <section id="power-query-workspace" aria-label="Power Query workspace" hidden></section>
     <div id="modal"></div>
     <div id="rolesetup"></div>
   </div>
 </div>
-<script src="./js/util.js?v=b233a5ee4c"></script>
-<script src="./js/snapshot.js?v=809553e17e"></script>
-<script src="./js/roles.js?v=b73b9e8453"></script>
-<script src="./js/usage-adapter.js?v=47ad9159c1"></script>
-<script src="./js/tmdl-parser.js?v=da39e2dc49"></script>
-<script src="./js/canvas.js?v=64c91b7486"></script>
-<script src="./js/layouts.js?v=1875b73e7b"></script>
-<script src="./js/matrix.js?v=22923dc027"></script>
-<script src="./js/measures.js?v=c9bf72f1b5"></script>
-<script src="./js/sidebar.js?v=ec936e653d"></script>
-<script src="./js/topbar.js?v=4816e9347c"></script>
+<script src="./js/util.js?v=d3242ae7da"></script>
+<script src="./js/snapshot.js?v=95e2b53b19"></script>
+<script src="./js/theme.js?v=0597ea1d05"></script>
+<script src="./js/roles.js?v=2cf4e6cfdc"></script>
+<script src="./js/tmdl-parser.js?v=4a557d06be"></script>
+<script src="./js/workspace-ui.js?v=d88454c851"></script>
+<script src="./js/canvas.js?v=528c71f089"></script>
+<script src="./js/layouts.js?v=cb40987f9d"></script>
+<script src="./js/matrix.js?v=506715e731"></script>
+<script src="./js/dax-format.js?v=478f9a6c45"></script>
+<script src="./js/measures.js?v=a21fcdad0d"></script>
+<script src="./js/power-query-dependencies.js?v=27a8d4c15b"></script>
+<script src="./js/power-query-graph-model.js?v=317e106358"></script>
+<script src="./js/power-query-lineage.js?v=487522c796"></script>
+<script src="./js/power-query.js?v=89f493d091"></script>
+<script src="./js/power-query-canvas.js?v=c92c23df3f"></script>
+<script src="./js/power-query-inspector.js?v=19931f0c80"></script>
+<script src="./js/power-query-workspace.js?v=671f115815"></script>
+<script src="./js/sidebar.js?v=bc9a8737a8"></script>
+<script src="./js/topbar.js?v=0872b6187f"></script>
 <script src="./js/rules.js?v=dc35541371"></script>
 <script src="./js/relationships.js?v=7f17713638"></script>
-<script src="./js/explorer.js?v=45ea573eb5"></script>
-<script src="./js/app.js?v=d9a77fe0f1"></script>
+<script src="./js/explorer.js?v=ecee66dbef"></script>
+<script src="./js/onboarding.js?v=7b0e1dbd94"></script>
+<script src="./js/app.js?v=79be1249dc"></script>
 </body>
 </html>

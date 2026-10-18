@@ -1,0 +1,39 @@
+{
+  "head": "bd9449555e9b39662d5ec02a086278a8a720fc22",
+  "boundary": "integration-owned supplemental actual Chrome zoom; T3 journey separately passed; not independent/native/user acceptance",
+  "checks": [
+    {
+      "name": "true200% side/below trusted resizing at1280 and1440",
+      "pass": true
+    }
+  ],
+  "failures": [],
+  "assets": {
+    "js/app.js": "dbc5683c97f85dcc78febcca9fc2c6acb50b18d8950f31c9698ba88243ba643a",
+    "js/canvas.js": "fe9d19334998613a5a395da31f90e03a97182f9a3f4a8da7e8d45fe4a16b5787",
+    "js/dax-format.js": "478f9a6c45bb226d09d7cd8fea4cac5d2322384534b6e11268a0b4f21716cea8",
+    "js/explorer.js": "6bfdf4472d1d62a401fcdec81489471114e995a4a0a8fed0511a7d63210948d0",
+    "js/host-vscode.js": "4e91334ac73aa98f5aca05a47bb79a9d78086df18800ffefb823640da6b227cb",
+    "js/layouts.js": "1875b73e7be241916483cc64addd149400688d236e0e1f0985a4e3e23a756ac1",
+    "js/matrix.js": "a3c83262cbe6107325c96e42334a09a84054f79a59f7b75c02673b642ac521d1",
+    "js/measures.js": "773398f3546ee6d58a81b0d0abdbe24e2b7b3958222023e640369e4a24640179",
+    "js/power-query-canvas.js": "0348aa3eb036811afb3564e809adb449e15f094da553f1893c7676fb1b842204",
+    "js/power-query-dependencies.js": "44e2b21a9287e5e7569f9d70d02fe8ce2b6c19815d24fcf88ae53a0994ba72c6",
+    "js/power-query-graph-model.js": "8c48f7ada3e7725e22ffb63835412105255054148d537722ada89efb53caaeaa",
+    "js/power-query-inspector.js": "11907a14ff50ec5b51afed33794344c85e3916512119b9617fc5746df86f3748",
+    "js/power-query-lineage.js": "487522c796aee67611d78dc210cab1b5595f8231a745fd0f0b0af573d6f029f1",
+    "js/power-query-workspace.js": "dfba8d99f897e408324e34a8b026eae3614a45d8f43d95567fe178f12a3736f3",
+    "js/power-query.js": "cecb795556be8bdba10991375997286588a2c5dcba21d412a47ca1b6a2c7539f",
+    "js/relationships.js": "7f17713638764a42071a62c31bfef1b2692765a0c8f8e32c3e9f64ca1954b2b5",
+    "js/roles.js": "2cf4e6cfdc79c931322e4d6a8d6762fe436826ce2a3d80d6f0a1abeff21acab1",
+    "js/rules.js": "dc355413715cc01e405615a07efa44c34250dd7730835838364ef89118c286ad",
+    "js/sidebar.js": "13fab92f5e8c77f66e076a176f16edc7c56f09a1a58fb4c792042debe1e876d4",
+    "js/snapshot.js": "b63823ca6cd56832fcd3b442ed41fccea2b9dc0c8d1a14e0a903c57b7fb6147c",
+    "js/tmdl-parser.js": "0e97ff4704d528751ec3db70583c5ececfad9cfa89790b1e98991bf7e6317399",
+    "js/topbar.js": "c5789195bee0f6f196a0647fd1ff88b78c5d1cc753dfc244256cfc8918f3c1a9",
+    "js/usage-adapter.js": "47ad9159c1948ce92482c13d90de999d57d6dc63ea20ff9b448258acf38ec428",
+    "js/util.js": "b233a5ee4c6ee57e6fad4a6d158dd57155a186bdc5fd73eb6bde196401928960",
+    "js/workspace-ui.js": "d88454c85170b1256bdc56baa387d9a5abf653d905a6e157d0017ed0c4a40a43"
+  },
+  "runtimeExceptions": []
+}

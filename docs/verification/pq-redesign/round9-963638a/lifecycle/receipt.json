@@ -1,0 +1,17 @@
+{
+  "candidate": "963638aeb2d124460709374004ddcf0799268ada",
+  "transport": "T3 collaborative preview",
+  "startedAt": "2026-10-10T10:43:49.484Z",
+  "checks": [],
+  "failures": [
+    {
+      "name": "reader-superseded-navigation-copy-reset",
+      "error": "Error: {\"content\":[{\"type\":\"text\",\"text\":\"Preview automation click timed out after 5000ms.\"}],\"isError\":true}\n    at unwrap (eval at <anonymous> (exec_main.mjs:3:146), <anonymous>:4:37)\n    at click (eval at <anonymous> (exec_main.mjs:3:146), <anonymous>:9:32)\n    at async eval (eval at <anonymous> (exec_main.mjs:3:146), <anonymous>:23:2)\n    at async check (eval at <anonymous> (exec_main.mjs:3:146), <anonymous>:18:84)\n    at async eval (eval at <anonymous> (exec_main.mjs:3:146), <anonymous>:22:1)\n    at async exec_main.mjs:3:140"
+    },
+    {
+      "name": "tables-measures-and-reader-suspend",
+      "error": "Error: {\"content\":[{\"type\":\"text\",\"text\":\"Preview automation click timed out after 5000ms.\"}],\"isError\":true}\n    at unwrap (eval at <anonymous> (exec_main.mjs:3:146), <anonymous>:4:37)\n    at click (eval at <anonymous> (exec_main.mjs:3:146), <anonymous>:9:32)\n    at async eval (eval at <anonymous> (exec_main.mjs:3:146), <anonymous>:29:2)\n    at async check (eval at <anonymous> (exec_main.mjs:3:146), <anonymous>:18:84)\n    at async eval (eval at <anonymous> (exec_main.mjs:3:146), <anonymous>:28:1)\n    at async exec_main.mjs:3:140"
+    }
+  ],
+  "endedAt": "2026-10-10T10:43:59.683Z"
+}

@@ -1,0 +1,167 @@
+{
+  "entry": {
+    "button": "Open full query",
+    "entry": {
+      "x": 897,
+      "y": 241.9921875,
+      "width": 358,
+      "height": 38,
+      "top": 241.9921875,
+      "right": 1255,
+      "bottom": 279.9921875,
+      "left": 897
+    },
+    "controls": {
+      "x": 881,
+      "y": 315.4921875,
+      "width": 390,
+      "height": 459.890625,
+      "top": 315.4921875,
+      "right": 1271,
+      "bottom": 775.3828125,
+      "left": 881
+    },
+    "root": {
+      "x": 881,
+      "y": 126,
+      "width": 399,
+      "height": 644,
+      "top": 126,
+      "right": 1280,
+      "bottom": 770,
+      "left": 881
+    },
+    "scroll": 0,
+    "position": "sticky",
+    "aria": "dialog"
+  },
+  "sticky": {
+    "button": {
+      "x": 897,
+      "y": 138,
+      "width": 358,
+      "height": 38,
+      "top": 138,
+      "right": 1255,
+      "bottom": 176,
+      "left": 897
+    },
+    "root": {
+      "x": 881,
+      "y": 126,
+      "width": 399,
+      "height": 644,
+      "top": 126,
+      "right": 1280,
+      "bottom": 770,
+      "left": 881
+    }
+  },
+  "sizes": [
+    {
+      "width": 1280,
+      "height": 800,
+      "dialog": {
+        "x": 16,
+        "y": 16,
+        "width": 1248,
+        "height": 768,
+        "top": 16,
+        "right": 1264,
+        "bottom": 784,
+        "left": 16
+      },
+      "code": {
+        "x": 34,
+        "y": 139,
+        "width": 1212,
+        "height": 627,
+        "top": 139,
+        "right": 1246,
+        "bottom": 766,
+        "left": 34
+      },
+      "font": "14px",
+      "wrap": true,
+      "client": 1203,
+      "scroll": 1203
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "dialog": {
+        "x": 16,
+        "y": 16,
+        "width": 1408,
+        "height": 868,
+        "top": 16,
+        "right": 1424,
+        "bottom": 884,
+        "left": 16
+      },
+      "code": {
+        "x": 34,
+        "y": 139,
+        "width": 1372,
+        "height": 727,
+        "top": 139,
+        "right": 1406,
+        "bottom": 866,
+        "left": 34
+      },
+      "font": "14px",
+      "wrap": true,
+      "client": 1363,
+      "scroll": 1363
+    }
+  ],
+  "digest": {
+    "sha256": "d6e39dd20f16814c72428562bbc3ae00f81808086ad3744b04b3b35928828bd4",
+    "utf16": 22187,
+    "crlf": 77
+  },
+  "close": {
+    "membership": [
+      "[\"partition\",\"SyntheticSales\",\"SyntheticSales\"]",
+      "[\"expression\",\"\",\"Sales Raw\"]",
+      "[\"expression\",\"\",\"Quote\\\"Query\"]",
+      "[\"expression\",\"\",\"Server\"]",
+      "[\"expression\",\"\",\"OccurrenceProbe\"]",
+      "[\"expression\",\"\",\"FarA\"]",
+      "[\"expression\",\"\",\"FarB\"]",
+      "[\"expression\",\"\",\"CycleA\"]",
+      "[\"expression\",\"\",\"CycleB\"]",
+      "[\"expression\",\"\",\"SelfLoop\"]"
+    ],
+    "focusMode": "dim",
+    "direction": "connected",
+    "depth": 1,
+    "listFacet": "all",
+    "groupFilter": "all",
+    "generation": 3,
+    "selectedId": "[\"expression\",\"\",\"OccurrenceProbe\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": -23.80000000000001,
+      "y": 331.2,
+      "k": 0.85
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 400,
+      "wrap": true,
+      "focus": {
+        "kind": "expand",
+        "nodeId": "[\"expression\",\"\",\"OccurrenceProbe\"]"
+      },
+      "disclosures": {
+        "provenance": false
+      },
+      "expanded": false
+    },
+    "category": "all",
+    "query": ""
+  }
+}

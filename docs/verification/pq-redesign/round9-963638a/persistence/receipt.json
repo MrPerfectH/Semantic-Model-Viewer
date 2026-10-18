@@ -1,0 +1,7 @@
+{
+  "candidate": "963638aeb2d124460709374004ddcf0799268ada",
+  "checks": [
+    "End650 Home300 keyboard440 persisted exact source-free dock width height on reload and model generation"
+  ],
+  "failures": []
+}

@@ -1,0 +1,194 @@
+{
+  "navigation": {
+    "membership": [
+      "[\"expression\",\"\",\"Q1\"]",
+      "[\"expression\",\"\",\"Q2\"]",
+      "[\"expression\",\"\",\"Q3\"]",
+      "[\"expression\",\"\",\"MergeResult\"]",
+      "[\"expression\",\"\",\"AppendResult\"]",
+      "[\"expression\",\"\",\"Disconnected\"]"
+    ],
+    "focusMode": "hide",
+    "direction": "connected",
+    "depth": 1,
+    "listFacet": "all",
+    "generation": 4,
+    "selectedId": "[\"expression\",\"\",\"MergeResult\"]",
+    "inspectorOpen": true,
+    "viewport": {
+      "x": 43.58333333333337,
+      "y": 216.875,
+      "k": 0.5416666666666666
+    },
+    "inspectorView": {
+      "codeX": 0,
+      "codeY": 0,
+      "inspectorX": 0,
+      "inspectorY": 0,
+      "wrap": false,
+      "focus": {
+        "kind": "focus-depth",
+        "nodeId": "[\"expression\",\"\",\"MergeResult\"]"
+      }
+    },
+    "category": "all",
+    "query": ""
+  },
+  "phase": "ready",
+  "generation": 4,
+  "selected": "[\"expression\",\"\",\"MergeResult\"]",
+  "code": "Table.NestedJoin(Q1, {\"ID\"}, Q2, {\"ID\"}, \"Joined\")",
+  "visible": [
+    "[\"expression\",\"\",\"Q1\"]",
+    "[\"expression\",\"\",\"Q2\"]",
+    "[\"expression\",\"\",\"MergeResult\"]",
+    "[\"expression\",\"\",\"AppendResult\"]"
+  ],
+  "dimmed": [],
+  "layout": [
+    [
+      "[\"expression\",\"\",\"AppendResult\"]",
+      {
+        "x": 704,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Disconnected\"]",
+      {
+        "x": 0,
+        "y": 426
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"MergeResult\"]",
+      {
+        "x": 352,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Q1\"]",
+      {
+        "x": 0,
+        "y": 0
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Q2\"]",
+      {
+        "x": 0,
+        "y": 126
+      }
+    ],
+    [
+      "[\"expression\",\"\",\"Q3\"]",
+      {
+        "x": 0,
+        "y": 252
+      }
+    ]
+  ],
+  "history": [
+    {
+      "membership": [
+        "[\"expression\",\"\",\"Q1\"]",
+        "[\"expression\",\"\",\"Q2\"]",
+        "[\"expression\",\"\",\"Q3\"]",
+        "[\"expression\",\"\",\"MergeResult\"]",
+        "[\"expression\",\"\",\"AppendResult\"]",
+        "[\"expression\",\"\",\"Disconnected\"]"
+      ],
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "generation": 4,
+      "selectedId": null,
+      "inspectorOpen": false,
+      "viewport": {
+        "x": 96.04270462633451,
+        "y": 53.15302491103202,
+        "k": 0.8576512455516014
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": false,
+        "focus": null
+      },
+      "category": "all",
+      "query": ""
+    }
+  ],
+  "undo": 0,
+  "registry": [
+    "[\"expression\",\"\",\"Q1\"]",
+    "[\"expression\",\"\",\"Q2\"]",
+    "[\"expression\",\"\",\"Q3\"]",
+    "[\"expression\",\"\",\"MergeResult\"]",
+    "[\"expression\",\"\",\"AppendResult\"]",
+    "[\"expression\",\"\",\"Disconnected\"]"
+  ],
+  "edges": [
+    [
+      "[\"expression\",\"\",\"Q1\"]",
+      "[\"expression\",\"\",\"MergeResult\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"Q2\"]",
+      "[\"expression\",\"\",\"MergeResult\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"MergeResult\"]",
+      "[\"expression\",\"\",\"AppendResult\"]"
+    ],
+    [
+      "[\"expression\",\"\",\"Q3\"]",
+      "[\"expression\",\"\",\"AppendResult\"]"
+    ]
+  ],
+  "sets": {
+    "all": [
+      "[\"expression\",\"\",\"Q1\"]",
+      "[\"expression\",\"\",\"Q2\"]",
+      "[\"expression\",\"\",\"Q3\"]",
+      "[\"expression\",\"\",\"MergeResult\"]",
+      "[\"expression\",\"\",\"AppendResult\"]",
+      "[\"expression\",\"\",\"Disconnected\"]"
+    ],
+    "connected": [
+      "[\"expression\",\"\",\"Q1\"]",
+      "[\"expression\",\"\",\"MergeResult\"]",
+      "[\"expression\",\"\",\"Q2\"]",
+      "[\"expression\",\"\",\"AppendResult\"]",
+      "[\"expression\",\"\",\"Q3\"]"
+    ],
+    "disconnected": [
+      "[\"expression\",\"\",\"Disconnected\"]"
+    ]
+  },
+  "library": [
+    "Q1",
+    "Q2",
+    "Q3",
+    "MergeResult",
+    "AppendResult",
+    "Disconnected"
+  ],
+  "banner": "",
+  "note": "Add with + or drag onto the canvas. Read-only metadata · static references are partial. Raw M is excluded from shared snapshots.",
+  "mapCount": 6,
+  "map": "4 visible / 6 objects",
+  "focus": {
+    "tag": "SELECT",
+    "cls": ""
+  },
+  "options": [
+    "All (6)",
+    "Connected (5)",
+    "Disconnected (1)"
+  ]
+}

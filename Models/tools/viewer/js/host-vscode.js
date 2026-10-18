@@ -3,9 +3,9 @@
    js/host-web.js to the rest of the app.
 
    webview -> extension:  ready | storage {key,value} | listModels | openModel {modelId} |
-                          loadAnalysis | notify {level,message} | openFile {path}
+                          notify {level,message} | openFile {path}
    extension -> webview:  init {storage,models,caps,open?} | model {modelId,name,path,files} |
-                          models {models} | usage {data} | error {message} */
+                          models {models} | error {message} */
 (function (g) {
   'use strict';
 
@@ -29,7 +29,7 @@
 
   var host = {
     kind: 'vscode',
-    caps: { drop: false, pickFiles: false, connectRepo: false, workspace: true, png: false, pickAnalysis: true },
+    caps: { drop: false, pickFiles: false, connectRepo: false, workspace: true, png: false },
     storage: {
       get: function (k) { return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null; },
       set: function (k, v) { mem[k] = String(v); post({ type: 'storage', key: k, value: String(v) }); },
@@ -53,7 +53,6 @@
     },
     listModels: function () { return request('listModels').then(function (r) { host.models = r.models || []; return host.models; }); },
     openModel: function (id) { return request('openModel', { modelId: id }).then(function (m) { return m.cancelled ? null : host.parseModelMessage(m); }); },
-    pickAnalysis: function () { return request('loadAnalysis').then(function (r) { return r && r.data ? r.data : null; }); },
     snapshotAssets: function () { return request('snapshotAssets'); },
     saveSnapshot: function (data) { return request('saveSnapshot', data); },
     refreshModel: function () { return request('refreshModel'); },
@@ -64,7 +63,7 @@
       if (!m || !m.files) return null;
       var model = g.TMDLParser.parseAny(m.files);
       var name = m.name || model.name || 'Model';
-      return { id: m.modelId, name: name, path: m.path, model: model, usage: m.usage || null };
+      return { id: m.modelId, name: name, path: m.path, model: model };
     }
   };
 
@@ -89,9 +88,6 @@
       case 'models':
         host.models = msg.models || [];
         if (app) app.render(true);
-        break;
-      case 'usage':
-        if (app && (!msg.modelId || msg.modelId === app.modelKey)) { try { app.setUsage(msg.data); } catch (error) { app.setState({ repoError: error.message }); } }
         break;
       case 'error':
         if (app) app.setState({ repoError: msg.message || 'Unknown error', showModelMenu: true });

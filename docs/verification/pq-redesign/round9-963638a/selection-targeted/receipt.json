@@ -1,0 +1,14 @@
+{
+  "candidate": "963638aeb2d124460709374004ddcf0799268ada",
+  "boundary": "T3 registered UI; viewport preparation API explicitly marked; trusted clicks captured at pointerdown",
+  "checks": [
+    "explicit Center deterministic visible own title hit and hidden disabled",
+    "Frame related flow preserves inspection and exact Back state"
+  ],
+  "failures": [
+    {
+      "name": "standard names informational while unknown and dynamic uncertainty remain visible",
+      "error": "Error: standard classification shown\n    at ok (eval at <anonymous> (exec_main.mjs:4:12), <anonymous>:4:322)\n    at eval (eval at <anonymous> (exec_main.mjs:4:12), <anonymous>:39:327)\n    at async check (eval at <anonymous> (exec_main.mjs:4:12), <anonymous>:6:77)\n    at async eval (eval at <anonymous> (exec_main.mjs:4:12), <anonymous>:38:1)\n    at async exec_main.mjs:4:6"
+    }
+  ]
+}

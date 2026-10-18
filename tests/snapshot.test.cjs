@@ -224,3 +224,43 @@ test('invalid embedded payload remains isolated instead of falling back to recip
   store.setJSON('failure-ui-state', { shown: true }); store.del('smv_repo_cache');
   assert.deepEqual(counters, { reads: 0, writes: 0, deletes: 0 });
 });
+
+test('Power Query payload and re-export preserve exact M, null/missing states and static dependencies', async () => {
+  const app=appFixture(), code='let\r\n  Source = Fn(Param),\r\n  Text = "'+hostile.replaceAll('"','""')+' $& $$",\r\n  Dynamic = Expression.Evaluate("Unknown", #shared)\r\nin Source  \r\n';
+  app.model.powerQuery={version:1,warnings:['Unresolved source metadata'],nodes:[
+    {id:'p',kind:'partition',table:app.model.tables[0].name,name:'P',type:'m',state:'available',code,classification:'query',basis:'inferred from syntax',queryGroup:'Stage',groupPath:'Extract/Stage',handle:'secret-handle'},
+    {id:'param',kind:'expression',table:null,name:'Param',type:'m',state:'available',code:'"https://example.invalid/source" meta [IsParameterQuery=true]',classification:'parameter',basis:'M metadata marker (not evaluated)'},
+    {id:'fn',kind:'expression',table:null,name:'Fn',type:'m',state:'available',code:'(x) => x',classification:'function',basis:'inferred from syntax'},
+    {id:'missing',kind:'partition',table:'Calendar',name:'Missing',type:'m',state:'missing',code:null},
+    {id:'dax',kind:'partition',table:'Calendar',name:'Calculated',type:'calculated',state:'non-m',code:null},
+    {id:'unknown',kind:'expression',table:null,name:'Unresolved',type:'unknown',state:'missing'}
+  ]};
+  const payload=Snapshots.capture(app), bundle=assets(), html=Snapshots.buildHTML(bundle.template,bundle.sources,payload);
+  assert.equal(payload.model.powerQuery.nodes[0].code,code);
+  assert.equal(payload.model.powerQuery.nodes[0].handle,undefined);
+  assert.equal(payload.model.powerQuery.nodes[3].code,null);
+  assert.equal(Object.hasOwn(payload.model.powerQuery.nodes[5],'code'),false);
+  assert.equal(scripts(html).length,scripts(html).filter(s=>s.attrs.includes('data-smv-asset=')).length+2);
+  const loaded=embedded(html,'smv-snapshot-data');
+  assert.deepEqual(loaded.model.powerQuery,payload.model.powerQuery);
+  const g={};g.window=g;vm.createContext(g);
+  for(const file of ['power-query-dependencies.js','power-query-graph-model.js'])vm.runInContext(fs.readFileSync(path.join(jsDir,file),'utf8'),g);
+  const graph=g.PowerQueryGraphModel.build(loaded.model);
+  assert.ok(graph.edges.some(e=>e.inputId==='param'&&e.consumerId==='p'));
+  assert.ok(graph.edges.some(e=>e.inputId==='fn'&&e.consumerId==='p'));
+  assert.ok(graph.issues.length,'dynamic / missing metadata remains explicit');
+  const repack=await Snapshots.loadAssets(inlineDocument(html));
+  app.model=loaded.model;
+  const again=Snapshots.capture(app);
+  const second=Snapshots.buildHTML(repack.template,repack.sources,again);
+  assert.deepEqual(embedded(second,'smv-snapshot-data').model.powerQuery,loaded.model.powerQuery);
+  assert.match(second,/worker-src blob:;/);
+  assert.match(second,/connect-src 'none'/);
+});
+
+test('older payloads without Power Query stay valid and do not gain invented M on re-export',()=>{
+  const payload=Snapshots.capture(appFixture());
+  assert.equal(payload.model.powerQuery,undefined);
+  assert.equal(Snapshots.validate(payload),payload);
+  assert.equal(Snapshots.modelData(payload.model).powerQuery,undefined);
+});

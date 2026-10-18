@@ -1,0 +1,10 @@
+{
+  "node": "v22.23.3",
+  "browser": "154.0.8037.99",
+  "baseline": true,
+  "checks": [
+    "Reproduced stale label after exact viewport restoration",
+    "Reproduced full 52-node chain overview below 4 percent"
+  ],
+  "failures": []
+}

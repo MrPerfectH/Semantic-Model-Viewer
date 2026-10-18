@@ -1,0 +1,40 @@
+{
+  "boundary": "Supplemental isolated Chrome after explicit T3 host unavailable; not native or independent acceptance",
+  "checks": [
+    {
+      "name": "explicit BIM group intersects canvas, visible-only map and induced edge",
+      "pass": true
+    },
+    {
+      "name": "membership add uses viewport, preserves previous position; Undo restores exact layout/membership",
+      "pass": true
+    },
+    {
+      "name": "Center selected remains exact after pan/zoom; category projection remains intact",
+      "pass": true
+    },
+    {
+      "name": "wide-reader exact source, scroll/disclosures/history and late completion lifecycle",
+      "pass": true
+    },
+    {
+      "name": "Tables and Measures actual navigation leaves PQ manual layout intact",
+      "pass": true
+    },
+    {
+      "name": "actual snapshot excludes M, PQ and groups",
+      "pass": true
+    },
+    {
+      "name": "queued reader restore cannot survive generation reset",
+      "pass": true
+    }
+  ],
+  "failures": [],
+  "snapshot": {
+    "sha256": "51c671928cf09058575581dfed06bf65c00aadd2484c4a7ca8de44185a902aa7",
+    "bytes": 756267,
+    "file": "PQ Reading Review (synthetic) snapshot 2026-10-09.html"
+  },
+  "runtimeExceptions": []
+}

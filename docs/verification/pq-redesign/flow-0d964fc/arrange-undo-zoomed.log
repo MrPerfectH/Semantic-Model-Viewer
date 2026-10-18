@@ -1,0 +1,8 @@
+{
+  "candidate": "0d964fc97273cca8626e3cc4e9b39f73620b7e24",
+  "boundary": "T3 explicit unavailable / Do not retry; isolated Chrome targeted Arrange Undo displayed-zoom reproduction",
+  "checks": [],
+  "failures": [
+    "AssertionError [ERR_ASSERTION]: Displayed zoom must reflect restored viewport after actual Arrange Undo\n\n'32%' !== '85%'\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-flow-0d964fc-arrange-undo-zoomed.browser.cjs:8:491"
+  ]
+}

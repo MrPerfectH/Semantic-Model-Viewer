@@ -1,0 +1,10 @@
+{
+  "out": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/runtime-d3d8360/browser-lifecycle-instrumented",
+  "passed": 2,
+  "failures": [
+    {
+      "name": "A8 Tables viewport preservation",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   k: 1,\n+   x: 0,\n+   y: 0\n-   k: 0.9,\n-   x: 137,\n-   y: 93\n  }\n\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-scenarios.cjs:68:234\n    at Object.check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-additional.browser.cjs:14:42)\n    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-scenarios.cjs:68:178\n    at async Object.check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-additional.browser.cjs:14:36)\n    at async module.exports (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-scenarios.cjs:60:1)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-additional.browser.cjs:36:3"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "title": "Explore sales dates and Sales LY",
+  "model": "../../Models/demo/Contoso Retail.SemanticModel",
+  "steps": [
+    {
+      "id": "sales-dates",
+      "caption": "Inspect the active Order Date relationship, then explore Ship Date.",
+      "view": {
+        "version": 2,
+        "mode": "graph",
+        "tables": [
+          "Sales",
+          "Date"
+        ],
+        "focus": {
+          "kind": "relationship",
+          "name": "470d1e32-65ae-5dfe-9d87-b3bbfb96d912"
+        },
+        "highlights": [
+          {
+            "kind": "column",
+            "table": "Sales",
+            "name": "Order Date"
+          },
+          {
+            "kind": "column",
+            "table": "Date",
+            "name": "Date"
+          }
+        ],
+        "callouts": [
+          {
+            "object": {
+              "kind": "column",
+              "table": "Sales",
+              "name": "Order Date"
+            },
+            "text": "This active relationship uses Order Date. Select the dashed Ship Date relationship to inspect the other date role."
+          }
+        ],
+        "chrome": false,
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "id": "sales-ly",
+      "caption": "Trace Sales LY to Total Sales using the real Measures workspace.",
+      "view": {
+        "version": 2,
+        "mode": "measures",
+        "focus": {
+          "kind": "measure",
+          "table": "Measures",
+          "name": "Sales LY"
+        },
+        "context": {
+          "depth": 1,
+          "direction": "up",
+          "limit": 25
+        },
+        "highlights": [
+          {
+            "kind": "measure",
+            "table": "Measures",
+            "name": "Total Sales"
+          }
+        ],
+        "callouts": [
+          {
+            "object": {
+              "kind": "measure",
+              "table": "Measures",
+              "name": "Sales LY"
+            },
+            "text": "Sales LY shifts Date context to last year. Select Total Sales to inspect the underlying formula; these are metadata, not executed values."
+          }
+        ],
+        "width": 1440,
+        "height": 1000,
+        "chrome": false
+      }
+    }
+  ],
+  "summary": "No numeric results are needed to explore the model."
+}

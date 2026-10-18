@@ -1,0 +1,8 @@
+{
+  "runtime": "209c226c62a431522650104ded8011a73e8391f3",
+  "boundary": "T3 result exceeded 64000 bytes twice; isolated Chrome same directed hit oracle, compact records",
+  "checks": [
+    "Both opposing edges retain independent 14px interior hits and trusted clicks after horizontal drag; graph immutable"
+  ],
+  "failures": []
+}

@@ -1,0 +1,79 @@
+{
+  "phase": "ready",
+  "graph": [
+    {
+      "id": "[\"partition\",\"Sql.Database\",\"P1\"]",
+      "label": "Sql.Database / P1",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"partition\",\"Sql.Database\",\"P2\"]",
+      "label": "Sql.Database / P2",
+      "sourceEvidence": []
+    },
+    {
+      "id": "[\"expression\",\"\",\"Probe\"]",
+      "label": "Probe",
+      "sourceEvidence": []
+    }
+  ],
+  "entries": [
+    {
+      "name": "Sql.Database / P1",
+      "id": "[\"partition\",\"Sql.Database\",\"P1\"]",
+      "presentation": {
+        "status": "Model table",
+        "kind": "Query (kind unknown)",
+        "loaded": true,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Partition associated with semantic-model table Sql.Database",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Sql.Database / P2",
+      "id": "[\"partition\",\"Sql.Database\",\"P2\"]",
+      "presentation": {
+        "status": "Model table",
+        "kind": "Query (kind unknown)",
+        "loaded": true,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Partition associated with semantic-model table Sql.Database",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": []
+    },
+    {
+      "name": "Probe",
+      "id": "[\"expression\",\"\",\"Probe\"]",
+      "presentation": {
+        "status": "Query (kind unknown)",
+        "kind": "Query (kind unknown)",
+        "loaded": false,
+        "provider": "Unknown",
+        "providerIcon": "?",
+        "providerColor": "#536176",
+        "basis": "Expression metadata; loading or execution is not inferred",
+        "sourceBasis": "No recognized direct source call. Query references do not establish the source provider."
+      },
+      "evidence": [],
+      "inputs": [],
+      "issues": [
+        {
+          "consumerId": "[\"expression\",\"\",\"Probe\"]",
+          "kind": "analysis-uncertainty",
+          "message": "Ambiguous reference: Sql.Database. More than one model object matches (duplicate name/identity or multiple partitions); no target was chosen."
+        }
+      ]
+    }
+  ]
+}

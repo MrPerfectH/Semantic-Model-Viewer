@@ -1,0 +1,93 @@
+{
+  "candidate": "cc9ca3dbc0bd5967240e0d10b0f521d8bf5adcc7",
+  "staleLock": {
+    "before": {
+      "membership": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"CycleA\"]",
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 15,
+      "selectedId": "[\"expression\",\"\",\"CycleB\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": 147.25,
+        "y": 65.75,
+        "k": 1.25
+      },
+      "bodyScroll": {
+        "x": 0,
+        "y": 0
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": true,
+        "focus": null,
+        "disclosures": {
+          "provenance": false
+        },
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    },
+    "after": {
+      "membership": [
+        "[\"expression\",\"\",\"CycleA\"]",
+        "[\"expression\",\"\",\"CycleB\"]"
+      ],
+      "flowRootId": "[\"expression\",\"\",\"CycleA\"]",
+      "focusMode": "dim",
+      "direction": "connected",
+      "depth": 1,
+      "listFacet": "all",
+      "groupFilter": "all",
+      "generation": 15,
+      "selectedId": "[\"expression\",\"\",\"CycleB\"]",
+      "inspectorOpen": true,
+      "viewport": {
+        "x": 147.25,
+        "y": 65.75,
+        "k": 1.25
+      },
+      "bodyScroll": {
+        "x": 0,
+        "y": 0
+      },
+      "inspectorView": {
+        "codeX": 0,
+        "codeY": 0,
+        "inspectorX": 0,
+        "inspectorY": 0,
+        "wrap": true,
+        "focus": null,
+        "disclosures": {
+          "provenance": false
+        },
+        "expanded": false
+      },
+      "category": "all",
+      "query": ""
+    },
+    "unchanged": true,
+    "activation": "programmatic detached stale callback diagnostic; source selections and live lock used trusted T3"
+  },
+  "removeRoot": {
+    "root": null,
+    "selected": "[\"expression\",\"\",\"CycleB\"]"
+  },
+  "undo": {
+    "root": "[\"expression\",\"\",\"CycleA\"]",
+    "selected": "[\"expression\",\"\",\"CycleB\"]",
+    "prefs": "{\"dock\":\"bottom\",\"width\":400,\"height\":650}"
+  },
+  "assertions": "Detached old lock callback unchanged; trusted root removal releases lock; trusted Undo restores root and selected CycleB"
+}

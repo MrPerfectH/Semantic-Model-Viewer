@@ -1,0 +1,10 @@
+{
+  "out": "/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/docs/verification/pq-redesign/runtime-29fc2fc/frozen-workflows",
+  "passed": 0,
+  "failures": [
+    {
+      "name": "Frozen filter combined/disconnected/fanout sequences with retained analysis and layout",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'error' !== 'ready'\n\n    at importCase (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-additional.browser.cjs:25:10)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-scenarios.cjs:10:3\n    at async Object.check (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-additional.browser.cjs:14:36)\n    at async module.exports (/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-runtime-scenarios.cjs:7:1)\n    at async /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/test-pq-redesign-independent-20261008/tests/pq-redesign-independent-d3d8360-additional.browser.cjs:36:3"
+    }
+  ]
+}

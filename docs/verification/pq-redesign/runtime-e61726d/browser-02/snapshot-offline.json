@@ -1,0 +1,32 @@
+{
+  "phase": "ready",
+  "category": "all",
+  "query": "",
+  "selectedId": null,
+  "inspectorOpen": false,
+  "banner": "",
+  "message": "Power Query metadata is unavailable here. Raw M is excluded from shared snapshots; open the original TMDL or model.bim to inspect it.",
+  "code": "",
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "k": 1
+  },
+  "history": [],
+  "inspectorView": {
+    "codeX": 0,
+    "codeY": 0,
+    "inspectorX": 0,
+    "inspectorY": 0,
+    "wrap": false,
+    "focus": null
+  },
+  "visible": [],
+  "library": [],
+  "options": [
+    "All",
+    "Connected",
+    "Disconnected"
+  ],
+  "sets": {}
+}

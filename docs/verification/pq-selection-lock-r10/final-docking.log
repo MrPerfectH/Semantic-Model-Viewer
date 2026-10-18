@@ -1,0 +1,19 @@
+CASE 1280-1-right
+CASE 1280-1-bottom
+CASE 1280-2-right
+CASE 1280-2-bottom
+CASE 1440-1-right
+CASE 1440-1-bottom
+CASE 1440-2-right
+CASE 1440-2-bottom
+Error: ENOENT: no such file or directory, open '/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/docs/verification/pq-selection-lock-r10/frozen-final/Models/tools/viewer/index.html'
+    at Object.openSync (node:fs:560:18)
+    at Object.readFileSync (node:fs:444:35)
+    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/docs/verification/pq-selection-lock-r10/frozen-final/tests/pq-selection-docking-r9.browser.cjs:37:432
+    at Array.map (<anonymous>)
+    at /Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/docs/verification/pq-selection-lock-r10/frozen-final/tests/pq-selection-docking-r9.browser.cjs:37:384 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/przemek.harazny/.t3/worktrees/Semantic-Model-Viewer/feat-power-query-metadata-lineage/docs/verification/pq-selection-lock-r10/frozen-final/Models/tools/viewer/index.html'
+}

@@ -1,0 +1,46 @@
+
+> semantic-model-viewer@0.3.3 package
+> vsce package --out C:\Users\PrzemekHarazny\pq-r10-windows\repair.vsix
+
+Executing prepublish script 'npm run vscode:prepublish'...
+
+> semantic-model-viewer@0.3.3 vscode:prepublish
+> npm run sync-viewer
+
+
+> semantic-model-viewer@0.3.3 sync-viewer
+> node scripts/sync-viewer.js
+
+synced 33 viewer runtime assets from Models/tools/viewer into media/
+ WARNING  LICENSE, LICENSE.md, or LICENSE.txt not found
+ INFO  Files included in the VSIX:
+repair.vsix
+├─ [Content_Types].xml 
+├─ extension.vsixmanifest 
+└─ extension/
+   ├─ changelog.md [4.26 KB]
+   ├─ package.json [6.5 KB]
+   ├─ readme.md [5.89 KB]
+   ├─ images/
+   │  ├─ activity.svg [0.32 KB]
+   │  └─ icon.png [1.68 KB]
+   ├─ media/
+   │  ├─ explorer.css [14.01 KB]
+   │  ├─ index.html [6.68 KB]
+   │  ├─ measures.css [15.02 KB]
+   │  ├─ power-query-canvas.css [4.68 KB]
+   │  ├─ power-query-inspector.css [8.01 KB]
+   │  ├─ power-query-lineage.css [1.7 KB]
+   │  ├─ power-query-workspace.css [5.73 KB]
+   │  ├─ power-query.css [1.71 KB]
+   │  └─ js/ (25 files) [701.44 KB]
+   └─ src/
+      ├─ cleaner.js [5.59 KB]
+      ├─ extension.js [2.49 KB]
+      ├─ panel.js [15.99 KB]
+      ├─ tree.js [1.26 KB]
+      └─ workspace.js [4.9 KB]
+
+=> Run vsce ls --tree to see all included files.
+
+ DONE  Packaged: C:\Users\PrzemekHarazny\pq-r10-windows\repair.vsix (45 files, 251.28 KB)
