@@ -10,14 +10,16 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/cli.test.cjs"
+    "test": "node --test tests/cli.test.cjs tests/open-model.test.cjs"
   },
   "files": [
     "bin/",
+    "scripts/open-model.cjs",
     "Models/tools/viewer/index.html",
     "Models/tools/viewer/*.css",
     "Models/tools/viewer/js/",
     "Models/tools/viewer/scripts/cli/",
+    "Models/tools/viewer/scripts/scan_report_usage.py",
     "docs/cli.md",
     "docs/snapshots.md"
   ]
