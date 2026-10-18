@@ -536,6 +536,7 @@
     },
     pickMeasure: function (n) {
       var self = this, app = this.app;
+      if (typeof document !== 'undefined' && document.body) document.body.classList.remove('smv-browse-open');
       this.cancelSnapshotViewport();
       app.setState({ selMeasure: n, mvOpen: app.mvOpenFor(n), gExtra: {}, gHover: null, gPin: null });
     },
@@ -852,7 +853,7 @@
       var self = this, app = this.app, M = app.model;
       var sn = app.state.selMeasure;
       var m = app.msrOf(sn);
-      var key = [app.modelKey, sn || '', app._usage ? 1 : 0].join('|');
+      var key = [app.modelKey, sn || '', app._usage ? 1 : 0, m ? '' : [app.state.mvQuery, app.state.mvFilter, app.state.mvTable].join('|')].join('|');
       if (key !== this._mainKey) {
         this._mainKey = key;
         this._flowKey = null; this._daxKey = null; this._nodeEls = {}; this._edgeEls = {}; this._groupEls = {};
@@ -868,6 +869,27 @@
 
     buildEmptyMain: function () {
       var self = this, app = this.app, M = app.model, all = [], hidden = 0, links = 0;
+      var filtered = !!(app.state.mvQuery || app.state.mvTable || (app.state.mvFilter && app.state.mvFilter !== 'all'));
+      if (filtered) {
+        var matches = new Map();
+        this.buildRows().rows.forEach(function (row) { if (!row.isFolder && !row.isHeader) matches.set(row.name, row); });
+        var results = el('div', { cls: 'mv-starters' });
+        matches.forEach(function (row) {
+          var measure = app.msrOf(row.name);
+          results.appendChild(el('button', { cls: 'mv-starter', data: { measure: row.name }, onClick: function () { self.pickMeasure(row.name); } }, [
+            el('span', { cls: 'mv-row-label' }, [
+              el('strong', { text: row.name }), el('span', { cls: 'mv-row-table', text: row.table }),
+              el('code', { cls: 'mv-starter-dax', text: measure.dax || '— no expression —' })
+            ]), el('span', { text: '→', 'aria-hidden': 'true' })
+          ]));
+        });
+        this.mainEl.appendChild(el('section', { cls: 'mv-overview', 'aria-label': 'Matching measures' }, [
+          el('h1', { text: matches.size + ' matching measures' }),
+          el('p', { cls: 'mv-overview-intro', text: app.state.mvQuery ? 'Filter: ' + app.state.mvQuery : 'Current library filters' }),
+          results, !matches.size ? el('p', { text: 'No measures match these filters.' }) : null
+        ]));
+        return;
+      }
       M.tables.forEach(function (t) { t.measures.forEach(function (m) {
         all.push({ name: m.name, table: t.name, n: (M.msrUsedBy[m.name] || []).length });
         if (m.h) hidden++; links += (m._deps || []).length;

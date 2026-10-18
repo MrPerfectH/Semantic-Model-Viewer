@@ -38,6 +38,8 @@ Versions 1 and 2 are accepted. Version 2 adds explored-state capture and support
 
 The graph uses the real dependency expansion controls; bounded context specifies the initial neighborhood. Hidden branches remain indicated by the viewer. Table focus may select a table, column or named relationship. Multiple same-named measures are rejected by the current viewer input contract rather than opening an ambiguous measure.
 
+For a set of measures, use the library filters and an unselected Measures snapshot rather than choosing one measure as the whole answer. `examples/explanations/date-dependent-measures.json` opens all seven Contoso formulas containing `Date[Date]`. Each result shows its DAX and opens the native measure workspace when selected. Browse measures returns to this filtered overview at every viewport width; changing the library filters also refreshes the overview. This text filter is a formula search, not a complete transitive dependency query. `annotationsVisible: false` initially hides explanation text, highlights and hidden-target reminders.
+
 Attention is purple, proposals are amber and explicitly labelled. Selection is not a diagnosis. Native active/inactive relationship details remain available. A focused table list limits the opening canvas, not the metadata included in the artifact. The library and source metadata remain available for exploration.
 
 ## Update and read selection
