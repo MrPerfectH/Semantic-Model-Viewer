@@ -29,6 +29,19 @@ No install needed. The demo opens with a synthetic "Contoso Retail" model alread
 It reads TMDL (`*.SemanticModel` folders and `.pbip` repos) and `model.bim`. It also renders a
 relationship matrix and a domain map of the whole model.
 
+## Start here
+
+1. **[Try the demo first](https://MrPerfectH.github.io/Semantic-Model-Viewer/)** — no installation. Contoso Retail is synthetic. In Tables, add Sales with **+**, select it, and explore its filter paths; or open Measures and select a measure to see its dependencies.
+2. **Choose where to open your own model:**
+   - **VS Code:** install [Semantic Model Viewer from the Marketplace](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer), open your project folder, then select a model in **Semantic Models**. No Python or Power BI Desktop required. [Setup and VSIX alternative](vscode-extension/README.md#install-and-start).
+   - **Local desktop:** use the [Mac/Windows setup below](#install-2-minutes). Python 3 and a browser are required. Linux users can [run from source](#run-it-from-source).
+   - **Browser:** use the demo site, choose **Open model**, then import your folder or BIM file. Chrome/Edge also support a connected repository folder; browser folder permissions may be requested again in a later session.
+3. **Supported input:** a `*.SemanticModel` folder containing TMDL definitions, a PBIP project **folder** containing those models, or `model.bim`. A `.pbip` file alone is not the model; `.pbix` files cannot be opened directly. In Power BI Desktop, save as a PBIP project with TMDL definitions, or export BIM with your model tooling.
+
+If no model appears, check that the selected folder contains `definition/*.tmdl` or `model.bim`. In VS Code use **Refresh Model List**; in the browser/local app retry **Open model** with the model folder itself. The VS Code package does not bundle the demo; its demo link opens the browser.
+
+After opening a model, the optional welcome offers contextual tips for Tables, Measures, and sharing. **Skip tour**, **Close**, or **Skip remaining tips** keep you in control; **Help** restarts guidance. Tips never rearrange your canvas or change your model. Preferences stay in this browser/app profile or VS Code profile; snapshots do not launch onboarding.
+
 ## Install (2 minutes)
 
 The viewer runs on your own computer from a copy of this repo. A small local app
@@ -78,7 +91,7 @@ can create another one. Close extra windows normally; your saved models and layo
 
 ### VS Code
 
-Download `semantic-model-viewer-<version>.vsix` from the
+Install from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer), or download `semantic-model-viewer-<version>.vsix` from the
 [Releases page](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases), then in VS Code run
 **Extensions: Install from VSIX…** from the Command Palette (or
 `code --install-extension <file>.vsix`). Details: [vscode-extension/README.md](vscode-extension/README.md).
@@ -89,8 +102,7 @@ To update, install the newer `.vsix`.
 <https://MrPerfectH.github.io/Semantic-Model-Viewer/> opens the same viewer with the
 built-in synthetic "Contoso Retail" model already loaded, so you can look around before
 installing. You can import your own model there as well; it is parsed in your browser and
-not uploaded, but because the page itself reads the folder, the browser shows a one-time
-"allow this site to view files" prompt that the installed app never does.
+not uploaded, but because the page itself reads the folder, the browser shows a "allow this site to view files" prompt that the installed app never does.
 
 ## About the app
 
@@ -131,7 +143,7 @@ it stop after the window has been closed for three minutes; `--port` picks anoth
 
 Without the local app, `Models/tools/viewer/index.html` also opens straight from disk or
 from any static host (`python3 -m http.server` in that folder works). Folders are then read
-by the browser itself, which asks for permission once per folder, and the built-in demo
+by the browser itself, which asks for folder permission (which may need renewal), and the built-in demo
 model needs a web server to load.
 
 A fresh browser profile starts with **No model selected** (the hosted demo opens the sample

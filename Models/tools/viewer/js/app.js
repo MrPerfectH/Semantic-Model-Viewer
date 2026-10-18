@@ -220,6 +220,7 @@
       if (this.powerQueryWorkspace) this.powerQueryWorkspace.update();
       this.importModal.update();
       this.rulesModal.update();
+      if (this.onboarding) this.onboarding.update();
     },
 
     /* ---------- color / source helpers ---------- */
@@ -483,12 +484,12 @@
     },
 
     /* An intentionally empty model for "nothing chosen yet" - same wiring as a
-       real load (see _applyModel above), so the picker opens over a properly
+       real load (see _applyModel above), so Start here appears over a properly
        built, if empty, canvas instead of a half-initialized screen. Does not
        touch smv_current_v1: only an actual choice (including the built-in
        sample itself) should make this the remembered default from now on. */
     loadEmptyModel: function () {
-      this._applyModel({ name: '', tables: [], relationships: [] }, 'Choose a model', null, { persist: false, showModelMenu: true });
+      this._applyModel({ name: '', tables: [], relationships: [] }, 'Choose a model', null, { persist: false, showModelMenu: false });
     },
 
     loadModel: function (key) {
@@ -780,7 +781,7 @@
         if (!/\.(tmdl|bim|json)$/i.test(f.name)) continue;
         try { files.push({ name: f.name, path: p, text: await f.text() }); } catch (e) { }
       }
-      if (!files.length) { this.setState({ importError: 'No .tmdl / .bim / .json files found in the selection.', importReady: false }); return; }
+      if (!files.length) { this.setState({ importError: 'No .tmdl / .bim / .json files found in the selection. Choose the PBIP project folder or its *.SemanticModel folder, or export model.bim. A .pbix file cannot be opened directly.', importReady: false }); return; }
       // a repo folder was dropped: group files by *.SemanticModel folder
       var byModel = {};
       files.forEach(function (f) {
@@ -1343,7 +1344,7 @@
         if (initial) this.hostOpenModel(initial);
         else {
           this.model = {name:'',tables:[],relationships:[]}; this.prepareModel(this.model);
-          this.setState({modelName:'Choose a model',showModelMenu:true});
+          this.setState({modelName:'Choose a model',showModelMenu:false});
         }
         return;
       }
@@ -1351,7 +1352,7 @@
       /* No stored choice yet (a genuinely first-ever open, or a fresh browser
          profile) -> don't silently load the bundled sample. Same idea as the
          VS Code host's own "nothing open yet" state above (an empty model,
-         picker already open), via loadEmptyModel() so the canvas/explorer get
+         Start here visible), via loadEmptyModel() so the canvas/explorer get
          the same full initialization a real model load gets - not a smaller,
          easy-to-drift-from copy of it. Once the user picks anything -
          including the bundled sample itself - `smv_current_v1` is set and
@@ -1383,7 +1384,16 @@
   if (typeof module === 'object' && module.exports) module.exports = App;
 
   window.addEventListener('DOMContentLoaded', function () {
-    function start() { if (g.ViewerTheme) g.ViewerTheme.init(); var app = new App(); window.app = app; app.render(); return app.init(); }
+    function start() {
+      if (g.ViewerTheme) g.ViewerTheme.init();
+      var app = new App(); window.app = app; app.render();
+      return app.init().then(function () {
+        // Storage and host initialization must finish before first-use preferences are read.
+        if (g.ViewerOnboarding && !app.snapshotMode) {
+          app.onboarding = new g.ViewerOnboarding(app); app.render(true);
+        }
+      });
+    }
     if (g.SMVHost && g.SMVHost.kind === 'vscode') {
       g.SMVHost.boot().then(function () { U.store.useAdapter(g.SMVHost.storage); return start(); }).catch(function (error) {
         var root = document.getElementById('root'); U.clear(root);

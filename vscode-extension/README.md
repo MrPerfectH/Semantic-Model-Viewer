@@ -10,6 +10,14 @@ Fabric connection, or Python is required.
 The screenshots below use only the synthetic **Contoso Retail** demo. Select an image to
 open it at full size.
 
+## Install and start
+
+Install [Semantic Model Viewer](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer) in VS Code **1.85 or newer**. Alternatively, download the `.vsix` from [GitHub Releases](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/latest) and run **Extensions: Install from VSIX…**. Marketplace installations update through VS Code; VSIX installations can be updated by installing a newer VSIX.
+
+Open your PBIP project **folder**, then select a model under **Semantic Models** in the Activity Bar. Supported models are `*.SemanticModel` folders with TMDL definitions and `model.bim`; a `.pbix` or `.pbip` file alone is not supported. If none appear, check the folder and exclusion settings, then run **Semantic Model Viewer: Refresh Model List**. Hidden directories are skipped.
+
+Use **+** in Tables to add a table, or select a measure in Measures. Optional first-use tips can be skipped and restarted through **Help**; the preference is saved in your VS Code profile without modifying model files. The browser demo is separate from the extension and needs no workspace.
+
 ## Measures
 
 Follow the logic behind a measure. Trace what feeds it and what depends on it, then compare the DAX without losing your place.

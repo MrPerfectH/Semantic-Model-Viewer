@@ -175,7 +175,7 @@ class ViewerPanel {
       }
       case 'storage':
         if (!storageKey(msg.key) || (msg.value !== null && typeof msg.value !== 'string') || (typeof msg.value === 'string' && msg.value.length > MAX_SNAPSHOT_BYTES)) throw new Error('Invalid viewer storage value.');
-        await this.context.workspaceState.update(STORAGE_PREFIX + msg.key, msg.value === null ? undefined : msg.value);
+        await (msg.key === 'smv_onboarding_v1' ? this.context.globalState : this.context.workspaceState).update(STORAGE_PREFIX + msg.key, msg.value === null ? undefined : msg.value);
         return;
       case 'listModels': return reply({ models: (await findModels()).map(pub) });
       case 'openModel': {
@@ -228,6 +228,8 @@ class ViewerPanel {
     for (const key of this.context.workspaceState.keys()) {
       if (key.startsWith(STORAGE_PREFIX) && storageKey(key.slice(STORAGE_PREFIX.length))) out[key.slice(STORAGE_PREFIX.length)] = this.context.workspaceState.get(key);
     }
+    const onboarding = this.context.globalState.get(STORAGE_PREFIX + 'smv_onboarding_v1');
+    if (onboarding !== undefined) out.smv_onboarding_v1 = onboarding;
     return out;
   }
 
