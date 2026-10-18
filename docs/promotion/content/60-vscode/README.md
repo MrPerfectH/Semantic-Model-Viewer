@@ -1,29 +1,33 @@
 # #60 — Inspect a model inside VS Code
 
-Question: “Can I inspect my semantic model inside VS Code?” Target 22-second clip. Status: complete production script and copy; distributed-extension host rehearsal and video PENDING. No VS Code executable is installed in this environment. Do not publish as a demonstrated result yet.
+Question: “Can I inspect my semantic model inside VS Code?” Status: native Linux host rehearsed; 24-second captioned video, SRT and thumbnail prepared. Owner editorial acceptance remains open.
 
-## Exact actions and captions
+## Rehearsed actions and captions
 
-Preparation: download the v0.3.9 VSIX from the verified release; install using Extensions: Install from VSIX…; open a workspace containing the released `Models/demo/Contoso Retail.SemanticModel`. Start with the extension already installed. This preparation is documented but NOT rehearsed here.
+Installed the published v0.3.9 VSIX in official VS Code 1.142.0 for Linux x64, with isolated temporary user-data and extension directories. Opened a workspace containing only the synthetic `Models/demo/Contoso Retail.SemanticModel` from tag v0.3.9. Installation happens before the clip.
 
-1. 0–4 s: open Semantic Models in the Activity Bar; select discovered Contoso Retail. Caption: “Explore your semantic model inside VS Code.” Expected result: viewer webview. PENDING host verification.
-2. 4–9 s: Measures → search Gross Margin → choose Gross Margin %. Caption: “Select a measure to inspect its inputs.” Exact measure/formula verified in the v0.3.9 browser host; editor navigation remains PENDING.
-3. 9–17 s: select Gross Profit in the graph; use Fit all if needed. Caption: “Read the original DAX beside its dependency.” Expected comparison must be verified in the distributed VSIX before recording.
-4. 17–22 s: hold. Caption: “Install the released extension. Link in the post.”
-
-Record at 1280 × 800 or larger, using a synthetic-only workspace. Keep source editing and refresh out of this initial clip. Capture a comparison thumbnail and burn captions from these timings after host rehearsal.
+1. 0–4.5 s: select discovered Contoso Retail in Semantic Models; hide the editor sidebar to give the viewer room.
+2. 4.5–8 s: Measures → search Gross Margin → select Gross Margin %.
+3. 8–14 s: hold the measure and its upstream graph.
+4. 14–20 s: select Gross Profit in the graph; Fit all. Compare `DIVIDE ( [Gross Profit], [Total Sales] )` with `[Total Sales] - [Total Cost]`.
+5. 20–24 s: hold the comparison with the release CTA caption.
 
 ## Assets and accessibility
 
-No invented VS Code screenshot or substitute browser video is supplied. `assets/` is reserved for the actual host capture. Remaining deliverables: 15–25 s captioned MP4, SRT, thumbnail, VS Code version/OS and installed-extension version evidence, model-discovery and graph-selection rehearsal.
+- [Captioned MP4](assets/vscode-captioned.mp4), silent H.264, 1440 × 1140, 24 seconds.
+- [Timed captions / narration](captions.srt).
+- [Thumbnail](assets/thumbnail.png) and [native rehearsal comparison](assets/rehearsal-comparison.png).
+- [Uncaptioned native capture](assets/raw.mp4), 1440 × 1040.
 
-The numbered captions above also serve as image alt descriptions / silent-video script. Captures use synthetic Contoso data. Annotated cards preserve the original screenshot and add a labelled crop; they do not redraw the UI. Owner editorial approval, phone-size review and platform upload preview are still required.
+Alt description: In Linux VS Code, the Semantic Models sidebar discovers Contoso Retail. The viewer opens in an editor tab. Measures search finds Gross Margin %. Selecting its Gross Profit graph node displays both original DAX expressions in the comparison pane.
+
+The video samples the actual compositor-rendered editor window (51 frames over 24 seconds, approximately 2 fps under capture load), preserving capture timing, then encodes at 30 fps with duplicated frames. It is not a browser mock, simulated interaction, or 30-fps source capture. The recording has no audio. Captions sit below the entire editor window. See shared QA for exact host and fixture evidence. Platform upload preview and real-device readability remain owner gates.
 
 ## LinkedIn draft
 
 Working with semantic model files in VS Code?
 
-Semantic Model Viewer can open a discovered model in the editor, where you can select a measure and inspect its dependency graph alongside the DAX. The planned example uses synthetic Contoso and compares Gross Margin % with Gross Profit.
+Semantic Model Viewer can open a discovered model in the editor, where you can select a measure and inspect its dependency graph alongside the DAX. This Linux VS Code recording uses synthetic Contoso and compares Gross Margin % with Gross Profit.
 
 Install the released VSIX: https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/tag/v0.3.9
 
@@ -41,6 +45,6 @@ No claim of in-viewer source editing, live Power BI Service synchronization, aut
 
 ## Release / host QA
 
-GitHub release API confirms semantic-model-viewer-0.3.9.vsix exists (281707 bytes; digest recorded in QA). The current README documents VSIX installation. No actual VS Code installation, discovery, refresh or webview interaction tested here. #114 guidance-dependent claims remain pending. Do not silently convert the planned instructions into a “passed” record.
+Passed: published VSIX installation, installed-version listing, workspace discovery, webview opening, measure search, graph-node selection and DAX comparison on Linux. No Windows/macOS test, refresh test, clean-user onboarding acceptance or installation UI video is claimed. The isolated synthetic workspace was pretrusted for capture; normal workspace trust/setup decisions are outside this clip. #114 guidance still needs owner review.
 
 See [shared QA and link checks](../QA.md). Nothing has been posted and this issue remains open for acceptance/editorial review.

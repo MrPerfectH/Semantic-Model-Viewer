@@ -13,9 +13,9 @@ rows=[
 ('58-focused-relationships','03-focused','3 / 4   Hide unrelated tables','Choose incoming paths; Arrange, then Fit.',(950,365,1280,755),'Visual focus keeps all model tables. Inactive paths remain labelled.'),
 ('58-focused-relationships','04-relationship','4 / 4   Inspect one relationship','Select the Sales–Product connection.',(380,515,715,755),'Product filters Sales. This reads metadata; it does not simulate DAX or RLS.'),
 ('59-power-query','01-table','1 / 5   Start with Sales','Select Sales, then Open Power Query.',(950,165,1280,355),'The table identifies StageSales as its query input.'),
-('59-power-query','02-inputs','2 / 5   Follow resolved inputs','Select Sales in the Power Query library.',(268,150,1280,550),'The input flow includes StageSales and its parameters.'),
+('59-power-query','02-inputs','2 / 5   Follow resolved inputs','Select Sales in the Power Query library.',(550,310,995,565),'The input flow includes StageSales and its parameters.'),
 ('59-power-query','03-stage-sales','3 / 5   Inspect StageSales','Single-click StageSales in the graph.',(880,465,1275,710),'Keep uncertainty visible: two links could not be confirmed.'),
-('59-power-query','04-parameter','4 / 5   Follow StartYear','Select StartYear in the highlighted M.',(70,145,780,200),'The parameter definition contains 2019. No query is executed.'),
+('59-power-query','04-parameter','4 / 5   Follow StartYear','Select StartYear in the highlighted M.',(70,145,300,200),'The parameter definition contains 2019. No query is executed.'),
 ('59-power-query','05-m-reference','5 / 5   Read the M evidence','Return to StageSales; Open full query.',(700,200,1080,275),'Line 4 references StartYear. Static analysis does not prove a live connection.'),
 ('119-matrix','01-matrix','1 / 3   Open Matrix','Look across fact tables in the full model.',(20,125,840,300),'Matrix omits five non-fact relationships here; it is independent of the canvas.'),
 ('119-matrix','02-shared-product','2 / 3   Spot a shared dimension','Read Product across Sales, Purchases, Returns.',(25,365,425,565),'Filled cells mark active relationships with Product.'),
@@ -30,12 +30,12 @@ for package,name,title,action,box,note in rows:
    d.text((32,y),line,font=font,fill=color); y+=size+10
   return y
  text(30,title,38);text(92,action,28)
- context=im.resize((1016,635));out.paste(context,(32,150))
- text(805,'DETAIL FROM THE SAME CAPTURE',23,'#52617b')
- crop=im.crop(box);crop.thumbnail((1016,300));
+ context=im.resize((800,500));out.paste(context,(140,150))
+ text(670,'DETAIL FROM THE SAME CAPTURE',23,'#52617b')
+ crop=im.crop(box);crop.thumbnail((1016,440));
  # Enlarge detail up to the available width/height without distortion.
- scale=min(1016/crop.width,300/crop.height);crop=crop.resize((round(crop.width*scale),round(crop.height*scale)))
- out.paste(crop,(32,850))
+ scale=min(1016/crop.width,440/crop.height);crop=crop.resize((round(crop.width*scale),round(crop.height*scale)))
+ out.paste(crop,(32,715))
  text(1170,note,30)
  text(1300,'Synthetic Contoso • v0.3.9 • Semantic Model Viewer',20,'#52617b')
  dest=ROOT/package/'assets'/'cards';dest.mkdir(exist_ok=True)

@@ -49,6 +49,11 @@
       ]
     },
     {
+      "path": "118-first-model/captions.srt",
+      "bytes": 388,
+      "sha256": "32f0f3e0099a4a3dabf8d9b2152039aa1d805d04f26264447c7bc6bd039783c9"
+    },
+    {
       "path": "119-matrix/assets/01-matrix.png",
       "bytes": 59369,
       "sha256": "8b1009bb917ef04c33ecb5a89c06c96793d02ae87991a143e2a61e1e97746aa2",
@@ -77,8 +82,8 @@
     },
     {
       "path": "119-matrix/assets/cards/01-matrix.png",
-      "bytes": 227185,
-      "sha256": "babebd89f4b383d1de9b7cc8142f2ba8e4beab301a7fcbd607e44e5ba3a108b1",
+      "bytes": 188661,
+      "sha256": "f2d5ea68bcd82e83c7711cb05031e408875921c29f489ba9f6e1c98432ecb826",
       "dimensions": [
         1080,
         1350
@@ -86,8 +91,8 @@
     },
     {
       "path": "119-matrix/assets/cards/02-shared-product.png",
-      "bytes": 167288,
-      "sha256": "3e20d90c0cd0d366f5f39b1f58237e5a47b8513c81de0fb1e98146f667c77794",
+      "bytes": 150031,
+      "sha256": "d1ba0e53ee763074bf13052cc878cb47a902b909c0c665ab045cb935968d931e",
       "dimensions": [
         1080,
         1350
@@ -95,8 +100,8 @@
     },
     {
       "path": "119-matrix/assets/cards/03-product-view.png",
-      "bytes": 231974,
-      "sha256": "23b6ec012a559a82829e3501bd1695b29ba68080d4ffde05b3642b0c469cde5a",
+      "bytes": 213300,
+      "sha256": "cc4d246ef48c4072f090756979b2323ead6723fbf68b47097d55a9c1bd37a704",
       "dimensions": [
         1080,
         1350
@@ -192,6 +197,11 @@
       ]
     },
     {
+      "path": "56-snapshots/captions.srt",
+      "bytes": 455,
+      "sha256": "1054edc0bdb8cc4ba9c5af2e9197196c56b27478d6089d8b3c4b3384527e2824"
+    },
+    {
       "path": "57-dax/assets/01-inputs.png",
       "bytes": 89215,
       "sha256": "d754a478f3016915ed9979554508fd1f6141f015271298c62d19330ab14e178d",
@@ -257,6 +267,11 @@
       ]
     },
     {
+      "path": "57-dax/captions.srt",
+      "bytes": 354,
+      "sha256": "6f682b614804f55c3db72853b1f58270584e446c46964241582f5f3ad8460b2c"
+    },
+    {
       "path": "58-focused-relationships/assets/01-broad.png",
       "bytes": 155385,
       "sha256": "d20b2edb404c602d5873eadbd916c28d3d55cbfbe23a98d6fb97f5669472e928",
@@ -294,8 +309,8 @@
     },
     {
       "path": "58-focused-relationships/assets/cards/01-broad.png",
-      "bytes": 277284,
-      "sha256": "9bb253cd60ef608787ff4a117a64ea00ff81dbf90004fac29cc39426399db543",
+      "bytes": 235934,
+      "sha256": "4ea9093611c4d8b5a8a1fd380b391c43f7358196018c4c0c682db4ef3ab906cb",
       "dimensions": [
         1080,
         1350
@@ -303,8 +318,8 @@
     },
     {
       "path": "58-focused-relationships/assets/cards/02-sales.png",
-      "bytes": 240341,
-      "sha256": "a34f3ccd95126c55f6fd19644a9b5225d46fdc2079fdf6e1192a2739543a4084",
+      "bytes": 205287,
+      "sha256": "277926950f0656b7e18a5324bbe696a7e2968b54d02b886587cf738dbdb6fbc2",
       "dimensions": [
         1080,
         1350
@@ -312,8 +327,8 @@
     },
     {
       "path": "58-focused-relationships/assets/cards/03-focused.png",
-      "bytes": 217350,
-      "sha256": "aa4151220019772c99d1ed37ae9b32c4882adfaae0ca54c840af992bd554dc8b",
+      "bytes": 189495,
+      "sha256": "dc72d64e768f871fd2fc6f4f6616b24431c98d4983fcf4abb598dd89f6a516ff",
       "dimensions": [
         1080,
         1350
@@ -321,8 +336,8 @@
     },
     {
       "path": "58-focused-relationships/assets/cards/04-relationship.png",
-      "bytes": 236565,
-      "sha256": "47573e1fc945e52b7c6cc08ca04350c58769fcab840e8fc732990b10a37fe924",
+      "bytes": 212310,
+      "sha256": "435873d19bfc6988c3c0dc4c5059cc653b9c51fb0f8e2a17ff2afe097c6f7d90",
       "dimensions": [
         1080,
         1350
@@ -375,8 +390,8 @@
     },
     {
       "path": "59-power-query/assets/cards/01-table.png",
-      "bytes": 254239,
-      "sha256": "b549ee0ce8b5de1b44195f74f3febbbafefe11fbc3d30a4a5691ee83b20fdd57",
+      "bytes": 226944,
+      "sha256": "9d896742d283388158867cd5039343b09f474ac6002cd13d3b2a207ba52479f5",
       "dimensions": [
         1080,
         1350
@@ -384,8 +399,8 @@
     },
     {
       "path": "59-power-query/assets/cards/02-inputs.png",
-      "bytes": 214545,
-      "sha256": "a4eec8a5338ec48811ba2d63bf5b269da01e8303d8c45b4471ab0e08d1f54b99",
+      "bytes": 198921,
+      "sha256": "b91166c25d3d6a9c1ac3de4a0023bfe2681b205326c33a98f0a3d1d71d4f107d",
       "dimensions": [
         1080,
         1350
@@ -393,8 +408,8 @@
     },
     {
       "path": "59-power-query/assets/cards/03-stage-sales.png",
-      "bytes": 216592,
-      "sha256": "903a09f2763123c339eb35a9c2669dc0e257b69dc9c042c6d949ac920c27ac72",
+      "bytes": 186043,
+      "sha256": "d2d39b3192b7a183a5f36f00ec089741b8b5feec4105cc9c63a7bf4a0466f8ca",
       "dimensions": [
         1080,
         1350
@@ -402,8 +417,8 @@
     },
     {
       "path": "59-power-query/assets/cards/04-parameter.png",
-      "bytes": 94906,
-      "sha256": "80a6a968b120375c92d209200fd826efd45f6b991f754f546e299176daf52dc3",
+      "bytes": 109110,
+      "sha256": "1522be117a731b0a059d2e8c99ab1cbf0612f5897ffef618a1eb06f88bf3b11b",
       "dimensions": [
         1080,
         1350
@@ -411,12 +426,73 @@
     },
     {
       "path": "59-power-query/assets/cards/05-m-reference.png",
-      "bytes": 128347,
-      "sha256": "1932b2fd881dc1b9318d9e350430e0b590378046513b536d37d7b609225931b4",
+      "bytes": 114287,
+      "sha256": "f3eb4b09b4aca73c2a3a368b9b5ed482c510b6a489d6d1bbfb033118ce4bcfc2",
       "dimensions": [
         1080,
         1350
       ]
+    },
+    {
+      "path": "60-vscode/assets/raw.mp4",
+      "bytes": 728161,
+      "sha256": "8506feba1805d71a70a600a7a2e0b6c1ab1899e632772af6d2ce97a9a462634d",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1440,
+            "height": 1040
+          }
+        ],
+        "format": {
+          "duration": "24.000000"
+        }
+      }
+    },
+    {
+      "path": "60-vscode/assets/rehearsal-comparison.png",
+      "bytes": 389839,
+      "sha256": "383d6ecd382fc3aa1c7e018d4addd4059c2f0aa8af35bec96413cd767b545d5f",
+      "dimensions": [
+        1440,
+        1040
+      ]
+    },
+    {
+      "path": "60-vscode/assets/thumbnail.png",
+      "bytes": 438693,
+      "sha256": "2b5c62cc6835844b48dd2efcc9873f04a8d4f616f02006ea8533ffe062b9c3b5",
+      "dimensions": [
+        1440,
+        1140
+      ]
+    },
+    {
+      "path": "60-vscode/assets/vscode-captioned.mp4",
+      "bytes": 658132,
+      "sha256": "4c122032cf4e4e6dc6fe6c932b64689d544212e12ad14297fdf0b1690b1897e4",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1440,
+            "height": 1140
+          }
+        ],
+        "format": {
+          "duration": "24.000000"
+        }
+      }
+    },
+    {
+      "path": "60-vscode/captions.srt",
+      "bytes": 437,
+      "sha256": "aed4e6e122f77af498ee0c429552e28e47cdff03140a6ed1b4d7790ddecb334e"
     }
   ]
 }

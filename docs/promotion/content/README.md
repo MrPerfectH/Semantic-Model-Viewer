@@ -1,6 +1,6 @@
 # Promotion content preparation — epic #113
 
-Seven concrete production packages, prepared 2026-10-18. **Six have actual visual assets; VS Code is scripted but awaits host capture. None has editorial acceptance or publication approval.**
+Seven concrete production packages, prepared 2026-10-18. **All seven have actual visual assets, including native Linux VS Code capture. None has editorial acceptance or publication approval.**
 
 | Package | Deliverable present | Remaining gate |
 |---|---|---|
@@ -10,11 +10,11 @@ Seven concrete production packages, prepared 2026-10-18. **Six have actual visua
 | [#119 Matrix](119-matrix/README.md) | Three annotated PNG cards plus original captures, shared Product example, separate posts | Owner/platform/phone review |
 | [#118 first model](118-first-model/README.md) | Public-demo rehearsal, ~20 s captioned MP4, SRT, thumbnail, separate posts | #114 entry-path acceptance; recheck deployment; no new onboarding |
 | [#56 snapshots](56-snapshots/README.md) | Real export + exact-file offline replay, ~20 s captioned MP4, SRT, actual HTML and stills, separate posts | Owner/platform/phone review |
-| [#60 VS Code](60-vscode/README.md) | Exact proposed 22 s script, verified distribution destination, separate draft posts | Actual VSIX host rehearsal, MP4, captions and thumbnail; #114 guidance |
+| [#60 VS Code](60-vscode/README.md) | Rehearsed released VSIX on Linux, 24 s MP4, SRT, thumbnail, separate posts | Owner/platform/real-device review; #114 guidance |
 
 [Release/host QA, link checks and limitations](QA.md) · [Four-week queue](editorial-queue.csv) · [Editorial operating notes](editorial-plan.md) · [Asset manifest](asset-manifest.json)
 
-DAX was prepared first. Assets are authentic synthetic Contoso app captures. v0.3.9 web release was used for feature captures; #118 intentionally uses the separately identified public demo. A browser-only capture does not establish VS Code or installed desktop host behavior. No invented UI, telemetry, testimonials or publication outcomes.
+DAX was prepared first. Assets are authentic synthetic Contoso app captures. v0.3.9 web release was used for feature captures; #118 intentionally uses the separately identified public demo. The VS Code package separately verifies the native Linux editor using the released VSIX; Windows/macOS and installed desktop launcher behavior are not established. No invented UI, telemetry, testimonials or publication outcomes.
 
 Reproduce card formatting with `python render-cards.py` (Pillow required); reproduce video edits with `bash render-videos.sh` (FFmpeg/libass required). Scripts operate only on the retained real captures. Final assets are committed; tools used for capture were installed outside the repository. Raw recordings remain available to revise timing or framing.
 
