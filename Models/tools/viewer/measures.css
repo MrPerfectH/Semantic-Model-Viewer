@@ -129,3 +129,29 @@
 @media(max-width:900px){.mv-analysis-header h1{font-size:18px;}.mv-graph-help{display:none;}.mv-starters{grid-template-columns:1fr;}.mv-library-top{padding:16px 12px 12px;}.mv-overview{padding:28px;}.mv-overview-stats{gap:8px;}.mv-overview-stat{padding:14px;}}
 @media(max-width:680px){.mv-library{width:220px!important;min-width:190px;max-width:40vw;}.mv-library-heading{flex-direction:column;align-items:flex-start;gap:4px;}.mv-library-top{padding:12px 8px;}.mv-row-count,.mv-row-table,.mv-library-foot{display:none;}.mv-library-row{gap:5px;}.mv-overview{padding:22px 16px;}.mv-overview-stats{grid-template-columns:1fr;}.mv-analysis-header{padding:13px;}.mv-metadata{gap:4px;}.mv-chip{font-size:9px!important;}.mv-mode-switch button{padding:6px;font-size:10px;}.mv-starter-count{display:none;}.mv-analysis-body{padding:7px;}.mv-dax-actions{gap:4px;}}
 @media(prefers-reduced-motion:reduce){.mv-workspace *{scroll-behavior:auto!important;transition:none!important;}}
+
+/* Model source references use the same table palette as the Tables canvas. */
+.mv-source-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px;padding:10px 16px;border-bottom:1px solid #edf1f6;font-size:11px;color:#53647c;}
+.mv-source-controls label{display:flex;align-items:center;gap:7px;cursor:pointer;}
+.mv-source-controls input{accent-color:#2563eb;margin:0;width:15px;height:15px;}
+.mv-source-card{position:absolute;z-index:2;overflow:hidden;border:1px solid var(--mv-source-color);border-radius:7px;background:#fff;box-shadow:0 2px 6px #1c35500d;}
+.mv-source-header,.mv-source-column{display:block;box-sizing:border-box;width:100%;height:34px;border:0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;padding:0 12px;}
+.mv-source-header{font:600 12px/32px 'IBM Plex Sans',sans-serif;background:#1f2430;color:#fff;border-left:4px solid var(--mv-source-color);}
+.mv-source-column{font:400 11px/33px 'IBM Plex Mono',monospace;background:#fff;color:#3a414d;border-top:1px solid #e7edf4;}
+.mv-source-column:hover,.mv-source-column.is-selected{background:var(--mv-source-tint);color:#1f2430;box-shadow:inset 3px 0 var(--mv-source-color);}
+.mv-source-header:hover,.mv-source-header.is-selected{box-shadow:inset 0 0 0 2px var(--mv-source-color);}
+.mv-source-omitted{display:block;font-size:10px;line-height:34px;padding:0 12px;color:#7c899b;}
+.mv-source-edge-label{font:500 10px 'IBM Plex Sans',sans-serif;paint-order:stroke;stroke:#fbfcfe;stroke-width:4px;stroke-linejoin:round;}
+.mv-source-summary{font-size:11px;color:#77859a;margin:7px 0;}
+.mv-impact-heading{margin:0;font-size:13px;color:#334155;}
+.mv-impact-note{font-size:11px;line-height:1.6;color:#77859a;margin:0;}
+.mv-impact-list{border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;}
+.mv-impact-row{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #edf1f6;background:#fff;padding:10px 12px;cursor:pointer;}
+.mv-impact-row:last-child{border-bottom:0;}
+.mv-impact-row:hover,.mv-impact-row[aria-pressed=true]{background:#f2f7ff;}
+.mv-impact-row strong{display:block;font-size:12px;font-weight:500;color:#334155;overflow-wrap:anywhere;}
+.mv-impact-row span{display:block;font-size:10px;line-height:1.5;color:#7c899b;margin-top:4px;overflow-wrap:anywhere;}
+.mv-table-impact-action{padding:12px 16px;border-bottom:1px solid #edf1f6;}
+.mv-column-impact-action{flex:none;font:500 10px 'IBM Plex Sans',sans-serif;color:#2563eb;background:#fff;border:1px solid #dce6f6;border-radius:5px;padding:4px 6px;cursor:pointer;}
+.mv-source-header:focus-visible,.mv-source-column:focus-visible,.mv-impact-row:focus-visible,.mv-column-impact-action:focus-visible{outline:2px solid #2563eb;outline-offset:-2px;}
+.mv-impact-search{box-sizing:border-box;min-width:0;width:100%;padding:8px 10px;border:1px solid #dce6f6;border-radius:6px;background:#f8fafc;font:400 11px 'IBM Plex Sans',sans-serif;color:#334155;}

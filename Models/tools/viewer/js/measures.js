@@ -31,6 +31,7 @@
     this._graphOrientation = choice(prefs.orientation, ['lr', 'tb', 'bt'], 'lr');
     this._splitShares = { beside: share(prefs.besideShare, .55), below: share(prefs.belowShare, .52) };
     this._wrapDax = prefs.wrap !== false;
+    this._showSources = prefs.sources === true;
   }
 
   MeasuresView.prototype = {
@@ -52,13 +53,18 @@
         });
       });
       var selected = typeof data.selectedMeasure === 'string' && measures.has(data.selectedMeasure) ? data.selectedMeasure : null;
-      var comparison = selected && typeof data.comparisonMeasure === 'string' && measures.has(data.comparisonMeasure) && data.comparisonMeasure !== selected ? data.comparisonMeasure : null;
+      var candidate = record(data.source), source = null;
+      var sourceTable = ((this.app.model || {}).tables || []).find(function (t) { return t.name === candidate.table; });
+      if (sourceTable && (candidate.column == null || (sourceTable.columns || []).some(function (c) { return c.name === candidate.column; }))) {
+        source = { table: sourceTable.name, column: candidate.column == null ? null : candidate.column }; selected = null;
+      }
+      var comparison = (selected || source) && typeof data.comparisonMeasure === 'string' && measures.has(data.comparisonMeasure) && data.comparisonMeasure !== selected ? data.comparisonMeasure : null;
       var validNames = function (items, allowed, cap) {
         return Array.from(new Set((Array.isArray(items) ? items : []).filter(function (item) { return typeof item === 'string' && allowed.has(item); }))).slice(0, cap);
       };
       return {
-        version: 1, selectedMeasure: selected, comparisonMeasure: comparison,
-        extraMeasures: selected ? validNames(data.extraMeasures, measures, CAP) : [],
+        version: 1, selectedMeasure: selected, comparisonMeasure: comparison, source: source, directOnly: !!source && data.directOnly === true,
+        extraMeasures: selected && !source ? validNames(data.extraMeasures, measures, CAP) : [],
         library: {
           query: typeof library.query === 'string' ? library.query.slice(0, 10000) : '',
           visibility: choice(library.visibility, ['all', 'visible', 'hidden'], 'all'),
@@ -70,36 +76,36 @@
           mode: choice(prefs.mode, ['split', 'dax', 'graph'], 'split'),
           split: choice(prefs.split, ['beside', 'below'], 'beside'),
           besideShare: share(prefs.besideShare, .55), belowShare: share(prefs.belowShare, .52),
-          orientation: choice(prefs.orientation, ['lr', 'tb', 'bt'], 'lr'), wrap: prefs.wrap !== false
+          orientation: choice(prefs.orientation, ['lr', 'tb', 'bt'], 'lr'), wrap: prefs.wrap !== false, sources: !!source || prefs.sources === true
         },
         graph: { zoom: bounded(graph.zoom, .02, 1.8, 1), scrollLeft: bounded(graph.scrollLeft, 0, 10000000, 0),
           scrollTop: bounded(graph.scrollTop, 0, 10000000, 0), autoFit: graph.autoFit === true }
       };
     },
     graphViewportContext: function () {
-      return JSON.stringify([this._graphOrientation, Object.keys(this.app.state.gExtra || {}).sort()]);
+      return JSON.stringify([this._graphOrientation, this._showSources, !!this.app.state.dependencyDirectOnly, Object.keys(this.app.state.gExtra || {}).sort()]);
     },
     captureGraphViewport: function () {
       var app = this.app, pending = this._snapshotViewport, last = this._lastGraphViewport;
-      if (pending && pending.model === app.model && pending.selected === app.state.selMeasure) return Object.assign({}, pending.graph);
-      if (this._built && this.gScroll && this.gScroll.clientWidth && this._graphModel === app.model && this._graphMeasure === app.state.selMeasure) {
+      if (pending && pending.model === app.model && pending.selected === this.graphRoot()) return Object.assign({}, pending.graph);
+      if (this._built && this.gScroll && this.gScroll.clientWidth && this._graphModel === app.model && this._graphMeasure === this.graphRoot()) {
         return { zoom: this._gZoom || 1, scrollLeft: this.gScroll.scrollLeft, scrollTop: this.gScroll.scrollTop, autoFit: !!this._gAutoFit };
       }
-      if (last && last.model === app.model && last.selected === app.state.selMeasure && last.context === this.graphViewportContext()) return Object.assign({}, last.graph);
+      if (last && last.model === app.model && last.selected === this.graphRoot() && last.context === this.graphViewportContext()) return Object.assign({}, last.graph);
       return { zoom: 1, scrollLeft: 0, scrollTop: 0, autoFit: false };
     },
     rememberGraphViewport: function () {
-      this._lastGraphViewport = { model: this.app.model, selected: this.app.state.selMeasure, context: this.graphViewportContext(), graph: this.captureGraphViewport() };
+      this._lastGraphViewport = { model: this.app.model, selected: this.graphRoot(), context: this.graphViewportContext(), graph: this.captureGraphViewport() };
     },
     captureSnapshot: function () {
       var state = this.app.state;
       return this.sanitizeSnapshot({
-        selectedMeasure: state.selMeasure, comparisonMeasure: state.gPin,
+        selectedMeasure: state.selMeasure, comparisonMeasure: state.gPin, source: state.dependencySource, directOnly: state.dependencyDirectOnly,
         extraMeasures: Object.keys(state.gExtra || {}).filter(function (name) { return !!state.gExtra[name]; }),
         library: { query: state.mvQuery, visibility: state.mvFilter, homeTable: state.mvTable,
           openFolders: Object.keys(state.mvOpen || {}).filter(function (name) { return !!state.mvOpen[name]; }), width: state.mvW },
         preferences: { mode: this._workspaceMode, split: this._splitLayout, besideShare: this._splitShares.beside,
-          belowShare: this._splitShares.below, orientation: this._graphOrientation, wrap: this._wrapDax },
+          belowShare: this._splitShares.below, orientation: this._graphOrientation, wrap: this._wrapDax, sources: this._showSources },
         graph: this.captureGraphViewport()
       });
     },
@@ -112,14 +118,15 @@
       var data = this.sanitizeSnapshot(value), prefs = data.preferences, self = this;
       this.cancelSnapshotViewport();
       this._workspaceMode = prefs.mode; this._splitLayout = prefs.split; this._graphOrientation = prefs.orientation;
-      this._splitShares = { beside: prefs.besideShare, below: prefs.belowShare }; this._wrapDax = prefs.wrap;
+      this._splitShares = { beside: prefs.besideShare, below: prefs.belowShare }; this._wrapDax = prefs.wrap; this._showSources = prefs.sources;
       this._mainKey = null; this._railKey = null; this._daxKey = null; this._gC = null; this._shellModel = null;
-      this._snapshotViewport = data.selectedMeasure ? { model: this.app.model, selected: data.selectedMeasure, graph: data.graph } : null;
-      this._lastGraphViewport = { model: this.app.model, selected: data.selectedMeasure, graph: data.graph };
+      var root = data.source ? this.sourceKey(data.source.table, data.source.column) : data.selectedMeasure;
+      this._snapshotViewport = root ? { model: this.app.model, selected: root, graph: data.graph } : null;
+      this._lastGraphViewport = { model: this.app.model, selected: root, graph: data.graph };
       var extras = Object.create(null), open = Object.create(null);
       data.extraMeasures.forEach(function (name) { extras[name] = 1; });
       data.library.openFolders.forEach(function (path) { open[path] = true; });
-      this.app.setState({ selMeasure: data.selectedMeasure, gPin: data.comparisonMeasure, gExtra: extras, gHover: null,
+      this.app.setState({ selMeasure: data.selectedMeasure, dependencySource: data.source, dependencyDirectOnly: data.directOnly, gPin: data.comparisonMeasure, gExtra: extras, gHover: null,
         mvQuery: data.library.query, mvFilter: data.library.visibility, mvTable: data.library.homeTable, mvOpen: open, mvW: data.library.width
       }, function () { self.restorePendingViewport(); });
       return true;
@@ -127,14 +134,14 @@
     restorePendingViewport: function () {
       var pending = this._snapshotViewport, app = this.app, self = this;
       if (!pending) return;
-      if (pending.model !== app.model || pending.selected !== app.state.selMeasure) { this.cancelSnapshotViewport(); return; }
+      if (pending.model !== app.model || pending.selected !== self.graphRoot()) { this.cancelSnapshotViewport(); return; }
       if (this._snapshotFrame || !this._built || app.state.viewMode !== 'measures' || !this.gScroll || !this.gScroll.clientWidth) return;
       // Wait for initial centering and responsive panel sizing before restoring scroll.
       this._snapshotFrame = requestAnimationFrame(function () {
         self._snapshotFrame = requestAnimationFrame(function () {
           self._snapshotFrame = 0;
           if (self._snapshotViewport !== pending) return;
-          if (pending.model !== app.model || pending.selected !== app.state.selMeasure) { self.cancelSnapshotViewport(); return; }
+          if (pending.model !== app.model || pending.selected !== self.graphRoot()) { self.cancelSnapshotViewport(); return; }
           if (!self._built || app.state.viewMode !== 'measures' || !self.gScroll || !self.gScroll.clientWidth) return;
           if (pending.graph.autoFit) self.fitGraph();
           else {
@@ -142,15 +149,54 @@
             self.gScroll.scrollTo({ left: pending.graph.scrollLeft, top: pending.graph.scrollTop, behavior: 'auto' });
           }
           self._snapshotViewport = null;
-          self._initViewportFor = app.state.selMeasure;   // the snapshot is the opening view
+          self._initViewportFor = self.graphRoot();   // the snapshot is the opening view
           self.rememberGraphViewport();
         });
       });
     },
 
     /* ---------- graph helpers ---------- */
+    sourceKey: function (table, column) { return '\u0000source:' + JSON.stringify([table, column == null ? null : column]); },
+    graphRoot: function () {
+      var source = this.app.state.dependencySource;
+      return source ? this.sourceKey(source.table, source.column) : this.app.state.selMeasure;
+    },
+    currentImpact: function () {
+      var key = JSON.stringify(this.app.state.dependencySource);
+      if (!this._impactCache || this._impactCache.model !== this.app.model || this._impactCache.key !== key) {
+        this._impactCache = { model: this.app.model, key: key, data: this.app.measureImpact(this.app.state.dependencySource) };
+      }
+      return this._impactCache.data;
+    },
+    sourceLabel: function (source) { return source.table + (source.column == null ? '' : '[' + source.column + ']'); },
+    analyzeSource: function (table, column) {
+      var t = this.app.model.byName[table];
+      if (!t || (column != null && !t.columns.some(function (c) { return c.name === column; }))) return;
+      this._showSources = true; this.savePreferences(); this.cancelSnapshotViewport();
+      this._gC = null; this._initViewportFor = null; this._impactQuery = '';
+      this.app.setState({ dependencySource: { table: table, column: column == null ? null : column },
+        selMeasure: null, dependencyDirectOnly: false, gPin: null, gHover: null, gExtra: {}, viewMode: 'measures' });
+    },
+    setShowSources: function (on) {
+      this._showSources = !!on; this.savePreferences(); this._gC = null; this._mainKey = null;
+      var patch = {};
+      if (!on && this.app.state.dependencySource) {
+        var impact = this.app.measureImpact(this.app.state.dependencySource);
+        patch = { dependencySource: null, selMeasure: this.app.state.gPin || impact.direct[0] || impact.all[0] || null, gPin: null, gExtra: {}, gHover: null };
+      }
+      this.app.setState(patch);
+    },
     flowKids: function (name, dir) {
-      if (dir === 'up') { var m = this.app.msrOf(name); return ((m && m._deps) || []).slice().sort(function (a, b) { return a.localeCompare(b); }); }
+      var source = this.app.state.dependencySource, root = source && this.graphRoot();
+      var direct = source ? this.currentImpact().direct : [];
+      if (name === root) return dir === 'up' ? [] : direct;
+      if (dir === 'up') {
+        var m = this.app.msrOf(name), deps = ((m && m._deps) || []).slice();
+        if (source && direct.indexOf(name) >= 0) deps.push(root);
+        if (source) { var allowed = this.app.state.dependencyDirectOnly ? direct : this.currentImpact().all; deps = deps.filter(function (n) { return n === root || allowed.indexOf(n) >= 0; }); }
+        return deps.sort(function (a, b) { return a.localeCompare(b); });
+      }
+      if (source && this.app.state.dependencyDirectOnly) return [];
       return (((this.app.model || {}).msrUsedBy || {})[name] || []).slice().sort(function (a, b) { return a.localeCompare(b); });
     },
     gReach: function (start, map) {
@@ -208,7 +254,7 @@
     /* Which groups the reader opened, per analyzed measure. Session only — re-analyzing the
        same measure later in the session keeps the groups open; a reload starts collapsed. */
     graphGroupState: function (root) {
-      var key = root || this.app.state.selMeasure || '';
+      var key = root || this.graphRoot() || '';
       if (!this._gGroupOpen) this._gGroupOpen = {};
       if (!this._gGroupOpen[key]) this._gGroupOpen[key] = {};
       return this._gGroupOpen[key];
@@ -226,8 +272,11 @@
     initialViewport: function (G, paneW, paneH) {
       var w = Math.max(1, paneW || 0), h = Math.max(1, paneH || 0);
       var fit = Math.min((w - 32) / Math.max(1, G.w), (h - 32) / Math.max(1, G.h));
-      var zoom = Math.max(.6, Math.min(1, fit));
+      // Source rows need readable labels. Start at 100% with the first source in
+      // view; Fit all remains an explicit overview action for wider diagrams.
+      var zoom = G.sources && G.sources.length ? 1 : Math.max(.6, Math.min(1, fit));
       var R = (G.xy && G.xy[G.root]) || { x: 0, y: 0, w: 0 };
+      if (G.sources && G.sources.length && !this.app.state.dependencySource) R = G.sources[0];
       var frameW = Math.ceil(G.w * zoom), frameH = Math.ceil(G.h * zoom);
       var ox = Math.max(0, (w - frameW) / 2), oy = Math.max(0, (h - frameH) / 2);
       var cx = ox + (R.x + (R.w || 0) / 2) * zoom, cy = oy + (R.y + NH / 2) * zoom;
@@ -391,12 +440,113 @@
         upSet: upSet, dnSet: dnSet, xy: xy, w: w, h: h, geo: geo, nE: eList.length, relM: relM, capped: capped,
         boxes: boxes, groupOf: grouping.groupOf, hiddenByGroup: hidden, grouped: grouping.grouped };
     },
+    /* Source cards are one table header plus only the columns used by visible links.
+       Whole-table links attach to the header; column links attach to their own row. */
+    addSourceLayout: function (G) {
+      var self = this, app = this.app, selected = app.state.dependencySource;
+      var measureNames = G.names.filter(function (name) { return !!app.msrOf(name); });
+      var byTable = new Map(), links = [];
+      var ensure = function (tn) {
+        if (!byTable.has(tn)) byTable.set(tn, { table: tn, columns: new Set() });
+        return byTable.get(tn);
+      };
+      measureNames.forEach(function (name) {
+        var m = app.msrOf(name);
+        (m._tables || []).forEach(function (tn) {
+          if (selected && (selected.table !== tn || selected.column != null)) return;
+          ensure(tn); links.push({ table: tn, column: null, to: name });
+        });
+        (m._cols || []).forEach(function (group) {
+          if (selected && selected.table !== group.t) return;
+          group.cs.forEach(function (cn) {
+            if (selected && selected.column != null && selected.column !== cn) return;
+            ensure(group.t).columns.add(cn); links.push({ table: group.t, column: cn, to: name });
+          });
+        });
+      });
+      if (selected) {
+        var chosen = ensure(selected.table);
+        if (selected.column != null) chosen.columns.add(selected.column);
+      }
+      if (!byTable.size) { G.sources = []; return G; }
+      var remaining = 200;
+      var sources = Array.from(byTable.values()).sort(function (a, b) { return a.table.localeCompare(b.table); }).filter(function (s) {
+        if (!remaining) return false;
+        remaining--;
+        var columns = Array.from(s.columns).sort();
+        s.omitted = Math.max(0, columns.length - remaining);
+        s.columns = columns.slice(0, remaining); remaining -= s.columns.length;
+        s.w = Math.min(320, Math.max(220, [s.table].concat(s.columns).reduce(function (max, n) { return Math.max(max, n.length); }, 0) * 7 + 32));
+        s.h = NH + s.columns.length * NH + (s.omitted ? NH : 0);
+        return true;
+      });
+      G.sourcesCapped = sources.length < byTable.size || sources.some(function (s) { return s.omitted; });
+      var vertical = G.orientation !== 'lr', bottom = G.orientation === 'bt';
+      var width = vertical ? sources.reduce(function (sum, s) { return sum + s.w + 40; }, -40) : Math.max.apply(null, sources.map(function (s) { return s.w; }));
+      var height = vertical ? Math.max.apply(null, sources.map(function (s) { return s.h; })) : sources.reduce(function (sum, s) { return sum + s.h + 32; }, -32);
+      var dx = vertical ? Math.max(0, (width + 120 - G.w) / 2) : width + 96;
+      var dy = vertical ? (bottom ? 0 : height + 80) : Math.max(0, (height + 120 - G.h) / 2);
+      // A virtual source root reserves a measure layer; reclaim it in horizontal layouts.
+      if (selected && !vertical && measureNames.length) {
+        var first = Math.min.apply(null, measureNames.map(function (n) { return G.xy[n].x; }));
+        dx -= first - 100;
+      }
+      var translate = function (d) {
+        return d.replace(/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/g, function (_, x, y) { return (+x + dx) + ',' + (+y + dy); });
+      };
+      Object.keys(G.xy).forEach(function (n) { G.xy[n].x += dx; G.xy[n].y += dy; });
+      G.boxes.forEach(function (b) { b.x += dx; b.y += dy; });
+      G.geo = G.geo.filter(function (e) { return !selected || (e.a !== G.root && e.b !== G.root); });
+      G.geo.forEach(function (e) { e.d = translate(e.d); });
+      G.w = Math.max(G.w + dx, width + 120); G.h = Math.max(G.h + dy, height + 120);
+      var cursor = 60, originY = bottom ? G.h + 60 : 60;
+      if (bottom) G.h += height + 120;
+      sources.forEach(function (s) {
+        s.x = vertical ? cursor : 60; s.y = vertical ? originY : cursor;
+        cursor += vertical ? s.w + 40 : s.h + 32;
+        s.color = app.tableColor(app.model.byName[s.table]);
+        [null].concat(s.columns).forEach(function (cn, i) {
+          var key = self.sourceKey(s.table, cn);
+          G.xy[key] = { x: s.x, y: s.y + i * NH, w: s.w };
+          G.deps[key] = []; G.cons[key] = [];
+        });
+      });
+      links.forEach(function (link) {
+        var a = self.sourceKey(link.table, link.column), A = G.xy[a], B = G.xy[link.to];
+        if (!A || !B) return;
+        var x1, y1, x2, y2, d;
+        if (vertical) {
+          x1 = A.x + A.w / 2; y1 = A.y + (bottom ? 0 : NH);
+          x2 = B.x + B.w / 2; y2 = B.y + (bottom ? NH : 0);
+          var middle = (y1 + y2) / 2;
+          d = 'M' + x1 + ',' + y1 + ' C' + x1 + ',' + middle + ' ' + x2 + ',' + middle + ' ' + x2 + ',' + y2;
+        } else {
+          x1 = A.x + A.w; y1 = A.y + NH / 2; x2 = B.x; y2 = B.y + NH / 2;
+          var bend = Math.min(90, Math.max(24, (x2 - x1) / 2));
+          d = 'M' + x1 + ',' + y1 + ' C' + (x1 + bend) + ',' + y1 + ' ' + (x2 - bend) + ',' + y2 + ' ' + x2 + ',' + y2;
+        }
+        if (G.deps[link.to].indexOf(a) < 0) G.deps[link.to].push(a); G.cons[a].push(link.to);
+        G.geo.push({ a: a, b: link.to, d: d, base: app.tableColor(app.model.byName[link.table]), source: true,
+          whole: link.column == null, label: link.column == null ? 'Whole table' : link.column,
+          labelX: x1 + (vertical ? 6 : 10), labelY: y1 - 7 });
+      });
+      if (selected) {
+        G.names = measureNames; G.inc.delete(G.root); G.upSet.delete(G.root); G.dnSet.delete(G.root);
+        // The virtual root shares the selected source's position for Center and snapshots.
+        G.xy[G.root] = G.xy[self.sourceKey(selected.table, selected.column)];
+      }
+      G.sources = sources; G.nE = G.geo.length;
+      return G;
+    },
     buildGraph: function () {
       var self = this, app = this.app;
-      var root = app.state.selMeasure, extra = app.state.gExtra || {};
-      var key = (app.modelKey || '') + '|' + root + '|' + this._graphOrientation + '|' + Object.keys(extra).sort().join('\u0001')
-        + '|' + Object.keys(this.graphGroupState(root)).sort().join('\u0001');
-      if (!this._gC || this._gC.k !== key) this._gC = { k: key, g: this.gLayout(root, extra, CAP) };
+      var root = this.graphRoot(), extra = app.state.gExtra || {};
+      var key = (app.modelKey || '') + '|' + root + '|' + this._showSources + '|' + !!app.state.dependencyDirectOnly + '|' + this._graphOrientation + '|' + Object.keys(extra).sort().join('\u0001')
+        + '|' + Object.keys(this.graphGroupState(root)).sort().join('\u0001') + '|' + app.colorBy + '|' + app.paletteName;
+      if (!this._gC || this._gC.k !== key) {
+        var layout = this.gLayout(root, extra, CAP);
+        this._gC = { k: key, g: this._showSources ? this.addSourceLayout(layout) : layout };
+      }
       var G = this._gC.g;
       var pinN = app.state.gPin && app.state.gPin !== root ? app.state.gPin : null;
       var hov = app.state.gHover || pinN;
@@ -406,10 +556,11 @@
         var onUp = upR && (e.b === hov || upR.has(e.b));
         var onDn = dnR && (e.a === hov || dnR.has(e.a));
         var rel = !!(onUp || onDn);
-        var c = e.back ? '#e58f5a' : (rel ? (onUp ? '#6d28d9' : '#2563eb') : (hov ? '#cdd3dd' : e.base));
+        var c = e.source ? e.base : e.back ? '#e58f5a' : (rel ? (onUp ? '#6d28d9' : '#2563eb') : (hov ? '#cdd3dd' : e.base));
         var wd = rel ? (e.a === hov || e.b === hov ? 2 : 1.6) : 1.2, o = hov ? (rel ? 1 : .45) : .85;
         return {
-          key: e.a + '\u0001' + e.b, d: e.d, da: e.back ? '5 4' : 'none',
+          key: e.a + '\u0001' + e.b, d: e.d, da: e.back || e.whole ? '5 4' : 'none',
+          label: e.whole ? 'Whole table' : '', labelX: e.labelX, labelY: e.labelY, color: c,
           st: "d:path('" + e.d + "');stroke:" + c + ";stroke-width:" + wd + "px;opacity:" + o + ";transition:d .28s ease,stroke .18s ease,opacity .18s ease,stroke-width .18s ease;"
         };
       });
@@ -466,7 +617,7 @@
         };
       });
       return {
-        nodes: nodes, edges: edges, groups: groups, root: G.root, xy: G.xy, w: G.w, h: G.h,
+        nodes: nodes, edges: edges, groups: groups, sources: G.sources || [], sourcesCapped: G.sourcesCapped, root: G.root, xy: G.xy, w: G.w, h: G.h,
         pan: function (e) {
           if (e.button !== 0 || e.target.closest('button')) return;
           var elx = e.currentTarget;
@@ -499,7 +650,7 @@
       };
     },
     setGraphExtras: function (extra, reveal, allGroups) {
-      var layout = this.gLayout(this.app.state.selMeasure, extra, CAP);
+      var layout = this.gLayout(this.graphRoot(), extra, CAP);
       var open = this.graphGroupState();
       if (allGroups) layout.boxes.forEach(function (box) { open[box.key] = true; });
       else (reveal || []).forEach(function (name) { if (layout.groupOf[name]) open[layout.groupOf[name]] = true; });
@@ -515,6 +666,7 @@
     },
     gShow: function (name) {
       var self = this, app = this.app;
+      if (app.state.dependencySource) { app.setState({ gPin: name, gHover: null }); return; }
       var o = Object.assign({}, app.state.gExtra || {});
       if (!(this._gInc && this._gInc.has(name))) o[name] = 1;
       /* Opening the formula of a measure a collapsed group is hiding has to open the group
@@ -530,10 +682,10 @@
     pickMeasure: function (n) {
       var self = this, app = this.app;
       this.cancelSnapshotViewport();
-      app.setState({ selMeasure: n, mvOpen: app.mvOpenFor(n), gExtra: {}, gHover: null, gPin: null });
+      app.setState({ selMeasure: n, dependencySource: null, mvOpen: app.mvOpenFor(n), gExtra: {}, gHover: null, gPin: null });
     },
     gCenter: function () {
-      this.centerGraphNode(this.app.state.selMeasure);
+      this.centerGraphNode(this.graphRoot());
     },
     centerGraphNode: function (name) {
       var pane = this._gEl, R = this._gXY && this._gXY[name], z = this._gZoom || 1;
@@ -698,7 +850,7 @@
       var top = el('div', { cls: 'mv-library-top' });
       top.appendChild(el('div', { cls: 'mv-library-heading' }, [
         el('span', { cls: 'mv-eyebrow', text: 'MEASURE LIBRARY' }),
-        el('button', { cls: 'mv-text-button', text: 'Overview', onClick: function () { app.setState({ selMeasure: null, gPin: null, gHover: null }); } })
+        el('button', { cls: 'mv-text-button', text: 'Overview', onClick: function () { app.setState({ selMeasure: null, dependencySource: null, gPin: null, gHover: null }); } })
       ]));
       this.qInput = el('input', {
         cls: 'mv-search', type: 'search', value: app.state.mvQuery || '', placeholder: 'Search names, tables, or DAX…',
@@ -805,16 +957,16 @@
     renderMain: function () {
       var self = this, app = this.app, M = app.model;
       var sn = app.state.selMeasure;
-      var m = app.msrOf(sn);
-      var key = [app.modelKey, sn || '', app._usage ? 1 : 0].join('|');
+      var m = app.msrOf(sn), source = app.state.dependencySource;
+      var key = [app.modelKey, sn || '', JSON.stringify(source), this._showSources, app._usage ? 1 : 0].join('|');
       if (key !== this._mainKey) {
         this._mainKey = key;
-        this._flowKey = null; this._daxKey = null; this._nodeEls = {}; this._edgeEls = {}; this._groupEls = {};
+        this._flowKey = null; this._daxKey = null; this._nodeEls = {}; this._edgeEls = {}; this._edgeLabels = {}; this._groupEls = {}; this._sourceLayer = null;
         if (this._graphObserver) { this._graphObserver.disconnect(); this._graphObserver = null; }
         U.clear(this.mainEl);
-        if (m) this.buildSelectedMain(sn, m); else this.buildEmptyMain();
+        if (m || source) this.buildSelectedMain(sn, m || { _deps: [], _cols: [] }); else this.buildEmptyMain();
       }
-      if (m) {
+      if (m || source) {
         this.renderFlow();
         this.renderDax();
       }
@@ -852,8 +1004,8 @@
     },
 
     buildSelectedMain: function (sn, m) {
-      var self = this, app = this.app, M = app.model, home = M.msrHome[sn];
-      this._graphModel = M; this._graphMeasure = sn;
+      var self = this, app = this.app, M = app.model, source = app.state.dependencySource, home = source ? source.table : M.msrHome[sn];
+      this._graphModel = M; this._graphMeasure = this.graphRoot();
       var colGs = m._cols || [], nCols = colGs.reduce(function (a, c) { return a + c.cs.length; }, 0);
       var body = el('div', { cls: 'mv-analysis' });
       var metadata = el('div', { cls: 'mv-metadata' }, [
@@ -869,6 +1021,14 @@
       else if (!usage && app._usage) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'No direct report usage', title: 'Not directly referenced in ' + ((app._usageMeta && app._usageMeta.report) || 'the scanned report') + '. It may feed other measures that are used.' }));
       var header = el('header', { cls: 'mv-analysis-header' });
       var heading = el('div', { cls: 'mv-heading-block' }, [el('div', { cls: 'mv-eyebrow', text: 'ANALYZING MEASURE' }), el('h1', { text: sn }), metadata]);
+      if (source) {
+        U.clear(heading);
+        heading.appendChild(el('div', { cls: 'mv-eyebrow', text: source.column == null ? 'ANALYZING TABLE' : 'ANALYZING COLUMN' }));
+        heading.appendChild(el('h1', { text: this.sourceLabel(source) }));
+        var impact = this.currentImpact();
+        heading.appendChild(el('p', { cls: 'mv-source-summary', text: impact.direct.length + ' direct · ' + (impact.all.length - impact.direct.length) + ' indirect dependent measures' }));
+        heading.appendChild(el('button', { cls: 'mv-text-button', text: 'Back to ' + source.table, onClick: function () { app.focusTable(source.table); } }));
+      }
       header.appendChild(heading);
       var modes = el('div', { cls: 'mv-mode-switch', role: 'group', 'aria-label': 'Analysis view' });
       this._modeButtons = {};
@@ -892,6 +1052,15 @@
       ]), this.orientationSelect]);
       this.updateDirectionLabel();
       graphPane.appendChild(graphHeading);
+      this.sourceToggle = el('input', { type: 'checkbox', checked: this._showSources, onChange: function (e) { self.setShowSources(e.target.checked); } });
+      var sourceControls = el('div', { cls: 'mv-source-controls' }, el('label', {}, [this.sourceToggle, el('span', { text: 'Show table and column references' })]));
+      if (source) {
+        var directToggle = el('input', { type: 'checkbox', checked: !!app.state.dependencyDirectOnly, onChange: function (e) {
+          self._gC = null; self._daxKey = null; app.setState({ dependencyDirectOnly: e.target.checked, gExtra: {}, gHover: null, gPin: null });
+        } });
+        sourceControls.appendChild(el('label', {}, [directToggle, el('span', { text: 'Direct only' })]));
+      }
+      graphPane.appendChild(sourceControls);
       var graphToolbar = el('div', { cls: 'mv-graph-toolbar', role: 'group', 'aria-label': 'Graph navigation' });
       var graphButton = function (label, title, click) { return el('button', { cls: 'mv-button', text: label, title: title, 'aria-label': title, onClick: click }); };
       this.zoomLabel = graphButton('100%', 'Reset dependency graph zoom to 100%', function () { self.setGraphZoom(1); self.gCenter(); });
@@ -899,7 +1068,7 @@
       graphToolbar.appendChild(this.zoomLabel);
       graphToolbar.appendChild(graphButton('+', 'Zoom in dependency graph', function () { self.setGraphZoom((self._gZoom || 1) * 1.2); }));
       graphToolbar.appendChild(graphButton('Fit all', 'Fit entire dependency graph', function () { self.fitGraph(); }));
-      graphToolbar.appendChild(graphButton('Center', 'Center the analyzed measure', function () { self.gCenter(); }));
+      graphToolbar.appendChild(graphButton('Center', 'Center the analysis source', function () { self.gCenter(); }));
       graphToolbar.appendChild(el('span', { cls: 'mv-toolbar-spacer' }));
       this.expandBtn = graphButton('Expand all', 'Expand all upstream and downstream branches and groups, up to 500 measures', function () { self.expandGraphAll(); });
       this.resetBtn = graphButton('Reset', 'Reset dependency expansion and comparison', function () { app.setState({ gExtra: {}, gPin: null, gHover: null }); });
@@ -918,6 +1087,7 @@
       this.statEl = el('span', { cls: 'mv-graph-stat' });
       graphPane.appendChild(el('div', { cls: 'mv-graph-footer' }, [
         el('span', { cls: 'mv-legend-up', text: '● Upstream' }), el('span', { cls: 'mv-legend-down', text: '● Downstream' }), this.statEl,
+        this._showSources ? el('span', { cls: 'mv-graph-help', text: 'Whole table: dashed link to header · Column: solid link to row' }) : null,
         el('span', { cls: 'mv-graph-help', text: 'Click to compare · Enter to analyze' })
       ]));
       this.analysisBody.appendChild(graphPane);
@@ -963,7 +1133,7 @@
     },
     savePreferences: function () {
       store.setJSON(PREF_KEY, { mode: this._workspaceMode, split: this._splitLayout, orientation: this._graphOrientation,
-        besideShare: this._splitShares.beside, belowShare: this._splitShares.below, wrap: this._wrapDax });
+        besideShare: this._splitShares.beside, belowShare: this._splitShares.below, wrap: this._wrapDax, sources: this._showSources });
     },
     setWorkspaceMode: function (mode, persist) {
       if (mode === 'dax' && this._workspaceMode !== 'dax') this.rememberGraphViewport();
@@ -1041,6 +1211,32 @@
       if (this.gCanvasEl) { this.renderFlow(); if (this._gAutoFit) this.fitGraph(); else this.gCenter(); }
     },
 
+    renderSourceCards: function (G) {
+      var self = this, app = this.app;
+      var key = G.structKey + '|' + (G.sources || []).map(function (s) { return s.table + ':' + s.color; }).join('|');
+      if (this._sourceLayer && this._sourceLayer.parentNode === this.gCanvasEl && this._sourceRenderKey === key) return;
+      this._sourceRenderKey = key;
+      if (this._sourceLayer) this._sourceLayer.remove();
+      this._sourceLayer = el('div', { cls: 'mv-source-layer' });
+      (G.sources || []).forEach(function (s) {
+        var selected = app.state.dependencySource;
+        var card = el('section', { cls: 'mv-source-card', 'aria-label': 'Source table ' + s.table,
+          style: 'left:' + s.x + 'px;top:' + s.y + 'px;width:' + s.w + 'px;--mv-source-color:' + s.color + ';--mv-source-tint:' + U.tint(s.color, .08) + ';' });
+        var row = function (cn, label, header) {
+          var active = selected && selected.table === s.table && selected.column === cn;
+          return el('button', { cls: (header ? 'mv-source-header' : 'mv-source-column') + (active ? ' is-selected' : ''),
+            text: label, title: header ? 'Find measures referencing ' + s.table + ' or any of its columns' : 'Find measures referencing ' + s.table + '[' + cn + ']',
+            'aria-label': header ? 'Analyze table ' + s.table : 'Analyze column ' + s.table + '[' + cn + ']',
+            'aria-pressed': String(!!active), onClick: function () { self.analyzeSource(s.table, cn); } });
+        };
+        card.appendChild(row(null, s.table, true));
+        s.columns.forEach(function (cn) { card.appendChild(row(cn, cn, false)); });
+        if (s.omitted) card.appendChild(el('span', { cls: 'mv-source-omitted', text: s.omitted + ' more referenced columns' }));
+        self._sourceLayer.appendChild(card);
+      });
+      this.gCanvasEl.appendChild(this._sourceLayer);
+    },
+
     renderFlow: function () {
       var self = this, app = this.app;
       var G;
@@ -1051,11 +1247,14 @@
       this._g = G;
       this.gScroll.onmousedown = G.pan;
       this.statEl.textContent = G.stat;
-      this.cappedEl.style.display = G.capped ? '' : 'none';
+      this.cappedEl.style.display = G.capped || G.sourcesCapped ? '' : 'none';
+      this.cappedEl.textContent = G.sourcesCapped ? 'Source display limit reached (200 table/column rows). Select a table or column to narrow the analysis.' : '500-measure display limit reached. Select another source or measure to explore omitted branches.';
       this.expandBtn.style.display = G.canExpand ? '' : 'none';
       this.resetBtn.style.display = G.hasExtra ? '' : 'none';
       this.gCanvasEl.style.cssText = G.canvas + 'transform-origin:0 0;transform:scale(' + (this._gZoom || 1) + ');';
       this.gSvg.setAttribute('width', G.w); this.gSvg.setAttribute('height', G.h);
+
+      this.renderSourceCards(G);
 
       /* edges — reuse path elements so the CSS d-transition animates on expansion */
       var seenE = {};
@@ -1066,14 +1265,22 @@
           p = sv('path', { fill: 'none', 'marker-end': 'url(#mv-flow-arrow)' });
           self._edgeEls[E.key] = p;
           self.gSvg.appendChild(p);
+          p.appendChild(sv('title', {}));
         }
         p.setAttribute('d', E.d);
         p.setAttribute('stroke-dasharray', E.da);
         p.style.cssText = E.st;
+        p.firstChild.textContent = E.label || 'Dependency';
+        if (!self._edgeLabels) self._edgeLabels = {};
+        var label = self._edgeLabels[E.key];
+        if (E.label && !label) { label = sv('text', { 'class': 'mv-source-edge-label' }); self._edgeLabels[E.key] = label; self.gSvg.appendChild(label); }
+        if (label) { label.textContent = E.label; label.setAttribute('x', E.labelX); label.setAttribute('y', E.labelY); label.setAttribute('fill', '#53647c'); }
       });
       Object.keys(this._edgeEls).forEach(function (k) {
         if (!seenE[k]) { self._edgeEls[k].remove(); delete self._edgeEls[k]; }
       });
+
+      Object.keys(this._edgeLabels || {}).forEach(function (k) { if (!seenE[k]) { self._edgeLabels[k].remove(); delete self._edgeLabels[k]; } });
 
       /* group frames — one per home table + display folder bundle, keyed so a frame that
          survives a re-layout keeps its element (and its expanded state reads instantly) */
@@ -1148,8 +1355,8 @@
         if (!seenN[k]) { self._nodeEls[k].wrap.remove(); delete self._nodeEls[k]; }
       });
 
-      if (this._gScrolledFor !== app.state.selMeasure) {
-        this._gScrolledFor = app.state.selMeasure;
+      if (this._gScrolledFor !== this.graphRoot()) {
+        this._gScrolledFor = this.graphRoot();
         this._initViewportFor = null;
         this.applyInitialViewport();
       } else if (this._gAutoFit && structureChanged) this.fitGraph();
@@ -1165,7 +1372,7 @@
        `_initViewportFor` is the record of which measure has had its opening view, so a
        restored snapshot or a scroll the reader made is never overwritten later. */
     applyInitialViewport: function () {
-      var pane = this.gScroll, G = this._g, name = this.app.state.selMeasure;
+      var pane = this.gScroll, G = this._g, name = this.graphRoot();
       if (!pane || !G || this._initViewportFor === name) return;
       if (this._snapshotViewport) return;         // a restored snapshot owns the viewport
       if (!pane.clientWidth || !pane.clientHeight) return;
@@ -1209,8 +1416,51 @@
       ]);
       return header;
     },
+    renderImpactDax: function () {
+      var self = this, app = this.app, source = app.state.dependencySource, impact = this.currentImpact();
+      var names = app.state.dependencyDirectOnly ? impact.direct : impact.all;
+      var pin = app.state.gPin, key = JSON.stringify([source, !!app.state.dependencyDirectOnly, pin]);
+      if (this._daxKey === key) return;
+      this._daxKey = key; U.clear(this.daxGrid); this.daxGrid.setAttribute('data-comparing', 'false');
+      var card = pin ? this.daxCard(pin) : null;
+      if (card) this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card' }, [
+        this.daxHeader(card, 'Inspecting measure', 'width:8px;height:8px;background:#2563eb;border-radius:2px;', function () { app.setState({ gPin: null }); }), this.daxBody(card)
+      ]));
+      this.daxGrid.appendChild(el('h3', { cls: 'mv-impact-heading', text: 'Dependent measures (' + names.length + ')' }));
+      this.daxGrid.appendChild(el('p', { cls: 'mv-impact-note', text: 'Detected DAX references. Column formulas and relationship filter propagation are not expanded.' }));
+      if (!names.length) this.daxGrid.appendChild(el('p', { cls: 'mv-impact-note', text: 'No measure references detected for this source.' }));
+      var list = el('div', { cls: 'mv-impact-list' });
+      var search = el('input', { cls: 'mv-impact-search', type: 'search', placeholder: 'Filter dependent measures…', 'aria-label': 'Filter dependent measures', value: this._impactQuery || '' });
+      this.daxGrid.appendChild(search);
+      var count = el('p', { cls: 'mv-impact-note', role: 'status' });
+      this.daxGrid.appendChild(count);
+      var draw = function () {
+      U.clear(list);
+      var query = (self._impactQuery || '').toLowerCase().trim();
+      var matches = names.filter(function (name) { return !query || name.toLowerCase().includes(query); });
+      count.textContent = matches.length > 120 ? 'Showing 120 of ' + matches.length + ' matches. Refine the filter to see more.' : matches.length + ' matching measures';
+      matches.slice(0, 120).forEach(function (name) {
+        var m = app.msrOf(name), direct = impact.direct.indexOf(name) >= 0;
+        var via = (m._deps || []).filter(function (n) { return impact.all.indexOf(n) >= 0; });
+        var reasons = [];
+        if (direct && source.column != null) reasons.push(source.column);
+        if (direct && source.column == null) {
+          if ((m._tables || []).indexOf(source.table) >= 0) reasons.push('Whole table');
+          (m._cols || []).forEach(function (group) { if (group.t === source.table) reasons = reasons.concat(group.cs); });
+        }
+        list.appendChild(el('button', { cls: 'mv-impact-row', 'aria-pressed': String(pin === name), onClick: function () { app.setState({ gPin: pin === name ? null : name, gHover: null }); } }, [
+          el('strong', { text: name }), el('span', { text: direct ? 'Direct · ' + reasons.join(', ') : 'Via ' + via.join(', ') })
+        ]));
+      });
+      };
+      search.addEventListener('input', function () { self._impactQuery = search.value; draw(); });
+      draw(); this.daxGrid.appendChild(list);
+      if (!card && names.length) this.daxGrid.appendChild(el('p', { cls: 'mv-impact-note', text: 'Select a measure to inspect its DAX. The analysis stays rooted at this source.' }));
+    },
+
     renderDax: function () {
       var self = this, app = this.app;
+      if (app.state.dependencySource) { this.renderImpactDax(); return; }
       var sn = app.state.selMeasure;
       var pinName = app.state.gPin && app.state.gPin !== sn ? app.state.gPin : null;
       var key = [app.modelKey, sn, pinName || '', app._usage ? 1 : 0, JSON.stringify(app.state.gExtra || {})].join('|');
@@ -1256,7 +1506,7 @@
       var on = app.state.viewMode === 'measures' && app.state.loaded;
       if (!on) {
         if (this._built) this.rememberGraphViewport();
-        if (this._built) { if (this._graphObserver) { this._graphObserver.disconnect(); this._graphObserver = null; } U.clear(this.host); this._built = false; this._railKey = null; this._mainKey = null; this._daxKey = null; this._nodeEls = {}; this._edgeEls = {}; this._groupEls = {}; this._gScrolledFor = null; this._initViewportFor = null; }
+        if (this._built) { if (this._graphObserver) { this._graphObserver.disconnect(); this._graphObserver = null; } U.clear(this.host); this._built = false; this._railKey = null; this._mainKey = null; this._daxKey = null; this._nodeEls = {}; this._edgeEls = {}; this._edgeLabels = {}; this._groupEls = {}; this._sourceLayer = null; this._gScrolledFor = null; this._initViewportFor = null; }
         return;
       }
       if (this._built && this._shellModel !== app.modelKey) {
@@ -1265,8 +1515,8 @@
       }
       if (!this._built) {
         var last = this._lastGraphViewport;
-        if (!this._snapshotViewport && last && app.state.selMeasure && last.model === app.model && last.selected === app.state.selMeasure && last.context === this.graphViewportContext()) {
-          this._snapshotViewport = { model: app.model, selected: app.state.selMeasure, graph: Object.assign({}, last.graph) };
+        if (!this._snapshotViewport && last && this.graphRoot() && last.model === app.model && last.selected === this.graphRoot() && last.context === this.graphViewportContext()) {
+          this._snapshotViewport = { model: app.model, selected: this.graphRoot(), graph: Object.assign({}, last.graph) };
         }
         this.buildShell(); this._railKey = null; this._mainKey = null; this._daxKey = null;
       }

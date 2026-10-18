@@ -171,3 +171,57 @@ test('measure workspace occupies wide screens and persists adjustable layouts', 
     assert.ok(bounds.dax.right<=bounds.body.right); assert.ok(bounds.dax.bottom<=bounds.body.bottom);
   });
 });
+
+test('table/column dependency flow works in the complete viewer', { skip: !chrome && 'Install Chrome or set CHROME_PATH', timeout: 60000 }, async t => {
+  const server = http.createServer((req,res) => {
+    const pathname=new URL(req.url,'http://localhost').pathname;
+    const file=path.join(sourceRoot,pathname==='/'?'index.html':pathname);
+    if (!file.startsWith(sourceRoot+path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) {res.writeHead(404);res.end();return;}
+    res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':'text/html');
+    res.end(fs.readFileSync(file));
+  });
+  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+  const browser=await openBrowser();
+  t.after(async()=>{await browser.close();await new Promise(resolve=>server.close(resolve));});
+  await browser.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1024,deviceScaleFactor:1,mobile:false});
+  await browser.send('Page.navigate',{url:'http://127.0.0.1:'+server.address().port});
+  for(let n=0;n<150;n++) {
+    if(await browser.evaluate('!!window.app && app.state.loaded')) break;
+    await new Promise(resolve=>setTimeout(resolve,20));
+  }
+  const settle=()=>browser.evaluate('new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))');
+  await browser.evaluate(`(()=>{
+    window.errors=[];window.addEventListener('error',e=>errors.push(e.message));
+    app._applyModel({name:'Sources',tables:[
+      {name:'Sales',domain:'Commercial',source:{kind:'manual'},columns:[{name:'Amount'},{name:'Unused'}],measures:[]},
+      {name:'Measures',domain:'Measures',source:{kind:'manual'},columns:[],measures:[
+        {name:'Revenue',dax:'SUM(Sales[Amount])'}, {name:'Rows',dax:'COUNTROWS(Sales)'}, {name:'Average',dax:'DIVIDE([Revenue],[Rows])'}
+      ]}],relationships:[]},'Sources','source-test',{persist:false});
+    app.setState({viewMode:'measures'});app.measures.pickMeasure('Average');app.measures.setShowSources(false);
+  })()`); await settle();
+  assert.equal(await browser.evaluate("document.querySelectorAll('.mv-source-card').length"),0);
+  await browser.evaluate("document.querySelector('.mv-source-controls input').click()");await settle();
+  assert.deepEqual(await browser.evaluate("[...document.querySelectorAll('.mv-source-column')].map(el=>el.textContent)"),['Amount']);
+  assert.equal(await browser.evaluate("[...document.querySelectorAll('.mv-source-edge-label')].some(el=>el.textContent==='Whole table')"),true);
+  await browser.evaluate("document.querySelector('.mv-source-column').click()");await settle();
+  assert.deepEqual(await browser.evaluate("app.state.dependencySource"),{table:'Sales',column:'Amount'});
+  assert.deepEqual(await browser.evaluate("[...document.querySelectorAll('.mv-impact-row strong')].map(el=>el.textContent)"),['Average','Revenue']);
+  await browser.evaluate("document.querySelector('.mv-impact-row').click()");await settle();
+  assert.equal(await browser.evaluate("document.querySelector('.mv-dax-card h3').textContent"),'Average');
+  await browser.evaluate("document.querySelectorAll('.mv-source-controls input')[1].click()");await settle();
+  assert.deepEqual(await browser.evaluate("[...document.querySelectorAll('.mv-impact-row strong')].map(el=>el.textContent)"),['Revenue']);
+  await browser.evaluate("document.querySelector('.mv-source-header').click()");await settle();
+  assert.deepEqual(await browser.evaluate("[...document.querySelectorAll('.mv-impact-row strong')].map(el=>el.textContent)"),['Average','Revenue','Rows']);
+  await browser.evaluate("window.saved=app.measures.captureSnapshot();app.measures.pickMeasure('Average')");await settle();
+  await browser.evaluate("app.measures.restoreSnapshot(saved)");await settle();
+  assert.deepEqual(await browser.evaluate('app.state.dependencySource'),{table:'Sales',column:null});
+  for(const orientation of ['lr','tb','bt']) {
+    await browser.evaluate(`app.measures.setGraphOrientation('${orientation}');app.measures.fitGraph()`);await settle();
+    assert.equal(await browser.evaluate("document.querySelectorAll('.mv-source-card').length"),1);
+  }
+  await browser.evaluate("app.focusTable('Sales')");await settle();
+  assert.equal(await browser.evaluate("[...document.querySelectorAll('#drawer button')].some(b=>b.textContent==='Find dependent measures')"),true);
+  await browser.evaluate("[...document.querySelectorAll('#drawer button')].find(b=>b.textContent==='Find dependent measures').click()");await settle();
+  assert.equal(await browser.evaluate('app.state.viewMode'),'measures');
+  assert.deepEqual(await browser.evaluate('window.errors'),[]);
+});
