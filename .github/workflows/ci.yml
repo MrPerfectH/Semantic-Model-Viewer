@@ -18,6 +18,8 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: vscode-extension/package-lock.json
+      - name: Install CLI and MCP dependencies
+        run: npm ci
       - name: Install
         working-directory: vscode-extension
         run: npm ci

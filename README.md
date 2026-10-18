@@ -59,7 +59,10 @@ Needs **Python 3** and **Chrome or Edge** (other browsers work, in a normal tab)
 3. Double-click the installer in the repo folder:
    - **Mac:** `Install on Mac.command`. It adds **Semantic Model Viewer** to
      `~/Applications`; drag it to the Dock.
-   - **Windows:** `Install on Windows.cmd`. It adds a Desktop icon and a Start menu entry.
+   - **Windows:** `Install on Windows.cmd`. It adds a Desktop icon and a Start menu entry,
+     and a **Semantic Model Viewer** button in the **External Tools** ribbon of Power BI
+     Desktop (restart Power BI Desktop to see it). Windows asks for administrator approval
+     once for that button. The button opens the app; it does not load the open model yet.
 4. The app opens in its own window. Use **Open model → Import model → Browse folder…**
    or **Connect repo folder…** and pick a `*.SemanticModel` folder, a `.pbip` repo folder
    (every model inside is found) or a folder holding `model.bim`. Dragging a folder onto the
@@ -178,6 +181,8 @@ node bin/smv.cjs snapshot "Models/demo/Contoso Retail.SemanticModel" --out snaps
 Open the file in a browser to explore the model. Optionally use `--tables` or
 `--measure` to choose the starting view; the full model remains available.
 No extra packages or browser are needed to export. See [CLI usage](docs/cli.md).
+
+Agents can also capture annotated views and build walkthroughs with imported numbers, transparent calculations, and proposed changes. See [visual explanations](docs/visual-explanations.md). Image capture uses an installed Chrome/Chromium; snapshot export still needs no browser.
 
 A snapshot contains the **full model metadata and DAX**, even if the starting canvas
 is empty or focused on a few tables. It is frozen at the displayed creation time.
@@ -521,3 +526,5 @@ distance apply to the target. **Back** restores navigation, filters and reader s
 also restores the complete layout membership. Arrange remains input → consumer and
 preserves positions until explicitly invoked. Static analysis is partial; cycles and
 uncertainty remain visible. No M is executed or included in default shared snapshots.
+
+The [interactive agent workflow](docs/interactive-viewer.md) opens focused Tables and Measures views through CLI or MCP, keeps annotations attached during exploration, and exports the acknowledged viewer state. Inline MCP Apps are host-dependent.

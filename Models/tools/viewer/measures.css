@@ -118,11 +118,13 @@
 .mv-dax-ref{font-size:inherit!important;line-height:inherit!important;}
 .mv-no-wrap .mv-dax-body{white-space:pre;overflow-wrap:normal;}
 .mv-dax-fold{padding:10px 14px 10px 4px;white-space:normal;}
-.mv-dax-row{display:flex;align-items:flex-start;min-width:max-content;}
+.mv-dax-row{display:flex;align-items:flex-start;min-width:0;}
 .mv-dax-gutter{flex:none;width:20px;text-align:center;user-select:none;}
 .mv-dax-fold-btn{border:0;background:transparent;color:var(--smv-muted,#94a0b0);cursor:pointer;padding:0;width:18px;height:1.75em;font-size:10px;line-height:1.75;border-radius:4px;}
 .mv-dax-fold-btn:hover{background:var(--smv-surface,#eef2f7);color:var(--smv-burgundy,#254a7f);}
-.mv-dax-line{flex:1;min-width:0;white-space:pre;}
+.mv-dax-line{flex:1;min-width:0;white-space:pre-wrap;overflow-wrap:anywhere;}
+.mv-no-wrap .mv-dax-row{min-width:max-content;}
+.mv-no-wrap .mv-dax-line{white-space:pre;overflow-wrap:normal;}
 .mv-dax-chip{border-style:dashed!important;font-weight:500!important;}
 .mv-dax-more{border:1px solid var(--smv-soft,#d5dae2);background:var(--smv-surface,#f1f3f6);color:var(--smv-muted,#536278);border-radius:4px;padding:0 6px;margin:0 2px;cursor:pointer;font:600 12px/1.5 'IBM Plex Mono',monospace;}
 .mv-dax-more:hover{background:var(--smv-soft,#e7ecf3);color:var(--smv-burgundy,#254a7f);}

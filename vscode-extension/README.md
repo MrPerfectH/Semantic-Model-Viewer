@@ -69,6 +69,13 @@ Step back to see the model as a whole. **Domains** groups related tables into a 
    and choose **Open in Semantic Model Viewer**.
 3. Use the viewer's model menu to switch between models in the workspace.
 
+The extension lists models from **every folder** in the workspace. In a multi-root
+workspace, each model shows its workspace folder name before its path. If a model comes
+from a folder you do not want (for example this viewer's own repository), remove that
+folder from the workspace or add a pattern such as `**/Archive/**` to
+`semanticModelViewer.exclude`. `semanticModelViewer.defaultModel` only picks which model
+opens first. It does not hide other models.
+
 The extension refreshes models when their definition files change. Layouts and viewer
 settings are saved in VS Code workspace state; table workspaces and saved views belong to
 their model.
