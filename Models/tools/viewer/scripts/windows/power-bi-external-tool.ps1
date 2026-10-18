@@ -70,7 +70,8 @@ function Install-PbiExternalTool {
     }
     Remove-Item -ErrorAction SilentlyContinue $temp
 
-    if (Test-Path $target) { return $target }
+    # An older copy of the file would pass a plain Test-Path, so check it has the new content.
+    if ((Test-Path $target) -and ([IO.File]::ReadAllText($target) -eq $json)) { return $target }
     Write-Warning "Could not add the Power BI button at $target. Run the installer again and approve the Windows prompt."
     return $null
 }
