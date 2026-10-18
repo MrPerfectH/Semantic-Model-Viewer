@@ -1,0 +1,18 @@
+1
+00:00:00,000 --> 00:00:06,000
+What feeds Gross Margin %?
+Follow the purple upstream measures.
+
+2
+00:00:06,000 --> 00:00:14,000
+Select Gross Profit to compare its DAX.
+Gross Margin % stays in view.
+
+3
+00:00:14,000 --> 00:00:18,000
+Static inspection. No DAX execution.
+
+4
+00:00:18,000 --> 00:00:21,500
+Explore the demo's Measures view.
+Link in the post.

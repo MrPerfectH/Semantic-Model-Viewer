@@ -1,0 +1,422 @@
+{
+  "captured": "2026-10-18",
+  "assets": [
+    {
+      "path": "118-first-model/assets/first-model-captioned.mp4",
+      "bytes": 409095,
+      "sha256": "c9f4b7bcd76c4968273db9829ee5ae16c8b882ace081edb784d5dffd6ce1d9f9",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "20.366667"
+        }
+      }
+    },
+    {
+      "path": "118-first-model/assets/raw.mp4",
+      "bytes": 284127,
+      "sha256": "1aa54310c88ef085248bda6f66074db61abcacc8203847f6d8a50e091c33c152",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 2560,
+            "height": 1600
+          }
+        ],
+        "format": {
+          "duration": "20.363800"
+        }
+      }
+    },
+    {
+      "path": "118-first-model/assets/thumbnail.png",
+      "bytes": 112984,
+      "sha256": "64e4c59f67305107b736632e8fcefc1ef4222016c130a68f8d33b64ef4bc3053",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "119-matrix/assets/01-matrix.png",
+      "bytes": 59369,
+      "sha256": "8b1009bb917ef04c33ecb5a89c06c96793d02ae87991a143e2a61e1e97746aa2",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "119-matrix/assets/02-shared-product.png",
+      "bytes": 59411,
+      "sha256": "4bbff44e3cb7c819298bdafaf38941d9985fbf5cfa48d272a4265dc9b3f45ac6",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "119-matrix/assets/03-product-view.png",
+      "bytes": 110066,
+      "sha256": "ad0fee732a643a3a6e56f74a343b5af4d4a44c87073c6437d6b96f5484455927",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "119-matrix/assets/cards/01-matrix.png",
+      "bytes": 227185,
+      "sha256": "babebd89f4b383d1de9b7cc8142f2ba8e4beab301a7fcbd607e44e5ba3a108b1",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "119-matrix/assets/cards/02-shared-product.png",
+      "bytes": 167288,
+      "sha256": "3e20d90c0cd0d366f5f39b1f58237e5a47b8513c81de0fb1e98146f667c77794",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "119-matrix/assets/cards/03-product-view.png",
+      "bytes": 231974,
+      "sha256": "23b6ec012a559a82829e3501bd1695b29ba68080d4ffde05b3642b0c469cde5a",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "56-snapshots/assets/contoso-snapshot.html",
+      "bytes": 934748,
+      "sha256": "b6272bd0db744c99c87c544ff42af2d88bb18630f597eb9d7d81a64d8f2945d5"
+    },
+    {
+      "path": "56-snapshots/assets/export-raw.mp4",
+      "bytes": 241456,
+      "sha256": "00b97d034514d5c03c1cf1dfedecf98e677136b17d12363ca4f07004bf4bb4e7",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 2560,
+            "height": 1600
+          }
+        ],
+        "format": {
+          "duration": "5.631000"
+        }
+      }
+    },
+    {
+      "path": "56-snapshots/assets/recipient-dax.png",
+      "bytes": 107786,
+      "sha256": "04d50ad3e7eee7b9859a1736a545746c97975ccdee2fe1382ff2a1a596a80ecd",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "56-snapshots/assets/recipient-open.png",
+      "bytes": 135276,
+      "sha256": "8d60662d819b27d399dcea303c957d897c14f181489d34bf9f3e4b03d71d9b24",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "56-snapshots/assets/recipient-raw.webm",
+      "bytes": 1796700,
+      "sha256": "4c3e6c0fbf36d8b1bdda83d1678394803c5a8e74766501feff8bb7f231a276ab",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp9",
+            "width": 1280,
+            "height": 800
+          }
+        ],
+        "format": {
+          "duration": "14.400000"
+        }
+      }
+    },
+    {
+      "path": "56-snapshots/assets/snapshot-captioned.mp4",
+      "bytes": 730414,
+      "sha256": "135fdfca2b04653d03fd062b714fccfa7b640f9d16780aaea212868c653acdd7",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "20.033333"
+        }
+      }
+    },
+    {
+      "path": "56-snapshots/assets/thumbnail.png",
+      "bytes": 120524,
+      "sha256": "038ddad664b47f976aeb9d9d84b11712c40922d861a86d1d1a746e8b6f386bae",
+      "dimensions": [
+        1280,
+        900
+      ]
+    },
+    {
+      "path": "57-dax/assets/01-inputs.png",
+      "bytes": 89215,
+      "sha256": "d754a478f3016915ed9979554508fd1f6141f015271298c62d19330ab14e178d",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "57-dax/assets/02-compare.png",
+      "bytes": 91462,
+      "sha256": "22f9b0efc011b85719dc706836ed2c109154063850506e79d98bfa5bb6ea03ef",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "57-dax/assets/dax-captioned.mp4",
+      "bytes": 342305,
+      "sha256": "108967535cb8a4783019234e845fb65605b28964756f2da4339c40e5d550b404",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "21.600000"
+        }
+      }
+    },
+    {
+      "path": "57-dax/assets/raw.mp4",
+      "bytes": 216684,
+      "sha256": "4076b8805db6976d5737692c909d18dbb3c64bc99c0732c3c357974aabea05a3",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 2560,
+            "height": 1600
+          }
+        ],
+        "format": {
+          "duration": "21.602100"
+        }
+      }
+    },
+    {
+      "path": "57-dax/assets/thumbnail.png",
+      "bytes": 105785,
+      "sha256": "e4fc77d668b1d7546f9fdf2f6c74be03e4119b78c84e5471a6736429b4bd4088",
+      "dimensions": [
+        1280,
+        900
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/01-broad.png",
+      "bytes": 155385,
+      "sha256": "d20b2edb404c602d5873eadbd916c28d3d55cbfbe23a98d6fb97f5669472e928",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/02-sales.png",
+      "bytes": 140273,
+      "sha256": "f50557f2b00a98b24c6705a2825305afda78494691f7f2b87e169422e988534d",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/03-focused.png",
+      "bytes": 115080,
+      "sha256": "30c42ba07c1d010a56f3968ef389690157012ebf19bf93143d983c271c47cc51",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/04-relationship.png",
+      "bytes": 125148,
+      "sha256": "ca9d98c3e21205e147452787d0e4172f243f5713a49803dde2be154accb6b211",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/cards/01-broad.png",
+      "bytes": 277284,
+      "sha256": "9bb253cd60ef608787ff4a117a64ea00ff81dbf90004fac29cc39426399db543",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/cards/02-sales.png",
+      "bytes": 240341,
+      "sha256": "a34f3ccd95126c55f6fd19644a9b5225d46fdc2079fdf6e1192a2739543a4084",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/cards/03-focused.png",
+      "bytes": 217350,
+      "sha256": "aa4151220019772c99d1ed37ae9b32c4882adfaae0ca54c840af992bd554dc8b",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/cards/04-relationship.png",
+      "bytes": 236565,
+      "sha256": "47573e1fc945e52b7c6cc08ca04350c58769fcab840e8fc732990b10a37fe924",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "59-power-query/assets/01-table.png",
+      "bytes": 140273,
+      "sha256": "f50557f2b00a98b24c6705a2825305afda78494691f7f2b87e169422e988534d",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "59-power-query/assets/02-inputs.png",
+      "bytes": 91197,
+      "sha256": "4cd1c93d7e74bbc36e648416f733df1f2f19c42bb68797e0d09ec8e5ce5b3e1b",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "59-power-query/assets/03-stage-sales.png",
+      "bytes": 110657,
+      "sha256": "cbd92350ec0427c2bcc84619577dd910105ccc5b1f7527bd554212128bbc475e",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "59-power-query/assets/04-parameter.png",
+      "bytes": 26070,
+      "sha256": "1d32f6131d63b4aa715d8f9060f8df2ab80f75378cbf5dd58f5a956709c0e1e3",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "59-power-query/assets/05-m-reference.png",
+      "bytes": 38780,
+      "sha256": "0e9a93aff3c70213aa71bba546d1213782c30fc2654b7db1a7b21c25139a045f",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "59-power-query/assets/cards/01-table.png",
+      "bytes": 254239,
+      "sha256": "b549ee0ce8b5de1b44195f74f3febbbafefe11fbc3d30a4a5691ee83b20fdd57",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "59-power-query/assets/cards/02-inputs.png",
+      "bytes": 214545,
+      "sha256": "a4eec8a5338ec48811ba2d63bf5b269da01e8303d8c45b4471ab0e08d1f54b99",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "59-power-query/assets/cards/03-stage-sales.png",
+      "bytes": 216592,
+      "sha256": "903a09f2763123c339eb35a9c2669dc0e257b69dc9c042c6d949ac920c27ac72",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "59-power-query/assets/cards/04-parameter.png",
+      "bytes": 94906,
+      "sha256": "80a6a968b120375c92d209200fd826efd45f6b991f754f546e299176daf52dc3",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "59-power-query/assets/cards/05-m-reference.png",
+      "bytes": 128347,
+      "sha256": "1932b2fd881dc1b9318d9e350430e0b590378046513b536d37d7b609225931b4",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    }
+  ]
+}
