@@ -1,11 +1,24 @@
 'use strict';
-const { test } = require('node:test');
+const { test, after } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const root = path.resolve(__dirname, '..');
+// Production checks the cached upstream ref; fixtures must not depend on the
+// developer's branch topology (for example a main-only hotfix during a PR).
+const fixtureDir = fs.mkdtempSync(path.join(os.tmpdir(), 'smv-renderer-fixture-'));
+after(() => fs.rmSync(fixtureDir, { recursive: true, force: true }));
+const viewerRoot = path.join(fixtureDir, 'viewer');
+for (const args of [
+  ['clone', '--shared', '--quiet', root, viewerRoot],
+  ['-C', viewerRoot, 'update-ref', 'refs/remotes/origin/main', 'HEAD']
+]) {
+  const result = spawnSync('git', args, { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+}
+
 test('fresh launches reread relationship columns and reject broken metadata without opening stale output', t => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'smv-launch-test-'));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
@@ -16,7 +29,7 @@ test('fresh launches reread relationship columns and reject broken metadata with
   fs.writeFileSync(path.join(model, 'Date.tmdl'), 'table Date\n\tcolumn Key\n\t\tdataType: int64');
   const relationship = path.join(model, 'relationships.tmdl');
   const writeRel = column => fs.writeFileSync(relationship, 'relationship a\n\tfromColumn: Sales.' + column + '\n\ttoColumn: Date.Key');
-  const launch = () => spawnSync(process.execPath, [path.join(root, 'scripts/open-model.cjs'), model, '--no-open', '--output-dir', path.join(dir, 'output with spaces')], { encoding: 'utf8' });
+  const launch = () => spawnSync(process.execPath, [path.join(root, 'scripts/open-model.cjs'), model, '--viewer-root', viewerRoot, '--no-open', '--output-dir', path.join(dir, 'output with spaces')], { encoding: 'utf8' });
   writeRel('Key');
   const first = launch();
   assert.equal(first.status, 0, first.stderr);
@@ -83,7 +96,7 @@ function writeReportFixture(dir, { binding = '../Sales model.SemanticModel', pag
   return { model, report };
 }
 const launchWithReport = (model, report, output) => spawnSync(process.execPath,
-  [path.join(root, 'scripts/open-model.cjs'), model, '--report', report, '--no-open', '--output-dir', output], { encoding: 'utf8' });
+  [path.join(root, 'scripts/open-model.cjs'), model, '--viewer-root', viewerRoot, '--report', report, '--no-open', '--output-dir', output], { encoding: 'utf8' });
 test('--report embeds fresh measure usage and keeps the report-health sidecar', t => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'smv-report-test-'));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
