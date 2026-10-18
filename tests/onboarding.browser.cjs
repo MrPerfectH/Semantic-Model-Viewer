@@ -1,6 +1,5 @@
-/* Acceptance test: use the real download button, stop the server, and open the
-   actual HTML file in Chrome with networking and browser storage unavailable.
-   Run: node --test tests/snapshot.browser.cjs */
+/* Acceptance test: first-use guidance in the shipped viewer and VS Code adapter.
+   Run: node --test tests/onboarding.browser.cjs */
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -33,7 +32,16 @@ async function openBrowser() {
   } const promise = waiting.get(data.id); if (!promise) return; waiting.delete(data.id); data.error ? promise.reject(new Error(data.error.message)) : promise.resolve(data.result); });
   const send = (method, params = {}) => new Promise((resolve, reject) => { const seq = ++id; waiting.set(seq, {resolve,reject}); socket.send(JSON.stringify({id:seq,method,params})); });
   const evaluate = async expression => { const result = await send('Runtime.evaluate', {expression, awaitPromise:true, returnByValue:true}); if (result.exceptionDetails) throw new Error(result.exceptionDetails.text + ': ' + JSON.stringify(result.exceptionDetails.exception)); return result.result.value; };
-  return { send, evaluate, downloads, async close() { socket.close(); child.kill('SIGTERM'); await new Promise(resolve => child.once('exit', resolve)); fs.rmSync(profile, {recursive:true,force:true}); } };
+  return { send, evaluate, downloads, async close() {
+    if (child.exitCode === null && child.signalCode === null) await new Promise(resolve => {
+      const timeout = setTimeout(() => child.kill('SIGKILL'), 5000);
+      child.once('exit', () => { clearTimeout(timeout); resolve(); });
+      if (socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify({id:++id,method:'Browser.close'}));
+      else child.kill('SIGTERM');
+    });
+    socket.close();
+    await fs.promises.rm(profile, {recursive:true,force:true,maxRetries:10,retryDelay:100});
+  } };
 }
 
 
@@ -61,7 +69,7 @@ test('onboarding journeys in a browser and the real VS Code adapter', {skip:!chr
   });
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   const browser=await openBrowser();
-  t.after(async()=>{await browser.close();await new Promise(resolve=>server.close(resolve));});
+  t.after(async()=>{try { await browser.close(); } finally { await new Promise(resolve=>{server.close(resolve);server.closeAllConnections();}); }});
   const base='http://127.0.0.1:'+server.address().port;
   const evaluate=browser.evaluate;
   const click=label=>evaluate(`Array.from(document.querySelectorAll('button')).find(b=>b.textContent===${JSON.stringify(label)}).click()`);
@@ -79,6 +87,10 @@ test('onboarding journeys in a browser and the real VS Code adapter', {skip:!chr
   await load('/'); assert.equal(await guide(),null,'Dismissal survives reload');
   await click('Help'); assert.equal(await guide(),'Welcome to Semantic Model Viewer');
   assert.equal(await evaluate('document.activeElement.id'),'smv-guide-title');
+  await browser.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Tab',code:'Tab'});
+  assert.equal(await evaluate('document.activeElement.textContent'),'Show tips');
+  await browser.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Tab',code:'Tab'});
+  assert.equal(await evaluate('document.activeElement.textContent'),'Skip tour');
   await browser.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape'});
   assert.equal(await guide(),null);assert.equal(await evaluate('document.activeElement.textContent'),'Help');
   await click('Help');await click('Show tips');assert.equal(await guide(),'Add a table');

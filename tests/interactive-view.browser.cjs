@@ -4,7 +4,7 @@ const {prepare,build}=require('../Models/tools/viewer/scripts/cli/explain.cjs');
 const {capture,browserPath}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
 let browser;try{browser=browserPath();}catch(e){if(process.env.CI)throw e;}
 const model=path.resolve(__dirname,'../Models/demo/Contoso Retail.SemanticModel'),tables=require('../examples/explanations/interactive-tables.json'),measure=require('../examples/explanations/interactive-measure.json');
-async function verify(t,view,code,html){const root=fs.mkdtempSync(path.join(os.tmpdir(),'smv-live-browser-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));const p=prepare(model,view);const script=`<script>{const original=smv.ready;const testing=(async()=>{await original();const check=(ok,message)=>{if(!ok)throw new Error(message)};const frame=()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));${code}return original();})();smv.ready=()=>testing;}</script>`;return capture((html||p.html).replace('</body>',()=>script+'</body>'),path.join(root,'verified.png'),p.view);}
+async function verify(t,view,code,html){const root=fs.mkdtempSync(path.join(os.tmpdir(),'smv-live-browser-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));const p=prepare(model,view);const script=`<script>{const original=smv.ready;const testing=(async()=>{await original();const check=(ok,message)=>{if(!ok)throw new Error(message)};check(!app.onboarding&&!document.querySelector('.smv-guide, [data-onboarding-help]'),'authored views must not initialize onboarding or Help');const frame=()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));${code}return original();})();smv.ready=()=>testing;}</script>`;return capture((html||p.html).replace('</body>',()=>script+'</body>'),path.join(root,'verified.png'),p.view);}
 test('native focus, semantic annotations and explored state survive pan/expand/reset',{skip:!browser},async t=>verify(t,tables,`
 check(app.canvas.selRel.name===${JSON.stringify(tables.focus.name)},'native relationship selection');
 check(app.explorer.names.size===2,'focused visible tables');
@@ -43,7 +43,7 @@ test('offline walkthrough uses one real viewer and navigates steps',{skip:!brows
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'smv-walkthrough-browser-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
   const out=await build(path.resolve(__dirname,'../examples/explanations/interactive-walkthrough.json'),path.join(root,'out'));
   const html=fs.readFileSync(out.interactive,'utf8');assert.match(html,/SMV_STEPS/);
-  await verify(t,tables,`check(SMV_STEPS.length===2,'two steps');await smv.step(1);check(app.state.selMeasure==='Sales LY','step switches actual workspace');await smv.step(0);check(app.state.viewMode==='graph'&&app.explorer.names.size===2,'previous restores tables');`,html);
+  await verify(t,tables,`check(SMV_STEPS.length===2,'two steps');await smv.step(1);check(!app.onboarding&&!document.querySelector('.smv-guide, [data-onboarding-help]'),'walkthrough navigation must not start onboarding');check(app.state.selMeasure==='Sales LY','step switches actual workspace');await smv.step(0);check(app.state.viewMode==='graph'&&app.explorer.names.size===2,'previous restores tables');`,html);
 });
 
 test('focused measures remain navigable in a narrow light/dark viewport',{skip:!browser},async t=>verify(t,{...measure,width:360,height:900},`
