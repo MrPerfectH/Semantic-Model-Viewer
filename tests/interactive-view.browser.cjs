@@ -30,6 +30,19 @@ check(app.measures._g.nodes.length===1,'initial cap respected');app.setState({gE
 app.measures.pickMeasure('Total Sales');await frame();check(app.state.selMeasure==='Total Sales','real dependency navigation');
 await smv.reset();check(app.state.selMeasure==='Sales LY','reset measure focus');
 `));
+test('Browse measures opens all filtered formulas and every result can be analyzed',{skip:!browser},async t=>verify(t,{...measure,width:728,state:{measures:{version:1,selectedMeasure:'Sales LY',library:{query:'Date[Date]'},preferences:{mode:'split',split:'below',wrap:true}}}},`
+const browse=()=>[...document.querySelectorAll('.smv-explanation-controls button')].find(b=>b.textContent==='Browse measures');
+browse().click();await frame();check(app.state.selMeasure===null,'Browse opens overview at desktop widths');
+const names=['Sales LY','Sales YTD','Sales MTD','Sales Rolling 12M','Sales Ship Date','New Customers','Stock Cover Days'];
+check(document.querySelectorAll('.mv-overview .mv-starter').length===7,'all seven Date matches visible');
+check(document.querySelectorAll('.mv-overview .mv-starter-dax').length===7,'each result shows its actual formula');
+for(const name of names){const item=[...document.querySelectorAll('.mv-overview .mv-starter')].find(b=>b.dataset.measure===name);check(item,'missing '+name);item.click();await frame();check(app.state.selMeasure===name,'analyze '+name);check(document.querySelector('.mv-dax-body').textContent.includes('Date'),'Date formula visible for '+name);browse().click();await frame();}
+app.setState({mvQuery:'USERELATIONSHIP'});await frame();check(document.querySelectorAll('.mv-overview .mv-starter').length===1,'overview follows changed filter');
+`));
+test('hidden annotations omit descriptions and hidden-target reminders',{skip:!browser},async t=>verify(t,{...measure,annotationsVisible:false},`
+check(document.querySelector('.smv-notes').hidden,'description initially hidden');
+app.measures.pickMeasure('New Customers');await frame();await frame();check(!document.querySelector('.smv-hidden-targets').textContent,'hidden annotation targets do not leave reminders');
+`));
 test('agent updates wait for Apply while user is exploring',{skip:!browser},async t=>verify(t,tables,`
 document.body.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}));
 const offer={revision:2,sourceRevision:SMV_SOURCE_REVISION,view:${JSON.stringify(measure)}};

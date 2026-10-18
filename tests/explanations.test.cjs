@@ -62,6 +62,33 @@ test('capture cleanup terminates descendants even after the launcher exits',{ski
   assert.equal(fs.existsSync(marker),false,'no descendant continues writing after cleanup');
 });
 
+test('capture cleanup tolerates an inaccessible exited process group',{skip:process.platform==='win32'},async t=>{
+  const {stopBrowser}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+  const child={pid:987654321,exitCode:0,signalCode:null};
+  const signals=[];let code='EPERM';
+  t.mock.method(process,'kill',(pid,signal)=>{signals.push([pid,signal]);throw Object.assign(new Error('kill '+code),{code});});
+  await stopBrowser(child);
+  assert.deepEqual(signals,[[-child.pid,'SIGTERM'],[-child.pid,'SIGKILL']]);
+  code='EINVAL';
+  await assert.rejects(stopBrowser(child),{code:'EINVAL'});
+  code='EPERM';
+  const running=Object.assign(new (require('node:events').EventEmitter)(),{pid:child.pid,exitCode:null,signalCode:null});
+  await assert.rejects(stopBrowser(running),{code:'EPERM'});
+});
+
+test('capture cleanup falls back to its live launcher when group signaling is denied',{skip:process.platform==='win32'},async t=>{
+  const {stopBrowser}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+  const child=Object.assign(new (require('node:events').EventEmitter)(),{pid:987654321,exitCode:null,signalCode:null});
+  const signals=[];
+  t.mock.method(process,'kill',(pid,signal)=>{
+    signals.push([pid,signal]);
+    if(pid<0)throw Object.assign(new Error('kill EPERM'),{code:'EPERM'});
+    assert.equal(pid,child.pid);child.exitCode=0;child.emit('exit',0);return true;
+  });
+  await stopBrowser(child);
+  assert.deepEqual(signals,[[-child.pid,'SIGTERM'],[child.pid,'SIGTERM'],[-child.pid,'SIGKILL']]);
+});
+
 test('browser startup retries a locked endpoint file and reports a persistent lock',async t=>{
   const {EventEmitter}=require('node:events'),{PassThrough}=require('node:stream');
   const {waitForEndpoint}=require('../Models/tools/viewer/scripts/cli/capture.cjs');

@@ -58,7 +58,17 @@ async function stopBrowser(child) {
       // Each POSIX capture owns a process group, including launcher descendants.
       if(process.platform!=='win32')process.kill(-child.pid,kind);
       else if(running())child.kill(kind);
-    } catch(error) {if(error.code!=='ESRCH')throw error;}
+    } catch(error) {
+      if(error.code==='ESRCH')return;
+      // macOS may deny the group signal even while its owned launcher is live.
+      // Fall back to that launcher; never broaden the target or suppress a
+      // denied direct signal. An already-exited launcher needs no fallback.
+      if(error.code==='EPERM'){
+        if(running())try {process.kill(child.pid,kind);}catch(direct){if(direct.code!=='ESRCH')throw direct;}
+        return;
+      }
+      throw error;
+    }
   };
   await wait(2000); // Browser.close normally shuts down cleanly.
   signal('SIGTERM');

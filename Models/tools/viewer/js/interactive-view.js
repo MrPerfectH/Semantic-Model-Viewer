@@ -34,14 +34,14 @@ body[data-smv-interactive] .mv-dax-body pre,body[data-smv-interactive] .mv-dax-c
     document.querySelectorAll('.smv-hl,.smv-callout,.smv-proposal,.smv-annotation-lines,.smv-explanation-controls').forEach(function(n){n.remove();});
     var controls=node('aside',null,'smv-explanation-controls');controls.setAttribute('aria-label','Explanation controls');
     var label=node('strong','Explanation · attention highlights');controls.appendChild(label);
-    if(view.mode==='measures')controls.appendChild(button('Browse measures',function(){document.body.classList.toggle('smv-browse-open');}));
+    if(view.mode==='measures')controls.appendChild(button('Browse measures',function(){dirty=true;app.measures.cancelSnapshotViewport();app.setState({selMeasure:null,gPin:null,gHover:null});document.body.classList.toggle('smv-browse-open');}));
     if(g.SMV_EXPAND_WORKSPACE)controls.appendChild(button('Expand workspace',function(){g.SMV_EXPAND_WORKSPACE().catch(function(e){status.textContent=e.message;});}));
     if(g.SMV_SAVE_OFFLINE)controls.appendChild(button('Save offline view',function(){g.SMV_SAVE_OFFLINE().catch(function(e){status.textContent=e.message;});}));
     if(g.SMV_SEND_CONTEXT)controls.appendChild(button('Use selection in conversation',function(){g.SMV_SEND_CONTEXT().catch(function(e){status.textContent=e.message;});}));
     controls.appendChild(button('Reset explanation',function(){if(api)api.reset();}));
     var hidden=view.annotationsVisible===false,toggle=button('Hide annotations',function(){dirty=true;hidden=!hidden;notes.hidden=hidden;toggle.textContent=hidden?'Show annotations':'Hide annotations';paint(true);});toggle.textContent=hidden?'Show annotations':'Hide annotations';controls.appendChild(toggle);
     var status=node('span','', 'smv-status');status.setAttribute('aria-live','polite');controls.appendChild(status);
-    var notes=node('div',null,'smv-notes');
+    var notes=node('div',null,'smv-notes');notes.hidden=hidden;
     view.callouts.forEach(function(c){notes.appendChild(node('p',c.text));});
     view.proposals.forEach(function(p){notes.appendChild(node('p','Proposed '+p.kind+': '+p.text));});
     var provenance=node('details',null,'smv-view-provenance');provenance.appendChild(node('summary','About this view'));
@@ -73,6 +73,7 @@ body[data-smv-interactive] .mv-dax-body pre,body[data-smv-interactive] .mv-dax-c
       var drawing=[];
       function ring(b,proposal){var n=node('div',null,'smv-hl'+(proposal?' smv-proposal':''));n.style.cssText='left:'+Math.max(0,b.left-3)+'px;top:'+Math.max(0,b.top-3)+'px;width:'+(b.width+6)+'px;height:'+(b.height+6)+'px';document.body.appendChild(n);overlays.push(n);drawing.push(n.getBoundingClientRect());}
       unique.forEach(function(r,i){
+        if(hidden)return;
         if(!boxes[i]){var text=node('span',r.kind+': '+r.name+' is outside this view. ');hiddenList.appendChild(text);hiddenList.appendChild(button('Reveal',function(){if(api)api.reveal(r);}));}
         else if(!hidden){var el=target(r);if(el)el.classList.add('smv-attention-target');ring(boxes[i],false);overlays[overlays.length-1].dataset.smvTarget=refKey(r);}
       });
