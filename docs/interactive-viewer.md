@@ -17,6 +17,34 @@ Open the returned URL in a browser on the CLI machine. In T3, use its native bro
 
 The view has native relationship selection, readable columns, attention highlights, annotations, Hide/Show annotations and Reset explanation. Panning and expanding keep annotations attached. Hidden/offscreen objects are reported with a Reveal action. Hidden targets are not redirected to similarly named objects.
 
+## One prepared view per question
+
+The supported starting point is the shipped viewer in a browser, with a JSON specification selecting the content. No agent-created HTML wrapper, tabs, injected CSS or iframe bridge is needed. When two perspectives help, open two independent viewer URLs or exports using the harness's ordinary browser tabs.
+
+For Contoso Sales YoY, these specifications are included in the installed package:
+
+```sh
+smv serve 'Models/demo/Contoso Retail.SemanticModel' \
+  --view examples/explanations/sales-yoy-calculation.json \
+  --background --session /tmp/smv-yoy-calculation.json --json
+smv serve 'Models/demo/Contoso Retail.SemanticModel' \
+  --view examples/explanations/sales-yoy-relationships.json \
+  --background --session /tmp/smv-yoy-relationships.json --json
+```
+
+From a checkout, replace `smv` with `node bin/smv.cjs`. Resolve the model and example paths relative to the checkout or installed package; they are not relative to an arbitrary working directory. Open each returned URL with the harness's native browser tool. The calculation view shows Sales YoY, Sales LY, Total Sales and Sales YoY %, with actual DAX and selectable dependencies. The relationship view expands both endpoint cards and fits the available canvas. It keeps cards readable rather than forcing name strips. Use DAX, Dependencies or Split view to choose the measure workspace layout.
+
+Prepared views reserve space for their controls. Browse measures opens the library and overview; Close measures, the library's Close button, or Escape returns to the prior analysis. Selecting a result analyzes it and closes the library. Short formula cards use their content height. Views without explicit highlights, callouts or proposals omit annotation controls and rings; focus and dependency context alone do not add annotations.
+
+To share a portable view instead of a live URL:
+
+```sh
+smv session export /tmp/smv-yoy-calculation.json \
+  --basis authored --revision 1 --out /tmp/sales-yoy.html --json
+```
+
+The exported HTML contains the actual viewer and model metadata. Open that file directly in a browser. Inline chat display depends on the host's HTML/MCP Apps support; opening a browser is the baseline workflow. A static image is a fallback, not an interactive view. Stop a live session when it is no longer needed; keep it running while the user explores it.
+
 ## View specification
 
 Versions 1 and 2 are accepted. Version 2 adds explored-state capture and supports widths down to 320 pixels. Existing version 1 files remain valid. Unsupported versions fail explicitly.

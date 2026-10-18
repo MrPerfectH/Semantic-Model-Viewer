@@ -97,3 +97,22 @@ window.smv={ready:()=>ready};setTimeout(()=>reject(new Error('MCP App never sync
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'smv-app-bridge-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
   await capture(html,path.join(root,'bridge.png'),{width:1440,height:1000,scale:1});assert.equal(synchronized,true);
 });
+
+test('plain prepared views have a closable library and controls never cover formulas',{skip:!browser},async t=>verify(t,{version:2,mode:'measures',focus:{kind:'measure',table:'Measures',name:'Sales YoY'},context:{direction:'both',depth:3,limit:25},chrome:false,width:728,height:900},`
+check(![...document.querySelectorAll('.smv-explanation-controls button')].some(b=>/annotations/i.test(b.textContent)),'empty annotation controls omitted');
+check(!document.querySelectorAll('.smv-hl').length,'focus alone does not create annotation rings');
+const browse=()=>document.querySelector('[data-smv-browse]');check(browse(),'Browse control');browse().click();await frame();
+check(document.body.classList.contains('smv-browse-open'),'library opened');
+const close=document.querySelector('[aria-label="Close measure library"]');check(close&&close.getBoundingClientRect().width,'visible Close control');close.click();await frame();
+check(!document.body.classList.contains('smv-browse-open'),'library closes');check(app.state.selMeasure==='Sales YoY','closing restores analyzed measure');
+const buttons=[...document.querySelectorAll('.mv-mode-switch button')];buttons.find(b=>b.textContent==='DAX').click();await frame();
+const footer=document.querySelector('.smv-explanation-controls').getBoundingClientRect();check(document.querySelector('#root').getBoundingClientRect().bottom<=footer.top+1,'controls reserve workspace space');
+const formula=document.querySelector('.mv-dax-card').getBoundingClientRect();check(formula.bottom<=footer.top,'formula card readable above controls');
+`));
+test('relationship view expands both endpoints and fits after the controls are laid out',{skip:!browser},async t=>verify(t,{version:2,mode:'graph',tables:['Sales','Date'],focus:tables.focus,chrome:false,width:1280,height:900},`
+check(app.canvas.cards.Sales.expanded&&app.canvas.cards.Date.expanded,'both endpoint cards expanded');
+check(app.canvas.detailMode==='cards','relationship columns stay visible');
+const rects=['Sales','Date'].map(n=>app.canvas.cards[n].el.getBoundingClientRect());const left=Math.min(...rects.map(r=>r.left)),right=Math.max(...rects.map(r=>r.right));
+const host=app.canvas.host.getBoundingClientRect();check(Math.abs((left+right)/2-(host.left+host.width/2))<5,'table pair centered');
+check(rects.every(r=>r.top>=host.top&&r.bottom<=host.bottom),'expanded cards fit available canvas');
+`));

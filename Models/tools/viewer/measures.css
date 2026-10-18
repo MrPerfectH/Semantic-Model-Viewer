@@ -147,3 +147,7 @@
 @media(max-width:900px){.mv-analysis-header h1{font-size:18px;}.mv-graph-help{display:none;}.mv-starters{grid-template-columns:1fr;}.mv-library-top{padding:16px 12px 12px;}.mv-overview{padding:28px;}.mv-overview-stats{gap:8px;}.mv-overview-stat{padding:14px;}}
 @media(max-width:680px){.mv-library{width:220px!important;min-width:190px;max-width:40vw;}.mv-library-heading{flex-direction:column;align-items:flex-start;gap:4px;}.mv-library-top{padding:12px 8px;}.mv-row-count,.mv-row-table,.mv-library-foot{display:none;}.mv-library-row{gap:5px;}.mv-overview{padding:22px 16px;}.mv-overview-stats{grid-template-columns:1fr;}.mv-analysis-header{padding:13px;}.mv-metadata{gap:4px;}.mv-chip{font-size:9px!important;}.mv-mode-switch button{padding:6px;font-size:10px;}.mv-starter-count{display:none;}.mv-analysis-body{padding:7px;}.mv-dax-actions{gap:4px;}}
 @media(prefers-reduced-motion:reduce){.mv-workspace *{scroll-behavior:auto!important;transition:none!important;}}
+
+/* Prepared views keep short formulas compact; long expressions scroll inside the panel. */
+body[data-smv-interactive] .mv-dax-grid,body[data-smv-interactive] .mv-dax-grid[data-comparing=true]{grid-template-rows:max-content;grid-auto-rows:max-content;align-content:start;}
+body[data-smv-interactive] .mv-dax-body{flex:none;}
