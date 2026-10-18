@@ -104,3 +104,9 @@ optional. Large-model performance has not been benchmarked; no capacity claim is
 made beyond the displayed graph limits.
 
 final result: passed
+
+## Follow-up: approved source library and formula ownership
+
+The 2026-10-19 implementation and visual QA for all four approved refinements are
+recorded in [the current QA report](../design-qa.md). This earlier report covers
+the initial table/column graph implementation.

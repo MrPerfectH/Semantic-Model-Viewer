@@ -57,7 +57,7 @@
         toggle: function () { app.setState({ expandedMeasure: open ? null : m.name }); },
         trace: function () {
           app.canvas.pinned.clear();
-          app.setState({ viewMode: 'measures', selMeasure: m.name, dependencySource: null, mvOpen: app.mvOpenFor(m.name), selected: null });
+          app.setState({ viewMode: 'measures', selMeasure: m.name, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvOpen: app.mvOpenFor(m.name), selected: null });
           app.canvas.applyHighlight(null, null);
         }
       };

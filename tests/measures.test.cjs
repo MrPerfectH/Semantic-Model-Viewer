@@ -195,8 +195,8 @@ test('measure snapshot is JSON-safe and preserves comparison, library state, pre
   const snapshot=JSON.parse(JSON.stringify(view.captureSnapshot()));
   assert.equal(snapshot.version,1);assert.equal(snapshot.selectedMeasure,'Margin');assert.equal(snapshot.comparisonMeasure,'Profit');
   assert.deepEqual(snapshot.extraMeasures,['Revenue']);
-  assert.deepEqual(snapshot.library,{query:'DIVIDE',visibility:'hidden',homeTable:'Sales',openFolders:['Finance','Finance\\Ratios'],width:360});
-  assert.deepEqual(snapshot.preferences,{mode:'split',split:'below',besideShare:.63,belowShare:.46,orientation:'bt',wrap:false,sources:false});
+  assert.deepEqual(snapshot.library,{query:'DIVIDE',visibility:'hidden',homeTable:'Sales',openFolders:['Finance','Finance\\Ratios'],width:360,sourceMode:'measures',pickingSource:false,sourceQuery:'',impactQuery:'',openTables:[]});
+  assert.deepEqual(snapshot.preferences,{mode:'split',split:'below',besideShare:.63,belowShare:.46,orientation:'bt',wrap:false,sources:false,fmt:'long',inline:false,plain:false});
   assert.deepEqual(snapshot.graph,{zoom:.8,scrollLeft:123,scrollTop:456,autoFit:false});
   view.rememberGraphViewport();view.gScroll.clientWidth=0;
   assert.deepEqual(JSON.parse(JSON.stringify(view.captureSnapshot().graph)),snapshot.graph,'A hidden graph retains its viewport');
@@ -571,4 +571,50 @@ test('DAX code block resets the host <code> styling so tokens stay readable in V
   assert.ok(rule, '.mv-dax-code rule exists');
   assert.match(rule[1], /background:none/);
   assert.match(rule[1], /color:inherit/);
+});
+
+test('source picker includes tables without measures and columns without references', () => {
+  const {view,app}=sourceHarness();
+  app.model.tables.push({name:'Lookup',columns:[{name:'Unused key'}],measures:[]});
+  app.state.mvSourceOpen={Lookup:true};
+  let choices=view.buildSourceChoices();
+  assert.equal(choices.find(t=>t.table==='Lookup').expanded,true);
+  assert.deepEqual(Array.from(choices.find(t=>t.table==='Sales').columns,c=>c.name),['Amount','Unused','LineAmount']);
+  app.state.mvSourceQuery='unused';choices=view.buildSourceChoices();
+  assert.deepEqual(Array.from(choices,t=>t.table),['Lookup','Sales']);
+  assert.ok(choices.every(t=>t.expanded));
+  assert.deepEqual(Array.from(choices.find(t=>t.table==='Sales').columns,c=>c.name),['Unused']);
+});
+
+test('impact navigation puts direct references first and inspecting keeps the source pinned', () => {
+  const {view,app}=sourceHarness();app.state.dependencySource={table:'Sales',column:null};app.state.selMeasure=null;
+  assert.deepEqual(rowNames(view.buildImpactRows().rows),['Revenue','Rows','Margin','Profit']);
+  view._workspaceMode='graph';view.inspectMeasure('Margin');
+  assert.equal(view._workspaceMode,'split');assert.equal(app.state.gPin,'Margin');assert.equal(app.state.selMeasure,null);
+  assert.equal(app.state.dependencySource.table,'Sales');
+  app.state.dependencyDirectOnly=true;
+  assert.deepEqual(rowNames(view.buildImpactRows().rows),['Revenue','Rows']);
+  app.state.mvImpactQuery='COUNTROWS';assert.deepEqual(rowNames(view.buildImpactRows().rows),['Rows']);
+});
+
+test('formula references are owned by a card and expansion resolves the displayed expression', () => {
+  const {view,app}=sourceHarness();
+  let refs=view.referenceData({name:'Revenue',table:'Sales'});
+  assert.deepEqual(Array.from(refs.columns[0].cs),['Amount']);assert.equal(refs.scope,'Direct references · original formula');
+  assert.equal(view.referenceData({name:'Margin',table:'Sales'}).columns.length,0,'No inherited or comparison-card columns');
+  app.referencesInDax=(text,home)=>{assert.equal(text,'expanded expression');assert.equal(home,'Sales');return {measures:[],tables:['Sales'],columns:[{t:'Sales',cs:['Amount']}],unresolved:[]};};
+  refs=view.referenceData({name:'Margin',table:'Sales',text:'expanded expression',inlined:{count:2,cycles:[],capped:false}});
+  assert.equal(refs.scope,'References in expanded DAX');assert.equal(refs.partial,false);assert.deepEqual(refs.tables,['Sales']);
+});
+
+test('snapshot restores source browsing and formula display preferences', () => {
+  const {view,app}=sourceHarness();
+  Object.assign(app.state,{dependencySource:{table:'Sales',column:null},selMeasure:null,mvSourceMode:'sources',mvSourcePicking:true,mvSourceQuery:'amount',mvSourceOpen:{Sales:true,Missing:true},mvImpactQuery:'profit'});
+  view._inlineDax=true;view._fmt='short';view._plainDax=true;
+  const snapshot=JSON.parse(JSON.stringify(view.captureSnapshot()));
+  assert.deepEqual(snapshot.library.openTables,['Sales']);assert.equal(snapshot.library.sourceMode,'sources');
+  view._inlineDax=false;view._fmt='original';app.state.mvSourceOpen={};view.restoreSnapshot(snapshot);
+  assert.equal(view._inlineDax,true);assert.equal(view._fmt,'short');assert.equal(view._plainDax,true);
+  assert.equal(app.state.mvSourcePicking,true);assert.equal(app.state.mvSourceQuery,'amount');assert.equal(app.state.mvImpactQuery,'profit');
+  assert.deepEqual(Object.keys(app.state.mvSourceOpen),['Sales']);
 });

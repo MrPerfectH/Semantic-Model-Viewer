@@ -41,8 +41,9 @@
     /* A snapshot contains only explicit UI state, never model objects or DOM nodes. */
     sanitizeSnapshot: function (value) {
       var data = record(value), library = record(data.library), prefs = record(data.preferences), graph = record(data.graph);
-      var measures = new Set(), tables = new Set(), folders = new Set();
+      var measures = new Set(), tables = new Set(), sourceTables = new Set(), folders = new Set();
       ((this.app.model || {}).tables || []).forEach(function (table) {
+        sourceTables.add(table.name);
         if ((table.measures || []).length) tables.add(table.name);
         (table.measures || []).forEach(function (measure) {
           measures.add(measure.name);
@@ -72,13 +73,19 @@
           visibility: choice(library.visibility, ['all', 'visible', 'hidden'], 'all'),
           homeTable: typeof library.homeTable === 'string' && tables.has(library.homeTable) ? library.homeTable : '',
           openFolders: validNames(library.openFolders, folders, folders.size),
-          width: bounded(library.width, 240, 480, 296)
+          width: bounded(library.width, 240, 480, 296),
+          sourceMode: source ? 'sources' : choice(library.sourceMode, ['measures', 'sources'], 'measures'),
+          pickingSource: library.pickingSource === true,
+          sourceQuery: typeof library.sourceQuery === 'string' ? library.sourceQuery.slice(0, 10000) : '',
+          impactQuery: typeof library.impactQuery === 'string' ? library.impactQuery.slice(0, 10000) : '',
+          openTables: validNames(library.openTables, sourceTables, sourceTables.size)
         },
         preferences: {
           mode: choice(prefs.mode, ['split', 'dax', 'graph'], 'split'),
           split: choice(prefs.split, ['beside', 'below'], 'beside'),
           besideShare: share(prefs.besideShare, .55), belowShare: share(prefs.belowShare, .52),
-          orientation: choice(prefs.orientation, ['lr', 'tb', 'bt'], 'lr'), wrap: prefs.wrap !== false, sources: !!source || prefs.sources === true
+          orientation: choice(prefs.orientation, ['lr', 'tb', 'bt'], 'lr'), wrap: prefs.wrap !== false, sources: !!source || prefs.sources === true,
+          fmt: choice(prefs.fmt, ['original', 'long', 'short'], 'long'), inline: prefs.inline === true, plain: prefs.plain === true
         },
         graph: { zoom: bounded(graph.zoom, .02, 1.8, 1), scrollLeft: bounded(graph.scrollLeft, 0, 10000000, 0),
           scrollTop: bounded(graph.scrollTop, 0, 10000000, 0), autoFit: graph.autoFit === true }
@@ -105,9 +112,11 @@
         selectedMeasure: state.selMeasure, comparisonMeasure: state.gPin, source: state.dependencySource, directOnly: state.dependencyDirectOnly,
         extraMeasures: Object.keys(state.gExtra || {}).filter(function (name) { return !!state.gExtra[name]; }),
         library: { query: state.mvQuery, visibility: state.mvFilter, homeTable: state.mvTable,
-          openFolders: Object.keys(state.mvOpen || {}).filter(function (name) { return !!state.mvOpen[name]; }), width: state.mvW },
+          openFolders: Object.keys(state.mvOpen || {}).filter(function (name) { return !!state.mvOpen[name]; }), width: state.mvW,
+          sourceMode: this.sourceMode(), pickingSource: !!state.mvSourcePicking, sourceQuery: state.mvSourceQuery, impactQuery: state.mvImpactQuery,
+          openTables: Object.keys(state.mvSourceOpen || {}).filter(function (name) { return !!state.mvSourceOpen[name]; }) },
         preferences: { mode: this._workspaceMode, split: this._splitLayout, besideShare: this._splitShares.beside,
-          belowShare: this._splitShares.below, orientation: this._graphOrientation, wrap: this._wrapDax, sources: this._showSources },
+          belowShare: this._splitShares.below, orientation: this._graphOrientation, wrap: this._wrapDax, sources: this._showSources, fmt: this._fmt, inline: !!this._inlineDax, plain: !!this._plainDax },
         graph: this.captureGraphViewport()
       });
     },
@@ -120,7 +129,7 @@
       var data = this.sanitizeSnapshot(value), prefs = data.preferences, self = this;
       this.cancelSnapshotViewport();
       this._workspaceMode = prefs.mode; this._splitLayout = prefs.split; this._graphOrientation = prefs.orientation;
-      this._splitShares = { beside: prefs.besideShare, below: prefs.belowShare }; this._wrapDax = prefs.wrap; this._showSources = prefs.sources;
+      this._splitShares = { beside: prefs.besideShare, below: prefs.belowShare }; this._wrapDax = prefs.wrap; this._showSources = prefs.sources; this._fmt = prefs.fmt; this._inlineDax = prefs.inline; this._plainDax = prefs.plain;
       this._mainKey = null; this._railKey = null; this._daxKey = null; this._gC = null; this._shellModel = null;
       var root = data.source ? this.sourceKey(data.source.table, data.source.column) : data.selectedMeasure;
       this._snapshotViewport = root ? { model: this.app.model, selected: root, graph: data.graph } : null;
@@ -128,7 +137,9 @@
       var extras = Object.create(null), open = Object.create(null);
       data.extraMeasures.forEach(function (name) { extras[name] = 1; });
       data.library.openFolders.forEach(function (path) { open[path] = true; });
-      this.app.setState({ selMeasure: data.selectedMeasure, dependencySource: data.source, dependencyDirectOnly: data.directOnly, gPin: data.comparisonMeasure, gExtra: extras, gHover: null,
+      var sourceOpen = Object.create(null); data.library.openTables.forEach(function (name) { sourceOpen[name] = true; });
+      this.app.setState({ mvSourceMode: data.library.sourceMode, mvSourcePicking: data.library.pickingSource, mvSourceQuery: data.library.sourceQuery,
+        mvSourceOpen: sourceOpen, mvImpactQuery: data.library.impactQuery, selMeasure: data.selectedMeasure, dependencySource: data.source, dependencyDirectOnly: data.directOnly, gPin: data.comparisonMeasure, gExtra: extras, gHover: null,
         mvQuery: data.library.query, mvFilter: data.library.visibility, mvTable: data.library.homeTable, mvOpen: open, mvW: data.library.width
       }, function () { self.restorePendingViewport(); });
       return true;
@@ -175,16 +186,16 @@
       var t = this.app.model.byName[table];
       if (!t || (column != null && !t.columns.some(function (c) { return c.name === column; }))) return;
       this._showSources = true; this.savePreferences(); this.cancelSnapshotViewport();
-      this._gC = null; this._initViewportFor = null; this._impactQuery = '';
+      this._gC = null; this._initViewportFor = null;
       this.app.setState({ dependencySource: { table: table, column: column == null ? null : column },
-        selMeasure: null, dependencyDirectOnly: false, gPin: null, gHover: null, gExtra: {}, viewMode: 'measures' });
+        selMeasure: null, mvSourceMode: 'sources', mvSourcePicking: false, mvImpactQuery: '', dependencyDirectOnly: false, gPin: null, gHover: null, gExtra: {}, viewMode: 'measures' });
     },
     setShowSources: function (on) {
       this._showSources = !!on; this.savePreferences(); this._gC = null; this._mainKey = null;
       var patch = {};
       if (!on && this.app.state.dependencySource) {
         var impact = this.app.measureImpact(this.app.state.dependencySource);
-        patch = { dependencySource: null, selMeasure: this.app.state.gPin || impact.direct[0] || impact.all[0] || null, gPin: null, gExtra: {}, gHover: null };
+        patch = { dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, selMeasure: this.app.state.gPin || impact.direct[0] || impact.all[0] || null, gPin: null, gExtra: {}, gHover: null };
       }
       this.app.setState(patch);
     },
@@ -274,11 +285,10 @@
     initialViewport: function (G, paneW, paneH) {
       var w = Math.max(1, paneW || 0), h = Math.max(1, paneH || 0);
       var fit = Math.min((w - 32) / Math.max(1, G.w), (h - 32) / Math.max(1, G.h));
-      // Source rows need readable labels. Start at 100% with the first source in
-      // view; Fit all remains an explicit overview action for wider diagrams.
+      // Source rows need readable labels. Start at 100% around the analysis root;
+      // Fit all remains an explicit overview action for wider diagrams.
       var zoom = G.sources && G.sources.length ? 1 : Math.max(.6, Math.min(1, fit));
       var R = (G.xy && G.xy[G.root]) || { x: 0, y: 0, w: 0 };
-      if (G.sources && G.sources.length && !this.app.state.dependencySource) R = G.sources[0];
       var frameW = Math.ceil(G.w * zoom), frameH = Math.ceil(G.h * zoom);
       var ox = Math.max(0, (w - frameW) / 2), oy = Math.max(0, (h - frameH) / 2);
       var cx = ox + (R.x + (R.w || 0) / 2) * zoom, cy = oy + (R.y + NH / 2) * zoom;
@@ -493,10 +503,14 @@
       var height = vertical ? Math.max.apply(null, sources.map(function (s) { return s.h; })) : sources.reduce(function (sum, s) { return sum + s.h + 32; }, -32);
       var dx = vertical ? Math.max(0, (width + 120 - G.w) / 2) : width + 96;
       var dy = vertical ? (bottom ? 0 : height + 80) : Math.max(0, (height + 120 - G.h) / 2);
-      // A virtual source root reserves a measure layer; reclaim it in horizontal layouts.
+      // A virtual source root reserves a measure layer; reclaim it before the real nodes.
       if (selected && !vertical && measureNames.length) {
         var first = Math.min.apply(null, measureNames.map(function (n) { return G.xy[n].x; }));
         dx -= first - 100;
+      }
+      if (selected && vertical && !bottom && measureNames.length) {
+        var firstY = Math.min.apply(null, measureNames.map(function (n) { return G.xy[n].y; }));
+        dy -= firstY - 60;
       }
       var translate = function (d) {
         return d.replace(/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/g, function (_, x, y) { return (+x + dx) + ',' + (+y + dy); });
@@ -606,6 +620,7 @@
           pick: function () {
             clearTimeout(self._clkT);
             self._clkT = setTimeout(function () {
+              if (app.state.dependencySource) { self.inspectMeasure(n); return; }
               var was = app.state.gPin === n;
               app.setState({ gPin: was ? null : n });
             }, 230);
@@ -673,7 +688,7 @@
     },
     gShow: function (name) {
       var self = this, app = this.app;
-      if (app.state.dependencySource) { app.setState({ gPin: name, gHover: null }); return; }
+      if (app.state.dependencySource) { this.inspectMeasure(name); return; }
       var o = Object.assign({}, app.state.gExtra || {});
       if (!(this._gInc && this._gInc.has(name))) o[name] = 1;
       /* Opening the formula of a measure a collapsed group is hiding has to open the group
@@ -690,7 +705,7 @@
       var self = this, app = this.app;
       if (typeof document !== 'undefined' && document.body) document.body.classList.remove('smv-browse-open');
       this.cancelSnapshotViewport();
-      app.setState({ selMeasure: n, dependencySource: null, mvOpen: app.mvOpenFor(n), gExtra: {}, gHover: null, gPin: null });
+      app.setState({ selMeasure: n, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvOpen: app.mvOpenFor(n), gExtra: {}, gHover: null, gPin: null });
     },
     gCenter: function () {
       this.centerGraphNode(this.graphRoot());
@@ -824,6 +839,89 @@
     },
 
     /* ---------- rail rows ---------- */
+    sourceMode: function () { return this.app.state.dependencySource || this.app.state.mvSourceMode === 'sources' ? 'sources' : 'measures'; },
+    setLibraryMode: function (mode) {
+      if (mode === 'sources') {
+        var patch = { mvSourceMode: 'sources', mvSourcePicking: true };
+        if (!this.app.state.dependencySource) Object.assign(patch, { selMeasure: null, gPin: null, gHover: null, gExtra: {} });
+        this.app.setState(patch);
+      } else {
+        this.app.setState({ mvSourceMode: 'measures', mvSourcePicking: false, dependencySource: null,
+          selMeasure: this.app.state.selMeasure || this.app.state.gPin || null, gPin: null, gHover: null, gExtra: {} });
+      }
+    },
+    inspectMeasure: function (name) {
+      if (!this.app.msrOf(name)) return;
+      if (this._workspaceMode === 'graph') this._workspaceMode = 'split';
+      var self = this;
+      this.app.setState({ gPin: name, gHover: null }, function () { self.centerGraphNode(name); });
+    },
+    buildSourceChoices: function () {
+      var state = this.app.state, query = (state.mvSourceQuery || '').trim().toLowerCase(), open = state.mvSourceOpen || {};
+      return this.app.model.tables.slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).map(function (t) {
+        var tableMatch = t.name.toLowerCase().includes(query);
+        var columns = (t.columns || []).filter(function (c) { return !query || tableMatch || c.name.toLowerCase().includes(query); });
+        return { table: t.name, columns: columns, count: (t.columns || []).length,
+          expanded: !!query || !!open[t.name], matches: !query || tableMatch || columns.length > 0 };
+      }).filter(function (t) { return t.matches; });
+    },
+    sourceReason: function (name, impact) {
+      var source = this.app.state.dependencySource, m = this.app.msrOf(name), direct = impact.direct.indexOf(name) >= 0;
+      if (!direct) return 'Via ' + (m._deps || []).filter(function (n) { return impact.all.indexOf(n) >= 0; }).join(', ');
+      if (source.column != null) return 'Direct · ' + source.column;
+      var reasons = (m._tables || []).indexOf(source.table) >= 0 ? ['Whole table'] : [];
+      (m._cols || []).forEach(function (group) { if (group.t === source.table) reasons = reasons.concat(group.cs); });
+      return 'Direct · ' + reasons.join(', ');
+    },
+    buildImpactRows: function () {
+      var self = this, app = this.app, impact = this.currentImpact(), direct = new Set(impact.direct);
+      var query = (app.state.mvImpactQuery || '').trim().toLowerCase();
+      var names = (app.state.dependencyDirectOnly ? impact.direct : impact.all).filter(function (name) {
+        var m = app.msrOf(name);
+        return m && (!query || [name, app.model.msrHome[name], m.folder, m.dax].join(' ').toLowerCase().includes(query));
+      }).sort(function (a, b) { return Number(direct.has(b)) - Number(direct.has(a)) || a.localeCompare(b); });
+      var limitKey = JSON.stringify([app.state.dependencySource, query, !!app.state.dependencyDirectOnly]);
+      if (this._impactLimitKey !== limitKey) { this._impactLimitKey = limitKey; this._impactLimit = 120; }
+      var visible = names.slice(0, this._impactLimit), rows = [], lastGroup;
+      visible.forEach(function (name) {
+        var isDirect = direct.has(name), group = isDirect ? 'Direct references' : 'Indirect dependents';
+        if (group !== lastGroup) { rows.push({ isHeader: true, name: group, meta: String(names.filter(function (n) { return direct.has(n) === isDirect; }).length) }); lastGroup = group; }
+        rows.push({ key: 'impact:' + name, name: name, table: app.model.msrHome[name],
+          subtitle: self.sourceReason(name, impact), meta: isDirect ? 'Direct' : 'Indirect', selected: app.state.gPin === name,
+          tip: name + '\n' + self.sourceReason(name, impact), depth: 0, click: function () { self.inspectMeasure(name); } });
+      });
+      return { rows: rows, total: names.length, modelTotal: impact.all.length, more: names.length - visible.length };
+    },
+    renderSourceChoices: function () {
+      var self = this, app = this.app, state = app.state, choices = this.buildSourceChoices();
+      U.clear(this.rowsEl);
+      this.totalEl.textContent = choices.length + (choices.length === 1 ? ' table' : ' tables');
+      if (!choices.length) { this.rowsEl.appendChild(el('p', { cls: 'mv-no-results', text: 'No matching tables or columns.' })); return; }
+      choices.forEach(function (t) {
+        var section = el('section', { cls: 'mv-source-choice' });
+        section.appendChild(el('button', { cls: 'mv-source-choice-table', 'aria-expanded': String(t.expanded), 'aria-label': 'Browse columns in ' + t.table,
+          onClick: function () { var open = Object.assign({}, state.mvSourceOpen || {}); open[t.table] = !t.expanded; app.setState({ mvSourceOpen: open }); }
+        }, [el('span', { html: U.icon('chevRight', 12), style: 'transform:rotate(' + (t.expanded ? 90 : 0) + 'deg);' }), el('strong', { text: t.table }), el('span', { text: t.count })]));
+        if (t.expanded) {
+          section.appendChild(el('button', { cls: 'mv-source-choice-whole', 'aria-label': 'Use whole table ' + t.table,
+            onClick: function () { self.analyzeSource(t.table); }
+          }, [el('strong', { text: 'Use whole table' }), el('span', { text: 'All columns + whole-table references' })]));
+          if (t.columns.length) section.appendChild(el('p', { cls: 'mv-source-choice-hint', text: 'Or choose a column' }));
+          var limitKey = JSON.stringify([t.table, state.mvSourceQuery || '']);
+          if (!self._sourcePages) self._sourcePages = new Map();
+          var limit = self._sourcePages.get(limitKey) || 100;
+          t.columns.slice(0, limit).forEach(function (c) {
+            section.appendChild(el('button', { cls: 'mv-source-choice-column', text: c.name, title: self.sourceLabel({ table: t.table, column: c.name }),
+              'aria-label': 'Use column ' + self.sourceLabel({ table: t.table, column: c.name }),
+              onClick: function () { self.analyzeSource(t.table, c.name); } }));
+          });
+          if (limit < t.columns.length) section.appendChild(el('button', { cls: 'mv-text-button', text: 'Show more columns (' + (t.columns.length - limit) + ' remaining)',
+            onClick: function () { self._sourcePages.set(limitKey, limit + 100); self._railKey = null; app.setState({}); } }));
+        }
+        self.rowsEl.appendChild(section);
+      });
+    },
+
     buildRows: function () {
       var self = this, app = this.app, M = app.model;
       var q = (app.state.mvQuery || '').trim().toLowerCase();
@@ -894,13 +992,22 @@
       var top = el('div', { cls: 'mv-library-top' });
       top.appendChild(el('div', { cls: 'mv-library-heading' }, [
         el('span', { cls: 'mv-eyebrow', text: 'MEASURE LIBRARY' }),
-        el('button', { cls: 'mv-text-button', text: 'Overview', onClick: function () { app.setState({ selMeasure: null, dependencySource: null, gPin: null, gHover: null }); } })
+        el('button', { cls: 'mv-text-button', text: 'Overview', onClick: function () { app.setState({ selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, gPin: null, gHover: null }); } })
       ]));
+      var sourceModes = el('div', { cls: 'mv-filter-tabs mv-start-tabs', role: 'group', 'aria-label': 'Start analysis from' });
+      this.sourceModeButtons = {};
+      [['measures', 'Measure'], ['sources', 'Table or column']].forEach(function (item) {
+        var button = el('button', { text: item[1], onClick: function () { self.setLibraryMode(item[0]); } });
+        self.sourceModeButtons[item[0]] = button; sourceModes.appendChild(button);
+      });
+      top.appendChild(sourceModes);
+      this.sourceSummaryEl = el('div', { cls: 'mv-library-source', hidden: true });
+      top.appendChild(this.sourceSummaryEl);
       this.qInput = el('input', {
         cls: 'mv-search', type: 'search', value: app.state.mvQuery || '', placeholder: 'Search names, tables, or DAX…',
         'aria-label': 'Search measures by name, folder, table, or DAX', spellcheck: 'false',
-        onInput: function (e) { app.setState({ mvQuery: e.target.value }); },
-        onKeyDown: function (e) { if (e.key === 'Escape') { app.setState({ mvQuery: '' }); } }
+        onInput: function (e) { var patch = {}; patch[self.libraryQueryField()] = e.target.value; app.setState(patch); },
+        onKeyDown: function (e) { if (e.key === 'Escape') { var patch = {}; patch[self.libraryQueryField()] = ''; app.setState(patch); } }
       });
       top.appendChild(this.qInput);
       var filters = el('div', { cls: 'mv-filter-tabs', role: 'group', 'aria-label': 'Measure visibility' });
@@ -909,7 +1016,7 @@
         var btn = el('button', { text: item[1], onClick: function () { app.setState({ mvFilter: item[0] }); } });
         self.filterBtns[item[0]] = btn; filters.appendChild(btn);
       });
-      top.appendChild(filters);
+      this.visibilityFilters = filters; top.appendChild(filters);
       this.tableSelect = el('select', { cls: 'mv-table-filter', 'aria-label': 'Filter measures by home table',
         onChange: function (e) { app.setState({ mvTable: e.target.value }); }
       }, el('option', { value: '', text: 'All home tables' }));
@@ -917,11 +1024,16 @@
         self.tableSelect.appendChild(el('option', { value: t.name, text: t.name + ' (' + t.measures.length + ')' }));
       });
       top.appendChild(this.tableSelect);
+      this.directInput = el('input', { type: 'checkbox', onChange: function (e) {
+        self._gC = null; self._daxKey = null; app.setState({ dependencyDirectOnly: e.target.checked, gExtra: {}, gHover: null });
+      } });
+      this.directFilter = el('label', { cls: 'mv-library-direct', hidden: true }, [this.directInput, el('span', { text: 'Direct only' })]);
+      top.appendChild(this.directFilter);
       this.totalEl = el('div', { cls: 'mv-library-count', 'aria-live': 'polite' });
       top.appendChild(this.totalEl);
       this.rowsEl = el('div', { cls: 'mv-library-rows', 'aria-label': 'Measures' });
       pane.appendChild(top); pane.appendChild(this.rowsEl);
-      pane.appendChild(el('div', { cls: 'mv-library-foot', text: 'Row counts: uses / used by · measures only' }));
+      this.libraryFoot = el('div', { cls: 'mv-library-foot', text: 'Row counts: uses / used by · measures only' }); pane.appendChild(this.libraryFoot);
       this.pane = pane;
       var resizer = el('div', {
         cls: 'mv-resize', title: 'Resize measure library', role: 'separator', tabindex: '0',
@@ -948,27 +1060,45 @@
       this._built = true; this._shellModel = app.modelKey;
     },
     paneStyle: function () { return 'width:' + Math.max(240, Math.min(480, this.app.state.mvW || 296)) + 'px;'; },
+    libraryQueryField: function () { return this.sourceMode() === 'measures' ? 'mvQuery' : this.app.state.mvSourcePicking || !this.app.state.dependencySource ? 'mvSourceQuery' : 'mvImpactQuery'; },
     clearFilters: function () { this.app.setState({ mvQuery: '', mvFilter: 'all', mvTable: '' }); },
 
     renderRail: function () {
       var self = this, app = this.app;
-      var key = [app.modelKey, app.state.mvQuery, app.state.mvFilter, app.state.mvTable, app.state.selMeasure, JSON.stringify(app.state.mvOpen || {}), app._usage ? 1 : 0].join('|');
+      var key = [app.modelKey, app.state.mvQuery, app.state.mvFilter, app.state.mvTable, app.state.selMeasure, JSON.stringify(app.state.mvOpen || {}), app._usage ? 1 : 0, this.sourceMode(), app.state.mvSourcePicking, JSON.stringify(app.state.dependencySource), app.state.mvSourceQuery, JSON.stringify(app.state.mvSourceOpen || {}), app.state.mvImpactQuery, app.state.gPin, app.state.dependencyDirectOnly, this._impactLimit].join('|');
       if (key === this._railKey) return;
       this._railKey = key;
-      var built = this.buildRows();
-      this.totalEl.textContent = built.total === built.modelTotal ? built.total + ' measures' : built.total + ' of ' + built.modelTotal + ' measures';
-      if (this.qInput.value !== (app.state.mvQuery || '')) this.qInput.value = app.state.mvQuery || '';
+      var mode = this.sourceMode(), source = app.state.dependencySource, picking = mode === 'sources' && (app.state.mvSourcePicking || !source);
+      Object.keys(this.sourceModeButtons).forEach(function (key) { self.sourceModeButtons[key].setAttribute('aria-pressed', String(key === mode)); });
+      this.visibilityFilters.hidden = this.tableSelect.hidden = mode !== 'measures';
+      this.directFilter.hidden = mode !== 'sources' || picking;
+      this.directInput.checked = !!app.state.dependencyDirectOnly;
+      this.sourceSummaryEl.hidden = !source || mode !== 'sources';
+      U.clear(this.sourceSummaryEl);
+      if (source && mode === 'sources') {
+        this.sourceSummaryEl.appendChild(el('div', {}, [el('span', { cls: 'mv-eyebrow', text: 'SOURCE' }), el('strong', { text: this.sourceLabel(source) }),
+          source.column == null ? el('span', { text: 'All columns + whole-table references' }) : null]));
+        this.sourceSummaryEl.appendChild(el('button', { cls: 'mv-text-button', text: picking ? 'Cancel' : 'Change', 'aria-label': picking ? 'Cancel source selection' : 'Change analysis source',
+          onClick: function () { app.setState({ mvSourcePicking: !picking }); } }));
+      }
+      var field = this.libraryQueryField(), placeholder = mode === 'measures' ? 'Search names, tables, or DAX…' : picking ? 'Find a table or column…' : 'Search dependent measures…';
+      this.qInput.placeholder = placeholder;
+      this.qInput.setAttribute('aria-label', mode === 'measures' ? 'Search measures by name, folder, table, or DAX' : picking ? 'Find a table or column' : 'Search dependent measures');
+      if (this.qInput.value !== (app.state[field] || '')) this.qInput.value = app.state[field] || '';
+      this.rowsEl.setAttribute('aria-label', mode === 'measures' ? 'Measures' : picking ? 'Tables and columns' : 'Dependent measures');
+      this.libraryFoot.textContent = mode === 'measures' ? 'Row counts: uses / used by · measures only' : picking ? 'Choose a whole table or one column.' : 'Select to inspect DAX · Enter on a graph node to analyze';
+      if (picking) { this.renderSourceChoices(); return; }
+      var built = mode === 'sources' ? this.buildImpactRows() : this.buildRows();
+      this.totalEl.textContent = mode === 'sources' ? built.total + ' of ' + built.modelTotal + ' dependent measures' : built.total === built.modelTotal ? built.total + ' measures' : built.total + ' of ' + built.modelTotal + ' measures';
       this.tableSelect.value = app.model.byName[app.state.mvTable] ? app.state.mvTable : '';
-      Object.keys(this.filterBtns).forEach(function (f) {
-        self.filterBtns[f].setAttribute('aria-pressed', String((app.state.mvFilter || 'all') === f));
-      });
+      Object.keys(this.filterBtns).forEach(function (f) { self.filterBtns[f].setAttribute('aria-pressed', String((app.state.mvFilter || 'all') === f)); });
       var active = document.activeElement && document.activeElement.dataset.mvRow;
       U.clear(this.rowsEl);
       if (!built.rows.length) {
         this.rowsEl.appendChild(el('div', { cls: 'mv-no-results' }, [
-          el('strong', { text: built.modelTotal ? 'No matching measures' : 'No measures in this model' }),
-          el('p', { text: built.modelTotal ? 'Try a different name, table, folder, or DAX function.' : 'Import a semantic model with measures to explore its DAX and dependencies.' }),
-          built.modelTotal ? el('button', { cls: 'mv-button', text: 'Clear filters', onClick: function () { self.clearFilters(); } }) : null
+          el('strong', { text: mode === 'sources' && !built.modelTotal ? 'No dependent measures detected' : built.modelTotal ? 'No matching measures' : 'No measures in this model' }),
+          el('p', { text: mode === 'sources' && !built.modelTotal ? 'This source has no detected measure references. Choose another table or column.' : built.modelTotal ? 'Try a different name, table, folder, or DAX function.' : 'Import a semantic model with measures to explore its DAX and dependencies.' }),
+          built.modelTotal ? el('button', { cls: 'mv-button', text: 'Clear filters', onClick: function () { if (mode === 'sources') app.setState({ mvImpactQuery: '', dependencyDirectOnly: false }); else self.clearFilters(); } }) : null
         ]));
         return;
       }
@@ -983,7 +1113,7 @@
         else kids.push(el('span', { cls: 'mv-measure-icon', text: 'ƒ', 'aria-hidden': 'true' }));
         kids.push(el('span', { cls: 'mv-row-label' }, [
           el('span', { cls: 'mv-row-name', text: R.name }),
-          R.isFolder ? null : el('span', { cls: 'mv-row-table', text: R.table })
+          R.isFolder ? null : el('span', { cls: 'mv-row-table', text: R.subtitle || R.table })
         ]));
         if (R.hid) kids.push(el('span', { title: 'Hidden in the model', cls: 'mv-hidden-icon', 'aria-label': 'Hidden', html: U.icon('eyeOff', 12) }));
         if (R.hasUse) kids.push(el('span', { cls: 'mv-usage-badge', title: R.useTip, text: R.use + ' pg' }));
@@ -997,6 +1127,8 @@
         frag.appendChild(button);
       });
       this.rowsEl.appendChild(frag);
+      if (built.more) this.rowsEl.appendChild(el('button', { cls: 'mv-text-button mv-library-more', text: 'Show more measures (' + built.more + ' remaining)',
+        onClick: function () { self._impactLimit += 120; self._railKey = null; app.setState({}); } }));
       if (restore) restore.focus({ preventScroll: true });
     },
 
@@ -1005,18 +1137,24 @@
       var self = this, app = this.app, M = app.model;
       var sn = app.state.selMeasure;
       var m = app.msrOf(sn), source = app.state.dependencySource;
-      var key = [app.modelKey, sn || '', JSON.stringify(source), this._showSources, app._usage ? 1 : 0, m || source ? '' : [app.state.mvQuery, app.state.mvFilter, app.state.mvTable].join('|')].join('|');
+      var key = [app.modelKey, sn || '', JSON.stringify(source), this._showSources, this.sourceMode(), app._usage ? 1 : 0, m || source ? '' : [app.state.mvQuery, app.state.mvFilter, app.state.mvTable].join('|')].join('|');
       if (key !== this._mainKey) {
         this._mainKey = key;
         this._flowKey = null; this._daxKey = null; this._nodeEls = {}; this._edgeEls = {}; this._edgeLabels = {}; this._groupEls = {}; this._sourceLayer = null;
         if (this._graphObserver) { this._graphObserver.disconnect(); this._graphObserver = null; }
         U.clear(this.mainEl);
-        if (m || source) this.buildSelectedMain(sn, m || { _deps: [], _cols: [] }); else this.buildEmptyMain();
+        if (m || source) this.buildSelectedMain(sn, m || { _deps: [], _cols: [] }); else if (this.sourceMode() === 'sources') this.buildSourceEmptyMain(); else this.buildEmptyMain();
       }
       if (m || source) {
         this.renderFlow();
         this.renderDax();
+        if (source) this.applyWorkspaceLayout();
       }
+    },
+
+    buildSourceEmptyMain: function () {
+      this.mainEl.appendChild(el('div', { cls: 'mv-overview' }, [el('div', { cls: 'mv-eyebrow', text: 'CHOOSE A SOURCE' }),
+        el('h1', { text: 'Start with a table or column.' }), el('p', { cls: 'mv-overview-intro', text: 'Choose a whole table to find measures referencing it or any of its columns. Expand a table to narrow the source to one column.' })]));
     },
 
     buildEmptyMain: function () {
@@ -1121,12 +1259,6 @@
       graphPane.appendChild(graphHeading);
       this.sourceToggle = el('input', { type: 'checkbox', checked: this._showSources, onChange: function (e) { self.setShowSources(e.target.checked); } });
       var sourceControls = el('div', { cls: 'mv-source-controls' }, el('label', {}, [this.sourceToggle, el('span', { text: 'Show table and column references' })]));
-      if (source) {
-        var directToggle = el('input', { type: 'checkbox', checked: !!app.state.dependencyDirectOnly, onChange: function (e) {
-          self._gC = null; self._daxKey = null; app.setState({ dependencyDirectOnly: e.target.checked, gExtra: {}, gHover: null, gPin: null });
-        } });
-        sourceControls.appendChild(el('label', {}, [directToggle, el('span', { text: 'Direct only' })]));
-      }
       graphPane.appendChild(sourceControls);
       var graphToolbar = el('div', { cls: 'mv-graph-toolbar', role: 'group', 'aria-label': 'Graph navigation' });
       var graphButton = function (label, title, click) { return el('button', { cls: 'mv-button', text: label, title: title, 'aria-label': title, onClick: click }); };
@@ -1209,8 +1341,8 @@
       this.applyWorkspaceLayout();
       if (this.daxGrid) this.daxGrid.scrollTop = 0;
       var self = this;
-      Object.keys(this._modeButtons).forEach(function (key) { self._modeButtons[key].setAttribute('aria-pressed', String(key === self._workspaceMode)); });
-      if (this._workspaceMode !== 'dax') requestAnimationFrame(function () { if (self._gAutoFit) self.fitGraph(); else self.gCenter(); self.restorePendingViewport(); });
+      Object.keys(this._modeButtons).forEach(function (key) { self._modeButtons[key].setAttribute('aria-pressed', String(key === self.analysisBody.getAttribute('data-mode'))); });
+      if (this._workspaceMode !== 'dax') requestAnimationFrame(function () { if (self._gAutoFit) self.fitGraph(); else if (persist !== false || !self._showSources) self.gCenter(); self.restorePendingViewport(); });
     },
     setSplitLayout: function (layout) {
       this._splitLayout = choice(layout, ['beside', 'below'], 'beside');
@@ -1231,13 +1363,16 @@
       if (!this.analysisBody) return;
       var metrics = this.splitMetrics();
       this._effectiveSplit = metrics.layout; this._renderedShare = metrics.share;
-      this.analysisBody.setAttribute('data-mode', this._workspaceMode);
+      var mode = this.app.state.dependencySource && !this.app.state.gPin && this._workspaceMode === 'split' ? 'graph' : this._workspaceMode;
+      this.analysisBody.setAttribute('data-mode', mode);
+      var self = this;
+      Object.keys(this._modeButtons || {}).forEach(function (key) { self._modeButtons[key].setAttribute('aria-pressed', String(key === mode)); });
       this.analysisBody.setAttribute('data-split', metrics.layout);
       this.analysisBody.style.setProperty('--mv-graph-share', (metrics.share * 100) + 'fr');
       this.analysisBody.style.setProperty('--mv-dax-share', ((1 - metrics.share) * 100) + 'fr');
       if (this.splitSelect) {
         this.splitSelect.value = this._splitLayout;
-        this.splitSelect.hidden = this._workspaceMode !== 'split';
+        this.splitSelect.hidden = mode !== 'split';
         this.splitSelect.title = this._splitLayout !== metrics.layout ? 'DAX is below the graph while the workspace is narrow.' : 'Choose where DAX appears in split view.';
       }
       if (this.splitDivider) {
@@ -1622,51 +1757,67 @@
       ]);
       return header;
     },
-    renderImpactDax: function () {
-      var self = this, app = this.app, source = app.state.dependencySource, impact = this.currentImpact();
-      var names = app.state.dependencyDirectOnly ? impact.direct : impact.all;
-      var pin = app.state.gPin, key = JSON.stringify([source, !!app.state.dependencyDirectOnly, pin, this._inlineDax, this._plainDax, this._fmt]);
+    referenceData: function (card) {
+      var m = this.app.msrOf(card.name), refs;
+      if (card.inlined && this.app.referencesInDax) refs = this.app.referencesInDax(card.text, card.table);
+      else refs = { measures: (m._deps || []).slice(), tables: (m._tables || []).slice(),
+        columns: (m._cols || []).map(function (g) { return { t: g.t, cs: g.cs.slice() }; }), unresolved: m._unresolved || [] };
+      refs.scope = card.inlined ? 'References in expanded DAX' : 'Direct references · original formula';
+      refs.partial = !!(card.inlined && (card.inlined.capped || card.inlined.cycles.length));
+      return refs;
+    },
+    referenceSection: function (card) {
+      var self = this, refs = this.referenceData(card), nCols = refs.columns.reduce(function (n, g) { return n + g.cs.length; }, 0);
+      var section = el('section', { cls: 'mv-card-references', 'aria-label': 'References for ' + card.name,
+        data: { referenceScope: card.inlined ? 'expanded' : 'original' } }, el('h4', { text: refs.scope }));
+      var group = function (label, count, empty) {
+        var row = el('div', { cls: 'mv-reference-group' }, el('strong', { text: label + ' (' + count + ')' }));
+        var items = el('div', { cls: 'mv-reference-items' });
+        if (!count) items.appendChild(el('span', { cls: 'mv-reference-empty', text: empty }));
+        row.appendChild(items); section.appendChild(row); return items;
+      };
+      var measures = group('Measures', refs.measures.length, card.inlined ? 'No remaining measure references' : 'No direct measure references');
+      refs.measures.forEach(function (name) { measures.appendChild(el('button', { cls: 'mv-reference-chip mv-reference-measure', text: name,
+        title: 'Inspect ' + name, onClick: function () { self.gShow(name); } })); });
+      var columns = group('Columns', nCols, card.inlined ? 'No column references in expanded DAX' : 'No direct column references');
+      refs.columns.forEach(function (g) { g.cs.forEach(function (column) {
+        var label = self.sourceLabel({ table: g.t, column: column });
+        columns.appendChild(el('button', { cls: 'mv-reference-chip', text: label, title: 'Find measures depending on ' + label,
+          onClick: function () { self.analyzeSource(g.t, column); } }));
+      }); });
+      if (refs.tables.length) {
+        var tables = group('Whole tables', refs.tables.length, '');
+        refs.tables.forEach(function (table) { tables.appendChild(el('button', { cls: 'mv-reference-chip', text: table + ' · Whole table',
+          title: 'Find measures depending on ' + table, onClick: function () { self.analyzeSource(table); } })); });
+      }
+      if (refs.partial) section.appendChild(el('p', { cls: 'mv-reference-note', text: 'Expansion stopped at a cycle or size limit. Remaining measure references are listed above.' }));
+      if (refs.unresolved.length) section.appendChild(el('p', { cls: 'mv-reference-note', text: refs.unresolved.length + ' unresolved reference' + (refs.unresolved.length === 1 ? '' : 's') + ' in this formula.' }));
+      return section;
+    },
+    formulaCard: function (card, label, color, close, canInline, comparing) {
+      // Build the body before the header: formatting supplies the folding controls.
+      var body = this.daxBody(card);
+      return el('article', { cls: 'mv-dax-card' + (comparing ? ' mv-comparison-card' : ''),
+        data: { smvKind: 'measure', smvName: card.name, smvTable: card.table } }, [
+        this.daxHeader(card, label, 'width:8px;height:8px;border-radius:2px;flex:none;background:' + color + ';', close, canInline),
+        body, this.referenceSection(card)
+      ]);
+    },
+    renderSourceDax: function () {
+      var self = this, app = this.app, source = app.state.dependencySource;
+      var pin = app.state.gPin, key = JSON.stringify([app.modelKey, source, pin, this._inlineDax, this._plainDax, this._fmt]);
       if (this._daxKey === key) return;
       this._daxKey = key; U.clear(this.daxGrid); this.daxGrid.setAttribute('data-comparing', 'false');
       var card = pin ? this.daxCard(pin, this._inlineDax) : null;
-      if (card) this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card' }, [
-        this.daxHeader(card, 'Inspecting measure', 'width:8px;height:8px;background:#2563eb;border-radius:2px;', function () { app.setState({ gPin: null }); }, true), this.daxBody(card)
-      ]));
-      this.daxGrid.appendChild(el('h3', { cls: 'mv-impact-heading', text: 'Dependent measures (' + names.length + ')' }));
-      this.daxGrid.appendChild(el('p', { cls: 'mv-impact-note', text: 'Detected DAX references. Column formulas and relationship filter propagation are not expanded.' }));
-      if (!names.length) this.daxGrid.appendChild(el('p', { cls: 'mv-impact-note', text: 'No measure references detected for this source.' }));
-      var list = el('div', { cls: 'mv-impact-list' });
-      var search = el('input', { cls: 'mv-impact-search', type: 'search', placeholder: 'Filter dependent measures…', 'aria-label': 'Filter dependent measures', value: this._impactQuery || '' });
-      this.daxGrid.appendChild(search);
-      var count = el('p', { cls: 'mv-impact-note', role: 'status' });
-      this.daxGrid.appendChild(count);
-      var draw = function () {
-      U.clear(list);
-      var query = (self._impactQuery || '').toLowerCase().trim();
-      var matches = names.filter(function (name) { return !query || name.toLowerCase().includes(query); });
-      count.textContent = matches.length > 120 ? 'Showing 120 of ' + matches.length + ' matches. Refine the filter to see more.' : matches.length + ' matching measures';
-      matches.slice(0, 120).forEach(function (name) {
-        var m = app.msrOf(name), direct = impact.direct.indexOf(name) >= 0;
-        var via = (m._deps || []).filter(function (n) { return impact.all.indexOf(n) >= 0; });
-        var reasons = [];
-        if (direct && source.column != null) reasons.push(source.column);
-        if (direct && source.column == null) {
-          if ((m._tables || []).indexOf(source.table) >= 0) reasons.push('Whole table');
-          (m._cols || []).forEach(function (group) { if (group.t === source.table) reasons = reasons.concat(group.cs); });
-        }
-        list.appendChild(el('button', { cls: 'mv-impact-row', 'aria-pressed': String(pin === name), onClick: function () { app.setState({ gPin: pin === name ? null : name, gHover: null }); } }, [
-          el('strong', { text: name }), el('span', { text: direct ? 'Direct · ' + reasons.join(', ') : 'Via ' + via.join(', ') })
-        ]));
-      });
-      };
-      search.addEventListener('input', function () { self._impactQuery = search.value; draw(); });
-      draw(); this.daxGrid.appendChild(list);
-      if (!card && names.length) this.daxGrid.appendChild(el('p', { cls: 'mv-impact-note', text: 'Select a measure to inspect its DAX. The analysis stays rooted at this source.' }));
+      if (card) this.daxGrid.appendChild(this.formulaCard(card, 'Inspecting measure · source remains ' + this.sourceLabel(source), 'var(--smv-down,#2563eb)',
+        function () { app.setState({ gPin: null, gHover: null }); }, true, false));
+      else this.daxGrid.appendChild(el('div', { cls: 'mv-compare-empty' }, [el('strong', { text: 'Select a dependent measure' }),
+        el('p', { text: 'Select a measure in the left library or graph to inspect its DAX while keeping this source.' })]));
     },
 
     renderDax: function () {
       var self = this, app = this.app;
-      if (app.state.dependencySource) { this.renderImpactDax(); return; }
+      if (app.state.dependencySource) { this.renderSourceDax(); return; }
       var sn = app.state.selMeasure;
       var pinName = app.state.gPin && app.state.gPin !== sn ? app.state.gPin : null;
       var key = [app.modelKey, sn, pinName || '', this._inlineDax ? 1 : 0, this._plainDax ? 1 : 0, this._fmt, app._usage ? 1 : 0, JSON.stringify(app.state.gExtra || {})].join('|');
@@ -1675,38 +1826,21 @@
       U.clear(this.daxGrid);
       var left = this.daxCard(sn, this._inlineDax);
       if (!left) return;
-      var leftBody = this.daxBody(left);
-      this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card', data: { smvKind: 'measure', smvName: left.name, smvTable: left.table } }, [
-        this.daxHeader(left, 'Analyzed measure', 'width:8px;height:8px;border-radius:2px;background:var(--smv-burgundy,#1f2430);flex:none;', null, true),
-        leftBody
-      ]));
+      this.daxGrid.appendChild(this.formulaCard(left, 'Analyzed measure', 'var(--smv-burgundy,#1f2430)', null, true, false));
       var pinCard = pinName ? this.daxCard(pinName) : null;
       this.daxGrid.setAttribute('data-comparing', String(!!pinCard));
       if (pinCard) {
         var pr = (this._gRel || {})[pinName];
         var pinColor = pr === 'up' ? 'var(--smv-up,#6d28d9)' : (pr === 'dn' ? 'var(--smv-down,#2563eb)' : 'var(--smv-ink,#3a414d)');
-        var pinBody = this.daxBody(pinCard);
-        this.daxGrid.appendChild(el('article', { cls: 'mv-dax-card mv-comparison-card' }, [
-          this.daxHeader(pinCard, 'Comparing · ' + (pr === 'up' ? 'upstream' : pr === 'dn' ? 'downstream' : 'related measure'), 'width:8px;height:8px;border-radius:2px;flex:none;background:' + pinColor + ';', function () { app.setState({ gPin: null, gHover: null }); }),
-          pinBody
-        ]));
+        this.daxGrid.appendChild(this.formulaCard(pinCard, 'Comparing · ' + (pr === 'up' ? 'upstream' : pr === 'dn' ? 'downstream' : 'related measure'), pinColor,
+          function () { app.setState({ gPin: null, gHover: null }); }, false, true));
       } else {
         this.daxGrid.appendChild(el('div', { cls: 'mv-compare-empty' }, [
           el('strong', { text: 'Compare a related measure' }),
           el('p', { text: 'Select a node in the graph or a highlighted measure in the formula to read both expressions here.' })
         ]));
       }
-      var m = app.msrOf(sn), groups = (m && m._cols) || [];
-      if (groups.length) {
-        var refs = el('details', { cls: 'mv-column-refs' }, el('summary', { text: 'Referenced columns (' + groups.reduce(function (n, cg) { return n + cg.cs.length; }, 0) + ')' }));
-        groups.forEach(function (cg) {
-          refs.appendChild(el('div', { cls: 'mv-column-group' }, [
-            el('button', { cls: 'mv-text-button', text: cg.t, title: 'Show ' + cg.t + ' in the table diagram', onClick: function () { app.focusTable(cg.t); } }),
-            el('div', { text: cg.cs.join(' · ') })
-          ]));
-        });
-        this.daxGrid.appendChild(refs);
-      }
+
     },
 
     update: function () {

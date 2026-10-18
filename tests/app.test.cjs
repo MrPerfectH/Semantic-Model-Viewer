@@ -712,3 +712,13 @@ test('source impact terminates on measure cycles and is rebuilt for a new model'
 });
 
 test('Tables to Power Query and back preserves viewport; other normal return routes still fit',()=>{const {app}=harness();let fits=0,transforms=0;app.state.viewMode='graph';app.canvas.view={x:137,y:93,k:.9};app.captureTableView=()=>({selected:'Sales'});app.canvas.applyHighlight=()=>{};app.canvas.fitView=()=>{fits++;app.canvas.view={x:0,y:0,k:1};};app.canvas.updateTransform=()=>{transforms++;};app.setViewMode('power-query');app.setViewMode('graph');assert.deepEqual(plain(app.canvas.view),{x:137,y:93,k:.9});assert.equal(fits,0);assert.equal(transforms,1);app.setViewMode('measures');app.setViewMode('graph');assert.equal(fits,1);assert.deepEqual(plain(app.canvas.view),{x:0,y:0,k:1});});
+
+test('displayed DAX references use the same resolution rules as dependency indexing', () => {
+  const {app}=harness();app.model=dependencyFixture();app.prepareModel(app.model);
+  for(const table of app.model.tables) for(const measure of table.measures) {
+    const refs=app.referencesInDax(measure.dax,table.name);
+    assert.deepEqual(plain(refs.columns),plain(measure._cols),measure.name);
+    assert.deepEqual(plain(refs.tables),plain(measure._tables),measure.name);
+    assert.deepEqual(plain(refs.measures.filter(name=>name!==measure.name)),plain(measure._deps),measure.name);
+  }
+});
