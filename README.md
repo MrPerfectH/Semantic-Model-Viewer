@@ -167,6 +167,13 @@ Open the file in a browser to explore the model. Optionally use `--tables` or
 `--measure` to choose the starting view; the full model remains available.
 No extra packages or browser are needed to export. See [CLI usage](docs/cli.md).
 
+To open a fresh view directly from TMDL, use
+`node scripts/open-model.cjs "/absolute/path/Model.SemanticModel"`.
+It generates a new offline snapshot on every launch, validates relationship
+endpoints, and records the model source and Viewer revision beside the HTML.
+It avoids copied web assets and stale local servers. See the
+[launch and installation instructions](docs/cli.md#open-a-fresh-local-view).
+
 A snapshot contains the **full model metadata and DAX**, even if the starting canvas
 is empty or focused on a few tables. It is frozen at the displayed creation time.
 Recipients can use **Save snapshot** again to keep their presentation changes in a
