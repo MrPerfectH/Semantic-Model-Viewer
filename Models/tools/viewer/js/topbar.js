@@ -61,10 +61,11 @@
       if(app.canRefreshSource())actions.appendChild(el('button',{cls:'ex-button',text:st.refreshing?'Refreshing…':'Refresh',disabled:!!st.refreshing,
         title:'Re-read this model from its source folder. Your layout and saved views are kept.',onClick:function(){app.refreshSource();}}));
       if(st.viewMode!=='power-query')actions.appendChild(el('button',{cls:'ex-button',text:st.pngLabel,title:'Export current view as PNG',onClick:function(){app.exportPNG();}}));
-      if(!app.server)actions.appendChild(el('a',{cls:'ex-button',text:'Get the app',href:'https://github.com/MrPerfectH/Semantic-Model-Viewer#install-2-minutes',target:'_blank',rel:'noopener',
+      if(!app.server)actions.appendChild(el('a',{cls:'ex-button',text:'Get the app',href:'https://github.com/MrPerfectH/Semantic-Model-Viewer#start-here',target:'_blank',rel:'noopener',
         title:'Download the desktop app: it opens your model folders directly, with no browser permission prompt',style:'text-decoration:none;display:inline-flex;align-items:center;'}));
       actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Open model',onClick:function(){app.setState({showImport:true,importError:'',importReady:false});}}));
     }
+    if(!offline&&g.ViewerOnboarding)actions.appendChild(el('button',{cls:'ex-button',text:'Help', 'data-onboarding-help':'',onClick:function(){if(app.onboarding)app.onboarding.restart();}}));
     this.host.appendChild(actions);
     /* Domains keeps Fit in its own toolbar row (see TableExplorer.renderClusterToolbar),
        next to Expand all / Collapse all, so both canvases carry the same controls. */

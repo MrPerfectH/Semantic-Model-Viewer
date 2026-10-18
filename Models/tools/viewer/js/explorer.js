@@ -235,7 +235,7 @@
       bar.appendChild(button('Clear',function(){cv.setMarked([]);},false,'Clear the selection (Esc)'));
     },
     update:function(){
-      var self=this,app=this.app,st=app.state,cv=app.canvas,graph=st.loaded&&st.viewMode==='graph';
+      var self=this,app=this.app,st=app.state,cv=app.canvas,graph=!!app.model&&(st.loaded||!app.snapshotMode)&&st.viewMode==='graph';
       this.renderSelection();
       /* Domains borrows the Tables chrome — the same toolbar row and status line — so the two
          canvases speak one visual language instead of the old floating chip plus legend. */
@@ -245,6 +245,8 @@
       this.toolbar.hidden=!graph&&!clusters;this.status.hidden=!graph&&!clusters;
       this.mapHost.hidden=!graph||!this.names.size||this.mapHidden;
       var main=document.getElementById('main');
+      var start=!!graph&&!app.modelKey&&!app.model.tables.length;
+      main.classList.toggle('ex-start',start);
       main.classList.toggle('ex-graph',!!graph);
       main.classList.toggle('ex-clusters',!!clusters);
       main.style.setProperty('--library-width',width+'px');
@@ -261,6 +263,7 @@
       }
       this._clusterKey=null;
       if(!graph)return;
+      if(start){this.library.hidden=true;this.toolbar.hidden=true;this.nav.hidden=true;this.status.hidden=true;this.empty.hidden=false;this.renderEmpty();return;}
       this.empty.hidden=!!this.names.size;
       this.status.textContent=this.message || 'Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several';
       var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
@@ -379,12 +382,16 @@
       var self=this,app=this.app;U.clear(this.empty);
       /* No model chosen yet (see app.js init) vs. a real model with an empty
          canvas: the first needs "pick a model", not "explore 0 tables". */
-      if(!app.model.tables.length&&app.state.modelName==='Choose a model'){
-        this.empty.appendChild(el('div',{cls:'ex-empty-card'},[
-          el('span',{cls:'ex-eyebrow',text:'SEMANTIC MODEL VIEWER'}),el('h1',{text:'No model selected.'}),
-          el('p',{text:'Open the built-in sample, import a model, or connect a repo folder to get started.'}),
-          button('Choose a model',function(){app.setState({showModelMenu:true});},true)
-        ]));
+      if(!app.state.loaded || (!app.model.tables.length && !app.modelKey)){
+        var card=el('div',{cls:'ex-empty-card'},[
+          el('span',{cls:'ex-eyebrow',text:'START HERE'}),el('h1',{text:'Open your first model.'}),
+          el('p',{text:app.host?'Open a folder in VS Code containing a *.SemanticModel folder or model.bim, then choose a model.':app.server?'Try the synthetic demo, or browse a local folder containing a *.SemanticModel definition or model.bim.':'Try the synthetic demo, or import a *.SemanticModel folder or model.bim. Your model is parsed in this browser.'})
+        ]);
+        if(!app.host)card.appendChild(button('Try the demo',function(){app.switchModel('builtin');},true));
+        else card.appendChild(el('a',{cls:'ex-button',text:'Try the demo in your browser',href:'https://MrPerfectH.github.io/Semantic-Model-Viewer/',target:'_blank',rel:'noopener'}));
+        card.appendChild(button(app.host?'Choose model':'Open model',function(){if(app.host)app.hostSelectModel();else app.setState({showImport:true,showModelMenu:false,importError:'',importReady:false});},true));
+        card.appendChild(el('p',{text:'No compatible model? Save your Power BI project as PBIP with TMDL definitions, or export model.bim. A .pbix file cannot be opened directly. Select the project folder, not just the .pbip file.'}));
+        this.empty.appendChild(card);
         return;
       }
       this.empty.appendChild(el('div',{cls:'ex-empty-card'},[

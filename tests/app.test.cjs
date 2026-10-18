@@ -281,7 +281,7 @@ test('a genuinely fresh browser boots with no model selected, not the bundled sa
   await app.init();
   assert.equal(app.model.tables.length, 0);
   assert.equal(app.state.modelName, 'Choose a model');
-  assert.equal(app.state.showModelMenu, true);
+  assert.equal(app.state.showModelMenu, false);
   assert.equal(app.modelKey, null, 'nothing should read as "the current model" in the switcher');
 });
 

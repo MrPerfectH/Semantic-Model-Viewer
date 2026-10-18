@@ -62,6 +62,10 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
     await browser.send('Page.navigate',{url});
     await waitFor(()=>browser.evaluate('document.readyState!=="loading"&&!!window.app&&!!app.state.loaded'),'Viewer did not load');
     await settle();await settle();
+    if (await browser.evaluate('!!app.snapshotMode')) {
+      assert.equal(await browser.evaluate("!!document.querySelector('.smv-guide, [data-onboarding-help]')"),false);
+      assert.equal(await browser.evaluate('!!app.onboarding'),false);
+    }
   };
   const save=async label=>{
     const before=new Set(browser.downloads.keys());
@@ -84,9 +88,10 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
   };
   await load('http://127.0.0.1:'+server.address().port+'/');
   assert.equal(await browser.evaluate('app.model.tables.length'),0,'Fresh profiles start with no selected model');
-  await browser.evaluate("[...document.querySelectorAll('button')].find(button=>button.textContent.includes('Contoso Retail')&&button.textContent.includes('built-in')).click()");
+  await browser.evaluate("[...document.querySelectorAll('button')].find(button=>button.textContent==='Try the demo').click()");
   await waitFor(()=>browser.evaluate('app.modelKey==="builtin"&&app.model.tables.length===43'),'Built-in sample did not load');
   await settle();
+  await browser.evaluate("document.querySelector('.smv-guide')?.querySelectorAll('button')[1].click()");
   await browser.evaluate(`app.explorer.blank();app.explorer.add(['Date','Customer'],{x:160,y:180});app.canvas.selectTable('Date');
     app.canvas.view={x:-210,y:35,k:.9};app.canvas.updateTransform();app.canvas.savePreset('Date briefing');
     app.setViewMode('measures');app.setState({selMeasure:'Sales LY',gPin:'Total Sales'});`);

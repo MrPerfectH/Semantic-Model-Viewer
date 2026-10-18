@@ -2,7 +2,7 @@
    up a new release; the cache is only the fallback when the network is unavailable.
    The asset list is read from index.html at install time, so there is no list to maintain. */
 'use strict';
-const CACHE = 'smv-shell-v0.3.8';
+const CACHE = 'smv-shell-onboarding-v1';
 const EXTRA = ['./', 'index.html', 'manifest.webmanifest', 'model-data.json', 'report-usage.json',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png'];
 const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
