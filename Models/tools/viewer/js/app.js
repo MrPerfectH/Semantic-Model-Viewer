@@ -8,7 +8,7 @@
      comments. Quoted identifiers escape apostrophes as '', brackets as ]]. */
   function daxReferences(text) {
     text = String(text || '');
-    var refs = [], i = 0, n = text.length;
+    var refs = [], variables = new Set(), expectVariable = false, i = 0, n = text.length;
     var trivia = function (at) {
       while (at < n) {
         if (/\s/.test(text[at])) { at++; continue; }
@@ -40,8 +40,9 @@
         if (bare.closed) refs.push({ table: null, name: bare.value });
         continue;
       }
-      var table = null;
+      var table = null, quotedTable = false;
       if (text[i] === "'") {
+        quotedTable = true;
         var q = quoted(i, "'", "'"); i = q.next;
         if (q.closed) table = q.value;
       } else if (/[A-Za-z_\u0080-\uffff]/.test(text[i])) {
@@ -50,12 +51,45 @@
         table = text.slice(start, i);
       } else { i++; continue; }
       var next = trivia(i);
+      if (!quotedTable && table && table.toUpperCase() === 'VAR') { expectVariable = true; continue; }
+      if (expectVariable && table) { variables.add(table.toLowerCase()); expectVariable = false; continue; }
       if (table !== null && text[next] === '[') {
         var qualified = quoted(next, ']', ']'); i = qualified.next;
         if (qualified.closed) refs.push({ table: table, name: qualified.value });
+      } else if (table && (quotedTable || text[next] !== '(')) {
+        refs.push({ table: table, name: null, quoted: quotedTable });
       }
     }
-    return refs;
+    return refs.filter(function (ref) { return ref.name !== null || ref.quoted || !variables.has(ref.table.toLowerCase()); });
+  }
+
+  /* Share the same resolution rules between dependency indexing and references
+     shown beneath original or expanded DAX. Never infer sources from home tables. */
+  function resolveReferences(model, dax, home, selfName) {
+    var names = model._referenceNames, cols = Object.create(null), deps = new Set(), tables = new Set(), unresolved = [];
+    daxReferences(dax).forEach(function (ref) {
+      if (ref.name === null) {
+        var whole = names.tables.get(ref.table.toLowerCase());
+        if (whole) tables.add(whole);
+        return;
+      }
+      var measure, table;
+      if (ref.table === null) {
+        measure = names.measures.get(ref.name.toLowerCase());
+        table = home;
+      } else {
+        table = names.tables.get(ref.table.toLowerCase());
+        if (!table) { unresolved.push(ref); return; }
+        measure = names.tableMeasures.get(table).get(ref.name.toLowerCase());
+      }
+      if (measure) { if (measure !== selfName) deps.add(measure); return; }
+      var source = model.byName[table];
+      var column = source && source.columns.find(function (c) { return c.name.toLowerCase() === ref.name.toLowerCase(); });
+      if (column) (cols[table] = cols[table] || new Set()).add(column.name);
+      else unresolved.push(ref);
+    });
+    return { measures: Array.from(deps), tables: Array.from(tables).sort(),
+      columns: Object.keys(cols).sort().map(function (tn) { return { t: tn, cs: Array.from(cols[tn]).sort() }; }), unresolved: unresolved };
   }
 
   /* Two looks for the same model. `vivid` is the original one hue per domain with solid filled
@@ -113,7 +147,7 @@
       showModelMenu: false, showPresets: false, presetName: '',
       showImport: false, importError: '', importReady: false, importName: '', importSummary: '',
       msrQuery: '', expandedMeasure: null, calcOpen: {}, pngLabel: 'PNG',
-      selMeasure: null, mvQuery: '', mvOpen: {}, gExtra: {}, gHover: null, gPin: null,
+      selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvSourceQuery: '', mvSourceOpen: {}, mvImpactQuery: '', mvQuery: '', mvOpen: {}, gExtra: {}, gHover: null, gPin: null,
       mvW: Math.max(230, Math.min(600, parseInt(store.get('smv-mvw'), 10) || 296)),
       repoScanning: false, repoError: '', showRules: false,
       snapshotSaving: false, snapshotMessage: '', snapshotError: ''
@@ -416,30 +450,24 @@
           }
         });
       });
-      var usedBy = {};
+      model._referenceNames = { measures: measureNames, tables: tableNames, tableMeasures: tableMeasures };
+      var usedBy = {}, tableUsers = new Map(), columnUsers = new Map();
+      var addUser = function (index, key, name) { if (!index.has(key)) index.set(key, new Set()); index.get(key).add(name); };
       model.tables.forEach(function (t) {
         t.measures.forEach(function (m) {
-          var cols = {}, deps = new Set();
-          daxReferences(m.dax).forEach(function (ref) {
-            var nm;
-            if (ref.table === null) nm = measureNames.get(ref.name.toLowerCase());
-            else {
-              var tn = tableNames.get(ref.table.toLowerCase());
-              if (!tn) return;
-              nm = tableMeasures.get(tn).get(ref.name.toLowerCase());
-              if (!nm) {
-                var column = model.byName[tn].columns.find(function (c) { return c.name.toLowerCase() === ref.name.toLowerCase(); });
-                (cols[tn] = cols[tn] || new Set()).add(column ? column.name : ref.name);
-              }
-            }
-            if (nm && nm !== m.name) deps.add(nm);
+          var refs = resolveReferences(model, m.dax, t.name, m.name);
+          m._deps = refs.measures; m._cols = refs.columns; m._tables = refs.tables; m._unresolved = refs.unresolved;
+          var deps = refs.measures, tables = refs.tables;
+          tables.forEach(function (tn) { addUser(tableUsers, tn, m.name); });
+          m._cols.forEach(function (group) {
+            addUser(tableUsers, group.t, m.name);
+            group.cs.forEach(function (cn) { addUser(columnUsers, JSON.stringify([group.t, cn]), m.name); });
           });
-          m._deps = Array.from(deps);
-          m._cols = Object.keys(cols).map(function (tn) { return { t: tn, cs: Array.from(cols[tn]).sort() }; });
           deps.forEach(function (d) { (usedBy[d] = usedBy[d] || []).push(m.name); });
         });
       });
       model.msrHome = msrHome; model.msrUsedBy = usedBy;
+      model.tableMeasureUsers = tableUsers; model.columnMeasureUsers = columnUsers;
       // dynamic color maps (curated colors first, palette for the rest)
       var domCounts = {}, srcCounts = {};
       model.tables.forEach(function (t) {
@@ -448,6 +476,22 @@
       });
       this._domCounts = domCounts; this._srcCounts = srcCounts;
       this.rebuildColorMaps();
+    },
+
+    referencesInDax: function (dax, home) { return resolveReferences(this.model, dax, home); },
+
+    /* Static expression references, including downstream measure chains. Table selection
+       combines explicit table references and column references, never home-table membership. */
+    measureImpact: function (source) {
+      var model = this.model, table = source && model && model.byName[source.table];
+      if (!table || (source.column != null && !table.columns.some(function (c) { return c.name === source.column; }))) return { direct: [], all: [] };
+      var index = source.column == null ? model.tableMeasureUsers : model.columnMeasureUsers;
+      var key = source.column == null ? source.table : JSON.stringify([source.table, source.column]);
+      var direct = Array.from(index && index.get(key) || []).sort(), seen = new Set(direct), queue = direct.slice();
+      for (var i = 0; i < queue.length; i++) {
+        (model.msrUsedBy[queue[i]] || []).forEach(function (name) { if (!seen.has(name)) { seen.add(name); queue.push(name); } });
+      }
+      return { direct: direct, all: Array.from(seen).sort() };
     },
 
     /* Everything it takes to make the app reflect `model` as the current one -
@@ -477,7 +521,7 @@
       var state = {
         loaded: true, allExpanded: false, modelName: name, selected: null, activeFilter: null, search: '',
         isolate: false, showModelMenu: !!opts.showModelMenu, msrQuery: '', expandedMeasure: null, calcOpen: {},
-        selMeasure: null, mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, viewMode: 'graph',
+        selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvSourceQuery: '', mvSourceOpen: {}, mvImpactQuery: '', mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, viewMode: 'graph',
         showRules: false
       };
       this.setState(state, function () { self.canvas.build(); self.canvas.fitView(); });
@@ -562,7 +606,7 @@
       this.matrix._key = null; this.sidebar._key = null;
       this.setState({ loaded: true, modelName: record.name || model.name || 'Semantic model', viewMode: 'graph',
         allExpanded: false, selected: null, activeFilter: null, search: '', isolate: false, showModelMenu: false,
-        selMeasure: null, mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, showRules: false, repoError: '' }, function () {
+        selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvSourceQuery: '', mvSourceOpen: {}, mvImpactQuery: '', mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, showRules: false, repoError: '' }, function () {
         cv.build(); cv.fitView();
         if (saved) {
           cv.applyPreset(saved.table); self._tableWorkspace = self.captureTableView(); self._tableViewport = Object.assign({}, cv.view);
