@@ -28,7 +28,7 @@ function fixture() {
   const model={tables:[table],byName:{Sales:table},msrHome:Object.fromEntries(measures.map(m=>[m.name,'Sales'])),msrUsedBy:{}};
   measures.forEach(m=>m._deps.forEach(d=>(model.msrUsedBy[d] ||= []).push(m.name)));
   window.app={model,modelKey:'layout-fixture',state:{loaded:true,viewMode:'measures',selMeasure:'Margin',mvOpen:{},gPin:'Base'},
-    msrOf:n=>measures.find(m=>m.name===n),msrUse:()=>null,useTip:()=>'',tipFlags:()=>'',mvOpenFor:()=>({}),focusTable(){},
+    tableColor:()=>'#3b82f6',msrOf:n=>measures.find(m=>m.name===n),msrUse:()=>null,useTip:()=>'',tipFlags:()=>'',mvOpenFor:()=>({}),focusTable(){},
     setState(patch,cb){Object.assign(this.state,patch);window.view.update();if(cb)cb();}};
   window.view=new MeasuresView(app,document.getElementById('fixture'));view.update();
   window.box=selector=>{const el=document.querySelector(selector),r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom,clientWidth:el.clientWidth,clientHeight:el.clientHeight,scrollHeight:el.scrollHeight,scrollWidth:el.scrollWidth};};

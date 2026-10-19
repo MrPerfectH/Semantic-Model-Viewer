@@ -1782,12 +1782,12 @@
       var columns = group('Columns', nCols, card.inlined ? 'No column references in expanded DAX' : 'No direct column references');
       refs.columns.forEach(function (g) { g.cs.forEach(function (column) {
         var label = self.sourceLabel({ table: g.t, column: column });
-        columns.appendChild(el('button', { cls: 'mv-reference-chip', text: label, title: 'Find measures depending on ' + label,
+        columns.appendChild(el('button', { cls: 'mv-reference-chip mv-reference-source', style: '--mv-reference-color:' + self.app.tableColor(self.app.model.byName[g.t]) + ';', text: label, title: 'Find measures depending on ' + label,
           onClick: function () { self.analyzeSource(g.t, column); } }));
       }); });
       if (refs.tables.length) {
         var tables = group('Whole tables', refs.tables.length, '');
-        refs.tables.forEach(function (table) { tables.appendChild(el('button', { cls: 'mv-reference-chip', text: table + ' · Whole table',
+        refs.tables.forEach(function (table) { tables.appendChild(el('button', { cls: 'mv-reference-chip mv-reference-source', style: '--mv-reference-color:' + self.app.tableColor(self.app.model.byName[table]) + ';', text: table + ' · Whole table',
           title: 'Find measures depending on ' + table, onClick: function () { self.analyzeSource(table); } })); });
       }
       if (refs.partial) section.appendChild(el('p', { cls: 'mv-reference-note', text: 'Expansion stopped at a cycle or size limit. Remaining measure references are listed above.' }));

@@ -106,3 +106,19 @@ available height. Graph spacing and a separate mobile redesign are outside this 
 - [x] Browser workflow, snapshot, layout and regression checks passed.
 
 Prior palette verification is preserved in `docs/design-qa-spellbook.md`.
+
+## Reference chip color refinement — 2026-10-19
+
+User feedback: the reference footer looked like a flow of text. Column and whole-table
+chips now use the source table's graph color as a solid left border and tinted fill;
+measure chips use the existing upstream color. Larger 12px labels, more padding,
+stronger section headings and visible keyboard focus separate each clickable reference.
+
+Browser evidence (1280 × 800 CSS/screenshot pixels):
+- Classic, expanded Budget Attainment: `/home/harry/.t3/userdata/browser-artifacts/browser-screenshot-100-115-251-31-mvf5ojwh-bb3346ec.png`.
+- Spellbook, same state: `/home/harry/.t3/userdata/browser-artifacts/browser-screenshot-100-115-251-31-mvf5p2pl-b8fb31d6.png`.
+
+Both inspected visually; teal Budget and blue Sales references are distinct, readable,
+and retain their full table[column] labels. No browser errors observed. Existing
+measure/layout/browser suite: 48 passed, 0 failed, 0 skipped. Runtime hashes refreshed
+and VS Code assets synchronized. No remaining actionable findings for this refinement.

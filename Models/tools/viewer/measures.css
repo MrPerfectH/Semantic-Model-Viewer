@@ -203,12 +203,18 @@
 @container measure-dax (min-width:760px){.mv-dax-grid[data-comparing=true]{grid-template-rows:minmax(min-content,1fr);}}
 .mv-dax-card{display:grid;grid-template-rows:auto minmax(120px,1fr) auto;min-height:360px;}
 .mv-card-references{border-top:1px solid var(--smv-soft,#e2e8f0);padding:12px 13px;background:var(--smv-surface,#fff);max-height:220px;overflow:auto;}
-.mv-card-references h4{font-size:11px;font-weight:600;color:var(--smv-ink,#334155);line-height:1.4;margin:0 0 10px;}
+.mv-card-references h4{font-size:12px;font-weight:600;color:var(--smv-ink,#334155);line-height:1.4;margin:0 0 10px;}
 .mv-reference-group+.mv-reference-group{margin-top:10px;}
-.mv-reference-group>strong{display:block;font-size:10px;font-weight:600;color:var(--smv-muted,#657286);margin-bottom:5px;}
-.mv-reference-items{display:flex;flex-wrap:wrap;gap:5px;}
-.mv-reference-chip{display:inline-block;max-width:100%;border:1px solid var(--smv-soft,#dce6f6);border-radius:5px;background:var(--smv-surface,#f8fafc);color:var(--smv-ink,#334155);padding:4px 7px;text-align:left;overflow-wrap:anywhere;font-size:10px!important;line-height:1.5!important;}
+.mv-reference-group>strong{display:block;font-size:11px;font-weight:600;color:var(--smv-muted,#657286);margin-bottom:5px;}
+.mv-reference-items{display:flex;flex-wrap:wrap;gap:8px;}
+.mv-reference-chip{display:inline-block;max-width:100%;border:1px solid var(--smv-soft,#dce6f6);border-radius:5px;background:var(--smv-surface,#f8fafc);color:var(--smv-ink,#334155);padding:6px 10px;text-align:left;overflow-wrap:anywhere;font-size:12px!important;font-weight:500;line-height:1.5!important;}
 .mv-reference-chip:hover{border-color:var(--smv-down,#2563eb);}
 .mv-reference-measure{color:var(--smv-up,#6d28d9);background:var(--smv-up-soft,#f7f5ff);border-color:var(--smv-up-border,#d9cffa);}
 .mv-reference-empty,.mv-reference-note{font-size:10px;color:var(--smv-muted,#77859a);line-height:1.6;margin:0;}
 .mv-reference-note{margin-top:8px;}
+
+/* Match reference chips to the source colors used in the dependency graph. */
+.mv-reference-source{border-color:color-mix(in srgb,var(--mv-reference-color) 45%,var(--smv-soft,#dce6f6));border-left:3px solid var(--mv-reference-color);background:color-mix(in srgb,var(--mv-reference-color) 13%,var(--smv-surface,#fff));}
+.mv-reference-source:hover{border-color:var(--mv-reference-color);background:color-mix(in srgb,var(--mv-reference-color) 21%,var(--smv-surface,#fff));}
+.mv-reference-measure{border-left:3px solid var(--smv-up,#6d28d9);background:color-mix(in srgb,var(--smv-up,#6d28d9) 12%,var(--smv-surface,#fff));}
+.mv-reference-chip:focus-visible{outline:2px solid var(--smv-down,#2563eb);outline-offset:2px;}
