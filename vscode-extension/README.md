@@ -106,6 +106,24 @@ is unavailable in the VS Code webview; use an interactive HTML snapshot to share
 <details>
 <summary>Development and local packaging</summary>
 
+Every successful push to `develop` publishes the tested extension to the **pre-release**
+channel of the existing Marketplace listing. In VS Code, open **Semantic Model Viewer**
+in Extensions and select **Switch to Pre-Release Version**. With auto-update enabled,
+subsequent develop builds arrive automatically. Select **Switch to Release Version**
+to return to stable. Pre-releases are public and available to anyone who opts in.
+
+The CI workflow can also be run manually against `develop` to publish its current commit.
+Publishing requires the repository's `VSCE_PAT` secret with Marketplace publishing access;
+pull requests never publish or receive this secret.
+
+CI assigns a unique numeric preview version only in its build checkout. It uses the next
+odd minor above the committed version and the CI run number as the patch: committed
+`0.3.9` produces `0.5.<run number>`, leaving `0.4.*` available for stable releases.
+Future stable releases should use even minor versions (`0.4.*`, `0.6.*`, etc.). When
+stable advances to `0.6.*`, develop previews advance to `0.7.*`. Re-running a CI run
+keeps the same version and skips an already-published package. Stable publishing
+continues through the existing release workflow on `main`.
+
 Use Node.js 22 or later for the packaging tools. From the repository root:
 
 ```bash
