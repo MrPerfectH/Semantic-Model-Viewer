@@ -22,3 +22,25 @@ test('MCP Apps resource contains the actual viewer and bridge, without localhost
   assert.equal(sync.structuredContent.view.focus.name,view.focus.name);
   const selection=await client.callTool({name:'smv_selection',arguments:{session}});assert.equal(selection.structuredContent.selection.name,view.focus.name);
 });
+
+test('installed-style stdio command negotiates UI capability and serves actual viewer resources',async t=>{
+  const {StdioClientTransport}=require('@modelcontextprotocol/client/stdio');
+  const root=path.resolve(__dirname,'..');
+  for(const ui of [false,true])await t.test(ui?'MCP Apps client':'tools-only client',async()=>{
+    const transport=new StdioClientTransport({command:process.execPath,args:[path.join(root,'bin/smv.cjs'),'mcp'],cwd:root,env:{...process.env,SMV_ROOT:root},stderr:'pipe'});
+    const client=new Client({name:'stdio-integration-test',version:'1'},{capabilities:ui?{extensions:{'io.modelcontextprotocol/ui':{mimeTypes:['text/html;profile=mcp-app']}}}:{}});
+    try{
+      await client.connect(transport);
+      const tools=await client.listTools();assert.ok(tools.tools.some(tool=>tool.name==='smv_open'&&tool._meta?.ui?.resourceUri===URI));
+      const inspected=await client.callTool({name:'smv_inspect',arguments:{model:'Models/demo/Contoso Retail.SemanticModel'}});assert.equal(inspected.structuredContent.name,'Contoso Retail');
+      const opened=await client.callTool({name:'smv_open',arguments:{model:'Models/demo/Contoso Retail.SemanticModel',view:require('../examples/explanations/sales-yoy-calculation.json')}});
+      assert.ok(!opened.isError,JSON.stringify(opened.content));assert.equal(opened.structuredContent.presentation.inline.available,ui);
+      if(ui){
+        assert.equal(opened._meta.viewer.view.focus.name,'Sales YoY');
+        const resource=await client.readResource({uri:URI});assert.equal(resource.contents[0].mimeType,'text/html;profile=mcp-app');assert.match(resource.contents[0].text,/smv_app_sync/);
+        assert.doesNotMatch(resource.contents[0].text,/window.SMV_SESSION_URL=/);
+      }else assert.equal(opened._meta?.viewer,undefined);
+      const stopped=await client.callTool({name:'smv_stop',arguments:{session:opened.structuredContent.session}});assert.equal(stopped.structuredContent.stopped,true);
+    }finally{await client.close();}
+  });
+});
