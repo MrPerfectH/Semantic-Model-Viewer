@@ -195,8 +195,8 @@ test('measure snapshot is JSON-safe and preserves comparison, library state, pre
   const snapshot=JSON.parse(JSON.stringify(view.captureSnapshot()));
   assert.equal(snapshot.version,1);assert.equal(snapshot.selectedMeasure,'Margin');assert.equal(snapshot.comparisonMeasure,'Profit');
   assert.deepEqual(snapshot.extraMeasures,['Revenue']);
-  assert.deepEqual(snapshot.library,{query:'DIVIDE',visibility:'hidden',homeTable:'Sales',openFolders:['Finance','Finance\\Ratios'],width:360});
-  assert.deepEqual(snapshot.preferences,{mode:'split',split:'below',besideShare:.63,belowShare:.46,orientation:'bt',wrap:false});
+  assert.deepEqual(snapshot.library,{query:'DIVIDE',visibility:'hidden',homeTable:'Sales',openFolders:['Finance','Finance\\Ratios'],width:360,sourceMode:'measures',pickingSource:false,sourceQuery:'',impactQuery:'',openTables:[]});
+  assert.deepEqual(snapshot.preferences,{mode:'split',split:'below',besideShare:.63,belowShare:.46,orientation:'bt',wrap:false,sources:false,fmt:'long',inline:false,plain:false});
   assert.deepEqual(snapshot.graph,{zoom:.8,scrollLeft:123,scrollTop:456,autoFit:false});
   view.rememberGraphViewport();view.gScroll.clientWidth=0;
   assert.deepEqual(JSON.parse(JSON.stringify(view.captureSnapshot().graph)),snapshot.graph,'A hidden graph retains its viewport');
@@ -458,6 +458,101 @@ test('Expand all reports the display limit and does not hide additional groups a
   assert.equal(graph.nodes.find(n => n.name === 'Base Amount').dnMore[0], '−', 'does not offer an impossible expansion at the cap');
 });
 
+function sourceHarness() {
+  const result = harness();
+  const {app,view} = result;
+  const sales=app.model.tables[0]; sales.columns=[{name:'Amount'},{name:'Unused'},{name:'LineAmount',isCalc:true}];
+  sales.measures[0]._cols=[{t:'Sales',cs:['Amount']}];
+  app.model.tables[1].measures.push({name:'Rows',dax:'COUNTROWS(Sales)',_deps:[],_tables:['Sales']});
+  app.model.msrHome.Rows='Metrics';
+  app.tableColor=()=> '#18b9a6';
+  app.tipFlags=()=>'';
+  app.measureImpact=source=>{
+    const direct = app.model.tables.flatMap(t=>t.measures).filter(m=>
+      source.column==null && (m._tables||[]).includes(source.table) || (m._cols||[]).some(g=>g.t===source.table && (source.column==null||g.cs.includes(source.column)))
+    ).map(m=>m.name).sort();
+    const all=new Set(direct),queue=[...direct];
+    for(let i=0;i<queue.length;i++) for(const n of app.model.msrUsedBy[queue[i]]||[]) if(!all.has(n)){all.add(n);queue.push(n);}
+    return {direct,all:[...all].sort()};
+  };
+  view._showSources=true;
+  return result;
+}
+
+test('source cards include only connected columns, with table edges anchored to headers', () => {
+  const {view,app}=sourceHarness();
+  app.state.selMeasure='Rows';
+  for(const direction of ['lr','tb','bt']) {
+    const graph=view.addSourceLayout(view.gLayout('Rows',{},500,direction));
+    assert.deepEqual(Array.from(graph.sources[0].columns),[],'COUNTROWS needs the table header only');
+    const edge=graph.geo.find(e=>e.source);
+    assert.equal(edge.a,view.sourceKey('Sales',null)); assert.equal(edge.whole,true);
+  }
+  app.state.selMeasure='Margin';
+  const graph=view.addSourceLayout(view.gLayout('Margin',{},500));
+  assert.deepEqual(Array.from(graph.sources[0].columns),['Amount']);
+  assert.ok(graph.geo.some(e=>e.a===view.sourceKey('Sales','Amount')&&e.b==='Revenue'&&!e.whole));
+});
+
+test('table and column roots use one graph and do not expand unrelated measure inputs', () => {
+  const {view,app}=sourceHarness();
+  app.state.dependencySource={table:'Sales',column:null}; app.state.selMeasure=null;
+  const table=view.buildGraph();
+  assert.deepEqual(Array.from(table.nodes,n=>n.name).sort(),['Margin','Profit','Revenue','Rows']);
+  app.state.dependencySource={table:'Sales',column:'Amount'};
+  for(const direction of ['lr','tb','bt']) {
+    view._graphOrientation=direction;
+    const graph=view.buildGraph();
+    assert.deepEqual(Array.from(graph.nodes,n=>n.name).sort(),['Margin','Profit','Revenue']);
+    assert.deepEqual(Array.from(graph.sources[0].columns),['Amount']);
+    for(const p of Object.values(graph.xy)) {
+      assert.ok(p.x>=0&&p.x+p.w<=graph.w,JSON.stringify({direction,p,graphWidth:graph.w}));
+      assert.ok(p.y>=0&&p.y+34<=graph.h);
+    }
+  }
+  app.state.dependencyDirectOnly=true;
+  assert.deepEqual(Array.from(view.buildGraph().nodes,n=>n.name),['Revenue']);
+});
+
+test('a source with no detected consumers remains visible without invented columns', () => {
+  const {view,app}=sourceHarness();
+  app.state.dependencySource={table:'Sales',column:'Unused'}; app.state.selMeasure=null;
+  const graph=view.buildGraph();
+  assert.equal(graph.nodes.length,0); assert.equal(graph.sources.length,1);
+  assert.deepEqual(Array.from(graph.sources[0].columns),['Unused']);
+  assert.equal(graph.edges.length,0);
+});
+
+test('source selection, direct-only filter, inspected DAX and viewport survive snapshots', () => {
+  const {view,app}=sourceHarness();
+  app.state.selMeasure=null;app.state.dependencySource={table:'Sales',column:'Amount'};
+  app.state.gPin='Profit';app.state.dependencyDirectOnly=true;
+  view._built=true;view._graphModel=app.model;view._graphMeasure=view.graphRoot();
+  view.gScroll={clientWidth:600,scrollLeft:90,scrollTop:50}; view._gZoom=.9;
+  const data=JSON.parse(JSON.stringify(view.captureSnapshot()));
+  assert.deepEqual(data.source,{table:'Sales',column:'Amount'});assert.equal(data.comparisonMeasure,'Profit');
+  assert.equal(data.directOnly,true);assert.equal(data.preferences.sources,true);
+  assert.equal(data.graph.scrollLeft,90);
+  app.state.dependencySource=null;app.state.selMeasure='Margin';
+  view.restoreSnapshot(data);
+  assert.deepEqual(JSON.parse(JSON.stringify(app.state.dependencySource)),data.source);
+  assert.equal(app.state.selMeasure,null);assert.equal(app.state.gPin,'Profit');
+  const invalid=view.sanitizeSnapshot({...data,source:{table:'Sales',column:'Missing'}});
+  assert.equal(invalid.source,null);assert.equal(invalid.comparisonMeasure,null);
+});
+
+test('source graphs start at readable scale and source display limits are disclosed', () => {
+  const {view,app}=sourceHarness();
+  const graph=view.buildGraph();
+  assert.equal(view.initialViewport(graph,480,360).zoom,1);
+  const sales=app.model.tables[0];
+  sales.measures[0]._cols=[{t:'Sales',cs:Array.from({length:250},(_,i)=>'Column '+i)}];
+  view._gC=null;
+  const capped=view.buildGraph();
+  assert.equal(capped.sourcesCapped,true);
+  assert.ok(capped.sources[0].omitted>0);
+});
+
 test('library search lists name matches before measures that only mention the text in DAX', () => {
   const { view, app } = harness();
   app.state.mvQuery = 'revenue';
@@ -476,4 +571,50 @@ test('DAX code block resets the host <code> styling so tokens stay readable in V
   assert.ok(rule, '.mv-dax-code rule exists');
   assert.match(rule[1], /background:none/);
   assert.match(rule[1], /color:inherit/);
+});
+
+test('source picker includes tables without measures and columns without references', () => {
+  const {view,app}=sourceHarness();
+  app.model.tables.push({name:'Lookup',columns:[{name:'Unused key'}],measures:[]});
+  app.state.mvSourceOpen={Lookup:true};
+  let choices=view.buildSourceChoices();
+  assert.equal(choices.find(t=>t.table==='Lookup').expanded,true);
+  assert.deepEqual(Array.from(choices.find(t=>t.table==='Sales').columns,c=>c.name),['Amount','Unused','LineAmount']);
+  app.state.mvSourceQuery='unused';choices=view.buildSourceChoices();
+  assert.deepEqual(Array.from(choices,t=>t.table),['Lookup','Sales']);
+  assert.ok(choices.every(t=>t.expanded));
+  assert.deepEqual(Array.from(choices.find(t=>t.table==='Sales').columns,c=>c.name),['Unused']);
+});
+
+test('impact navigation puts direct references first and inspecting keeps the source pinned', () => {
+  const {view,app}=sourceHarness();app.state.dependencySource={table:'Sales',column:null};app.state.selMeasure=null;
+  assert.deepEqual(rowNames(view.buildImpactRows().rows),['Revenue','Rows','Margin','Profit']);
+  view._workspaceMode='graph';view.inspectMeasure('Margin');
+  assert.equal(view._workspaceMode,'split');assert.equal(app.state.gPin,'Margin');assert.equal(app.state.selMeasure,null);
+  assert.equal(app.state.dependencySource.table,'Sales');
+  app.state.dependencyDirectOnly=true;
+  assert.deepEqual(rowNames(view.buildImpactRows().rows),['Revenue','Rows']);
+  app.state.mvImpactQuery='COUNTROWS';assert.deepEqual(rowNames(view.buildImpactRows().rows),['Rows']);
+});
+
+test('formula references are owned by a card and expansion resolves the displayed expression', () => {
+  const {view,app}=sourceHarness();
+  let refs=view.referenceData({name:'Revenue',table:'Sales'});
+  assert.deepEqual(Array.from(refs.columns[0].cs),['Amount']);assert.equal(refs.scope,'Direct references · original formula');
+  assert.equal(view.referenceData({name:'Margin',table:'Sales'}).columns.length,0,'No inherited or comparison-card columns');
+  app.referencesInDax=(text,home)=>{assert.equal(text,'expanded expression');assert.equal(home,'Sales');return {measures:[],tables:['Sales'],columns:[{t:'Sales',cs:['Amount']}],unresolved:[]};};
+  refs=view.referenceData({name:'Margin',table:'Sales',text:'expanded expression',inlined:{count:2,cycles:[],capped:false}});
+  assert.equal(refs.scope,'References in expanded DAX');assert.equal(refs.partial,false);assert.deepEqual(refs.tables,['Sales']);
+});
+
+test('snapshot restores source browsing and formula display preferences', () => {
+  const {view,app}=sourceHarness();
+  Object.assign(app.state,{dependencySource:{table:'Sales',column:null},selMeasure:null,mvSourceMode:'sources',mvSourcePicking:true,mvSourceQuery:'amount',mvSourceOpen:{Sales:true,Missing:true},mvImpactQuery:'profit'});
+  view._inlineDax=true;view._fmt='short';view._plainDax=true;
+  const snapshot=JSON.parse(JSON.stringify(view.captureSnapshot()));
+  assert.deepEqual(snapshot.library.openTables,['Sales']);assert.equal(snapshot.library.sourceMode,'sources');
+  view._inlineDax=false;view._fmt='original';app.state.mvSourceOpen={};view.restoreSnapshot(snapshot);
+  assert.equal(view._inlineDax,true);assert.equal(view._fmt,'short');assert.equal(view._plainDax,true);
+  assert.equal(app.state.mvSourcePicking,true);assert.equal(app.state.mvSourceQuery,'amount');assert.equal(app.state.mvImpactQuery,'profit');
+  assert.deepEqual(Object.keys(app.state.mvSourceOpen),['Sales']);
 });
