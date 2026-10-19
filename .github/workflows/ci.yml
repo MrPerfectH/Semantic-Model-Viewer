@@ -4,6 +4,7 @@ on:
   push:
     branches: [main, develop]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -26,6 +27,10 @@ jobs:
       - name: Test viewer and extension
         working-directory: vscode-extension
         run: npm test
+      - name: Assign the develop pre-release version
+        if: github.ref == 'refs/heads/develop' && github.event_name != 'pull_request'
+        working-directory: vscode-extension
+        run: node scripts/preview-version.cjs
       - name: Package the extension
         working-directory: vscode-extension
         env:
@@ -37,10 +42,35 @@ jobs:
             npm run package
           fi
       - name: Upload the develop test extension
-        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/develop' && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: semantic-model-viewer-preview-${{ github.sha }}
           path: vscode-extension/*.vsix
           if-no-files-found: error
           retention-days: 14
+
+  publish-preview:
+    needs: test
+    if: github.ref == 'refs/heads/develop' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: marketplace-pre-release
+      cancel-in-progress: false
+    steps:
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          name: semantic-model-viewer-preview-${{ github.sha }}
+          path: dist
+      - name: Publish the tested pre-release to Marketplace
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          if [ -z "$VSCE_PAT" ]; then
+            echo "::error::Configure the VSCE_PAT repository secret to publish pre-releases."
+            exit 1
+          fi
+          npx --yes @vscode/vsce@4 publish --packagePath dist/*.vsix --pre-release --skip-duplicate
