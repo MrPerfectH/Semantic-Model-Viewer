@@ -1,9 +1,16 @@
 import {App} from '@modelcontextprotocol/ext-apps';
-const host=new App({name:'Semantic Model Viewer',version:'0.2.0'},{});
+// The viewer uses a fixed canvas, so document-flow auto sizing reports zero.
+// Request a bounded workspace height explicitly through the MCP Apps protocol.
+const host=new App({name:'Semantic Model Viewer',version:'0.2.0'},{},{autoResize:false});
+async function sizeWorkspace(view={}){
+  const height=Math.max(480,Math.min(1000,Number.isFinite(view.height)?view.height:900));
+  await host.sendSizeChanged({height});
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+}
 let session=null;
 function output(result){if(result.isError)throw new Error(result.content?.find(c=>c.type==='text')?.text||'Viewer tool failed');return result.structuredContent;}
 window.SMV_MCP_SYNC=async(receipt)=>{
-  if(!session)return null;
+  if(!session||receipt.currentView.width<320||receipt.currentView.height<320)return null;
   return output(await host.callServerTool({name:'smv_app_sync',arguments:{session,receipt}}));
 };
 window.SMV_SEND_CONTEXT=async()=>{
@@ -13,6 +20,7 @@ window.SMV_SEND_CONTEXT=async()=>{
 host.ontoolresult=async result=>{
   const data=result._meta?.viewer;if(!data)return;
   await window.smv.ready();
+  await sizeWorkspace(data.view);
   if(session&&session!==data.session){document.querySelector('.smv-status').textContent='A different session was returned. Open a new view to keep this exploration.';return;}
   session=data.session;
   if(window.SMV_SOURCE_REVISION!==data.sourceRevision){
@@ -36,4 +44,4 @@ window.SMV_SAVE_OFFLINE=async()=>{
   const response=await host.downloadFile({contents:[{type:'resource',resource:{uri:'file:///semantic-model-explanation.html',mimeType:'text/html',text:html}}]});
   if(response.isError)throw new Error('Download was declined or is unsupported. Ask the agent to export an offline HTML view.');
 };
-host.connect().then(()=>window.SMVInteractive.appearance(host.getHostContext()||{})).catch(error=>{const status=document.querySelector('.smv-status');if(status)status.textContent='Inline host connection unavailable: '+error.message;});
+host.connect().then(async()=>{window.SMVInteractive.appearance(host.getHostContext()||{});await sizeWorkspace();}).catch(error=>{const status=document.querySelector('.smv-status');if(status)status.textContent='Inline host connection unavailable: '+error.message;});
