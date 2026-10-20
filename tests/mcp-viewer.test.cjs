@@ -45,3 +45,18 @@ test('installed-style stdio command negotiates UI capability and serves actual v
     }finally{await client.close();}
   });
 });
+
+test('offline downloads cross the app bridge in bounded chunks and remain readable without a session',async t=>{
+  const client=await fixture(t,true),html='<!doctype html><title>Offline viewer</title>'+('model metadata 😀 '.repeat(30000));
+  let upload,resource;
+  for(let offset=0;offset<html.length;offset+=32768){
+    const args={...(upload?{upload}:{}),chunk:html.slice(offset,offset+32768),complete:offset+32768>=html.length};
+    assert.ok(Buffer.byteLength(JSON.stringify(args))<262144);
+    const response=await client.callTool({name:'smv_app_download',arguments:args});
+    assert.ok(!response.isError,JSON.stringify(response.content));upload=response.structuredContent.upload;resource=response.structuredContent.resource;
+  }
+  assert.equal(resource.type,'resource_link');
+  const read=await client.readResource({uri:resource.uri});assert.equal(read.contents[0].text,html);
+  const overwrite=await client.callTool({name:'smv_app_download',arguments:{upload,chunk:'changed',complete:true}});assert.equal(overwrite.isError,true);
+  const other=await fixture(t,true);await assert.rejects(other.readResource({uri:resource.uri}));
+});

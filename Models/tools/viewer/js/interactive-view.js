@@ -5,6 +5,13 @@
   function clone(v){return JSON.parse(JSON.stringify(v));}
   function node(tag,text,cls){var n=document.createElement(tag);if(text)n.textContent=text;if(cls)n.className=cls;return n;}
   function button(text,run){var b=node('button',text);b.type='button';b.onclick=run;return b;}
+  function hostAction(label,description,pending,run,status){
+    var b=button(label,async function(){
+      b.disabled=true;status.textContent=pending;
+      try{status.textContent=await run()||'Done.';}catch(e){status.textContent=e.message||'The action failed.';}
+      finally{b.disabled=false;}
+    });b.title=description;return b;
+  }
   function refKey(r){return JSON.stringify([r.kind,r.table||'',r.name]);}
   function hooks(app){
     Object.keys(app.canvas.cards||{}).forEach(function(n){var c=app.canvas.cards[n];c.el.dataset.smvKind='table';c.el.dataset.smvName=n;Object.keys(c.colRows).forEach(function(k){var el=c.colRows[k];el.dataset.smvKind='column';el.dataset.smvTable=n;el.dataset.smvName=k;});});
@@ -56,12 +63,14 @@ body[data-smv-interactive] .mv-library{display:none!important}body[data-smv-inte
     var controls=node('aside',null,'smv-explanation-controls');controls.setAttribute('aria-label','Explanation controls');
     closeLibrary(false);
     if(view.mode==='measures'){var browse=button('Browse measures',function(){browseMeasures(app);});browse.dataset.smvBrowse='1';browse.setAttribute('aria-expanded','false');controls.appendChild(browse);}
-    if(g.SMV_EXPAND_WORKSPACE)controls.appendChild(button('Expand workspace',function(){g.SMV_EXPAND_WORKSPACE().catch(function(e){status.textContent=e.message;});}));
-    if(g.SMV_SAVE_OFFLINE)controls.appendChild(button('Save offline view',function(){g.SMV_SAVE_OFFLINE().catch(function(e){status.textContent=e.message;});}));
-    if(g.SMV_SEND_CONTEXT)controls.appendChild(button('Use selection in conversation',function(){g.SMV_SEND_CONTEXT().catch(function(e){status.textContent=e.message;});}));
+    var actionStatus=node('span','', 'smv-action-status');actionStatus.setAttribute('role','status');actionStatus.setAttribute('aria-live','polite');
+    if(g.SMV_EXPAND_WORKSPACE)controls.appendChild(hostAction('Expand workspace','Open this viewer in the host’s fullscreen workspace.','Opening workspace…',g.SMV_EXPAND_WORKSPACE,actionStatus));
+    if(g.SMV_SAVE_OFFLINE)controls.appendChild(hostAction('Save offline view','Download an interactive HTML file with the model and current view.','Preparing offline view…',g.SMV_SAVE_OFFLINE,actionStatus));
+    if(g.SMV_SEND_CONTEXT)controls.appendChild(hostAction('Use selection in conversation','Share the selected object as context for your next message. This does not send a question.','Sharing selection…',g.SMV_SEND_CONTEXT,actionStatus));
     controls.appendChild(button('Reset explanation',function(){if(api)api.reset();}));
     var hasAnnotations=!!(view.highlights.length||view.callouts.length||view.proposals.length);
     var hidden=view.annotationsVisible===false||!hasAnnotations,toggle=button('Hide annotations',function(){dirty=true;hidden=!hidden;notes.hidden=hidden;toggle.textContent=hidden?'Show annotations':'Hide annotations';paint(true);});toggle.textContent=hidden?'Show annotations':'Hide annotations';if(hasAnnotations)controls.appendChild(toggle);
+    controls.appendChild(actionStatus);
     var status=node('span','', 'smv-status');status.setAttribute('aria-live','polite');controls.appendChild(status);
     var notes=node('div',null,'smv-notes');notes.hidden=hidden;
     view.callouts.forEach(function(c){notes.appendChild(node('p',c.text));});

@@ -44,3 +44,15 @@ The fixed-position viewer contributes no document-flow height. The SDK automatic
 The app disables automatic document sizing and explicitly requests a bounded workspace height (480–1000 pixels, default 900) on connection and view delivery. It skips synchronization while the host viewport is below the schema minimum. The rebuilt bridge passes all 10 interactive browser checks, including resizing from the small initial frame and state synchronization; all 35 core tests also pass.
 
 Opened another native Sales YoY card using the rebuilt resource in T3. This is a real MCP tool call, without an agent HTML wrapper. Visual acceptance in T3 remains pending the owner’s check of the new card.
+
+## Offline export and selection feedback
+
+The owner’s native Total Sales selection arrived in this conversation as qualified measure context. That verifies selection delivery in T3, but the app had no visible confirmation and connection polling could overwrite action feedback.
+
+The installed T3 host bundle rejects app messages larger than 262,144 bytes; the Contoso offline HTML is approximately 1 MB. Reproduced the previous embedded-file download failure using that exact message limit in the official AppBridge test (`Message too large`). The app now transfers the retained HTML in chunks of at most 32,768 characters to a connection-owned app-only tool, then requests a small resource-link download. The downloaded file reopens with its actual selected relationship and interactive viewer; it does not retain disconnected host buttons. Download resources do not depend on a running viewer session and cannot be read from another MCP connection.
+
+Button tests cover pending/disabled controls, success, rejection, qualified context delivery and persistent feedback independent of connection polling. Core tests: 36 passed. Interactive browser tests: 11 passed.
+
+On the actual Omarchy desktop, opened the exported HTML in Chromium, closed the relationship inspector and selected the dashed Ship Date relationship. The inspector showed Ship Date and Inactive. Also opened the CLI-prepared Sales YoY measure view, opened Browse measures and closed it with Escape, restoring the analysis.
+
+The Omarchy desktop’s installed T3 client is the older September build and displays no projects. The independent current T3 web client stops at pairing with `HTTP Authentication failed; no valid credentials available`. Consequently native T3 download-dialog acceptance on that desktop remains unverified; the automated host tests and desktop offline-file test are distinct evidence. No pairing credentials were requested or changed during this check.

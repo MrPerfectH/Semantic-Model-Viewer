@@ -15,7 +15,9 @@ window.SMV_MCP_SYNC=async(receipt)=>{
 };
 window.SMV_SEND_CONTEXT=async()=>{
   const current=window.smv.inspect();
+  if(!current.selection)throw new Error('Select a table, column, relationship or measure first.');
   await host.updateModelContext({content:[{type:'text',text:JSON.stringify({session,selection:current.selection,workspace:current.workspace,revision:current.revision,sourceRevision:current.sourceRevision})}]});
+  return 'Shared '+(current.selection.table?current.selection.table+'['+current.selection.name+']':current.selection.name)+'. Ask your next question in chat.';
 };
 host.ontoolresult=async result=>{
   const data=result._meta?.viewer;if(!data)return;
@@ -31,7 +33,11 @@ host.ontoolresult=async result=>{
 host.onhostcontextchanged=context=>window.SMVInteractive.appearance(context);
 window.SMV_EXPAND_WORKSPACE=async()=>{
   const context=host.getHostContext();
-  if(context?.availableDisplayModes?.includes('fullscreen'))await host.requestDisplayMode({mode:'fullscreen'});
+  if(context?.availableDisplayModes?.includes('fullscreen')){
+    const result=await host.requestDisplayMode({mode:'fullscreen'});
+    if(result.mode!=='fullscreen')throw new Error('The host kept the viewer inline. Try expanding again when the agent is idle.');
+    return 'Workspace expanded.';
+  }
   else throw new Error('This host does not offer a fullscreen workspace. Save the offline view and open it in your browser.');
 };
 window.SMV_SAVE_OFFLINE=async()=>{
@@ -41,7 +47,14 @@ window.SMV_SAVE_OFFLINE=async()=>{
   const view=JSON.stringify(window.smv.inspect().currentView).replace(/</g,'\\u003c');
   const boot='window.SMV_SOURCE_REVISION='+JSON.stringify(window.SMV_SOURCE_REVISION)+';SMVExplanation.start('+view+');';
   html=html.replace('</body>',()=>'<script data-smv-explanation-adapter>'+adapter.replace(/<\/script/gi,'<\\/script')+'</script><script>'+boot+'</script></body>');
-  const response=await host.downloadFile({contents:[{type:'resource',resource:{uri:'file:///semantic-model-explanation.html',mimeType:'text/html',text:html}}]});
+  let upload,resource;
+  for(let offset=0;offset<html.length;offset+=32768){
+    const staged=output(await host.callServerTool({name:'smv_app_download',arguments:{...(upload?{upload}:{}),chunk:html.slice(offset,offset+32768),complete:offset+32768>=html.length}}));
+    upload=staged.upload;resource=staged.resource;
+  }
+  const status=document.querySelector('.smv-action-status');if(status)status.textContent='Confirm the download in your chat app…';
+  const response=await host.downloadFile({contents:[resource]});
   if(response.isError)throw new Error('Download was declined or is unsupported. Ask the agent to export an offline HTML view.');
+  return 'Download requested: semantic-model-explanation.html. Open it in a browser to explore offline.';
 };
 host.connect().then(async()=>{window.SMVInteractive.appearance(host.getHostContext()||{});await sizeWorkspace();}).catch(error=>{const status=document.querySelector('.smv-status');if(status)status.textContent='Inline host connection unavailable: '+error.message;});
