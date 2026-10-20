@@ -35,6 +35,7 @@ test('installed-style stdio command negotiates UI capability and serves actual v
       const inspected=await client.callTool({name:'smv_inspect',arguments:{model:'Models/demo/Contoso Retail.SemanticModel'}});assert.equal(inspected.structuredContent.name,'Contoso Retail');
       const opened=await client.callTool({name:'smv_open',arguments:{model:'Models/demo/Contoso Retail.SemanticModel',view:require('../examples/explanations/sales-yoy-calculation.json')}});
       assert.ok(!opened.isError,JSON.stringify(opened.content));assert.equal(opened.structuredContent.presentation.inline.available,ui);
+      const status=await client.callTool({name:'smv_status',arguments:{session:opened.structuredContent.session}});assert.equal(status.structuredContent.presentation.inline.available,ui,'status preserves negotiated UI capability');
       if(ui){
         assert.equal(opened._meta.viewer.view.focus.name,'Sales YoY');
         const resource=await client.readResource({uri:URI});assert.equal(resource.contents[0].mimeType,'text/html;profile=mcp-app');assert.match(resource.contents[0].text,/smv_app_sync/);

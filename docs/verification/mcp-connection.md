@@ -12,15 +12,17 @@ Verified locally on 2026-10-20 on Linux, on branch `fix/prepared-view-presentati
 
 The initial browser run failed because the machine's default temporary storage returned write error -122. Re-running with a writable temporary directory passed. No application behavior was changed to disguise this environment failure.
 
-## Target T3 status: native chat verification pending
+## Target T3 status: native MCP App created; visual acknowledgement pending
 
-The installed T3 server reported version `0.1.1-nightly.20261019.3360`. Its installed client assets contain an MCP Apps renderer and protocol handlers. That establishes the presence of host code, not a completed integration with this provider session.
+The installed T3 server reported version `0.1.1-nightly.20261019.3360`. After a subsequent turn loaded the new registration, the running Codex tool catalog exposed `semantic-model-viewer.smv_open` and the other viewer tools.
 
-Registered `semantic-model-viewer` through `codex mcp add`, with `SMV_ROOT` scoped to this checkout and a writable local cache temporary directory. `codex mcp get semantic-model-viewer --json` confirmed the registration was enabled. This is a development-machine configuration outside the repository, not an installer shipped to other computers.
+Called the real `smv_open` tool in this conversation with the committed Sales YoY calculation view. It returned `presentation.inline.available: true` and `ui://smv/viewer.html`. T3's durable tool output recorded a `t3McpApp` attachment with server `semantic-model-viewer`, tool `smv_open`, and the correct resource URI. This proves native MCP App packaging in the actual target host, rather than a custom `html_render` loader.
 
-The current running tool connection did not reload the server: `resources/list` returned `unknown MCP server 'semantic-model-viewer'`, and no `smv_*` tool was exposed in the turn's tool catalog. The final native T3 test must be run after that connection is refreshed. Call the newly exposed `smv_open` tool directly, inspect its negotiated UI capability, and verify user interaction with the native MCP App card. Do not substitute `html_render`, a custom loader, SDK test-host screenshots, or a locally simulated capability for this final check.
+The MCP session remained alive, but its client list was empty during observation. An independent browser could reach T3 but was stopped at its pairing screen; short-lived verification tokens were revoked and their temporary files removed afterward. Consequently native panel mounting, rendered content, and user interaction are still unverified. Asked the owner whether the native card is interactive, blank/error, or absent. Do not claim visual acceptance or successful state synchronization without that acknowledgement.
 
-No claim of end-to-end T3 inline acceptance is made by these tests.
+The live test also exposed inconsistent diagnostics: `smv_open` reported negotiated UI support while `smv_status` returned the CLI session's generic unsupported value. The MCP adapter now applies its negotiated UI capability to both responses, with a failing-then-passing real-stdio regression check. This reporting fix does not itself prove that a UI has mounted; the client acknowledgements remain the evidence for that.
+
+Registered `semantic-model-viewer` through `codex mcp add`, scoped to this checkout with a writable local temporary directory. This is a development-machine configuration outside the repository, not an installer shipped to other computers.
 
 ## Repeat setup on another development machine
 
