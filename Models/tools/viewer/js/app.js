@@ -1341,9 +1341,10 @@
         var library = workspace.explorer || {};
         ex.query = typeof library.query === 'string' ? library.query : '';
         ex.filter = ['all', 'canvas', 'available'].includes(library.filter) ? library.filter : 'all';
-        ex.direction = ['incoming', 'outgoing', 'connected'].includes(library.direction) ? library.direction : 'incoming';
-        ex.depth = library.depth === 'direct' ? 'direct' : 'all';
-        ex.includeInactive = !!library.includeInactive; ex.mapHidden = !!library.mapHidden;
+        ex.direction = ['incoming', 'outgoing', 'connected'].includes(library.direction) ? library.direction : 'connected';
+        ex.depth = ['direct', 'two', 'all'].includes(library.depth) ? library.depth : 'direct';
+        this.state.focusDepth = ex.depth === 'direct' ? 1 : ex.depth === 'two' ? 2 : 1000000;
+        ex.includeInactive = library.includeInactive !== false; ex.mapHidden = !!library.mapHidden;
         ex.libraryHidden = !!library.libraryHidden; ex.inspectorHidden = !!library.inspectorHidden;
         ex.history = []; ex.message = 'Offline snapshot. Changes stay in this tab; save a snapshot to keep them.'; ex._key = null;
       }
