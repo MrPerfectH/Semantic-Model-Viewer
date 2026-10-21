@@ -434,6 +434,41 @@ positions), `smv_layout_<id>` / `smv_presets_<id>` (imported models), `smv_model
 `smv_current_v1`, `smv-detail`, `smv-layout`, `smv-lines`, `smv-mvw`, `smv_repo_name`,
 `smv_repo_cache`, `smv-measures-workspace-v1`.
 
+### Table and column references in measure dependencies
+
+The Measures graph defaults to measures only. Enable **Show table and column references**
+to add source tables, using the same colors as the Tables canvas. Cards contain only the
+columns connected to measures visible in the graph. A dashed **Whole table** link attaches
+to the table header (for example, `COUNTROWS(Sales)`); a solid column link attaches to its
+row (for example, `SUM(Sales[Amount])`). A measure's home table does not imply a dependency.
+
+In the left library, choose **Table or column**. Expand a table and choose **Use whole
+table** or any column; the picker includes columns with no detected consumers. The library
+then lists direct references first, followed by indirect dependents. Change the source to
+return to the picker. You can also select a source table header in the graph to find
+measures referencing that table or any of its columns.
+Select a column row to narrow the source. The table details drawer also provides
+**Find dependent measures**, and each column has **Find measures**. Source analysis includes
+indirect dependents through measures, a **Direct only** filter, and searchable results.
+Selecting a dependent measure inspects its DAX without changing the source; **Analyze this
+measure** returns to measure analysis. Source selection, graph settings, and inspected DAX
+are preserved in interactive snapshots.
+
+Each formula card owns its reference summary. Original DAX shows direct references only;
+**Inline measures** shows references resolved from the expanded expression, including
+columns introduced by inlined measures. Comparison cards retain their own reference scope.
+The DAX pane opens when a dependent measure is inspected; before that, the graph uses
+the available width. Inline, formatting and source library settings also survive snapshots.
+
+This is static DAX reference detection, not complete engine lineage. Calculated columns
+and calculated tables can be sources, but their defining expressions are not expanded.
+Relationship filter propagation and calculation-item expressions are not traced. Qualified
+column references and explicit table references are resolved against the model; unqualified
+bracket names resolve to measures first, then columns in the measure's home table. Ambiguous
+row-context references outside that table and virtual columns are not fully resolved.
+Graphs are limited to 500 measures and 200 source table/column rows, with visible notices;
+dependent-measure lists show up to 120 matches at once and can be narrowed by search.
+
 ## Regression checks
 
 No installation is needed. With Node.js available:

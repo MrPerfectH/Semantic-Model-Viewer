@@ -656,4 +656,83 @@ test('local app: the hosted page is the demo and opens the sample; the local app
   assert.equal(app.isDemoSite(), false);
 });
 
+test('source impact distinguishes whole tables, columns, home tables and indirect measures', () => {
+  const { app } = harness();
+  const fixture = model([
+    { name: 'Sales', columns: [{name:'Amount'}, {name:'Quantity'}, {name:'LineAmount',isCalc:true}, {name:'Unused'}] },
+    { name: 'Measures', measures: [
+      {name:'Revenue',dax:'SUM(sales[amount])'}, {name:'Rows',dax:'COUNTROWS(Sales)'},
+      {name:'Average',dax:'DIVIDE([Revenue], [Rows])'},
+      {name:'Calculated input',dax:'SUM(Sales[LineAmount])'},
+      {name:'Duplicate refs',dax:'SUM(Sales[Amount]) + SUM(Sales[Amount]) + COUNTROWS(Sales)'},
+      {name:'Unknown',dax:'SUM(Sales[Missing]) + Missing[Amount]'},
+    ] },
+  ]);
+  app.prepareModel(fixture); app.model = fixture;
+  assert.deepEqual(plain(app.measureImpact({table:'Sales',column:'Amount'})), {direct:['Duplicate refs','Revenue'],all:['Average','Duplicate refs','Revenue']});
+  assert.deepEqual(plain(app.measureImpact({table:'Sales'})), {direct:['Calculated input','Duplicate refs','Revenue','Rows'],all:['Average','Calculated input','Duplicate refs','Revenue','Rows']});
+  assert.deepEqual(plain(app.measureImpact({table:'Measures'})), {direct:[],all:[]}, 'Home table does not create source references');
+  assert.deepEqual(plain(app.measureImpact({table:'Sales',column:'Unused'})), {direct:[],all:[]});
+  assert.deepEqual(plain(app.measureImpact({table:'Sales',column:'LineAmount'})), {direct:['Calculated input'],all:['Calculated input']});
+  assert.deepEqual(plain(app.measureImpact({table:'Sales',column:'Missing'})), {direct:[],all:[]});
+  assert.equal(fixture.tables[1].measures.find(m=>m.name==='Unknown')._unresolved.length,2);
+});
+
+test('table reference scanning skips strings, comments, functions and variable names', () => {
+  const { app } = harness();
+  const fixture = model([
+    {name:'Sales',columns:[{name:'Amount'}]},
+    {name:"Owner's Data",columns:[{name:'Amount'}]},
+    {name:'SUM'}, {name:'LocalRows'},
+    {name:'Measures',measures:[
+      {name:'Quoted',dax:"COUNTROWS('Owner''s Data') + COUNTROWS(sales)"},
+      {name:'Not references',dax:'VAR LocalRows = 1 RETURN SUM({LocalRows}) & "Sales /*" /* Sales */ // Sales\n'},
+      {name:'Variable table',dax:'VAR LocalRows = FILTER(Sales, Sales[Amount] > 0) RETURN COUNTROWS(LocalRows)'},
+      {name:'Qualified measure',dax:'Measures[Quoted]'},
+    ]},
+  ]);
+  app.prepareModel(fixture); app.model = fixture;
+  assert.deepEqual(plain(fixture.tables[4].measures[0]._tables), ["Owner's Data",'Sales']);
+  assert.deepEqual(plain(fixture.tables[4].measures[1]._tables), []);
+  assert.deepEqual(plain(fixture.tables[4].measures[2]._tables), ['Sales']);
+  assert.deepEqual(plain(fixture.tables[4].measures[3]._tables), []);
+  assert.deepEqual(plain(fixture.tables[4].measures[3]._deps), ['Quoted']);
+});
+
+test('source impact terminates on measure cycles and is rebuilt for a new model', () => {
+  const { app } = harness();
+  const first = model([{name:'Sales',columns:[{name:'Amount'}],measures:[
+    {name:'A',dax:'SUM(Sales[Amount]) + [B]'}, {name:'B',dax:'[A]'},
+  ]}]);
+  app.prepareModel(first); app.model=first;
+  assert.deepEqual(plain(app.measureImpact({table:'Sales'})), {direct:['A'],all:['A','B']});
+  const second=model([{name:'Sales',columns:[{name:'Amount'}],measures:[{name:'A',dax:'1'}]}]);
+  app.prepareModel(second);app.model=second;
+  assert.deepEqual(plain(app.measureImpact({table:'Sales'})), {direct:[],all:[]});
+});
+
 test('Tables to Power Query and back preserves viewport; other normal return routes still fit',()=>{const {app}=harness();let fits=0,transforms=0;app.state.viewMode='graph';app.canvas.view={x:137,y:93,k:.9};app.captureTableView=()=>({selected:'Sales'});app.canvas.applyHighlight=()=>{};app.canvas.fitView=()=>{fits++;app.canvas.view={x:0,y:0,k:1};};app.canvas.updateTransform=()=>{transforms++;};app.setViewMode('power-query');app.setViewMode('graph');assert.deepEqual(plain(app.canvas.view),{x:137,y:93,k:.9});assert.equal(fits,0);assert.equal(transforms,1);app.setViewMode('measures');app.setViewMode('graph');assert.equal(fits,1);assert.deepEqual(plain(app.canvas.view),{x:0,y:0,k:1});});
+
+test('displayed DAX references use the same resolution rules as dependency indexing', () => {
+  const {app}=harness();app.model=dependencyFixture();app.prepareModel(app.model);
+  for(const table of app.model.tables) for(const measure of table.measures) {
+    const refs=app.referencesInDax(measure.dax,table.name);
+    assert.deepEqual(plain(refs.columns),plain(measure._cols),measure.name);
+    assert.deepEqual(plain(refs.tables),plain(measure._tables),measure.name);
+    assert.deepEqual(plain(refs.measures.filter(name=>name!==measure.name)),plain(measure._deps),measure.name);
+  }
+});
+
+test('snapshot without saved explorer settings opens with connected tables, so a dimension shows its facts', () => {
+  const { app } = harness();
+  const explorer = { loadModel() {}, direction: 'incoming', depth: 'all', includeInactive: false };
+  Object.assign(app.canvas, { setLayoutKey() {}, applyPreset() {}, setPresets() {}, updateTransform() {}, renderLines() {}, view: { x: 0, y: 0, k: 1 } });
+  Object.assign(app, { explorer, prepareModel() {}, captureTableView: () => ({}), measures: {}, matrix: {}, sidebar: {} });
+  const payload = overrides => ({ model: model([{ name: 'Date' }, { name: 'Sales' }]), workspace: overrides });
+  app.loadSnapshot(payload({}));
+  assert.deepEqual(plain({ d: explorer.direction, depth: explorer.depth, inactive: explorer.includeInactive, focus: app.state.focusDepth }),
+    { d: 'connected', depth: 'direct', inactive: true, focus: 1 });
+  app.loadSnapshot(payload({ explorer: { direction: 'outgoing', depth: 'two', includeInactive: false } }));
+  assert.deepEqual(plain({ d: explorer.direction, depth: explorer.depth, inactive: explorer.includeInactive, focus: app.state.focusDepth }),
+    { d: 'outgoing', depth: 'two', inactive: false, focus: 2 });
+});
