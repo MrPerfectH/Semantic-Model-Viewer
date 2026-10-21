@@ -562,4 +562,4 @@ also restores the complete layout membership. Arrange remains input → consumer
 preserves positions until explicitly invoked. Static analysis is partial; cycles and
 uncertainty remain visible. No M is executed or included in default shared snapshots.
 
-The [interactive agent workflow](docs/interactive-viewer.md) opens focused Tables and Measures views through CLI or MCP, keeps annotations attached during exploration, and exports the acknowledged viewer state. Inline MCP Apps are host-dependent.
+The [interactive agent workflow](docs/interactive-viewer.md) uses the CLI to open focused Tables and Measures views in the integrated browser, reuse a live session for follow-up questions, read selections, and export acknowledged viewer state. MCP is optional; the browser workflow needs no embedded chat UI.

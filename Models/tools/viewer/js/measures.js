@@ -703,7 +703,7 @@
     },
     pickMeasure: function (n) {
       var self = this, app = this.app;
-      if (typeof document !== 'undefined' && document.body) document.body.classList.remove('smv-browse-open');
+      if (window.SMVInteractive) window.SMVInteractive.closeLibrary(false);
       this.cancelSnapshotViewport();
       app.setState({ selMeasure: n, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvOpen: app.mvOpenFor(n), gExtra: {}, gHover: null, gPin: null });
     },
@@ -994,6 +994,10 @@
         el('span', { cls: 'mv-eyebrow', text: 'MEASURE LIBRARY' }),
         el('button', { cls: 'mv-text-button', text: 'Overview', onClick: function () { app.setState({ selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, gPin: null, gHover: null }); } })
       ]));
+      if(document.body.dataset.smvInteractive&&window.SMVInteractive)top.querySelector('.mv-library-heading').appendChild(el('button', {
+        cls:'mv-text-button',text:'Close','aria-label':'Close measure library',
+        onClick:function(){window.SMVInteractive.closeLibrary(true);}
+      }));
       var sourceModes = el('div', { cls: 'mv-filter-tabs mv-start-tabs', role: 'group', 'aria-label': 'Start analysis from' });
       this.sourceModeButtons = {};
       [['measures', 'Measure'], ['sources', 'Table or column']].forEach(function (item) {

@@ -3,44 +3,31 @@ name: smv-explain
 description: Illustrate semantic-model explanations with the Semantic Model Viewer CLI using annotated model views, external results, and proposed changes. Use when a user wants to understand model logic, discuss a suspected issue, or see a modeling idea.
 ---
 
-# Illustrate a model explanation
+# Explore a model in the browser
 
-Use an installed `smv` command, or `node bin/smv.cjs` from the Semantic Model Viewer checkout. `smv --help` lists commands. Keep scope with the user's question: one useful image is sufficient when a walkthrough adds no value.
+Use the installed `smv` command, or `node bin/smv.cjs` from a checkout. The default is the actual interactive viewer in the harness's integrated browser. MCP is optional and is not required for this workflow. Do not create answer-specific HTML wrappers, tabs, SVG diagrams or injected presentation scripts.
 
-Use `smv inspect <model-path>` to obtain actual object names, relationship names, formulas, and query IDs. Inputs are a TMDL model folder or a BIM file. Do not guess identifiers from labels. `smv discover <folder>` lists model paths if needed.
+## Start and retain a session
 
-Create a version 1 JSON view. For example:
+1. Run `smv inspect <model-path>` to obtain actual qualified names, relationship identifiers and formulas. Use `smv discover <folder>` when the model path is unknown. Never guess identifiers from labels.
+2. Write a versioned view JSON selecting the question's objects. Consult `docs/interactive-viewer.md` and the packaged `examples/explanations/sales-yoy-calculation.json` and `sales-yoy-relationships.json`. Include dependencies and source relationship endpoints needed to explain the calculation. Focus alone needs no callouts or highlights; add them only when they supply useful information.
+3. Run `smv serve <model-path> --view view.json --background --session state.json --json`. Retain the absolute session-file path and returned URL for follow-up turns.
+4. Open that URL with the harness's native browser tool. Retain its tab ID and respect browser ownership. Confirm that the page is interactive and `smv session status state.json --json` reports a fresh acknowledged browser revision before claiming it is ready.
 
-```json
-{
-  "version": 1,
-  "mode": "graph",
-  "tables": ["Sales", "Date"],
-  "highlights": [{"kind": "table", "name": "Date"}],
-  "callouts": [{"object": {"kind": "table", "name": "Date"}, "text": "The date context we are discussing."}],
-  "chrome": false,
-  "crop": "highlights"
-}
-```
+`smv open` also launches the machine's browser when no integrated browser is available. A remote harness browser might not reach the CLI machine's localhost. Report that specific limitation and offer a local browser or portable HTML; never label a screenshot interactive. The session file and URL contain credentials: do not commit them.
 
-Column and measure references also require `table`. A relationship's `name` is its source identifier; a query's `name` is its metadata ID from inspect. `mode: "measures"` requires a measure `focus`. Other modes are `matrix`, `clusters`, and `power-query`. Matrix annotations target tables; query views target queries.
+## Continue in the same browser
 
-Run `smv shot <model-path> --view view.json --out image.png --json`, inspect the image, and revise context, dimensions, or labels when needed. Capture requires Chrome/Chromium; set `SMV_BROWSER` to the executable if discovery fails. Unknown, invisible, or clipped objects are errors to resolve, not reasons to omit the visual silently.
+Reuse the live session and tab for the same model. Read `smv session status state.json --json`, then send `smv session update state.json --revision <current-requested-revision> --view next-view.json --json`. Do not rebuild screenshots or start another server for each question. Open another ordinary browser tab only when the user needs simultaneous perspectives.
 
-For a sequence, write an explanation containing `version: 1`, `title`, `model`, and `steps`. Each step has a unique simple `id`, a `caption`, and one `view`, `result`, or `calculation`. Paths resolve relative to the explanation file. Run `smv explain validate explanation.json`, then `smv explain build explanation.json --out <new-directory> --json`. Inspect the resulting images before presenting them.
+`awaiting-viewer` is not an applied acknowledgement. While the user explores, the viewer offers Apply or Keep exploring. Respect that choice and check status before describing an update as visible. Do not reload or force navigation to bypass it. Reset returns to the authored view.
 
-External tools can supply datasets; this CLI never runs DAX, SQL, or M. Preserve the source tool, query, execution time, filters, and model identity when known. Keep unknown provenance unknown and label invented values `illustrative`. Calculations are limited arithmetic over those inputs. Consult the repository's `docs/visual-explanations.md` for result, calculation, and proposal contracts when using those features.
+Read `smv session selection state.json --json` when the user asks about “this one”; it returns a qualified object and revisions. Use `--client <clientId>` when several tabs are active. A missing or stale selection is not evidence of what the user sees. A changed source revision requires reopening the view. Keep the server running while the user reviews it; stop temporary sessions with `smv session stop state.json` when no longer needed.
 
-Proposals illustrate suggestions; they do not edit the source or simulate model behavior. Explain the distinction between the visible model structure and your interpretation where it matters to the user's question.
+## Optional artifacts and evidence
 
-Present the PNG with the host's supported image mechanism. For multi-step HTML in T3, use its available HTML preview/render tools; otherwise provide artifact links or Markdown images. Do not assume every host can embed HTML. Local publishing or sending artifacts to another service is a separate action governed by the user's request.
+Export only when needed: `smv session export state.json --basis authored|current --revision <n> --out view.html --json`. Current-state export requires a fresh acknowledgement. HTML includes the actual viewer and model metadata and opens offline. PNG capture needs Chrome/Chromium (`SMV_BROWSER` selects an executable); inspect captures before presenting them. `smv shot` and `smv explain build` remain available for requested images and walkthroughs; see `docs/visual-explanations.md`.
 
-Prefer the actual interactive viewer for exploration. Consult `docs/interactive-viewer.md` for version 2 dependency context, revisioned session updates, current selection, export basis and MCP setup. Never recreate the viewer in answer-specific HTML, SVG or JavaScript. Use CLI-generated artifacts and the app's own interactions.
+The CLI never executes DAX, SQL or M. External tools may supply numeric results; retain their source, query, execution time, filters and model identity when known. Label invented numbers illustrative. Proposals illustrate suggestions without modifying the source or simulating model behavior.
 
-Use `smv serve <model> --view view.json --background --session state.json --json` to obtain a local view URL without choosing a browser for the host. Use the harness's native browser/right pane if the URL is reachable. `smv open <model> --view view.json --session state.json` also launches the machine's browser. Check host ownership before operating a user's tab. Do not infer that remote hosts can reach localhost.
-
-Use `smv session status` to read the current requested revision. Send `smv session update <state.json> --revision <n> --view <file> --json`; `awaiting-viewer` is not an applied acknowledgement. Respect Apply/Keep exploring. Read `smv session selection <state.json> --json` to identify “this one”; use `--client` when several tabs are active. Do not guess from labels. Export with an explicit `--basis authored|current` and the current `--revision`.
-
-In an MCP harness, use the corresponding `smv_*` tools. Inline UI requires MCP Apps capability support, not merely MCP support. Use the actual UI resource when supported; otherwise use a screenshot plus a reachable open-view link or offline artifact. The MCP App selection-context action is explicit. Closing the MCP connection stops its owned sessions. Do not disable protections or publish local models to force embedding.
-
-`smv explain build` produces an `interactive.html` walkthrough with actual viewer steps as well as static outputs. Stop sessions started for temporary work with `smv session stop state.json`. Source watching refreshes the served artifact; reload the browser to see the new view.
+The existing MCP adapter is an optional integration for hosts that require it. Do not configure MCP or create embedded chat cards for the standard CLI/browser flow. Host-specific embedding is not a prerequisite for exploring the model.
