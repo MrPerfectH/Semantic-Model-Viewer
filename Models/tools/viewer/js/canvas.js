@@ -389,15 +389,6 @@
       var longWord = String(t.name).split(/\s+/).reduce(function (a, w) { return Math.max(a, w.length); }, 0);
       this.cards[t.name] = { el: card, head: head, meta: meta, body: body, caret: caret, lock: lock, rm: rm, nm: nm, src: src, roleEl: role, table: t, expanded: false, colRows: colRows, ring: null, longWord: longWord, dx: 0 };
       this.layoutCard(t.name);
-      /* A card's height is cached for the edges. Anything that resizes it later (a font that
-         loads, a wrapped title) has to refresh that cache, or lines end off the card. */
-      if (typeof ResizeObserver !== 'undefined') {
-        new ResizeObserver(function () {
-          var cur = self.cards[t.name];
-          if (!cur || cur.el !== card || !card.offsetHeight || card.offsetHeight === cur.h) return;
-          self._measureCard(t.name); self.queueLines();
-        }).observe(card);
-      }
       this.bindCardDrag(t.name);
       head.setAttribute('role', 'button'); head.setAttribute('tabindex', '0'); head.setAttribute('aria-label', 'Select table ' + t.name);
       head.addEventListener('keydown', function (e) { if (e.target !== head) return; if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); self.focusGraph(t.name); } });
