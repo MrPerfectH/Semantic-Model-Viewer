@@ -97,3 +97,30 @@ window.smv={ready:()=>ready};setTimeout(()=>reject(new Error('MCP App never sync
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'smv-app-bridge-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
   await capture(html,path.join(root,'bridge.png'),{width:1440,height:1000,scale:1});assert.equal(synchronized,true);
 });
+
+test('table and column Measures focus round-trip without a disconnected receipt', { skip: !browser }, async t => verify(t, { version: 2, mode: 'measures', focus: { kind: 'table', name: 'Sales' }, banner: false }, `
+check(app.state.dependencySource.table==='Sales','table dependency view opens');
+check(app.state.selMeasure===null,'table is not treated as a measure');
+check(getComputedStyle(document.querySelector('.smv-explanation-controls')).display==='none','plain exploration hides banner');
+const saved=smv.inspect().currentView;check(saved.focus.kind==='table'&&saved.focus.name==='Sales','receipt preserves table focus');
+SMVExplanation.validate(app.model,saved);await smv.apply(saved);check(app.state.dependencySource.table==='Sales','table view restores');
+await smv.apply({version:2,mode:'measures',focus:{kind:'column',table:'Sales',name:'Net Amount'},banner:false});
+check(app.state.dependencySource.column==='Net Amount','column dependency view opens');
+SMVExplanation.validate(app.model,smv.inspect().currentView);
+await smv.apply({version:2,mode:'measures',banner:false});
+check(app.state.selMeasure===null&&app.state.dependencySource===null,'Measures overview opens');
+SMVExplanation.validate(app.model,smv.inspect().currentView);
+await smv.apply(${JSON.stringify(measure)});check(app.state.dependencySource===null&&app.state.selMeasure==='Sales LY','measure focus clears source mode');
+`));
+test('quiet views expose pending Apply and explicit apply bypasses exploration', { skip: !browser }, async t => verify(t, { ...tables, banner: false }, `
+const controls=()=>document.querySelector('.smv-explanation-controls');
+check(getComputedStyle(controls()).display==='none','banner initially hidden');
+document.body.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}));
+const view={...${JSON.stringify(measure)},banner:false};
+check((await smv.offer({revision:2,sourceRevision:SMV_SOURCE_REVISION,view})).state==='pending','normal update respects exploration');
+check(getComputedStyle(controls()).display!=='none','pending Apply remains visible');
+check(document.querySelector('.smv-pending').textContent.includes('Apply'),'Apply action present');
+check((await smv.offer({revision:3,sourceRevision:SMV_SOURCE_REVISION,view,apply:true})).state==='applied','explicit apply takes over');
+check(smv.inspect().revision===3&&app.state.selMeasure==='Sales LY','new view acknowledged');
+check(getComputedStyle(controls()).display==='none','quiet after acknowledgement');
+`));

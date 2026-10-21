@@ -21,7 +21,7 @@
   function validate(model, input) {
     if (!object(input) || ![1,2].includes(input.version)) fail('version must be 1 or 2');
     var v = JSON.parse(JSON.stringify(input));
-    var allowed = ['version','mode','tables','focus','highlights','callouts','width','height','scale','chrome','crop','proposals','context','state','annotationsVisible'];
+    var allowed = ['version','mode','tables','focus','highlights','callouts','width','height','scale','chrome','crop','proposals','context','state','annotationsVisible','banner'];
     Object.keys(v).forEach(function (k) { if (!allowed.includes(k)) fail('unknown field ' + k); });
     v.mode = v.mode || 'graph';
     if (!['graph','measures','matrix','clusters','power-query'].includes(v.mode)) fail('unsupported mode ' + v.mode);
@@ -29,12 +29,13 @@
     ['width','height'].forEach(function (k) { if (!Number.isInteger(v[k]) || v[k] < (v.version===2?320:400) || v[k] > 4096) fail(k + ' must be an integer within the supported viewport range (v1: 400–4096, v2: 320–4096)'); });
     if (![1,2].includes(v.scale)) fail('scale must be 1 or 2');
     if(v.annotationsVisible!==undefined&&typeof v.annotationsVisible!=='boolean')fail('annotationsVisible must be boolean');
+    if (v.banner !== undefined && typeof v.banner !== 'boolean') fail('banner must be boolean');
     if (v.chrome !== undefined && typeof v.chrome !== 'boolean') fail('chrome must be boolean');
     if (v.crop !== undefined && !['viewport','highlights'].includes(v.crop)) fail('crop must be viewport or highlights');
     v.highlights = v.highlights || []; v.callouts = v.callouts || [];
     if (!Array.isArray(v.highlights) || !Array.isArray(v.callouts)) fail('highlights and callouts must be arrays');
     if (v.focus) resolve(model, v.focus);
-    if (v.mode === 'measures' && (!v.focus || v.focus.kind !== 'measure')) fail('measures mode requires a measure focus');
+    if (v.mode === 'measures' && ((!v.focus&&v.version===1) || (v.focus&&!['measure','table','column'].includes(v.focus.kind)))) fail('measures mode requires a measure, table or column focus');
     if(v.context!==undefined){
       if(!object(v.context)||Object.keys(v.context).some(function(k){return !['depth','direction','limit'].includes(k);}))fail('invalid dependency context');
       if(v.mode!=='measures')fail('dependency context requires measures mode');
@@ -93,7 +94,8 @@
     await frame();
     if(view.mode==='measures'){
       app.measures._explanationContext=view.context||null;app.measures._gC=null;app.measures._wrapDax=true;
-      app.setState({selMeasure:view.focus.name,gPin:null,gExtra:{},gHover:null});
+      if(!view.focus||view.focus.kind==='measure')app.setState({selMeasure:view.focus?view.focus.name:null,dependencySource:null,mvSourceMode:'measures',gPin:null,gExtra:{},gHover:null});
+      else app.measures.analyzeSource(view.focus.kind==='table'?view.focus.name:view.focus.table,view.focus.kind==='column'?view.focus.name:null);
       await frame();
       app.measures.setWorkspaceMode('split',false);
     }

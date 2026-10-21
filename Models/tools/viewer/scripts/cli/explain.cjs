@@ -20,7 +20,7 @@ function reportUsage(report,model){
 }
 function prepare(source,input,options={}){
   const context=runtime(),{model,app}=readModel(context,source),view=validate(model,input);
-  const focus={tables:view.tables || model.tables.map(t=>t.name),measure:view.mode==='measures'?view.focus.name:null};
+  const focus={tables:view.tables || model.tables.map(t=>t.name),measure:view.mode==='measures'&&view.focus&&view.focus.kind==='measure'?view.focus.name:null};
   let html=snapshot(context,app,focus,{usage:options.report?reportUsage(options.report,model):null});
   const interactive=fs.readFileSync(path.join(__dirname,'../../js/interactive-view.js'),'utf8').replace(/<\/script/gi,'<\\/script');
   const adapter=fs.readFileSync(path.join(__dirname,'../../js/explanation-view.js'),'utf8').replace(/<\/script/gi,'<\\/script');

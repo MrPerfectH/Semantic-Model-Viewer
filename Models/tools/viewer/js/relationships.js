@@ -90,7 +90,7 @@
     return path.reverse();
   }
 
-  var api = { traverse: traverse, pathTo: pathTo, explanation: EXPLANATION };
+  var api = { behaviorOf: behaviorOf, traverse: traverse, pathTo: pathTo, explanation: EXPLANATION };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   g.RelationshipGraph = api;
 })(typeof window !== 'undefined' ? window : globalThis);

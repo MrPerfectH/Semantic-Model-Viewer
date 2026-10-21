@@ -44,3 +44,31 @@ test('source mutation during capture rejects the export and preserves the previo
   await assert.rejects(exportSession(session,{basis:'authored',revision:1,out,force:true}),e=>e.code==='SOURCE_CHANGED');
   assert.equal(fs.readFileSync(out,'utf8'),'previous artifact');assert.ok(!fs.readdirSync(root).some(n=>n.startsWith('.smv-export-')));
 });
+
+test('Measures accepts table and column sources; banner is an explicit boolean', () => {
+  assert.equal(prepare(model, { version: 2, mode: 'measures' }).view.mode, 'measures');
+  for (const focus of [{ kind: 'table', name: 'Sales' }, { kind: 'column', table: 'Sales', name: 'Net Amount' }]) {
+    const p = prepare(model, { version: 2, mode: 'measures', focus, banner: false });
+    assert.deepEqual(p.view.focus, focus);
+    assert.equal(p.view.banner, false);
+    assert.match(p.html, /analyzeSource/);
+  }
+  assert.throws(() => prepare(model, { version: 2, banner: 'false' }), /banner must be boolean/);
+});
+test('session status distinguishes waiting for Apply from acknowledgement and explicit takeover', async t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'smv-apply-')), file = path.join(root, 'session.json');
+  const server = await serve(model, { session: file }); t.after(() => { server.close(); fs.rmSync(root, { recursive: true, force: true }); });
+  assert.equal(server.appliedView.banner, false);
+  assert.equal(server.application.state, 'awaiting-viewer');
+  await request(file, 'update', { expectedRevision: 1, view: tables });
+  await request(file, 'client', { clientId: 'one', revision: 1, sourceRevision: server.sourceRevision, currentView: tables, explored: true, pendingRevision: 2 });
+  const waiting = await request(file, 'status'); assert.equal(waiting.application.state, 'waiting-for-apply'); assert.match(waiting.application.message, /Waiting for Apply click/);
+  await assert.rejects(request(file, 'update', { expectedRevision: 2, view: tables, apply: 'yes' }), /apply must be boolean/);
+  const update = await request(file, 'update', { expectedRevision: 2, view: tables, apply: true });
+  assert.equal(update.application.applyRequested, true); assert.equal(update.application.state, 'awaiting-viewer');
+  const url = new URL(server.url); url.pathname = '/view'; assert.equal((await (await fetch(url)).json()).apply, true);
+  await request(file, 'client', { clientId: 'one', revision: 3, sourceRevision: server.sourceRevision, currentView: tables, explored: false, pendingRevision: null });
+  assert.equal((await request(file, 'status')).application.state, 'applied');
+  await request(file, 'update', { expectedRevision: 3, view: tables });
+  assert.equal((await (await fetch(url)).json()).apply, false);
+});

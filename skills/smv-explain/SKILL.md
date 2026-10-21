@@ -3,6 +3,8 @@ name: smv-explain
 description: Illustrate semantic-model explanations with the Semantic Model Viewer CLI using annotated model views, external results, and proposed changes. Use when a user wants to understand model logic, discuss a suspected issue, or see a modeling idea.
 ---
 
+Resolve the installed executable with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" --where` (the workspace helper also returns `cliPath`). Use that path or `${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs`; never construct a plugin cache path with a version number.
+
 # Illustrate a model explanation
 
 When loaded through the Claude Code plugin, use `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"` from the user's project, and read guides under `${CLAUDE_PLUGIN_ROOT}/docs/`. Otherwise use an installed `smv` command, or `node bin/smv.cjs` from the Semantic Model Viewer checkout. `smv --help` lists commands. Keep scope with the user's question: one useful image is sufficient when a walkthrough adds no value. Store generated artifacts in the user's project, not the plugin installation.

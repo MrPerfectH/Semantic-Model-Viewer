@@ -30,6 +30,7 @@ function prepare(project = process.cwd()) {
   });
   const id = crypto.randomUUID();
   return {
+    cliPath: fs.realpathSync(path.resolve(__dirname, '../bin/smv.cjs')),
     projectRoot, artifactsDir, sessions,
     newSessionFile: path.join(artifactsDir, `session-${id}.json`),
     newViewFile: path.join(artifactsDir, `view-${id}.json`),

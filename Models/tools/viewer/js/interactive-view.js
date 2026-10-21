@@ -13,7 +13,8 @@
     if(app.state.viewMode==='measures'){
       var name=app.state.gPin||app.state.selMeasure;
       var table=app.model.tables.find(function(t){return t.measures.some(function(m){return m.name===name;});});
-      return table?{kind:'measure',table:table.name,name:name}:null;
+      var source=app.state.dependencySource;
+      return table?{kind:'measure',table:table.name,name:name}:source?(source.column==null?{kind:'table',name:source.table}:{kind:'column',table:source.table,name:source.column}):null;
     }
     if(selected&&(selected.kind==='column'||selected.kind==='query'))return clone(selected);
     if(app.canvas.selRel)return {kind:'relationship',name:app.canvas.selRel.name};
@@ -24,6 +25,7 @@
     var s=node('style');s.id='smv-interactive-css';s.textContent=`
 .smv-hl{position:fixed;border:2px solid #6854d9!important;box-shadow:0 0 0 2px #ffffffb3;border-radius:7px;pointer-events:none;z-index:90;box-sizing:border-box}.smv-proposal{border-color:#b37713!important}.smv-annotation-lines{position:fixed;inset:0;width:100%;height:100%;z-index:89;pointer-events:none}.smv-context-dim{opacity:1!important}body[data-smv-interactive] [data-smv-kind=table]{opacity:1!important}body[data-smv-interactive] .smv-attention-target{color:var(--smv-ink,#25334c)!important}
 .smv-explanation-controls{position:fixed;bottom:12px;left:12px;z-index:200;max-width:calc(100vw - 24px);max-height:38vh;overflow:auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px;border:1px solid var(--smv-line,#cbd2df);border-radius:12px;background:var(--smv-surface,#fff);color:var(--smv-ink,#25334c);box-shadow:0 4px 18px #172b4d14;font:13px/1.5 system-ui}
+.smv-explanation-controls[data-smv-banner=hidden]{display:none}.smv-explanation-controls[data-smv-banner=hidden][data-smv-pending="1"],.smv-explanation-controls[data-smv-banner=hidden][data-smv-error="1"]{display:flex}.smv-explanation-controls[data-smv-banner=hidden]>:not(.smv-pending):not(.smv-status){display:none}.smv-explanation-controls[data-smv-banner=hidden][data-smv-error="0"]>.smv-status{display:none}.smv-pending[hidden]{display:none!important}
 .smv-explanation-controls button{font:inherit;padding:6px 10px;border:1px solid var(--smv-line,#ccd3e0);border-radius:7px;color:inherit;background:var(--smv-soft,#f5f6fb);cursor:pointer}.smv-explanation-controls button:focus-visible{outline:3px solid #8472ed;outline-offset:2px}.smv-view-provenance{flex-basis:100%;max-width:640px}.smv-view-provenance summary{cursor:pointer}.smv-view-provenance pre{max-height:220px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}.smv-notes{max-width:480px;flex-basis:100%;white-space:pre-wrap}.smv-notes p{margin:4px 0}.smv-status{font-size:12px}.smv-pending{flex-basis:100%;padding:8px;border-left:3px solid #6854d9}.smv-hidden-targets{flex-basis:100%;color:var(--smv-muted,#59667b)}
 body[data-smv-interactive] .mv-dax-body pre,body[data-smv-interactive] .mv-dax-code{white-space:pre-wrap!important;overflow-wrap:anywhere!important}
 @media(max-width:700px){body[data-smv-interactive] .mv-library{display:none!important}body[data-smv-interactive].smv-browse-open .mv-library{display:flex!important;position:absolute;inset:0 auto 110px 0;z-index:150;max-width:85vw;width:280px!important;min-width:0}body[data-smv-interactive] .mv-analysis-body[data-mode=split]{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) 8px minmax(0,1fr)}body[data-smv-interactive] .ex-library{max-width:190px}.smv-explanation-controls{font-size:12px}}
@@ -32,7 +34,7 @@ body[data-smv-interactive] .mv-dax-body pre,body[data-smv-interactive] .mv-dax-c
   function annotations(app,view,refs,target){
     style();document.body.dataset.smvInteractive='1';if(active)active.stop();
     document.querySelectorAll('.smv-hl,.smv-callout,.smv-proposal,.smv-annotation-lines,.smv-explanation-controls').forEach(function(n){n.remove();});
-    var controls=node('aside',null,'smv-explanation-controls');controls.setAttribute('aria-label','Explanation controls');
+    var controls=node('aside',null,'smv-explanation-controls');controls.setAttribute('aria-label','Explanation controls');controls.dataset.smvBanner=view.banner===false?'hidden':'shown';controls.dataset.smvPending='0';controls.dataset.smvError='0';
     var label=node('strong','Explanation · attention highlights');controls.appendChild(label);
     if(view.mode==='measures')controls.appendChild(button('Browse measures',function(){dirty=true;app.measures.cancelSnapshotViewport();app.setState({selMeasure:null,gPin:null,gHover:null});document.body.classList.toggle('smv-browse-open');}));
     if(g.SMV_EXPAND_WORKSPACE)controls.appendChild(button('Expand workspace',function(){g.SMV_EXPAND_WORKSPACE().catch(function(e){status.textContent=e.message;});}));
@@ -92,7 +94,7 @@ body[data-smv-interactive] .mv-dax-body pre,body[data-smv-interactive] .mv-dax-c
       if(view.crop==='highlights'&&drawing.length){drawing.push(controls.getBoundingClientRect());var x=Math.max(0,Math.min.apply(null,drawing.map(function(b){return b.left;}))-16),y=Math.max(0,Math.min.apply(null,drawing.map(function(b){return b.top;}))-16);clip={x:x,y:y,width:Math.min(innerWidth,Math.max.apply(null,drawing.map(function(b){return b.right;}))+16)-x,height:Math.min(innerHeight,Math.max.apply(null,drawing.map(function(b){return b.bottom;}))+16)-y};}
     }
     function tick(){paint();raf=requestAnimationFrame(tick);}paint(true);raf=requestAnimationFrame(tick);
-    active={stop:function(){cancelAnimationFrame(raf);overlays.forEach(function(n){n.remove();});controls.remove();},status:status,pending:pendingBox,clip:clip,paint:paint,isHidden:function(){return hidden;}};
+    active={controls:controls,stop:function(){cancelAnimationFrame(raf);overlays.forEach(function(n){n.remove();});controls.remove();},status:status,pending:pendingBox,clip:clip,paint:paint,isHidden:function(){return hidden;}};
     return {clip:clip};
   }
   function snapshot(){
@@ -118,12 +120,12 @@ body[data-smv-interactive] .mv-dax-body pre,body[data-smv-interactive] .mv-dax-c
       if(update.sourceRevision!==g.SMV_SOURCE_REVISION){showStatus('Source changed. Reopen the session to review the new model.');return {state:'source-changed'};}
       if(update.revision<=revision||update.revision===declinedRevision)return {state:'unchanged'};
       g.SMVExplanation.validate(g.app.model,update.view);
-      if(dirty){pending=update;showPending();return {state:'pending',revision:update.revision};}
+      if(dirty&&!update.apply){pending=update;showPending();return {state:'pending',revision:update.revision};}
       return accept(update);
     };
     async function accept(update){await smv.apply(update.view);authored=clone(update.view);revision=update.revision;pending=null;showPending();await report();return {state:'applied',revision:revision};}
-    function showStatus(text){if(active)active.status.textContent=text;}
-    function showPending(){if(!active)return;var box=active.pending;box.replaceChildren();box.hidden=!pending;if(pending){box.appendChild(node('span','The agent prepared another view. '));box.appendChild(button('Apply',function(){accept(pending).catch(function(e){showStatus(e.message);});}));box.appendChild(button('Keep exploring',function(){declinedRevision=pending.revision;pending=null;box.hidden=true;report();}));}}
+    function showStatus(text){if(active){active.status.textContent=text;active.controls.dataset.smvError=/^(Disconnected:|Source changed\.)/.test(text)?'1':'0';}}
+    function showPending(){if(!active)return;var box=active.pending;box.replaceChildren();box.hidden=!pending;active.controls.dataset.smvPending=pending?'1':'0';if(pending){box.appendChild(node('span','The agent prepared another view. '));box.appendChild(button('Apply',function(){accept(pending).catch(function(e){showStatus(e.message);});}));box.appendChild(button('Keep exploring',function(){declinedRevision=pending.revision;pending=null;showPending();report();}));}}
     function interacted(e){if(busy||e.target.closest&&e.target.closest('.smv-explanation-controls'))return;dirty=true;selectedAt=new Date().toISOString();var el=e.target.closest&&e.target.closest('[data-smv-kind]');if(el){selected={kind:el.dataset.smvKind,name:el.dataset.smvName};if(el.dataset.smvTable)selected.table=el.dataset.smvTable;}else selected=null;}
     ['pointerdown','wheel','keydown'].forEach(function(name){document.addEventListener(name,interacted,{capture:true,passive:true});});
     function endpoint(action){var url=new URL(g.SMV_SESSION_URL);url.pathname='/'+action;return url;}

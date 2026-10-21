@@ -30,6 +30,8 @@ jobs:
           claude plugin validate --strict .claude-plugin/marketplace.json
       - name: Build standalone CLI-only payload
         run: npm run build:plugin
+      - name: Test focused CLI queries and session state
+        run: node --test tests/cli.test.cjs tests/interactive-view.test.cjs
       - name: Test CLI-only plugin and session lifecycle
         run: npm run test:plugin
       - name: Install the plugin into a fresh Claude configuration
