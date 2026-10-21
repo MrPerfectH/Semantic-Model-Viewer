@@ -16,7 +16,6 @@ Usage:
   smv session status|stop|selection <state.json>
   smv session update <state.json> --view view.json --revision <n>
   smv session export <state.json> --basis authored|current --revision <n> --out view.html|view.png [--client <id>]
-  smv mcp
   smv shot <model-folder> --view view.json --out image.png [--browser <executable>]
   smv explain build <explanation.json> --out <directory>
   smv snapshot <model-folder> --out snapshot.html [--tables Sales,Date | --measure "Total Sales"]
@@ -38,7 +37,6 @@ Source files are read locally and never modified. No DAX execution is performed.
 `;
 
 async function main(args) {
-  if (args[0] === 'mcp')return require('../../../../../integrations/mcp/server.cjs').start();
   if (args[0] === 'inspect') {if(args.length!==2)throw new Error('Expected inspect <model>');const context=runtime(),{model}=readModel(context,args[1]);process.stdout.write(JSON.stringify(context.Snapshots.modelData(model),null,2)+'\n');return;}
   if (['serve','open','session'].includes(args[0]))return sessionCommand(args);
   if (args[0] === 'discover') { if(args.length<2)throw new Error('discover requires at least one folder');process.stdout.write(JSON.stringify(require('./discover.cjs').discover(args.slice(1)),null,2)+'\n');return; }

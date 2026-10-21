@@ -1,14 +1,13 @@
 'use strict';
 
 // Exercise Claude's real marketplace installer without touching the user's config.
-// With no argument, build a clean git marketplace from the npm package file list.
+// With no argument, build the same standalone CLI payload shipped by the catalog.
 // Pass owner/repo#ref to verify the published marketplace instead.
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
-const { createRequire } = require('node:module');
 const { execFileSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
@@ -46,18 +45,7 @@ try {
   if (process.argv.length > 3) throw new Error('Expected at most one marketplace source');
   if (!source) {
     const checkout = path.join(work, 'source');
-    fs.mkdirSync(checkout);
-    // npm_execpath is provided by npm run, and avoids shell/npm.cmd quoting.
-    const npm = process.env.npm_execpath;
-    assert.ok(npm, 'Run with npm run test:marketplace');
-    const packed = JSON.parse(run(process.execPath, [npm, 'pack', '--dry-run', '--ignore-scripts', '--json']))[0];
-    const files = new Set(packed.files.map(file => file.path));
-    files.add('package-lock.json');
-    for (const name of files) {
-      const destination = path.join(checkout, name);
-      fs.mkdirSync(path.dirname(destination), { recursive: true });
-      fs.copyFileSync(path.join(root, name), destination);
-    }
+    require('./build-claude-plugin.cjs').build(checkout);
     assert.equal(fs.existsSync(path.join(checkout, 'node_modules')), false);
     run('git', ['init', '--initial-branch=main'], checkout);
     run('git', ['add', '.'], checkout);
@@ -68,8 +56,8 @@ try {
     // entry at a clean git remote to exercise the cached-copy/dependency path.
     const catalog = path.join(work, 'catalog');
     fs.mkdirSync(path.join(catalog, '.claude-plugin'), { recursive: true });
-    const manifest = JSON.parse(fs.readFileSync(path.join(checkout, '.claude-plugin/marketplace.json'), 'utf8'));
-    assert.equal(manifest.plugins[0].source, './');
+    const manifest = JSON.parse(fs.readFileSync(path.join(root, '.claude-plugin/marketplace.json'), 'utf8'));
+    assert.equal(manifest.plugins[0].source, './plugins/semantic-model-viewer');
     manifest.plugins[0].source = { source: 'url', url: pathToFileURL(remote).href };
     fs.writeFileSync(path.join(catalog, '.claude-plugin/marketplace.json'), JSON.stringify(manifest));
     source = catalog;
@@ -78,7 +66,7 @@ try {
   fs.mkdirSync(config);
   console.log('Adding marketplace to a fresh Claude configuration...');
   console.log(run(claude, ['plugin', 'marketplace', 'add', source]).trim());
-  console.log('Installing the plugin through Claude (including locked npm dependencies)...');
+  console.log('Installing the CLI-only plugin through Claude...');
   console.log(run(claude, ['plugin', 'install', id, '--scope', 'user', '--json']).trim());
   const installed = JSON.parse(fs.readFileSync(path.join(config, 'plugins/installed_plugins.json'), 'utf8'));
   const entries = installed.plugins[id];
@@ -86,20 +74,19 @@ try {
   const pluginRoot = fs.realpathSync(entries[0].installPath);
   const relative = path.relative(fs.realpathSync(config), pluginRoot);
   assert.ok(relative && !relative.startsWith('..') && !path.isAbsolute(relative), 'Expected a cached copy, not an in-place source');
-  assert.ok(fs.existsSync(path.join(pluginRoot, 'node_modules')), 'Claude did not install npm dependencies');
-  const load = createRequire(path.join(pluginRoot, 'package.json'));
-  for (const dependency of ['@modelcontextprotocol/client', '@modelcontextprotocol/server', '@modelcontextprotocol/ext-apps/server', 'zod']) {
-    assert.ok(load.resolve(dependency).startsWith(pluginRoot), 'Dependency escaped the plugin cache: ' + dependency);
-  }
+  const installedPackage = JSON.parse(fs.readFileSync(path.join(pluginRoot, 'package.json'), 'utf8'));
+  assert.deepEqual(installedPackage.dependencies || {}, {}, 'CLI plugin must not declare runtime packages');
+  assert.equal(fs.existsSync(path.join(pluginRoot, 'integrations/mcp')), false, 'CLI payload must not include the adapter');
+  assert.equal(fs.existsSync(path.join(pluginRoot, 'node_modules/@modelcontextprotocol')), false, 'Plugin installation must not fetch the MCP SDK');
   const inventory = run(claude, ['plugin', 'details', id]);
   console.log(inventory.trim());
-  for (const skill of ['open', 'explain', 'snapshot', 'smv-explain']) assert.ok(inventory.includes(skill), 'Missing skill: ' + skill);
-  assert.match(inventory, /MCP servers \(1\)/, 'Claude did not discover the viewer MCP server');
-  console.log('Testing the installed MCP server against a separate Power BI project...');
+  for (const skill of ['open', 'explain', 'snapshot', 'stop', 'smv-explain']) assert.ok(inventory.includes(skill), 'Missing skill: ' + skill);
+  assert.match(inventory, /MCP servers \(0\)/, 'CLI plugin must not register an MCP server');
+  console.log('Testing the installed CLI in a separate project without node_modules...');
   run(process.execPath, ['--test', 'tests/claude-plugin.test.cjs'], root, {
     env: { ...env, SMV_PLUGIN_TEST_ROOT: pluginRoot }, stdio: 'inherit'
   });
-  console.log('PASS: marketplace install, dependency setup, command discovery, live viewer and HTML export.');
+  console.log('PASS: CLI-only marketplace install, command discovery, live viewer, selection, HTML export and session cleanup.');
 } finally {
   fs.rmSync(work, { recursive: true, force: true });
 }

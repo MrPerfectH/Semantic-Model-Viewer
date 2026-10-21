@@ -18,7 +18,7 @@ async function request(file,action,payload){
 }
 function presentation(state,capabilities={}){
   const accessible=capabilities.localBrowser===true;
-  return {preferred:accessible?'browser':'artifact',live:{url:state.url,accessibleFrom:'same machine as CLI',revision:state.revision},fallback:{kind:'interactive-html-or-png',reason:accessible?null:'Local session reachability is not confirmed. Export an offline view or screenshot.'},inline:{available:false,reason:'Use the MCP Apps adapter only when the host advertises UI support.'}};
+  return {preferred:accessible?'browser':'artifact',live:{url:state.url,accessibleFrom:'same machine as CLI',revision:state.revision},fallback:{kind:'interactive-html-or-png',reason:accessible?null:'The CLI has not tested host browser reachability. Use a reachable browser URL or export an offline view.'},inline:{available:false,reason:'The CLI provides browser URLs and files. Displaying them in chat depends on the host.'}};
 }
 async function serve(source,options={}){
   source=fs.realpathSync(source);const view=options.view?path.resolve(options.view):null,report=options.report?path.resolve(options.report):null;

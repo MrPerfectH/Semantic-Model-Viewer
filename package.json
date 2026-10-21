@@ -15,11 +15,11 @@
     "build:mcp-app": "node scripts/build-mcp-app.cjs",
     "test:interactive": "node --test tests/interactive-view.browser.cjs",
     "test:marketplace": "node scripts/test-claude-marketplace.cjs",
-    "prepack": "npm run build:mcp-app"
+    "test:plugin": "node --test tests/claude-plugin.test.cjs",
+    "build:plugin": "node scripts/build-claude-plugin.cjs"
   },
   "files": [
     ".claude-plugin/",
-    ".mcp.json",
     "bin/",
     "Models/tools/viewer/index.html",
     "Models/tools/viewer/*.css",
@@ -36,17 +36,15 @@
     "docs/claude-code-plugin.md",
     "examples/explanations/",
     "Models/demo/",
-    "docs/interactive-viewer.md",
-    "docs/mcp-usage.md",
-    "integrations/mcp/"
+    "scripts/claude-workspace.cjs",
+    "docs/cli-plugin-workflow.md",
+    "skills/stop/"
   ],
-  "dependencies": {
+  "devDependencies": {
+    "esbuild": "0.28.2",
     "@modelcontextprotocol/client": "2.3.1",
     "@modelcontextprotocol/ext-apps": "2.0.3",
     "@modelcontextprotocol/server": "2.3.1",
     "zod": "4.6.7"
-  },
-  "devDependencies": {
-    "esbuild": "0.28.2"
   }
 }

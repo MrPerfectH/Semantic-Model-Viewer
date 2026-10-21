@@ -45,7 +45,7 @@ After opening a model, the optional welcome offers contextual tips for Tables, M
 ## Claude Code
 
 Load the `semantic-model-viewer` plugin to open models, ask for visual explanations, and
-save offline snapshots from Claude Code. It packages the existing CLI and MCP tools.
+save offline snapshots from Claude Code. It runs the existing CLI through Claude's shell tools.
 Install from inside Claude Code:
 
 ```text
@@ -53,8 +53,7 @@ Install from inside Claude Code:
 /plugin install semantic-model-viewer@semantic-model-tools
 ```
 
-Then use `/semantic-model-viewer:open`. Requires Node.js 22+, npm and Git; Claude
-installs the plugin dependencies. No separate Viewer app installation is needed.
+Then use `/semantic-model-viewer:open`. Requires Node.js 22+ and Git. The plugin CLI has no runtime npm dependencies. No separate Viewer app installation is needed.
 See [plugin setup and commands](docs/claude-code-plugin.md).
 
 ## Install (2 minutes)
@@ -577,4 +576,4 @@ also restores the complete layout membership. Arrange remains input → consumer
 preserves positions until explicitly invoked. Static analysis is partial; cycles and
 uncertainty remain visible. No M is executed or included in default shared snapshots.
 
-The [interactive agent workflow](docs/interactive-viewer.md) opens focused Tables and Measures views through CLI or MCP, keeps annotations attached during exploration, and exports the acknowledged viewer state. Inline MCP Apps are host-dependent.
+The [interactive agent workflow](docs/cli-plugin-workflow.md) opens focused Tables and Measures views through the CLI, keeps annotations attached during exploration, and exports the acknowledged viewer state to portable files.

@@ -1,97 +1,115 @@
 'use strict';
-
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { Client } = require('@modelcontextprotocol/client');
-const { StdioClientTransport } = require('@modelcontextprotocol/client/stdio');
-
+const { spawnSync } = require('node:child_process');
 const root = process.env.SMV_PLUGIN_TEST_ROOT || path.resolve(__dirname, '..');
-const configuration = JSON.parse(fs.readFileSync(path.join(root, '.claude-plugin/plugin.json'), 'utf8'));
-const mcp = JSON.parse(fs.readFileSync(path.join(root, '.mcp.json'), 'utf8'));
+const read = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 
-test('plugin has a Viewer-specific namespace distinct from Cleaner', () => {
-  assert.equal(configuration.name, 'semantic-model-viewer');
+test('Viewer plugin declares CLI commands and no MCP registration or runtime dependencies', () => {
+  const manifest = read(path.join(root, '.claude-plugin/plugin.json'));
+  assert.equal(manifest.name, 'semantic-model-viewer');
+  assert.equal(manifest.mcpServers, undefined);
+  assert.equal(fs.existsSync(path.join(root, '.mcp.json')), false);
+  assert.deepEqual(read(path.join(root, 'package.json')).dependencies || {}, {});
+  for (const name of ['open', 'explain', 'snapshot', 'stop', 'smv-explain']) {
+    const skill = fs.readFileSync(path.join(root, 'skills', name, 'SKILL.md'), 'utf8');
+    assert.doesNotMatch(skill, /\bsmv_(?:open|inspect|sessions|status|selection|update|export|stop)\b|ui:\/\/|SMV_ROOT/);
+    assert.match(skill, /CLI|cli|session stop/);
+  }
 });
 
-test('plugin MCP configuration starts the real viewer from a separate project with spaces', { timeout: 30000 }, async t => {
-  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'smv plugin test '));
-  const projectPath = path.join(directory, 'Power BI project');
+test('plugin runs discover, inspect, live sessions and HTML exports with no node_modules', { timeout: 30000 }, async t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'smv cli plugin '));
   const plugin = path.join(directory, 'Viewer plugin');
-  fs.mkdirSync(projectPath);
+  const projectPath = path.join(directory, 'Power BI project');
+  fs.mkdirSync(plugin); fs.mkdirSync(projectPath);
   const project = fs.realpathSync(projectPath);
-  fs.symlinkSync(root, plugin, 'junction');
+  // Copy only the CLI and viewer runtime. There is no adapter or dependency tree
+  // to accidentally load through a symlink back to the development checkout.
+  for (const name of ['bin', 'Models/tools/viewer', 'scripts/claude-workspace.cjs']) {
+    const target = path.join(plugin, name); fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.cpSync(path.join(root, name), target, { recursive: true });
+  }
   fs.cpSync(path.join(root, 'Models/demo/Contoso Retail.SemanticModel'), path.join(project, 'Sales.SemanticModel'), { recursive: true });
-  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
-
-  // Expand only the variables Claude Code supplies, then launch the shipped config.
-  const variables = { CLAUDE_PLUGIN_ROOT: plugin, CLAUDE_PROJECT_DIR: project };
-  const expand = value => value.replace(/\$\{([^}]+)\}/g, (_, key) => {
-    assert.ok(Object.hasOwn(variables, key), 'Unexpected configuration variable: ' + key);
-    return variables[key];
-  });
-  const config = mcp.mcpServers.viewer;
-  assert.equal(config.command, 'node');
-  const transport = new StdioClientTransport({
-    command: process.execPath,
-    args: config.args.map(expand),
-    env: {
-      ...Object.fromEntries(['TMPDIR', 'TEMP', 'TMP'].filter(key => process.env[key]).map(key => [key, process.env[key]])),
-      ...Object.fromEntries(Object.entries(config.env).map(([key, value]) => [key, expand(value)]))
-    },
-    // The project scope must come from config, even with a different process cwd.
-    cwd: plugin,
-    stderr: 'pipe'
-  });
-  let stderr = '';
-  transport.stderr?.on('data', chunk => { stderr += chunk; });
-  const client = new Client({ name: 'claude-plugin-test', version: '1' }, { capabilities: {} });
-  t.after(() => client.close());
-  await client.connect(transport);
-  const tools = await client.listTools();
-  for (const name of ['smv_sessions', 'smv_inspect', 'smv_open', 'smv_status', 'smv_update', 'smv_selection', 'smv_export', 'smv_stop']) {
-    assert.ok(tools.tools.some(tool => tool.name === name), 'Missing tool: ' + name);
+  const cli = path.join(plugin, 'bin/smv.cjs');
+  function run(script, args) {
+    return spawnSync(process.execPath, [script, ...args], { cwd: project, env: process.env, encoding: 'utf8', timeout: 15000 });
   }
-
-  async function call(name, args) {
-    const result = await client.callTool({ name, arguments: args });
-    assert.ok(!result.isError, JSON.stringify(result) + stderr);
-    return result.structuredContent;
+  function successful(script, args) {
+    const result = run(script, args);
+    assert.equal(result.status, 0, result.stderr || String(result.error));
+    return result.stdout;
   }
-  const model = await call('smv_inspect', { model: 'Sales.SemanticModel' });
+  const invoke = (...args) => successful(cli, args);
+  const json = (...args) => JSON.parse(invoke(...args));
+  const workspace = () => JSON.parse(successful(path.join(plugin, 'scripts/claude-workspace.cjs'), []));
+  let session;
+  t.after(() => {
+    try { if (session && fs.existsSync(session)) run(cli, ['session', 'stop', session, '--json']); }
+    finally { fs.rmSync(directory, { recursive: true, force: true }); }
+  });
+  assert.equal(fs.existsSync(path.join(plugin, 'node_modules')), false);
+  assert.equal(fs.existsSync(path.join(plugin, 'integrations/mcp')), false);
+  assert.doesNotMatch(invoke('--help'), /\bsmv mcp\b/);
+  const oldProtocol = run(cli, ['mcp']);
+  assert.notEqual(oldProtocol.status, 0);
+  assert.match(oldProtocol.stderr, /Expected snapshot/);
+  const models = json('discover', '.');
+  assert.equal(models.length, 1);
+  assert.equal(models[0].path, path.join(project, 'Sales.SemanticModel'));
+  const model = json('inspect', models[0].path);
   assert.equal(model.name, 'Contoso Retail');
-  assert.equal(model.provenance.path, path.join(project, 'Sales.SemanticModel'));
   assert.ok(model.tables.some(table => table.name === 'Sales'));
-  const denied = await client.callTool({ name: 'smv_inspect', arguments: { model: path.join(plugin, 'Models/demo/Contoso Retail.SemanticModel') } });
-  assert.equal(denied.isError, true, 'Plugin files must not become the model scope');
-
-  const opened = await call('smv_open', { model: 'Sales.SemanticModel', view: {} });
-  assert.equal(opened.presentation.inline.available, false);
-  assert.equal(opened.revision, 1);
-  assert.equal(opened.view.version, 2);
-  assert.equal((await call('smv_sessions', {})).sessions.length, 1);
-  const url = opened.presentation.live.url;
-  assert.ok(url, JSON.stringify(opened.presentation));
-  const response = await fetch(url);
+  const sourceFile = path.join(models[0].path, 'definition/model.tmdl');
+  const original = fs.readFileSync(sourceFile, 'utf8');
+  const prepared = workspace(); session = prepared.newSessionFile;
+  assert.equal(prepared.projectRoot, project);
+  assert.equal(prepared.sessions.length, 0);
+  const opened = json('serve', models[0].path, '--background', '--session', session, '--json');
+  assert.equal(opened.source, models[0].path);
+  assert.equal(opened.appliedView.version, 2);
+  assert.equal((workspace()).sessions[0].file, session);
+  const response = await fetch(opened.url);
   assert.equal(response.status, 200);
   assert.match(await response.text(), /SMVInteractive/);
-
-  const updated = await call('smv_update', { session: opened.session, revision: 1, view: { version: 2, mode: 'graph', tables: ['Date'] } });
-  assert.equal(updated.revision, 2);
-  assert.equal(updated.state, 'awaiting-viewer');
-  const outside = await client.callTool({ name: 'smv_export', arguments: { session: opened.session, revision: 2, basis: 'authored', out: path.join(directory, 'outside.html') } });
-  assert.equal(outside.isError, true);
-  assert.equal(fs.existsSync(path.join(directory, 'outside.html')), false);
-  const exported = await call('smv_export', { session: opened.session, revision: 2, basis: 'authored', out: 'review.html' });
-  assert.equal(exported.path, path.join(project, 'review.html'));
+  const currentView = { version: 2, mode: 'graph', tables: ['Date'] };
+  fs.writeFileSync(prepared.newViewFile, JSON.stringify(currentView));
+  const update = json('session', 'update', session, '--view', prepared.newViewFile, '--revision', '1', '--json');
+  assert.equal(update.revision, 2);
+  assert.equal(update.state, 'awaiting-viewer');
+  const status = json('session', 'status', session, '--json');
+  assert.equal(status.revision, 2);
+  const endpoint = new URL(opened.url); endpoint.pathname = '/client';
+  const receipt = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ clientId: 'test-browser', revision: 2, sourceRevision: status.sourceRevision, currentView, selection: { kind: 'table', name: 'Date' }, workspace: 'graph', explored: true }) });
+  assert.equal(receipt.status, 200);
+  assert.equal(json('session', 'selection', session, '--json').selection.name, 'Date');
+  const exported = json('session', 'export', session, '--basis', 'current', '--revision', '2', '--out', prepared.newExportFile, '--json');
+  assert.equal(exported.basis, 'current');
   assert.match(fs.readFileSync(exported.path, 'utf8'), /Contoso Retail/);
-  const defaultExport = await call('smv_export', { session: opened.session, revision: 2, basis: 'authored' });
-  assert.equal(path.dirname(defaultExport.path), path.join(project, '.smv-artifacts'));
-  assert.equal(defaultExport.artifact.gitIgnoredByDefault, true);
-  assert.ok(defaultExport.artifact.bytes > 100000);
-  await call('smv_stop', { session: opened.session });
-  assert.equal((await call('smv_sessions', {})).sessions.length, 0);
-  assert.equal(stderr, '');
+  const snapshot = path.join(prepared.artifactsDir, 'snapshot.html');
+  invoke('snapshot', models[0].path, '--measure', 'Sales LY', '--out', snapshot);
+  assert.match(fs.readFileSync(snapshot, 'utf8'), /SAMEPERIODLASTYEAR/);
+  assert.equal(fs.readFileSync(sourceFile, 'utf8'), original);
+  assert.equal(json('session', 'stop', session, '--json').stopped, true);
+  assert.equal((workspace()).sessions.length, 0);
+});
+
+test('CLI workspace helper ignores artifacts and refuses symlink destinations', t => {
+  const { prepare } = require(path.join(root, 'scripts/claude-workspace.cjs'));
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'smv cli workspace '));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  const project = path.join(directory, 'project'), outside = path.join(directory, 'outside');
+  fs.mkdirSync(project); fs.mkdirSync(outside);
+  assert.equal(spawnSync('git', ['init'], { cwd: project }).status, 0);
+  fs.writeFileSync(path.join(project, '.gitignore'), 'original\n');
+  const state = prepare(project); fs.writeFileSync(state.newExportFile, 'artifact');
+  assert.equal(spawnSync('git', ['check-ignore', state.newExportFile], { cwd: project }).status, 0);
+  assert.equal(fs.readFileSync(path.join(project, '.gitignore'), 'utf8'), 'original\n');
+  fs.rmSync(state.artifactsDir, { recursive: true });
+  fs.symlinkSync(outside, path.join(project, '.smv-artifacts'), 'junction');
+  assert.throws(() => prepare(project), /symlink/);
+  assert.deepEqual(fs.readdirSync(outside), []);
 });

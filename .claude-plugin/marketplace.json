@@ -5,8 +5,8 @@
   "plugins": [
     {
       "name": "semantic-model-viewer",
-      "source": "./",
-      "description": "Explore model relationships, DAX and Power Query with focused live views, visual explanations and offline snapshots.",
+      "source": "./plugins/semantic-model-viewer",
+      "description": "CLI-powered model exploration: relationships, DAX, Power Query, focused browser views and offline snapshots.",
       "category": "data",
       "tags": ["power-bi", "tmdl", "dax", "semantic-model", "viewer"]
     }

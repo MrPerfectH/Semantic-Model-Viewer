@@ -22,14 +22,15 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
       - name: Install the tested Claude CLI
         run: npm install --global @anthropic-ai/claude-code@2.1.280
       - name: Validate plugin and marketplace manifests
         run: |
           claude plugin validate --strict .claude-plugin/plugin.json
           claude plugin validate --strict .claude-plugin/marketplace.json
-      - name: Test CLI, model contracts, sessions and MCP
-        run: npm test
+      - name: Build standalone CLI-only payload
+        run: npm run build:plugin
+      - name: Test CLI-only plugin and session lifecycle
+        run: npm run test:plugin
       - name: Install the plugin into a fresh Claude configuration
         run: npm run test:marketplace
