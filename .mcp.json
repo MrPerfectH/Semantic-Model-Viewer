@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "viewer": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs", "mcp"],
+      "env": { "SMV_ROOT": "${CLAUDE_PROJECT_DIR}" }
+    }
+  }
+}

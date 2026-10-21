@@ -42,6 +42,21 @@ If no model appears, check that the selected folder contains `definition/*.tmdl`
 
 After opening a model, the optional welcome offers contextual tips for Tables, Measures, and sharing. **Skip tour**, **Close**, or **Skip remaining tips** keep you in control; **Help** restarts guidance. Tips never rearrange your canvas or change your model. Preferences stay in this browser/app profile or VS Code profile; snapshots do not launch onboarding.
 
+## Claude Code
+
+Load the `semantic-model-viewer` plugin to open models, ask for visual explanations, and
+save offline snapshots from Claude Code. It packages the existing CLI and MCP tools.
+Install from inside Claude Code:
+
+```text
+/plugin marketplace add MrPerfectH/Semantic-Model-Viewer#claude-marketplace
+/plugin install semantic-model-viewer@semantic-model-tools
+```
+
+Then use `/semantic-model-viewer:open`. Requires Node.js 22+, npm and Git; Claude
+installs the plugin dependencies. No separate Viewer app installation is needed.
+See [plugin setup and commands](docs/claude-code-plugin.md).
+
 ## Install (2 minutes)
 
 The viewer runs on your own computer from a copy of this repo. A small local app

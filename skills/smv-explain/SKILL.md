@@ -5,7 +5,7 @@ description: Illustrate semantic-model explanations with the Semantic Model View
 
 # Illustrate a model explanation
 
-Use an installed `smv` command, or `node bin/smv.cjs` from the Semantic Model Viewer checkout. `smv --help` lists commands. Keep scope with the user's question: one useful image is sufficient when a walkthrough adds no value.
+When loaded through the Claude Code plugin, use `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"` from the user's project, and read guides under `${CLAUDE_PLUGIN_ROOT}/docs/`. Otherwise use an installed `smv` command, or `node bin/smv.cjs` from the Semantic Model Viewer checkout. `smv --help` lists commands. Keep scope with the user's question: one useful image is sufficient when a walkthrough adds no value. Store generated artifacts in the user's project, not the plugin installation.
 
 Use `smv inspect <model-path>` to obtain actual object names, relationship names, formulas, and query IDs. Inputs are a TMDL model folder or a BIM file. Do not guess identifiers from labels. `smv discover <folder>` lists model paths if needed.
 

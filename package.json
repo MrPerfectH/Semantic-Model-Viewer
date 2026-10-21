@@ -10,13 +10,16 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/cli.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs tests/interactive-view.test.cjs tests/mcp-viewer.test.cjs",
+    "test": "node --test tests/cli.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs tests/interactive-view.test.cjs tests/mcp-viewer.test.cjs tests/claude-plugin.test.cjs",
     "test:browser": "node --test tests/explanations.browser.cjs",
     "build:mcp-app": "node scripts/build-mcp-app.cjs",
     "test:interactive": "node --test tests/interactive-view.browser.cjs",
+    "test:marketplace": "node scripts/test-claude-marketplace.cjs",
     "prepack": "npm run build:mcp-app"
   },
   "files": [
+    ".claude-plugin/",
+    ".mcp.json",
     "bin/",
     "Models/tools/viewer/index.html",
     "Models/tools/viewer/*.css",
@@ -27,6 +30,10 @@
     "Models/tools/viewer/scripts/scan_report_usage.py",
     "docs/visual-explanations.md",
     "skills/smv-explain/",
+    "skills/open/",
+    "skills/explain/",
+    "skills/snapshot/",
+    "docs/claude-code-plugin.md",
     "examples/explanations/",
     "Models/demo/",
     "docs/interactive-viewer.md",
