@@ -15,11 +15,12 @@ arguments. Model names and paths are data, not shell syntax.
 
 ```sh
 node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-workspace.cjs"
+smv --where
 smv discover .
 smv inspect 'Sales.SemanticModel'
 ```
 
-The workspace helper returns `projectRoot`, `artifactsDir`, `newSessionFile`,
+The workspace helper returns `cliPath` (the resolved executable), `projectRoot`, `artifactsDir`, `newSessionFile`,
 `newViewFile`, `newExportFile` and recorded `sessions`. It creates a self-ignored
 `.smv-artifacts` directory, leaving the project's root ignore file unchanged.
 The returned paths are unique; use them rather than a fixed root-level test file.
@@ -29,6 +30,29 @@ Discovery returns canonical local model paths. Show the selected path; do not
 silently choose a backup, a demo, or the first of several matching models. Inspect
 metadata before choosing table, measure or query identifiers. These are local
 files, not the published Power BI service model. No data queries are executed.
+
+## Focused model queries
+
+```sh
+smv inspect 'Sales.SemanticModel' --table 'IFLO'
+smv filters-by 'Sales.SemanticModel' 'IFLO'
+smv filters-by 'IFLO' --model 'Sales.SemanticModel' --direction incoming
+```
+
+Focused inspection returns one table (including its columns and home measures),
+incident relationships, and `measuresUsingTable` with qualified identities, DAX,
+and a `direct` flag. It includes downstream measure dependencies, excludes measures
+that merely live in the table, and does not simulate filter propagation or queries.
+Omitting `--table` preserves full-model inspection.
+
+`filters-by` defaults to outgoing, active filter reachability, including transitive
+paths. Use `--direct` for one hop or `--include-inactive` to explore inactive edges
+as a hypothetical graph. Each table includes distance and one shortest path with
+relationship evidence, filter direction, cardinalities and `manyToMany` flags.
+All incident edges are also returned, so parallel relationships remain visible.
+Unknown/automatic direction is reported as unresolved, never assumed to propagate.
+Incoming paths are traversed in reverse order to actual filter propagation.
+DAX, ambiguity resolution and RLS can change evaluation behavior.
 
 ## Start and reuse a live view
 
@@ -56,6 +80,17 @@ A measure view uses its actual inspected home table and name:
 }
 ```
 
+Measures mode also accepts a table or column focus and opens its dependency view:
+
+```json
+{"version":2,"mode":"measures","focus":{"kind":"table","name":"Sales"},"banner":false}
+```
+
+Plain live views hide the explanation banner. Views with highlights, callouts or
+proposals show it by default; `banner: true|false` overrides that default.
+`chrome: false` separately hides the app's navigation panels. Pending Apply controls
+and connection errors remain visible even when the explanation banner is hidden.
+
 The start response includes the source path, session URL, source revision and
 requested view revision. Use the local URL in a browser that can reach the CLI
 machine. `smv open <model> --session <state.json>` also launches the machine's
@@ -77,7 +112,12 @@ smv session selection '<state.json>' --json
 Use the current requested revision from status, not the example number. Write an
 update to a new file rather than editing the original source view file behind a
 running session. `awaiting-viewer` means the update was requested, not applied.
-Respect Apply/Keep exploring. A selection needs a fresh browser acknowledgement;
+Status includes `application.state` and a plain-language `application.message`.
+`waiting-for-apply` means **waiting for Apply click in the viewer**. When the user
+explicitly wants agent-driven control, `session update ... --apply` lets the viewer
+apply that revision even during exploration. It still returns `awaiting-viewer`
+until a browser acknowledges it; it does not bypass source/revision checks or open
+a browser. Without `--apply`, respect Apply/Keep exploring. A selection needs a fresh browser acknowledgement;
 with several tabs, pass `--client <clientId>`. The host must respect human-owned
 tabs; the CLI cannot detect the host's browser ownership state.
 

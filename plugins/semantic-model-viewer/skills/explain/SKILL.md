@@ -5,6 +5,8 @@ argument-hint: "[model path] [question about the model]"
 disable-model-invocation: true
 ---
 
+Resolve the installed executable with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" --where` (the workspace helper also returns `cliPath`). Use that path or `${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs`; never construct a plugin cache path with a version number.
+
 Answer the user's question in $ARGUMENTS. Read `${CLAUDE_PLUGIN_ROOT}/skills/smv-explain/SKILL.md` and follow its CLI workflow. The executable is `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"`; use shell commands and generated files throughout.
 
 Resolve models from the user's project. Use the CLI's `discover .` and `inspect "<model>"` commands to identify actual metadata. Show the exact local source and confirm backup-looking paths. Do not claim that these files match the published service model.

@@ -7,14 +7,16 @@ const { runtime, readModel, selection, snapshot } = require('./model.cjs');
 const HELP = `Semantic Model Viewer — offline snapshots and agent-authored visual explanations
 
 Usage:
-  smv inspect <model>
+  smv --where
+  smv inspect <model> [--table <name>]
+  smv filters-by <model> <table> [--direction outgoing|incoming] [--direct] [--include-inactive]
   smv discover <folder>...
   smv explain validate <explanation.json>
   smv results import <file or -> [--format csv --metadata metadata.json]
   smv serve <model> [--view view.json] [--watch] [--background --session state.json]
   smv open <model> --session state.json [--view view.json]
   smv session status|stop|selection <state.json>
-  smv session update <state.json> --view view.json --revision <n>
+  smv session update <state.json> --view view.json --revision <n> [--apply]
   smv session export <state.json> --basis authored|current --revision <n> --out view.html|view.png [--client <id>]
   smv shot <model-folder> --view view.json --out image.png [--browser <executable>]
   smv explain build <explanation.json> --out <directory>
@@ -37,7 +39,26 @@ Source files are read locally and never modified. No DAX execution is performed.
 `;
 
 async function main(args) {
-  if (args[0] === 'inspect') {if(args.length!==2)throw new Error('Expected inspect <model>');const context=runtime(),{model}=readModel(context,args[1]);process.stdout.write(JSON.stringify(context.Snapshots.modelData(model),null,2)+'\n');return;}
+  if (args[0] === '--where') {
+    if (args.length !== 1) throw new Error('Use smv --where without other arguments');
+    process.stdout.write(require('node:fs').realpathSync(path.resolve(__dirname, '../../../../../bin/smv.cjs')) + '\n'); return;
+  }
+  if (['inspect', 'filters-by'].includes(args[0])) {
+    const { values, positionals } = parseArgs({ args, allowPositionals: true, options: {
+      table: { type: 'string' }, model: { type: 'string' }, direction: { type: 'string' }, direct: { type: 'boolean' }, 'include-inactive': { type: 'boolean' }, json: { type: 'boolean' }
+    } });
+    const query = require('./query.cjs'); let result;
+    if (positionals[0] === 'inspect') {
+      if (positionals.length !== 2 || values.model || values.direction || values.direct || values['include-inactive']) throw new Error('Expected inspect <model> [--table <name>]');
+      if (values.table !== undefined && !values.table.trim()) throw new Error('--table cannot be empty');
+      result = query.inspect(positionals[1], values.table);
+    } else {
+      const source = values.model || positionals[1], table = values.model ? positionals[1] : positionals[2];
+      if (positionals.length !== (values.model ? 2 : 3) || values.table || !table?.trim()) throw new Error('Expected filters-by <model> <table> or filters-by <table> --model <model>');
+      result = query.filtersBy(source, table, { direction: values.direction, direct: values.direct, includeInactive: values['include-inactive'] });
+    }
+    process.stdout.write(JSON.stringify(result, null, 2) + '\n'); return;
+  }
   if (['serve','open','session'].includes(args[0]))return sessionCommand(args);
   if (args[0] === 'discover') { if(args.length<2)throw new Error('discover requires at least one folder');process.stdout.write(JSON.stringify(require('./discover.cjs').discover(args.slice(1)),null,2)+'\n');return; }
   if (args[0] === 'results') return resultsCommand(args.slice(1));
@@ -84,12 +105,13 @@ async function resultsCommand(args){
   const output=JSON.stringify(result,null,2)+'\n';if(values.out)fs.writeFileSync(values.out,output,{flag:'wx'});else process.stdout.write(output);
 }
 async function sessionCommand(args){
-  const {values,positionals}=parseArgs({args,allowPositionals:true,options:{view:{type:'string'},report:{type:'string'},session:{type:'string'},port:{type:'string'},background:{type:'boolean'},watch:{type:'boolean'},json:{type:'boolean'},revision:{type:'string'},basis:{type:'string'},out:{type:'string'},client:{type:'string'},force:{type:'boolean'}}});
+  const {values,positionals}=parseArgs({args,allowPositionals:true,options:{view:{type:'string'},report:{type:'string'},session:{type:'string'},port:{type:'string'},background:{type:'boolean'},watch:{type:'boolean'},json:{type:'boolean'},revision:{type:'string'},basis:{type:'string'},out:{type:'string'},client:{type:'string'},force:{type:'boolean'},apply:{type:'boolean'}}});
+  if(values.apply && !(positionals[0]==='session' && positionals[1]==='update'))throw new Error('--apply is only supported for session update');
   const api=require('./session.cjs');let result;
   if(positionals[0]==='session'){
     if(positionals.length!==3||!['status','stop','selection','update','export'].includes(positionals[1]))throw new Error('Expected session status|stop|selection|update|export <state.json>');
     if(['update','export'].includes(positionals[1])&&(!/^\d+$/.test(values.revision||'')||Number(values.revision)<1))throw new Error('--revision must be a positive integer');
-    if(positionals[1]==='update'){if(!values.view)throw new Error('--view is required');result=await api.request(positionals[2],'update',{expectedRevision:Number(values.revision),view:require('./explain.cjs').readJSON(values.view)});}
+    if(positionals[1]==='update'){if(!values.view)throw new Error('--view is required');result=await api.request(positionals[2],'update',{expectedRevision:Number(values.revision),view:require('./explain.cjs').readJSON(values.view),apply:!!values.apply});}
     else if(positionals[1]==='selection')result=await api.request(positionals[2],'selection',{clientId:values.client});
     else if(positionals[1]==='export'){if(!values.out)throw new Error('--out is required');result=await api.exportSession(positionals[2],{...values,revision:Number(values.revision),clientId:values.client});}
     else result=await api.request(positionals[2],positionals[1]);

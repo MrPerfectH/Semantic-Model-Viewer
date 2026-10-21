@@ -47,3 +47,19 @@ or attach files to a PR. It does not modify the TMDL source or execute M or DAX.
 Use `smv shot` for an annotated image, `smv explain build` for a walkthrough, and `smv results import` to attach numbers from existing tools. Calculations, proposed changes, and local exploration are described in [the visual explanations guide](visual-explanations.md). These commands extend the existing snapshot CLI; they do not execute model queries.
 
 For focused browser views, revisioned session updates, selection feedback and cleanup, see [CLI plugin workflow](cli-plugin-workflow.md).
+
+## Focused inspection and filter paths
+
+Use `smv --where` to print the resolved executable path. Plugin skills use the
+host-provided plugin root rather than a hardcoded cache version.
+
+```sh
+smv inspect "Model.SemanticModel" --table IFLO
+smv filters-by "Model.SemanticModel" IFLO
+smv filters-by IFLO --model "Model.SemanticModel" --direction incoming --direct
+```
+
+The first query returns the table, its relationships, and direct/indirect DAX
+measure users. The second lists active outgoing filter paths with direction and
+many-to-many evidence. See [CLI plugin workflow](cli-plugin-workflow.md) for
+inactive relationships, live table focus, banner options and explicit Apply control.

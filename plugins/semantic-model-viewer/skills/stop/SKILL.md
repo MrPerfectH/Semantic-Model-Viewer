@@ -5,6 +5,8 @@ argument-hint: "[model or session file, or all]"
 disable-model-invocation: true
 ---
 
+Resolve the installed executable with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" --where` (the workspace helper also returns `cliPath`). Use that path or `${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs`; never construct a plugin cache path with a version number.
+
 Stop the viewer sessions requested in $ARGUMENTS.
 
 Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-workspace.cjs"` from the user's project to list session-file records. Use `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" session status "<session-file>" --json` to check the exact source and live state. The helper reports records; their presence alone does not prove the servers are running.

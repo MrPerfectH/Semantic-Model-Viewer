@@ -20,6 +20,10 @@ function presentation(state,capabilities={}){
   const accessible=capabilities.localBrowser===true;
   return {preferred:accessible?'browser':'artifact',live:{url:state.url,accessibleFrom:'same machine as CLI',revision:state.revision},fallback:{kind:'interactive-html-or-png',reason:accessible?null:'The CLI has not tested host browser reachability. Use a reachable browser URL or export an offline view.'},inline:{available:false,reason:'The CLI provides browser URLs and files. Displaying them in chat depends on the host.'}};
 }
+function liveView(input){
+  if(!input||typeof input!=='object'||Array.isArray(input)||input.banner!==undefined)return input;
+  return {...input,banner:['highlights','callouts','proposals'].some(key=>Array.isArray(input[key])&&input[key].length>0)};
+}
 async function serve(source,options={}){
   source=fs.realpathSync(source);const view=options.view?path.resolve(options.view):null,report=options.report?path.resolve(options.report):null;
   const file=options.session?path.resolve(options.session):null;
@@ -30,20 +34,27 @@ async function serve(source,options={}){
   }
   if(options.background){
     if(!file)throw new Error('--background requires --session <state.json>');
-    prepare(source,view?readJSON(view):{version:2},{report});
+    prepare(source,liveView(view?readJSON(view):{version:2}),{report});
     fs.mkdirSync(path.dirname(file),{recursive:true});const log=fs.openSync(file+'.log','a',0o600);
     const child=spawn(process.execPath,[__filename,source,JSON.stringify({...options,background:false,view,report,session:file})],{detached:true,stdio:['ignore',log,log]});fs.closeSync(log);
     let error;child.once('error',e=>{error=e;});child.unref();
     const end=Date.now()+15000;while(!fs.existsSync(file)){if(error)throw error;if(child.exitCode!==null)throw new Error('Session failed; see '+file+'.log');if(Date.now()>end){child.kill();throw new Error('Session startup timed out; see '+file+'.log');}await new Promise(r=>setTimeout(r,50));}
     return request(file,'status');
   }
-  const token=crypto.randomBytes(24).toString('hex');let prepared,revision=1,error=null,lastAttempt='',interval,closing=false;
-  let input=view?readJSON(view):{version:2};const clients=new Map();
-  function rebuild(){try{const next=fingerprint(source,view,report);if(next===lastAttempt)return;const candidate=prepare(source,view?readJSON(view):input,{report});if(prepared)revision++;prepared=candidate;input=candidate.view;lastAttempt=next;error=null;}catch(e){lastAttempt='';error=e.message;}}
+  const token=crypto.randomBytes(24).toString('hex');let prepared,revision=1,applyRevision=0,error=null,lastAttempt='',interval,closing=false;
+  let input=view?readJSON(view):{version:2,banner:false};const clients=new Map();
+  function rebuild(){try{const next=fingerprint(source,view,report);if(next===lastAttempt)return;const candidate=prepare(source,liveView(view?readJSON(view):input),{report});if(prepared)revision++;applyRevision=0;prepared=candidate;input=candidate.view;lastAttempt=next;error=null;}catch(e){lastAttempt='';error=e.message;}}
   rebuild();if(error)throw new Error(error);
   const state={version:1,source,view,report,watch:!!options.watch,pid:process.pid,startedAt:new Date().toISOString()};
   function clientState(){return Array.from(clients.values()).filter(c=>Date.now()-c.receivedAt<5000);}
-  const status=()=>({...state,revision,sourceRevision:prepared.hash,appliedView:prepared.view,inputFingerprint:lastAttempt,error,clients:clientState().map(c=>({clientId:c.clientId,revision:c.revision,explored:c.explored,pendingRevision:c.pendingRevision,receivedAt:c.receivedAt})),presentation:presentation({...state,revision})});
+  function application(){
+    const alive=clientState(), waiting=alive.filter(c=>c.revision!==revision);
+    if(!alive.length)return {state:'awaiting-viewer',message:'Open the session URL; no viewer has acknowledged this view.',applyRequested:applyRevision===revision};
+    if(!waiting.length)return {state:'applied',message:'All active viewers acknowledged the requested view.',applyRequested:applyRevision===revision};
+    const click=applyRevision!==revision&&waiting.some(c=>c.pendingRevision===revision);
+    return {state:click?'waiting-for-apply':'awaiting-viewer',message:click?'Waiting for Apply click in the viewer. Use session update --apply only when explicitly taking over the view.':'Waiting for the viewer to receive and apply the requested view.',applyRequested:applyRevision===revision};
+  }
+  const status=()=>({...state,revision,application:application(),sourceRevision:prepared.hash,appliedView:prepared.view,inputFingerprint:lastAttempt,error,clients:clientState().map(c=>({clientId:c.clientId,revision:c.revision,explored:c.explored,pendingRevision:c.pendingRevision,receivedAt:c.receivedAt})),presentation:presentation({...state,revision})});
   async function body(req){let text='';for await(const chunk of req){text+=chunk;if(Buffer.byteLength(text)>2*1024*1024)throw fault('REQUEST_TOO_LARGE','Session payload exceeds 2MB');}try{return JSON.parse(text);}catch{throw fault('JSON_INVALID','Invalid session JSON');}}
   function choose(payload={}){
     const alive=clientState();const candidates=payload.clientId?alive.filter(c=>c.clientId===payload.clientId):alive;
@@ -59,13 +70,13 @@ async function serve(source,options={}){
       res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');
       if(url.pathname==='/status'&&req.method==='GET'){json(200,status());return;}
       if(url.pathname==='/stop'&&req.method==='POST'){json(200,{stopped:true});setImmediate(close);return;}
-      if(url.pathname==='/view'&&req.method==='GET'){json(200,{revision,sourceRevision:prepared.hash,view:prepared.view,error});return;}
+      if(url.pathname==='/view'&&req.method==='GET'){json(200,{revision,sourceRevision:prepared.hash,view:prepared.view,apply:applyRevision===revision,error});return;}
       if(url.pathname==='/update'&&req.method==='POST'){
-        const payload=await body(req);if(payload.expectedRevision!==revision)throw fault('REVISION_CONFLICT','Session revision changed',{expected:payload.expectedRevision,actual:revision});
+        const payload=await body(req);if(payload.apply!==undefined&&typeof payload.apply!=='boolean')throw fault('UPDATE_INVALID','apply must be boolean');if(payload.expectedRevision!==revision)throw fault('REVISION_CONFLICT','Session revision changed',{expected:payload.expectedRevision,actual:revision});
         if(error||fingerprint(source,view,report)!==lastAttempt)throw fault('SOURCE_CHANGED','Source changed; refresh or restart before updating');
-        const candidate=prepare(source,payload.view,{report});if(candidate.hash!==prepared.hash)throw fault('SOURCE_CHANGED','Source changed during update');
-        prepared=candidate;input=candidate.view;revision++;
-        json(200,{state:'awaiting-viewer',requestRevision:payload.expectedRevision,revision,sourceRevision:prepared.hash,view:prepared.view,clients:status().clients});return;
+        const candidate=prepare(source,liveView(payload.view),{report});if(candidate.hash!==prepared.hash)throw fault('SOURCE_CHANGED','Source changed during update');
+        prepared=candidate;input=candidate.view;revision++;applyRevision=payload.apply?revision:0;
+        json(200,{state:'awaiting-viewer',application:application(),requestRevision:payload.expectedRevision,revision,sourceRevision:prepared.hash,view:prepared.view,clients:status().clients});return;
       }
       if(url.pathname==='/client'&&req.method==='POST'){
         const payload=await body(req);if(typeof payload.clientId!=='string'||payload.clientId.length>100)throw fault('CLIENT_INVALID','Client ID required');

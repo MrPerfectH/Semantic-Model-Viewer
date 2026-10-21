@@ -35,7 +35,7 @@ function readModel(context, source, name) {
     }
   }
   if (!bim) walk(target);
-  const model = bim ? context.TMDLParser.parseBIM(JSON.parse(fs.readFileSync(target,'utf8'))) : context.TMDLParser.parseTMDL(files, { strictRelationships: true });
+  const model = bim ? context.TMDLParser.parseBIM(JSON.parse(fs.readFileSync(target,'utf8')), { strictRelationships: true }) : context.TMDLParser.parseTMDL(files, { strictRelationships: true });
   if (!model.tables.length) throw new Error('No tables found in the model.');
   const folder = path.basename(target) === 'definition' ? path.dirname(target) : target;
   model.name = name || model.name || path.basename(folder).replace(/\.SemanticModel$/i, '');

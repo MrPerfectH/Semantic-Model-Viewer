@@ -5,6 +5,8 @@ argument-hint: "[model path] [output.html] [optional starting table or measure]"
 disable-model-invocation: true
 ---
 
+Resolve the installed executable with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" --where` (the workspace helper also returns `cliPath`). Use that path or `${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs`; never construct a plugin cache path with a version number.
+
 Create an HTML snapshot for $ARGUMENTS using shell commands from the user's project.
 
 1. Resolve the model with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" discover .` if needed. Ask the user to choose among matches and confirm backup-looking paths. Use `inspect "<model>"` to validate requested object names. This reads local metadata, not the published model.

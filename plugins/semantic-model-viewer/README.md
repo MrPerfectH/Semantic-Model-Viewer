@@ -3,7 +3,7 @@
 The `semantic-model-viewer` plugin runs the Semantic Model Viewer CLI through
 Claude's shell tools. It includes the viewer runtime and five skills: open,
 explain, snapshot, stop and the automatically selected model explanation skill.
-Version 0.2.0 is CLI-only: it registers no MCP server and needs no runtime npm
+Version 0.2.1 is CLI-only: it registers no MCP server and needs no runtime npm
 packages. Users do not install the separate Viewer app or VS Code extension.
 
 ## Install through Claude
