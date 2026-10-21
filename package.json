@@ -37,6 +37,7 @@
     "examples/explanations/",
     "Models/demo/",
     "docs/interactive-viewer.md",
+    "docs/mcp-usage.md",
     "integrations/mcp/"
   ],
   "dependencies": {

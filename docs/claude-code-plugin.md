@@ -84,6 +84,9 @@ and live Power BI connections are unsupported.
 
 ## Scope and lifecycle
 
+For minimal tool inputs, inline capability diagnostics, exact source provenance,
+gitignored export defaults and session cleanup, see [MCP usage](mcp-usage.md).
+
 The plugin declares its MCP server in the standard root `.mcp.json` file.
 The plugin launches `node <plugin-root>/bin/smv.cjs mcp` and sets `SMV_ROOT` to
 `${CLAUDE_PROJECT_DIR}`. The MCP server permits model reads and exports only inside
