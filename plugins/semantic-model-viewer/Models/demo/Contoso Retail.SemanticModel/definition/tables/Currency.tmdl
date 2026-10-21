@@ -1,0 +1,29 @@
+table Currency
+	lineageTag: b9f301ff-48f7-5f18-bd5c-cfd13e6d8c65
+
+	column CurrencyKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: 0ca45743-e116-5fd7-a820-cf165ca0895a
+		sourceColumn: currencykey
+
+	column 'Currency Code'
+		dataType: string
+		lineageTag: ee7586e5-3a9e-5fc7-8063-a4ad74e41857
+		sourceColumn: currency_code
+
+	column 'Currency Name'
+		dataType: string
+		lineageTag: 4cd429b0-9351-5c41-bb6c-d31676bec697
+		sourceColumn: currency_name
+
+	partition Currency = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="finance",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_currency",Kind="Table"]}[Data]
+				in
+				    tbl

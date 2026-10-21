@@ -1,0 +1,68 @@
+expression Environment = "Production" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+expression ServerName = "adb-contoso.azuredatabricks.net" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+expression StartYear = 2019 meta [IsParameterQuery=true, Type="Number", IsParameterQueryRequired=true]
+
+expression fnCleanText = (value as text) as text => Text.Trim(Text.Clean(value))
+
+expression RawSales =
+		let
+		    Source = Databricks.Catalogs(ServerName, "/sql/1.0/warehouses/demo", []),
+		    db = Source{[Name="sales",Kind="Schema"]}[Data],
+		    tbl = db{[Name="fact_sales",Kind="Table"]}[Data]
+		in
+		    tbl
+
+expression StageSales =
+		let
+		    Source = RawSales,
+		    // The synthetic source has order_date; Environment gates production rows.
+		    Filtered = Table.SelectRows(Source, each Environment = "Production" and Date.Year([order_date]) >= StartYear)
+		in
+		    Filtered
+
+expression RawCustomers =
+		let
+		    Source = Databricks.Catalogs(ServerName, "/sql/1.0/warehouses/demo", []),
+		    db = Source{[Name="sales",Kind="Schema"]}[Data],
+		    tbl = db{[Name="dim_customer",Kind="Table"]}[Data]
+		in
+		    tbl
+
+expression CleanCustomers =
+		let
+		    Source = RawCustomers,
+		    Cleaned = Table.TransformColumns(Source, {{"customer_name", fnCleanText, type text}})
+		in
+		    Cleaned
+
+expression RawProducts =
+		let
+		    Source = Databricks.Catalogs(ServerName, "/sql/1.0/warehouses/demo", []),
+		    db = Source{[Name="sales",Kind="Schema"]}[Data],
+		    tbl = db{[Name="dim_product",Kind="Table"]}[Data]
+		in
+		    tbl
+
+expression CleanProducts =
+		let
+		    Source = RawProducts,
+		    Cleaned = Table.TransformColumns(Source, {{"product_name", fnCleanText, type text}})
+		in
+		    Cleaned
+
+expression RawStores =
+		let
+		    Source = Databricks.Catalogs(ServerName, "/sql/1.0/warehouses/demo", []),
+		    db = Source{[Name="retail",Kind="Schema"]}[Data],
+		    tbl = db{[Name="dim_store",Kind="Table"]}[Data]
+		in
+		    tbl
+
+expression CleanStores =
+		let
+		    Source = RawStores,
+		    Cleaned = Table.TransformColumns(Source, {{"store_name", fnCleanText, type text}})
+		in
+		    Cleaned

@@ -1,0 +1,60 @@
+table Purchases
+	lineageTag: f1c01923-f037-5465-8b4a-86886fc874f1
+
+	column 'Product Key'
+		dataType: int64
+		isHidden
+		lineageTag: 5afab77a-5e79-569b-891c-748e8ae93df3
+		sourceColumn: product_key
+
+	column 'Supplier Key'
+		dataType: int64
+		isHidden
+		lineageTag: 44694f92-5829-5cde-a1e5-1df429c5f490
+		sourceColumn: supplier_key
+
+	column 'Warehouse Key'
+		dataType: int64
+		isHidden
+		lineageTag: 10d3cda9-0cf6-5303-ad0b-86916cbf1ea7
+		sourceColumn: warehouse_key
+
+	column 'Purchase Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: 4cdc872a-357d-5391-9a26-0feb50c8a509
+		sourceColumn: purchase_date
+
+	column 'Receipt Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: a65fe289-a8e5-5012-b393-fa0c4b61e4c1
+		sourceColumn: receipt_date
+
+	column 'Purchase Quantity'
+		dataType: decimal
+		isHidden
+		lineageTag: 94d6302d-534e-5d8a-8b83-e0b3844f6901
+		sourceColumn: purchase_quantity
+
+	column 'Purchase Cost'
+		dataType: decimal
+		isHidden
+		lineageTag: 09d0be0d-c4bc-5721-a6c3-529178858e53
+		sourceColumn: purchase_cost
+
+	column 'Freight Cost'
+		dataType: decimal
+		isHidden
+		lineageTag: 2c34d96f-52be-5d62-a899-25ab3c2565f8
+		sourceColumn: freight_cost
+
+	partition Purchases = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="supply",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_purchases",Kind="Table"]}[Data]
+				in
+				    tbl

@@ -27,6 +27,11 @@ test('plugin runs discover, inspect, live sessions and HTML exports with no node
   const projectPath = path.join(directory, 'Power BI project');
   fs.mkdirSync(plugin); fs.mkdirSync(projectPath);
   const project = fs.realpathSync(projectPath);
+  let session;
+  t.after(() => {
+    try { if (session && fs.existsSync(session)) run(cli, ['session', 'stop', session, '--json']); }
+    finally { fs.rmSync(directory, { recursive: true, force: true }); }
+  });
   // Copy only the CLI and viewer runtime. There is no adapter or dependency tree
   // to accidentally load through a symlink back to the development checkout.
   for (const name of ['bin', 'Models/tools/viewer', 'scripts/claude-workspace.cjs']) {
@@ -46,11 +51,6 @@ test('plugin runs discover, inspect, live sessions and HTML exports with no node
   const invoke = (...args) => successful(cli, args);
   const json = (...args) => JSON.parse(invoke(...args));
   const workspace = () => JSON.parse(successful(path.join(plugin, 'scripts/claude-workspace.cjs'), []));
-  let session;
-  t.after(() => {
-    try { if (session && fs.existsSync(session)) run(cli, ['session', 'stop', session, '--json']); }
-    finally { fs.rmSync(directory, { recursive: true, force: true }); }
-  });
   assert.equal(fs.existsSync(path.join(plugin, 'node_modules')), false);
   assert.equal(fs.existsSync(path.join(plugin, 'integrations/mcp')), false);
   assert.doesNotMatch(invoke('--help'), /\bsmv mcp\b/);

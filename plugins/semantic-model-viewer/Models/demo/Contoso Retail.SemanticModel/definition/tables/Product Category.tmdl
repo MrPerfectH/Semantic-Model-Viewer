@@ -1,0 +1,34 @@
+table 'Product Category'
+	lineageTag: c3d5b701-c267-5821-be5b-d9e7cef3d876
+
+	column CategoryKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: a2878100-8b6f-575c-b4c4-f3003288a414
+		sourceColumn: categorykey
+
+	column Category
+		dataType: string
+		lineageTag: 46a02355-8f08-51d8-b4b0-13d91df39642
+		sourceColumn: category
+
+	column Subcategory
+		dataType: string
+		lineageTag: b1d78252-1f09-55f6-85a5-0ae30899baed
+		sourceColumn: subcategory
+
+	column Department
+		dataType: string
+		lineageTag: bc925a11-e15c-5e03-870f-b940d47ef2b6
+		sourceColumn: department
+
+	partition 'Product Category' = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="sales",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_product_category",Kind="Table"]}[Data]
+				in
+				    tbl

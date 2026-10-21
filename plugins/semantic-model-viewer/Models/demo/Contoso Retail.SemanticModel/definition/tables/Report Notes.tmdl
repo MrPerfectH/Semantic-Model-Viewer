@@ -1,0 +1,14 @@
+table 'Report Notes'
+	lineageTag: 74a4e0a7-961a-5666-9d49-2ea27a0235d0
+
+	column Note
+		dataType: string
+		sourceColumn: Note
+
+	partition 'Report Notes' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows({{"Contoso Retail demo model. All data is fictional."}}, {"Note"})
+				in
+				    Source

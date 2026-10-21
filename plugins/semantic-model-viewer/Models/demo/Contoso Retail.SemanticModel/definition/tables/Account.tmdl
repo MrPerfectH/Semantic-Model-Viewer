@@ -1,0 +1,34 @@
+table Account
+	lineageTag: 3f503488-f903-5b4e-a1c7-f56ae076d5bb
+
+	column AccountKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: 7fa5defc-7914-5801-b09c-cf0ac289a2da
+		sourceColumn: accountkey
+
+	column 'Account Name'
+		dataType: string
+		lineageTag: dddd34fa-edff-5672-9e7a-d1219f151ae0
+		sourceColumn: account_name
+
+	column 'Account Group'
+		dataType: string
+		lineageTag: 346cff27-5ee6-594d-be7a-a7b899688782
+		sourceColumn: account_group
+
+	column 'Is Revenue'
+		dataType: string
+		lineageTag: 8e47811a-39bb-5a84-8f65-bb7cfb1fd937
+		sourceColumn: is_revenue
+
+	partition Account = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="finance",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_account",Kind="Table"]}[Data]
+				in
+				    tbl
