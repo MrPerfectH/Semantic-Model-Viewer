@@ -84,7 +84,12 @@ test('measure workspace occupies wide screens and persists adjustable layouts', 
         await browser.evaluate(`view.setWorkspaceMode('split'); view.setSplitLayout('${layout}');`); await settle();
         const r = await browser.evaluate(`({body:box('.mv-analysis-body'),graph:box('.mv-graph-panel'),dax:box('.mv-dax-panel'),divider:box('.mv-split-divider'),layout:view._effectiveSplit})`);
         assert.equal(r.layout,layout);
-        for (const pane of [r.graph,r.dax]) { assert.ok(pane.width>250 && pane.height>150,JSON.stringify(r)); assert.ok(pane.right <= r.body.right && pane.bottom <= r.body.bottom,JSON.stringify(r)); }
+        for (const pane of [r.graph,r.dax]) {
+          assert.ok(pane.width>250 && pane.height>150,JSON.stringify(r));
+          assert.ok(pane.right <= r.body.right,JSON.stringify(r));
+          if(layout==='beside') assert.ok(pane.bottom <= r.body.bottom,JSON.stringify(r));
+          else assert.ok(pane.bottom <= r.body.y+r.body.scrollHeight,JSON.stringify(r));
+        }
         if(layout==='beside') { assert.equal(r.graph.y,r.dax.y); assert.ok(r.dax.x>r.graph.right); }
         else { assert.equal(r.graph.x,r.dax.x); assert.ok(r.dax.y>r.graph.bottom); }
       }
@@ -167,8 +172,16 @@ test('measure workspace occupies wide screens and persists adjustable layouts', 
     await browser.evaluate("view.setSplitLayout('beside')"); await settle();
     assert.equal(await browser.evaluate('view._effectiveSplit'),'below');
     assert.equal(await browser.evaluate('view._splitLayout'),'beside');
-    const bounds=await browser.evaluate("({body:box('.mv-analysis-body'),dax:box('.mv-dax-panel')})");
-    assert.ok(bounds.dax.right<=bounds.body.right); assert.ok(bounds.dax.bottom<=bounds.body.bottom);
+    const bounds=await browser.evaluate("({body:box('.mv-analysis-body'),dax:box('.mv-dax-panel'),graph:box('.mv-graph-scroll')})");
+    assert.ok(bounds.dax.right<=bounds.body.right);
+    assert.ok(bounds.graph.height>=240,'Stacked graph retains usable canvas height');
+    assert.ok(bounds.dax.height>=320,'DAX remains usable below the graph');
+    assert.equal(await browser.evaluate('view.splitSelect.selectedOptions[0].textContent'),'DAX below graph (narrow view)');
+    await browser.evaluate('view.analysisBody.scrollTop=view.analysisBody.scrollHeight');await settle();
+    assert.equal(await browser.evaluate("box('.mv-dax-panel').bottom<=box('.mv-analysis-body').bottom"),true,'DAX is reachable by scrolling');
+    await browser.send('Emulation.setDeviceMetricsOverride',{width:1920,height:1080,deviceScaleFactor:1,mobile:false});await settle();await settle();
+    assert.equal(await browser.evaluate('view._effectiveSplit'),'beside');
+    assert.equal(await browser.evaluate('view.splitSelect.selectedOptions[0].textContent'),'DAX beside graph');
   });
 });
 
@@ -242,5 +255,36 @@ test('table/column dependency flow works in the complete viewer', { skip: !chrom
   await browser.evaluate("document.querySelector('[aria-label=\"Use whole table Sales\"]').click()");await settle();
   assert.deepEqual(await browser.evaluate('app.state.dependencySource'),{table:'Sales',column:null});
   assert.deepEqual(await browser.evaluate("[...document.querySelectorAll('.mv-source-column')].map(e=>e.textContent)"),['Amount'],'Only connected columns enter the graph');
+  await t.test('dense source analysis keeps a usable stacked canvas in both themes',async()=>{
+    await browser.evaluate(`(()=>{
+      const name='Work Order Maintenance (IW_49n)';
+      app._applyModel({name:'Narrow source regression',tables:[
+        {name,domain:'Operations',source:{kind:'manual'},columns:[{name:'work_order_id'}],measures:[]},
+        {name:'Measures',domain:'Operations',source:{kind:'manual'},columns:[],measures:Array.from({length:26},(_,i)=>({name:'Dependent '+i,dax:"COUNT('"+name+"'[work_order_id])"}))}
+      ],relationships:[]},'Narrow source regression','narrow-source-test',{persist:false});
+      app.measures.analyzeSource(name,'work_order_id');
+      app.setState({gPin:'Dependent 0'});
+      app.measures.setWorkspaceMode('split');app.measures.setSplitLayout('beside');app.measures.setGraphOrientation('tb');
+    })()`);await settle();
+    for(const theme of ['classic','spellbook']) {
+      await browser.evaluate(`ViewerTheme.set('${theme}')`);
+      for(const [width,height] of [[720,800],[900,720]]) {
+        await browser.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:false});await settle();await settle();
+        await browser.evaluate('app.measures.fitGraph()');await settle();
+        const r=await browser.evaluate(`(()=>{
+          const v=app.measures,b=v.analysisBody,g=v.gScroll;
+          return {height:g.clientHeight,zoom:v._gZoom,label:v.splitSelect.selectedOptions[0].textContent,overflow:getComputedStyle(b).overflowY,scrolls:b.scrollHeight>b.clientHeight};
+        })()`);
+        assert.ok(r.height>=240,JSON.stringify({theme,width,...r}));
+        assert.ok(r.zoom>.05,'Fit must not collapse this 26-measure fixture to 2%: '+JSON.stringify(r));
+        assert.equal(r.label,'DAX below graph (narrow view)');
+        assert.equal(r.overflow,'auto');assert.equal(r.scrolls,true);
+        await browser.evaluate('app.measures.analysisBody.scrollTop=app.measures.analysisBody.scrollHeight');await settle();
+        assert.equal(await browser.evaluate(`(()=>{const b=app.measures.analysisBody.getBoundingClientRect(),d=document.querySelector('.mv-dax-panel').getBoundingClientRect();return d.bottom<=b.bottom && d.bottom>b.top})()`),true);
+      }
+    }
+    await browser.evaluate("app.measures.setSplitLayout('below')");await settle();
+    assert.equal(await browser.evaluate('app.measures.splitSelect.selectedOptions[0].textContent'),'DAX below graph');
+  });
   assert.deepEqual(await browser.evaluate('window.errors'),[]);
 });
