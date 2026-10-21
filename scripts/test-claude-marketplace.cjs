@@ -19,21 +19,24 @@ const plugin = 'semantic-model-viewer';
 const id = plugin + '@' + marketplace;
 const env = { ...process.env, CLAUDE_CONFIG_DIR: config, CLAUDE_CODE_PLUGIN_PREFER_HTTPS: '1' };
 const claude = process.env.SMV_CLAUDE_BIN || 'claude';
-let windowsClaudeScript;
+let windowsClaudeEntry;
 
 function run(command, args, cwd = root, options = {}) {
   // execFile cannot launch npm's Windows .cmd shim. Invoke the installed
-  // package's JavaScript entry directly, without a shell or interpolated args.
+  // package's native or JavaScript entry without a shell/interpolated args.
   if (process.platform === 'win32' && command === claude && !process.env.SMV_CLAUDE_BIN) {
-    if (!windowsClaudeScript) {
+    if (!windowsClaudeEntry) {
       assert.ok(process.env.npm_execpath, 'Run with npm run test:marketplace');
       const globalRoot = execFileSync(process.execPath, [process.env.npm_execpath, 'root', '--global'], { encoding: 'utf8' }).trim();
       const packageRoot = path.join(globalRoot, '@anthropic-ai/claude-code');
       const metadata = JSON.parse(fs.readFileSync(path.join(packageRoot, 'package.json'), 'utf8'));
-      windowsClaudeScript = path.join(packageRoot, typeof metadata.bin === 'string' ? metadata.bin : metadata.bin.claude);
+      windowsClaudeEntry = path.join(packageRoot, typeof metadata.bin === 'string' ? metadata.bin : metadata.bin.claude);
     }
-    args = [windowsClaudeScript, ...args];
-    command = process.execPath;
+    if (/\.exe$/i.test(windowsClaudeEntry)) command = windowsClaudeEntry;
+    else {
+      args = [windowsClaudeEntry, ...args];
+      command = process.execPath;
+    }
   }
   return execFileSync(command, args, { cwd, env, encoding: 'utf8', timeout: 180000, ...options });
 }
