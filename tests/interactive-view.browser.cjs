@@ -124,3 +124,16 @@ check((await smv.offer({revision:3,sourceRevision:SMV_SOURCE_REVISION,view,apply
 check(smv.inspect().revision===3&&app.state.selMeasure==='Sales LY','new view acknowledged');
 check(getComputedStyle(controls()).display==='none','quiet after acknowledgement');
 `));
+
+test('authored table sets start compact and clicking tables shows both filter directions',{skip:!browser},async t=>verify(t,{version:2,mode:'graph',tables:['Date','Sales','Returns','Budget','Forecast','Inventory','Purchases','Shipments','Sales Orders'],focus:{kind:'table',name:'Date'},banner:false},`
+const points=[...app.explorer.names].map(n=>app.canvas.pos[n]);
+check(new Set(points.map(p=>Math.round(p.y))).size>2,'table set must not start as a horizontal row');
+const host=app.canvas.host.getBoundingClientRect();
+for(const name of app.explorer.names){const box=app.canvas.cards[name].el.getBoundingClientRect();check(box.left>=host.left-1&&box.right<=host.right+1,'authored fit must wait for inspector width: '+name);}
+check(app.explorer.direction==='both','default must include incoming and outgoing filter paths');
+let related=app.explorer.related();check(related.names.has('Sales'),'Date must show the fact table it filters');
+app.canvas.selectTable('Sales');await frame();
+related=app.explorer.related();check(related.names.has('Date'),'Sales must show its filtering dimension');
+const controls=app.explorer.relationControls();check(controls.querySelector('[aria-label="Relationship direction"]').value==='both','inspector default matches canvas');
+const saved=app.canvas.captureFocus();app.explorer.direction='incoming';app.canvas.restoreFocus(saved);check(app.explorer.direction==='both','saved focus preserves both directions');check(app.explorer.depth==='all','saved focus preserves indirect paths');
+`));

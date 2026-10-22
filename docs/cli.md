@@ -63,3 +63,9 @@ The first query returns the table, its relationships, and direct/indirect DAX
 measure users. The second lists active outgoing filter paths with direction and
 many-to-many evidence. See [CLI plugin workflow](cli-plugin-workflow.md) for
 inactive relationships, live table focus, banner options and explicit Apply control.
+
+Subcommands support `--help`, including `inspect --help` and `session update --help`.
+New authored table views use a compact layout and explore incoming plus outgoing
+filter paths by default. Saved positions remain unchanged. Use `smv session update ... --wait 5` to wait for a browser acknowledgement; check `confirmed` rather than
+assuming an accepted update has appeared. For quick previews, prefer standalone
+HTML snapshots; live views can also be exported as an offline fallback.

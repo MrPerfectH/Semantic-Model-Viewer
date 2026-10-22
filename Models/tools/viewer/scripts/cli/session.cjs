@@ -13,7 +13,8 @@ async function request(file,action,payload){
   const url=new URL(state.url);if(url.protocol!=='http:'||url.hostname!=='127.0.0.1')throw new Error('Session URL must be local');
   url.pathname='/'+action;
   const post=payload!==undefined||action==='stop';
-  const r=await fetch(url,{method:post?'POST':'GET',headers:post?{'Content-Type':'application/json'}:undefined,body:payload===undefined?undefined:JSON.stringify(payload),signal:AbortSignal.timeout(10000)});
+  let r;try{r=await fetch(url,{method:post?'POST':'GET',headers:post?{'Content-Type':'application/json'}:undefined,body:payload===undefined?undefined:JSON.stringify(payload),signal:AbortSignal.timeout(10000)});}
+  catch(e){throw fault('SESSION_UNREACHABLE','Cannot reach the local viewer server. Reopen it with serve/open, or use snapshot for a server-free HTML file.',{session:path.resolve(file),cause:e.cause?.code||e.name});}
   const result=await r.json();if(!r.ok)throw fault(result.error?.code||'SESSION_FAILED',result.error?.message||'Session request failed: '+r.status,result.error?.details);return result;
 }
 function presentation(state,capabilities={}){
@@ -49,12 +50,19 @@ async function serve(source,options={}){
   function clientState(){return Array.from(clients.values()).filter(c=>Date.now()-c.receivedAt<5000);}
   function application(){
     const alive=clientState(), waiting=alive.filter(c=>c.revision!==revision);
-    if(!alive.length)return {state:'awaiting-viewer',message:'Open the session URL; no viewer has acknowledged this view.',applyRequested:applyRevision===revision};
-    if(!waiting.length)return {state:'applied',message:'All active viewers acknowledged the requested view.',applyRequested:applyRevision===revision};
+    const history=Array.from(clients.values()), latest=history.slice().sort((a,b)=>b.receivedAt-a.receivedAt)[0];
+    const evidence={browserAcknowledged:alive.length>0&&!waiting.length,applyRequested:applyRevision===revision,
+      lastAcknowledgedRevision:history.length?Math.max(...history.map(c=>c.revision)):null,
+      lastSeenAt:latest?new Date(latest.receivedAt).toISOString():null};
+    if(!alive.length)return {...evidence,state:latest?'unconfirmed':'awaiting-viewer',message:latest?
+      'No fresh browser acknowledgement. Last known viewer revision: '+evidence.lastAcknowledgedRevision+'. Reopen or focus the browser to confirm the current view.':
+      'No browser has acknowledged this view. Open the URL in any reachable browser, or export authored HTML for a server-free view.'};
+    if(!waiting.length)return {...evidence,state:'applied',message:'All active viewers acknowledged the requested view.'};
     const click=applyRevision!==revision&&waiting.some(c=>c.pendingRevision===revision);
-    return {state:click?'waiting-for-apply':'awaiting-viewer',message:click?'Waiting for Apply click in the viewer. Use session update --apply only when explicitly taking over the view.':'Waiting for the viewer to receive and apply the requested view.',applyRequested:applyRevision===revision};
+    return {...evidence,state:click?'waiting-for-apply':'awaiting-viewer',message:click?'Waiting for Apply click in the viewer. Use session update --apply only when explicitly taking over the view.':'Waiting for the viewer to receive and apply the requested view.'};
   }
-  const status=()=>({...state,revision,application:application(),sourceRevision:prepared.hash,appliedView:prepared.view,inputFingerprint:lastAttempt,error,clients:clientState().map(c=>({clientId:c.clientId,revision:c.revision,explored:c.explored,pendingRevision:c.pendingRevision,receivedAt:c.receivedAt})),presentation:presentation({...state,revision})});
+  const status=()=>({...state,revision,application:application(),sourceRevision:prepared.hash,appliedView:prepared.view,inputFingerprint:lastAttempt,error,
+    clients:Array.from(clients.values()).map(c=>({clientId:c.clientId,revision:c.revision,sourceRevision:c.sourceRevision,explored:c.explored,pendingRevision:c.pendingRevision,receivedAt:c.receivedAt,fresh:Date.now()-c.receivedAt<5000})),presentation:presentation({...state,revision})});
   async function body(req){let text='';for await(const chunk of req){text+=chunk;if(Buffer.byteLength(text)>2*1024*1024)throw fault('REQUEST_TOO_LARGE','Session payload exceeds 2MB');}try{return JSON.parse(text);}catch{throw fault('JSON_INVALID','Invalid session JSON');}}
   function choose(payload={}){
     const alive=clientState();const candidates=payload.clientId?alive.filter(c=>c.clientId===payload.clientId):alive;
@@ -109,6 +117,18 @@ async function serve(source,options={}){
   function close(){if(closing)return;closing=true;clearInterval(interval);server.close();server.closeAllConnections();if(file&&fs.existsSync(file)){try{if(readJSON(file).url===state.url)fs.unlinkSync(file);}catch{}}process.removeListener('SIGTERM',close);process.removeListener('SIGINT',close);}
   process.on('SIGTERM',close);process.on('SIGINT',close);return {...status(),close};
 }
+async function waitForApply(file,revision,{seconds,clientId}={}){
+  if(!Number.isFinite(seconds)||seconds<0||seconds>60)throw new Error('Wait must be 0 to 60 seconds');
+  const end=Date.now()+seconds*1000;
+  while(true){
+    const status=await request(file,'status');
+    if(status.revision!==revision)throw fault('REVISION_CONFLICT','Requested view changed while waiting for acknowledgement',{expected:revision,actual:status.revision});
+    const viewers=clientId?status.clients.filter(c=>c.clientId===clientId&&c.fresh):status.clients.filter(c=>c.fresh);
+    const confirmed=viewers.length>0&&viewers.every(c=>c.revision===revision&&c.sourceRevision===status.sourceRevision);
+    if(confirmed||Date.now()>=end)return {state:confirmed?'applied':status.application.state,confirmed,timedOut:!confirmed,clientId:clientId||null,revision,application:status.application,clients:status.clients};
+    await new Promise(done=>setTimeout(done,Math.min(200,Math.max(0,end-Date.now()))));
+  }
+}
 function open(url){const command=process.platform==='darwin'?'open':process.platform==='win32'?'rundll32.exe':'xdg-open';const args=process.platform==='win32'?['url.dll,FileProtocolHandler',url]:[url];return new Promise((resolve,reject)=>{const child=spawn(command,args,{stdio:'ignore'});child.once('error',reject);child.once('exit',code=>code===0?resolve():reject(new Error('Browser launcher exited '+code)));});}
 async function exportSession(file,options){
   const info=await request(file,'snapshot',{basis:options.basis,expectedRevision:options.revision,clientId:options.clientId});
@@ -128,4 +148,4 @@ async function exportSession(file,options){
   return {...info,path:output,containsFullMetadata:true};
 }
 if(require.main===module)serve(process.argv[2],JSON.parse(process.argv[3])).then(s=>process.stdout.write(s.url+'\n')).catch(e=>{console.error(e.message);process.exitCode=1;});
-module.exports={serve,request,open,fingerprint,exportSession,presentation};
+module.exports={serve,request,open,fingerprint,exportSession,presentation,waitForApply};

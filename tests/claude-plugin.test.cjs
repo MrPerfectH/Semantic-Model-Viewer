@@ -54,9 +54,11 @@ test('plugin runs discover, inspect, live sessions and HTML exports with no node
   assert.equal(fs.existsSync(path.join(plugin, 'node_modules')), false);
   assert.equal(fs.existsSync(path.join(plugin, 'integrations/mcp')), false);
   assert.doesNotMatch(invoke('--help'), /\bsmv mcp\b/);
+  assert.match(invoke('inspect','--help'), /Usage: smv inspect/);
+  assert.match(invoke('session','update','--help'), /--wait/);
   const oldProtocol = run(cli, ['mcp']);
   assert.notEqual(oldProtocol.status, 0);
-  assert.match(oldProtocol.stderr, /Expected snapshot/);
+  assert.match(oldProtocol.stderr, /Unknown command/);
   const models = json('discover', '.');
   assert.equal(models.length, 1);
   assert.equal(models[0].path, path.join(project, 'Sales.SemanticModel'));
@@ -84,10 +86,12 @@ test('plugin runs discover, inspect, live sessions and HTML exports with no node
   assert.match(await response.text(), /SMVInteractive/);
   const currentView = { version: 2, mode: 'graph', tables: ['Date'] };
   fs.writeFileSync(prepared.newViewFile, JSON.stringify(currentView));
-  const update = json('session', 'update', session, '--view', prepared.newViewFile, '--revision', '1', '--apply', '--json');
+  const update = json('session', 'update', session, '--view', prepared.newViewFile, '--revision', '1', '--apply', '--wait', '0', '--json');
   assert.equal(update.revision, 2);
   assert.equal(update.state, 'awaiting-viewer');
   assert.equal(update.application.applyRequested, true);
+  assert.equal(update.confirmed, false);
+  assert.equal(update.timedOut, true);
   assert.equal(update.view.banner, false);
   const status = json('session', 'status', session, '--json');
   assert.equal(status.revision, 2);

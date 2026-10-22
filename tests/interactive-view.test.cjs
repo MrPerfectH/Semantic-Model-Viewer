@@ -72,3 +72,19 @@ test('session status distinguishes waiting for Apply from acknowledgement and ex
   await request(file, 'update', { expectedRevision: 3, view: tables });
   assert.equal((await (await fetch(url)).json()).apply, false);
 });
+
+test('waiting confirms browser receipts, not successful HTML fetches, and retains stale evidence',async t=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'smv-wait-')),file=path.join(root,'session.json');
+  const server=await serve(model,{session:file});t.after(()=>{server.close();fs.rmSync(root,{recursive:true,force:true});});
+  const {waitForApply}=require('../Models/tools/viewer/scripts/cli/session.cjs');
+  assert.equal((await fetch(server.url)).status,200);
+  const absent=await waitForApply(file,1,{seconds:.02});assert.equal(absent.confirmed,false);assert.equal(absent.timedOut,true);assert.equal(absent.application.browserAcknowledged,false);assert.deepEqual(absent.clients,[]);
+  const receipt={clientId:'viewer',revision:1,sourceRevision:server.sourceRevision,currentView:{version:2},explored:false};
+  const waiting=waitForApply(file,1,{seconds:2,clientId:'viewer'});
+  await request(file,'client',receipt);assert.equal((await waiting).confirmed,true);
+  const status=await request(file,'status');assert.equal(status.application.browserAcknowledged,true);assert.equal(status.application.lastAcknowledgedRevision,1);
+  const realNow=Date.now;t.mock.method(Date,'now',()=>realNow()+6000);
+  const stale=await request(file,'status');assert.equal(stale.application.browserAcknowledged,false);assert.equal(stale.application.state,'unconfirmed');assert.equal(stale.clients[0].fresh,false);assert.equal(stale.clients[0].revision,1);assert.equal(stale.application.lastAcknowledgedRevision,1);
+  await request(file,'update',{expectedRevision:1,view:{version:2}});
+  await assert.rejects(waitForApply(file,1,{seconds:.02}),e=>e.code==='REVISION_CONFLICT');
+});
