@@ -36,7 +36,7 @@ files, not the published Power BI service model. No data queries are executed.
 ```sh
 smv inspect 'Sales.SemanticModel' --table 'IFLO'
 smv filters-by 'Sales.SemanticModel' 'IFLO'
-smv filters-by 'IFLO' --model 'Sales.SemanticModel' --direction incoming
+smv filters-by 'IFLO' --model 'Sales.SemanticModel' --direction both
 ```
 
 Focused inspection returns one table (including its columns and home measures),
@@ -51,8 +51,19 @@ as a hypothetical graph. Each table includes distance and one shortest path with
 relationship evidence, filter direction, cardinalities and `manyToMany` flags.
 All incident edges are also returned, so parallel relationships remain visible.
 Unknown/automatic direction is reported as unresolved, never assumed to propagate.
+`--direction both` returns the union of incoming and outgoing filter paths. It
+does not follow an undirected route through a parent into unrelated sibling tables.
 Incoming paths are traversed in reverse order to actual filter propagation.
 DAX, ambiguity resolution and RLS can change evaluation behavior.
+
+## Browser layout defaults
+
+Authored table sets open in a compact star layout around their selected focus,
+with the fit calculated after the inspector is visible. Clicked tables explore
+active filter paths in **both directions**, direct and indirect, by default.
+This changes exploration, not model relationship metadata. The inspector can
+still select incoming, outgoing, all connected, inactive edges or shorter paths.
+Saved layouts and explicitly saved exploration settings are preserved.
 
 ## Start and reuse a live view
 
@@ -105,14 +116,24 @@ and reload the browser when the source changes.
 
 ```sh
 smv session status '<state.json>' --json
-smv session update '<state.json>' --revision 1 --view '<next-view.json>' --json
+smv session update '<state.json>' --revision 1 --view '<next-view.json>' --wait 5 --json
 smv session selection '<state.json>' --json
 ```
 
 Use the current requested revision from status, not the example number. Write an
 update to a new file rather than editing the original source view file behind a
 running session. `awaiting-viewer` means the update was requested, not applied.
-Status includes `application.state` and a plain-language `application.message`.
+Status includes `application.state`, `application.browserAcknowledged` and a
+plain-language `application.message`. `session update --wait 5` polls for up to
+five seconds and returns `confirmed: true` only after fresh browser receipts at
+the requested source/view revision. `--client` selects whose acknowledgement to
+wait for; it does not limit which tabs receive the update. A timeout returns
+`confirmed: false`, `timedOut: true`; the update remains accepted.
+
+A background or closed pane can stop sending receipts. Stale clients remain in
+status with `fresh: false`, `lastAcknowledgedRevision` and `lastSeenAt`; their
+current display is **unconfirmed**. Fetching HTML alone never acknowledges a view.
+Run any subcommand with `--help` for its exact options and examples.
 `waiting-for-apply` means **waiting for Apply click in the viewer**. When the user
 explicitly wants agent-driven control, `session update ... --apply` lets the viewer
 apply that revision even during exploration. It still returns `awaiting-viewer`
@@ -135,6 +156,11 @@ acknowledgement and currently supports Tables and Measures. The output file is a
 portable full-metadata viewer, not a filtered data extract. HTML export uses no
 browser automation or runtime npm packages. PNG export and `shot` require
 Chrome/Chromium; `SMV_BROWSER` selects its executable.
+
+For a quick preview, prefer `snapshot`: it keeps working after the browser pane
+or conversation closes. For live exploration, also export the authored HTML as
+a fallback and give both the browser URL and file link. Any browser that can
+reach the local server works; a particular host Browser pane is not required.
 
 Use a host-native file attachment or link. Do not paste megabytes of HTML into
 the conversation or bypass file-inspection/publication rules. If a host cannot

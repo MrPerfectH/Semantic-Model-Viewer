@@ -22,6 +22,26 @@
   function traverse(model, rootNames, options) {
     options = options || {};
     var direction = options.direction || 'connected';
+    // Walk each filter direction independently. An undirected walk would also
+    // visit siblings that neither filter nor are filtered by the selected table.
+    if (direction === 'both') {
+      var roots = typeof rootNames === 'string' ? [rootNames] : Array.from(rootNames || []);
+      var incoming = traverse(model, roots, Object.assign({}, options, { direction: 'incoming' }));
+      var outgoing = traverse(model, roots, Object.assign({}, options, { direction: 'outgoing' }));
+      var combined = { names: new Set(), distances: new Map(), predecessors: new Map(), paths: new Map(),
+        directions: new Map(), unresolved: incoming.unresolved, explanation: EXPLANATION };
+      [incoming, outgoing].forEach(function (result, i) {
+        result.names.forEach(function (name) {
+          if (!combined.directions.has(name)) combined.directions.set(name, []);
+          combined.directions.get(name).push(i ? 'outgoing' : 'incoming');
+          if (!combined.names.has(name) || result.distances.get(name) < combined.distances.get(name)) {
+            combined.names.add(name); combined.distances.set(name, result.distances.get(name));
+            combined.paths.set(name, pathTo(result, name));
+          }
+        });
+      });
+      return combined;
+    }
     if (['connected', 'incoming', 'outgoing'].indexOf(direction) < 0) {
       throw new RangeError('Unknown relationship traversal direction: ' + direction);
     }
@@ -81,6 +101,7 @@
      Incoming traversal order is the reverse of actual filter propagation. */
   function pathTo(result, tableName) {
     if (!result || !result.names.has(tableName)) return null;
+    if (result.paths) return result.paths.get(tableName).slice();
     var path = [], current = tableName;
     while (result.predecessors.has(current)) {
       var previous = result.predecessors.get(current);

@@ -88,7 +88,7 @@
     if(view.chrome===false)style.textContent+='#topbar{display:none!important}';
     if(app.explorer){app.explorer.libraryHidden=view.chrome===false;app.explorer.inspectorHidden=view.chrome===false;app.explorer.mapHidden=view.chrome===false;app.explorer.update();}
     if(view.chrome===false && app.explorer){app.explorer.libraryHidden=true;app.explorer.inspectorHidden=true;app.explorer.mapHidden=true;app.explorer.update();}
-    if(view.tables && app.explorer){app.explorer.blank();app.explorer.add(view.tables,{x:100,y:100});}
+    if(view.tables && app.explorer){app.explorer.blank();app.explorer.add(view.tables);}
     app.setState({showStandalone:true,search:'',activeFilter:null});
     app.setViewMode(view.mode);
     await frame();
@@ -117,6 +117,9 @@
       if(view.focus.kind==='relationship')cv.selectRel(resolve(app.model,view.focus));
       else if(view.focus.kind==='table'||view.focus.kind==='column')cv.selectTable(view.focus.table||view.focus.name,{keepView:true});
     }
+    // Arrange newly authored table sets after native focus is set. Restored
+    // explored state below keeps its exact positions and viewport.
+    if(view.mode==='graph' && view.tables && !(view.state&&view.state.tableView) && app.explorer){await frame();app.explorer.arrangeSubset(false);}
     if(view.state){
       if(view.state.tableView){var tv=view.state.tableView;Object.keys(tv.pos).forEach(function(n){cv.pos[n]=Object.assign({},tv.pos[n]);if(cv.cards[n]){cv.cards[n].x=tv.pos[n].x;cv.cards[n].y=tv.pos[n].y;cv.cards[n].el.style.left=tv.pos[n].x+'px';cv.cards[n].el.style.top=tv.pos[n].y+'px';}});if(tv.display)cv.restoreDisplay(tv.display);else if(tv.expanded)cv.restoreDisplay({expanded:tv.expanded});if(tv.focus)cv.restoreFocus(tv.focus);cv.view=Object.assign({},tv.view);cv.updateTransform();cv.renderLines();}
       if(view.state.measures)app.measures.restoreSnapshot(view.state.measures);

@@ -27,12 +27,12 @@ function inspect(source, requested) {
 function filtersBy(source, requested, options = {}) {
   const { context, model, table, source: canonical } = load(source, requested), graph = context.RelationshipGraph;
   const direction = options.direction || 'outgoing';
-  if (!['outgoing', 'incoming'].includes(direction)) throw new Error('--direction must be outgoing or incoming');
+  if (!['outgoing', 'incoming', 'both'].includes(direction)) throw new Error('--direction must be outgoing, incoming or both');
   const result = graph.traverse(model, [table.name], { direction, includeInactive: !!options.includeInactive, maxDepth: options.direct ? 1 : Infinity });
   const data = context.Snapshots.modelData(model);
   const describe = r => relationship(graph, data.relationships[model.relationships.indexOf(r)]);
   const reachable = [...result.names].filter(n => n !== table.name).map(name => ({
-    name, distance: result.distances.get(name),
+    name, distance: result.distances.get(name), directions: result.directions ? result.directions.get(name) : [direction],
     path: graph.pathTo(result, name).map(step => ({ traversalFrom: step.from, traversalTo: step.to, relationship: describe(step.relationship) }))
   }));
   return { source: canonical, name: model.name, table: table.name, direction, includeInactive: !!options.includeInactive,

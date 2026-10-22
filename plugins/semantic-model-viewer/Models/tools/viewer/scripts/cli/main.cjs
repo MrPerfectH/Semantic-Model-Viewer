@@ -9,14 +9,14 @@ const HELP = `Semantic Model Viewer — offline snapshots and agent-authored vis
 Usage:
   smv --where
   smv inspect <model> [--table <name>]
-  smv filters-by <model> <table> [--direction outgoing|incoming] [--direct] [--include-inactive]
+  smv filters-by <model> <table> [--direction outgoing|incoming|both] [--direct] [--include-inactive]
   smv discover <folder>...
   smv explain validate <explanation.json>
   smv results import <file or -> [--format csv --metadata metadata.json]
   smv serve <model> [--view view.json] [--watch] [--background --session state.json]
   smv open <model> --session state.json [--view view.json]
   smv session status|stop|selection <state.json>
-  smv session update <state.json> --view view.json --revision <n> [--apply]
+  smv session update <state.json> --view view.json --revision <n> [--apply] [--wait <seconds>]
   smv session export <state.json> --basis authored|current --revision <n> --out view.html|view.png [--client <id>]
   smv shot <model-folder> --view view.json --out image.png [--browser <executable>]
   smv explain build <explanation.json> --out <directory>
@@ -39,6 +39,16 @@ Source files are read locally and never modified. No DAX execution is performed.
 `;
 
 async function main(args) {
+  const help = require('./help.cjs');
+  if(help.requested(args)){process.stdout.write(help.help(args)||HELP);return;}
+  try { return await run(args); }
+  catch(error){
+    const spec=help.specification(args);
+    if(spec){error.details={...error.details,...spec};error.message+=' Run '+spec.help+'.';}
+    throw error;
+  }
+}
+async function run(args) {
   if (args[0] === '--where') {
     if (args.length !== 1) throw new Error('Use smv --where without other arguments');
     process.stdout.write(require('node:fs').realpathSync(path.resolve(__dirname, '../../../../../bin/smv.cjs')) + '\n'); return;
@@ -49,7 +59,9 @@ async function main(args) {
     } });
     const query = require('./query.cjs'); let result;
     if (positionals[0] === 'inspect') {
-      if (positionals.length !== 2 || values.model || values.direction || values.direct || values['include-inactive']) throw new Error('Expected inspect <model> [--table <name>]');
+      if (positionals.length < 2) throw new Error('Missing model path for inspect. Provide one TMDL folder or BIM file');
+      if (positionals.length > 2) throw new Error('inspect accepts one model path. Quote paths containing spaces; use --table <name> for a table filter');
+      if (values.model || values.direction || values.direct || values['include-inactive']) throw new Error('inspect supports --table and --json; filter-path options belong to filters-by');
       if (values.table !== undefined && !values.table.trim()) throw new Error('--table cannot be empty');
       result = query.inspect(positionals[1], values.table);
     } else {
@@ -70,7 +82,9 @@ async function main(args) {
   } });
   if (values.help || args.length === 0) { process.stdout.write(HELP); return; }
   const [command, source] = positionals;
-  if (command !== 'snapshot' || !source || positionals.length !== 2) throw new Error('Expected snapshot with one TMDL model folder. Run smv --help.');
+  if (command !== 'snapshot') throw new Error('Unknown command '+JSON.stringify(command)+'. Run smv --help.');
+  if (!source) throw new Error('Missing model path for snapshot');
+  if (positionals.length !== 2) throw new Error('snapshot accepts one model path. Quote paths containing spaces');
   if (!values.out) throw new Error('--out is required.');
   const output = path.resolve(values.out);
   if (path.extname(output).toLowerCase() !== '.html') throw new Error('Snapshot output must use .html.');
@@ -105,13 +119,18 @@ async function resultsCommand(args){
   const output=JSON.stringify(result,null,2)+'\n';if(values.out)fs.writeFileSync(values.out,output,{flag:'wx'});else process.stdout.write(output);
 }
 async function sessionCommand(args){
-  const {values,positionals}=parseArgs({args,allowPositionals:true,options:{view:{type:'string'},report:{type:'string'},session:{type:'string'},port:{type:'string'},background:{type:'boolean'},watch:{type:'boolean'},json:{type:'boolean'},revision:{type:'string'},basis:{type:'string'},out:{type:'string'},client:{type:'string'},force:{type:'boolean'},apply:{type:'boolean'}}});
+  const {values,positionals}=parseArgs({args,allowPositionals:true,options:{view:{type:'string'},report:{type:'string'},session:{type:'string'},port:{type:'string'},background:{type:'boolean'},watch:{type:'boolean'},json:{type:'boolean'},revision:{type:'string'},basis:{type:'string'},out:{type:'string'},client:{type:'string'},force:{type:'boolean'},apply:{type:'boolean'},wait:{type:'string'}}});
   if(values.apply && !(positionals[0]==='session' && positionals[1]==='update'))throw new Error('--apply is only supported for session update');
+  if(values.wait!==undefined && (!(positionals[0]==='session'&&positionals[1]==='update') || !Number.isFinite(Number(values.wait)) || !values.wait.trim() || Number(values.wait)<0 || Number(values.wait)>60))throw new Error('--wait requires session update and a number from 0 to 60 seconds');
+  if(values.client && positionals[0]==='session' && !['selection','export','update'].includes(positionals[1]))throw new Error('--client is supported for session selection, update or export');
+  if(values.client&&positionals[0]==='session'&&positionals[1]==='update'&&values.wait===undefined)throw new Error('--client for update selects whose acknowledgement to wait for; add --wait <seconds>');
   const api=require('./session.cjs');let result;
   if(positionals[0]==='session'){
-    if(positionals.length!==3||!['status','stop','selection','update','export'].includes(positionals[1]))throw new Error('Expected session status|stop|selection|update|export <state.json>');
+    if(!['status','stop','selection','update','export'].includes(positionals[1]))throw new Error('Choose a session command: status, stop, selection, update or export');
+    if(positionals.length<3)throw new Error('Missing session file path for session '+positionals[1]);
+    if(positionals.length>3)throw new Error('session '+positionals[1]+' accepts one state-file path; quote paths containing spaces');
     if(['update','export'].includes(positionals[1])&&(!/^\d+$/.test(values.revision||'')||Number(values.revision)<1))throw new Error('--revision must be a positive integer');
-    if(positionals[1]==='update'){if(!values.view)throw new Error('--view is required');result=await api.request(positionals[2],'update',{expectedRevision:Number(values.revision),view:require('./explain.cjs').readJSON(values.view),apply:!!values.apply});}
+    if(positionals[1]==='update'){if(!values.view)throw new Error('--view is required');result=await api.request(positionals[2],'update',{expectedRevision:Number(values.revision),view:require('./explain.cjs').readJSON(values.view),apply:!!values.apply});if(values.wait!==undefined)result={...result,...await api.waitForApply(positionals[2],result.revision,{seconds:Number(values.wait),clientId:values.client})};}
     else if(positionals[1]==='selection')result=await api.request(positionals[2],'selection',{clientId:values.client});
     else if(positionals[1]==='export'){if(!values.out)throw new Error('--out is required');result=await api.exportSession(positionals[2],{...values,revision:Number(values.revision),clientId:values.client});}
     else result=await api.request(positionals[2],positionals[1]);
