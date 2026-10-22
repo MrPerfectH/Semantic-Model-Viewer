@@ -1321,14 +1321,22 @@
       this.analysisBody.appendChild(daxPane); body.appendChild(this.analysisBody); this.mainEl.appendChild(body);
       this.setWorkspaceMode(this._workspaceMode || 'split', false);
       if (typeof ResizeObserver !== 'undefined') {
-        this._graphObserver = new ResizeObserver(function () {
-          self.applyWorkspaceLayout();
-          /* The pane is usually still 0x0 on the frame a measure is chosen, and a viewport
-             placed against nothing lands nowhere. This is the callback that fires the moment
-             it gets a real size, so it is where the first placement belongs — no retry loop,
-             and nothing left spinning when the pane never opens at all. */
-          self.applyInitialViewport();
-          if (self._gAutoFit) self.fitGraph();
+        var resizeFrame = 0;
+        var observer = this._graphObserver = new ResizeObserver(function () {
+          if (resizeFrame) return;
+          // Stacking and its label can resize the observed panes. Apply those changes
+          // on the next frame rather than re-entering ResizeObserver delivery.
+          resizeFrame = requestAnimationFrame(function () {
+            resizeFrame = 0;
+            if (self._graphObserver !== observer) return;
+            self.applyWorkspaceLayout();
+            /* The pane is usually still 0x0 on the frame a measure is chosen, and a viewport
+               placed against nothing lands nowhere. This is the callback that fires the moment
+               it gets a real size, so it is where the first placement belongs — no retry loop,
+               and nothing left spinning when the pane never opens at all. */
+            self.applyInitialViewport();
+            if (self._gAutoFit) self.fitGraph();
+          });
         });
         this._graphObserver.observe(this.gScroll);
         this._graphObserver.observe(this.analysisBody);
@@ -1375,9 +1383,12 @@
       this.analysisBody.style.setProperty('--mv-graph-share', (metrics.share * 100) + 'fr');
       this.analysisBody.style.setProperty('--mv-dax-share', ((1 - metrics.share) * 100) + 'fr');
       if (this.splitSelect) {
+        var stacked = this._splitLayout !== metrics.layout;
+        var label = stacked ? 'DAX below graph (narrow view)' : 'DAX beside graph';
+        if (this.splitSelect.options[0].textContent !== label) this.splitSelect.options[0].textContent = label;
         this.splitSelect.value = this._splitLayout;
         this.splitSelect.hidden = mode !== 'split';
-        this.splitSelect.title = this._splitLayout !== metrics.layout ? 'DAX is below the graph while the workspace is narrow.' : 'Choose where DAX appears in split view.';
+        this.splitSelect.title = stacked ? 'DAX is below the graph while the workspace is narrow. Your beside preference returns when there is room.' : 'Choose where DAX appears in split view.';
       }
       if (this.splitDivider) {
         this.splitDivider.setAttribute('aria-orientation', metrics.layout === 'below' ? 'horizontal' : 'vertical');

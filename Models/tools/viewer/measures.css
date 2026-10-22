@@ -75,7 +75,9 @@
 .mv-panel-heading>div{min-width:0;}
 .mv-mode-switch button{font-size:11px;padding:6px 9px;}
 .mv-analysis-body{display:grid;grid-template-columns:minmax(0,var(--mv-graph-share,55fr)) 12px minmax(0,var(--mv-dax-share,45fr));grid-template-rows:minmax(0,1fr);flex:1;min-height:0;overflow:hidden;gap:0;padding:16px;}
-.mv-analysis-body[data-mode=split][data-split=below]{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,var(--mv-graph-share,52fr)) 12px minmax(0,var(--mv-dax-share,48fr));}
+/* Stacked panels scroll as a workspace instead of squeezing the graph between its controls. */
+.mv-analysis-body[data-mode=split][data-split=below]{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(min-content,var(--mv-graph-share,52fr)) 12px minmax(320px,var(--mv-dax-share,48fr));overflow:auto;}
+.mv-analysis-body[data-mode=split][data-split=below] .mv-graph-scroll{min-height:240px;contain:size;}
 .mv-split-divider{display:flex;align-items:center;justify-content:center;cursor:col-resize;touch-action:none;user-select:none;border-radius:6px;}
 .mv-split-divider>span{width:3px;height:32px;border-radius:4px;background:var(--smv-line,#c7d2e1);}
 .mv-split-divider:hover,.mv-split-divider.is-dragging{background:var(--smv-soft,#e4ecf8);}
