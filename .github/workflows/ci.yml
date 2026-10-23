@@ -11,6 +11,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,6 +28,7 @@ jobs:
         working-directory: vscode-extension
         run: npm test
       - name: Check measure layouts and offline snapshots in Chrome
+        timeout-minutes: 5
         env:
           CHROME_PATH: /usr/bin/google-chrome
         run: node --test --test-concurrency=1 tests/measures-layout.browser.cjs tests/snapshot.browser.cjs
