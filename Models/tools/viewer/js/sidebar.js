@@ -34,7 +34,7 @@
       var isRel = c.rel, hid = c.hidden, ty = app.shortType(c.dataType);
       var ckey = 'col|' + c.name, copen = !!(app.state.calcOpen || {})[ckey];
       return {
-        name: c.name, type: ty, isCalc: !!c.isCalc, dax: c.dax || '', open: copen,
+        name: c.name, trace: function () { app.measures.analyzeSource(t.name, c.name); }, type: ty, isCalc: !!c.isCalc, dax: c.dax || '', open: copen,
         toggle: function () { app.setState({ calcOpen: Object.assign({}, app.state.calcOpen, (function (o) { o[ckey] = !copen; return o; })({})) }); },
         rowStyle: 'display:flex;align-items:center;gap:10px;padding:5px 16px;' + (isRel ? ('background:' + tint('#f59e0b', 0.07) + ';') : ''),
         dotStyle: isRel ? 'width:7px;height:7px;border-radius:50%;background:var(--smv-gold,#f59e0b);flex:none;'
@@ -57,7 +57,7 @@
         toggle: function () { app.setState({ expandedMeasure: open ? null : m.name }); },
         trace: function () {
           app.canvas.pinned.clear();
-          app.setState({ viewMode: 'measures', selMeasure: m.name, mvOpen: app.mvOpenFor(m.name), selected: null });
+          app.setState({ viewMode: 'measures', selMeasure: m.name, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvOpen: app.mvOpenFor(m.name), selected: null });
           app.canvas.applyHighlight(null, null);
         }
       };
@@ -237,8 +237,11 @@
       });
     }
 
+    body.appendChild(el('div', { cls: 'mv-table-impact-action' }, el('button', { cls: 'mv-button mv-button-primary', text: 'Find dependent measures',
+      onClick: function () { app.measures.analyzeSource(sel.name); } })));
+
     if (sel.hasMeasures) {
-      body.appendChild(sectionTitle('Measures', sel.measureCount));
+      body.appendChild(sectionTitle('Measures stored here', sel.measureCount));
       if (sel.showMsrSearch) {
         var inp = el('input', {
           value: app.state.msrQuery || '', placeholder: 'Filter measures…', spellcheck: 'false',
@@ -287,12 +290,14 @@
         c.dax ? fxBadge('Calculated column — click to read the DAX') : null,
         el('span', { style: c.typeStyle, text: c.type })
       ];
-      if (!c.dax) { body.appendChild(el('div', { cls: 'hv-f0f2f5', style: c.rowStyle }, rowKids)); return; }
-      var wrap = el('div', {}, el('button', {
+      var trace = el('button', { cls: 'mv-column-impact-action', text: 'Find measures', title: 'Find measures referencing ' + sel.name + '[' + c.name + ']',
+        'aria-label': 'Find measures referencing ' + sel.name + '[' + c.name + ']', onClick: c.trace });
+      var label = c.dax ? el('button', {
         cls: 'hv-f0f2f5', onClick: c.toggle, title: 'Show / hide the column DAX',
-        style: c.rowStyle + 'width:100%;text-align:left;border:none;cursor:pointer;box-sizing:border-box;'
-      }, rowKids));
-      if (c.open) wrap.appendChild(daxBox(c.dax, '2px 16px 8px 34px'));
+        style: c.rowStyle + 'flex:1;min-width:0;text-align:left;border:none;cursor:pointer;box-sizing:border-box;'
+      }, rowKids) : el('div', { cls: 'hv-f0f2f5', style: c.rowStyle + 'flex:1;min-width:0;' }, rowKids);
+      var wrap = el('div', {}, el('div', { style: 'display:flex;align-items:center;padding-right:8px;' }, [label, trace]));
+      if (c.open && c.dax) wrap.appendChild(daxBox(c.dax, '2px 16px 8px 34px'));
       body.appendChild(wrap);
     });
 

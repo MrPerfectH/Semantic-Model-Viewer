@@ -26,6 +26,10 @@ jobs:
       - name: Test viewer and extension
         working-directory: vscode-extension
         run: npm test
+      - name: Check measure layouts and offline snapshots in Chrome
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: node --test --test-concurrency=1 tests/measures-layout.browser.cjs tests/snapshot.browser.cjs
       - name: Package the extension
         working-directory: vscode-extension
         env:
