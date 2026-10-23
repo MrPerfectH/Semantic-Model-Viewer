@@ -28,7 +28,7 @@ Use VS Code 1.85 or newer. Local file exploration does not require Python, Power
 
 Supported local inputs are `*.SemanticModel` folders with TMDL definitions and `model.bim`. A `.pbix` file alone is not a supported local input. If a model is missing, check the opened folder and run **Semantic Model Viewer: Refresh Model List**. You can also right-click a supported model and choose **Open in Semantic Model Viewer**.
 
-[Watch opening a model and following it into DAX — 37 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/vscode-to-dax-v3.mp4)
+[Watch opening a model and following it into DAX — 35 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/vscode-to-dax-v4.mp4)
 
 ## Focus on part of the table canvas
 
