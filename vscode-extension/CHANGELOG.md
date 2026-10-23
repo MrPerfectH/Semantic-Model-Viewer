@@ -1,9 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.4.1
 
 - Keep the Measures overview visible while searching or filtering. Open matching formulas in an optional dialog with the same syntax colors and reference navigation as the Measures workspace.
-
 
 ## 0.4.0
 
