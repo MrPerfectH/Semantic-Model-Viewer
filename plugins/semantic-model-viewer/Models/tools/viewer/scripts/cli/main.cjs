@@ -150,7 +150,7 @@ async function sessionCommand(args){
     result=await api.serve(positionals[1],{...values,newSession:values['new-session'],port:values.port===undefined?0:Number(values.port),background:positionals[0]==='open'||values.background});
     if(positionals[0]==='open')await api.open(result.url);
   }
-  process.stdout.write(values.json?JSON.stringify(result)+'\n':(result.url||JSON.stringify(result))+'\n');
+  process.stdout.write(positionals[0]==='session'?JSON.stringify(result,null,values.json?0:2)+'\n':values.json?JSON.stringify(result)+'\n':(result.url||JSON.stringify(result))+'\n');
 }
 async function workflowCommand(args){
   const {values,positionals}=parseArgs({args,allowPositionals:true,options:{table:{type:'string'},model:{type:'string'},related:{type:'boolean'},dependents:{type:'boolean'},direction:{type:'string'},direct:{type:'boolean'},'include-inactive':{type:'boolean'},details:{type:'boolean'},json:{type:'boolean'},session:{type:'string'},'new-session':{type:'boolean'},watch:{type:'boolean'},'bin-dir':{type:'string'}}});
