@@ -28,7 +28,7 @@ Use VS Code 1.85 or newer. Local file exploration does not require Python, Power
 
 Supported local inputs are `*.SemanticModel` folders with TMDL definitions and `model.bim`. A `.pbix` file alone is not a supported local input. If a model is missing, check the opened folder and run **Semantic Model Viewer: Refresh Model List**. You can also right-click a supported model and choose **Open in Semantic Model Viewer**.
 
-[Watch opening a model and following it into DAX — 37 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/vscode-to-dax.mp4)
+[Watch opening a model and following it into DAX — 37 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/vscode-to-dax-v2.mp4)
 
 ## Focus on part of the table canvas
 
@@ -46,7 +46,7 @@ Select a table to highlight its relationships while unrelated tables dim. Switch
 
 Select **Sales** in the table canvas, then choose **Find dependent measures** in the table inspector. The measure library lists direct and indirect references to that table. Use **Direct only** to narrow the list.
 
-![Select Sales, choose Find dependent measures, and explore its dependent measures](media/vscode-guide/table-to-dependent-measures.gif)
+![Select Sales, choose Find dependent measures, and explore its dependent measures](media/vscode-guide/table-to-dependent-measures-v2.gif)
 
 For a single column, choose **Find measures** beside that column in the inspector.
 
@@ -54,7 +54,7 @@ For a single column, choose **Find measures** beside that column in the inspecto
 
 Click a dependent measure to inspect its formula while keeping Sales as the source. Double-click its graph node to make it the analyzed measure; the focused measure becomes black.
 
-![Click a dependent measure, then double-click to analyze it](media/vscode-guide/select-dependent-measure.gif)
+![Click a dependent measure, then double-click to analyze it](media/vscode-guide/select-dependent-measure-v2.gif)
 
 ### 3. Expand the calculation
 
