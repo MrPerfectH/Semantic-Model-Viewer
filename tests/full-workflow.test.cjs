@@ -22,6 +22,7 @@ test('show reuses one model session, creates independent named views and reports
   const again=run(dir,'show',model,'--table','Date','--related','--dependents');assert.equal(again.sessionId,first.sessionId);assert.equal(again.reused,true);assert.equal(again.views[0].revision,1);
   const served=run(dir,'serve',path.join(model,'definition'),'--background','--json');assert.equal(served.sessionId,first.sessionId);
   const second=run(dir,'show',model,'--table','Sales');assert.equal(second.sessionId,first.sessionId);assert.equal((await api.request(first.sessionFile,'views')).views.length,5);
+  assert.equal(run(dir,'session','status',first.sessionFile).workspaceApplication.views,4);
   const [tables,measures]=first.views,workspace=await (await fetch(first.workspaceUrl)).text();assert.match(workspace,/Side by side/);assert.match(workspace,/<iframe/);
   const before=await api.request(first.sessionFile,'status',undefined,tables.id);assert.equal(before.application.browserAcknowledged,false);
   await api.request(first.sessionFile,'update',{expectedRevision:1,view:{version:2,mode:'graph',tables:{relatedTo:'Date',depth:1}},apply:true},tables.id);
