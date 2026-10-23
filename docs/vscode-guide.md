@@ -16,7 +16,7 @@ If Marketplace installation is unavailable, download `semantic-model-viewer-<ver
 
 Use VS Code 1.85 or newer. Local file exploration does not require Python, Power BI Desktop, or a Fabric connection.
 
-[Watch installation and finding the model list — 10 seconds](media/vscode-guide/install-extension.mp4)
+[Watch installation and finding the model list — 10 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/install-extension.mp4)
 
 ![Find Semantic Model Viewer, install it, and choose a model](media/vscode-guide/install-extension.gif)
 
@@ -28,13 +28,13 @@ Use VS Code 1.85 or newer. Local file exploration does not require Python, Power
 
 Supported local inputs are `*.SemanticModel` folders with TMDL definitions and `model.bim`. A `.pbix` file alone is not a supported local input. If a model is missing, check the opened folder and run **Semantic Model Viewer: Refresh Model List**. You can also right-click a supported model and choose **Open in Semantic Model Viewer**.
 
-[Watch opening a model and following it into DAX — 37 seconds](media/vscode-guide/vscode-to-dax.mp4)
+[Watch opening a model and following it into DAX — 37 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/vscode-to-dax.mp4)
 
 ## Focus on part of the table canvas
 
 Select a table to highlight its relationships while unrelated tables dim. Switch to another table to follow a different path without losing the surrounding layout. Choose **Hide unrelated**, then **Arrange**, for a larger focused diagram. Hiding tables changes the view, not the model files.
 
-[Watch the table workflow — 24 seconds](media/vscode-guide/focus-tables.mp4)
+[Watch the table workflow — 24 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/focus-tables.mp4)
 
 ![Dim unrelated tables and switch selection while keeping the layout](media/vscode-guide/dim-and-switch.gif)
 
