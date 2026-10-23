@@ -9,14 +9,16 @@ Install the extension, open a local Power BI semantic model, and follow its tabl
 1. Open **Extensions** in VS Code: **Cmd+Shift+X** on macOS or **Ctrl+Shift+X** on Windows/Linux.
 2. Search for **Semantic Model Viewer**. Select the extension published by **MrPerfectH**.
    For an exact match, search `@id:MrPerfectH.semantic-model-viewer`.
-3. Choose **Install**. If VS Code asks you to trust the publisher, review the prompt and confirm if you want to proceed.
+3. Choose **Install** and follow the VS Code prompts.
 4. Open your project folder and select **Semantic Models** in the Activity Bar.
 
 If Marketplace installation is unavailable, download `semantic-model-viewer-<version>.vsix` from [GitHub Releases](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/latest). Open the Command Palette (**Cmd+Shift+P** on macOS, **Ctrl+Shift+P** on Windows/Linux), run **Extensions: Install from VSIX…**, and choose the downloaded file. To update a VSIX installation, repeat with the newer file. Reload VS Code if prompted.
 
 Use VS Code 1.85 or newer. Local file exploration does not require Python, Power BI Desktop, or a Fabric connection.
 
-[Watch installation and finding the model list — 19 seconds](media/vscode-guide/install-extension.mp4)
+[Watch installation and finding the model list — 8 seconds](media/vscode-guide/install-extension.mp4)
+
+![Find Semantic Model Viewer, install it, and choose a model](media/vscode-guide/install-extension.gif)
 
 ## Open a semantic model
 
