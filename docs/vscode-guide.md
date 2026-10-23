@@ -30,6 +30,16 @@ Supported local inputs are `*.SemanticModel` folders with TMDL definitions and `
 
 [Watch opening a model and following it into DAX — 37 seconds](media/vscode-guide/vscode-to-dax.mp4)
 
+## Focus on part of the table canvas
+
+Select a table to highlight its relationships while unrelated tables dim. Switch to another table to follow a different path without losing the surrounding layout. Choose **Hide unrelated**, then **Arrange**, for a larger focused diagram. Hiding tables changes the view, not the model files.
+
+[Watch the table workflow — 24 seconds](media/vscode-guide/focus-tables.mp4)
+
+![Dim unrelated tables and switch selection while keeping the layout](media/vscode-guide/dim-and-switch.gif)
+
+![Hide unrelated tables and arrange the remaining diagram](media/vscode-guide/hide-and-arrange.gif)
+
 ## From a table to dependent measures
 
 ### 1. Find the measures that use a table
@@ -53,16 +63,6 @@ Open **DAX**, then choose **Inline measures** to expand the referenced calculati
 ![Inline referenced measures to inspect the underlying expressions](media/vscode-guide/inline-dax.gif)
 
 Dependency analysis inspects static DAX references; it does not execute DAX or simulate relationship filter propagation.
-
-## Focus on part of the table canvas
-
-Select a table to highlight its relationships while unrelated tables dim. Switch to another table to follow a different path without losing the surrounding layout. Choose **Hide unrelated**, then **Arrange**, for a larger focused diagram. Hiding tables changes the view, not the model files.
-
-[Watch the table workflow — 24 seconds](media/vscode-guide/focus-tables.mp4)
-
-![Dim unrelated tables and switch selection while keeping the layout](media/vscode-guide/dim-and-switch.gif)
-
-![Hide unrelated tables and arrange the remaining diagram](media/vscode-guide/hide-and-arrange.gif)
 
 ## What is new in version 0.4.0
 
