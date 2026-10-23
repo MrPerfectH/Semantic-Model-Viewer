@@ -35,3 +35,16 @@ test('Power BI Desktop identity signs in through a root localhost callback',asyn
  const auth=createAuth({clientId:POWER_BI_DESKTOP_CLIENT_ID,msalFactory:()=>({getAuthCodeUrl:async r=>{request=r;return 'https://login.microsoftonline.com/test';},acquireTokenByCode:async r=>{assert.equal(r.redirectUri,request.redirectUri);assert.equal(r.codeVerifier.length,43);return {account:a};},getTokenCache:()=>({getAllAccounts:async()=>[a]})}),openBrowser:async()=>{const url=new URL(request.redirectUri);assert.equal(url.pathname,'/');assert.equal(url.hostname,'localhost');assert.deepEqual(request.scopes,['https://analysis.windows.net/powerbi/api/.default']);url.searchParams.set('state',request.state);url.searchParams.set('code','test');await fetch(url);}});
  assert.equal((await auth.signIn()).name,a.username);
 });
+function deviceMock() {
+ let request, finish; const removed=[];let accounts=[];
+ const auth=createAuth({clientId:require('../auth.cjs').POWER_BI_DESKTOP_CLIENT_ID,openBrowser:async()=>{throw new Error('device flow must not open an embedded browser');},msalFactory:()=>({getTokenCache:()=>({getAllAccounts:async()=>accounts,removeAccount:async a=>{removed.push(a.homeAccountId);accounts=accounts.filter(x=>x!==a);}}),acquireTokenByDeviceCode:r=>{request=r;r.deviceCodeCallback({userCode:'TEST-CODE',verificationUri:'https://microsoft.com/devicelogin',expiresIn:900});return new Promise(resolve=>{finish=()=>{accounts=[a];resolve({account:a,accessToken:'private-token'});};});}})});
+ return {auth,removed,get request(){return request;},finish:()=>finish()};
+}
+test('device login exposes only a user code and completes into the existing account cache',async()=>{
+ const m=deviceMock();const login=await m.auth.beginDeviceSignIn();assert.equal(login.userCode,'TEST-CODE');assert.ok(login.expiresAt>Date.now());assert.ok(!JSON.stringify(login).includes('private-token'));
+ await assert.rejects(m.auth.beginDeviceSignIn(),{code:'SignInInProgress'});
+ m.finish();await new Promise(resolve=>setImmediate(resolve));const status=await m.auth.status();assert.equal(status.account.name,a.username);assert.equal(status.deviceLogin,null);assert.ok(!JSON.stringify(status).includes('private-token'));
+});
+test('cancelled device login cannot resurrect a signed-out account after late token delivery',async()=>{
+ const m=deviceMock();await m.auth.beginDeviceSignIn();m.auth.cancel();assert.equal(m.request.cancel,true);m.finish();await new Promise(resolve=>setImmediate(resolve));const status=await m.auth.status();assert.equal(status.account,null);assert.equal(status.deviceLogin,null);assert.deepEqual(m.removed,['a']);
+});

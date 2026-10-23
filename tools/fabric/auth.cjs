@@ -11,6 +11,7 @@ const scopesFor = (audience, purpose, clientId) => {
   throw new FabricError('InvalidAudience', 'Unsupported Microsoft token audience.');
 };
 function createAuth({ clientId, openBrowser, loadTokens = async () => null, saveTokens = async () => {}, msalFactory }) {
+  let deviceLogin = null; let deviceError = null; let deviceRequest = null;
   let client; let pending; let interactiveBusy = false; let selectedId; let generation = 0;
   async function init() {
     if (!clientId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(clientId)) throw new FabricError('NotConfigured', 'Fabric sign-in is awaiting application setup by the Semantic Model Viewer maintainers.');
@@ -67,7 +68,31 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
     } finally { clearTimeout(timer); server?.close(); server?.closeAllConnections(); pending = null; interactiveBusy = false; }
   }
   return {
-    async status() { if (!clientId) return { configured: false, account: null }; return { configured: true, account: accountInfo(await account()) }; },
+    async beginDeviceSignIn() {
+      if (interactiveBusy) throw new FabricError('SignInInProgress', 'Microsoft sign-in is already in progress.');
+      interactiveBusy = true; deviceLogin = null; deviceError = null;
+      const currentGeneration = generation;
+      let ready, failed; const started = new Promise((resolve,reject)=>{ready=resolve;failed=reject;});
+      (async()=>{
+        try {
+          const app = await init();
+          if (generation !== currentGeneration) throw new FabricError('Cancelled','Microsoft sign-in cancelled.');
+          deviceRequest = { scopes: scopesFor(POWER_BI_AUDIENCE, undefined, clientId), deviceCodeCallback: response => {
+            if (generation !== currentGeneration) { failed(new FabricError('Cancelled','Microsoft sign-in cancelled.')); return; }
+            deviceLogin = { userCode: response.userCode, verificationUri: response.verificationUri, expiresAt: Date.now() + response.expiresIn * 1000 }; ready(deviceLogin);
+          } };
+          const result = await app.acquireTokenByDeviceCode(deviceRequest);
+          if (generation !== currentGeneration) { if(result?.account) await app.getTokenCache().removeAccount(result.account); throw new FabricError('Cancelled','Microsoft sign-in cancelled.'); }
+          if (!result?.account) throw new FabricError('SignInDenied','Microsoft sign-in did not complete.');
+          selectedId = result.account.homeAccountId;
+          for (const previous of await app.getTokenCache().getAllAccounts()) if (previous.homeAccountId !== selectedId) await app.getTokenCache().removeAccount(previous);
+          deviceLogin = null;
+        } catch(error) { if (generation === currentGeneration) { deviceLogin = null; deviceError = 'Microsoft device sign-in was cancelled, expired, or denied. Try again.'; } failed(error); }
+        finally { if(generation === currentGeneration) {deviceRequest = null; interactiveBusy = false;} }
+      })();
+      return started;
+    },
+    async status() { if (!clientId) return { configured: false, account: null }; return { configured: true, account: accountInfo(await account()), deviceLogin, deviceError }; },
     async signIn() { return accountInfo((await interactive(clientId === POWER_BI_DESKTOP_CLIENT_ID ? POWER_BI_AUDIENCE : FABRIC_AUDIENCE, 'select_account')).account); },
     async getAccessToken(audience, purpose) {
       const currentGeneration = generation;
@@ -83,8 +108,8 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
         return (await interactive(audience, undefined, purpose)).accessToken;
       }
     },
-    async signOut() { generation++; pending?.(); if (clientId) { const app = await init(); for (const a of await app.getTokenCache().getAllAccounts()) await app.getTokenCache().removeAccount(a); } selectedId = null; await saveTokens(null); },
-    cancel() { generation++; pending?.(); }
+    async signOut() { generation++; pending?.(); if(deviceRequest) deviceRequest.cancel = true; deviceRequest = null; deviceLogin = null; deviceError = null; interactiveBusy = false; if (clientId) { const app = await init(); for (const a of await app.getTokenCache().getAllAccounts()) await app.getTokenCache().removeAccount(a); } selectedId = null; await saveTokens(null); },
+    cancel() { generation++; pending?.(); if(deviceRequest) deviceRequest.cancel = true; deviceRequest = null; deviceLogin = null; deviceError = null; interactiveBusy = false; }
   };
 }
 module.exports = { createAuth, createWorkAccountAuth: createAuth, scopesFor, POWER_BI_DESKTOP_CLIENT_ID };

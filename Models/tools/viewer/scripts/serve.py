@@ -196,7 +196,7 @@ class Handler(SimpleHTTPRequestHandler):
                 return
             payload = json.loads(self.rfile.read(length).decode('utf-8'))
             if not isinstance(payload, dict) or payload.get('action') not in {
-                    'status', 'signIn', 'listWorkspaces', 'listModels', 'openModel', 'signOut', 'cancel'}:
+                    'status', 'signIn', 'beginDeviceSignIn', 'listWorkspaces', 'listModels', 'openModel', 'signOut', 'cancel'}:
                 self.send_json(400, {'error': 'Invalid Fabric request.'})
                 return
             result = self.server.fabric.request(payload)

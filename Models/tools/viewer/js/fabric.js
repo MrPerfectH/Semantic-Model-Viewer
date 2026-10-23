@@ -19,7 +19,7 @@
   FabricConnection.prototype.current=function(){return this.app.getStore().find(function(r){return r.id===this.app.modelKey;},this);};
   FabricConnection.prototype.run=async function(fn){
     var generation=++this.generation;this.busy=true;this.error='';this.draw();this.app.render(true);
-    try{await fn.call(this,generation);}catch(e){if(generation===this.generation){this.error=e.message || String(e);if(!this.visible)this.app.setState({snapshotError:this.error});}}
+    try{await fn.call(this,generation);}catch(e){if(generation===this.generation){this.deviceLogin=null;this.error=e.message || String(e);if(!this.visible)this.app.setState({snapshotError:this.error});}}
     finally{if(generation===this.generation){this.busy=false;this.draw();this.app.render(true);}}
   };
   FabricConnection.prototype.show=function(){
@@ -27,7 +27,7 @@
     this.returnFocus=document.activeElement;this.visible=true;this.workspace=null;this.items=[];this.query='';this.draw();
     this.run(async function(n){var s=await this.request({action:'status'});if(n!==this.generation)return;this.account=s.account;this.unavailable=s.available===false?s.message || 'Fabric sign-in has not been configured by the application maintainer.':'';if(this.account && !this.unavailable)await this.list(false,n);});
   };
-  FabricConnection.prototype.close=function(){if(this.busy && this.available())this.request({action:'cancel'}).catch(function(){});this.generation++;this.visible=false;this.busy=false;if(this.overlay)this.overlay.remove();this.overlay=null;if(this.returnFocus && this.returnFocus.focus)this.returnFocus.focus();};
+  FabricConnection.prototype.close=function(){if(this.busy && this.available())this.request({action:'cancel'}).catch(function(){});this.generation++;this.visible=false;this.busy=false;this.deviceLogin=null;if(this.overlay)this.overlay.remove();this.overlay=null;if(this.returnFocus && this.returnFocus.focus)this.returnFocus.focus();};
   FabricConnection.prototype.list=async function(more,n){
     var p={action:this.workspace?'listModels':'listWorkspaces'};if(this.workspace)p.workspaceId=this.workspace.id;if(more)p.continuationToken=this.next;
     var result=await this.request(p);if(n!==this.generation)return;
@@ -75,6 +75,11 @@
     if(this.unavailable)dialog.appendChild(el('p',{role:'status',text:this.unavailable}));
     if(this.error)dialog.appendChild(el('p',{role:'alert',text:this.error,style:'color:#b91c1c;'}));
     if(this.busy)dialog.appendChild(el('p',{role:'status',text:'Working… Close to cancel.'}));
+    if(this.deviceLogin){
+      dialog.appendChild(el('p',{text:'Open microsoft.com/devicelogin in your regular browser and enter this code. Sign in only if you started this connection.'}));
+      dialog.appendChild(el('strong',{text:this.deviceLogin.userCode,style:'display:block;font-size:24px;letter-spacing:3px;margin:12px 0;'}));
+      dialog.appendChild(el('a',{href:'https://microsoft.com/devicelogin',target:'_blank',rel:'noopener noreferrer',text:'Open Microsoft sign-in'}));
+    }
     if(this.account){
       dialog.appendChild(el('p',{text:this.account.name || 'Microsoft work account'}));
       dialog.appendChild(button('Sign out',function(){self.run(async function(n){await self.request({action:'signOut'});if(n!==self.generation)return;self.account=null;self.items=[];self.workspace=null;self.next=null;});},this.busy));
@@ -85,6 +90,17 @@
       var list=el('div',{});function fill(){U.clear(list);self.items.filter(function(i){return String(i.name || i.displayName || '').toLowerCase().includes((search.value || '').toLowerCase());}).forEach(function(i){list.appendChild(button(i.name || i.displayName,function(){self.query='';self.run(async function(n){if(self.workspace)await self.open(i,n);else{self.workspace=i;await self.list(false,n);}});},self.busy));});if(!self.items.length&&!self.busy)list.appendChild(el('p',{text:'No accessible items found.'}));}search.addEventListener('input',function(){self.query=search.value;fill();});dialog.appendChild(search);dialog.appendChild(list);fill();
       if(this.next)dialog.appendChild(button('Load more',function(){self.run(async function(n){await self.list(true,n);});},this.busy));
     }else dialog.appendChild(button('Sign in with Microsoft',function(){self.run(async function(n){var s=await self.request({action:'signIn',transport:self.transport});if(n!==self.generation)return;self.account=s.account;if(!self.account)throw new Error('Sign-in did not complete.');await self.list(false,n);});},this.busy || !!this.unavailable));
+    if(!this.account)dialog.appendChild(button('Sign in using a code',function(){self.run(async function(n){
+      var started=await self.request({action:'beginDeviceSignIn'});if(n!==self.generation)return;
+      self.deviceLogin=started.deviceLogin;self.draw();
+      while(n===self.generation){
+        await new Promise(function(resolve){setTimeout(resolve,2000);});if(n!==self.generation)return;
+        var state=await self.request({action:'status'});if(n!==self.generation)return;
+        if(state.deviceError)throw new Error(state.deviceError);
+        if(state.account){self.deviceLogin=null;self.account=state.account;await self.list(false,n);return;}
+        if(!state.deviceLogin || Date.now()>self.deviceLogin.expiresAt)throw new Error('Microsoft sign-in expired. Try again.');
+      }
+    });},this.busy || !!this.unavailable));
     var cached=this.app.getStore().filter(function(r){return r.source && r.source.kind==='fabric';});
     if(cached.length){dialog.appendChild(el('h3',{text:'Saved models (available offline)'}));cached.forEach(function(r){dialog.appendChild(button(r.name,function(){self.activate(r);self.close();},self.busy));dialog.appendChild(button('Remove '+r.name,function(){self.remove(r);},self.busy));});}
     document.body.appendChild(overlay);this.overlay=overlay;var focus=dialog.querySelector('input, button:not(:disabled)');if(focus)focus.focus();
