@@ -13,12 +13,16 @@ function fixture(extra = {}) {
     getModelDefinition: async () => ({ transport: 'xmla', parts: [{ path: 'model.bim', content: '{"model":{"tables":[]}}' }] }), ...extra };
   return createService({ auth, client });
 }
-test('unconfigured build provides explicit unavailable state without starting login', async () => {
+test('default public-client build reports readiness without starting login', async () => {
   const old = process.env.SMV_FABRIC_CLIENT_ID; delete process.env.SMV_FABRIC_CLIENT_ID;
   try {
     const service = createService();
-    assert.equal((await service.request({ action: 'status' })).available, false);
-    await assert.rejects(service.request({ action: 'signIn' }), /publisher/);
+    const state = await service.request({ action: 'status' });
+    let hasMsal = false;
+    try { require.resolve('@azure/msal-node', { paths: [require('node:path').join(__dirname, '../tools/fabric')] }); hasMsal = true; } catch {}
+    assert.equal(state.available, hasMsal);
+    assert.equal(state.account, null);
+    if (!hasMsal) assert.match(state.message, /dependencies/);
   } finally { if (old === undefined) delete process.env.SMV_FABRIC_CLIENT_ID; else process.env.SMV_FABRIC_CLIENT_ID = old; }
 });
 test('opening and refreshing resolves names from discovery and returns only metadata identity', async () => {
