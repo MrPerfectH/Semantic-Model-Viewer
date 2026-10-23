@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.2
+
+- Add animated workflow GIFs, video links, and the illustrated VS Code guide to the extension README shown in VS Code and Marketplace.
+
 ## 0.4.1
 
 - Keep the Measures overview visible while searching or filtering. Open matching formulas in an optional dialog with the same syntax colors and reference navigation as the Measures workspace.

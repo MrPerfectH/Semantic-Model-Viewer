@@ -12,6 +12,34 @@ No install needed. The demo opens with a synthetic "Contoso Retail" model alread
 
 [![Semantic Model Viewer showing the Contoso Retail demo model: fact and dimension tables with their relationships on a canvas](docs/img/marketplace/tables.png)](https://MrPerfectH.github.io/Semantic-Model-Viewer/)
 
+## Watch the workflows
+
+[Full illustrated VS Code guide](https://github.com/MrPerfectH/Semantic-Model-Viewer/blob/main/docs/vscode-guide.md). These recordings use the synthetic Contoso Retail model. Select a video link to watch it in your browser.
+
+### Install and open a model
+
+[Watch installation — 10 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/install-extension.mp4) · [Watch opening a model and exploring DAX — 35 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/vscode-to-dax-v4.mp4)
+
+![Find the extension, install it, and choose a model](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/install-extension.gif)
+
+### Focus the table canvas
+
+[Watch the table workflow — 24 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/focus-tables.mp4)
+
+![Select a table and dim unrelated tables](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/dim-and-switch.gif)
+
+![Hide unrelated tables and arrange the focused canvas](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/hide-and-arrange.gif)
+
+### Follow a table into its measures and DAX
+
+![Find direct and indirect measures that depend on Sales](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/table-to-dependent-measures-v2.gif)
+
+![Inspect a dependent measure and double-click to analyze it](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/select-dependent-measure-v3.gif)
+
+![Expand referenced measures with Inline measures](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/inline-dax-v2.gif)
+
+The installation recording shows 0.3.9; its installation steps still apply. Feature recordings were made during development and demonstrate features available in stable 0.4.0 and newer.
+
 ## Why use it
 
 * **Explore tables and relationships.** Build a canvas of just the tables you care about, with a star
@@ -77,11 +105,14 @@ can create another one. Close extra windows normally; your saved models and layo
 
 [VS Code quick start, installation instructions, and short videos](docs/vscode-guide.md).
 
-Download `semantic-model-viewer-<version>.vsix` from the
-[Releases page](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases), then in VS Code run
-**Extensions: Install from VSIX…** from the Command Palette (or
-`code --install-extension <file>.vsix`). Details: [vscode-extension/README.md](vscode-extension/README.md).
-To update, install the newer `.vsix`.
+Install **Semantic Model Viewer** by **MrPerfectH** from the
+[VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer).
+VS Code delivers updates through its normal extension update mechanism.
+
+For manual installation, download the latest VSIX from
+[GitHub Releases](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/latest)
+and run **Extensions: Install from VSIX…**. See the
+[extension README](vscode-extension/README.md) for details.
 
 ### Online demo
 
