@@ -61,8 +61,9 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
     catch {res.writeHead(404);res.end('Not found');}
   });
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
-  const browser=await openBrowser();
-  t.after(async()=>{await browser.close();if(server.listening)await new Promise(resolve=>server.close(resolve));fs.rmSync(downloadDir,{recursive:true,force:true});});
+  let browser;
+  t.after(async()=>{try{if(browser)await browser.close();}finally{server.closeAllConnections();if(server.listening)await new Promise(resolve=>server.close(resolve));fs.rmSync(downloadDir,{recursive:true,force:true});}});
+  browser=await openBrowser();
   await browser.send('Page.enable');
   await browser.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
   await browser.send('Browser.setDownloadBehavior',{behavior:'allowAndName',downloadPath:downloadDir,eventsEnabled:true});

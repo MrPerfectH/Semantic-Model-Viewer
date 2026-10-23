@@ -39,7 +39,7 @@ async function openBrowser() {
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'smv-measures-layout-'));
   const child = spawn(chrome, ['--headless=new', '--remote-debugging-port=0', '--no-first-run', '--no-default-browser-check', '--disable-background-networking', '--disable-sync', '--disable-extensions', '--user-data-dir=' + profile, 'about:blank'], { stdio: ['ignore', 'ignore', 'pipe'] });
   const endpoint = await new Promise((resolve, reject) => {
-    let output = ''; const timer = setTimeout(() => reject(new Error('Chrome did not start: ' + output)), 15000);
+    let output = ''; const timer = setTimeout(() => { child.kill('SIGKILL'); reject(new Error('Chrome did not start: ' + output)); }, 30000);
     child.stderr.on('data', chunk => { output += chunk; const match = output.match(/DevTools listening on (ws:\/\/\S+)/); if (match) { clearTimeout(timer); resolve(match[1]); } });
     child.once('error', error => { clearTimeout(timer); reject(error); });
     child.once('exit', code => { clearTimeout(timer); reject(new Error('Chrome exited during startup: ' + code + ' ' + output)); });
@@ -67,8 +67,9 @@ async function openBrowser() {
 test('measure workspace occupies wide screens and persists adjustable layouts', { skip: !chrome && 'Install Chrome or set CHROME_PATH', timeout: 60000 }, async t => {
   const server = http.createServer((req,res) => { res.writeHead(200, {'Content-Type':'text/html'}); res.end(fixture()); });
   await new Promise(resolve => server.listen(0,'127.0.0.1',resolve));
-  const browser = await openBrowser();
-  t.after(async () => { await browser.close(); await new Promise(resolve => server.close(resolve)); });
+  let browser;
+  t.after(async () => { try { if (browser) await browser.close(); } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); } });
+  browser = await openBrowser();
   const url = 'http://127.0.0.1:' + server.address().port;
   await browser.send('Page.enable');
   const settle = () => browser.evaluate('new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))');
@@ -203,8 +204,9 @@ test('table/column dependency flow works in the complete viewer', { skip: !chrom
     res.end(fs.readFileSync(file));
   });
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
-  const browser=await openBrowser();
-  t.after(async()=>{await browser.close();await new Promise(resolve=>server.close(resolve));});
+  let browser;
+  t.after(async()=>{try{if(browser)await browser.close();}finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}});
+  browser=await openBrowser();
   await browser.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1024,deviceScaleFactor:1,mobile:false});
   await browser.send('Page.navigate',{url:'http://127.0.0.1:'+server.address().port});
   for(let n=0;n<150;n++) {
@@ -327,8 +329,9 @@ test('search preserves the overview and opens optional colored DAX results', { s
     if(!file.startsWith(sourceRoot+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile()){res.writeHead(404);res.end();return;}
     res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':'text/html');res.end(fs.readFileSync(file));
   });
-  await new Promise(r=>server.listen(0,'127.0.0.1',r));const browser=await openBrowser();
-  t.after(async()=>{await browser.close();await new Promise(r=>server.close(r));});
+  await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;
+  t.after(async()=>{try{if(browser)await browser.close();}finally{server.closeAllConnections();await new Promise(r=>server.close(r));}});
+  browser=await openBrowser();
   const settle=()=>browser.evaluate('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
   await browser.send('Page.enable');await browser.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
   await browser.send('Page.navigate',{url:'http://127.0.0.1:'+server.address().port});
