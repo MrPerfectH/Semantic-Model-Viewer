@@ -21,7 +21,7 @@
   function validate(model, input) {
     if (!object(input) || ![1,2].includes(input.version)) fail('version must be 1 or 2');
     var v = JSON.parse(JSON.stringify(input));
-    var allowed = ['version','mode','tables','focus','highlights','callouts','width','height','scale','chrome','crop','proposals','context','state','annotationsVisible','banner'];
+    var allowed = ['version','mode','tables','focus','highlights','callouts','width','height','scale','chrome','crop','proposals','context','state','annotationsVisible','banner','arrange'];
     Object.keys(v).forEach(function (k) { if (!allowed.includes(k)) fail('unknown field ' + k); });
     v.mode = v.mode || 'graph';
     if (!['graph','measures','matrix','clusters','power-query'].includes(v.mode)) fail('unsupported mode ' + v.mode);
@@ -29,6 +29,21 @@
     ['width','height'].forEach(function (k) { if (!Number.isInteger(v[k]) || v[k] < (v.version===2?320:400) || v[k] > 4096) fail(k + ' must be an integer within the supported viewport range (v1: 400–4096, v2: 320–4096)'); });
     if (![1,2].includes(v.scale)) fail('scale must be 1 or 2');
     if(v.annotationsVisible!==undefined&&typeof v.annotationsVisible!=='boolean')fail('annotationsVisible must be boolean');
+    if (v.arrange !== undefined && typeof v.arrange !== 'boolean') fail('arrange must be boolean');
+    if (v.tables !== undefined && object(v.tables)) {
+      if(v.version!==2)fail('relative table sets require version 2');
+      var spec=v.tables, selectors=['relatedTo','filteredBy','filters'].filter(function(k){return spec[k]!==undefined;});
+      if(selectors.length!==1 || Object.keys(spec).some(function(k){return !['relatedTo','filteredBy','filters','depth','includeInactive'].includes(k);}))fail('relative tables need exactly one of relatedTo, filteredBy or filters');
+      if(typeof spec[selectors[0]]!=='string')fail('relative table selector must be a table name');
+      var root=model.tables.find(function(t){return t.name.toLowerCase()===spec[selectors[0]].toLowerCase();});
+      if(!root)fail('unknown related table '+spec[selectors[0]]);
+      if(spec.depth!==undefined&&(!Number.isInteger(spec.depth)||spec.depth<0||spec.depth>100))fail('relative depth must be 0 to 100');
+      if(spec.includeInactive!==undefined&&typeof spec.includeInactive!=='boolean')fail('includeInactive must be boolean');
+      var graph=g.RelationshipGraph;
+      if(!graph && typeof require==='function')graph=require('./relationships.js');
+      if(!graph)fail('relationship resolver is unavailable');
+      v.tables=Array.from(graph.traverse(model,[root.name],{direction:selectors[0]==='relatedTo'?'both':selectors[0]==='filteredBy'?'outgoing':'incoming',maxDepth:spec.depth===undefined?Infinity:spec.depth,includeInactive:!!spec.includeInactive}).names);
+    }
     if (v.banner !== undefined && typeof v.banner !== 'boolean') fail('banner must be boolean');
     if (v.chrome !== undefined && typeof v.chrome !== 'boolean') fail('chrome must be boolean');
     if (v.crop !== undefined && !['viewport','highlights'].includes(v.crop)) fail('crop must be viewport or highlights');
@@ -54,6 +69,7 @@
       }
       if(v.state.measures){
         var ms=v.state.measures;
+        if(ms.source){if(!object(ms.source)||typeof ms.source.table!=='string')fail('invalid dependency source');resolve(model,{kind:'table',name:ms.source.table});if(ms.source.column!=null)resolve(model,{kind:'column',table:ms.source.table,name:ms.source.column});}
         [ms.selectedMeasure,ms.comparisonMeasure].filter(Boolean).concat(ms.extraMeasures||[]).forEach(function(n){var matches=model.tables.filter(function(t){return t.measures.some(function(m){return m.name===n;});});if(matches.length!==1)fail('unknown or ambiguous explored measure '+n);});
       }
     }
@@ -86,7 +102,7 @@
     style.textContent='.smv-context-dim{opacity:1!important}*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.smv-hl{position:fixed;border:3px solid #d64024;border-radius:8px;pointer-events:none;z-index:9000;box-sizing:border-box}.smv-callout{position:fixed;max-width:260px;padding:8px 12px;border:1px solid #d64024;border-radius:6px;background:#fff8ed;color:#572312;font:600 15px/1.4 system-ui;z-index:9001;pointer-events:none;overflow-wrap:anywhere}';
     document.querySelectorAll('.smv-hl,.smv-callout,.smv-proposal,[data-smv-toggle]').forEach(function(n){n.remove();});
     if(view.chrome===false)style.textContent+='#topbar{display:none!important}';
-    if(app.explorer){app.explorer.libraryHidden=view.chrome===false;app.explorer.inspectorHidden=view.chrome===false;app.explorer.mapHidden=view.chrome===false;app.explorer.update();}
+    if(app.explorer){var compact=g.SMV_WORKSPACE_EMBEDDED&&innerWidth<1000;app.explorer.libraryHidden=view.chrome===false||compact;app.explorer.inspectorHidden=view.chrome===false||compact;app.explorer.mapHidden=view.chrome===false;app.explorer.update();}
     if(view.chrome===false && app.explorer){app.explorer.libraryHidden=true;app.explorer.inspectorHidden=true;app.explorer.mapHidden=true;app.explorer.update();}
     if(view.tables && app.explorer){app.explorer.blank();app.explorer.add(view.tables);}
     app.setState({showStandalone:true,search:'',activeFilter:null});
@@ -119,12 +135,13 @@
     }
     // Arrange newly authored table sets after native focus is set. Restored
     // explored state below keeps its exact positions and viewport.
-    if(view.mode==='graph' && view.tables && !(view.state&&view.state.tableView) && app.explorer){await frame();app.explorer.arrangeSubset(false);}
+    if(view.mode==='graph' && view.arrange!==false && (view.tables||view.arrange===true) && !(view.state&&view.state.tableView) && app.explorer){await frame();app.explorer.arrangeSubset(false);}
     if(view.state){
       if(view.state.tableView){var tv=view.state.tableView;Object.keys(tv.pos).forEach(function(n){cv.pos[n]=Object.assign({},tv.pos[n]);if(cv.cards[n]){cv.cards[n].x=tv.pos[n].x;cv.cards[n].y=tv.pos[n].y;cv.cards[n].el.style.left=tv.pos[n].x+'px';cv.cards[n].el.style.top=tv.pos[n].y+'px';}});if(tv.display)cv.restoreDisplay(tv.display);else if(tv.expanded)cv.restoreDisplay({expanded:tv.expanded});if(tv.focus)cv.restoreFocus(tv.focus);cv.view=Object.assign({},tv.view);cv.updateTransform();cv.renderLines();}
       if(view.state.measures)app.measures.restoreSnapshot(view.state.measures);
       if(view.state.selection&&view.state.selection.kind==='relationship')cv.selectRel(resolve(app.model,view.state.selection));
     }
+    if(view.arrange===true&&view.mode==='graph'&&view.state&&view.state.tableView&&app.explorer){await frame();app.explorer.arrangeSubset(false);}
     if(view.mode==='power-query'){
       var deadline=Date.now()+15000;while(!app.powerQueryWorkspace.context){if(Date.now()>deadline||app.powerQueryWorkspace.phase==='error')fail('Power Query analysis failed or timed out');await new Promise(function(done){setTimeout(done,20);});}
     }

@@ -98,14 +98,14 @@ body[data-smv-interactive] .mv-dax-body pre,body[data-smv-interactive] .mv-dax-c
     return {clip:clip};
   }
   function snapshot(){
-    var app=g.app,cv=app.canvas,view=clone(authored);view.version=2;view.mode=app.state.viewMode;view.width=innerWidth;view.height=innerHeight;view.annotationsVisible=active?!active.isHidden():true;
+    var app=g.app,cv=app.canvas,view=clone(authored);view.version=2;view.mode=app.state.viewMode;view.width=innerWidth;view.height=innerHeight;view.arrange=false;view.annotationsVisible=active?!active.isHidden():true;
     view.tables=Array.from(app.explorer.names);
     if(view.mode==='measures')view.focus=selection(app);else if(selection(app))view.focus=selection(app);else delete view.focus;
     if(view.mode!=='measures')delete view.context;
     view.state={tableView:{pos:clone(cv.pos),view:clone(cv.view),expanded:Object.keys(cv.cards).filter(function(n){return cv.cards[n].expanded;}),display:cv.captureDisplay(),focus:cv.captureFocus()},measures:app.measures.captureSnapshot(),selection:selection(app)};
     return view;
   }
-  function receipt(){return {version:1,revision:revision,sourceRevision:g.SMV_SOURCE_REVISION||null,view:clone(authored),explored:dirty,selection:selection(g.app),selectedAt:selectedAt,workspace:g.app.state.viewMode,currentView:snapshot(),pendingRevision:pending?pending.revision:null,clientId:clientId};}
+  function receipt(){var app=g.app,rendered={workspace:app.state.viewMode,tableCanvasTables:Array.from(app.explorer.names).filter(function(n){return app.canvas.cards[n]&&app.canvas.cards[n].el.style.display!=='none';}).length};if(app.state.viewMode==='measures')rendered.measureGraphNodes=app.measures._g?app.measures._g.nodes.length:0;return {renderedSummary:rendered,version:1,revision:revision,sourceRevision:g.SMV_SOURCE_REVISION||null,view:clone(authored),explored:dirty,selection:selection(g.app),selectedAt:selectedAt,workspace:g.app.state.viewMode,currentView:snapshot(),pendingRevision:pending?pending.revision:null,clientId:clientId};}
   var clientId=typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():String(Math.random());
   function connect(smv,input){
     api=smv;authored=clone(input);selected=input.state&&input.state.selection||input.focus||null;

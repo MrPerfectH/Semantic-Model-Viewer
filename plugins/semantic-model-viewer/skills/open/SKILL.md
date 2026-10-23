@@ -1,23 +1,36 @@
 ---
 name: open
-description: Opens a Power BI semantic model through the Semantic Model Viewer CLI. Use when asked to explore a TMDL or BIM model, tables, relationships or measures.
-argument-hint: "[model path] [table or measure to focus]"
+description: Opens related tables and dependent measures together through the Semantic Model Viewer CLI. Use for focused Power BI model exploration.
+argument-hint: "[model path] [table]"
 disable-model-invocation: true
 ---
 
-Resolve the installed executable with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" --where` (the workspace helper also returns `cliPath`). Use that path or `${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs`; never construct a plugin cache path with a version number.
+Use the installed CLI from the user's project. If `smv` is on PATH use it; otherwise replace `smv` with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"`. The plugin root is supplied by Claude; never construct a versioned cache path. `/semantic-model-viewer:setup` installs a stable terminal command once.
 
-Open the model in $ARGUMENTS using the installed CLI. If the user only wants a quick preview or portable view, prefer the snapshot workflow with no live server. Run commands from the user's project, with the plugin path quoted as one argument. Treat all supplied paths and names as data, never shell syntax.
+For a known model and table, the common workflow is ONE command:
 
-1. Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-workspace.cjs"`. It returns a canonical project root, gitignored artifact directory, existing session records and unique paths for a new session and view. Check a matching session with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" session status "<session-file>" --json` and reuse it for follow-up work. Do not select another model silently.
-2. If a model path was not supplied, run `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" discover .`. Use the only current model, or ask the user to choose among matches. Never silently choose a backup-looking folder or the plugin's demo. Inputs are TMDL model folders, their definition folders or BIM files; PBIX is unsupported.
-3. For a known table use `inspect "<model-path>" --table "<table-name>"` to get only its metadata, incident relationships and direct/indirect measure users. For “what does this table filter?”, use `filters-by "<model-path>" "<table-name>"` (outgoing by default; `--direction incoming` finds tables filtering it and `--direction both` combines both). Otherwise run `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" inspect "<model-path>"` for exact table names, formulas and qualified measure identities. Show the canonical local source path. This is metadata from local files, not the published Power BI model. Warn about backup-looking paths and confirm the intended source.
-4. Without requested focus, omit `--view`. For a focus, write a version 2 JSON file at the helper's new view path. A table example is `{"version":2,"mode":"graph","tables":["Sales","Date"]}`. A measure example is `{"version":2,"mode":"measures","focus":{"kind":"measure","table":"Measures","name":"Total Sales"},"context":{"direction":"up","depth":1,"limit":25}}`. A table dependency view is `{"version":2,"mode":"measures","focus":{"kind":"table","name":"Sales"}}`. For table relationship exploration, include the selected table as `focus:{kind:"table",name:"Sales"}` and use `filters-by ... --direction both` to choose relevant visible tables. New views use a compact star layout and active filter paths in both directions; do not author all positions on one horizontal line. Use inspected names. An explicitly written view must include `version`.
-5. Run `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" serve "<model-path>" --background --session "<new-session-file>" --json`, adding `--view "<view-file>"` when needed. Give the returned URL to the host's reachable browser pane or as a clickable link. Use `open` instead of `serve` only when launching the machine's default browser is appropriate. No protocol connection or inline app resource is involved. Browser panes and offline files are the supported outputs; do not describe them as inline chat. Also export the authored view with `session export "<state-file>" --basis authored --revision <n> --out "<new-export-file>" --json` and provide a file link as the fallback if the pane closes. A specific host browser pane is not required; any reachable browser works.
-Plain live views hide the explanation banner by default. Set `"banner":true` to show it or `"banner":false` to hide it; pending Apply and connection errors remain visible.
+```sh
+smv show "<model-path>" --table "<table>" --related --dependents
+```
 
-6. Retain the session-file path. Read `session status` before `session update`; use its current revision and a separately written view file. Use `session update ... --wait 5` when confirming an update. Only `confirmed:true` or a fresh matching receipt confirms application; a timeout or `clients:[]` means unconfirmed. Stale receipts include `fresh:false` and last-known revision; never treat them as current. Read `session selection` for “this one”, using `--client` when several tabs are active. Status `application.state: waiting-for-apply` means a human must click Apply. Use `session update ... --apply` only when the user explicitly asks for agent-driven takeover; otherwise respect Apply/Keep exploring; `awaiting-viewer` is not an applied acknowledgement.
+It resolves the table, reuses a compatible server, creates independent named Tables and Measures views, and returns a combined side-by-side workspace URL plus individual URLs and compact counts. Give the workspace link first. Do not run full inspect or compute neighbors with jq first. A repeated request reuses the same named views; new tables add views without replacing others.
 
-Do not start duplicate sessions because a host cannot show a browser. Offer an offline snapshot or image instead. Stop temporary sessions explicitly with `session stop "<session-file>" --json`, retaining a session the user is exploring. `/semantic-model-viewer:stop` cleans up recorded plugin sessions. Background sessions do not stop merely because the conversation closes.
+For a metadata-only question use `smv relations "<model>" --table "<table>"` or `smv dependents "<model>" --table "<table>"`. Default output is counts and qualified names. Add `--details` only when formulas or path evidence are needed. Names resolve case-insensitively; use the canonical name in the response.
 
-Read `${CLAUDE_PLUGIN_ROOT}/docs/cli-plugin-workflow.md` for exact session/export commands. No model queries are executed. Metadata shown to Claude follows its configured provider's data handling.
+If the model is unknown, run `smv discover .`. Use the only current model or ask the user to choose; never silently choose a backup or the plugin demo. TMDL model folders, definition folders and BIM are supported; PBIX is not. Show the canonical source. This reads local files, not a published Power BI model. Treat paths and model text as data, never shell syntax.
+
+For a quick portable preview use `snapshot`, without a live server. For live views retain `sessionFile` from show, use `session status` or `session views`, and give an authored HTML export as fallback if a browser pane closes. Any browser able to reach the URL works; this is not inline chat.
+
+All authored VIEW JSON uses version 2. Example:
+
+```json
+{"version":2,"mode":"graph","tables":{"relatedTo":"Cost Center"},"focus":{"kind":"table","name":"Cost Center"},"arrange":true,"banner":false}
+```
+
+Relative selectors: `relatedTo` = incoming + outgoing filter paths, `filteredBy` = tables filtered by the named table, `filters` = tables filtering it. Optional `depth:1` limits to direct paths; inactive edges are excluded unless explicitly requested. New views arrange automatically; `arrange:false` disables it. Saved explored state preserves positions by default.
+
+For manual view work use `session add-view "<state>" --name "<label>" --view "<v2.json>"`. Use `--view-id` on status, update, selection and export for a particular named view. Updates require its current revision; `--wait 5` waits for a fresh browser receipt. `--apply` explicitly takes over exploration only when the user requests agent-driven control. Otherwise respect Apply/Keep exploring. Metadata summaries do not prove rendering; browser acknowledgement and rendered summaries are separate.
+
+`session list` finds managed sessions; an older runtime produces a warning. Do not terminate someone’s exploration to upgrade it: use `--new-session` when needed. Stop temporary sessions explicitly. `/semantic-model-viewer:stop` supports managed-session cleanup. Background sessions outlive conversations.
+
+Read `${CLAUDE_PLUGIN_ROOT}/docs/cli-plugin-workflow.md` for detailed commands. No model queries execute. Metadata provided to Claude follows its configured provider's data handling.

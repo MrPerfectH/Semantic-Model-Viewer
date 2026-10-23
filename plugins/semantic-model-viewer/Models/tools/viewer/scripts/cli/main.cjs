@@ -8,6 +8,10 @@ const HELP = `Semantic Model Viewer — offline snapshots and agent-authored vis
 
 Usage:
   smv --where
+  smv install [--bin-dir <directory>]
+  smv show <model> --table <name> [--related] [--dependents]
+  smv relations|dependents <model> --table <name> [--details]
+  smv session list | smv session stop --all
   smv inspect <model> [--table <name>]
   smv filters-by <model> <table> [--direction outgoing|incoming|both] [--direct] [--include-inactive]
   smv discover <folder>...
@@ -49,6 +53,7 @@ async function main(args) {
   }
 }
 async function run(args) {
+  if(['show','relations','dependents','install'].includes(args[0]))return workflowCommand(args);
   if (args[0] === '--where') {
     if (args.length !== 1) throw new Error('Use smv --where without other arguments');
     process.stdout.write(require('node:fs').realpathSync(path.resolve(__dirname, '../../../../../bin/smv.cjs')) + '\n'); return;
@@ -78,7 +83,7 @@ async function run(args) {
   const { values, positionals } = parseArgs({ args, allowPositionals: true, options: {
     out: { type: 'string', short: 'o' }, tables: { type: 'string' }, table: { type: 'string', multiple: true },
     measure: { type: 'string' }, name: { type: 'string' },
-    force: { type: 'boolean' }, help: { type: 'boolean', short: 'h' }
+    view: { type:'string' }, force: { type: 'boolean' }, help: { type: 'boolean', short: 'h' }
   } });
   if (values.help || args.length === 0) { process.stdout.write(HELP); return; }
   const [command, source] = positionals;
@@ -91,7 +96,8 @@ async function run(args) {
   for (const key of ['tables', 'measure', 'name']) if (values[key] !== undefined && !values[key].trim()) throw new Error('--' + key + ' cannot be empty.');
   if (fs.existsSync(output) && !values.force) throw new Error('Output already exists; use --force to replace it: ' + output);
   const context = runtime(), { model, app } = readModel(context, source, values.name);
-  const content = snapshot(context, app, selection(model, values));
+  if(values.view&&(values.tables||values.table||values.measure))throw new Error('Choose --view or --table/--tables/--measure, not both');
+  const content = values.view?require('./explain.cjs').prepare(source,require('./explain.cjs').readJSON(values.view)).html:snapshot(context, app, selection(model, values));
   fs.mkdirSync(path.dirname(output), { recursive: true });
   fs.writeFileSync(output, content, { flag: values.force ? 'w' : 'wx' });
   process.stdout.write(output + '\n');
@@ -119,28 +125,50 @@ async function resultsCommand(args){
   const output=JSON.stringify(result,null,2)+'\n';if(values.out)fs.writeFileSync(values.out,output,{flag:'wx'});else process.stdout.write(output);
 }
 async function sessionCommand(args){
-  const {values,positionals}=parseArgs({args,allowPositionals:true,options:{view:{type:'string'},report:{type:'string'},session:{type:'string'},port:{type:'string'},background:{type:'boolean'},watch:{type:'boolean'},json:{type:'boolean'},revision:{type:'string'},basis:{type:'string'},out:{type:'string'},client:{type:'string'},force:{type:'boolean'},apply:{type:'boolean'},wait:{type:'string'}}});
+  const {values,positionals}=parseArgs({args,allowPositionals:true,options:{view:{type:'string'},report:{type:'string'},session:{type:'string'},port:{type:'string'},background:{type:'boolean'},watch:{type:'boolean'},json:{type:'boolean'},revision:{type:'string'},basis:{type:'string'},out:{type:'string'},client:{type:'string'},force:{type:'boolean'},apply:{type:'boolean'},wait:{type:'string'},'view-id':{type:'string'},'new-session':{type:'boolean'},all:{type:'boolean'},model:{type:'string'},name:{type:'string'}}});
+  if(values.all&&!(positionals[0]==='session'&&positionals[1]==='stop'))throw new Error('--all is supported only by session stop');
   if(values.apply && !(positionals[0]==='session' && positionals[1]==='update'))throw new Error('--apply is only supported for session update');
   if(values.wait!==undefined && (!(positionals[0]==='session'&&positionals[1]==='update') || !Number.isFinite(Number(values.wait)) || !values.wait.trim() || Number(values.wait)<0 || Number(values.wait)>60))throw new Error('--wait requires session update and a number from 0 to 60 seconds');
   if(values.client && positionals[0]==='session' && !['selection','export','update'].includes(positionals[1]))throw new Error('--client is supported for session selection, update or export');
   if(values.client&&positionals[0]==='session'&&positionals[1]==='update'&&values.wait===undefined)throw new Error('--client for update selects whose acknowledgement to wait for; add --wait <seconds>');
   const api=require('./session.cjs');let result;
   if(positionals[0]==='session'){
-    if(!['status','stop','selection','update','export'].includes(positionals[1]))throw new Error('Choose a session command: status, stop, selection, update or export');
+    if(positionals[1]==='list'){if(positionals.length!==2)throw new Error('Use session list [--model <model>]');const rows=await require('./managed.cjs').list(values.model);process.stdout.write(JSON.stringify(rows.map(({record,...r})=>({sessionId:r.sessionId,source:r.source,sessionFile:r.sessionFile,url:r.url,pluginVersion:r.pluginVersion,running:r.running,views:r.views?.map(v=>({id:v.id,label:v.label,revision:v.revision,summary:v.summary,application:v.application})),error:r.error,warnings:r.pluginVersion===require('./managed.cjs').version()?[]:['Session uses a different or older plugin version']})),null,2)+'\n');return;}
+    if(positionals[1]==='stop'&&values.all){if(positionals.length!==2)throw new Error('Use session stop --all [--model <model>] without a state file');process.stdout.write(JSON.stringify(await require('./managed.cjs').stopAll(values.model))+'\n');return;}
+    if(!['status','stop','selection','update','export','views','add-view'].includes(positionals[1]))throw new Error('Choose a session command: status, stop, selection, update or export');
     if(positionals.length<3)throw new Error('Missing session file path for session '+positionals[1]);
     if(positionals.length>3)throw new Error('session '+positionals[1]+' accepts one state-file path; quote paths containing spaces');
     if(['update','export'].includes(positionals[1])&&(!/^\d+$/.test(values.revision||'')||Number(values.revision)<1))throw new Error('--revision must be a positive integer');
-    if(positionals[1]==='update'){if(!values.view)throw new Error('--view is required');result=await api.request(positionals[2],'update',{expectedRevision:Number(values.revision),view:require('./explain.cjs').readJSON(values.view),apply:!!values.apply});if(values.wait!==undefined)result={...result,...await api.waitForApply(positionals[2],result.revision,{seconds:Number(values.wait),clientId:values.client})};}
-    else if(positionals[1]==='selection')result=await api.request(positionals[2],'selection',{clientId:values.client});
-    else if(positionals[1]==='export'){if(!values.out)throw new Error('--out is required');result=await api.exportSession(positionals[2],{...values,revision:Number(values.revision),clientId:values.client});}
-    else result=await api.request(positionals[2],positionals[1]);
+    if(positionals[1]==='update'){if(!values.view)throw new Error('--view is required');result=await api.request(positionals[2],'update',{expectedRevision:Number(values.revision),view:require('./explain.cjs').readJSON(values.view),apply:!!values.apply},values['view-id']);if(values.wait!==undefined)result={...result,...await api.waitForApply(positionals[2],result.revision,{seconds:Number(values.wait),clientId:values.client,viewId:values['view-id']})};}
+    else if(positionals[1]==='selection')result=await api.request(positionals[2],'selection',{clientId:values.client},values['view-id']);
+    else if(positionals[1]==='export'){if(!values.out)throw new Error('--out is required');result=await api.exportSession(positionals[2],{...values,viewId:values['view-id'],revision:Number(values.revision),clientId:values.client});}
+    else if(positionals[1]==='add-view'){if(!values.view||!values.name)throw new Error('add-view requires --view <json> and --name <label>');result=await api.request(positionals[2],'views',{views:[{id:values['view-id']||require('node:crypto').randomUUID(),label:values.name,view:require('./explain.cjs').readJSON(values.view)}]});}
+    else result=await api.request(positionals[2],positionals[1],undefined,values['view-id']);
   }else{
     if(positionals.length!==2)throw new Error('Expected serve|open <model> [--view file] [--watch] [--background --session state.json]');
     if(values.port!==undefined&&(!/^\d+$/.test(values.port)||Number(values.port)>65535))throw new Error('Port must be 0 to 65535');
-    if(positionals[0]==='open'&&!values.session)throw new Error('open requires --session <state.json> so the background server can be stopped');
-    result=await api.serve(positionals[1],{...values,port:values.port===undefined?0:Number(values.port),background:positionals[0]==='open'||values.background});
+    result=await api.serve(positionals[1],{...values,newSession:values['new-session'],port:values.port===undefined?0:Number(values.port),background:positionals[0]==='open'||values.background});
     if(positionals[0]==='open')await api.open(result.url);
   }
   process.stdout.write(values.json?JSON.stringify(result)+'\n':(result.url||JSON.stringify(result))+'\n');
+}
+async function workflowCommand(args){
+  const {values,positionals}=parseArgs({args,allowPositionals:true,options:{table:{type:'string'},model:{type:'string'},related:{type:'boolean'},dependents:{type:'boolean'},direction:{type:'string'},direct:{type:'boolean'},'include-inactive':{type:'boolean'},details:{type:'boolean'},json:{type:'boolean'},session:{type:'string'},'new-session':{type:'boolean'},watch:{type:'boolean'},'bin-dir':{type:'string'}}});
+  const allowed={install:['bin-dir','json'],show:['table','model','related','dependents','direction','direct','include-inactive','session','new-session','watch','json'],relations:['table','model','direction','direct','include-inactive','details','json'],dependents:['table','model','direct','details','json']}[positionals[0]];
+  for(const key of Object.keys(values))if(!allowed.includes(key))throw new Error('--'+key+' is not supported by '+positionals[0]);
+  if(values.table!==undefined&&!values.table.trim())throw new Error('--table cannot be empty');
+  if(values.model!==undefined&&!values.model.trim())throw new Error('--model cannot be empty');
+  let result;
+  if(positionals[0]==='install'){if(positionals.length!==1)throw new Error('install takes options only');result=require('./install.cjs').install({binDir:values['bin-dir']});}
+  else{
+    let source,table;
+    if(values.table){if(positionals.length!==2||values.model)throw new Error('Use <command> <model> --table <name>');source=positionals[1];table=values.table;}
+    else if(values.model){if(positionals.length!==2)throw new Error('Use <command> <table> --model <model>');source=values.model;table=positionals[1];}
+    else if(positionals.length===2){const models=require('./discover.cjs').discover([process.cwd()]);if(models.length!==1)throw new Error('Provide --model or a model path with --table; found '+models.length+' local models');source=models[0].path;table=positionals[1];if(/backup/i.test(source))throw new Error('A backup model requires an explicit model path');}
+    else throw new Error('Provide a model path and --table <name>');
+    const options={...values,table,newSession:values['new-session'],includeInactive:values['include-inactive']};
+    result=positionals[0]==='show'?await require('./show.cjs').show(source,options):require('./query.cjs').focused(source,table,positionals[0],options);
+  }
+  process.stdout.write(JSON.stringify(result,null,2)+'\n');
 }
 module.exports = { main };

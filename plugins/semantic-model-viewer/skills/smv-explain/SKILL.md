@@ -3,19 +3,19 @@ name: smv-explain
 description: Illustrate semantic-model explanations with the Semantic Model Viewer CLI using annotated model views, external results, and proposed changes. Use when a user wants to understand model logic, discuss a suspected issue, or see a modeling idea.
 ---
 
-Resolve the installed executable with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" --where` (the workspace helper also returns `cliPath`). Use that path or `${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs`; never construct a plugin cache path with a version number.
+Use `smv` on PATH or `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"` from the host-provided plugin root. No `--where` call is needed for ordinary work; it is diagnostic only. Never construct a versioned cache path. `/semantic-model-viewer:setup` installs the stable terminal command once.
 
 # Illustrate a model explanation
 
 When loaded through the Claude Code plugin, use `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"` from the user's project, and read guides under `${CLAUDE_PLUGIN_ROOT}/docs/`. Otherwise use an installed `smv` command, or `node bin/smv.cjs` from the Semantic Model Viewer checkout. `smv --help` lists commands. Keep scope with the user's question: one useful image is sufficient when a walkthrough adds no value. Store generated artifacts in the user's project, not the plugin installation.
 
-Use `smv inspect <model-path>` to obtain actual object names, relationship names, formulas, and query IDs. Inputs are a TMDL model folder or a BIM file. Do not guess identifiers from labels. `smv discover <folder>` lists model paths if needed.
+For known tables start with `smv relations <model-path> --table "<name>"` and `smv dependents <model-path> --table "<name>"`; add `--details` for formulas or path evidence. Use `smv inspect <model-path>` only for a broader schema/query-ID inventory. Inputs are a TMDL model folder or a BIM file. Do not guess identifiers from labels. `smv discover <folder>` lists model paths if needed.
 
-Create a version 1 JSON view. For example:
+Create a version 2 JSON view. For example:
 
 ```json
 {
-  "version": 1,
+  "version": 2,
   "mode": "graph",
   "tables": ["Sales", "Date"],
   "highlights": [{"kind": "table", "name": "Date"}],
@@ -25,7 +25,7 @@ Create a version 1 JSON view. For example:
 }
 ```
 
-Column and measure references also require `table`. A relationship's `name` is its source identifier; a query's `name` is its metadata ID from inspect. `mode: "measures"` requires a measure `focus`. Other modes are `matrix`, `clusters`, and `power-query`. Matrix annotations target tables; query views target queries.
+Column and measure references also require `table`. A relationship's `name` is its source identifier; a query's `name` is its metadata ID from inspect. `mode: "measures"` accepts a measure, table or column `focus`; without focus a v2 view opens the overview. Other modes are `matrix`, `clusters`, and `power-query`. Matrix annotations target tables; query views target queries.
 
 Run `smv shot <model-path> --view view.json --out image.png --json`, inspect the image, and revise context, dimensions, or labels when needed. Capture requires Chrome/Chromium; set `SMV_BROWSER` to the executable if discovery fails. Unknown, invisible, or clipped objects are errors to resolve, not reasons to omit the visual silently.
 
@@ -46,3 +46,5 @@ Use `smv session status` to read the current requested revision. Send `smv sessi
 Use shell CLI commands for every operation. In the Claude Code plugin, run `node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-workspace.cjs"` from the user's project for gitignored artifact paths and existing session records. Show the exact local source; confirm backup-looking folders before relying on them. Reuse matching sessions and stop temporary ones explicitly. Browser panes and exported files are the presentation routes; do not promise inline chat. Use native file attachments or links without pasting full HTML or bypassing host publication rules. Read `${CLAUDE_PLUGIN_ROOT}/docs/cli-plugin-workflow.md` in the plugin, or `docs/cli-plugin-workflow.md` in a checkout.
 
 `smv explain build` produces an `interactive.html` walkthrough with actual viewer steps as well as static outputs. Stop sessions started for temporary work with `smv session stop state.json`. Source watching refreshes the served artifact; reload the browser to see the new view.
+
+For the common table explanation, prefer `smv show <model> --table "<name>" --related --dependents`: one managed server, a combined workspace, and independent view URLs. Version 2 view files also support `tables:{"relatedTo":"<table>"}`, `arrange:true` and `banner:false`. See the CLI workflow document. The explanation walkthrough envelope remains version 1; its embedded view specifications use version 2.

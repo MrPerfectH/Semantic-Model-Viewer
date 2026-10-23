@@ -5,11 +5,11 @@ argument-hint: "[model path] [question about the model]"
 disable-model-invocation: true
 ---
 
-Resolve the installed executable with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" --where` (the workspace helper also returns `cliPath`). Use that path or `${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs`; never construct a plugin cache path with a version number.
+Use `smv` on PATH or `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"` from the host-provided plugin root. No `--where` call is needed for ordinary work; it is diagnostic only. Never construct a versioned cache path. `/semantic-model-viewer:setup` installs the stable terminal command once.
 
 Answer the user's question in $ARGUMENTS. Read `${CLAUDE_PLUGIN_ROOT}/skills/smv-explain/SKILL.md` and follow its CLI workflow. The executable is `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"`; use shell commands and generated files throughout.
 
-Resolve models from the user's project. Use the CLI's `discover .` and `inspect "<model>"` commands to identify actual metadata. Show the exact local source and confirm backup-looking paths. Do not claim that these files match the published service model.
+Resolve models from the user's project. Use `discover .` when the model is unknown, then focused `relations` and `dependents` for a known table. Reserve `inspect` for broad schema/query inventories. Prefer `show ... --related --dependents` for the common table question. Show the exact local source and confirm backup-looking paths. Do not claim that these files match the published service model.
 
 Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-workspace.cjs"` for gitignored output paths and existing session records. Reuse a matching live session where appropriate. Never write generated files into the plugin installation. Read `${CLAUDE_PLUGIN_ROOT}/docs/cli-plugin-workflow.md` for live sessions and `${CLAUDE_PLUGIN_ROOT}/docs/visual-explanations.md` for walkthroughs, external results and proposal contracts.
 

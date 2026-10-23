@@ -1,9 +1,9 @@
 # Claude Code plugin
 
 The `semantic-model-viewer` plugin runs the Semantic Model Viewer CLI through
-Claude's shell tools. It includes the viewer runtime and five skills: open,
+Claude's shell tools. It includes the viewer runtime and six skills: setup, open,
 explain, snapshot, stop and the automatically selected model explanation skill.
-Version 0.2.2 is CLI-only: it registers no MCP server and needs no runtime npm
+Version 0.3.0 is CLI-only: it registers no MCP server and needs no runtime npm
 packages. Users do not install the separate Viewer app or VS Code extension.
 
 ## Install through Claude
@@ -26,13 +26,14 @@ own `semantic-model-tools` marketplace, not an Anthropic directory listing. The
 same catalog can list a separate Semantic Model Cleaner plugin later.
 
 ```text
-/semantic-model-viewer:open Sales.SemanticModel
+/semantic-model-viewer:setup
+/semantic-model-viewer:open Sales.SemanticModel Cost Center
 /semantic-model-viewer:explain Sales.SemanticModel how does Sales LY use dates?
 /semantic-model-viewer:snapshot Sales.SemanticModel
 /semantic-model-viewer:stop all
 ```
 
-The first four skills run when invoked. `/semantic-model-viewer:smv-explain` can
+The setup, open, explain, snapshot and stop skills run when invoked. `/semantic-model-viewer:smv-explain` can
 also load automatically for model explanation requests. Claude requests its normal
 shell/file permissions when running CLI commands. No MCP connection or tool
 configuration is needed.
@@ -40,17 +41,16 @@ configuration is needed.
 ## CLI workflow
 
 The skills call `node <plugin-root>/bin/smv.cjs` from the user's project. They
-use `discover` and `inspect` for local metadata, `serve --background --session`
-for browser views, `session` commands for revisions, selection and exports, and
+use `show` for combined browser views and `relations`/`dependents` for focused metadata; `discover` finds models and `inspect` supplies broad inventories, `session` commands for revisions, selection and exports, and
 `snapshot` for standalone HTML. See [the exact CLI workflow](cli-plugin-workflow.md).
 
 A small bundled workspace helper creates `.smv-artifacts` in the current project
 with its own ignore rule. It returns unique file paths and recorded session
-locations. Generated view specifications, session files, logs and snapshots go
+locations. Generated view specifications and snapshots go
 there unless the user explicitly chooses another output path. It does not alter
 the project root's `.gitignore` or overwrite an existing custom ignore file.
 
-CLI sessions are explicit background processes. Keep and reuse their state-file
+CLI sessions are managed background processes recorded in a user state directory. Keep and reuse their state-file
 paths; they do not depend on a protocol connection and do not stop when chat
 closes. Use `/semantic-model-viewer:stop` or `smv session stop <state.json>` when
 finished. Offline exports remain usable after stopping the server.
@@ -86,7 +86,7 @@ claude plugin marketplace update semantic-model-tools
 claude plugin update semantic-model-viewer@semantic-model-tools
 ```
 
-Restart Claude Code to unload the older server and load the CLI-only skills.
+Restart Claude Code to load the updated skills. Existing viewer servers retain their runtime; use --new-session or stop the specific managed session when upgrading it.
 Viewer should no longer appear as a plugin MCP server. If a copy was manually
 configured separately, inspect `/mcp` and remove that specific Viewer entry from
 its original configuration; the plugin update does not edit unrelated settings.
@@ -112,7 +112,7 @@ explicit session cleanup. It also checks that the plugin has no MCP registration
 or runtime dependencies.
 
 `npm run test:marketplace` invokes the actual Claude installer with a fresh
-`CLAUDE_CONFIG_DIR`, checks five skills and zero MCP servers, and repeats the
+`CLAUDE_CONFIG_DIR`, checks six skills and zero MCP servers, and repeats the
 CLI integration tests. It does not modify the developer's Claude settings or
 make an LLM request. To verify the published source:
 
@@ -132,3 +132,13 @@ freshly built `plugins/semantic-model-viewer` payload together, with a new plugi
 manifest version. Build releases from a clean checkout so unrelated work is not
 included in viewer assets. Shell-command behavior in an interactive Claude
 session still needs a user smoke test.
+
+## CLI 0.3 workflow
+
+Run `/semantic-model-viewer:setup` once for a stable `smv` terminal command. Then
+`smv show <model> --table "Cost Center" --related --dependents` returns one reusable
+workspace with independent Tables and Measures views. `relations` and `dependents`
+return small JSON answers; add `--details` for evidence. `session list` and
+`session stop --all` manage only registered Viewer servers. New view JSON uses
+version 2 throughout; the version 1 walkthrough envelope is a separate format.
+See [CLI plugin workflow](cli-plugin-workflow.md) for the complete reference.
