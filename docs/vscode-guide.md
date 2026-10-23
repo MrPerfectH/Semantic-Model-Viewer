@@ -16,7 +16,7 @@ If Marketplace installation is unavailable, download `semantic-model-viewer-<ver
 
 Use VS Code 1.85 or newer. Local file exploration does not require Python, Power BI Desktop, or a Fabric connection.
 
-[Watch installation and finding the model list — 8 seconds](media/vscode-guide/install-extension.mp4)
+[Watch installation and finding the model list — 10 seconds](media/vscode-guide/install-extension.mp4)
 
 ![Find Semantic Model Viewer, install it, and choose a model](media/vscode-guide/install-extension.gif)
 
