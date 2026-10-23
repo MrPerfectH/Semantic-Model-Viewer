@@ -29,6 +29,13 @@ function serve() {
 async function openBrowser() {
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'smv-star-layout-'));
   const child = spawn(chrome, ['--headless=new', '--remote-debugging-port=0', '--no-first-run', '--no-default-browser-check', '--disable-background-networking', '--disable-sync', '--disable-extensions', '--user-data-dir=' + profile, 'about:blank'], { stdio: ['ignore', 'ignore', 'pipe'] });
+  // `close` follows exit AND drained stdio; register before Chrome can exit.
+  const closed = new Promise(resolve => child.once('close', resolve));
+  const waitClosed = async timeout => {
+    let timer;
+    try { return await Promise.race([closed.then(() => true), new Promise(resolve => { timer = setTimeout(() => resolve(false), timeout); })]); }
+    finally { clearTimeout(timer); }
+  };
   const endpoint = await new Promise((resolve, reject) => {
     let output = ''; const timer = setTimeout(() => reject(new Error('Chrome did not start: ' + output)), 15000);
     child.stderr.on('data', chunk => { output += chunk; const match = output.match(/DevTools listening on (ws:\/\/\S+)/); if (match) { clearTimeout(timer); resolve(match[1]); } });
@@ -47,7 +54,26 @@ async function openBrowser() {
     if (result.exceptionDetails) throw new Error(result.exceptionDetails.text + ': ' + JSON.stringify(result.exceptionDetails.exception));
     return result.result.value;
   };
-  return { send, evaluate, async close() { socket.close(); child.kill('SIGTERM'); await new Promise(resolve => child.once('exit', resolve)); fs.rmSync(profile, { recursive: true, force: true }); } };
+  return { send, evaluate, async close() {
+    // Let Chrome stop its profile writers normally before escalating termination.
+    // A disconnected CDP socket is expected during shutdown, not a test assertion.
+    void send('Browser.close').catch(() => {});
+    try {
+      if (!await waitClosed(5000)) {
+        child.kill('SIGTERM');
+        if (!await waitClosed(3000)) {
+          child.kill('SIGKILL');
+          if (!await waitClosed(3000)) throw new Error('Chrome did not close after SIGKILL; retained profile: ' + profile);
+        }
+      }
+      // Some filesystems briefly retain directory entries after Chrome closes.
+      fs.rmSync(profile, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
+    } finally {
+      socket.close();
+      child.stderr.destroy();
+      child.unref();
+    }
+  } };
 }
 
 
@@ -69,8 +95,15 @@ function fitted(result) {
 }
 test('demo fits the mounted iframe, delayed sizing and reload; user cameras survive later resize', {skip:!chrome}, async t => {
   const server = serve(); await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-  const browser = await openBrowser();
-  t.after(async () => { await browser.close(); await new Promise(resolve => server.close(resolve)); });
+  let browser;
+  t.after(async () => {
+    try { if (browser) await browser.close(); }
+    finally {
+      server.closeAllConnections();
+      await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
+    }
+  });
+  browser = await openBrowser();
   await browser.send('Page.enable');
   await browser.send('Page.addScriptToEvaluateOnNewDocument', {source:"localStorage.setItem('smv_current_v1','builtin');"});
   await browser.send('Page.navigate', {url:'http://127.0.0.1:'+server.address().port+'/frame'});
