@@ -269,7 +269,7 @@
           ';box-shadow:0 1px 2px rgba(20,30,50,.05),0 4px 12px rgba(20,30,50,.07);font-family:\'IBM Plex Sans\',sans-serif;overflow:hidden;transition:box-shadow .15s,opacity .15s,border-color .15s;'
       });
       var sm = app.srcMeta(t);
-      var head = el('div', { data: { head: '1' }, style: chrome.head || 'display:flex;align-items:flex-start;gap:9px;padding:10px 11px 10px 12px;cursor:grab;border-left:4px solid transparent;' });
+      var head = el('div', { data: { head: '1' }, style: 'position:relative;' + (chrome.head || 'display:flex;align-items:flex-start;gap:9px;padding:10px 11px 10px 12px;cursor:grab;border-left:4px solid transparent;') });
       var rmap = { fact: 'FACT', dim: 'DIM', helper: 'HLP', calcgroup: 'CG', fieldparam: 'FP', measures: 'M', standalone: 'STD', unknown: 'UNK' };
       var role = el('span', { text: rmap[t.role] || 'TBL', style: 'font:700 8.5px/1 "IBM Plex Mono",monospace;letter-spacing:.4px;padding:4px 5px;border-radius:4px;flex:none;color:#fff;margin-top:1px;' });
       var titleWrap = el('div', { style: chrome.titleWrap || 'flex:1;min-width:0;' });
@@ -288,13 +288,13 @@
       caret.addEventListener('click', function (e) { e.stopPropagation(); self.toggleCard(t.name); });
       var lock = el('button', {
         title: 'Lock focus on this table — the highlight stays when you click elsewhere', html: U.icon('lock', 11),
-        style: 'flex:none;width:20px;height:20px;border:none;border-radius:5px;background:transparent;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;'
+        style: 'position:absolute;top:9px;right:57px;width:20px;height:20px;border:none;border-radius:5px;background:inherit;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;'
       });
       lock.addEventListener('mousedown', function (e) { e.stopPropagation(); });
       lock.addEventListener('click', function (e) { e.stopPropagation(); self.toggleLock(t.name); });
       var rm = el('button', {
         title: 'Remove ' + t.name + ' from this layout (Delete)', 'aria-label': 'Remove ' + t.name + ' from layout', html: '&times;',
-        style: 'flex:none;width:20px;height:20px;border:none;border-radius:5px;background:transparent;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;font:400 17px/1 "IBM Plex Sans",sans-serif;'
+        style: 'position:absolute;top:9px;right:35px;width:20px;height:20px;border:none;border-radius:5px;background:inherit;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;font:400 17px/1 "IBM Plex Sans",sans-serif;'
       });
       rm.addEventListener('mousedown', function (e) { e.stopPropagation(); });
       rm.addEventListener('click', function (e) { e.stopPropagation(); if (app.explorer) app.explorer.removeMany([t.name]); });
@@ -1657,7 +1657,7 @@
         b.style.display = 'flex'; b.style.background = EDGE.lock; b.style.color = '#fff';
         b.title = 'Unlock — stop keeping this table focused';
       } else {
-        b.style.display = 'none'; b.style.background = 'transparent';
+        b.style.display = 'none'; b.style.background = 'inherit';
         b.style.color = fact ? 'rgba(255,255,255,.85)' : '#6b7280';
         b.title = 'Lock focus on this table — the highlight stays when you click elsewhere';
       }

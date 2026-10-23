@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0
+
+- Analyze a table or column to find directly and indirectly dependent measures. Filter to direct references, search the results, and inspect a formula while keeping the source selected.
+- Follow colored table, column and measure reference chips from original or inlined DAX. Each formula card shows its own references.
+- Browse filtered measures with a formula overview.
+- Preserve source analysis, inspected formula, display preferences and graph viewport in interactive HTML snapshots. Snapshots without saved Explore settings start with directly connected tables, including inactive relationships.
+- Keep table cards the same height on hover so relationship lines stay attached.
+- Keep at least 240 pixels of graph canvas in stacked Measures layouts, with DAX reachable by scrolling and an accurate narrow-layout label.
+- Unify the Spellbook palette across workspaces and simplify the Tables toolbar.
+
+Dependency analysis reads static DAX references; it does not execute DAX or follow calculated-column/table defining expressions or relationship filter propagation. The existing snapshot CLI remains available. Guided onboarding, agent sessions and visual explanations, MCP/inline apps, and Power BI External Tools installation are not part of this release.
+
 ## 0.3.9
 
 - Add an optional Spellbook theme with parchment surfaces and burgundy accents. Use the Classic dropdown in the top toolbar to select Spellbook.

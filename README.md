@@ -216,7 +216,7 @@ See how queries, parameters, functions, and table partitions feed each other. Fo
 | --- | --- |
 | [![Environment, StartYear, and RawSales feed StageSales, with ServerName upstream of RawSales](docs/img/marketplace/power-query-flow.png)](docs/img/marketplace/power-query-flow.png) | [![StageSales input flow beside its inputs, consumer, and complete read-only M expression](docs/img/marketplace/power-query-inspector.png)](docs/img/marketplace/power-query-inspector.png) |
 
-Links come from static analysis of M. No query runs and no source data is read. Unconfirmed links remain explicit; raw M is excluded from shared snapshots.
+Links come from static analysis of M. No query runs and no source data is read. Unconfirmed links remain explicit; available Power Query definitions are included in shared snapshots.
 
 ### Additional (Domains and Matrix)
 
@@ -423,6 +423,31 @@ State that persists in `localStorage`: `lsa_model_layout_v1` (built-in model car
 positions), `smv_layout_<id>` / `smv_presets_<id>` (imported models), `smv_models_v1`,
 `smv_current_v1`, `smv-detail`, `smv-layout`, `smv-lines`, `smv-mvw`, `smv_repo_name`,
 `smv_repo_cache`, `smv-measures-workspace-v1`.
+
+### Table and column references in measure dependencies
+
+The Measures graph defaults to measures only. Enable **Show table and column references**
+to add source tables, using the same colors as the Tables canvas. Cards contain only the
+columns connected to measures visible in the graph. A dashed **Whole table** link attaches
+to the table header (for example, `COUNTROWS(Sales)`); a solid column link attaches to its
+row (for example, `SUM(Sales[Amount])`). A measure's home table does not imply a dependency.
+
+Select a source table header to find measures referencing that table or any of its columns.
+Select a column row to narrow the source. The table details drawer also provides
+**Find dependent measures**, and each column has **Find measures**. Source analysis includes
+indirect dependents through measures, a **Direct only** filter, and searchable results.
+Selecting a dependent measure inspects its DAX without changing the source; **Analyze this
+measure** returns to measure analysis. Source selection, graph settings, and inspected DAX
+are preserved in interactive snapshots.
+
+This is static DAX reference detection, not complete engine lineage. Calculated columns
+and calculated tables can be sources, but their defining expressions are not expanded.
+Relationship filter propagation and calculation-item expressions are not traced. Qualified
+column references and explicit table references are resolved against the model; unqualified
+bracket names resolve to measures first, then columns in the measure's home table. Ambiguous
+row-context references outside that table and virtual columns are not fully resolved.
+Graphs are limited to 500 measures and 200 source table/column rows, with visible notices;
+dependent-measure lists show up to 120 matches at once and can be narrowed by search.
 
 ## Regression checks
 

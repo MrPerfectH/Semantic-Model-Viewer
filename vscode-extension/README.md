@@ -21,6 +21,8 @@ Follow the logic behind a measure. Trace what feeds it and what depends on it, t
 | --- | --- |
 | [![Gross Margin % dependency flow at 100% zoom, with upstream measures in purple and a downstream measure in blue](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-flow.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-flow.png) | [![Gross Margin % and Gross Profit formulas beside their dependency graph](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-dax.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-dax.png) |
 
+Select **Table or column** in the Measures library, or **Find dependent measures** in the table inspector, to analyze a source. Inspecting a result keeps that source selected. Colored reference chips beneath each formula open the corresponding analysis. Use **Direct only** to exclude indirect dependent measures. This is static DAX reference analysis; calculated-column/table defining expressions and relationship filter propagation are outside its scope.
+
 ## Tables
 
 Build a canvas around the tables you care about. Read cardinality and filter direction on the relationship lines, and inspect the selected table beside the diagram.
