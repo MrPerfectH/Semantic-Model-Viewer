@@ -2,7 +2,7 @@
 
 Install the extension, open a local Power BI semantic model, and follow its tables and DAX without leaving VS Code.
 
-**Feature preview:** the feature recordings below use a development build. The latest public GitHub release checked on 23 October 2026 is **0.3.9**. New dependency and snapshot improvements will be available with the next release; installing 0.3.9 does not enable every feature shown here.
+Use **version 0.4.0 or newer** for the table and column dependency features shown below. The feature recordings were made during development; the installation clip shows 0.3.9, using the same installation steps.
 
 ## Install the extension
 
@@ -54,13 +54,13 @@ Select a table to highlight its relationships while unrelated tables dim. Switch
 
 ![Hide unrelated tables and arrange the remaining diagram](media/vscode-guide/hide-and-arrange.gif)
 
-## What is coming in the next extension update
+## What is new in version 0.4.0
 
 - **Table and column dependency analysis:** find direct and indirect dependent measures, inspect formulas while retaining source context, and navigate from highlighted DAX references.
 - **Measure browsing:** a searchable formula overview and clearer navigation between sources and measures.
 - **Snapshot improvements:** preserve more analysis state, including the selected source, inspected formula, filters, and layout choices. Interactive HTML snapshots already exist; these changes extend them.
 
-The final release notes define the shipped scope. These are preview examples rather than a claim that the development build is already the stable release.
+See the [0.4.0 release notes](releases/0.4.0.md) for the full list of changes.
 
 ![A selected measure and its DAX](media/vscode-guide/measure-dax.png)
 
