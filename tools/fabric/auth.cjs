@@ -2,7 +2,10 @@
 const http = require('node:http');
 const crypto = require('node:crypto');
 const { FABRIC_AUDIENCE, POWER_BI_AUDIENCE, FabricError } = require('./client.cjs');
-const scopesFor = (audience, purpose) => {
+const POWER_BI_DESKTOP_CLIENT_ID = 'ea0616ba-638b-4df5-95b9-636659ae5121';
+const scopesFor = (audience, purpose, clientId) => {
+  if (![FABRIC_AUDIENCE, POWER_BI_AUDIENCE].includes(audience)) throw new FabricError('InvalidAudience', 'Unsupported Microsoft token audience.');
+  if (clientId === POWER_BI_DESKTOP_CLIENT_ID) return [`${POWER_BI_AUDIENCE}/.default`];
   if (audience === FABRIC_AUDIENCE) return [`${audience}/Workspace.Read.All`, `${audience}/SemanticModel.${purpose === 'definition' ? 'ReadWrite' : 'Read'}.All`];
   if (audience === POWER_BI_AUDIENCE) return [`${audience}/Dataset.Read.All`];
   throw new FabricError('InvalidAudience', 'Unsupported Microsoft token audience.');
@@ -35,7 +38,7 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
       rejectPending = reject;
       server = http.createServer((req, res) => {
         const url = new URL(req.url, 'http://localhost');
-        if (url.pathname !== '/callback') { res.writeHead(404).end(); return; }
+        if (url.pathname !== (clientId === POWER_BI_DESKTOP_CLIENT_ID ? '/' : '/callback')) { res.writeHead(404).end(); return; }
         if (url.searchParams.get('state') !== state) { res.writeHead(400).end('Invalid sign-in state.'); return; }
         res.writeHead(200, { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store', 'Content-Security-Policy': "default-src 'none'" }).end('Microsoft sign-in received. You can close this tab.');
         if (url.searchParams.has('error')) reject(new FabricError('SignInDenied', 'Microsoft sign-in was cancelled or denied.'));
@@ -48,9 +51,9 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
     pending = () => rejectPending(new FabricError('Cancelled', 'Microsoft sign-in cancelled.'));
     try {
       await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
-      const redirectUri = `http://localhost:${server.address().port}/callback`;
+      const redirectUri = `http://localhost:${server.address().port}${clientId === POWER_BI_DESKTOP_CLIENT_ID ? '/' : '/callback'}`;
       timer = setTimeout(() => rejectPending(new FabricError('SignInTimeout', 'Microsoft sign-in timed out.')), 5 * 60 * 1000);
-      const scopes = scopesFor(audience, purpose);
+      const scopes = scopesFor(audience, purpose, clientId);
       const url = await app.getAuthCodeUrl({ scopes, redirectUri, codeChallenge: crypto.createHash('sha256').update(verifier).digest('base64url'), codeChallengeMethod: 'S256', state, prompt });
       if (generation !== currentGeneration) throw new FabricError('Cancelled', 'Microsoft sign-in cancelled.');
       await openBrowser(url);
@@ -65,14 +68,14 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
   }
   return {
     async status() { if (!clientId) return { configured: false, account: null }; return { configured: true, account: accountInfo(await account()) }; },
-    async signIn() { return accountInfo((await interactive(FABRIC_AUDIENCE, 'select_account')).account); },
+    async signIn() { return accountInfo((await interactive(clientId === POWER_BI_DESKTOP_CLIENT_ID ? POWER_BI_AUDIENCE : FABRIC_AUDIENCE, 'select_account')).account); },
     async getAccessToken(audience, purpose) {
       const currentGeneration = generation;
       const app = await init(); const selected = await account();
       if (!selected) throw new FabricError('NotSignedIn', 'Sign in with your Microsoft work account.');
       if (generation !== currentGeneration) throw new FabricError('Cancelled', 'Microsoft token request cancelled.');
       selectedId = selected.homeAccountId;
-      try { const result = await app.acquireTokenSilent({ account: selected, scopes: scopesFor(audience, purpose) }); if (generation !== currentGeneration) { await app.getTokenCache().removeAccount(selected); throw new FabricError('Cancelled', 'Microsoft token request cancelled.'); } return result.accessToken; }
+      try { const result = await app.acquireTokenSilent({ account: selected, scopes: scopesFor(audience, purpose, clientId) }); if (generation !== currentGeneration) { await app.getTokenCache().removeAccount(selected); throw new FabricError('Cancelled', 'Microsoft token request cancelled.'); } return result.accessToken; }
       catch (error) {
         if (generation !== currentGeneration) throw new FabricError('Cancelled', 'Microsoft token request cancelled.');
         if (error instanceof FabricError) throw error;
@@ -84,4 +87,4 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
     cancel() { generation++; pending?.(); }
   };
 }
-module.exports = { createAuth, createWorkAccountAuth: createAuth, scopesFor };
+module.exports = { createAuth, createWorkAccountAuth: createAuth, scopesFor, POWER_BI_DESKTOP_CLIENT_ID };

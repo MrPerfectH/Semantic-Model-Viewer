@@ -16,7 +16,7 @@ Offline snapshots contain model metadata according to the existing snapshot poli
 
 ## Maintainer setup and development
 
-The publisher-owned multitenant Microsoft Entra public-client registration is provisioned in the personal publisher directory, with loopback redirect `http://localhost/callback`. Its public client ID is bundled in the native host. Microsoft consent, MFA, Conditional Access, and tenant restrictions still apply. This build uses its own application ID. Publisher verification and real cross-tenant sign-in/model access still require validation.
+The default sign-in uses the Power BI Desktop public-client identity (`ea0616ba-638b-4df5-95b9-636659ae5121`) and Power BI `.default` permissions, following the authentication approach documented by [Tabular Editor](https://docs.tabulareditor.com/en/features/te-cli/te-cli-auth.html). Users do not register an application. A publisher-owned registration remains available through the developer override. Microsoft consent, MFA, Conditional Access and tenant restrictions still apply; the shared identity does not guarantee access. Real tenant sign-in and REST metadata access must be verified before release.
 
 For standalone development, install Node.js 22 or later in addition to Python, run `npm ci --prefix tools/fabric`, and build the self-contained XMLA helpers using the .NET 8 SDK and `tools/fabric/xmla/publish.sh`. Launch the existing Python server. `SMV_FABRIC_CLIENT_ID` remains an optional developer override. These are maintainer/developer steps; packaged distributions must provision the ID and runtime dependencies before release. Standalone tokens remain in the helper process memory, so reopening the process may require Microsoft sign-in. VS Code uses SecretStorage for the MSAL cache.
 

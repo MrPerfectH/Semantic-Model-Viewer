@@ -23,3 +23,15 @@ test('sign-out removes all local accounts and saves null',async()=>{const m=mock
 test('cancel during silent token acquisition discards result',async()=>{let resolve;const m=mock({silent:()=>new Promise(r=>{resolve=r;})});const result=m.auth.getAccessToken('https://api.fabric.microsoft.com');while(!resolve)await new Promise(r=>setImmediate(r));m.auth.cancel();resolve({accessToken:'obsolete'});await assert.rejects(result,{code:'Cancelled'});assert.deepEqual(m.removed,['a']);});
 test('two simultaneous sign-ins do not create competing listeners',async()=>{const m=mock();const first=m.auth.signIn();await assert.rejects(m.auth.signIn(),{code:'SignInInProgress'});await first;});
 test('cancel before cached-account lookup cannot start token consent',async()=>{const m=mock();const result=m.auth.getAccessToken('https://api.fabric.microsoft.com');m.auth.cancel();await assert.rejects(result,{code:'Cancelled'});});
+
+test('Power BI Desktop identity uses its existing Power BI default permissions',()=>{
+ const {scopesFor,POWER_BI_DESKTOP_CLIENT_ID}=require('../auth.cjs');
+ for(const audience of ['https://api.fabric.microsoft.com','https://analysis.windows.net/powerbi/api']) assert.deepEqual(scopesFor(audience,'definition',POWER_BI_DESKTOP_CLIENT_ID),['https://analysis.windows.net/powerbi/api/.default']);
+ assert.throws(()=>scopesFor('https://untrusted.example',undefined,POWER_BI_DESKTOP_CLIENT_ID),{code:'InvalidAudience'});
+ assert.deepEqual(scopesFor('https://api.fabric.microsoft.com','definition',id),['https://api.fabric.microsoft.com/Workspace.Read.All','https://api.fabric.microsoft.com/SemanticModel.ReadWrite.All']);
+});
+test('Power BI Desktop identity signs in through a root localhost callback',async()=>{
+ const {POWER_BI_DESKTOP_CLIENT_ID}=require('../auth.cjs');let request;
+ const auth=createAuth({clientId:POWER_BI_DESKTOP_CLIENT_ID,msalFactory:()=>({getAuthCodeUrl:async r=>{request=r;return 'https://login.microsoftonline.com/test';},acquireTokenByCode:async r=>{assert.equal(r.redirectUri,request.redirectUri);assert.equal(r.codeVerifier.length,43);return {account:a};},getTokenCache:()=>({getAllAccounts:async()=>[a]})}),openBrowser:async()=>{const url=new URL(request.redirectUri);assert.equal(url.pathname,'/');assert.equal(url.hostname,'localhost');assert.deepEqual(request.scopes,['https://analysis.windows.net/powerbi/api/.default']);url.searchParams.set('state',request.state);url.searchParams.set('code','test');await fetch(url);}});
+ assert.equal((await auth.signIn()).name,a.username);
+});

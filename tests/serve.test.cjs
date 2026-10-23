@@ -206,7 +206,11 @@ test('Fabric bridge requires same-origin JSON and the per-server session nonce',
     const status = await post({ action: 'status' }, { 'X-SMV-Fabric-Session': token });
     assert.equal(status.status, 200);
     assert.equal(status.headers.get('cache-control'), 'no-store');
-    assert.equal((await status.json()).available, false, 'unconfigured registration is explicitly unavailable');
+    const state = await status.json();
+    let hasMsal = false;
+    try { require.resolve('@azure/msal-node', { paths: [path.join(__dirname, '../tools/fabric')] }); hasMsal = true; } catch {}
+    assert.equal(state.available, hasMsal, 'bundled public client is ready when native auth dependencies are installed');
+    assert.equal(state.account, null, 'configuration never signs in a user implicitly');
     const other = await start();
     try { assert.equal((await fetch(other.url + '/api/fabric', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-SMV-Fabric-Session': token }, body: '{"action":"status"}' })).status, 403); }
     finally { other.stop(); }
