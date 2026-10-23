@@ -28,7 +28,7 @@ Use VS Code 1.85 or newer. Local file exploration does not require Python, Power
 
 Supported local inputs are `*.SemanticModel` folders with TMDL definitions and `model.bim`. A `.pbix` file alone is not a supported local input. If a model is missing, check the opened folder and run **Semantic Model Viewer: Refresh Model List**. You can also right-click a supported model and choose **Open in Semantic Model Viewer**.
 
-[Watch opening a model and following it into DAX — 37 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/vscode-to-dax-v2.mp4)
+[Watch opening a model and following it into DAX — 37 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/vscode-to-dax-v3.mp4)
 
 ## Focus on part of the table canvas
 
@@ -54,13 +54,13 @@ For a single column, choose **Find measures** beside that column in the inspecto
 
 Click a dependent measure to inspect its formula while keeping Sales as the source. Double-click its graph node to make it the analyzed measure; the focused measure becomes black.
 
-![Click a dependent measure, then double-click to analyze it](media/vscode-guide/select-dependent-measure-v2.gif)
+![Click a dependent measure, then double-click to analyze it](media/vscode-guide/select-dependent-measure-v3.gif)
 
 ### 3. Expand the calculation
 
-Open **DAX**, then choose **Inline measures** to expand the referenced calculations inside the formula.
+Keep **Split view** selected and choose **DAX below graph**. Choose **Inline measures** to expand the referenced calculations. **Plain text** removes the inline labels so you can read the expanded expression while the Sales dependency chain remains visible above it.
 
-![Inline referenced measures to inspect the underlying expressions](media/vscode-guide/inline-dax.gif)
+![Inline referenced measures to inspect the underlying expressions](media/vscode-guide/inline-dax-v2.gif)
 
 Dependency analysis inspects static DAX references; it does not execute DAX or simulate relationship filter propagation.
 
@@ -72,7 +72,7 @@ Dependency analysis inspects static DAX references; it does not execute DAX or s
 
 See the [0.4.0 release notes](releases/0.4.0.md) for the full list of changes.
 
-![A selected measure and its DAX](media/vscode-guide/measure-dax.png)
+![Gross Margin % with its Sales dependency chain and expanded DAX](media/vscode-guide/measure-dax-connected.png)
 
 ![The focused Store relationship view](media/vscode-guide/focused-tables.png)
 
