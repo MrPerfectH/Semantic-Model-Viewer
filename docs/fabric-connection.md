@@ -16,9 +16,9 @@ Offline snapshots contain model metadata according to the existing snapshot poli
 
 ## Maintainer setup and development
 
-The publisher must provision its own multitenant Microsoft Entra public-client registration and approved loopback redirect. Microsoft consent, MFA, Conditional Access, and tenant restrictions still apply. This build deliberately has no borrowed application ID. An unconfigured build displays an unavailable sign-in message.
+The publisher-owned multitenant Microsoft Entra public-client registration is provisioned in the personal publisher directory, with loopback redirect `http://localhost/callback`. Its public client ID is bundled in the native host. Microsoft consent, MFA, Conditional Access, and tenant restrictions still apply. This build uses its own application ID. Publisher verification and real cross-tenant sign-in/model access still require validation.
 
-For standalone development, install Node.js 22 or later in addition to Python, run `npm ci --prefix tools/fabric`, and build the self-contained XMLA helpers using the .NET 8 SDK and `tools/fabric/xmla/publish.sh`. Set `SMV_FABRIC_CLIENT_ID` in the native host environment to the publisher-owned registration's public client ID, then launch the existing Python server. These are maintainer/developer steps; packaged distributions must provision the ID and runtime dependencies before release. Standalone tokens remain in the helper process memory, so reopening the process may require Microsoft sign-in. VS Code uses SecretStorage for the MSAL cache.
+For standalone development, install Node.js 22 or later in addition to Python, run `npm ci --prefix tools/fabric`, and build the self-contained XMLA helpers using the .NET 8 SDK and `tools/fabric/xmla/publish.sh`. Launch the existing Python server. `SMV_FABRIC_CLIENT_ID` remains an optional developer override. These are maintainer/developer steps; packaged distributions must provision the ID and runtime dependencies before release. Standalone tokens remain in the helper process memory, so reopening the process may require Microsoft sign-in. VS Code uses SecretStorage for the MSAL cache.
 
 Desktop VS Code 1.101 or later is required for the Node.js 22 host runtime ([VS Code release notes](https://code.visualstudio.com/updates/v1_101)).
 

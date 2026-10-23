@@ -16,7 +16,7 @@ function openBrowser(url) {
   });
 }
 function createService(options = {}) {
-  const clientId = options.clientId || process.env.SMV_FABRIC_CLIENT_ID || '';
+  const clientId = options.clientId || process.env.SMV_FABRIC_CLIENT_ID || 'd68a809b-913e-405c-b608-e95303378adc';
   let auth = options.auth;
   let initializationError;
   if (!auth && clientId) {
