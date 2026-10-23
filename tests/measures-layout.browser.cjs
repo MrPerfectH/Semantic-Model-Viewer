@@ -39,7 +39,7 @@ async function openBrowser() {
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'smv-measures-layout-'));
   const child = spawn(chrome, ['--headless=new', '--remote-debugging-port=0', '--no-first-run', '--no-default-browser-check', '--disable-background-networking', '--disable-sync', '--disable-extensions', '--user-data-dir=' + profile, 'about:blank'], { stdio: ['ignore', 'ignore', 'pipe'] });
   const endpoint = await new Promise((resolve, reject) => {
-    let output = ''; const timer = setTimeout(() => reject(new Error('Chrome did not start: ' + output)), 15000);
+    let output = ''; const timer = setTimeout(() => { child.kill('SIGKILL'); reject(new Error('Chrome did not start: ' + output)); }, 30000);
     child.stderr.on('data', chunk => { output += chunk; const match = output.match(/DevTools listening on (ws:\/\/\S+)/); if (match) { clearTimeout(timer); resolve(match[1]); } });
     child.once('error', error => { clearTimeout(timer); reject(error); });
     child.once('exit', code => { clearTimeout(timer); reject(new Error('Chrome exited during startup: ' + code + ' ' + output)); });
@@ -67,8 +67,9 @@ async function openBrowser() {
 test('measure workspace occupies wide screens and persists adjustable layouts', { skip: !chrome && 'Install Chrome or set CHROME_PATH', timeout: 60000 }, async t => {
   const server = http.createServer((req,res) => { res.writeHead(200, {'Content-Type':'text/html'}); res.end(fixture()); });
   await new Promise(resolve => server.listen(0,'127.0.0.1',resolve));
-  const browser = await openBrowser();
-  t.after(async () => { await browser.close(); await new Promise(resolve => server.close(resolve)); });
+  let browser;
+  t.after(async () => { try { if (browser) await browser.close(); } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); } });
+  browser = await openBrowser();
   const url = 'http://127.0.0.1:' + server.address().port;
   await browser.send('Page.enable');
   const settle = () => browser.evaluate('new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))');
@@ -203,8 +204,9 @@ test('table/column dependency flow works in the complete viewer', { skip: !chrom
     res.end(fs.readFileSync(file));
   });
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
-  const browser=await openBrowser();
-  t.after(async()=>{await browser.close();await new Promise(resolve=>server.close(resolve));});
+  let browser;
+  t.after(async()=>{try{if(browser)await browser.close();}finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}});
+  browser=await openBrowser();
   await browser.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1024,deviceScaleFactor:1,mobile:false});
   await browser.send('Page.navigate',{url:'http://127.0.0.1:'+server.address().port});
   for(let n=0;n<150;n++) {
@@ -318,4 +320,64 @@ test('table/column dependency flow works in the complete viewer', { skip: !chrom
     assert.equal(heights.after,heights.before);
   });
   assert.deepEqual(await browser.evaluate('window.errors'),[]);
+});
+
+test('search preserves the overview and opens optional colored DAX results', { skip: !chrome && 'Install Chrome or set CHROME_PATH', timeout: 60000 }, async t => {
+  const server=http.createServer((req,res)=>{
+    const pathname=new URL(req.url,'http://localhost').pathname;
+    const file=path.join(sourceRoot,pathname==='/'?'index.html':pathname);
+    if(!file.startsWith(sourceRoot+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile()){res.writeHead(404);res.end();return;}
+    res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':'text/html');res.end(fs.readFileSync(file));
+  });
+  await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;
+  t.after(async()=>{try{if(browser)await browser.close();}finally{server.closeAllConnections();await new Promise(r=>server.close(r));}});
+  browser=await openBrowser();
+  const settle=()=>browser.evaluate('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+  await browser.send('Page.enable');await browser.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+  await browser.send('Page.navigate',{url:'http://127.0.0.1:'+server.address().port});
+  for(let i=0;i<150;i++){if(await browser.evaluate('!!window.app && app.state.loaded'))break;await new Promise(r=>setTimeout(r,20));}
+  await browser.evaluate(`app._applyModel({name:'Search',tables:[{name:'Sales',source:{kind:'manual'},columns:[{name:'Amount'}],measures:[
+    {name:'Revenue',dax:'SUM(Sales[Amount])',folder:'Finance;Operations'},
+    {name:'Rows',dax:'COUNTROWS(Sales)'},
+    {name:'Average',dax:'DIVIDE([Revenue], [Rows])',h:true}
+  ]}],relationships:[]},'Search','search-test',{persist:false});app.setState({viewMode:'measures',selMeasure:null,mvQuery:'Revenue'});`);await settle();
+  assert.equal(await browser.evaluate("document.querySelector('.mv-overview h1').textContent"),'Understand the logic behind your model.');
+  assert.equal(await browser.evaluate("document.querySelector('.mv-search-summary span').textContent"),'2 matching measures','Duplicate folder entries count once');
+  assert.equal(await browser.evaluate("!!document.querySelector('dialog[open]')"),false);
+  await browser.evaluate("document.querySelector('.mv-search-summary button').focus();document.querySelector('.mv-search-summary button').click()");await settle();
+  assert.equal(await browser.evaluate("document.querySelector('dialog[open] h2').textContent"),'2 matching measures');
+  assert.equal(await browser.evaluate("document.querySelectorAll('.mv-result-card').length"),2);
+  assert.ok(await browser.evaluate("new Set([...document.querySelectorAll('.mv-result-card .mv-dax-body span,.mv-result-card .mv-dax-ref')].map(e=>getComputedStyle(e).color)).size>=2"),'DAX uses the shared syntax colors');
+  for(const theme of ['classic','spellbook']){
+    await browser.evaluate(`ViewerTheme.set('${theme}')`);
+    for(const width of [1440,680]){
+      await browser.send('Emulation.setDeviceMetricsOverride',{width,height:850,deviceScaleFactor:1,mobile:false});await settle();
+      const geometry=await browser.evaluate("(()=>{const d=document.querySelector('dialog'),r=d.getBoundingClientRect();return {left:r.left,right:r.right,width:innerWidth,overflow:d.scrollWidth>d.clientWidth,cols:getComputedStyle(document.querySelector('.mv-results-grid')).gridTemplateColumns.split(' ').length}})()");
+      assert.ok(geometry.left>=0&&geometry.right<=geometry.width,JSON.stringify(geometry));assert.equal(geometry.overflow,false);
+      assert.equal(geometry.cols,width===680?1:2);
+    }
+  }
+  await browser.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+  await browser.send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});await settle();
+  assert.equal(await browser.evaluate("!!document.querySelector('dialog[open]')"),false);
+  assert.equal(await browser.evaluate("document.activeElement===document.querySelector('.mv-search-summary button')"),true);
+  await browser.evaluate("document.querySelector('.mv-search-summary button').click();[...document.querySelectorAll('.mv-result-card .mv-dax-ref')].find(b=>b.textContent==='[Revenue]').click()");await settle();
+  assert.equal(await browser.evaluate('app.state.selMeasure'),'Revenue');
+  assert.equal(await browser.evaluate("!!document.querySelector('dialog[open]')"),false);
+  await browser.evaluate("app.setState({selMeasure:null,mvQuery:'not-a-measure'})");await settle();
+  await browser.evaluate("document.querySelector('.mv-search-summary button').focus();document.querySelector('.mv-search-summary button').click()");await settle();
+  assert.equal(await browser.evaluate("document.querySelector('dialog h2').textContent"),'0 matching measures');
+  assert.ok(await browser.evaluate("document.querySelector('.mv-results-empty').textContent.includes('No measures match')"));
+  await browser.evaluate("document.querySelector('dialog button').click();app.setState({selMeasure:null,mvQuery:'',mvFilter:'hidden'})");await settle();
+  assert.equal(await browser.evaluate("document.querySelector('.mv-search-summary span').textContent"),'1 matching measure');
+  await browser.evaluate("document.querySelector('.mv-search-summary button').click();document.querySelector('.mv-result-card .mv-button').click()");await settle();
+  assert.equal(await browser.evaluate('app.state.selMeasure'),'Average');
+  await browser.evaluate(`app._applyModel({name:'Many',tables:[{name:'Sales',source:{kind:'manual'},columns:[],measures:Array.from({length:45},(_,i)=>({name:'Match '+i,dax:'1'}))}],relationships:[]},'Many','many-test',{persist:false});app.setState({viewMode:'measures',selMeasure:null,mvQuery:'Match',mvFilter:'all'});`);await settle();
+  await browser.evaluate("document.querySelector('.mv-search-summary button').click()");await settle();
+  assert.equal(await browser.evaluate("document.querySelectorAll('.mv-result-card').length"),40);
+  await browser.evaluate("document.querySelector('.mv-results-more').click()");await settle();
+  assert.equal(await browser.evaluate("document.querySelectorAll('.mv-result-card').length"),45);
+  assert.equal(await browser.evaluate("document.querySelector('.mv-results-more').hidden"),true);
+  await browser.evaluate("app.setState({viewMode:'matrix'})");await settle();
+  assert.equal(await browser.evaluate("!!document.querySelector('dialog[open]')"),false,'Changing views closes the results');
 });
