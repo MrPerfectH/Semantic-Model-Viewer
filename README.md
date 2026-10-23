@@ -75,6 +75,8 @@ can create another one. Close extra windows normally; your saved models and layo
 
 ### VS Code
 
+[VS Code quick start, installation instructions, and short videos](docs/vscode-guide.md).
+
 Download `semantic-model-viewer-<version>.vsix` from the
 [Releases page](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases), then in VS Code run
 **Extensions: Install from VSIX…** from the Command Palette (or
