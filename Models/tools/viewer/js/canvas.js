@@ -478,6 +478,8 @@
       if (this.world) this.world.style.willChange = '';
     },
     updateTransform: function () {
+      // A camera changed by pan, zoom, focus or a saved view belongs to the reader.
+      if (!this._applyingFit) { this._autoFit = false; this._pendingFit = false; }
       this.holdLayer();
       if (this.world) this.world.style.transform = 'translate(' + this.view.x + 'px,' + this.view.y + 'px) scale(' + this.view.k + ')';
       this.applyLOD();
@@ -1695,10 +1697,46 @@
       return fitRect(size, boxes, 24);
     },
     fitView: function () {
-      var f = this.fitSolve();
+      this._autoFit = true;
+      this.watchSize();
+      this.refitView();
+      // The shell/iframe can finish mounting after the model-load microtask.
+      if (!this._fitFrame && typeof requestAnimationFrame === 'function') {
+        var self = this;
+        this._fitFrame = requestAnimationFrame(function () {
+          self._fitFrame = 0;
+          if (self._autoFit) self.refitView();
+        });
+      }
+    },
+    refitView: function () {
+      // Layout zoom controls lane spacing, not the recipient's camera minimum.
+      // Chip metrics stop growing at ZOOM_FLOOR, so smaller windows can still fit.
+      var f = this.fitSolve(null, 0.05);
       if (!f) return;
       this.view = f;
-      this.updateTransform();
+      this._applyingFit = true;
+      try {
+        this.updateTransform();
+        // The chip height is conservative (up to three title lines). Center the
+        // boxes actually mounted at the solved zoom, rather than that estimate.
+        if (!this.clusterOn && this.host.getBoundingClientRect) {
+          var base = this.host.getBoundingClientRect(), rect = this.viewportRect();
+          var boxes = Object.keys(this.cards).map(function (n) { return this.cards[n].el; }, this)
+            .filter(function (node) { return node.style.display !== 'none' && node.getBoundingClientRect; })
+            .map(function (node) { return node.getBoundingClientRect(); })
+            .filter(function (b) { return b.width && b.height; });
+          if (boxes.length) {
+            var left = Math.min.apply(null, boxes.map(function (b) { return b.left; }));
+            var right = Math.max.apply(null, boxes.map(function (b) { return b.right; }));
+            var top = Math.min.apply(null, boxes.map(function (b) { return b.top; }));
+            var bottom = Math.max.apply(null, boxes.map(function (b) { return b.bottom; }));
+            this.view.x += base.left + rect.x + rect.w / 2 - (left + right) / 2;
+            this.view.y += base.top + rect.y + rect.h / 2 - (top + bottom) / 2;
+            this.updateTransform();
+          }
+        }
+      } finally { this._applyingFit = false; }
     },
     /* The arithmetic behind Fit, with nothing applied: the view it WOULD land on. The arrange
        loop needs the answer before it commits, because the zoom the picture ends up shown at
@@ -1724,12 +1762,13 @@
       var rect = this.viewportRect();
       var availW = Math.max(200, rect.w), availH = Math.max(200, rect.h);
       /* A chip widens *and* grows taller as the zoom drops, so the bounds depend on the
-         answer. One refinement pass settles it: measure at the current zoom, then re-measure
-         at the zoom that came out of it — which is the zoom the cards will be drawn at. The
+         answer. Refine at the candidate zoom until stable (at most eight passes), which
+         is the zoom the cards will be drawn at. The
          candidate size has to be the size at that candidate zoom, never the stale measured
          one, or the second pass floors on the first and Fit never converges. */
       var k = startK || this.view.k, minX = 0, minY = 0, maxX = 0, maxY = 0, pass;
-      for (pass = 0; pass < 2; pass++) {
+      for (pass = 0; pass < (floor < ZOOM_FLOOR ? 8 : 2); pass++) {
+        var previousK = k;
         minX = 1e9; minY = 1e9; maxX = -1e9; maxY = -1e9;
         cards.forEach(function (c) {
           var p = self.gp(c.table.name); if (!p) return;
@@ -1744,10 +1783,10 @@
         });
         if (minX > maxX) return { x: 0, y: 0, k: 1 };
         var bw = Math.max(1, maxX - minX), bh = Math.max(1, maxY - minY);
-        /* Fit stops at the floor — and at the zoom the current positions were laid out for,
-           which is never below it. Zooming out past that is what makes the chips outgrow the
-           gaps between them; a picture that still does not fit is panned instead. */
+        /* Arrangement solves keep their lane zoom floor. The visible camera passes an
+           explicit lower floor so it can fit saved positions on a smaller recipient. */
         k = Math.max(floor, Math.min(1.25, Math.min(availW / bw, availH / bh)));
+        if (Math.abs(k - previousK) < 0.00001) break;
       }
       var cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
       return { k: k, x: rect.x + availW / 2 - cx * k, y: rect.y + availH / 2 - cy * k };
@@ -1791,7 +1830,8 @@
       var self = this;
       if (this._sizeWatch || typeof ResizeObserver !== 'function') return;
       this._sizeWatch = new ResizeObserver(function () {
-        if (self._pendingFit && self.host.clientWidth && self.host.clientHeight) self.fitView();
+        if (self._autoFit) self.refitView();
+        else if (self._pendingFit && self.host.clientWidth && self.host.clientHeight) self.fitView();
       });
       this._sizeWatch.observe(this.host);
     },
