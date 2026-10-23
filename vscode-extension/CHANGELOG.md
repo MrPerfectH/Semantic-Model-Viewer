@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Keep the Measures overview visible while searching or filtering. Open matching formulas in an optional dialog with the same syntax colors and reference navigation as the Measures workspace.
+
+
 ## 0.4.0
 
 - Analyze a table or column to find directly and indirectly dependent measures. Filter to direct references, search the results, and inspect a formula while keeping the source selected.
