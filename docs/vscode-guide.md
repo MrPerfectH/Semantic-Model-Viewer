@@ -32,13 +32,23 @@ Supported local inputs are `*.SemanticModel` folders with TMDL definitions and `
 
 ## From a table to dependent measures
 
-![Measures that depend on Sales](media/vscode-guide/table-dependent-measures.png)
+### 1. Find the measures that use a table
 
-Select a table or column, then choose **Find dependent measures**. Explore the measures that directly or indirectly reference that source. Use **Direct only** to narrow the list.
+Select **Sales** in the table canvas, then choose **Find dependent measures** in the table inspector. The measure library lists direct and indirect references to that table. Use **Direct only** to narrow the list.
 
-Click a dependent measure to inspect its formula. Double-click its graph node to make it the analyzed measure; the focused measure becomes black. Open DAX and use **Inline measures** to expand referenced calculations.
+![Select Sales, choose Find dependent measures, and explore its dependent measures](media/vscode-guide/table-to-dependent-measures.gif)
+
+For a single column, choose **Find measures** beside that column in the inspector.
+
+### 2. Inspect a measure, then follow its dependencies
+
+Click a dependent measure to inspect its formula while keeping Sales as the source. Double-click its graph node to make it the analyzed measure; the focused measure becomes black.
 
 ![Click a dependent measure, then double-click to analyze it](media/vscode-guide/select-dependent-measure.gif)
+
+### 3. Expand the calculation
+
+Open **DAX**, then choose **Inline measures** to expand the referenced calculations inside the formula.
 
 ![Inline referenced measures to inspect the underlying expressions](media/vscode-guide/inline-dax.gif)
 
@@ -69,5 +79,17 @@ See the [0.4.0 release notes](releases/0.4.0.md) for the full list of changes.
 ## Share a view with a colleague
 
 **Save snapshot** creates a self-contained HTML file that a colleague can explore in a browser. It contains model metadata, DAX, and available Power Query definitions, so share it with the intended audience. No model queries run in the snapshot.
+
+## CLI and working with AI agents
+
+The repository also includes a [snapshot CLI](cli.md) that an AI coding agent can invoke to create an interactive HTML view of a local model:
+
+```bash
+node bin/smv.cjs snapshot "Models/demo/Contoso Retail.SemanticModel" --tables Sales,Customer,Date --out sales-view.html
+```
+
+Run this from a repository checkout with Node.js 22 or newer. It reads local model definitions and exports a snapshot; it does not execute DAX or change the model files.
+
+Additional CLI tools that can support working with AI agents are in development. They are separate from the stable VS Code features demonstrated above. This guide does not yet include a recording of those development tools.
 
 All examples here use the synthetic Contoso Retail model. You can also [try the browser demo](https://MrPerfectH.github.io/Semantic-Model-Viewer/) before installing the extension.
