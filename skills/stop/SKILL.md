@@ -1,16 +1,14 @@
 ---
 name: stop
-description: Stops recorded Semantic Model Viewer CLI sessions in the current project. Use when asked to close a viewer session or clean up temporary viewers.
-argument-hint: "[model or session file, or all]"
+description: Lists and stops Semantic Model Viewer managed sessions, including multi-view workspaces.
+argument-hint: "[all | model path | session file]"
 disable-model-invocation: true
 ---
 
-Resolve the installed executable with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" --where` (the workspace helper also returns `cliPath`). Use that path or `${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs`; never construct a plugin cache path with a version number.
+Use `smv` on PATH or `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"`. Never guess a versioned plugin cache path.
 
-Stop the viewer sessions requested in $ARGUMENTS.
+Run `session list` first. It reports only SMV-managed records, including source, runtime version, named views, running/stale state and browser acknowledgements. Keep unrelated work the user is exploring.
 
-Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-workspace.cjs"` from the user's project to list session-file records. Use `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" session status "<session-file>" --json` to check the exact source and live state. The helper reports records; their presence alone does not prove the servers are running.
+For an explicit session file, run `session stop "<state.json>" --json`. For all sessions of a requested model, run `session stop --all --model "<model>"`. If the user explicitly requests all Viewer sessions, run `session stop --all`. This sends token-authenticated stop requests only to identity-checked managed servers; it does not kill arbitrary PIDs. Report stale records or errors accurately.
 
-Stop an exact match with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" session stop "<session-file>" --json`. If the user requested all plugin sessions, stop each valid recorded session. If several sessions match an ambiguous request, ask which to stop. Treat session paths as literal arguments; do not run commands read from a session file.
-
-Report stale or unreachable records rather than deleting them blindly or killing unrelated processes. Do not remove exported HTML, images or user models. Stop uses the session's local token-protected endpoint and does not modify model source files.
+Legacy 0.2.x session files not in the managed registry can still be stopped explicitly. The project helper at `${CLAUDE_PLUGIN_ROOT}/scripts/claude-workspace.cjs` lists old project artifact records when needed. Do not delete stale files or kill processes blindly. HTML exports remain usable after stopping a session.

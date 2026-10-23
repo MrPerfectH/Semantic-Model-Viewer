@@ -12,7 +12,7 @@ test('both filter directions are a union of directed paths, not an undirected wa
   assert.deepEqual([...graph.traverse(model,['Root'],{direction:'both',maxDepth:1}).names].sort(),['Down','Root','Up']);
 });
 test('every CLI subcommand provides help before attempting I/O',()=>{
-  for(const args of [['inspect'],['filters-by'],['discover'],['snapshot'],['serve'],['open'],['shot'],['results','import'],['explain','validate'],['explain','build'],...['status','selection','stop','update','export'].map(c=>['session',c])]){
+  for(const args of [['show'],['relations'],['dependents'],['install'],['inspect'],['filters-by'],['discover'],['snapshot'],['serve'],['open'],['shot'],['results','import'],['explain','validate'],['explain','build'],...['status','selection','stop','update','export','list','views','add-view'].map(c=>['session',c])]){
     const r=spawnSync(process.execPath,[cli,...args,'--help'],{encoding:'utf8'});
     assert.equal(r.status,0,JSON.stringify(args)+' '+r.stderr);assert.match(r.stdout,/Usage:/);assert.match(r.stdout,/smv /);
   }

@@ -1,174 +1,185 @@
-# CLI plugin workflow
+# CLI plugin workflow (0.3)
 
-Every operation is an ordinary command executed through the host's shell tool.
-In the installed Claude plugin, replace `smv` below with:
+Requires Node.js 22+. The plugin is CLI-only, with no runtime npm dependencies or
+MCP server. Model inputs are a local TMDL `.SemanticModel` folder, its `definition`
+folder, or a BIM file. Commands never modify model files or execute DAX, M or SQL.
 
-```sh
-node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"
-```
+## One-time terminal setup
 
-The host substitutes `${CLAUDE_PLUGIN_ROOT}` when it loads the skill. Run from the
-user's project and quote all source, state, view and output paths as individual
-arguments. Model names and paths are data, not shell syntax.
-
-## Prepare paths and find a model
+Invoke `/semantic-model-viewer:setup` inside Claude. It runs:
 
 ```sh
-node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-workspace.cjs"
-smv --where
-smv discover .
-smv inspect 'Sales.SemanticModel'
+node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" install
 ```
 
-The workspace helper returns `cliPath` (the resolved executable), `projectRoot`, `artifactsDir`, `newSessionFile`,
-`newViewFile`, `newExportFile` and recorded `sessions`. It creates a self-ignored
-`.smv-artifacts` directory, leaving the project's root ignore file unchanged.
-The returned paths are unique; use them rather than a fixed root-level test file.
-The helper lists session records without assuming their servers are alive.
+The stable `smv` launcher normally lives in `~/.local/bin` (Windows:
+`%LOCALAPPDATA%/SemanticModelViewer/bin`). It reads Claude's installed-plugin
+registry every time, so plugin cache version changes require no launcher update.
+The installer reports whether that directory is on PATH. `--bin-dir` can select
+an existing user PATH directory. Shell startup files are not modified and unrelated
+commands are never replaced. `smv --where` reports the selected runtime for diagnosis.
+Agents can always run the bundled CLI using the host-provided plugin root above;
+they never need to guess a cache path or run `--where` before each operation.
 
-Discovery returns canonical local model paths. Show the selected path; do not
-silently choose a backup, a demo, or the first of several matching models. Inspect
-metadata before choosing table, measure or query identifiers. These are local
-files, not the published Power BI service model. No data queries are executed.
-
-## Focused model queries
+## Common task: one command
 
 ```sh
-smv inspect 'Sales.SemanticModel' --table 'IFLO'
-smv filters-by 'Sales.SemanticModel' 'IFLO'
-smv filters-by 'IFLO' --model 'Sales.SemanticModel' --direction both
+smv show 'Sales.SemanticModel' --table 'Cost Center' --related --dependents
 ```
 
-Focused inspection returns one table (including its columns and home measures),
-incident relationships, and `measuresUsingTable` with qualified identities, DAX,
-and a `direct` flag. It includes downstream measure dependencies, excludes measures
-that merely live in the table, and does not simulate filter propagation or queries.
-Omitting `--table` preserves full-model inspection.
+The JSON response contains compact counts, `sessionFile`, a combined `workspaceUrl`
+and individual view URLs. Tables and Measures run side by side in ONE server.
+The workspace offers a Tabs mode for more space, and selectors for each pane.
+Each view retains its own selection, camera, revision and browser receipts.
+Repeat the same request to reuse the session and views. A different table adds
+named views without replacing the previous ones. With neither `--related` nor
+`--dependents`, both are shown; with one flag, only that view is created.
 
-`filters-by` defaults to outgoing, active filter reachability, including transitive
-paths. Use `--direct` for one hop or `--include-inactive` to explore inactive edges
-as a hypothetical graph. Each table includes distance and one shortest path with
-relationship evidence, filter direction, cardinalities and `manyToMany` flags.
-All incident edges are also returned, so parallel relationships remain visible.
-Unknown/automatic direction is reported as unresolved, never assumed to propagate.
-`--direction both` returns the union of incoming and outgoing filter paths. It
-does not follow an undirected route through a parent into unrelated sibling tables.
-Incoming paths are traversed in reverse order to actual filter propagation.
-DAX, ambiguity resolution and RLS can change evaluation behavior.
+`--direct` limits relationship neighbors to one hop. `--include-inactive` includes
+hypothetical paths through inactive relationships. Default exploration combines
+active incoming and outgoing filter paths, excluding unrelated siblings reached
+only by changing direction midway through an undirected walk. Actual model filter
+directions are unchanged. DAX can change filter behavior during evaluation.
 
-## Browser layout defaults
-
-Authored table sets open in a compact star layout around their selected focus,
-with the fit calculated after the inspector is visible. Clicked tables explore
-active filter paths in **both directions**, direct and indirect, by default.
-This changes exploration, not model relationship metadata. The inspector can
-still select incoming, outgoing, all connected, inactive edges or shorter paths.
-Saved layouts and explicitly saved exploration settings are preserved.
-
-## Start and reuse a live view
+## Short answers first
 
 ```sh
-smv serve 'Sales.SemanticModel' --background --session '<newSessionFile>' --json
+smv relations 'Sales.SemanticModel' --table 'Cost Center'
+smv dependents 'Sales.SemanticModel' --table 'Cost Center'
+smv dependents 'Cost Center' --model 'Sales.SemanticModel' --details
 ```
 
-Omitting `--view` opens the default version 2 graph. A supplied view JSON must
-include `version`; an empty JSON object is not a CLI view specification. For
-example, write the following to the helper's `newViewFile` path and add
-`--view '<newViewFile>'` when starting:
+`relations` returns table names, distances and counts for direct/indirect related
+tables, incident relationships, many-to-many edges, inactive edges and unresolved
+direction. `--direction incoming|outgoing|both` selects the traversal (default both).
+`dependents` returns qualified measure names, direct flags and direct/indirect
+counts. It follows static DAX table/column references and downstream measure chains;
+merely storing a measure in the table does not imply use. `--details` adds path
+and relationship evidence or DAX. These are metadata summaries, not executed results.
+A lone table argument auto-discovers only when the current folder contains exactly
+one non-backup model; otherwise supply its path explicitly.
 
-```json
-{"version":2,"mode":"graph","tables":["Sales","Date"]}
-```
+For a broad inventory, `inspect <model>` remains available. `inspect <model>
+--table <name>` returns that table, its relationships and measure-user formulas.
+`filters-by` preserves its previous outgoing default and detailed path output.
+No full inspection or jq preprocessing is needed before `show` or the short queries.
 
-A measure view uses its actual inspected home table and name:
+## One consistent view contract: version 2
 
 ```json
 {
-  "version":2,
-  "mode":"measures",
-  "focus":{"kind":"measure","table":"Measures","name":"Total Sales"},
-  "context":{"direction":"up","depth":1,"limit":25}
+  "version": 2,
+  "mode": "graph",
+  "tables": {"relatedTo": "Cost Center", "depth": 1},
+  "focus": {"kind": "table", "name": "Cost Center"},
+  "arrange": true,
+  "banner": false
 }
 ```
 
-Measures mode also accepts a table or column focus and opens its dependency view:
+`tables` accepts an array or exactly one relative selector:
+
+| Selector | Result, including the root |
+|---|---|
+| `relatedTo` | Tables filtering the root or filtered by it |
+| `filteredBy` | Tables filtered by the root |
+| `filters` | Tables filtering the root |
+
+`depth` is optional (default direct + indirect; 1 is direct). `includeInactive`
+defaults false. Relative root names resolve case-insensitively; invalid or ambiguous
+selectors fail explicitly. The same resolver is used by live views, snapshots,
+walkthroughs and PNG captures. Watched sessions reevaluate relative sets when the
+model changes.
+
+New graph table sets arrange compactly by default. `arrange:false` disables automatic
+arrangement; `arrange:true` explicitly rearranges even restored positions. Capturing
+explored state sets arrange false so saved cameras and positions survive restoration.
+`banner:false` hides explanation controls while keeping pending Apply and connection
+errors available. `chrome:false` separately hides app navigation panels.
+
+Measures accepts a table, column or measure focus. A version 2 Measures view without
+focus opens its overview. For example:
 
 ```json
-{"version":2,"mode":"measures","focus":{"kind":"table","name":"Sales"},"banner":false}
+{"version":2,"mode":"measures","focus":{"kind":"table","name":"Cost Center"},"banner":false}
 ```
 
-Plain live views hide the explanation banner. Views with highlights, callouts or
-proposals show it by default; `banner: true|false` overrides that default.
-`chrome: false` separately hides the app's navigation panels. Pending Apply controls
-and connection errors remain visible even when the explanation banner is hidden.
+Legacy version 1 views remain readable, but new views use version 2. The explanation
+walkthrough ENVELOPE and imported result-data formats remain version 1; embedded
+`view` objects inside walkthroughs use version 2. These are different contracts.
 
-The start response includes the source path, session URL, source revision and
-requested view revision. Use the local URL in a browser that can reach the CLI
-machine. `smv open <model> --session <state.json>` also launches the machine's
-browser; `serve` lets the host choose its browser pane. No protocol or inline app
-resource is involved. Do not equate a browser/file pane with inline chat.
-
-Read `session status` for an existing record before opening a duplicate. Source
-files are snapshotted at open time; use explicit `--watch` for local file watching
-and reload the browser when the source changes.
-
-## Update and read selection
+## Portable preview and visual verification
 
 ```sh
-smv session status '<state.json>' --json
-smv session update '<state.json>' --revision 1 --view '<next-view.json>' --wait 5 --json
-smv session selection '<state.json>' --json
+smv snapshot 'Sales.SemanticModel' --view view.json --out model.html
+smv shot 'Sales.SemanticModel' --view view.json --out check.png --json
 ```
 
-Use the current requested revision from status, not the example number. Write an
-update to a new file rather than editing the original source view file behind a
-running session. `awaiting-viewer` means the update was requested, not applied.
-Status includes `application.state`, `application.browserAcknowledged` and a
-plain-language `application.message`. `session update --wait 5` polls for up to
-five seconds and returns `confirmed: true` only after fresh browser receipts at
-the requested source/view revision. `--client` selects whose acknowledgement to
-wait for; it does not limit which tabs receive the update. A timeout returns
-`confirmed: false`, `timedOut: true`; the update remains accepted.
+Snapshots need no server or browser automation and remain interactive after chat
+closes. PNG capture needs Chrome/Chromium (`SMV_BROWSER` selects its executable).
+Both accept version 2 relative selectors, arrange and banner controls. HTML files
+retain the whole parsed model, DAX and available Power Query metadata even when
+focused; they are not filtered data extracts. Creating a file does not upload it.
+Respect host file-publication rules; don't paste megabytes of HTML into chat.
 
-A background or closed pane can stop sending receipts. Stale clients remain in
-status with `fresh: false`, `lastAcknowledgedRevision` and `lastSeenAt`; their
-current display is **unconfirmed**. Fetching HTML alone never acknowledges a view.
-Run any subcommand with `--help` for its exact options and examples.
-`waiting-for-apply` means **waiting for Apply click in the viewer**. When the user
-explicitly wants agent-driven control, `session update ... --apply` lets the viewer
-apply that revision even during exploration. It still returns `awaiting-viewer`
-until a browser acknowledges it; it does not bypass source/revision checks or open
-a browser. Without `--apply`, respect Apply/Keep exploring. A selection needs a fresh browser acknowledgement;
-with several tabs, pass `--client <clientId>`. The host must respect human-owned
-tabs; the CLI cannot detect the host's browser ownership state.
-
-## Export and stop
+## Managed sessions and named views
 
 ```sh
-smv snapshot 'Sales.SemanticModel' --out '<newExportFile>'
-smv session export '<state.json>' --basis authored --revision 2 --out '<view.html>' --json
-smv session export '<state.json>' --basis current --revision 2 --out '<explored.html>' --json
+smv serve 'Sales.SemanticModel' --background --json
+smv session list
+smv session views '<state.json>'
+smv session add-view '<state.json>' --name 'Dates' --view date-view.json
+smv session status '<state.json>' --view-id '<id>' --json
+smv session update '<state.json>' --view-id '<id>' --view next-view.json --revision 1 --wait 5 --json
+smv session selection '<state.json>' --view-id '<id>' --json
+smv session export '<state.json>' --view-id '<id>' --basis authored --revision 2 --out view.html --json
 smv session stop '<state.json>' --json
+smv session stop --all --model 'Sales.SemanticModel'
 ```
 
-A normal snapshot needs no live server. Current-state export requires a fresh
-acknowledgement and currently supports Tables and Measures. The output file is a
-portable full-metadata viewer, not a filtered data extract. HTML export uses no
-browser automation or runtime npm packages. PNG export and `shot` require
-Chrome/Chromium; `SMV_BROWSER` selects its executable.
+Without an explicit state file, `serve`, `open` and `show` reuse a compatible managed
+session for the same canonical model, report and watch settings. State is kept in
+`~/.local/state/semantic-model-viewer`; `SMV_STATE_DIR` selects another managed registry.
+`--new-session` starts a separate runtime. A mismatched plugin version is reported
+as a warning; no existing user exploration is terminated to upgrade it. Explicit
+session files retain their existing compatibility checks. Old unregistered 0.2.x
+sessions can still be addressed explicitly; `show` requires the new named-view protocol.
 
-For a quick preview, prefer `snapshot`: it keeps working after the browser pane
-or conversation closes. For live exploration, also export the authored HTML as
-a fallback and give both the browser URL and file link. Any browser that can
-reach the local server works; a particular host Browser pane is not required.
+`session list` includes running/stale records and versions. `session stop --all`
+stops only identity-checked SMV-managed servers in this registry, optionally restricted
+to a model. It never kills arbitrary PIDs or stops unrelated applications. Stale
+records are reported, not blindly acted on. Background servers outlive conversations.
 
-Use a host-native file attachment or link. Do not paste megabytes of HTML into
-the conversation or bypass file-inspection/publication rules. If a host cannot
-publish the file, state that limit and offer an allowed local artifact or browser
-link. Creating the file does not upload it.
+`--view-id` selects an independent named view for status, updates, selection and exports;
+omit it for the default view. `session views` prints per-view URLs and a workspace URL.
+At most 32 named views are kept in one server; start a new session for more.
 
-CLI background sessions outlive a conversation. Stop temporary sessions explicitly;
-`/semantic-model-viewer:stop` lists the helper's recorded files and uses these same
-CLI controls. State files are removed when their server stops; exported HTML and
-ignored log files remain. Report stale records instead of deleting them blindly
-or killing unrelated processes.
+## What was computed versus actually displayed
+
+Root status includes `workspaceApplication` with the number of named views, acknowledged views and fresh clients; the default view's own clients can be empty while named views are active. Use `--view-id` for a pane.
+
+Status includes `authoredSummary` and each named view's `summary`: counts computed
+from the current local model and authored view. These exist before any browser opens.
+`application.browserAcknowledged` becomes true only after fresh matching browser
+receipts. Each client's `appliedSummary` describes its validated reported current
+view; `renderedSummary` reports its actual table-canvas and measure-graph node counts.
+A successful HTTP fetch, an export or a metadata count is not a rendered acknowledgement.
+
+`session update --wait 5` waits up to five seconds for browser application. It returns
+`confirmed:true` only after receipts at the requested source/view revision. Timeout
+returns `confirmed:false,timedOut:true`; the update remains accepted. `--client`
+selects whose acknowledgement to wait for, not which tabs receive the update.
+Without it, all fresh clients of that named view must acknowledge.
+
+Normal updates respect human exploration. `waiting-for-apply` means waiting for the
+Apply click. Use `--apply` only when explicitly taking over the view. Stale/background
+clients stay visible with `fresh:false`, last revision and last-seen time; their
+current display is unconfirmed. Source changes require reload. `--watch` watches
+local source files explicitly; it does not contact the published Power BI service.
+
+Any reachable browser works; a particular host Browser pane is not required. Give
+an authored offline HTML export as fallback when a live pane closes. Use the bundled
+project helper for unique self-ignored artifact paths if needed:
+`node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-workspace.cjs"`.
+
+Every subcommand supports `--help` and errors include command-specific usage guidance.

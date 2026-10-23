@@ -10,7 +10,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/cli.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs tests/interactive-view.test.cjs tests/mcp-viewer.test.cjs tests/claude-plugin.test.cjs tests/browser-defaults.test.cjs",
+    "test": "node --test tests/cli.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs tests/interactive-view.test.cjs tests/mcp-viewer.test.cjs tests/claude-plugin.test.cjs tests/browser-defaults.test.cjs tests/full-workflow.test.cjs",
     "test:browser": "node --test tests/explanations.browser.cjs",
     "build:mcp-app": "node scripts/build-mcp-app.cjs",
     "test:interactive": "node --test tests/interactive-view.browser.cjs",
@@ -38,7 +38,8 @@
     "Models/demo/",
     "scripts/claude-workspace.cjs",
     "docs/cli-plugin-workflow.md",
-    "skills/stop/"
+    "skills/stop/",
+    "skills/setup/"
   ],
   "devDependencies": {
     "esbuild": "0.28.2",

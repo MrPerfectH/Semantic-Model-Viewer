@@ -80,7 +80,7 @@ try {
   assert.equal(fs.existsSync(path.join(pluginRoot, 'node_modules/@modelcontextprotocol')), false, 'Plugin installation must not fetch the MCP SDK');
   const inventory = run(claude, ['plugin', 'details', id]);
   console.log(inventory.trim());
-  for (const skill of ['open', 'explain', 'snapshot', 'stop', 'smv-explain']) assert.ok(inventory.includes(skill), 'Missing skill: ' + skill);
+  for (const skill of ['open', 'explain', 'snapshot', 'stop', 'smv-explain', 'setup']) assert.ok(inventory.includes(skill), 'Missing skill: ' + skill);
   assert.match(inventory, /MCP servers \(0\)/, 'CLI plugin must not register an MCP server');
   console.log('Testing the installed CLI in a separate project without node_modules...');
   run(process.execPath, ['--test', 'tests/claude-plugin.test.cjs'], root, {

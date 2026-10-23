@@ -137,3 +137,11 @@ related=app.explorer.related();check(related.names.has('Date'),'Sales must show 
 const controls=app.explorer.relationControls();check(controls.querySelector('[aria-label="Relationship direction"]').value==='both','inspector default matches canvas');
 const saved=app.canvas.captureFocus();app.explorer.direction='incoming';app.canvas.restoreFocus(saved);check(app.explorer.direction==='both','saved focus preserves both directions');check(app.explorer.depth==='all','saved focus preserves indirect paths');
 `));
+
+test('version 2 relative selectors and explicit arrange preserve later explored positions',{skip:!browser},async t=>verify(t,{version:2,tables:{relatedTo:'Date',depth:1},focus:{kind:'table',name:'Date'},arrange:true,banner:false},`
+check(app.explorer.names.has('Sales'),'relative table set resolved in browser');
+check(app.explorer.names.has('Date'),'relative root retained');
+check(smv.inspect().renderedSummary.tableCanvasTables===app.explorer.names.size,'rendered counts match canvas');
+const current=smv.inspect().currentView;check(current.arrange===false,'explored state disables forced rearrangement');
+current.state.tableView.pos.Date.x+=123;await smv.apply(current);check(Math.abs(app.canvas.pos.Date.x-current.state.tableView.pos.Date.x)<1,'saved custom positions survive arrange restoration');
+`));

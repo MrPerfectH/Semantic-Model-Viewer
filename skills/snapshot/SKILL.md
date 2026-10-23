@@ -5,7 +5,7 @@ argument-hint: "[model path] [output.html] [optional starting table or measure]"
 disable-model-invocation: true
 ---
 
-Resolve the installed executable with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" --where` (the workspace helper also returns `cliPath`). Use that path or `${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs`; never construct a plugin cache path with a version number.
+Use `smv` on PATH or `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"` from the host-provided plugin root. No `--where` call is needed for ordinary work; it is diagnostic only. Never construct a versioned cache path. `/semantic-model-viewer:setup` installs the stable terminal command once.
 
 Create an HTML snapshot for $ARGUMENTS using shell commands from the user's project.
 
@@ -15,3 +15,5 @@ Create an HTML snapshot for $ARGUMENTS using shell commands from the user's proj
 4. Provide a clickable file link or a supported host attachment. Do not paste megabytes of HTML into conversation or bypass inspection/publication requirements. If a host cannot publish the file, explain its limit and offer an allowed local file/browser link. A side panel is not inline chat. Explain that the HTML contains the full parsed metadata, DAX and available Power Query text even when focused.
 
 Snapshots need Node.js 22+ and a browser to explore; exporting HTML requires no extra packages or browser automation. Source files are unchanged and no model queries run. See `${CLAUDE_PLUGIN_ROOT}/docs/cli-plugin-workflow.md` and `${CLAUDE_PLUGIN_ROOT}/docs/cli.md`.
+
+For relative table selection or authored layouts, write a version 2 view and use `smv snapshot "<model>" --view "<v2.json>" --out "<file.html>"`. Example: `{"version":2,"tables":{"relatedTo":"Cost Center"},"arrange":true,"banner":false}`. PNG verification uses the same view with `smv shot`; no live browser session is required, but Chrome/Chromium must be available for PNG capture. Start known-table metadata questions with `relations` or `dependents`, not full inspect.

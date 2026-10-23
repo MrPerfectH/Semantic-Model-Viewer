@@ -31,7 +31,7 @@ function prepare(source,input,options={}){
   const root=path.resolve(__dirname,'../..');
   [...context.Snapshots.files,'index.html','js/explanation-view.js','js/interactive-view.js','scripts/cli/explain.cjs','scripts/cli/results.cjs','scripts/cli/model.cjs','scripts/cli/capture.cjs'].sort().forEach(file=>rendererHash.update(file).update(fs.readFileSync(path.join(root,file))));
   const renderer={format:'smv-explanation',version:1,sha256:rendererHash.digest('hex')};
-  return {html,view,model,renderer,hash:crypto.createHash('sha256').update(JSON.stringify(context.Snapshots.modelData(model))).digest('hex')};
+  return {html,view,model,analysis:app,summary:require('./query.cjs').summary(model,app,view),renderer,hash:crypto.createHash('sha256').update(JSON.stringify(context.Snapshots.modelData(model))).digest('hex')};
 }
 async function shot(source,input,output,options={}){
   if(path.extname(output).toLowerCase()!=='.png')throw new Error('Image output must use .png');

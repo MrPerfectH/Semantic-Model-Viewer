@@ -14,7 +14,7 @@ test('Viewer plugin declares CLI commands and no MCP registration or runtime dep
   assert.equal(manifest.mcpServers, undefined);
   assert.equal(fs.existsSync(path.join(root, '.mcp.json')), false);
   assert.deepEqual(read(path.join(root, 'package.json')).dependencies || {}, {});
-  for (const name of ['open', 'explain', 'snapshot', 'stop', 'smv-explain']) {
+  for (const name of ['open', 'explain', 'snapshot', 'stop', 'setup', 'smv-explain']) {
     const skill = fs.readFileSync(path.join(root, 'skills', name, 'SKILL.md'), 'utf8');
     assert.doesNotMatch(skill, /\bsmv_(?:open|inspect|sessions|status|selection|update|export|stop)\b|ui:\/\/|SMV_ROOT/);
     assert.match(skill, /CLI|cli|session stop/);
@@ -34,7 +34,7 @@ test('plugin runs discover, inspect, live sessions and HTML exports with no node
   });
   // Copy only the CLI and viewer runtime. There is no adapter or dependency tree
   // to accidentally load through a symlink back to the development checkout.
-  for (const name of ['bin', 'Models/tools/viewer', 'scripts/claude-workspace.cjs']) {
+  for (const name of ['bin', 'Models/tools/viewer', 'scripts/claude-workspace.cjs', '.claude-plugin/plugin.json']) {
     const target = path.join(plugin, name); fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.cpSync(path.join(root, name), target, { recursive: true });
   }
@@ -68,6 +68,11 @@ test('plugin runs discover, inspect, live sessions and HTML exports with no node
   assert.equal(focused.tables, undefined);
   const filters = json('filters-by', models[0].path, 'Date');
   assert.ok(filters.tables.some(t => t.name === 'Sales'));
+  const relations = json('relations', models[0].path, '--table', 'Sales');
+  assert.ok(relations.tables.some(t => t.name === 'Date'));
+  assert.equal(relations.relationships, undefined);
+  const deps = json('dependents', models[0].path, '--table', 'Sales');
+  assert.ok(deps.measures.length);assert.ok(deps.measures.every(m => m.dax === undefined));
   const model = json('inspect', models[0].path);
   assert.equal(model.name, 'Contoso Retail');
   assert.ok(model.tables.some(table => table.name === 'Sales'));

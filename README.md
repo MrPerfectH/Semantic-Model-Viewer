@@ -53,7 +53,7 @@ Install from inside Claude Code:
 /plugin install semantic-model-viewer@semantic-model-tools
 ```
 
-Then use `/semantic-model-viewer:open`. Requires Node.js 22+ and Git. The plugin CLI has no runtime npm dependencies. No separate Viewer app installation is needed.
+Run `/semantic-model-viewer:setup` once for a stable `smv` command, then use `/semantic-model-viewer:open`. `smv show <model> --table "Cost Center" --related --dependents` opens a reusable side-by-side Tables/Measures workspace; `relations` and `dependents` give short metadata answers. Requires Node.js 22+ and Git. The plugin CLI has no runtime npm dependencies. No separate Viewer app installation is needed.
 See [plugin setup and commands](docs/claude-code-plugin.md).
 
 ## Install (2 minutes)
