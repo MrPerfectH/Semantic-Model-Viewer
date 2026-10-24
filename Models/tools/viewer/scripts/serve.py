@@ -196,9 +196,11 @@ class Handler(SimpleHTTPRequestHandler):
                 return
             payload = json.loads(self.rfile.read(length).decode('utf-8'))
             if not isinstance(payload, dict) or payload.get('action') not in {
-                    'status', 'signIn', 'beginDeviceSignIn', 'listWorkspaces', 'listModels', 'openModel', 'signOut', 'cancel'}:
+                    'status', 'signIn', 'beginBrowserSignIn', 'beginDeviceSignIn', 'listWorkspaces', 'listModels', 'openModel', 'signOut', 'cancel'}:
                 self.send_json(400, {'error': 'Invalid Fabric request.'})
                 return
+            if payload['action'] == 'beginBrowserSignIn':
+                payload['returnUri'] = 'http://localhost:' + str(self.server.server_address[1]) + '/?fabricSignIn=1'
             result = self.server.fabric.request(payload)
             self.send_json(200, result)
         except (ValueError, UnicodeError):

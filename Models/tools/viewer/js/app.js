@@ -1379,6 +1379,7 @@
       } else {
         this.loadEmptyModel();
       }
+      if(this.server && this.fabric && new URLSearchParams(location.search).get('fabricSignIn')==='1'){history.replaceState(null,'',location.pathname);this.setState({showModelMenu:false});this.fabric.show();}
       var cached = store.getJSON('smv_repo_cache', null);
       if (cached && cached.length) this.repoModels = cached;
       if (this.server) {

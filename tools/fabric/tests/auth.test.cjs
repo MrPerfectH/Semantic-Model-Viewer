@@ -48,3 +48,11 @@ test('device login exposes only a user code and completes into the existing acco
 test('cancelled device login cannot resurrect a signed-out account after late token delivery',async()=>{
  const m=deviceMock();await m.auth.beginDeviceSignIn();m.auth.cancel();assert.equal(m.request.cancel,true);m.finish();await new Promise(resolve=>setImmediate(resolve));const status=await m.auth.status();assert.equal(status.account,null);assert.equal(status.deviceLogin,null);assert.deepEqual(m.removed,['a']);
 });
+test('browser sign-in returns a Microsoft URL and redirects back only after token exchange',async()=>{
+ let request,exchanged=false;
+ const auth=createAuth({clientId:require('../auth.cjs').POWER_BI_DESKTOP_CLIENT_ID,openBrowser:async()=>{throw new Error('must not launch a browser on the host');},msalFactory:()=>({getAuthCodeUrl:async r=>{request=r;return 'https://login.microsoftonline.com/organizations/test';},acquireTokenByCode:async()=>{exchanged=true;return {account:a};},getTokenCache:()=>({getAllAccounts:async()=>[a]})})});
+ await assert.rejects(auth.beginBrowserSignIn('https://evil.example'),{code:'InvalidRedirect'});
+ const login=await auth.beginBrowserSignIn('http://localhost:8945/?fabricSignIn=1');assert.match(login.url,/^https:\/\/login.microsoftonline.com\//);
+ const callback=new URL(request.redirectUri);callback.searchParams.set('state',request.state);callback.searchParams.set('code','test');
+ const response=await fetch(callback,{redirect:'manual'});assert.equal(response.status,302);assert.equal(response.headers.get('location'),'http://localhost:8945/?fabricSignIn=1');assert.equal(exchanged,true);assert.equal((await auth.status()).account.name,a.username);
+});

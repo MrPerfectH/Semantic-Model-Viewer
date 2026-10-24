@@ -2,7 +2,7 @@
 const path = require('node:path');
 const { spawn } = require('node:child_process');
 const { createFabricClient, FabricError } = require('./client.cjs');
-const ACTIONS = new Set(['status', 'beginDeviceSignIn', 'signIn', 'signOut', 'cancel', 'listWorkspaces', 'listModels', 'openModel']);
+const ACTIONS = new Set(['status', 'beginBrowserSignIn', 'beginDeviceSignIn', 'signIn', 'signOut', 'cancel', 'listWorkspaces', 'listModels', 'openModel']);
 const MAX_BYTES = 48 * 1024 * 1024;
 function openBrowser(url) {
   const parsed = new URL(url);
@@ -38,7 +38,7 @@ function createService(options = {}) {
   }
   async function status() {
     const state = auth ? await auth.status() : {};
-    return { available: !!auth && !!client, account: state.account || null, deviceLogin: state.deviceLogin || null, deviceError: state.deviceError || null,
+    return { available: !!auth && !!client, account: state.account || null, deviceLogin: state.deviceLogin || null, deviceError: state.deviceError || null, browserLogin: !!state.browserLogin, browserError: state.browserError || null,
       message: initializationError || (!auth ? 'Fabric sign-in has not been configured in this build. The viewer publisher must provision its Microsoft application registration.' : '') };
   }
   async function request(payload) {
@@ -53,6 +53,10 @@ function createService(options = {}) {
       return status();
     }
     if (!auth || !client) throw new FabricError('NotConfigured', (await status()).message);
+    if (payload.action === 'beginBrowserSignIn') {
+      cancel(); workspaces.clear(); models.clear();
+      return auth.beginBrowserSignIn(payload.returnUri);
+    }
     if (payload.action === 'beginDeviceSignIn') {
       cancel(); workspaces.clear(); models.clear();
       return { deviceLogin: await auth.beginDeviceSignIn() };
