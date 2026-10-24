@@ -1,0 +1,16 @@
+{
+  "observed_at_utc": "2026-10-18T11:58:44.588507+00:00",
+  "repository_api": "https://api.github.com/repos/MrPerfectH/Semantic-Model-Viewer",
+  "stars": 6,
+  "forks": 0,
+  "subscribers": 1,
+  "release_api": "https://api.github.com/repos/MrPerfectH/Semantic-Model-Viewer/releases?per_page=100",
+  "release_count": 10,
+  "asset_count": 20,
+  "release_asset_downloads": 28,
+  "vsix_downloads": 18,
+  "zip_downloads": 10,
+  "marketplace_url": "https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer",
+  "marketplace_installs": 14,
+  "marketplace_label": "The number of unique installations, not including updates."
+}

@@ -1,0 +1,2 @@
+feedback_id,observed_at,source_url,source_type,story_issue,summary,classification,confirmed_viewer_problem,host_release,permission_state,next_action,followup_issue
+R001,2026-10-18,https://www.reddit.com/r/PowerBI/comments/1x0aizl/i_inherited_this_report_today_ive_now_coined_the/,public_research_not_user_feedback,58,Discussion distinguishes crowded diagram from underlying model correctness,educational_question,no,not_applicable,paraphrase_only_no_quote_or_screenshot_permission,Prepare synthetic focused-layout explanation; verify no repetitive reply,unavailable
