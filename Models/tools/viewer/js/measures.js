@@ -602,7 +602,7 @@
         var upLbl = upN ? '+' + upN : (exU.length ? '−' + exU.length : ''), dnLbl = dnN ? '+' + dnN : (exD.length ? '−' + exD.length : '');
         var pin = pinN === n;
         var base = (n === root
-          ? 'border:1.5px solid var(--smv-burgundy,#1f2430);background:var(--smv-burgundy,#1f2430);color:#fff;font:600 12px/31px "IBM Plex Sans",sans-serif;box-shadow:0 4px 14px rgba(20,30,50,.30);'
+          ? 'border:1.5px solid var(--smv-burgundy,#1f2430);background:var(--smv-primary,var(--smv-burgundy,#1f2430));color:var(--smv-on-accent,#fff);font:600 12px/31px "IBM Plex Sans",sans-serif;box-shadow:0 4px 14px rgba(20,30,50,.30);'
           : 'border:1px solid ' + P[2] + ';background:' + P[1] + ';color:' + P[0] + ';font:500 12px/32px "IBM Plex Mono",monospace;')
           + (pin ? 'outline:2px solid ' + P[0] + ';outline-offset:1px;' : '');
         return {
