@@ -16,7 +16,7 @@ The default is Power BI Desktop public client `ea0616ba-638b-4df5-95b9-636659ae5
 
 `SMV_FABRIC_CLIENT_ID` or the host's explicit `clientId` can select a publisher-owned registration. Custom registrations retain resource-specific discovery/definition scopes and `/callback` redirect. The previously provisioned publisher registration is `d68a809b-913e-405c-b608-e95303378adc` in `haraznygmail.onmicrosoft.com`; its first external-tenant test required administrator approval. Neither identity bypasses tenant policy. No guarantee of approval-free sign-in or Microsoft support for third-party reuse is claimed. Keep the feature off main pending real tenant/model tests.
 
-Built-in TOM interactive sign-in is Windows-only and requires the .NET Desktop runtime according to Microsoft's client-library documentation. This helper instead uses browser authorization code + PKCE via MSAL for both Windows and macOS, then passes a Power BI audience access token to TOM through stdin. No tokens are placed in process arguments or logs.
+Built-in TOM interactive sign-in is Windows-only and requires the .NET Desktop runtime according to Microsoft's client-library documentation. This helper instead uses browser authorization code + PKCE via MSAL for both Windows and macOS, then passes a Power BI audience access token to TOM through stdin. No tokens are placed in process arguments or logs. The bridge passes the discovered workspace and semantic model names to TOM: the workspace URL uses the workspace name, and Initial Catalog uses the model name. REST model IDs are retained for discovery, cache identity and database lookup; they are not used as catalog names.
 
 ## Build/package
 

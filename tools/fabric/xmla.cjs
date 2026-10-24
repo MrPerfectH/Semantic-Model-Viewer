@@ -23,7 +23,7 @@ function createXmlaReader({ executable = process.env.SMV_FABRIC_XMLA_HELPER || p
         result.coverage = 'permission-dependent'; result.warnings = ['XMLA metadata depends on account permissions. Read + Build access may hide expressions and partitions; empty fields do not prove those objects are absent.']; finish(null, result); }
       catch (error) { finish(error instanceof FabricError ? error : new FabricError('XmlaFailed', 'The XMLA helper returned invalid metadata.')); }
     });
-    child.stdin.end(JSON.stringify({ workspaceId: request.workspaceId, workspaceName: request.workspaceName, modelId: request.modelId, accessToken: request.accessToken }));
+    child.stdin.end(JSON.stringify({ workspaceId: request.workspaceId, workspaceName: request.workspaceName, modelId: request.modelId, modelName: request.modelName, accessToken: request.accessToken }));
   });
 }
 module.exports = { createXmlaReader };
