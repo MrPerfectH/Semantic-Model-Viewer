@@ -13,6 +13,7 @@ const scopesFor = (audience, purpose, clientId) => {
 function createAuth({ clientId, openBrowser, loadTokens = async () => null, saveTokens = async () => {}, msalFactory }) {
   let browserLogin = false; let browserError = null;
   let deviceLogin = null; let deviceError = null; let deviceRequest = null;
+  const accessTokens = new Map();
   let client; let pending; let interactiveBusy = false; let selectedId; let generation = 0;
   async function init() {
     if (!clientId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(clientId)) throw new FabricError('NotConfigured', 'Fabric sign-in is awaiting application setup by the Semantic Model Viewer maintainers.');
@@ -24,6 +25,12 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
       } } });
     }
     return client;
+  }
+  function tokenKey(account, audience, purpose) { return JSON.stringify([account.homeAccountId, account.tenantId, scopesFor(audience, purpose, clientId)]); }
+  function remember(result, audience, purpose) {
+    const expires = result?.expiresOn?.getTime();
+    if (result?.account && result.accessToken && Number.isFinite(expires)) accessTokens.set(tokenKey(result.account, audience, purpose), { token: result.accessToken, expires });
+    return result;
   }
   function accountInfo(account) { return account ? { id: account.homeAccountId, name: account.username, tenantId: account.tenantId } : null; }
   async function account() { const accounts = await (await init()).getTokenCache().getAllAccounts(); return accounts.find(a => a.homeAccountId === selectedId) || accounts[0] || null; }
@@ -66,7 +73,8 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
       if (generation !== currentGeneration) { await app.getTokenCache().removeAccount(result.account); throw new FabricError('Cancelled', 'Microsoft sign-in cancelled.'); }
       if (prompt === 'select_account') { for (const previous of await app.getTokenCache().getAllAccounts()) { if (previous.homeAccountId !== result.account.homeAccountId) await app.getTokenCache().removeAccount(previous); } }
       selectedId = result.account.homeAccountId;
-      return result;
+      if (prompt === 'select_account') accessTokens.clear();
+      return remember(result, audience, purpose);
     } finally { if(callbackResponse && !callbackResponse.writableEnded) callbackResponse.writeHead(302, {'Location':browserFlow.returnUri,'Cache-Control':'no-store','Referrer-Policy':'no-referrer'}).end(); clearTimeout(timer); server?.close(); server?.closeAllConnections(); if(generation === currentGeneration) { pending = null; interactiveBusy = false; } }
   }
   return {
@@ -99,6 +107,8 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
           if (!result?.account) throw new FabricError('SignInDenied','Microsoft sign-in did not complete.');
           selectedId = result.account.homeAccountId;
           for (const previous of await app.getTokenCache().getAllAccounts()) if (previous.homeAccountId !== selectedId) await app.getTokenCache().removeAccount(previous);
+          accessTokens.clear();
+          remember(result, POWER_BI_AUDIENCE);
           deviceLogin = null;
         } catch(error) { if (generation === currentGeneration) { deviceLogin = null; deviceError = 'Microsoft device sign-in was cancelled, expired, or denied. Try again.'; } failed(error); }
         finally { if(generation === currentGeneration) {deviceRequest = null; interactiveBusy = false;} }
@@ -113,7 +123,11 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
       if (!selected) throw new FabricError('NotSignedIn', 'Sign in with your Microsoft work account.');
       if (generation !== currentGeneration) throw new FabricError('Cancelled', 'Microsoft token request cancelled.');
       selectedId = selected.homeAccountId;
-      try { const result = await app.acquireTokenSilent({ account: selected, scopes: scopesFor(audience, purpose, clientId) }); if (generation !== currentGeneration) { await app.getTokenCache().removeAccount(selected); throw new FabricError('Cancelled', 'Microsoft token request cancelled.'); } return result.accessToken; }
+      const key = tokenKey(selected, audience, purpose);
+      const cached = accessTokens.get(key);
+      if (cached && cached.expires > Date.now() + 60000) return cached.token;
+      accessTokens.delete(key);
+      try { const result = await app.acquireTokenSilent({ account: selected, scopes: scopesFor(audience, purpose, clientId) }); if (generation !== currentGeneration) { await app.getTokenCache().removeAccount(selected); throw new FabricError('Cancelled', 'Microsoft token request cancelled.'); } return remember(result, audience, purpose).accessToken; }
       catch (error) {
         if (generation !== currentGeneration) throw new FabricError('Cancelled', 'Microsoft token request cancelled.');
         if (error instanceof FabricError) throw error;
@@ -121,7 +135,7 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
         return (await interactive(audience, undefined, purpose)).accessToken;
       }
     },
-    async signOut() { generation++; browserLogin = false; browserError = null; pending?.(); if(deviceRequest) deviceRequest.cancel = true; deviceRequest = null; deviceLogin = null; deviceError = null; interactiveBusy = false; if (clientId) { const app = await init(); for (const a of await app.getTokenCache().getAllAccounts()) await app.getTokenCache().removeAccount(a); } selectedId = null; await saveTokens(null); },
+    async signOut() { generation++; accessTokens.clear(); browserLogin = false; browserError = null; pending?.(); if(deviceRequest) deviceRequest.cancel = true; deviceRequest = null; deviceLogin = null; deviceError = null; interactiveBusy = false; if (clientId) { const app = await init(); for (const a of await app.getTokenCache().getAllAccounts()) await app.getTokenCache().removeAccount(a); } selectedId = null; await saveTokens(null); },
     cancel() { generation++; browserLogin = false; browserError = null; pending?.(); if(deviceRequest) deviceRequest.cancel = true; deviceRequest = null; deviceLogin = null; deviceError = null; interactiveBusy = false; }
   };
 }

@@ -1,12 +1,12 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { createAuth } = require('../auth.cjs');
+const { createAuth, POWER_BI_DESKTOP_CLIENT_ID } = require('../auth.cjs');
 const id='11111111-1111-1111-1111-111111111111';
 const a={homeAccountId:'a',username:'a@example.test',tenantId:'tenant'};
 function mock(options={}) {
  let removed=[]; let cache=[a]; let serialized;
  const tokenCache={getAllAccounts:async()=>cache,removeAccount:async account=>{removed.push(account.homeAccountId);cache=cache.filter(v=>v.homeAccountId!==account.homeAccountId);},deserialize:()=>{},serialize:()=> 'cache'};
- const app={getTokenCache:()=>tokenCache,acquireTokenSilent:options.silent|| (async()=>({accessToken:'token'})),getAuthCodeUrl:async request=>`https://login.example/?${new URLSearchParams({redirect_uri:request.redirectUri,state:request.state})}`,acquireTokenByCode:async()=>({account:options.resultAccount||a,accessToken:'new'})};
+ const app={getTokenCache:()=>tokenCache,acquireTokenSilent:options.silent|| (async()=>({accessToken:'token'})),getAuthCodeUrl:async request=>`https://login.example/?${new URLSearchParams({redirect_uri:request.redirectUri,state:request.state})}`,acquireTokenByCode:async()=>({account:options.resultAccount||a,accessToken:'new',expiresOn:options.expiresOn})};
  const auth=createAuth({clientId:id,msalFactory:()=>app,saveTokens:async value=>{serialized=value;},openBrowser:async raw=>{const url=new URL(raw);const callback=new URL(url.searchParams.get('redirect_uri')); callback.searchParams.set('state',url.searchParams.get('state'));callback.searchParams.set('code','code'); await fetch(callback);}});
  return {auth,removed,get saved(){return serialized;}};
 }
@@ -55,4 +55,37 @@ test('browser sign-in returns a Microsoft URL and redirects back only after toke
  const login=await auth.beginBrowserSignIn('http://localhost:8945/?fabricSignIn=1');assert.match(login.url,/^https:\/\/login.microsoftonline.com\//);
  const callback=new URL(request.redirectUri);callback.searchParams.set('state',request.state);callback.searchParams.set('code','test');
  const response=await fetch(callback,{redirect:'manual'});assert.equal(response.status,302);assert.equal(response.headers.get('location'),'http://localhost:8945/?fabricSignIn=1');assert.equal(exchanged,true);assert.equal((await auth.status()).account.name,a.username);
+});
+
+test('one Microsoft login supplies workspace, model and XMLA tokens without further prompts', async () => {
+ let accounts = [a], request, prompts = 0, silent = 0;
+ const auth = createAuth({clientId: POWER_BI_DESKTOP_CLIENT_ID, msalFactory: () => ({
+  getTokenCache: () => ({getAllAccounts: async () => accounts, removeAccount: async () => {accounts=[];}}),
+  getAuthCodeUrl: async r => {request=r; prompts++; return 'https://login.microsoftonline.com/test';},
+  acquireTokenByCode: async () => ({account:a, accessToken:'session-token', expiresOn:new Date(Date.now()+3600000)}),
+  acquireTokenSilent: async () => {silent++; const e=new Error(); e.name='InteractionRequiredAuthError'; throw e;}
+ }), openBrowser:async () => {const url=new URL(request.redirectUri);url.searchParams.set('state',request.state);url.searchParams.set('code','test');await fetch(url);}});
+ await auth.signIn();
+ for (const audience of ['https://api.fabric.microsoft.com','https://api.fabric.microsoft.com','https://analysis.windows.net/powerbi/api']) assert.equal(await auth.getAccessToken(audience),'session-token');
+ assert.equal(prompts,1); assert.equal(silent,0);
+ assert.ok(!JSON.stringify(await auth.status()).includes('session-token'));
+ await auth.signOut(); await assert.rejects(auth.getAccessToken('https://api.fabric.microsoft.com'), {code:'NotSignedIn'});
+});
+
+test('expired session tokens fall back to MSAL renewal', async () => {
+ let renewals=0;
+ const m=mock({expiresOn:new Date(Date.now()-1000),silent:async()=>{renewals++;return {account:a,accessToken:'renewed',expiresOn:new Date(Date.now()+3600000)};}});
+ await m.auth.signIn();
+ assert.equal(await m.auth.getAccessToken('https://api.fabric.microsoft.com'),'renewed');
+ assert.equal(await m.auth.getAccessToken('https://api.fabric.microsoft.com'),'renewed');
+ assert.equal(renewals,1);
+});
+test('custom application token reuse does not cross API resources or definition permissions', async () => {
+ let renewals=0;
+ const m=mock({expiresOn:new Date(Date.now()+3600000),silent:async()=>{renewals++;return {account:a,accessToken:'separate',expiresOn:new Date(Date.now()+3600000)};}});
+ await m.auth.signIn();
+ assert.equal(await m.auth.getAccessToken('https://api.fabric.microsoft.com'),'new');
+ assert.equal(await m.auth.getAccessToken('https://analysis.windows.net/powerbi/api'),'separate');
+ assert.equal(await m.auth.getAccessToken('https://api.fabric.microsoft.com','definition'),'separate');
+ assert.equal(renewals,2);
 });
