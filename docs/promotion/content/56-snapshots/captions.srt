@@ -1,0 +1,19 @@
+1
+00:00:00,000 --> 00:00:05,500
+Save snapshot: one interactive HTML file.
+Full model metadata, DAX and available M.
+
+2
+00:00:05,500 --> 00:00:09,000
+Open that exact file in a fresh browser context.
+Network disabled for this rehearsal.
+
+3
+00:00:09,000 --> 00:00:16,000
+Select a measure and compare its DAX.
+The recipient can explore the frozen copy.
+
+4
+00:00:16,000 --> 00:00:21,000
+Focused view does not limit export scope.
+Try Save snapshot in the demo.
