@@ -419,10 +419,11 @@
         x0=Math.min(x0,b.x);y0=Math.min(y0,b.y);x1=Math.max(x1,b.x+b.w);y1=Math.max(y1,b.y+b.h);
       });
       var scale=Math.min(184/Math.max(1,x1-x0),96/Math.max(1,y1-y0)),ox=(200-(x1-x0)*scale)/2,oy=(112-(y1-y0)*scale)/2;
-      this.mapBounds={x:x0,y:y0,scale:scale,ox:ox,oy:oy};ctx.strokeStyle=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'#cfb992':'#d4dbe8';ctx.lineWidth=.7;
+      var theme=g.ViewerTheme,spellbook=theme&&theme.get()==='spellbook';
+      this.mapBounds={x:x0,y:y0,scale:scale,ox:ox,oy:oy};ctx.strokeStyle=theme?theme.paint('muted',spellbook?'#cfb992':'#d4dbe8'):'#d4dbe8';ctx.lineWidth=.7;
       app.model.relationships.forEach(function(r){var a=boxes[r.from],b=boxes[r.to];if(!a||!b)return;ctx.beginPath();ctx.moveTo(ox+(a.x+a.w/2-x0)*scale,oy+(a.y+35-y0)*scale);ctx.lineTo(ox+(b.x+b.w/2-x0)*scale,oy+(b.y+35-y0)*scale);ctx.stroke();});
       ns.forEach(function(n){var p=boxes[n];ctx.fillStyle=app.tableColor(app.model.byName[n]);ctx.fillRect(ox+(p.x-x0)*scale,oy+(p.y-y0)*scale,Math.max(3,p.w*scale),Math.max(2,p.h*scale));});
-      ctx.fillStyle=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'rgba(113,59,67,.07)':'rgba(37,99,235,.07)';ctx.strokeStyle=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'#713b43':'#2563eb';ctx.lineWidth=1.5;var bx=ox+(view.x-x0)*scale,by=oy+(view.y-y0)*scale;ctx.fillRect(bx,by,view.w*scale,view.h*scale);ctx.strokeRect(bx,by,view.w*scale,view.h*scale);
+      ctx.fillStyle=theme?theme.paint('accent-halo',spellbook?'rgba(113,59,67,.07)':'rgba(37,99,235,.07)'):'rgba(37,99,235,.07)';ctx.strokeStyle=theme?theme.paint('burgundy',spellbook?'#713b43':'#2563eb'):'#2563eb';ctx.lineWidth=1.5;var bx=ox+(view.x-x0)*scale,by=oy+(view.y-y0)*scale;ctx.fillRect(bx,by,view.w*scale,view.h*scale);ctx.strokeRect(bx,by,view.w*scale,view.h*scale);
     },
     navigateMap:function(e){var b=this.mapBounds;if(!b)return;var r=this.map.getBoundingClientRect(),cv=this.app.canvas;var x=((e.clientX-r.left)*200/r.width-b.ox)/b.scale+b.x,y=((e.clientY-r.top)*112/r.height-b.oy)/b.scale+b.y;cv.view.x=cv.host.clientWidth/2-x*cv.view.k;cv.view.y=cv.host.clientHeight/2-y*cv.view.k;cv.updateTransform();}
   };

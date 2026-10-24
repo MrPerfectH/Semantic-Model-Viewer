@@ -40,6 +40,9 @@ function buildHtml(webview, mediaUri) {
     return `<script nonce="${nonce}" src="${assetUri(webview, mediaUri, './js/host-vscode.js')}"></script>\n` + script;
   });
   if (!injected) throw new Error('The packaged viewer scripts are missing.');
+  // Host-only theme CSS stays outside the canonical template used by portable snapshots.
+  html = html.replace(/<html\b/i, '<html data-host="vscode"');
+  html = html.replace(/<\/head>/i, '<link rel="stylesheet" href="' + assetUri(webview, mediaUri, './vscode-theme.css') + '">\n</head>');
   const csp = `default-src 'none'; img-src ${webview.cspSource} data: blob:; style-src ${webview.cspSource} 'unsafe-inline'; font-src ${webview.cspSource}; script-src 'nonce-${nonce}'; connect-src 'none'; worker-src blob:; object-src 'none'; base-uri 'none'; form-action 'none';`;
   return html.replace(/<head>/i, '<head>\n<meta http-equiv="Content-Security-Policy" content="' + escapeAttribute(csp) + '">');
 }
