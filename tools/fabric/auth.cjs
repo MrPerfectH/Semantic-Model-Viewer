@@ -65,7 +65,7 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
       if (prompt === 'select_account') { for (const previous of await app.getTokenCache().getAllAccounts()) { if (previous.homeAccountId !== result.account.homeAccountId) await app.getTokenCache().removeAccount(previous); } }
       selectedId = result.account.homeAccountId;
       return result;
-    } finally { clearTimeout(timer); server?.close(); server?.closeAllConnections(); pending = null; interactiveBusy = false; }
+    } finally { clearTimeout(timer); server?.close(); server?.closeAllConnections(); if(generation === currentGeneration) { pending = null; interactiveBusy = false; } }
   }
   return {
     async beginDeviceSignIn() {

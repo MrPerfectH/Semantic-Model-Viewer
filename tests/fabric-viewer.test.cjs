@@ -53,3 +53,10 @@ test('native cache removal must succeed before deleting local metadata',async()=
   app.host.fabricRequest=async p=>{assert.equal(p.action,'removeModel');return {};};
   await c.remove(r);assert.equal(app.getStore().length,0);
 });
+test('reopening a connection restores its pending device code and continues to workspace discovery',async()=>{
+ const {c}=harness();const priorDocument=global.document;global.document={activeElement:null};let completion;const codes=[];let statuses=0;
+ const pending={userCode:'RESTORED',expiresAt:Date.now()+60000};c.account=null;c.draw=()=>{if(c.deviceLogin)codes.push(c.deviceLogin.userCode);};
+ c.request=async p=>p.action==='status'?(++statuses===1?{available:true,account:null,deviceLogin:pending}:{account:{id:'a',tenantId:'t'}}):{items:[{id:'w',name:'Showcase Demo'}]};
+ const run=c.run.bind(c);c.run=fn=>completion=run(fn);
+ try{c.show();await completion;assert.ok(codes.includes('RESTORED'));assert.equal(c.account.id,'a');assert.equal(c.items[0].name,'Showcase Demo');assert.equal(c.deviceLogin,null);assert.equal(c.busy,false);}finally{global.document=priorDocument;}
+});

@@ -13,8 +13,18 @@
   FabricConnection.prototype.request=async function(payload){
     if(!this.available())throw new Error('Fabric connections are available in the standalone app and VS Code.');
     if(this.app.host)return this.app.host.fabricRequest(payload);
-    var response=await fetch('api/fabric',{method:'POST',headers:{'Content-Type':'application/json','X-SMV-Fabric-Session':this.app.server.fabricSession || ''},body:JSON.stringify(payload),cache:'no-store'});
+    var response=await fetch('api/fabric',{method:'POST',headers:{'Content-Type':'application/json','X-SMV-Fabric-Session':this.app.server.fabricSession || ''},body:JSON.stringify(payload),cache:'no-store',signal:AbortSignal.timeout(payload.action==='signIn'?330000:payload.action==='openModel'?210000:30000)});
     var data=await response.json(); if(!response.ok || data.error)throw new Error(data.error || 'Fabric request failed.'); return data;
+  };
+  FabricConnection.prototype.waitForDevice=async function(n){
+    while(n===this.generation){
+      await new Promise(function(resolve){setTimeout(resolve,2000);});if(n!==this.generation)return;
+      var state=await this.request({action:'status'});if(n!==this.generation)return;
+      if(state.deviceError)throw new Error(state.deviceError);
+      if(state.account){this.deviceLogin=null;this.account=state.account;await this.list(false,n);return;}
+      if(!state.deviceLogin || Date.now()>state.deviceLogin.expiresAt)throw new Error('Microsoft sign-in expired. Try again.');
+      if(!this.deviceLogin || this.deviceLogin.userCode!==state.deviceLogin.userCode){this.deviceLogin=state.deviceLogin;this.draw();}
+    }
   };
   FabricConnection.prototype.current=function(){return this.app.getStore().find(function(r){return r.id===this.app.modelKey;},this);};
   FabricConnection.prototype.run=async function(fn){
@@ -25,7 +35,7 @@
   FabricConnection.prototype.show=function(){
     if(this.app.snapshotMode)return;
     this.returnFocus=document.activeElement;this.visible=true;this.workspace=null;this.items=[];this.query='';this.draw();
-    this.run(async function(n){var s=await this.request({action:'status'});if(n!==this.generation)return;this.account=s.account;this.unavailable=s.available===false?s.message || 'Fabric sign-in has not been configured by the application maintainer.':'';if(this.account && !this.unavailable)await this.list(false,n);});
+    this.run(async function(n){var s=await this.request({action:'status'});if(n!==this.generation)return;this.account=s.account;this.unavailable=s.available===false?s.message || 'Fabric sign-in has not been configured by the application maintainer.':'';if(s.deviceLogin && !this.account){this.deviceLogin=s.deviceLogin;this.draw();await this.waitForDevice(n);}else if(this.account && !this.unavailable)await this.list(false,n);});
   };
   FabricConnection.prototype.close=function(){if(this.busy && this.available())this.request({action:'cancel'}).catch(function(){});this.generation++;this.visible=false;this.busy=false;this.deviceLogin=null;if(this.overlay)this.overlay.remove();this.overlay=null;if(this.returnFocus && this.returnFocus.focus)this.returnFocus.focus();};
   FabricConnection.prototype.list=async function(more,n){
@@ -74,11 +84,12 @@
     dialog.appendChild(el('p',{text:'Read-only inspection. Standard XMLA access requires an enabled endpoint; available Power Query definitions may be limited. The definition API requires edit access and may request additional Microsoft permissions.'}));dialog.appendChild(button('Close',function(){self.close();}));
     if(this.unavailable)dialog.appendChild(el('p',{role:'status',text:this.unavailable}));
     if(this.error)dialog.appendChild(el('p',{role:'alert',text:this.error,style:'color:#b91c1c;'}));
-    if(this.busy)dialog.appendChild(el('p',{role:'status',text:'Working… Close to cancel.'}));
+    if(this.busy)dialog.appendChild(el('p',{role:'status',text:this.deviceLogin?'Waiting for Microsoft sign-in. Enter the code below in your regular browser.':!this.account?'Waiting for Microsoft sign-in. If no browser window appeared, choose Use a code instead.':'Loading Fabric metadata… Close to cancel.'}));
     if(this.deviceLogin){
-      dialog.appendChild(el('p',{text:'Open microsoft.com/devicelogin in your regular browser and enter this code. Sign in only if you started this connection.'}));
+      dialog.appendChild(el('p',{text:'In Chrome, Edge or Safari on your own device, open microsoft.com/devicelogin and enter this code. A remote preview may not show your passkey or security window. Return here after signing in; this page will continue automatically.'}));
       dialog.appendChild(el('strong',{text:this.deviceLogin.userCode,style:'display:block;font-size:24px;letter-spacing:3px;margin:12px 0;'}));
-      dialog.appendChild(el('a',{href:'https://microsoft.com/devicelogin',target:'_blank',rel:'noopener noreferrer',text:'Open Microsoft sign-in'}));
+      dialog.appendChild(button('Copy sign-in code',function(){navigator.clipboard.writeText(self.deviceLogin.userCode).catch(function(){self.error='Select and copy the displayed code manually.';self.draw();});}));
+      dialog.appendChild(el('a',{href:'https://microsoft.com/devicelogin',target:'_self',text:'Continue to Microsoft sign-in'}));
     }
     if(this.account){
       dialog.appendChild(el('p',{text:this.account.name || 'Microsoft work account'}));
@@ -90,17 +101,11 @@
       var list=el('div',{});function fill(){U.clear(list);self.items.filter(function(i){return String(i.name || i.displayName || '').toLowerCase().includes((search.value || '').toLowerCase());}).forEach(function(i){list.appendChild(button(i.name || i.displayName,function(){self.query='';self.run(async function(n){if(self.workspace)await self.open(i,n);else{self.workspace=i;await self.list(false,n);}});},self.busy));});if(!self.items.length&&!self.busy)list.appendChild(el('p',{text:'No accessible items found.'}));}search.addEventListener('input',function(){self.query=search.value;fill();});dialog.appendChild(search);dialog.appendChild(list);fill();
       if(this.next)dialog.appendChild(button('Load more',function(){self.run(async function(n){await self.list(true,n);});},this.busy));
     }else dialog.appendChild(button('Sign in with Microsoft',function(){self.run(async function(n){var s=await self.request({action:'signIn',transport:self.transport});if(n!==self.generation)return;self.account=s.account;if(!self.account)throw new Error('Sign-in did not complete.');await self.list(false,n);});},this.busy || !!this.unavailable));
-    if(!this.account)dialog.appendChild(button('Sign in using a code',function(){self.run(async function(n){
+    if(!this.account)dialog.appendChild(button(this.busy && !this.deviceLogin?'Use a code instead':'Sign in using a code',function(){self.run(async function(n){
       var started=await self.request({action:'beginDeviceSignIn'});if(n!==self.generation)return;
       self.deviceLogin=started.deviceLogin;self.draw();
-      while(n===self.generation){
-        await new Promise(function(resolve){setTimeout(resolve,2000);});if(n!==self.generation)return;
-        var state=await self.request({action:'status'});if(n!==self.generation)return;
-        if(state.deviceError)throw new Error(state.deviceError);
-        if(state.account){self.deviceLogin=null;self.account=state.account;await self.list(false,n);return;}
-        if(!state.deviceLogin || Date.now()>self.deviceLogin.expiresAt)throw new Error('Microsoft sign-in expired. Try again.');
-      }
-    });},this.busy || !!this.unavailable));
+      await self.waitForDevice(n);
+    });},!!this.deviceLogin || !!this.unavailable));
     var cached=this.app.getStore().filter(function(r){return r.source && r.source.kind==='fabric';});
     if(cached.length){dialog.appendChild(el('h3',{text:'Saved models (available offline)'}));cached.forEach(function(r){dialog.appendChild(button(r.name,function(){self.activate(r);self.close();},self.busy));dialog.appendChild(button('Remove '+r.name,function(){self.remove(r);},self.busy));});}
     document.body.appendChild(overlay);this.overlay=overlay;var focus=dialog.querySelector('input, button:not(:disabled)');if(focus)focus.focus();
