@@ -1288,7 +1288,9 @@
     },
     /* Drawing-only width policy shared with the Power Query canvas. */
     edgeStrokeWidth: function (zoom, isSel, active, hop, chip) {
-      var thin = Math.max(1.15, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : 1.15))) / zoom;
+      var hosted = g.SMVHost && g.SMVHost.kind === 'vscode';
+      var floor = hosted && ['dark', 'high-contrast'].includes(g.SMVHost.theme) ? 1.5 : 1.15;
+      var thin = Math.max(floor, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : floor))) / zoom;
       return Math.max(thin, isSel ? (chip ? 4.4 : 3.4) : (active ? (chip ? 3.4 : 2.6) : (hop ? (chip ? 2.8 : 2) : (chip ? 2.2 : 1.4))));
     },
     renderLines: function () {
@@ -1354,7 +1356,8 @@
         }
         var path = sv('path', { d: d, fill: 'none', stroke: col, 'stroke-width': baseW, 'stroke-linecap': 'round', style: 'pointer-events:none;' });
         if (r.inactive) path.setAttribute('stroke-dasharray', (baseW * 1.9).toFixed(1) + ' ' + (baseW * 1.6).toFixed(1));
-        var baseOp = dim ? 0.12 : ((active || isSel) ? 1 : (hop ? 0.9 : (r.inactive ? (chip ? 0.68 : 0.6) : (chip ? 0.82 : 0.72))));
+        var hostedDark = g.SMVHost && g.SMVHost.kind === 'vscode' && ['dark', 'high-contrast'].includes(g.SMVHost.theme);
+        var baseOp = dim ? 0.12 : ((active || isSel) ? 1 : (hop ? 0.9 : (r.inactive ? (hostedDark ? 0.84 : (chip ? 0.68 : 0.6)) : (hostedDark ? 0.96 : (chip ? 0.82 : 0.72)))));
         path.setAttribute('opacity', baseOp);
         path.setAttribute('data-smv-kind', 'relationship');
         path.setAttribute('data-smv-name', r.name || '');
@@ -1383,8 +1386,8 @@
         bind(hit);
         item.hit = hit;
         if (!dim) {
-          var ink = kind === 'base' && !isSel ? (g.ViewerTheme ? g.ViewerTheme.paint('muted', '#7d8593') : '#7d8593') : col;
-          var op2 = active || hop || isSel ? 1 : (chip ? 0.95 : 0.85);
+          var ink = kind === 'base' && !isSel ? (hostedDark ? EDGE.base : (g.ViewerTheme ? g.ViewerTheme.paint('muted', '#7d8593') : '#7d8593')) : col;
+          var op2 = hostedDark || active || hop || isSel ? 1 : (chip ? 0.95 : 0.85);
           /* One label per edge, through one seat picker and one `placed` ledger, so it can
              never land on a card or on another edge's label. Above PILL_ZOOM it is the
              combined cardinality pill — where the line has a run long enough to carry it;

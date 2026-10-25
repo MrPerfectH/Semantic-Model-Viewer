@@ -44,13 +44,13 @@
     return hosted() && c ? (luminance(c) > .179 ? '#000000' : '#ffffff') : fallback;
   }
   // Diagram tinting and Canvas2D require hex, rather than CSS var() expressions.
-  function readable(value) {
-    var c = rgb(value), bg = rgb(paint('surface', dark() ? '#1e1e1e' : '#ffffff'));
+  function readable(value, surface, minimum) {
+    var c = rgb(value), bg = rgb(paint(surface || 'surface', dark() ? '#1e1e1e' : '#ffffff'));
     if (!c || !bg || !hosted()) return value;
     var base = c.slice(), bgL = luminance(bg), target = bgL < .179 ? 255 : 0;
     for (var i = 0; i <= 20; i++) {
       var l = luminance(c);
-      if ((Math.max(l, bgL) + .05) / (Math.min(l, bgL) + .05) >= 4.5) break;
+      if ((Math.max(l, bgL) + .05) / (Math.min(l, bgL) + .05) >= (minimum || 4.5)) break;
       c = base.map(function (v) { return Math.round(v + (target - v) * (i + 1) / 21); });
     }
     return hex(c);
@@ -67,7 +67,9 @@
         hostPalette[axis] = {};
         Object.keys(base[axis]).forEach(function (key) { hostPalette[axis][key] = readable(base[axis][key]); });
       });
-      hostPalette.edge.base = readable('#9aa3b2');
+      // Relationship strokes sit on the canvas, not on cards. Give the default
+      // neutral a stronger canvas contrast so thin paths remain visible in dark themes.
+      hostPalette.edge.base = readable('#a8b7c9', 'paper', 4.5);
       hostPalette.edge.lock = hex(rgb(paint('ink', dark() ? '#ffffff' : '#1f2430')) || [31,36,48]);
       hostPalette.edge.marked = readable('#b4584f');
       hostPalette.list = base.list.map(readable); hostPalette.fallback = readable(base.fallback);
