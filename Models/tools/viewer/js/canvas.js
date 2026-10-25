@@ -508,8 +508,8 @@
          never smaller, so the 11px floor survives the string conversion */
       return Math.ceil(this.CHIP_FONT * Math.pow(this.CHIP_STEP, n) * 100) / 100;
     },
-    CHIP_LINES: 3,           /* a name wraps over at most this many lines, then it ellipsises */
-    CHIP_LEAD: 1.12,         /* line box / font size for the wrapped title */
+    CHIP_LINES: 3,           /* retain lane height for existing layouts; the title stays on one line */
+    CHIP_LEAD: 1.12,         /* title line box / font size */
     CHIP_PAD_Y: 8,           /* head padding above and below the title, at scale 1 */
     CHIP_PAD_X: 11,
     CHIP_MAX_W: 1.3,         /* a chip may be this much wider than a card, never more */
@@ -531,7 +531,7 @@
         lines: this.CHIP_LINES, lead: this.CHIP_LEAD,
         width: Math.max(this.CARD_W, Math.min(Math.round(this.CARD_W * this.CHIP_MAX_W), need)),
         /* the box the renderer actually produces: head padding above and below (at scale)
-           plus the fully wrapped title. This is the single card-metric the arrange lanes are
+           plus the reserved title area. This is the single card-metric the arrange lanes are
            measured against, so a lane can never be shorter than the chip it has to hold. */
         height: Math.ceil(this.CHIP_PAD_Y * 2 * scale + this.CHIP_LINES * font * this.CHIP_LEAD) };
     },
@@ -628,16 +628,16 @@
           c.caret.style.display = 'none';
           c.meta.style.display = 'none';
           c.body.style.display = 'none';
-          /* -webkit-box + line-clamp is the one wrap that ellipsises the LAST line instead of
-             cutting it: the name breaks over up to three lines and only what still does not
-             fit is replaced by the ellipsis, so a reader always keeps the opening words. */
+          /* Compact identifiers stay on one line: arbitrary wrapping left orphaned
+             letters below names such as ZLEC_NAGLOWEK. The full name remains in title. */
           c.nm.style.font = '600 ' + m.font.toFixed(2) + 'px/' + m.lead + ' "IBM Plex Sans",sans-serif';
-          c.nm.style.display = '-webkit-box';
-          c.nm.style.webkitLineClamp = String(m.lines);
-          c.nm.style.webkitBoxOrient = 'vertical';
+          c.nm.style.display = 'block';
+          c.nm.style.webkitLineClamp = '';
+          c.nm.style.webkitBoxOrient = '';
+          c.nm.style.whiteSpace = 'nowrap';
           c.nm.style.overflow = 'hidden';
           c.nm.style.textOverflow = 'ellipsis';
-          c.nm.style.overflowWrap = 'anywhere';
+          c.nm.style.overflowWrap = 'normal';
           /* Past 1.25x the badge's own letters are under 9px on screen — unreadable, and the
              room they cost is the room the name needs for its first two words. The role is
              still on the card: a fact carries the colour as a filled head, a dim as a bar. */
@@ -655,6 +655,7 @@
           c.body.style.display = c.expanded ? 'block' : 'none';
           c.nm.style.font = '600 13.5px/1.2 "IBM Plex Sans",sans-serif';
           c.nm.style.display = '';
+          c.nm.style.whiteSpace = '';
           c.nm.style.webkitLineClamp = '';
           c.nm.style.overflow = '';
           c.nm.style.textOverflow = '';
