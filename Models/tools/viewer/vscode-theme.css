@@ -6,6 +6,7 @@
   --smv-soft:var(--vscode-editor-inactiveSelectionBackground,#eef1f4);
   --smv-ink:var(--vscode-editor-foreground,var(--vscode-foreground,#202b40));
   --smv-muted:var(--vscode-descriptionForeground,var(--smv-ink));
+  --smv-diagram-subtitle:color-mix(in srgb,var(--smv-ink) 72%,var(--smv-surface));
   --smv-line:var(--vscode-contrastBorder,var(--vscode-widget-border,var(--vscode-editorGroup-border,#a0a0a0)));
   --smv-focus:var(--vscode-focusBorder,#007acc);
   --smv-active-border:var(--vscode-contrastActiveBorder,var(--smv-focus));
@@ -76,9 +77,9 @@
 /* Card headers also receive direct style assignments during recoloring. Keep the
    category stripe, but put their names and source metadata on a readable surface. */
 :root[data-host=vscode] :is(#canvas [data-name],#canvas [data-body],.wui-card){background:var(--smv-surface)!important}
-:root[data-host=vscode] :is(#canvas [data-head],.wui-card-head){background:color-mix(in srgb,var(--smv-category,var(--smv-line)) 12%,var(--smv-surface))!important;border-left-color:var(--smv-category,var(--smv-line))!important}
+:root[data-host=vscode] :is(#canvas [data-head],.wui-card-head){background:color-mix(in srgb,var(--smv-category,var(--smv-line)) 18%,var(--smv-surface))!important;border-left-color:var(--smv-category,var(--smv-line))!important}
 :root[data-host=vscode] :is(#canvas [data-title],.wui-card-title){color:var(--smv-ink)!important}
-:root[data-host=vscode] :is(#canvas [data-src],.wui-card-subtitle,.pqc-node-subtitle,.pqc-fact .pqc-node-subtitle,.pqc-source,.pqi-source-provider,.wui-card-chip *){color:var(--smv-muted)!important}
+:root[data-host=vscode] :is(#canvas [data-src],.wui-card-subtitle,.pqc-node-subtitle,.pqc-fact .pqc-node-subtitle,.pqc-source,.pqi-source-provider,.wui-card-chip *){color:var(--smv-diagram-subtitle)!important}
 :root[data-host=vscode] #canvas [data-head] button{background:var(--smv-surface)!important;color:var(--smv-ink)!important}
 :root[data-host=vscode] .pqi-fact :is(.pqi-heading,.pqi-subtitle){color:var(--smv-ink)!important}
 :root[data-host=vscode] .wui-card-chip{background:var(--smv-soft)!important}
