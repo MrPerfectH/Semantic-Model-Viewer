@@ -52,6 +52,26 @@ function createFabricClient({ getAccessToken, fetch: fetchImpl = globalThis.fetc
       return response;
     }
   }
+  async function checkXmlaCapacity(workspaceId, token, signal) {
+    // Best-effort diagnostics using existing permissions; never request additional scopes.
+    const probeSignal = AbortSignal.any([signal, AbortSignal.timeout(10000)]);
+    const get = path => fetchImpl(`https://api.powerbi.com/v1.0/myorg/${path}`, { signal: probeSignal, redirect: 'error', headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' } });
+    try {
+      const workspaceResponse = await get(`groups/${workspaceId}`);
+      if (!workspaceResponse.ok) return;
+      const workspace = await readJson(workspaceResponse);
+      if (!workspace.capacityId) return;
+      const capacityResponse = await get('capacities');
+      if (!capacityResponse.ok) return;
+      const capacities = await readJson(capacityResponse);
+      const capacity = Array.isArray(capacities.value) && capacities.value.find(value => value.id === workspace.capacityId);
+      if (capacity && ['suspended', 'paused'].includes(String(capacity.state).toLowerCase())) throw new FabricError('CapacitySuspended', 'This workspace’s Fabric capacity is suspended. Its capacity administrator must resume it before the model can be opened.');
+    } catch (error) {
+      signal.throwIfAborted();
+      if (error instanceof FabricError && error.code === 'CapacitySuspended') throw error;
+      // Capacity visibility is optional; XMLA remains the authority when this probe is unavailable.
+    }
+  }
   async function list(path, { signal, search = '' } = {}) {
     signal = signal ? AbortSignal.any([signal, AbortSignal.timeout(180000)]) : AbortSignal.timeout(180000);
     const values = []; const visited = new Set();
@@ -75,7 +95,9 @@ function createFabricClient({ getAccessToken, fetch: fetchImpl = globalThis.fetc
       options = { ...options, signal };
       async function readXmla() {
         const token = await getAccessToken(POWER_BI_AUDIENCE);
-        return xmlaReader({ workspaceId, modelId, ...options, accessToken: typeof token === 'string' ? token : token.accessToken });
+        const accessToken = typeof token === 'string' ? token : token.accessToken;
+        await checkXmlaCapacity(workspaceId, accessToken, options.signal);
+        return xmlaReader({ workspaceId, modelId, ...options, accessToken });
       }
       if (options.transport === 'xmla') {
         if (!xmlaReader) throw new FabricError('XmlaUnavailable', 'The XMLA helper is not installed.');
@@ -102,8 +124,7 @@ function createFabricClient({ getAccessToken, fetch: fetchImpl = globalThis.fetc
       } catch (error) {
         if (error.status !== 403 || !xmlaReader) throw error;
         options.signal?.throwIfAborted();
-        const token = await getAccessToken(POWER_BI_AUDIENCE);
-        return xmlaReader({ workspaceId, modelId, ...options, accessToken: typeof token === 'string' ? token : token.accessToken });
+        return readXmla();
       }
     }
   };
