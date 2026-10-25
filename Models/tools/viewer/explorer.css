@@ -72,3 +72,33 @@ button:disabled{opacity:.45;cursor:default!important}
 .ex-pane-toggle{display:inline-flex;align-items:center;justify-content:center;padding:6px 7px;min-width:32px;color:#7a879a}
 .ex-pane-toggle[aria-pressed=true]{background:#eaf1ff;color:#2453cb;border-color:#aac2f0}
 .ex-pane-library{margin-right:4px}.ex-pane-inspector{margin-left:4px}
+
+/* Fabric workspace and semantic model picker. */
+.fabric-dialog *{box-sizing:border-box}
+.fabric-dialog h2{margin:0}
+.fabric-dialog .fabric-header p{margin:6px 0 0}
+.fabric-dialog .fabric-header,.fabric-dialog .fabric-account,.fabric-dialog .fabric-footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.fabric-dialog .fabric-muted{color:#64748b;font-size:13px}
+.fabric-dialog .fabric-picker{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);border:1px solid #dce3ef;border-radius:12px;overflow:hidden;margin:18px 0}
+.fabric-dialog .fabric-pane{min-width:0;padding:16px}
+.fabric-dialog .fabric-pane+ .fabric-pane{border-left:1px solid #dce3ef;background:#f8faff}
+.fabric-dialog .fabric-list{height:260px;overflow:auto;margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.fabric-dialog .fabric-row{width:100%;text-align:left;border:1px solid transparent;border-radius:8px;background:transparent;padding:11px 12px;cursor:pointer;color:#1e293b;display:flex;align-items:center;gap:10px;flex-shrink:0;font:inherit}
+.fabric-dialog .fabric-row:hover{background:#edf2ff}
+.fabric-dialog .fabric-row[aria-pressed=true]{background:#e9efff;border-color:#8ba6fb;color:#2448b8}
+.fabric-dialog .fabric-row:focus-visible{outline:2px solid #3159e8;outline-offset:-2px}
+.fabric-dialog .fabric-row:disabled{cursor:wait;opacity:.6}
+.fabric-dialog .fabric-row-text{min-width:0;overflow-wrap:anywhere;flex:1}
+.fabric-dialog .fabric-row-name{display:block;font-weight:600}
+.fabric-dialog .fabric-row-id{display:block;font-size:11px;color:#64748b;margin-top:3px}
+.fabric-dialog .fabric-search{width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}
+.fabric-dialog .fabric-empty{padding:28px 12px;color:#64748b;text-align:center;line-height:1.6}
+.fabric-dialog .fabric-footer{border-top:1px solid #e2e8f0;padding-top:16px}
+.fabric-dialog .fabric-open{background:#3159e8;color:white;border-color:#3159e8}
+.fabric-dialog details{margin:12px 0;color:#64748b}
+.fabric-dialog summary{cursor:pointer}
+.fabric-dialog .fabric-account{margin-top:16px;padding:10px 12px;background:#f1f5f9;border-radius:8px;overflow-wrap:anywhere}
+@media(max-width:650px){.fabric-dialog .fabric-picker{grid-template-columns:1fr}
+.fabric-dialog .fabric-pane+ .fabric-pane{border-left:0;border-top:1px solid #dce3ef}
+.fabric-dialog .fabric-list{height:180px}
+}

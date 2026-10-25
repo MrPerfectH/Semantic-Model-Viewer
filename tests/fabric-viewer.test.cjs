@@ -60,3 +60,10 @@ test('reopening a connection restores its pending device code and continues to w
  const run=c.run.bind(c);c.run=fn=>completion=run(fn);
  try{c.show();await completion;assert.ok(codes.includes('RESTORED'));assert.equal(c.account.id,'a');assert.equal(c.items[0].name,'Showcase Demo');assert.equal(c.deviceLogin,null);assert.equal(c.busy,false);}finally{global.document=priorDocument;}
 });
+test('workspace discovery remains available while browsing models and appending model pages',async()=>{
+  const {c}=harness();c.workspace=null;c.generation=1;
+  c.request=async p=>p.action==='listWorkspaces'?{items:[{id:'w',name:'Workspace'}],continuationToken:'more-workspaces'}:{items:[{id:p.continuationToken?'m2':'m1',name:'Model'}],continuationToken:p.continuationToken?null:'more-models'};
+  await c.list(false,1);c.workspace=c.items[0];await c.list(false,1);await c.list(true,1);
+  assert.deepEqual(c.workspaceItems,[{id:'w',name:'Workspace'}]);assert.equal(c.workspaceNext,'more-workspaces');
+  assert.deepEqual(c.items.map(i=>i.id),['m1','m2']);assert.equal(c.next,null);
+});
