@@ -6,3 +6,8 @@ for pair in 'win-x64 win32-x64' 'win-arm64 win32-arm64' 'osx-x64 darwin-x64' 'os
   read -r rid destination <<< "$pair"
   dotnet publish "$xmla_dir/Smv.Fabric.Xmla.csproj" -c Release -r "$rid" --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o "$xmla_dir/publish/$destination"
 done
+if [[ "$(uname -s)" == Darwin ]]; then
+  "$xmla_dir/sign-macos.sh"
+else
+  echo 'Before distributing the Mac helpers, run sign-macos.sh on macOS.' >&2
+fi

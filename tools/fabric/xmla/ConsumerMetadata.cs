@@ -125,7 +125,7 @@ internal static class ConsumerMetadata
             var column = new Dictionary<string, object?> { ["name"] = name };
             var dataType = DataType(Text(row, "DataType"), Text(row, "OleDbDataType"));
             if (dataType.Length > 0) column["dataType"] = dataType;
-            else warnings.Add($"Data type unavailable for column {tableName}.{name}.");
+            else warnings.Add("Some column types could not be mapped and are marked unavailable.");
             Copy(row, column, "Description", "description"); Copy(row, column, "Expression", "expression");
             Copy(row, column, "FormatString", "formatString"); Copy(row, column, "DisplayFolder", "displayFolder");
             CopyBool(row, column, "IsHidden", "isHidden"); CopyBool(row, column, "IsKey", "isKey");
@@ -187,7 +187,7 @@ internal static class ConsumerMetadata
     private static string? Cardinality(string value) => value.ToLowerInvariant() switch { "one" or "1" => "one", "many" or "2" => "many", _ => null };
     private static string? CrossFilter(string value) => value.Replace(" ", "").ToLowerInvariant() switch { "onedirection" or "single" or "1" => "oneDirection", "bothdirections" or "both" or "2" => "bothDirections", "automatic" or "3" => "automatic", _ => null };
     private static string DataType(string value, string oleDb) => value.Replace(" ", "").ToLowerInvariant() switch {
-        "string" or "text" => "string", "int64" or "wholenumber" => "int64", "double" or "decimalnumber" => "double",
+        "string" or "text" => "string", "int64" or "integer" or "wholenumber" => "int64", "double" or "number" or "decimalnumber" => "double",
         "decimal" or "currency" or "fixeddecimalnumber" => "decimal", "datetime" or "date" => "dateTime", "boolean" or "true/false" => "boolean", "binary" => "binary",
         _ => oleDb switch { "2" or "3" or "16" or "17" or "18" or "19" or "20" or "21" => "int64", "4" or "5" => "double", "6" or "14" or "131" => "decimal", "7" or "133" or "134" or "135" => "dateTime", "11" => "boolean", "8" or "129" or "130" => "string", "128" => "binary", _ => "" }
     };

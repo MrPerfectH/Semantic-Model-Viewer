@@ -34,7 +34,7 @@ test('consumer metadata mapping preserves visible schema and marks unavailable d
  if(sdk.status!==0 || !/8\.0\./.test(sdk.stdout || '')) {t.skip('.NET 8 SDK required for consumer mapping fixture');return;}
  const run=spawnSync(dotnet,['run','--project',path.join(__dirname,'fixtures/fabric-consumer/ConsumerMapping.csproj'),'--configuration','Release'],{encoding:'utf8',timeout:120000});
  assert.equal(run.status,0,run.stderr || run.stdout);
- assert.match(run.stdout,/12 mapper checks passed/);
+ assert.match(run.stdout,/15 mapper checks passed/);
  const result=JSON.parse(run.stdout.split('\n').find(line=>line.startsWith('{')));
  require('../Models/tools/viewer/js/roles.js');require('../Models/tools/viewer/js/tmdl-parser.js');
  const model=globalThis.TMDLParser.parseAny(result.parts.map(part=>({path:part.path,name:path.basename(part.path),text:part.content})));

@@ -39,3 +39,5 @@ Official references:
 - [Microsoft loopback redirect rules](https://learn.microsoft.com/en-us/entra/identity-platform/reply-url)
 
 Capacity diagnostics use existing Power BI permissions to detect a suspended capacity before opening XMLA. When capacity visibility is unavailable, the diagnostic is skipped and XMLA remains authoritative. No capacity is resumed or changed by the viewer.
+
+Mac single-file helpers must be signed after cross-publishing: run `tools/fabric/xmla/sign-macos.sh` on macOS before packaging. It uses an ad hoc signature for local previews, or the maintainer-provided `SMV_MAC_SIGN_IDENTITY`. `publish.sh` runs it automatically when building on macOS. Public distribution still requires the appropriate publisher signing/notarization checks.
