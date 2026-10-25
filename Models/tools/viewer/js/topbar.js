@@ -49,12 +49,19 @@
     if(!offline && app.fabric && app.fabric.available()){
       actions.appendChild(el('button',{cls:'ex-button',text:'Connect to Fabric',onClick:function(){app.fabric.show();}}));
       if(fabricSource){
-        actions.appendChild(el('span',{text:'Last fetched '+new Date(fabricSource.fetchedAt).toLocaleString(),title:'Read-only Fabric metadata cache',style:'font-size:11px;color:#64748b;'}));
         actions.appendChild(el('button',{cls:'ex-button',text:app.fabric.busy?'Refreshing…':'Refresh Fabric',disabled:app.fabric.busy,onClick:function(){app.fabric.refresh();}}));
       }
     }
+    var acquisition=offline?info.source:fabricSource;
+    var metadataText='';
+    if(acquisition){
+      var acquired=Number.isFinite(Date.parse(acquisition.fetchedAt))?new Date(acquisition.fetchedAt).toLocaleString():'unknown';
+      var notices=Array.isArray(acquisition.warnings)?acquisition.warnings:[];
+      metadataText='Fabric metadata fetched '+acquired+(acquisition.method?' · '+acquisition.method.toUpperCase():'')+(acquisition.coverage?' · Coverage: '+acquisition.coverage:'');
+      if(notices.length)metadataText+=' · '+notices.join(' ');
+    }
     actions.appendChild(el('span',{cls:offline?'ex-snapshot-badge':'ex-local-badge',text:offline?'Offline snapshot':fabricSource?'Fabric · read-only':app.host?'VS Code workspace':'Local analysis',
-      title:offline?'Includes model metadata, DAX and available Power Query definitions. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'}));
+      title:metadataText || (offline?'Includes model metadata, DAX and available Power Query definitions. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'),tabindex:metadataText?'0':null,'aria-label':metadataText || null}));
     actions.appendChild(el('button',{cls:'ex-button ex-snapshot-export',text:st.snapshotSaving?'Saving snapshot…':'Save snapshot',disabled:!st.loaded||!!st.snapshotSaving,
       title:'Download an offline copy of the app, including this model, DAX, available Power Query definitions, and your current views',onClick:function(){app.saveSnapshot();}}));
     if(!offline&&app.host){
@@ -69,14 +76,6 @@
       actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Open model',onClick:function(){app.setState({showImport:true,importError:'',importReady:false});}}));
     }
     this.host.appendChild(actions);
-    var acquisition=offline?info.source:fabricSource;
-    if(acquisition){
-      var acquired=Number.isFinite(Date.parse(acquisition.fetchedAt))?new Date(acquisition.fetchedAt).toLocaleString():'unknown';
-      var notices=Array.isArray(acquisition.warnings)?acquisition.warnings:[];
-      var metadataText='Fabric metadata fetched '+acquired+(acquisition.method?' · '+acquisition.method.toUpperCase():'')+(acquisition.coverage?' · Coverage: '+acquisition.coverage:'');
-      if(notices.length)metadataText+=' · '+notices.join(' ');
-      this.host.appendChild(el('div',{role:'status',text:metadataText,style:'width:100%;font-size:11px;line-height:1.5;color:#64748b;'}));
-    }
     /* Domains keeps Fit in its own toolbar row (see TableExplorer.renderClusterToolbar),
        next to Expand all / Collapse all, so both canvases carry the same controls. */
     if(st.snapshotMessage||st.snapshotError){
