@@ -81,6 +81,23 @@
         "command": "semanticModelViewer.fabricSwitchAccount",
         "title": "Switch Fabric Account\u2026",
         "category": "Semantic Model Viewer"
+      },
+      {
+        "command": "semanticModelViewer.fabricBrowseSignIn",
+        "title": "Sign In to Browse Fabric",
+        "category": "Semantic Model Viewer",
+        "icon": "$(sign-in)"
+      },
+      {
+        "command": "semanticModelViewer.refreshFabric",
+        "title": "Refresh Fabric Workspaces",
+        "category": "Semantic Model Viewer",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "semanticModelViewer.openFabricTreeModel",
+        "title": "Open Fabric Semantic Model",
+        "category": "Semantic Model Viewer"
       }
     ],
     "menus": {
@@ -99,6 +116,10 @@
         {
           "command": "semanticModelViewer.openEntry",
           "when": "false"
+        },
+        {
+          "command": "semanticModelViewer.openFabricTreeModel",
+          "when": "false"
         }
       ],
       "view/title": [
@@ -116,6 +137,26 @@
           "command": "semanticModelViewer.connectFabric",
           "when": "view == semanticModelViewer.models",
           "group": "navigation@3"
+        },
+        {
+          "command": "semanticModelViewer.refreshFabric",
+          "when": "view == semanticModelViewer.fabric",
+          "group": "navigation@1"
+        },
+        {
+          "command": "semanticModelViewer.fabricBrowseSignIn",
+          "when": "view == semanticModelViewer.fabric",
+          "group": "navigation@2"
+        },
+        {
+          "command": "semanticModelViewer.fabricSignOut",
+          "when": "view == semanticModelViewer.fabric",
+          "group": "connection@1"
+        },
+        {
+          "command": "semanticModelViewer.fabricSwitchAccount",
+          "when": "view == semanticModelViewer.fabric",
+          "group": "connection@2"
         }
       ]
     },
@@ -153,6 +194,12 @@
           "name": "Semantic Models",
           "icon": "images/activity.svg",
           "contextualTitle": "Semantic Models"
+        },
+        {
+          "id": "semanticModelViewer.fabric",
+          "name": "Fabric",
+          "icon": "images/activity.svg",
+          "contextualTitle": "Fabric"
         }
       ]
     },

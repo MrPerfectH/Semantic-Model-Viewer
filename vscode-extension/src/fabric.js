@@ -22,8 +22,8 @@ class FabricConnection {
   }
   entries() { return (this.context.globalState || this.context.workspaceState).get(CACHE_KEY, []) || []; }
   async save(entries) { await (this.context.globalState || this.context.workspaceState).update(CACHE_KEY, entries); if (this.onChange) this.onChange(); }
-  async open(workspace, model, accountId, transport) {
-    const result = await this.request({ action: 'openModel', workspaceId: workspace.id, modelId: model.id, workspaceName: workspace.name, modelName: model.name, accountId, transport });
+  async open(workspace, model, accountId, transport, tenantId) {
+    const result = await this.request({ action: 'openModel', workspaceId: workspace.id, modelId: model.id, workspaceName: workspace.name, modelName: model.name, accountId, transport, ...(tenantId ? { tenantId } : {}) });
     const entry = this.fromResult(result, workspace, model);
     await this.save(this.entries().filter(e => e.id !== entry.id).concat(entry));
     return entry;

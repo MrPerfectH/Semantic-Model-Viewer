@@ -14,17 +14,21 @@ open it at full size.
 
 Requires desktop VS Code 1.101 or later for its Node.js 22 extension host.
 
-Run **Semantic Model Viewer: Connect to Fabric…**, sign in with a Microsoft work account,
-choose a workspace and semantic model, then choose the metadata connection method.
-**Standard XMLA** requires Read + Build permission and an enabled XMLA endpoint on supported
-capacity. **Fabric definition API** requires model edit access. Neither path writes to Fabric
-or executes model queries. Metadata coverage depends on what the selected endpoint exposes.
+Open **Semantic Models** in the Activity Bar, expand the **Fabric** section, and choose
+**Sign in to Fabric…**. Expand a workspace to load its semantic models, then click a model
+to open it in the viewer tab. Use the section’s Refresh action to reload discovery.
+Saved models remain in the Semantic Models list for offline access.
 
-This preview requires the publisher's Microsoft application registration, configured in the
-build through `SMV_FABRIC_CLIENT_ID`; no third-party application ID is included. Tenant policy
-may still require consent or administrator approval. The build must include MSAL and a published
-.NET XMLA helper for the host platform. A missing configuration or helper produces an explicit
-error. Live tenant sign-in and permission validation remain release prerequisites.
+The existing **Semantic Model Viewer: Connect to Fabric…** command also remains available.
+The sidebar uses the standard XMLA path, which requires Read + Build permission and an enabled
+XMLA endpoint on supported capacity. The command’s optional **Fabric definition API** path
+requires model edit access. Both paths read metadata without model writes or data refreshes.
+The consumer metadata fallback uses fixed INFO.VIEW metadata queries; definitions may be
+unavailable depending on permissions.
+
+Users do not need to register an application or supply credentials to the viewer. Microsoft
+sign-in happens in the browser, and tenant consent, MFA, and Conditional Access still apply.
+The package must include MSAL and a published .NET XMLA helper for the host platform.
 
 The extension runs on the desktop UI host, including when the workspace is remote. VS Code
 for the Web is unsupported. XMLA helper support depends on the binaries included in the build;
