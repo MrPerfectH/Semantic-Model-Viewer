@@ -1164,21 +1164,18 @@
       });
       return out;
     },
-    /* World units per screen pixel of label. Labels are sized for the reader, not the model:
-       like the bare arrow they are drawn in screen pixels and scaled by 1/zoom, so the pill is
-       the same size on screen whether the picture is at 50% or 200%. The chip view thickens
-       its lines and the label follows a little — not the full 1.6x the chip strokes take,
-       because the label already holds its on-screen size and a 30px pill beside an 11px
-       table name would be the loudest thing on the canvas. */
-    labelUnit: function () { return (this._chip ? 1.12 : 1) / Math.max(0.05, this.view.k); },
+    /* Compact cards use a smaller 39 × 15.6px relationship badge. Keep a readable
+       screen-size floor rather than shrinking indefinitely with zoom. Full cards retain
+       the 50 × 20px badge; the invisible line hit target remains unchanged. */
+    labelUnit: function () { return (this._chip ? 0.78 : 1) / Math.max(0.05, this.view.k); },
     /* The label an edge carries, horizontal, in world units: the combined cardinality pill,
        or (`bare`) the arrowhead on its own — below PILL_ZOOM always, above it when no run of
        the line has room for the pill. `m` is the margin a seat has to leave on each side.
        Seat eligibility, the stagger along a shared channel and the collision ledger all read
        through here, so the box that is reserved is always the box that is drawn. */
     labelDims: function (bare) {
-      var u = this.labelUnit();
       if (bare == null) bare = this.view.k < this.PILL_ZOOM;
+      var u = bare ? 1 / Math.max(0.05, this.view.k) : this.labelUnit();
       if (!bare) return { w: this.PILL_W * u, h: this.PILL_H * u, m: 10 * u };
       return { w: 16 * u, h: 12 * u, m: 6 * u };
     },
