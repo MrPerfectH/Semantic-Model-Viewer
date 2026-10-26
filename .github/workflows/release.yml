@@ -59,6 +59,7 @@ jobs:
         run: |
           gh release create "$GITHUB_REF_NAME" \
             --title "Semantic Model Viewer $GITHUB_REF_NAME" \
+            --notes-file .github/release-introduction.md \
             --generate-notes \
             dist/fabric/*.vsix \
             dist/fabric/*.zip \

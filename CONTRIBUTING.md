@@ -48,7 +48,7 @@ npm test
 ```
 
 Optional real-Chrome layout checks are described under "Regression checks" in the
-[README](README.md#regression-checks).
+[developer guide](docs/development.md#regression-checks).
 
 ## Build the VS Code extension
 
