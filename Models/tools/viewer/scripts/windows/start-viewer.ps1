@@ -49,8 +49,11 @@ if (-not (Test-ViewerReady)) {
         Show-Problem "Port $Port is used by another program. Stop it, or run start-viewer.ps1 -Port with a free port."
         exit 1
     }
+    $bundledPython = Join-Path $ViewerDir "runtime\python.exe"
     $py = Get-Command py -ErrorAction SilentlyContinue
-    if ($py) {
+    if (Test-Path -LiteralPath $bundledPython) {
+        $exe = $bundledPython; $args = @("`"$ServePy`"", "--port", "$Port", "--idle-exit", "180")
+    } elseif ($py) {
         $exe = "py"; $args = @("-3", "`"$ServePy`"", "--port", "$Port", "--idle-exit", "180")
     } else {
         $exe = "python"; $args = @("`"$ServePy`"", "--port", "$Port", "--idle-exit", "180")
