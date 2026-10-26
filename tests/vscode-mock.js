@@ -53,6 +53,7 @@ function makeVscode(opts) {
   const state = new Map();
   const commands = new Map();
   const panels = [];
+  const globalState = opts.globalState || new Map();
   const contains = (base, target) => { const rel = path.relative(base, target); return rel === '' || (rel !== '..' && !rel.startsWith('..' + path.sep) && !path.isAbsolute(rel)); };
 
   const vscode = {
@@ -131,6 +132,11 @@ function makeVscode(opts) {
     context: {
       extensionUri: Uri.file(opts.extensionRoot),
       subscriptions: [],
+      globalState: {
+        keys: () => Array.from(globalState.keys()),
+        get: (k) => globalState.get(k),
+        update: async (k, v) => { if (v === undefined) globalState.delete(k); else globalState.set(k, v); }
+      },
       workspaceState: {
         keys: () => Array.from(state.keys()),
         get: (k) => state.get(k),

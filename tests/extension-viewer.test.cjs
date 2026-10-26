@@ -94,8 +94,10 @@ test('VS Code boot seeds shared preferences before constructing and has an actio
   assert.equal(app.state.mvW, 410); assert.equal(app.canvas.detailMode, 'cards');
   assert.equal(app.state.loaded, false); assert.equal(app.model.tables.length, 0);
   const labels = texts(h.document.getElementById('topbar'));
-  assert.ok(labels.includes('Choose model')); assert.ok(labels.includes('Workspace models'));
-  assert.ok(labels.includes('Refresh model list')); assert.equal(labels.includes('Contoso Retail'), false);
+  assert.ok(labels.includes('Choose model')); assert.equal(app.state.showModelMenu, false);
+  assert.equal(labels.includes('Contoso Retail'), false);
+  app.setState({showModelMenu:true}); await flush();
+  assert.ok(texts(h.document.getElementById('topbar')).includes('Refresh model list'));
   assert.equal(labels.includes('PNG'), false); assert.equal(labels.includes('Open model'), false);
   app.host.storage.set('new-key', 'value'); app.host.storage.del('new-key');
   assert.equal(h.next('storage').value, 'value'); assert.equal(h.next('storage').value, null); h.isolated();

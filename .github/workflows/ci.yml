@@ -4,6 +4,7 @@ on:
   push:
     branches: [main, develop, feature/fabric-connect]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,6 +22,8 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: vscode-extension/package-lock.json
+      - name: Install CLI and MCP dependencies
+        run: npm ci
       - name: Install
         working-directory: vscode-extension
         run: npm ci
@@ -49,11 +52,34 @@ jobs:
           else
             npm run package
           fi
-      - name: Upload the develop test extension
-        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-        uses: actions/upload-artifact@v4
+  distribution:
+    needs: test
+    if: github.ref == 'refs/heads/develop' && github.event_name != 'pull_request'
+    uses: ./.github/workflows/fabric-preview.yml
+    with:
+      prerelease: true
+
+  publish-preview:
+    needs: [test, distribution]
+    if: github.ref == 'refs/heads/develop' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: marketplace-pre-release
+      cancel-in-progress: false
+    steps:
+      - uses: actions/setup-node@v7
         with:
-          name: semantic-model-viewer-preview-${{ github.sha }}
-          path: vscode-extension/*.vsix
-          if-no-files-found: error
-          retention-days: 14
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          name: semantic-model-viewer-fabric-preview
+          path: dist
+      - name: Publish the tested pre-release to Marketplace
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          if [ -z "$VSCE_PAT" ]; then
+            echo "::error::Configure the VSCE_PAT repository secret to publish pre-releases."
+            exit 1
+          fi
+          npx --yes @vscode/vsce@4 publish --packagePath dist/*.vsix --pre-release --skip-duplicate

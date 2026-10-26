@@ -78,7 +78,7 @@
     head.appendChild(el('th', { scope: 'col', text: 'Related table', style: 'position:sticky;top:0;left:0;z-index:6;background:#eef2f8;height:158px;width:240px;padding:0 12px 12px;text-align:left;vertical-align:bottom;border-bottom:1px solid #dbe3ee;font-size:11px;font-weight:600;color:#65748a;' }));
     mx.facts.forEach(function (f) {
       head.appendChild(el('th', { scope: 'col', style: 'position:sticky;top:0;z-index:5;background:#eef2f8;border-bottom:1px solid #dbe3ee;padding:0;width:52px;' }, el('button', {
-        title: 'Open ' + f.name + ' in the table diagram', 'aria-label': 'Open fact table ' + f.name + ' in the diagram', onClick: openT(f.name),
+        data: {smvKind:'table',smvName:f.name}, title: 'Open ' + f.name + ' in the table diagram', 'aria-label': 'Open fact table ' + f.name + ' in the diagram', onClick: openT(f.name),
         style: 'height:158px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:9px;border:none;background:transparent;cursor:pointer;padding:0 0 12px;'
       }, [
         el('span', { text: f.name, style: "writing-mode:vertical-rl;transform:rotate(180deg);font:600 11px/1.2 'IBM Plex Sans',sans-serif;color:#3a4d67;max-height:120px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;" }),
@@ -92,7 +92,7 @@
       var rc = mx.cellMap[t.name];
       var row = el('tr', { cls: 'hv-eef2f7' });
       row.appendChild(el('th', { scope: 'row', style: 'position:sticky;left:0;z-index:2;background:#fff;border-bottom:1px solid var(--smv-line,#edf1f6);padding:0;' }, el('button', {
-        title: 'Open ' + t.name + ' in the table diagram', 'aria-label': 'Open related table ' + t.name + ' in the diagram', onClick: openT(t.name),
+        data: {smvKind:'table',smvName:t.name}, title: 'Open ' + t.name + ' in the table diagram', 'aria-label': 'Open related table ' + t.name + ' in the diagram', onClick: openT(t.name),
         style: 'display:flex;align-items:center;gap:8px;height:40px;width:100%;padding:0 12px;border:none;background:transparent;cursor:pointer;text-align:left;'
       }, [
         el('span', { style: 'width:9px;height:9px;border-radius:50%;background:' + app.tableColor(t) + ';flex:none;' }),

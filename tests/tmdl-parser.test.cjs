@@ -149,3 +149,14 @@ test('unfence drops ``` fences that an older import left in a stored measure', (
   assert.equal(unfence('SUM ( x )'), 'SUM ( x )');
   assert.equal(unfence(undefined), '');
 });
+
+test('relationship identities preserve escaped names and distinguish parallel edges', () => {
+  const p=parser();
+  const model=p.parseTMDL([
+    file('model.tmdl','model Model\n'),
+    file('A.tmdl','table A\n\tcolumn ID\n\t\tdataType: int64\n'),
+    file('B.tmdl','table B\n\tcolumn ID\n\t\tdataType: int64\n'),
+    file('relationships.tmdl',"relationship '''Quoted'''\n\tfromColumn: A.ID\n\ttoColumn: B.ID\nrelationship Other\n\tfromColumn: A.ID\n\ttoColumn: B.ID\n")
+  ],{strictRelationships:true});
+  assert.deepEqual(Array.from(model.relationships,r=>r.name),["'Quoted'",'Other']);
+});

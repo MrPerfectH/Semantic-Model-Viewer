@@ -206,7 +206,7 @@
     "viewsWelcome": [
       {
         "view": "semanticModelViewer.models",
-        "contents": "No *.SemanticModel folder or model.bim found in the open workspace.\n\nOpen a folder that contains a Power BI project (.pbip) and the models appear here.\n[Refresh](command:semanticModelViewer.refreshModels)\n[Connect to Fabric](command:semanticModelViewer.connectFabric)"
+        "contents": "Start here: open a project folder containing a *.SemanticModel folder with TMDL definitions or model.bim. A .pbix or .pbip file alone is not supported.\n[Open folder](command:vscode.openFolder)\n[Refresh model list](command:semanticModelViewer.refreshModels)\n[Try the demo in your browser](https://MrPerfectH.github.io/Semantic-Model-Viewer/)\n[Connect to Fabric](command:semanticModelViewer.connectFabric)"
       }
     ]
   },

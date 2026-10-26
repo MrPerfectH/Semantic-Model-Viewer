@@ -20,7 +20,7 @@
     var out=[], cur=null;
     text.split(/\r?\n/).forEach(function(raw){
       var t=raw.trim(); if(!t) return;
-      if(/^relationship\s/.test(t) && !/^\t/.test(raw)){ cur={fromCard:'many',toCard:'one',inactive:false,both:false}; out.push(cur); return; }
+      if(/^relationship\s/.test(t) && !/^\t/.test(raw)){ cur={name:unq(t.replace(/^relationship\s+/, '')),fromCard:'many',toCard:'one',inactive:false,both:false}; out.push(cur); return; }
       if(!cur) return; var m;
       if((m=t.match(/^fromColumn:\s*(.+)$/))){ var r=parseRef(m[1]); if(r){cur.from=r.table;cur.fromCol=r.column;} }
       else if((m=t.match(/^toColumn:\s*(.+)$/))){ var r2=parseRef(m[1]); if(r2){cur.to=r2.table;cur.toCol=r2.column;} }
@@ -418,7 +418,7 @@
       return out;
     });
     var rels=(mdl.relationships||[]).filter(function(r){return !skip.test(r.fromTable)&&!skip.test(r.toTable);}).map(function(r){
-      return {from:r.fromTable, fromCol:r.fromColumn, to:r.toTable, toCol:r.toColumn,
+      return {name:r.name||'', from:r.fromTable, fromCol:r.fromColumn, to:r.toTable, toCol:r.toColumn,
         fromCard:String(r.fromCardinality||'many').toLowerCase(), toCard:String(r.toCardinality||'one').toLowerCase(),
         inactive:r.isActive===false, both:r.crossFilteringBehavior==='bothDirections'};
     });

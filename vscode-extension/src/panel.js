@@ -40,6 +40,9 @@ function buildHtml(webview, mediaUri) {
     return `<script nonce="${nonce}" src="${assetUri(webview, mediaUri, './js/host-vscode.js')}"></script>\n` + script;
   });
   if (!injected) throw new Error('The packaged viewer scripts are missing.');
+  // Host-only theme CSS stays outside the canonical template used by portable snapshots.
+  html = html.replace(/<html\b/i, '<html data-host="vscode"');
+  html = html.replace(/<\/head>/i, '<link rel="stylesheet" href="' + assetUri(webview, mediaUri, './vscode-theme.css') + '">\n</head>');
   const csp = `default-src 'none'; img-src ${webview.cspSource} data: blob:; style-src ${webview.cspSource} 'unsafe-inline'; font-src ${webview.cspSource}; script-src 'nonce-${nonce}'; connect-src 'none'; worker-src blob:; object-src 'none'; base-uri 'none'; form-action 'none';`;
   return html.replace(/<head>/i, '<head>\n<meta http-equiv="Content-Security-Policy" content="' + escapeAttribute(csp) + '">');
 }
@@ -176,7 +179,7 @@ class ViewerPanel {
       }
       case 'storage':
         if (!storageKey(msg.key) || (msg.value !== null && typeof msg.value !== 'string') || (typeof msg.value === 'string' && msg.value.length > MAX_SNAPSHOT_BYTES)) throw new Error('Invalid viewer storage value.');
-        await this.context.workspaceState.update(STORAGE_PREFIX + msg.key, msg.value === null ? undefined : msg.value);
+        await (msg.key === 'smv_onboarding_v1' ? this.context.globalState : this.context.workspaceState).update(STORAGE_PREFIX + msg.key, msg.value === null ? undefined : msg.value);
         return;
       case 'listModels': return reply({ models: (await this.listModels()).map(pub) });
       case 'fabricRequest': {
@@ -245,6 +248,8 @@ class ViewerPanel {
     for (const key of this.context.workspaceState.keys()) {
       if (key.startsWith(STORAGE_PREFIX) && storageKey(key.slice(STORAGE_PREFIX.length))) out[key.slice(STORAGE_PREFIX.length)] = this.context.workspaceState.get(key);
     }
+    const onboarding = this.context.globalState.get(STORAGE_PREFIX + 'smv_onboarding_v1');
+    if (onboarding !== undefined) out.smv_onboarding_v1 = onboarding;
     return out;
   }
 

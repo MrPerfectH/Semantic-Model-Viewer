@@ -46,7 +46,7 @@
     [['graph','Tables'],['measures','Measures'],['power-query','Power Query'],['clusters','Domains'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
     this.host.appendChild(nav);
     var actions=el('div',{cls:'ex-header-actions'});
-    if(g.ViewerTheme){
+    if(g.ViewerTheme&&!(g.SMVHost&&g.SMVHost.kind==='vscode')){
       var theme=el('select',{cls:'ex-theme-select','aria-label':'Appearance',title:'Choose the viewer appearance',onChange:function(e){g.ViewerTheme.set(e.target.value);}},[
         el('option',{value:'classic',text:'Classic'}),el('option',{value:'spellbook',text:'Spellbook'})]);
       theme.value=g.ViewerTheme.get();actions.appendChild(theme);
@@ -76,10 +76,11 @@
       if(app.canRefreshSource())actions.appendChild(el('button',{cls:'ex-button',text:st.refreshing?'Refreshing…':'Refresh',disabled:!!st.refreshing,
         title:'Re-read this model from its source folder. Your layout and saved views are kept.',onClick:function(){app.refreshSource();}}));
       if(st.viewMode!=='power-query')actions.appendChild(el('button',{cls:'ex-button',text:st.pngLabel,title:'Export current view as PNG',onClick:function(){app.exportPNG();}}));
-      if(!app.server)actions.appendChild(el('a',{cls:'ex-button',text:'Get the app',href:'https://github.com/MrPerfectH/Semantic-Model-Viewer#install-2-minutes',target:'_blank',rel:'noopener',
+      if(!app.server)actions.appendChild(el('a',{cls:'ex-button',text:'Get the app',href:'https://github.com/MrPerfectH/Semantic-Model-Viewer#start-here',target:'_blank',rel:'noopener',
         title:'Download the desktop app: it opens your model folders directly, with no browser permission prompt',style:'text-decoration:none;display:inline-flex;align-items:center;'}));
       actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Open model',onClick:function(){app.setState({showImport:true,importError:'',importReady:false});}}));
     }
+    if(!offline&&g.ViewerOnboarding)actions.appendChild(el('button',{cls:'ex-button',text:'Help', 'data-onboarding-help':'',onClick:function(){if(app.onboarding)app.onboarding.restart();}}));
     this.host.appendChild(actions);
     /* Domains keeps Fit in its own toolbar row (see TableExplorer.renderClusterToolbar),
        next to Expand all / Collapse all, so both canvases carry the same controls. */

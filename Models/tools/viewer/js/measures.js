@@ -302,10 +302,12 @@
       var vertical = orientation !== 'lr', direction = orientation === 'bt' ? -1 : 1;
       var dist = {}; dist[root] = 0;
       var bfs = function (dir) {
-        var seen = new Set([root]); var q = [root], __g = 0;
+        var seen = new Set([root]); var q = [root], __g = 0, context=self._explanationContext;
+        if(context&&context.direction!=='both'&&context.direction!==dir)return seen;
         while (q.length) {
           if (++__g > 200000) throw new Error('LOOP-GUARD: gLayout bfs');
           var n = q.shift();
+          if(context&&dist[n]>=context.depth)continue;
           self.flowKids(n, dir).forEach(function (k) {
             if (!seen.has(k)) { seen.add(k); if (dist[k] == null || dist[n] + 1 < dist[k]) dist[k] = dist[n] + 1; q.push(k); }
           });
@@ -314,6 +316,9 @@
       };
       var upSet = bfs('up'), dnSet = bfs('down');
       var initial=Array.from(new Set([].concat(Array.from(upSet),Array.from(dnSet))));
+      if(this._explanationContext){initial.sort(function(a,b){return (dist[a]-dist[b])||a.localeCompare(b);});initial=initial.slice(0,this._explanationContext.limit);}
+      // The authored limit bounds only the opening neighborhood. Explicit branch
+      // expansion remains usable up to the viewer's ordinary global cap.
       var names=Array.from(new Set(initial.concat(Object.keys(extra).filter(function(n){return self.app.msrOf(n);})))) ;
       var capped = false;
       if (names.length > cap) {
@@ -557,7 +562,7 @@
     buildGraph: function () {
       var self = this, app = this.app;
       var root = this.graphRoot(), extra = app.state.gExtra || {};
-      var key = (app.modelKey || '') + '|' + root + '|' + this._showSources + '|' + !!app.state.dependencyDirectOnly + '|' + this._graphOrientation + '|' + Object.keys(extra).sort().join('\u0001')
+      var key = (app.modelKey || '') + '|' + JSON.stringify(this._explanationContext) + '|' + root + '|' + this._showSources + '|' + !!app.state.dependencyDirectOnly + '|' + this._graphOrientation + '|' + Object.keys(extra).sort().join('\u0001')
         + '|' + Object.keys(this.graphGroupState(root)).sort().join('\u0001') + '|' + app.colorBy + '|' + app.paletteName;
       if (!this._gC || this._gC.k !== key) {
         var layout = this.gLayout(root, extra, CAP);
@@ -597,7 +602,7 @@
         var upLbl = upN ? '+' + upN : (exU.length ? '−' + exU.length : ''), dnLbl = dnN ? '+' + dnN : (exD.length ? '−' + exD.length : '');
         var pin = pinN === n;
         var base = (n === root
-          ? 'border:1.5px solid var(--smv-burgundy,#1f2430);background:var(--smv-burgundy,#1f2430);color:#fff;font:600 12px/31px "IBM Plex Sans",sans-serif;box-shadow:0 4px 14px rgba(20,30,50,.30);'
+          ? 'border:1.5px solid var(--smv-burgundy,#1f2430);background:var(--smv-primary,var(--smv-burgundy,#1f2430));color:var(--smv-on-accent,#fff);font:600 12px/31px "IBM Plex Sans",sans-serif;box-shadow:0 4px 14px rgba(20,30,50,.30);'
           : 'border:1px solid ' + P[2] + ';background:' + P[1] + ';color:' + P[0] + ';font:500 12px/32px "IBM Plex Mono",monospace;')
           + (pin ? 'outline:2px solid ' + P[0] + ';outline-offset:1px;' : '');
         return {
@@ -698,6 +703,7 @@
     },
     pickMeasure: function (n) {
       var self = this, app = this.app;
+      if (window.SMVInteractive) window.SMVInteractive.closeLibrary(false);
       this.cancelSnapshotViewport();
       app.setState({ selMeasure: n, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvOpen: app.mvOpenFor(n), gExtra: {}, gHover: null, gPin: null });
     },
@@ -988,6 +994,10 @@
         el('span', { cls: 'mv-eyebrow', text: 'MEASURE LIBRARY' }),
         el('button', { cls: 'mv-text-button', text: 'Overview', onClick: function () { app.setState({ selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, gPin: null, gHover: null }); } })
       ]));
+      if(document.body.dataset.smvInteractive&&window.SMVInteractive)top.querySelector('.mv-library-heading').appendChild(el('button', {
+        cls:'mv-text-button',text:'Close','aria-label':'Close measure library',
+        onClick:function(){window.SMVInteractive.closeLibrary(true);}
+      }));
       var sourceModes = el('div', { cls: 'mv-filter-tabs mv-start-tabs', role: 'group', 'aria-label': 'Start analysis from' });
       this.sourceModeButtons = {};
       [['measures', 'Measure'], ['sources', 'Table or column']].forEach(function (item) {
@@ -1212,6 +1222,27 @@
       var self = this, app = this.app, M = app.model, all = [], hidden = 0, links = 0;
       var filtered = !!(app.state.mvQuery || app.state.mvTable || (app.state.mvFilter && app.state.mvFilter !== 'all'));
       var matchCount = filtered ? this.matchingMeasures().length : 0;
+      // Authored views explicitly request browsing formulas; preserve that opening view.
+      if (filtered && this._explanationContext) {
+        var matches = new Map();
+        this.buildRows().rows.forEach(function (row) { if (!row.isFolder && !row.isHeader) matches.set(row.name, row); });
+        var results = el('div', { cls: 'mv-starters' });
+        matches.forEach(function (row) {
+          var measure = app.msrOf(row.name);
+          results.appendChild(el('button', { cls: 'mv-starter', data: { measure: row.name }, onClick: function () { self.pickMeasure(row.name); } }, [
+            el('span', { cls: 'mv-row-label' }, [
+              el('strong', { text: row.name }), el('span', { cls: 'mv-row-table', text: row.table }),
+              el('code', { cls: 'mv-starter-dax', text: measure.dax || '— no expression —' })
+            ]), el('span', { text: '→', 'aria-hidden': 'true' })
+          ]));
+        });
+        this.mainEl.appendChild(el('section', { cls: 'mv-overview', 'aria-label': 'Matching measures' }, [
+          el('h1', { text: matches.size + ' matching measures' }),
+          el('p', { cls: 'mv-overview-intro', text: app.state.mvQuery ? 'Filter: ' + app.state.mvQuery : 'Current library filters' }),
+          results, !matches.size ? el('p', { text: 'No measures match these filters.' }) : null
+        ]));
+        return;
+      }
       M.tables.forEach(function (t) { t.measures.forEach(function (m) {
         all.push({ name: m.name, table: t.name, n: (M.msrUsedBy[m.name] || []).length });
         if (m.h) hidden++; links += (m._deps || []).length;
@@ -1844,7 +1875,8 @@
     formulaCard: function (card, label, color, close, canInline, comparing) {
       // Build the body before the header: formatting supplies the folding controls.
       var body = this.daxBody(card);
-      return el('article', { cls: 'mv-dax-card' + (comparing ? ' mv-comparison-card' : '') }, [
+      return el('article', { cls: 'mv-dax-card' + (comparing ? ' mv-comparison-card' : ''),
+        data: { smvKind: 'measure', smvName: card.name, smvTable: card.table } }, [
         this.daxHeader(card, label, 'width:8px;height:8px;border-radius:2px;flex:none;background:' + color + ';', close, canInline),
         body, this.referenceSection(card)
       ]);

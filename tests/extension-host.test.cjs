@@ -207,3 +207,17 @@ test('disposing the panel clears pending watcher refresh and prevents old reads 
   assert.equal(webview.posted.filter((m) => m.type === 'model').length, 0);
   assert.equal(h.vscode._watchers[0].disposed, true);
 });
+
+test('onboarding persists across workspaces in the VS Code profile, separate from model settings', async t => {
+  const globalState = new Map();
+  const first = harness(t, {globalState});
+  const {webview} = await open(first);
+  const progress = JSON.stringify({welcomed:true,enabled:false,seen:{tables:true}});
+  await webview.receive({type:'storage',key:'smv_onboarding_v1',value:progress});
+  await webview.receive({type:'storage',key:'smv-detail',value:'full'});
+  assert.equal(first.panel.storageDump().smv_onboarding_v1, progress);
+  assert.equal([...first.vscode._state.keys()].some(key=>key.endsWith('smv_onboarding_v1')),false);
+  const second = harness(t, {globalState});
+  assert.equal(second.panel.storageDump().smv_onboarding_v1, progress);
+  assert.equal(second.panel.storageDump()['smv-detail'], undefined);
+});

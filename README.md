@@ -57,9 +57,21 @@ The installation recording shows 0.3.9; its installation steps still apply. Feat
 It reads TMDL (`*.SemanticModel` folders and `.pbip` repos) and `model.bim`. It also renders a
 relationship matrix and a domain map of the whole model.
 
-## Fabric connection (unreleased)
+## Fabric connection (development preview)
 
-The dedicated Fabric feature branch adds work-account sign-in, workspace/model browsing, read-only metadata inspection, cached reopening, and manual refresh in the standalone app and desktop VS Code. Publisher-owned Microsoft application setup and live-tenant/platform acceptance are still required before release. See [Fabric connection status and setup](docs/fabric-connection.md). Read + Build access may expose limited internal metadata.
+The `develop` preview adds work-account sign-in, workspace/model browsing, read-only metadata inspection, cached reopening, and manual refresh in the standalone app and desktop VS Code. Standard sign-in and live model opening have been tested on macOS, Linux x64 and Windows x64; final permission and metadata-fidelity acceptance remains open before promotion to `main`. See [Fabric connection status and setup](docs/fabric-connection.md). Read + Build access may expose limited internal metadata.
+## Start here
+
+1. **[Try the demo first](https://MrPerfectH.github.io/Semantic-Model-Viewer/)** — no installation. Contoso Retail is synthetic. In Tables, add Sales with **+**, select it, and explore its filter paths; or open Measures and select a measure to see its dependencies.
+2. **Choose where to open your own model:**
+   - **VS Code:** install [Semantic Model Viewer from the Marketplace](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer), open your project folder, then select a model in **Semantic Models**. No Python or Power BI Desktop required. [Setup and VSIX alternative](vscode-extension/README.md#install-and-start).
+   - **Local desktop:** use the [Mac/Windows setup below](#install-2-minutes). Python 3 and a browser are required. Linux users can [run from source](#run-it-from-source).
+   - **Browser:** use the demo site, choose **Open model**, then import your folder or BIM file. Chrome/Edge also support a connected repository folder; browser folder permissions may be requested again in a later session.
+3. **Supported input:** a `*.SemanticModel` folder containing TMDL definitions, a PBIP project **folder** containing those models, or `model.bim`. A `.pbip` file alone is not the model; `.pbix` files cannot be opened directly. In Power BI Desktop, save as a PBIP project with TMDL definitions, or export BIM with your model tooling.
+
+If no model appears, check that the selected folder contains `definition/*.tmdl` or `model.bim`. In VS Code use **Refresh Model List**; in the browser/local app retry **Open model** with the model folder itself. The VS Code package does not bundle the demo; its demo link opens the browser.
+
+After opening a model, the optional welcome offers contextual tips for Tables, Measures, and sharing. **Skip tour**, **Close**, or **Skip remaining tips** keep you in control; **Help** restarts guidance. Tips never rearrange your canvas or change your model. Preferences stay in this browser/app profile or VS Code profile; snapshots do not launch onboarding.
 
 ## Install (2 minutes)
 
@@ -78,7 +90,10 @@ Needs **Python 3** and **Chrome or Edge** (other browsers work, in a normal tab)
 3. Double-click the installer in the repo folder:
    - **Mac:** `Install on Mac.command`. It adds **Semantic Model Viewer** to
      `~/Applications`; drag it to the Dock.
-   - **Windows:** `Install on Windows.cmd`. It adds a Desktop icon and a Start menu entry.
+   - **Windows:** `Install on Windows.cmd`. It adds a Desktop icon and a Start menu entry,
+     and a **Semantic Model Viewer** button in the **External Tools** ribbon of Power BI
+     Desktop (restart Power BI Desktop to see it). Windows asks for administrator approval
+     once for that button. The button opens the app; it does not load the open model yet.
 4. The app opens in its own window. Use **Open model → Import model → Browse folder…**
    or **Connect repo folder…** and pick a `*.SemanticModel` folder, a `.pbip` repo folder
    (every model inside is found) or a folder holding `model.bim`. Dragging a folder onto the
@@ -123,8 +138,7 @@ and run **Extensions: Install from VSIX…**. See the
 <https://MrPerfectH.github.io/Semantic-Model-Viewer/> opens the same viewer with the
 built-in synthetic "Contoso Retail" model already loaded, so you can look around before
 installing. You can import your own model there as well; it is parsed in your browser and
-not uploaded, but because the page itself reads the folder, the browser shows a one-time
-"allow this site to view files" prompt that the installed app never does.
+not uploaded, but because the page itself reads the folder, the browser shows a "allow this site to view files" prompt that the installed app never does.
 
 ## About the app
 
@@ -165,7 +179,7 @@ it stop after the window has been closed for three minutes; `--port` picks anoth
 
 Without the local app, `Models/tools/viewer/index.html` also opens straight from disk or
 from any static host (`python3 -m http.server` in that folder works). Folders are then read
-by the browser itself, which asks for permission once per folder, and the built-in demo
+by the browser itself, which asks for folder permission (which may need renewal), and the built-in demo
 model needs a web server to load.
 
 A fresh browser profile starts with **No model selected** (the hosted demo opens the sample
@@ -210,6 +224,7 @@ It generates a new offline snapshot on every launch, validates relationship
 endpoints, and records the model source and Viewer revision beside the HTML.
 It avoids copied web assets and stale local servers. See the
 [launch and installation instructions](docs/cli.md#open-a-fresh-local-view).
+Agents can also capture annotated views and build walkthroughs with imported numbers, transparent calculations, and proposed changes. See [visual explanations](docs/visual-explanations.md). Image capture uses an installed Chrome/Chromium; snapshot export still needs no browser.
 
 A snapshot contains the **full model metadata and DAX**, even if the starting canvas
 is empty or focused on a few tables. It is frozen at the displayed creation time.
@@ -469,13 +484,23 @@ columns connected to measures visible in the graph. A dashed **Whole table** lin
 to the table header (for example, `COUNTROWS(Sales)`); a solid column link attaches to its
 row (for example, `SUM(Sales[Amount])`). A measure's home table does not imply a dependency.
 
-Select a source table header to find measures referencing that table or any of its columns.
+In the left library, choose **Table or column**. Expand a table and choose **Use whole
+table** or any column; the picker includes columns with no detected consumers. The library
+then lists direct references first, followed by indirect dependents. Change the source to
+return to the picker. You can also select a source table header in the graph to find
+measures referencing that table or any of its columns.
 Select a column row to narrow the source. The table details drawer also provides
 **Find dependent measures**, and each column has **Find measures**. Source analysis includes
 indirect dependents through measures, a **Direct only** filter, and searchable results.
 Selecting a dependent measure inspects its DAX without changing the source; **Analyze this
 measure** returns to measure analysis. Source selection, graph settings, and inspected DAX
 are preserved in interactive snapshots.
+
+Each formula card owns its reference summary. Original DAX shows direct references only;
+**Inline measures** shows references resolved from the expanded expression, including
+columns introduced by inlined measures. Comparison cards retain their own reference scope.
+The DAX pane opens when a dependent measure is inspected; before that, the graph uses
+the available width. Inline, formatting and source library settings also survive snapshots.
 
 This is static DAX reference detection, not complete engine lineage. Calculated columns
 and calculated tables can be sources, but their defining expressions are not expanded.
@@ -578,3 +603,5 @@ distance apply to the target. **Back** restores navigation, filters and reader s
 also restores the complete layout membership. Arrange remains input → consumer and
 preserves positions until explicitly invoked. Static analysis is partial; cycles and
 uncertainty remain visible. No M is executed or included in default shared snapshots.
+
+The [interactive agent workflow](docs/interactive-viewer.md) uses the CLI to open focused Tables and Measures views in the integrated browser, reuse a live session for follow-up questions, read selections, and export acknowledged viewer state. MCP is optional; the browser workflow needs no embedded chat UI.

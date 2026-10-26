@@ -68,3 +68,13 @@ The native lifecycle runner is intended only for an isolated installed-extension
 1. Obtain a known test source and a verified editor and Read + Build-only identity. Compare available table/column/measure/relationship definitions, DAX and Power Query across Import, DirectQuery and Direct Lake. Do not infer effective permissions from successful discovery or a fallback result.
 2. Complete the maintainer distribution review of declared prerequisites, bundled-component terms, tested architecture limits and ad hoc signing. A publisher-notarized standalone Mac installer is not claimed or produced.
 3. Record maintainer acceptance in #72. Keep #64/#65/#68/#72 open until the relevant evidence exists. Do not mark the story complete merely because the main sign-in/open journey works.
+
+## Develop integration
+
+The Fabric branch incorporates develop at `0e4fd77718557858135aba993f338306b2f3c1d3`, preserving its VS Code theme support, onboarding, authored views, MCP app bridge and CLI workflows. This integration targets develop pre-releases only; the final main acceptance gate remains open.
+
+Local validation passed 805 regression tests and 41 CLI/session tests. Browser checks passed snapshots, onboarding, measure layouts/search and the authored/MCP workflows. Integration exposed a conflict between prepared-view formula browsing and the normal viewer's optional search-results dialog; the prepared context retains immediate browsing while normal search retains the overview. The failing authored browser case passed after correction, along with the normal search browser case and 53 targeted measure/interactive/snapshot regressions.
+
+Develop publishing now waits for the six-target helper build, macOS signing/smoke check, packaged preview validation and regression checks before uploading the pre-release to Marketplace. No stable release or main merge is authorized by this integration.
+
+The additional enterprise-tenant test discovered 16 models but opened none through XMLA (`XmlaAccessDenied` for all 16). Dedicated capacity was confirmed; effective Build rights and the XMLA setting remain unconfirmed. It is denied-access evidence, not a passing Read + Build case. See issues #68 and #72 for the recorded outstanding gate.

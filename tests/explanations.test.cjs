@@ -1,0 +1,109 @@
+'use strict';
+const {test}=require('node:test');const assert=require('node:assert/strict');
+const fs=require('node:fs'),os=require('node:os'),path=require('node:path');
+const {validate,resolve}=require('../Models/tools/viewer/js/explanation-view.js');
+const {prepare,validateExplanation}=require('../Models/tools/viewer/scripts/cli/explain.cjs');
+const demo=path.resolve(__dirname,'../Models/demo/Contoso Retail.SemanticModel');
+const model={tables:[{name:'A',columns:[{name:'ID'}],measures:[{name:'Amount'}]},{name:'B',columns:[{name:'ID'}],measures:[]}],relationships:[{name:'one',from:'A',to:'B'},{name:'two',from:'A',to:'B'}]};
+test('qualified references disambiguate columns and parallel relationships',()=>{assert.equal(resolve(model,{kind:'column',table:'B',name:'ID'}),model.tables[1].columns[0]);assert.equal(resolve(model,{kind:'relationship',name:'two'}),model.relationships[1]);assert.throws(()=>resolve(model,{kind:'column',name:'ID'}),/needs table/);assert.throws(()=>resolve(model,{kind:'table',name:'Missing'}),/unknown/);});
+test('view contract rejects typos, invalid dimensions and unresolved highlights',()=>{assert.throws(()=>validate(model,{version:99}),/version/);assert.throws(()=>validate(model,{version:1,higlights:[]}),/unknown field/);assert.throws(()=>validate(model,{version:1,width:-2}),/width/);assert.throws(()=>validate(model,{version:1,mode:'measures'}),/focus/);assert.throws(()=>validate(model,{version:1,highlights:[{kind:'table',name:'missing'}]}),/unknown/);});
+test('explanation rejects duplicate or unsafe step IDs',()=>{const step={id:'x',caption:'A',view:{version:1}};assert.throws(()=>validateExplanation({version:1,title:'Test',model:demo,steps:[step,step]}),/unique/);assert.throws(()=>validateExplanation({version:1,title:'Test',model:demo,steps:[{...step,id:'../escape'}]}),/unique/);});
+test('explanation uses the real offline viewer and protects script boundaries',()=>{const p=prepare(demo,{version:1,tables:['Sales'],callouts:[{object:{kind:'table',name:'Sales'},text:'</script><script>bad()</script>'}]});assert.match(p.html,/SMVExplanation.start/);assert.ok(!p.html.includes('<script>bad()'));assert.equal(p.view.scale,2);assert.equal(p.hash.length,64);});
+const results=require('../Models/tools/viewer/scripts/cli/results.cjs');
+const amounts={version:1,columns:[{name:'Amount',type:'number',unit:'PLN'}],rows:[['0.1'],['0.2'],[null]],origin:{kind:'illustrative'}};
+test('dataset imports preserve decimals, nulls and unknown provenance',()=>{const d=results.validate(amounts);assert.equal(d.origin.executedAt,null);assert.equal(d.rows[2][0],null);assert.throws(()=>results.validate({...amounts,rows:[[Infinity]]}),/invalid/);assert.match(results.render(d),/Illustrative/);assert.match(results.render(d),/No value/);});
+test('CSV handles quoted separators, multiline fields, booleans and null numbers',()=>{const d=results.fromCSV('Name,Value,Enabled\r\n"A, B",,true\r\n"two\nlines",12.20,false\r\n',{columns:[{name:'Name',type:'string'},{name:'Value',type:'number'},{name:'Enabled',type:'boolean'}],origin:{kind:'imported'}});assert.deepEqual(d.rows,[['A, B',null,true],['two\nlines','12.20',false]]);assert.throws(()=>results.parseCSV('"open'),/Unclosed/);});
+test('calculation is exact decimal arithmetic with visible inputs',()=>{const defs={total:{op:'sum',inputs:[{dataset:'a',row:0,column:'Amount'},{dataset:'a',row:1,column:'Amount'}],decimals:2}};const c=results.calculate(defs,{a:results.validate(amounts)});assert.equal(c.total.value,'0.30');assert.equal(c.total.unit,'PLN');assert.equal(c.total.inputs.length,2);assert.doesNotThrow(()=>JSON.stringify(c));});
+test('calculations reject cycles, incompatible units, unlabelled constants and zero divisors',()=>{const input=(value,unit='')=>({kind:'illustrative',value,unit});assert.throws(()=>results.calculate({x:{op:'sum',inputs:[{calculation:'x'}]}},{}),/cycle/);assert.throws(()=>results.calculate({x:{op:'subtract',inputs:[input(2,'PLN'),input(1,'USD')]}},{}),/units/);assert.throws(()=>results.calculate({x:{op:'ratio',inputs:[input(2),input(0)]}},{}),/zero/);assert.throws(()=>results.calculate({x:{op:'sum',inputs:[{value:1}]}},{}),/illustrative/);});
+test('null propagates and chained calculations retain unrounded precision',()=>{const defs={third:{op:'divide',inputs:[{value:1,kind:'illustrative'},{value:3,kind:'illustrative'}],decimals:2},whole:{op:'multiply',inputs:[{calculation:'third'},{value:3,kind:'illustrative'}]},missing:{op:'sum',inputs:[{dataset:'a',row:2,column:'Amount'}]}};const c=results.calculate(defs,{a:results.validate(amounts)});assert.equal(c.third.value,'0.33');assert.equal(c.whole.value,'1.00');assert.equal(c.missing.value,null);});
+test('calculation metadata preserves the exact source cell reference',()=>{const c=results.calculate({x:{op:'sum',inputs:[{dataset:'amounts',row:1,column:'Amount'}]}},{amounts:results.validate(amounts)});assert.deepEqual(c.x.inputs[0].reference,{dataset:'amounts',row:1,column:'Amount'});});
+test('CLI validation errors expose structured object context',t=>{const {spawnSync}=require('node:child_process');const root=fs.mkdtempSync(path.join(os.tmpdir(),'smv-errors-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));const file=path.join(root,'view.json');fs.writeFileSync(file,JSON.stringify({version:1,highlights:[{kind:'table',name:'Missing'}]}));const r=spawnSync(process.execPath,[path.join(__dirname,'../bin/smv.cjs'),'shot',demo,'--view',file,'--out',path.join(root,'image.png'),'--json'],{encoding:'utf8'});assert.equal(r.status,1);const out=JSON.parse(r.stderr);assert.equal(out.error.code,'VIEW_INVALID');assert.equal(out.error.details.object.name,'Missing');assert.ok(!fs.existsSync(path.join(root,'image.png')));});
+
+test('browser startup accepts an endpoint file without a stderr banner',async t=>{
+  const {EventEmitter}=require('node:events'),{PassThrough}=require('node:stream');
+  const {waitForEndpoint}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+  const profile=fs.mkdtempSync(path.join(os.tmpdir(),'smv-endpoint-'));t.after(()=>fs.rmSync(profile,{recursive:true,force:true}));
+  const child=new EventEmitter();child.stderr=new PassThrough();
+  // A partial write must not resolve to an invalid endpoint.
+  fs.writeFileSync(path.join(profile,'DevToolsActivePort'),'12345\n');
+  const endpoint=waitForEndpoint(child,profile,1000);
+  fs.writeFileSync(path.join(profile,'DevToolsActivePort'),'12345\n/devtools/browser/test-id\n');
+  assert.equal(await endpoint,'ws://127.0.0.1:12345/devtools/browser/test-id');
+  assert.equal(child.listenerCount('exit'),0);assert.equal(child.stderr.listenerCount('data'),0);
+});
+test('browser startup supports stderr and retains failure diagnostics',async t=>{
+  const {EventEmitter}=require('node:events'),{PassThrough}=require('node:stream');
+  const {waitForEndpoint}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+  const profile=fs.mkdtempSync(path.join(os.tmpdir(),'smv-endpoint-'));t.after(()=>fs.rmSync(profile,{recursive:true,force:true}));
+  const child=()=>{const c=new EventEmitter();c.stderr=new PassThrough();return c;};
+  const a=child(),ready=waitForEndpoint(a,profile,1000);a.stderr.write('DevTools listening on ws://127.0.0.1:1234/devtools/browser/test\n');
+  assert.equal(await ready,'ws://127.0.0.1:1234/devtools/browser/test');
+  const b=child(),timeout=waitForEndpoint(b,profile,30);b.stderr.write('sandbox diagnostic');
+  await assert.rejects(timeout,/startup timed out.*sandbox diagnostic/);
+  const c=child(),exited=waitForEndpoint(c,profile,1000);c.stderr.write('startup failed');c.emit('exit',1,null);
+  await assert.rejects(exited,/Browser exited 1: startup failed/);
+});
+
+test('capture cleanup terminates descendants even after the launcher exits',{skip:process.platform==='win32'},async t=>{
+  const {spawn}=require('node:child_process');
+  const {stopBrowser}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+  const temp=fs.mkdtempSync(path.join(os.tmpdir(),'smv-process-tree-'));
+  const marker=path.join(temp,'alive');
+  const descendant="require('node:fs').writeFileSync(process.argv[1],'ready');setInterval(()=>require('node:fs').writeFileSync(process.argv[1],'alive'),20)";
+  const launcher="const c=require('node:child_process').spawn(process.execPath,['-e',process.argv[1],process.argv[2]],{stdio:'ignore'});c.unref()";
+  const child=spawn(process.execPath,['-e',launcher,descendant,marker],{detached:true,stdio:'ignore'});
+  t.after(async()=>{await stopBrowser(child);fs.rmSync(temp,{recursive:true,force:true});});
+  await new Promise((resolve,reject)=>{child.once('exit',resolve);child.once('error',reject);});
+  const deadline=Date.now()+3000;
+  while(!fs.existsSync(marker)){assert.ok(Date.now()<deadline,'descendant started');await new Promise(r=>setTimeout(r,20));}
+  await stopBrowser(child);
+  fs.rmSync(marker,{force:true});
+  await new Promise(r=>setTimeout(r,150));
+  assert.equal(fs.existsSync(marker),false,'no descendant continues writing after cleanup');
+});
+
+test('capture cleanup tolerates an inaccessible exited process group',{skip:process.platform==='win32'},async t=>{
+  const {stopBrowser}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+  const child={pid:987654321,exitCode:0,signalCode:null};
+  const signals=[];let code='EPERM';
+  t.mock.method(process,'kill',(pid,signal)=>{signals.push([pid,signal]);throw Object.assign(new Error('kill '+code),{code});});
+  await stopBrowser(child);
+  assert.deepEqual(signals,[[-child.pid,'SIGTERM'],[-child.pid,'SIGKILL']]);
+  code='EINVAL';
+  await assert.rejects(stopBrowser(child),{code:'EINVAL'});
+  code='EPERM';
+  const running=Object.assign(new (require('node:events').EventEmitter)(),{pid:child.pid,exitCode:null,signalCode:null});
+  await assert.rejects(stopBrowser(running),{code:'EPERM'});
+});
+
+test('capture cleanup falls back to its live launcher when group signaling is denied',{skip:process.platform==='win32'},async t=>{
+  const {stopBrowser}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+  const child=Object.assign(new (require('node:events').EventEmitter)(),{pid:987654321,exitCode:null,signalCode:null});
+  const signals=[];
+  t.mock.method(process,'kill',(pid,signal)=>{
+    signals.push([pid,signal]);
+    if(pid<0)throw Object.assign(new Error('kill EPERM'),{code:'EPERM'});
+    assert.equal(pid,child.pid);child.exitCode=0;child.emit('exit',0);return true;
+  });
+  await stopBrowser(child);
+  assert.deepEqual(signals,[[-child.pid,'SIGTERM'],[child.pid,'SIGTERM'],[-child.pid,'SIGKILL']]);
+});
+
+test('browser startup retries a locked endpoint file and reports a persistent lock',async t=>{
+  const {EventEmitter}=require('node:events'),{PassThrough}=require('node:stream');
+  const {waitForEndpoint}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+  const profile=fs.mkdtempSync(path.join(os.tmpdir(),'smv-locked-endpoint-'));t.after(()=>fs.rmSync(profile,{recursive:true,force:true}));
+  const file=path.join(profile,'DevToolsActivePort'),read=fs.readFileSync;
+  let attempts=0,locked=true;
+  t.mock.method(fs,'readFileSync',function(name,...args){
+    if(name!==file)return read.call(this,name,...args);
+    attempts++;
+    if(locked)throw Object.assign(new Error('endpoint is locked'),{code:'EBUSY'});
+    return '12345\n/devtools/browser/recovered';
+  });
+  const child=()=>{const c=new EventEmitter();c.stderr=new PassThrough();return c;};
+  const recovered=waitForEndpoint(child(),profile,1000);locked=false;
+  assert.equal(await recovered,'ws://127.0.0.1:12345/devtools/browser/recovered');assert.ok(attempts>=2);
+  locked=true;
+  await assert.rejects(waitForEndpoint(child(),profile,80),/startup timed out.*EBUSY: endpoint is locked/);
+});

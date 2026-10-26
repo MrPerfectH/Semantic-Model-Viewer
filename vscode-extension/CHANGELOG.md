@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.5.0 — Fabric Preview (unreleased)
+## 0.5.0 — Fabric development preview (unreleased)
 
-- Require VS Code 1.101 or later for the Fabric host runtime. — Fabric feature branch
+- Require VS Code 1.101 or later for the Fabric host runtime.
+- Integrate Fabric into develop pre-releases with all six native helpers and component notices. Main promotion still requires final acceptance.
+- An additional enterprise workspace passed login/discovery but denied XMLA opens for all 16 models; effective Build permissions and XMLA configuration remain unconfirmed.
 
 - Add work-account sign-in, workspace/model browsing, and explicit XMLA or Fabric definition API metadata access.
 - Cache metadata for offline reopening and support refresh, account switching, sign-out, removal, and existing HTML snapshots.
@@ -35,6 +37,25 @@
 - Unify the Spellbook palette across workspaces and simplify the Tables toolbar.
 
 Dependency analysis reads static DAX references; it does not execute DAX or follow calculated-column/table defining expressions or relationship filter propagation. The existing snapshot CLI remains available. Guided onboarding, agent sessions and visual explanations, MCP/inline apps, and Power BI External Tools installation are not part of this release.
+## Unreleased
+
+- Follow the active VS Code light, dark, and high-contrast theme, including live changes. Browser and snapshot Classic/Spellbook appearances stay unchanged.
+- Keep at least 240 pixels of dependency graph canvas in stacked split view. When the window is too short for both panels, scroll the workspace to reach DAX instead of compressing the graph.
+- Show “DAX below graph (narrow view)” when the layout automatically stacks. Restore the saved beside layout and its label when the window is wide enough.
+
+## 0.5.173 — pre-release
+
+This development preview includes the following changes since the last documented release:
+
+- Analyze a table or column to find its direct and indirect dependent measures. Use **Direct only** to narrow the list, then inspect a formula while keeping the source selected.
+- Navigate from colored table and column references in formula cards into dependency analysis. Inlined DAX shows the references in the expanded formula.
+- Browse and search measures with a formula overview and clearer source navigation.
+- Use optional first-run and contextual guidance; skip the tips when you do not need them.
+- Preserve analysis state in interactive HTML snapshots, including the selected source, inspected formula, filters and layout preferences.
+- Add interactive viewer sessions and visual explanations for model exploration.
+- Verify the new Power BI External Tools registration content before reporting installation success; an older file no longer counts as a successful update.
+
+Known limitations: dependency analysis is static and does not execute DAX or Power Query. The Power BI External Tools button opens the viewer; it does not automatically connect to the active Desktop model. This preview can compress the graph excessively in narrow split views; the fix is listed under Unreleased above.
 
 ## 0.3.9
 

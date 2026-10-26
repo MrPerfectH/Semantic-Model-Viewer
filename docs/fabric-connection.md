@@ -1,6 +1,6 @@
 # Fabric connection (unreleased)
 
-This feature is developed on `feature/fabric-connect` under GitHub issues #64–#72. It must not merge into `main` before the complete-feature acceptance gate in #72. The implementation is available as a Fabric preview. Standard browser sign-in and live XMLA model opening have passed on macOS, Linux x64 and Windows x64. See the [current acceptance record](verification/fabric-20261026/acceptance.md) for exact evidence and remaining limits.
+This feature is integrated into the `develop` pre-release under GitHub issues #64–#72. It must not merge into `main` before the complete-feature acceptance gate in #72. The implementation is available as a Fabric preview. Standard browser sign-in and live XMLA model opening have passed on macOS, Linux x64 and Windows x64. See the [current acceptance record](verification/fabric-20261026/acceptance.md) for exact evidence and remaining limits.
 
 ## User journey
 
@@ -33,3 +33,7 @@ Automated tests cover transport pagination/LROs, safe origins and paths, authent
 Before full acceptance/main merge, complete controlled editor versus Read + Build source comparisons, the Import/DirectQuery/Direct Lake fidelity matrix, remaining installed-host lifecycle checks, public standalone distribution/signing review, and maintainer acceptance. The six compiled helper targets are not six verified runtime targets. The current acceptance record distinguishes completed live checks from remaining checks; the October 13 verification record is historical.
 
 A suspended Fabric capacity cannot serve its models. The viewer reports this state when its existing permissions allow capacity diagnostics; it never resumes a capacity or changes billing.
+
+## Enterprise denied-access check
+
+An additional enterprise tenant was tested on the installed Windows x64 0.5.0 preview. Standard sign-in, account switching, workspace discovery and listing all 16 semantic models succeeded. All 16 metadata-only XMLA opens returned `XmlaAccessDenied`. Existing-permission probes confirmed dedicated capacity, but did not establish its XMLA setting or the account's effective Build rights. This is a denied-access result, not a passing Read + Build test or proof of a particular tenant-policy cause. Detailed safe diagnostics and a controlled permission test remain outstanding. No remote model, permissions or capacity settings were changed.

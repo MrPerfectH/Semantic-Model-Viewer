@@ -1,0 +1,22 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict');const fs=require('node:fs'),os=require('node:os'),path=require('node:path');
+const {serve,request}=require('../Models/tools/viewer/scripts/cli/session.cjs');const {discover,select}=require('../Models/tools/viewer/scripts/cli/discover.cjs');
+const {prepare}=require('../Models/tools/viewer/scripts/cli/explain.cjs');
+function fixture(t){const root=fs.mkdtempSync(path.join(os.tmpdir(),'smv-session-test-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));const model=path.join(root,'Example.SemanticModel');fs.mkdirSync(model);fs.writeFileSync(path.join(model,'model.tmdl'),'model Model\n');fs.writeFileSync(path.join(model,'A.tmdl'),'table A\n\tcolumn ID\n\t\tdataType: int64\n');return {root,model};}
+test('discovery returns stable IDs and detects ambiguous names',t=>{const {root,model}=fixture(t);const second=path.join(root,'nested','Example.SemanticModel');fs.mkdirSync(path.dirname(second));fs.cpSync(model,second,{recursive:true});const rows=discover([root]);assert.equal(rows.length,2);assert.deepEqual(discover([root]),rows);assert.throws(()=>select(rows,'Example'),/Ambiguous/);assert.equal(select(rows,rows[0].id).path,rows[0].path);});
+test('BIM concept models use the same offline rendering path',t=>{const {root}=fixture(t),file=path.join(root,'concept.bim');fs.writeFileSync(file,JSON.stringify({name:'Concept',model:{tables:[{name:'A',columns:[{name:'ID',dataType:'int64'}],measures:[]}],relationships:[]}}));const p=prepare(file,{version:1,highlights:[{kind:'table',name:'A'}]});assert.equal(p.model.tables[0].name,'A');assert.match(p.html,/SMVExplanation.start/);});
+test('local session protects access, reuses matching inputs, refreshes and stops',{timeout:15000},async t=>{const {root,model}=fixture(t),file=path.join(root,'session.json'),view=path.join(root,'view.json');fs.writeFileSync(view,JSON.stringify({version:1,highlights:[{kind:'table',name:'A'}]}));const server=await serve(model,{view,session:file,watch:true});t.after(server.close);
+  assert.equal((await fetch(server.url)).status,200);
+  const malformed=await new Promise((resolve,reject)=>{const req=require('node:http').request({hostname:'127.0.0.1',port:new URL(server.url).port,path:'//'},res=>{res.resume();resolve(res.statusCode);});req.on('error',reject);req.end();});assert.equal(malformed,400);assert.equal((await request(file,'status')).pid,process.pid);
+  assert.equal((await fetch(server.url.split('?')[0])).status,403);
+  assert.equal((await serve(model,{view,session:file,watch:true})).reused,true);
+  await assert.rejects(serve(model,{view,session:file}),/different inputs/);
+  fs.writeFileSync(view,JSON.stringify({version:1,highlights:[{kind:'table',name:'missing'}]}));
+  let state;const until=Date.now()+5000;do{await new Promise(r=>setTimeout(r,100));state=await request(file,'status');}while(!state.error&&Date.now()<until);
+  assert.match(state.error,/unknown/);assert.equal((await fetch(server.url)).status,409);
+  fs.writeFileSync(view,JSON.stringify({version:1,highlights:[{kind:'table',name:'A'}]}));
+  do{await new Promise(r=>setTimeout(r,100));state=await request(file,'status');}while(state.error&&Date.now()<until);
+  assert.equal(state.error,null);assert.equal((await fetch(server.url)).status,200);
+  assert.equal((await request(file,'stop')).stopped,true);await new Promise(r=>setTimeout(r,50));assert.ok(!fs.existsSync(file));
+});
+test('background session can be started and stopped through its state file',{timeout:20000},async t=>{const {root,model}=fixture(t),file=path.join(root,'background.json');const state=await serve(model,{background:true,session:file});t.after(async()=>{if(fs.existsSync(file))await request(file,'stop');});assert.notEqual(state.pid,process.pid);assert.equal((await fetch(state.url)).status,200);await request(file,'stop');});

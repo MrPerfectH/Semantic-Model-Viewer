@@ -21,6 +21,7 @@
     var o = options || {}, styles = cardStyles(o);
     function part(tag, cls, style, text) { var e = doc.createElement(tag); e.className = cls; e.style.cssText = style; if (text !== undefined) e.textContent = text; return e; }
     var card = part('div', 'wui-card', styles.card), head = part('div', 'wui-card-head', styles.head), badge = part('span', 'wui-card-badge', styles.badge, o.badge || 'Q');
+    if (g.SMVHost && g.SMVHost.kind === 'vscode') card.style.setProperty('--smv-category', color(o.color));
     var titleWrap = part('div', 'wui-card-title-wrap', styles.titleWrap), title = part('div', 'wui-card-title', styles.title, o.label || ''), subtitle = part('div', 'wui-card-subtitle', styles.subtitle, o.subtitle || '');
     title.title = o.label || ''; badge.title = o.badgeTitle || ''; subtitle.title = o.subtitle || '';
     titleWrap.appendChild(title); titleWrap.appendChild(subtitle); head.appendChild(badge); head.appendChild(titleWrap); card.appendChild(head);

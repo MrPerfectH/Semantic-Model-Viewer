@@ -235,7 +235,7 @@
       bar.appendChild(button('Clear',function(){cv.setMarked([]);},false,'Clear the selection (Esc)'));
     },
     update:function(){
-      var self=this,app=this.app,st=app.state,cv=app.canvas,graph=st.loaded&&st.viewMode==='graph';
+      var self=this,app=this.app,st=app.state,cv=app.canvas,graph=!!app.model&&(st.loaded||!app.snapshotMode)&&st.viewMode==='graph';
       this.renderSelection();
       /* Domains borrows the Tables chrome — the same toolbar row and status line — so the two
          canvases speak one visual language instead of the old floating chip plus legend. */
@@ -245,6 +245,8 @@
       this.toolbar.hidden=!graph&&!clusters;this.status.hidden=!graph&&!clusters;
       this.mapHost.hidden=!graph||!this.names.size||this.mapHidden;
       var main=document.getElementById('main');
+      var start=!!graph&&!app.modelKey&&!app.model.tables.length;
+      main.classList.toggle('ex-start',start);
       main.classList.toggle('ex-graph',!!graph);
       main.classList.toggle('ex-clusters',!!clusters);
       main.style.setProperty('--library-width',width+'px');
@@ -261,6 +263,7 @@
       }
       this._clusterKey=null;
       if(!graph)return;
+      if(start){this.library.hidden=true;this.toolbar.hidden=true;this.nav.hidden=true;this.status.hidden=true;this.empty.hidden=false;this.renderEmpty();return;}
       this.empty.hidden=!!this.names.size;
       this.status.textContent=this.message || 'Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several';
       var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
@@ -379,12 +382,16 @@
       var self=this,app=this.app;U.clear(this.empty);
       /* No model chosen yet (see app.js init) vs. a real model with an empty
          canvas: the first needs "pick a model", not "explore 0 tables". */
-      if(!app.model.tables.length&&app.state.modelName==='Choose a model'){
-        this.empty.appendChild(el('div',{cls:'ex-empty-card'},[
-          el('span',{cls:'ex-eyebrow',text:'SEMANTIC MODEL VIEWER'}),el('h1',{text:'No model selected.'}),
-          el('p',{text:'Open the built-in sample, import a model, or connect a repo folder to get started.'}),
-          button('Choose a model',function(){app.setState({showModelMenu:true});},true)
-        ]));
+      if(!app.state.loaded || (!app.model.tables.length && !app.modelKey)){
+        var card=el('div',{cls:'ex-empty-card'},[
+          el('span',{cls:'ex-eyebrow',text:'START HERE'}),el('h1',{text:'Open your first model.'}),
+          el('p',{text:app.host?'Open a folder in VS Code containing a *.SemanticModel folder or model.bim, then choose a model.':app.server?'Try the synthetic demo, or browse a local folder containing a *.SemanticModel definition or model.bim.':'Try the synthetic demo, or import a *.SemanticModel folder or model.bim. Your model is parsed in this browser.'})
+        ]);
+        if(!app.host)card.appendChild(button('Try the demo',function(){app.switchModel('builtin');},true));
+        else card.appendChild(el('a',{cls:'ex-button',text:'Try the demo in your browser',href:'https://MrPerfectH.github.io/Semantic-Model-Viewer/',target:'_blank',rel:'noopener'}));
+        card.appendChild(button(app.host?'Choose model':'Open model',function(){if(app.host)app.hostSelectModel();else app.setState({showImport:true,showModelMenu:false,importError:'',importReady:false});},true));
+        card.appendChild(el('p',{text:'No compatible model? Save your Power BI project as PBIP with TMDL definitions, or export model.bim. A .pbix file cannot be opened directly. Select the project folder, not just the .pbip file.'}));
+        this.empty.appendChild(card);
         return;
       }
       this.empty.appendChild(el('div',{cls:'ex-empty-card'},[
@@ -412,10 +419,11 @@
         x0=Math.min(x0,b.x);y0=Math.min(y0,b.y);x1=Math.max(x1,b.x+b.w);y1=Math.max(y1,b.y+b.h);
       });
       var scale=Math.min(184/Math.max(1,x1-x0),96/Math.max(1,y1-y0)),ox=(200-(x1-x0)*scale)/2,oy=(112-(y1-y0)*scale)/2;
-      this.mapBounds={x:x0,y:y0,scale:scale,ox:ox,oy:oy};ctx.strokeStyle=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'#cfb992':'#d4dbe8';ctx.lineWidth=.7;
+      var theme=g.ViewerTheme,spellbook=theme&&theme.get()==='spellbook';
+      this.mapBounds={x:x0,y:y0,scale:scale,ox:ox,oy:oy};ctx.strokeStyle=theme?theme.paint('muted',spellbook?'#cfb992':'#d4dbe8'):'#d4dbe8';ctx.lineWidth=.7;
       app.model.relationships.forEach(function(r){var a=boxes[r.from],b=boxes[r.to];if(!a||!b)return;ctx.beginPath();ctx.moveTo(ox+(a.x+a.w/2-x0)*scale,oy+(a.y+35-y0)*scale);ctx.lineTo(ox+(b.x+b.w/2-x0)*scale,oy+(b.y+35-y0)*scale);ctx.stroke();});
       ns.forEach(function(n){var p=boxes[n];ctx.fillStyle=app.tableColor(app.model.byName[n]);ctx.fillRect(ox+(p.x-x0)*scale,oy+(p.y-y0)*scale,Math.max(3,p.w*scale),Math.max(2,p.h*scale));});
-      ctx.fillStyle=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'rgba(113,59,67,.07)':'rgba(37,99,235,.07)';ctx.strokeStyle=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'#713b43':'#2563eb';ctx.lineWidth=1.5;var bx=ox+(view.x-x0)*scale,by=oy+(view.y-y0)*scale;ctx.fillRect(bx,by,view.w*scale,view.h*scale);ctx.strokeRect(bx,by,view.w*scale,view.h*scale);
+      ctx.fillStyle=theme?theme.paint('accent-halo',spellbook?'rgba(113,59,67,.07)':'rgba(37,99,235,.07)'):'rgba(37,99,235,.07)';ctx.strokeStyle=theme?theme.paint('burgundy',spellbook?'#713b43':'#2563eb'):'#2563eb';ctx.lineWidth=1.5;var bx=ox+(view.x-x0)*scale,by=oy+(view.y-y0)*scale;ctx.fillRect(bx,by,view.w*scale,view.h*scale);ctx.strokeRect(bx,by,view.w*scale,view.h*scale);
     },
     navigateMap:function(e){var b=this.mapBounds;if(!b)return;var r=this.map.getBoundingClientRect(),cv=this.app.canvas;var x=((e.clientX-r.left)*200/r.width-b.ox)/b.scale+b.x,y=((e.clientY-r.top)*112/r.height-b.oy)/b.scale+b.y;cv.view.x=cv.host.clientWidth/2-x*cv.view.k;cv.view.y=cv.host.clientHeight/2-y*cv.view.k;cv.updateTransform();}
   };
