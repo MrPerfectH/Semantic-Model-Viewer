@@ -105,6 +105,7 @@ test('question diagrams support direction, calculations and named live views',as
 
 test('question diagrams preserve older servers and reuse the current runtime on later calls',async t=>{
   const {dir,model}=setup(t);const real=managed.version;t.mock.method(managed,'version',()=> '0.0.1');const old=await api.serve(model,{newSession:true});t.mock.method(managed,'version',real);
-  const first=run(dir,'show',model,'--table','Date','--with','Sales');assert.notEqual(first.sessionId,old.sessionId);assert.match(first.warnings.join(' '),/left running/);
-  const second=run(dir,'show',model,'--table','Date','--with','Sales');assert.equal(second.sessionId,first.sessionId);assert.equal(second.reused,true);assert.equal((await managed.list(model)).filter(r=>r.running).length,2);
+  const exec=require('node:util').promisify(require('node:child_process').execFile);const invoke=async()=>JSON.parse((await exec(process.execPath,[cli,'show',model,'--table','Date','--with','Sales'],{cwd:dir,env:process.env,timeout:20000})).stdout);
+  const first=await invoke();assert.notEqual(first.sessionId,old.sessionId);assert.match(first.warnings.join(' '),/left running/);
+  const second=await invoke();assert.equal(second.sessionId,first.sessionId);assert.equal(second.reused,true);assert.equal((await managed.list(model)).filter(r=>r.running).length,2);
 });
