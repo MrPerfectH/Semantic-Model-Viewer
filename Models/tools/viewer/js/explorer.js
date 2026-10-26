@@ -376,9 +376,6 @@
       var self=this,app=this.app,cv=app.canvas;U.clear(this.legendDock);
       this.legendDock.hidden=!this.legendOpen;
       if(!this.legendOpen)return;
-      this.legendDock.appendChild(el('div',{cls:'ex-legend-heading'},[
-        el('strong',{text:app.colorBy==='source'?'Source legend':'Table folder legend'}),
-        button('Edit colours',function(){app.editGroupColours();})]));
       var grid=el('div',{cls:'ex-legend-grid'});
       (app.legend&&app.legend.build?app.legend.build():[]).forEach(function(L){
         var active=app.state.activeFilter===L.key;
@@ -418,14 +415,15 @@
       var zoom=el('div',{cls:'ex-footer-group'});this.nav.appendChild(zoom);
       zoom.appendChild(button('−',function(){cv.zoomOut();},false,'Zoom out'));zoom.appendChild(el('span',{cls:'ex-zoom-value',text:app.state.zoomPct}));zoom.appendChild(button('+',function(){cv.zoomIn();},false,'Zoom in'));zoom.appendChild(button('Fit',function(){cv.fitView();}));
       if(app.state.selected)zoom.appendChild(button('Center selected',function(){cv.focusGraph(app.state.selected);}));
-      var mode=el('div',{cls:'ex-footer-group',role:'group','aria-label':'Colour by'},[el('span',{text:'Colour by'})]);
-      [['source','Source'],['domain','Table folder']].forEach(function(pair){var b=button(pair[1],function(){cv.setColorMode(pair[0]);self.update();});b.setAttribute('aria-pressed',String(app.colorBy===pair[0]));b.classList.add('ex-mode');mode.appendChild(b);});this.nav.appendChild(mode);
       function toggle(label,on,action){var input=el('input',{type:'checkbox',role:'switch',checked:on,'aria-label':label,onChange:action});return el('label',{cls:'ex-footer-toggle'},[el('span',{text:label}),input]);}
       if(app.state.viewMode==='graph'){
         this.nav.appendChild(toggle('Disconnected tables',cv.showSA,function(){cv.toggleStandalone();self.update();}));
         this.nav.appendChild(toggle('Overview map',!this.mapHidden,function(){self.mapHidden=!self.mapHidden;self.saveChrome();self.update();}));
       }
+      var mode=el('div',{cls:'ex-footer-group',role:'group','aria-label':'Colour by'},[el('span',{text:'Colour by'})]);
+      [['source','Source'],['domain','Table folder']].forEach(function(pair){var b=button(pair[1],function(){cv.setColorMode(pair[0]);self.update();});b.setAttribute('aria-pressed',String(app.colorBy===pair[0]));b.classList.add('ex-mode');mode.appendChild(b);});this.nav.appendChild(mode);
       var legend=toggle('Legend',this.legendOpen,function(){self.legendOpen=!self.legendOpen;self.saveChrome();self.update();});this.legendBtn=legend.lastChild;this.nav.appendChild(legend);
+      if(this.legendOpen)this.nav.appendChild(button('Edit colours',function(){app.editGroupColours();}));
     },
     drawMap:function(){
       if(this._mapFrame)return;var self=this;this._mapFrame=requestAnimationFrame(function(){self._mapFrame=null;self.paintMap();});

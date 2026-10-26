@@ -1,7 +1,7 @@
 # Group colours
 
 Development feature: **Tables → bottom bar → Source / Table folder**.
-Open **Legend → Edit colours** to customise the selected mode.
+Enable **Legend**, then choose **Edit colours** in the bottom bar to customise the selected mode.
 The same controls are available on Table groups.
 The legend identifies the current colour groups and lets you focus a group.
 
@@ -66,3 +66,7 @@ The bottom bar keeps Source / Table folder visible with the legend collapsed.
 Legend and Overview map visibility are remembered as local reading preferences.
 The legend takes space below the canvas rather than covering the graph. Controls use
 13px text and wrap at narrower widths. These controls are not duplicated in Display.
+
+The legend contains only colour entries. The bottom bar orders navigation first,
+then disconnected tables and overview map, then colour mode, Legend and Edit colours.
+Edit colours appears only while the legend is visible.
