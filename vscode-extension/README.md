@@ -4,15 +4,74 @@
 
 Open local TMDL / PBIP files or `model.bim` in VS Code. Trace a measure through its DAX,
 build a focused table canvas, and see how queries feed your tables. No Power BI Desktop,
-Fabric connection, or Python is required.
+Fabric connection, or Python is required for local files.
 
 [Try the live demo](https://MrPerfectH.github.io/Semantic-Model-Viewer/) before installing.
 The screenshots below use only the synthetic **Contoso Retail** demo. Select an image to
 open it at full size.
 
+## Fabric connection (development preview)
+
+Requires desktop VS Code 1.101 or later for its Node.js 22 extension host.
+
+Open **Semantic Models** in the Activity Bar, expand the **Fabric** section, and choose
+**Sign in to Fabric…**. Expand a workspace to load its semantic models, then click a model
+to open it in the viewer tab. Use the section’s Refresh action to reload discovery.
+Saved models remain in the Semantic Models list for offline access.
+
+The existing **Semantic Model Viewer: Connect to Fabric…** command also remains available.
+The sidebar uses the standard XMLA path, which requires Read + Build permission and an enabled
+XMLA endpoint on supported capacity. The command’s optional **Fabric definition API** path
+requires model edit access. Both paths read metadata without model writes or data refreshes.
+The consumer metadata fallback uses fixed INFO.VIEW metadata queries; definitions may be
+unavailable depending on permissions.
+
+Users do not need to register an application or supply credentials to the viewer. Microsoft
+sign-in happens in the browser, and tenant consent, MFA, and Conditional Access still apply.
+The package must include MSAL and a published .NET XMLA helper for the host platform.
+
+The extension runs on the desktop UI host, including when the workspace is remote. VS Code
+for the Web is unsupported. XMLA helper support depends on the binaries included in the build;
+source builds require the .NET SDK to publish the helper before packaging.
+
+Saved metadata opens offline and displays its fetch time. **Refresh Model** downloads a new
+copy using the same connection method and account; a failed refresh preserves the saved copy.
+**Switch Fabric Account…** and **Sign Out of Fabric** control the session. Tokens stay in VS Code
+SecretStorage and never enter the viewer webview or snapshots. Signing out retains offline
+metadata; **Remove Saved Fabric Model…** removes the saved metadata and associated viewer layout.
+HTML snapshots can be shared without a Fabric connection and contain the model metadata you
+choose to export, including available definitions.
+
+## Watch the workflows
+
+[Full illustrated VS Code guide](https://github.com/MrPerfectH/Semantic-Model-Viewer/blob/main/docs/vscode-guide.md). These recordings use the synthetic Contoso Retail model. Select a video link to watch it in your browser.
+
+### Install and open a model
+
+[Watch installation — 10 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/install-extension.mp4) · [Watch opening a model and exploring DAX — 35 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/vscode-to-dax-v4.mp4)
+
+![Find the extension, install it, and choose a model](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/install-extension.gif)
+
+### Focus the table canvas
+
+[Watch the table workflow — 24 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/focus-tables.mp4)
+
+![Select a table and dim unrelated tables](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/dim-and-switch.gif)
+
+![Hide unrelated tables and arrange the focused canvas](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/hide-and-arrange.gif)
+
+### Follow a table into its measures and DAX
+
+![Find direct and indirect measures that depend on Sales](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/table-to-dependent-measures-v2.gif)
+
+![Inspect a dependent measure and double-click to analyze it](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/select-dependent-measure-v3.gif)
+
+![Expand referenced measures with Inline measures](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/inline-dax-v2.gif)
+
+The installation recording shows 0.3.9; its installation steps still apply. Feature recordings were made during development and demonstrate features available in stable 0.4.0 and newer.
 ## Install and start
 
-Install [Semantic Model Viewer](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer) in VS Code **1.85 or newer**. Alternatively, download the `.vsix` from [GitHub Releases](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/latest) and run **Extensions: Install from VSIX…**. Marketplace installations update through VS Code; VSIX installations can be updated by installing a newer VSIX.
+Install [Semantic Model Viewer](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer) in VS Code **1.101 or newer**. Alternatively, download the `.vsix` from [GitHub Releases](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/latest) and run **Extensions: Install from VSIX…**. Marketplace installations update through VS Code; VSIX installations can be updated by installing a newer VSIX.
 
 Open your PBIP project **folder**, then select a model under **Semantic Models** in the Activity Bar. Supported models are `*.SemanticModel` folders with TMDL definitions and `model.bim`; a `.pbix` or `.pbip` file alone is not supported. If none appear, check the folder and exclusion settings, then run **Semantic Model Viewer: Refresh Model List**. Hidden directories are skipped.
 
@@ -28,6 +87,8 @@ Follow the logic behind a measure. Trace what feeds it and what depends on it, t
 | Dependency flow | DAX comparison |
 | --- | --- |
 | [![Gross Margin % dependency flow at 100% zoom, with upstream measures in purple and a downstream measure in blue](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-flow.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-flow.png) | [![Gross Margin % and Gross Profit formulas beside their dependency graph](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-dax.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-dax.png) |
+
+Select **Table or column** in the Measures library, or **Find dependent measures** in the table inspector, to analyze a source. Inspecting a result keeps that source selected. Colored reference chips beneath each formula open the corresponding analysis. Use **Direct only** to exclude indirect dependent measures. This is static DAX reference analysis; calculated-column/table defining expressions and relationship filter propagation are outside its scope.
 
 ## Tables
 

@@ -29,6 +29,8 @@ jobs:
           cd Models/tools/viewer
           cp -r index.html *.css js icons sw.js manifest.webmanifest \
             model-data.json report-usage.json ../../../site/
+          mkdir -p ../../../site/media/vscode-guide
+          cp ../../../docs/media/vscode-guide/*.mp4 ../../../site/media/vscode-guide/
           touch ../../../site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v5

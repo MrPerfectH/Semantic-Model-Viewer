@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, feature/fabric-connect]
   pull_request:
   workflow_dispatch:
 
@@ -12,8 +12,11 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Launcher tests compare the renderer with cached origin/main.
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -24,13 +27,21 @@ jobs:
       - name: Install
         working-directory: vscode-extension
         run: npm ci
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Build Linux XMLA helper
+        run: |
+          dotnet publish tools/fabric/xmla/Smv.Fabric.Xmla.csproj -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o tools/fabric/xmla/publish/linux-x64
+          node tools/fabric/xmla/copy-notices.cjs linux-x64 tools/fabric/xmla/publish/linux-x64
       - name: Test viewer and extension
         working-directory: vscode-extension
         run: npm test
-      - name: Assign the develop pre-release version
-        if: github.ref == 'refs/heads/develop' && github.event_name != 'pull_request'
-        working-directory: vscode-extension
-        run: node scripts/preview-version.cjs
+      - name: Check measure layouts and offline snapshots in Chrome
+        timeout-minutes: 5
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: node --test --test-concurrency=1 tests/measures-layout.browser.cjs tests/snapshot.browser.cjs tests/demo-initial-viewport.browser.cjs
       - name: Package the extension
         working-directory: vscode-extension
         env:
@@ -41,17 +52,15 @@ jobs:
           else
             npm run package
           fi
-      - name: Upload the develop test extension
-        if: github.ref == 'refs/heads/develop' && github.event_name != 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: semantic-model-viewer-preview-${{ github.sha }}
-          path: vscode-extension/*.vsix
-          if-no-files-found: error
-          retention-days: 14
+  distribution:
+    needs: test
+    if: github.ref == 'refs/heads/develop' && github.event_name != 'pull_request'
+    uses: ./.github/workflows/fabric-preview.yml
+    with:
+      prerelease: true
 
   publish-preview:
-    needs: test
+    needs: [test, distribution]
     if: github.ref == 'refs/heads/develop' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     concurrency:
@@ -63,7 +72,7 @@ jobs:
           node-version: 22
       - uses: actions/download-artifact@v4
         with:
-          name: semantic-model-viewer-preview-${{ github.sha }}
+          name: semantic-model-viewer-fabric-preview
           path: dist
       - name: Publish the tested pre-release to Marketplace
         env:

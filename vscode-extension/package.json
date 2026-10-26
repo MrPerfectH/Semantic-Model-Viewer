@@ -2,7 +2,7 @@
   "name": "semantic-model-viewer",
   "displayName": "Semantic Model Viewer",
   "description": "Explore Power BI semantic models: tables and relationships, measure dependencies and DAX, and Power Query lineage. Save interactive HTML snapshots for offline sharing.",
-  "version": "0.3.9",
+  "version": "0.5.0",
   "license": "MIT",
   "publisher": "MrPerfectH",
   "repository": {
@@ -13,7 +13,7 @@
     "url": "https://github.com/MrPerfectH/Semantic-Model-Viewer/issues"
   },
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.101.0"
   },
   "categories": [
     "Visualization",
@@ -36,7 +36,7 @@
     "commands": [
       {
         "command": "semanticModelViewer.open",
-        "title": "Open Model…",
+        "title": "Open Model\u2026",
         "category": "Semantic Model Viewer",
         "icon": "$(type-hierarchy)"
       },
@@ -60,6 +60,44 @@
         "title": "Refresh Model List",
         "category": "Semantic Model Viewer",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "semanticModelViewer.connectFabric",
+        "title": "Connect to Fabric\u2026",
+        "category": "Semantic Model Viewer",
+        "icon": "$(cloud)"
+      },
+      {
+        "command": "semanticModelViewer.fabricSignOut",
+        "title": "Sign Out of Fabric",
+        "category": "Semantic Model Viewer"
+      },
+      {
+        "command": "semanticModelViewer.removeFabricModel",
+        "title": "Remove Saved Fabric Model\u2026",
+        "category": "Semantic Model Viewer"
+      },
+      {
+        "command": "semanticModelViewer.fabricSwitchAccount",
+        "title": "Switch Fabric Account\u2026",
+        "category": "Semantic Model Viewer"
+      },
+      {
+        "command": "semanticModelViewer.fabricBrowseSignIn",
+        "title": "Sign In to Browse Fabric",
+        "category": "Semantic Model Viewer",
+        "icon": "$(sign-in)"
+      },
+      {
+        "command": "semanticModelViewer.refreshFabric",
+        "title": "Refresh Fabric Workspaces",
+        "category": "Semantic Model Viewer",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "semanticModelViewer.openFabricTreeModel",
+        "title": "Open Fabric Semantic Model",
+        "category": "Semantic Model Viewer"
       }
     ],
     "menus": {
@@ -78,6 +116,10 @@
         {
           "command": "semanticModelViewer.openEntry",
           "when": "false"
+        },
+        {
+          "command": "semanticModelViewer.openFabricTreeModel",
+          "when": "false"
         }
       ],
       "view/title": [
@@ -90,6 +132,31 @@
           "command": "semanticModelViewer.open",
           "when": "view == semanticModelViewer.models",
           "group": "navigation@2"
+        },
+        {
+          "command": "semanticModelViewer.connectFabric",
+          "when": "view == semanticModelViewer.models",
+          "group": "navigation@3"
+        },
+        {
+          "command": "semanticModelViewer.refreshFabric",
+          "when": "view == semanticModelViewer.fabric",
+          "group": "navigation@1"
+        },
+        {
+          "command": "semanticModelViewer.fabricBrowseSignIn",
+          "when": "view == semanticModelViewer.fabric",
+          "group": "navigation@2"
+        },
+        {
+          "command": "semanticModelViewer.fabricSignOut",
+          "when": "view == semanticModelViewer.fabric",
+          "group": "connection@1"
+        },
+        {
+          "command": "semanticModelViewer.fabricSwitchAccount",
+          "when": "view == semanticModelViewer.fabric",
+          "group": "connection@2"
         }
       ]
     },
@@ -107,7 +174,7 @@
             "type": "string"
           },
           "default": [],
-          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**`. Hidden folders (`.worktrees`, `.pbi`, `.venv`…), `node_modules` and `.git` are always skipped."
+          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**`. Hidden folders (`.worktrees`, `.pbi`, `.venv`\u2026), `node_modules` and `.git` are always skipped."
         }
       }
     },
@@ -127,13 +194,19 @@
           "name": "Semantic Models",
           "icon": "images/activity.svg",
           "contextualTitle": "Semantic Models"
+        },
+        {
+          "id": "semanticModelViewer.fabric",
+          "name": "Fabric",
+          "icon": "images/activity.svg",
+          "contextualTitle": "Fabric"
         }
       ]
     },
     "viewsWelcome": [
       {
         "view": "semanticModelViewer.models",
-        "contents": "Start here: open a project folder containing a *.SemanticModel folder with TMDL definitions or model.bim. A .pbix or .pbip file alone is not supported.\n[Open folder](command:vscode.openFolder)\n[Refresh model list](command:semanticModelViewer.refreshModels)\n[Try the demo in your browser](https://MrPerfectH.github.io/Semantic-Model-Viewer/)"
+        "contents": "Start here: open a project folder containing a *.SemanticModel folder with TMDL definitions or model.bim. A .pbix or .pbip file alone is not supported.\n[Open folder](command:vscode.openFolder)\n[Refresh model list](command:semanticModelViewer.refreshModels)\n[Try the demo in your browser](https://MrPerfectH.github.io/Semantic-Model-Viewer/)\n[Connect to Fabric](command:semanticModelViewer.connectFabric)"
       }
     ]
   },
@@ -142,11 +215,18 @@
     "check-viewer": "node scripts/sync-viewer.js --check",
     "vscode:prepublish": "npm run sync-viewer",
     "package": "vsce package",
-    "test": "npm run sync-viewer && npm run check-viewer && node --test --test-concurrency=1 ../tests/*.test.cjs ../tests/extension.test.js ../Models/tools/viewer/tests/*.test.js"
+    "test": "npm run sync-viewer && npm run check-viewer && node --test --test-concurrency=1 ../tests/*.test.cjs ../tools/fabric/tests/*.test.cjs ../tests/extension.test.js ../Models/tools/viewer/tests/*.test.js",
+    "package:preview": "npm run sync-viewer && node scripts/check-fabric-preview.js && vsce package --pre-release"
   },
   "devDependencies": {
     "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^4.0.0"
   },
-  "icon": "images/icon.png"
+  "icon": "images/icon.png",
+  "dependencies": {
+    "@azure/msal-node": "7.0.1"
+  },
+  "extensionKind": [
+    "ui"
+  ]
 }

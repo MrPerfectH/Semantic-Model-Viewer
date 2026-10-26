@@ -48,3 +48,35 @@ if (check) {
   for (const file of files) fs.copyFileSync(path.join(src, file), path.join(dst, file));
   console.log('synced ' + files.length + ' viewer runtime assets from Models/tools/viewer into media/');
 }
+
+// Keep network/auth code in the extension host, outside webview resource roots.
+const fabricSource = path.resolve(root, '..', 'tools', 'fabric');
+const fabricTarget = path.join(root, 'fabric');
+if (fs.existsSync(fabricSource)) {
+  const runtime = fs.readdirSync(fabricSource).filter(file => file.endsWith('.cjs')).sort();
+  if (check) {
+    for (const file of runtime) {
+      if (!fs.existsSync(path.join(fabricTarget, file)) || !fs.readFileSync(path.join(fabricSource, file)).equals(fs.readFileSync(path.join(fabricTarget, file)))) throw new Error('Fabric host runtime is stale: ' + file);
+    }
+  } else {
+    fs.rmSync(fabricTarget, { recursive: true, force: true });
+    fs.mkdirSync(fabricTarget, { recursive: true });
+    for (const file of runtime) fs.copyFileSync(path.join(fabricSource, file), path.join(fabricTarget, file));
+  }
+}
+
+const xmlaPublish = path.join(fabricSource, 'xmla', 'publish');
+if (fs.existsSync(xmlaPublish)) {
+  const packagedPublish = path.join(fabricTarget, 'xmla', 'publish');
+  if (!check) fs.cpSync(xmlaPublish, packagedPublish, { recursive: true });
+  else {
+    const verifyHelper = (source, target) => {
+      for (const item of fs.readdirSync(source, { withFileTypes: true })) {
+        const sourcePath = path.join(source, item.name), targetPath = path.join(target, item.name);
+        if (item.isDirectory()) verifyHelper(sourcePath, targetPath);
+        else if (!fs.existsSync(targetPath) || !fs.readFileSync(sourcePath).equals(fs.readFileSync(targetPath))) throw new Error('XMLA helper is stale: ' + item.name);
+      }
+    };
+    verifyHelper(xmlaPublish, packagedPublish);
+  }
+}

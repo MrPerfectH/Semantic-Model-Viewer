@@ -1,0 +1,25 @@
+{
+  "linux": {
+    "platform": "linux-x64",
+    "nativeHelper": true,
+    "serverAssets": true,
+    "bundledMsal": true,
+    "signedOut": true,
+    "sourceModelsPackaged": false
+  },
+  "windows": {
+    "platform": "win32-x64",
+    "nativeHelper": true,
+    "serverAssets": true,
+    "bundledMsal": true,
+    "signedOut": true,
+    "sourceModelsPackaged": false,
+    "testedVersion": "0.5.0",
+    "archiveSha256": "e6d8c1b357c6b10cc0858981797dac29f89a448ca43c63a527632ff06d70e874"
+  },
+  "archive": {
+    "version": "0.5.0",
+    "bytes": 242815426,
+    "sha256": "e6d8c1b357c6b10cc0858981797dac29f89a448ca43c63a527632ff06d70e874"
+  }
+}

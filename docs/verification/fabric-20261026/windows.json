@@ -1,0 +1,35 @@
+{
+  "platform": "win32",
+  "arch": "x64",
+  "checks": [
+    "live refresh replaces one cache entry after validated retrieval",
+    "wrong-tenant refresh preserves last good cache",
+    "wrong-account refresh preserves last good cache",
+    "sign-out clears active credentials",
+    "signed-out discovery cannot use old credentials",
+    "saved model reopens while signed out",
+    "explicit removal deletes selected saved metadata"
+  ],
+  "normalProfileRestart": {
+    "signedIn": true,
+    "cachedModels": 1
+  },
+  "runtimeHashes": {
+    "media/js/tmdl-parser.js": "2ffa32d0ecf497cf59ecc1ed9da63ae3cc91bf04ddcae86ac276dfb5e46f77dc",
+    "fabric/auth.cjs": "179149cb272137af29bf56ecc5c64f587a0a6ab2cf421dd5245da21421390514",
+    "fabric/xmla/publish/win32-x64/Smv.Fabric.Xmla.exe": "dcdfb67cad6c9c954593c1a72f6189994ab80d556945951bda749729f57db4d3"
+  },
+  "integratedPreview": {
+    "version": "0.5.0",
+    "archiveSha256": "75da594d7b3ada54ca0a44461da14d05a28814af3c86a87b9087eca5b4af0643",
+    "workspaces": 99,
+    "selectedWorkspaceModels": 2,
+    "tables": 21,
+    "relationships": 11,
+    "canvasTables": 21,
+    "credentialsReused": true,
+    "relationshipEndpointInspection": true
+  },
+  "lifecycleVersion": "0.3.9",
+  "connectionRuntimeHashesMatchFinalArchive": true
+}

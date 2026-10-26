@@ -1143,6 +1143,7 @@
       var m = app.msrOf(sn), source = app.state.dependencySource;
       var key = [app.modelKey, sn || '', JSON.stringify(source), this._showSources, this.sourceMode(), app._usage ? 1 : 0, m || source ? '' : [app.state.mvQuery, app.state.mvFilter, app.state.mvTable].join('|')].join('|');
       if (key !== this._mainKey) {
+        this.closeMatchingResults();
         this._mainKey = key;
         this._flowKey = null; this._daxKey = null; this._nodeEls = {}; this._edgeEls = {}; this._edgeLabels = {}; this._groupEls = {}; this._sourceLayer = null;
         if (this._graphObserver) { this._graphObserver.disconnect(); this._graphObserver = null; }
@@ -1161,10 +1162,68 @@
         el('h1', { text: 'Start with a table or column.' }), el('p', { cls: 'mv-overview-intro', text: 'Choose a whole table to find measures referencing it or any of its columns. Expand a table to narrow the source to one column.' })]));
     },
 
+    matchingMeasures: function () {
+      var matches = new Map();
+      this.buildRows().rows.forEach(function (row) { if (!row.isFolder && !row.isHeader) matches.set(row.name, row); });
+      return Array.from(matches.values());
+    },
+    closeMatchingResults: function () {
+      if (this._matchingDialog) this._matchingDialog.close();
+    },
+    openMatchingResults: function () {
+      this.closeMatchingResults();
+      var self = this, app = this.app, previous = document.activeElement, matches = this.matchingMeasures(), shown = 0;
+      var dialog = el('dialog', { cls: 'mv-results-dialog', 'aria-label': 'Matching measures' });
+      var close = function () { dialog.close(); };
+      dialog.addEventListener('close', function () {
+        dialog.remove();
+        if (self._matchingDialog === dialog) self._matchingDialog = null;
+        if (previous && previous.isConnected) previous.focus({ preventScroll: true });
+      });
+      var heading = el('header', { cls: 'mv-results-heading' }, [
+        el('div', {}, [el('h2', { text: matches.length + (matches.length === 1 ? ' matching measure' : ' matching measures') }),
+          el('p', { text: app.state.mvQuery ? 'Search: ' + app.state.mvQuery : 'Current library filters' })]),
+        el('button', { cls: 'mv-button', text: 'Close', 'aria-label': 'Close matching results', onClick: close })
+      ]);
+      var results = el('div', { cls: 'mv-results-grid' });
+      var more = el('button', { cls: 'mv-button mv-results-more', text: 'Show more results' });
+      var open = function (name) { close(); self.pickMeasure(name); };
+      var append = function () {
+        matches.slice(shown, shown + 40).forEach(function (row) {
+          var card = self.daxCard(row.name), body = self.daxBody(card);
+          // Reference navigation leaves the preview and opens the referenced measure.
+          body.addEventListener('click', function (e) {
+            var button = e.target.closest('.mv-dax-ref');
+            if (!button) return;
+            var token = self.daxToks(button.textContent)[0];
+            if (token && token.msr) { e.preventDefault(); e.stopImmediatePropagation(); open(token.msr); }
+          }, true);
+          results.appendChild(el('article', { cls: 'mv-dax-card mv-result-card' }, [
+            el('header', { cls: 'mv-dax-card-header' }, [
+              el('h3', { text: row.name }), el('div', { cls: 'mv-dax-card-meta', text: row.table }),
+              el('button', { cls: 'mv-button mv-button-primary', text: 'Analyze measure',
+                'aria-label': 'Analyze ' + row.name, onClick: function () { open(row.name); } })
+            ]), body
+          ]));
+        });
+        shown = Math.min(shown + 40, matches.length);
+        more.hidden = shown >= matches.length;
+        more.textContent = 'Show more results (' + (matches.length - shown) + ' remaining)';
+      };
+      more.addEventListener('click', append);
+      dialog.appendChild(heading);
+      if (!matches.length) dialog.appendChild(el('p', { cls: 'mv-results-empty', text: 'No measures match these filters. Close this window to change your search.' }));
+      dialog.appendChild(results); dialog.appendChild(more);
+      this.pane.appendChild(dialog); this._matchingDialog = dialog; this._matchingModel = app.model;
+      append(); dialog.showModal();
+    },
+
     buildEmptyMain: function () {
       var self = this, app = this.app, M = app.model, all = [], hidden = 0, links = 0;
       var filtered = !!(app.state.mvQuery || app.state.mvTable || (app.state.mvFilter && app.state.mvFilter !== 'all'));
-      if (filtered) {
+      var matchCount = filtered ? this.matchingMeasures().length : 0;
+      // Authored views explicitly request browsing formulas; preserve that opening view.
+      if (filtered && this._explanationContext) {
         var matches = new Map();
         this.buildRows().rows.forEach(function (row) { if (!row.isFolder && !row.isHeader) matches.set(row.name, row); });
         var results = el('div', { cls: 'mv-starters' });
@@ -1206,6 +1265,10 @@
         el('div', { cls: 'mv-eyebrow', text: 'MEASURE EXPLORER' }),
         el('h1', { text: 'Understand the logic behind your model.' }),
         el('p', { cls: 'mv-overview-intro', text: all.length ? 'Find a measure, read its DAX, and trace the measures it depends on. Compare formulas without losing your place in the dependency graph.' : 'This model does not contain measures. Import a model with DAX measures to explore its calculation logic.' }),
+        filtered ? el('div', { cls: 'mv-search-summary' }, [
+          el('span', { text: matchCount + (matchCount === 1 ? ' matching measure' : ' matching measures'), 'aria-live': 'polite' }),
+          el('button', { cls: 'mv-button mv-button-primary', text: 'View matching results', onClick: function () { self.openMatchingResults(); } })
+        ]) : null,
         stats,
         all.length ? el('h2', { text: all[0].n ? 'Start with a widely used measure' : 'Explore your measures' }) : null,
         list,
@@ -1861,6 +1924,7 @@
     update: function () {
       var app = this.app;
       var on = app.state.viewMode === 'measures' && app.state.loaded;
+      if (this._matchingDialog && (!on || this._matchingModel !== app.model)) this.closeMatchingResults();
       if (!on) {
         if (this._built) this.rememberGraphViewport();
         if (this._built) { if (this._graphObserver) { this._graphObserver.disconnect(); this._graphObserver = null; } U.clear(this.host); this._built = false; this._railKey = null; this._mainKey = null; this._daxKey = null; this._nodeEls = {}; this._edgeEls = {}; this._edgeLabels = {}; this._groupEls = {}; this._sourceLayer = null; this._gScrolledFor = null; this._initViewportFor = null; }
