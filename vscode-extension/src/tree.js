@@ -5,23 +5,35 @@ const vscode = require('vscode');
 const { findModels } = require('./workspace');
 
 class ModelsTree {
-  constructor(fabric) {
+  constructor(fabric, fabricTree) {
     this.fabric = fabric;
+    this.fabricTree = fabricTree;
+    this.fabricRoot = { kind: "fabricRoot", name: "Fabric", id: "fabricRoot" };
     this._emitter = new vscode.EventEmitter();
     this.onDidChangeTreeData = this._emitter.event;
     this.models = [];
+    this.fabricListener = fabricTree && fabricTree.onDidChangeTreeData(() => this.refresh());
   }
-  dispose() { this._emitter.dispose(); }
+  dispose() { if (this.fabricListener) this.fabricListener.dispose(); this._emitter.dispose(); }
   refresh() { this._emitter.fire(undefined); }
 
   async getChildren(element) {
+    if (element && this.fabricTree) return this.fabricTree.getChildren(element.kind === 'fabricRoot' ? undefined : element);
     if (element) return [];
     this.models = (await findModels()).concat(this.fabric ? this.fabric.entries() : []);
     vscode.commands.executeCommand('setContext', 'semanticModelViewer.hasModels', this.models.length > 0);
-    return this.models;
+    return this.fabricTree ? [this.fabricRoot, ...this.models, ...(!this.models.length ? [{ kind: 'action', name: 'Open local model folder…', command: 'vscode.openFolder', icon: 'folder-opened' }] : [])] : this.models;
   }
 
   getTreeItem(m) {
+    if (m.kind === 'fabricRoot') {
+      const item = new vscode.TreeItem('Fabric', vscode.TreeItemCollapsibleState.Expanded);
+      item.id = m.id;
+      item.iconPath = new vscode.ThemeIcon('cloud');
+      item.contextValue = 'fabricRoot';
+      return item;
+    }
+    if (this.fabricTree && ['workspace', 'workspaces', 'model', 'action', 'message'].includes(m.kind)) return this.fabricTree.getTreeItem(m);
     const item = new vscode.TreeItem(m.name, vscode.TreeItemCollapsibleState.None);
     item.id = m.id;
     item.description = m.path;

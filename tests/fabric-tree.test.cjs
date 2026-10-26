@@ -9,7 +9,7 @@ const { FabricTree } = require('../vscode-extension/src/fabric-tree');
 const extension = require('../vscode-extension/src/extension');
 restore();
 function fixture() {
-  let account = { id: 'account', tenantId: 'tenant' };
+  let account = { id: 'account', name: 'user@example.test', tenantId: 'tenant' };
   const calls = [];
   const fabric = { request: async p => {
     calls.push(p);
@@ -25,8 +25,10 @@ test('signed-out Fabric tree offers sign-in without starting authentication auto
   assert.equal(rows[0].command, 'semanticModelViewer.fabricBrowseSignIn');
   assert.deepEqual(f.calls.map(p => p.action), ['status']);
 });
+async function workspaces(tree) { return tree.getChildren((await tree.getChildren()).find(n => n.kind === 'workspaces')); }
+
 test('tree discovers all workspace pages and lazily loads distinct models per workspace', async () => {
-  const f = fixture(); const rows = await f.tree.getChildren();
+  const f = fixture(); const rows = await workspaces(f.tree);
   assert.deepEqual(rows.map(w => w.name), ['Alpha', 'Zulu']);
   assert.equal(f.calls.some(p => p.action === 'listModels'), false);
   const a = (await f.tree.getChildren(rows[0]))[0], z = (await f.tree.getChildren(rows[1]))[0];
@@ -41,7 +43,7 @@ test('tree discovers all workspace pages and lazily loads distinct models per wo
   assert.equal(f.calls.filter(p => p.action === 'listModels').length, 3);
 });
 test('changing tenants cannot reuse the former account workspace node', async () => {
-  const f = fixture(); const workspace = (await f.tree.getChildren())[0];
+  const f = fixture(); const workspace = (await workspaces(f.tree))[0];
   f.setAccount({ id: 'other', tenantId: 'other-tenant' });
   assert.deepEqual(await f.tree.getChildren(workspace), []);
   assert.equal(f.calls.some(p => p.action === 'listModels'), false);
@@ -49,12 +51,12 @@ test('changing tenants cannot reuse the former account workspace node', async ()
 test('refresh discards an old in-flight discovery result', async () => {
   const f = fixture(); let finish;
   f.fabric.request = p => p.action === 'status' ? Promise.resolve({ account: { id: 'account', tenantId: 'tenant' } }) : new Promise(r => { finish = r; });
-  const pending = f.tree.getChildren(); await new Promise(r => setImmediate(r));
+  const pending = f.tree.getChildren({kind:'workspaces', accountId:'account', tenantId:'tenant'}); await new Promise(r => setImmediate(r));
   f.tree.refresh(); finish({ items: [{ id: 'old', name: 'Old workspace' }] });
   assert.deepEqual(await pending, []);
 });
 test('failed workspace expansion can be retried without reauthenticating', async () => {
-  const f = fixture(); const workspace = (await f.tree.getChildren())[0];
+  const f = fixture(); const workspace = (await workspaces(f.tree))[0];
   const request = f.fabric.request; let fail = true;
   f.fabric.request = p => p.action === 'listModels' && fail ? Promise.reject(new Error('Network unavailable')) : request(p);
   assert.equal((await f.tree.getChildren(workspace))[0].command, 'semanticModelViewer.refreshFabric');
@@ -69,7 +71,7 @@ test('clicking a native tree model opens the correct model without quick-pick di
     if (p.action === 'openModel') return { tenantId: 'tenant', accountId: 'account', files: [{ path: 'model.bim', text: '{"model":{"tables":[]}}' }] };
     return f.fabric.request(p);
   } };
-  const workspace = (await active.fabricTree.getChildren())[1];
+  const workspace = (await workspaces(active.fabricTree))[1];
   const model = (await active.fabricTree.getChildren(workspace))[0];
   let quickPicks = 0; const pick = vscode.window.showQuickPick;
   vscode.window.showQuickPick = async () => { quickPicks++; throw new Error('Unexpected model picker'); };
@@ -82,4 +84,47 @@ test('clicking a native tree model opens the correct model without quick-pick di
     const request = calls.find(p => p.action === 'openModel');
     assert.equal(request.workspaceId, 'z'); assert.equal(request.tenantId, 'tenant'); assert.equal(request.accountId, 'account');
   } finally { vscode.window.showQuickPick = pick; vscode.context.subscriptions.forEach(d => d.dispose()); }
+});
+
+test('signed-in sidebar shows account, tenant and sign-out even when discovery fails', async () => {
+  const f = fixture();
+  const request = f.fabric.request;
+  f.fabric.request = p => p.action === 'listWorkspaces' ? Promise.reject(new Error('Network unavailable')) : request(p);
+  const rows = await f.tree.getChildren();
+  assert.ok(rows.some(n => n.name === 'user@example.test'));
+  assert.ok(rows.some(n => n.name === 'Tenant: tenant'));
+  assert.ok(rows.some(n => n.command === 'semanticModelViewer.fabricSwitchAccount'));
+  assert.ok(rows.some(n => n.command === 'semanticModelViewer.fabricSignOut'));
+  assert.deepEqual(f.calls.map(p => p.action), ['status'], 'account controls do not wait for discovery');
+  const failed = await f.tree.getChildren(rows.find(n => n.kind === 'workspaces'));
+  assert.equal(failed[0].command, 'semanticModelViewer.refreshFabric');
+  f.setAccount(null); f.tree.refresh();
+  assert.deepEqual((await f.tree.getChildren()).map(n => n.command), ['semanticModelViewer.fabricBrowseSignIn']);
+});
+
+test('unified sidebar routes sign-in and sign-out and refreshes identity without a separate view', async () => {
+  const active = extension.activate(vscode.context);
+  let account = null, refreshed = 0;
+  const sub = active.tree.onDidChangeTreeData(() => refreshed++);
+  active.fabricTree.fabric.service = { request: async p => {
+    if (p.action === 'signIn') account = { id: 'new', name: 'new@example.test', tenantId: 'new-tenant' };
+    if (p.action === 'signOut') account = null;
+    return { account };
+  }};
+  try {
+    const root = (await active.tree.getChildren())[0];
+    assert.equal(root.kind, 'fabricRoot');
+    assert.equal(active.tree.getTreeItem(root).collapsibleState, vscode.TreeItemCollapsibleState.Expanded);
+    let rows = await active.tree.getChildren(root);
+    await vscode.commands.executeCommand(active.tree.getTreeItem(rows[0]).command.command);
+    rows = await active.tree.getChildren(root);
+    assert.ok(rows.some(n => n.name === 'new@example.test'));
+    assert.ok(rows.some(n => n.name === 'Tenant: new-tenant'));
+    const signOut = rows.find(n => n.command === 'semanticModelViewer.fabricSignOut');
+    await vscode.commands.executeCommand(active.tree.getTreeItem(signOut).command.command);
+    assert.equal((await active.tree.getChildren(root))[0].command, 'semanticModelViewer.fabricBrowseSignIn');
+    assert.ok(refreshed >= 2);
+    const manifest = require('../vscode-extension/package.json');
+    assert.deepEqual(manifest.contributes.views.semanticModelViewer.map(v => v.id), ['semanticModelViewer.models']);
+  } finally { sub.dispose(); vscode.context.subscriptions.forEach(d => d.dispose()); }
 });

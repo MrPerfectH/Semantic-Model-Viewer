@@ -14,9 +14,11 @@ open it at full size.
 
 Requires desktop VS Code 1.101 or later for its Node.js 22 extension host.
 
-Open **Semantic Models** in the Activity Bar, expand the **Fabric** section, and choose
-**Sign in to Fabric…**. Expand a workspace to load its semantic models, then click a model
-to open it in the viewer tab. Use the section’s Refresh action to reload discovery.
+Open **Semantic Models** in the Activity Bar. The expanded **Fabric** section shows
+**Sign in to Fabric…** when signed out. When signed in, it shows your account, tenant ID,
+**Switch account…**, and **Sign out of Fabric**. Expand **Workspaces**, then a workspace
+to load its semantic models; click a model to open it. Use Refresh on the Fabric row
+to reload discovery. Account actions stay available if workspace discovery fails.
 Saved models remain in the Semantic Models list for offline access.
 
 The existing **Semantic Model Viewer: Connect to Fabric…** command also remains available.

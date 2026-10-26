@@ -39,8 +39,8 @@ async function openUriCommand(uri) {
 function activate(context) {
   const fabric = new FabricConnection(context);
   panel = new ViewerPanel(context, fabric);
-  tree = new ModelsTree(fabric);
   const fabricTree = new FabricTree(fabric);
+  tree = new ModelsTree(fabric, fabricTree);
   fabric.onChange = () => { tree.refresh(); fabricTree.refresh(); };
   const run = fn => async (...args) => {
     try { return await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification, title: 'Fabric', cancellable: true }, async (_progress, token) => {
@@ -62,8 +62,7 @@ function activate(context) {
       const entry = await fabric.open(node.workspace, node, node.accountId, 'xmla', node.tenantId);
       await panel.show(entry);
     })),
-    vscode.window.registerTreeDataProvider('semanticModelViewer.fabric', fabricTree),
-    vscode.commands.registerCommand('semanticModelViewer.connectFabric', run(async () => { const entry = await fabric.connect(); if (entry) { tree.refresh(); await panel.show(entry); } })),
+    vscode.commands.registerCommand('semanticModelViewer.connectFabric', run(async () => { const entry = await fabric.connect(); fabricTree.refresh(); if (entry) { tree.refresh(); await panel.show(entry); } })),
     vscode.commands.registerCommand('semanticModelViewer.fabricSwitchAccount', run(async () => { await fabric.signOut(); fabricTree.refresh(); await fabric.request({ action: 'signIn' }); fabricTree.refresh(); })),
     vscode.commands.registerCommand('semanticModelViewer.fabricSignOut', run(async () => { await fabric.signOut(); fabricTree.refresh(); await vscode.window.showInformationMessage('Signed out of Fabric. Saved metadata remains available offline.'); })),
     vscode.commands.registerCommand('semanticModelViewer.removeFabricModel', run(async () => { const chosen = await vscode.window.showQuickPick(fabric.entries().map(e => ({ label: e.name, description: e.path, entry: e })), { placeHolder: 'Remove a saved Fabric model and its metadata' }); if (chosen) { await fabric.remove(chosen.entry.id); if (panel.current && panel.current.id === chosen.entry.id) panel.dispose(); tree.refresh(); } })),

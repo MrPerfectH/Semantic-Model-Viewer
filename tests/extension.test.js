@@ -24,11 +24,14 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   const restore = install(vscode);
   const ext = require(path.join(EXT, 'src', 'extension.js'));
   const { panel, tree } = ext.activate(vscode.context);
-  assert.strictEqual(vscode.context.subscriptions.length, 16, 'twelve commands, two tree views, folder listener and panel disposable registered');
+  assert.strictEqual(vscode.context.subscriptions.length, 15, 'twelve commands, unified tree view, folder listener and panel disposable registered');
 
   /* --- Activity Bar tree: one row per model, click opens it --- */
   assert.strictEqual(vscode._trees['semanticModelViewer.models'], tree, 'tree provider registered under the view id');
-  const rows = await tree.getChildren();
+  const allRows = await tree.getChildren();
+  assert.equal(allRows[0].kind, 'fabricRoot');
+  assert.equal(tree.getTreeItem(allRows[0]).collapsibleState, vscode.TreeItemCollapsibleState.Expanded);
+  const rows = allRows.filter(row => row.kind !== 'fabricRoot');
   assert.deepStrictEqual(rows.map((row) => row.id), ['ws:Fixture Model.SemanticModel', 'ws:power-query/model.bim'],
     'the tree discovers both the TMDL folder and standalone BIM fixture');
   const item = tree.getTreeItem(rows[0]);
