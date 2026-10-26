@@ -12,6 +12,7 @@ const VIEW_TYPE = 'semanticModelViewer';
 const MAX_SNAPSHOT_BYTES = 100 * 1024 * 1024;
 const REQUESTS = new Set(['listModels', 'openModel', 'refreshModel', 'snapshotAssets', 'saveSnapshot', 'fabricRequest']);
 const EVENTS = new Set(['ready', 'storage', 'notify', 'openFile']);
+const fabricColourKey = key => typeof key === 'string' && key.startsWith('smv-group-colours-v1:fabric:');
 const storageKey = (key) => typeof key === 'string' && key.length <= 1024 && /^(?:smv[_-].+|lsa_model_layout_v1)$/.test(key) && !/[\u0000-\u001f]/.test(key);
 const requestId = (id) => (typeof id === 'number' && Number.isSafeInteger(id) && id >= 0) || (typeof id === 'string' && id.length > 0 && id.length <= 128);
 const escapeAttribute = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -161,6 +162,7 @@ class ViewerPanel {
         this.initializing = panel;
         try {
           const models = await this.listModels();
+          await this.migrateFabricColours();
           while (this.panel === panel) {
             const epoch = this.epoch, entry = this.pendingOpen || this.current;
             let open = null;
@@ -179,7 +181,7 @@ class ViewerPanel {
       }
       case 'storage':
         if (!storageKey(msg.key) || (msg.value !== null && typeof msg.value !== 'string') || (typeof msg.value === 'string' && msg.value.length > MAX_SNAPSHOT_BYTES)) throw new Error('Invalid viewer storage value.');
-        await (msg.key === 'smv_onboarding_v1' ? this.context.globalState : this.context.workspaceState).update(STORAGE_PREFIX + msg.key, msg.value === null ? undefined : msg.value);
+        await ((msg.key === 'smv_onboarding_v1' || fabricColourKey(msg.key)) ? this.context.globalState : this.context.workspaceState).update(STORAGE_PREFIX + msg.key, msg.value === null ? undefined : msg.value);
         return;
       case 'listModels': return reply({ models: (await this.listModels()).map(pub) });
       case 'fabricRequest': {
@@ -243,10 +245,24 @@ class ViewerPanel {
 
   async listModels() { return (await findModels()).concat(this.fabric ? this.fabric.entries() : []); }
 
+  async migrateFabricColours() {
+    for (const key of this.context.workspaceState.keys()) {
+      if (!key.startsWith(STORAGE_PREFIX) || !fabricColourKey(key.slice(STORAGE_PREFIX.length))) continue;
+      // Existing installation-wide preferences win over an older workspace copy.
+      if (this.context.globalState.get(key) === undefined)
+        await this.context.globalState.update(key, this.context.workspaceState.get(key));
+      await this.context.workspaceState.update(key, undefined);
+    }
+  }
+
   storageDump() {
     const out = {};
     for (const key of this.context.workspaceState.keys()) {
       if (key.startsWith(STORAGE_PREFIX) && storageKey(key.slice(STORAGE_PREFIX.length))) out[key.slice(STORAGE_PREFIX.length)] = this.context.workspaceState.get(key);
+    }
+    for (const key of this.context.globalState.keys()) {
+      if (key.startsWith(STORAGE_PREFIX) && fabricColourKey(key.slice(STORAGE_PREFIX.length)))
+        out[key.slice(STORAGE_PREFIX.length)] = this.context.globalState.get(key);
     }
     const onboarding = this.context.globalState.get(STORAGE_PREFIX + 'smv_onboarding_v1');
     if (onboarding !== undefined) out.smv_onboarding_v1 = onboarding;

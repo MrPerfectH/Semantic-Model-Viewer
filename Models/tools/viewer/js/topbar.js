@@ -236,14 +236,16 @@
     var tot = {}, vis = {}, hid = {};
     app.model.tables.forEach(function (t) {
       var k = keyOf(t); tot[k] = (tot[k] || 0) + 1;
-      if (showSA || t.relCount > 0) vis[k] = (vis[k] || 0) + 1; else hid[k] = (hid[k] || 0) + 1;
+      var card=app.canvas && app.canvas.cards && app.canvas.cards[t.name];
+      var visible=card ? card.el.style.display!=='none' : (showSA || t.relCount>0);
+      if (visible) vis[k] = (vis[k] || 0) + 1; else hid[k] = (hid[k] || 0) + 1;
     });
     var map = app.colorBy === 'source' ? app._srcMap : app._domMap;
     return Object.keys(tot).sort(function (a, b) { return tot[b] - tot[a]; }).map(function (k) {
       return {
         key: k, label: app.groupLabel ? app.groupLabel(app.colorBy,k) : (app.colorBy === 'source' ? (labelMap[k] || k) : k), color: map[k] || app.FALLBACK_COLOR,
         count: vis[k] || 0, plus: hid[k] ? ('+' + hid[k]) : '',
-        tip: hid[k] ? ((vis[k] || 0) + ' on canvas · ' + hid[k] + ' standalone hidden — use the Standalone toggle to show ' + (hid[k] === 1 ? 'it' : 'them')) : (tot[k] + ' tables')
+        tip: hid[k] ? ((vis[k] || 0) + ' on canvas · ' + hid[k] + ' not currently visible') : (tot[k] + ' tables')
       };
     });
   };

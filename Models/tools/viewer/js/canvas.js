@@ -1457,7 +1457,7 @@
         var c = self.cards[n];
         var vis = true;
         if (iso) vis = visSet.has(c.table.name);
-        else if (c.table.relCount === 0) vis = self.showSA;
+        if (c.table.relCount === 0 && !self.showSA) vis = false;
         if (self.workspaceNames && !self.workspaceNames.has(n)) vis = false;
         c.el.style.display = vis ? '' : 'none';
       });
@@ -1685,7 +1685,7 @@
       }
     },
     setFilter: function (key) { this.pinned.clear(); this.app.setState({ activeFilter: key, selected: null }); this.applyHighlight(null, key); },
-    toggleStandalone: function () { var v = !this.app.state.showStandalone; this.app.setState({ showStandalone: v }); this.applyVisibility(v); this.renderLines(); },
+    toggleStandalone: function () { var v = !this.app.state.showStandalone; this.app.setState({ showStandalone: v }); this.applyVisibility(v); this.renderLines(); if(this.app.explorer){this.app.explorer.persist();this.app.explorer._key=null;this.app.explorer.update();} },
     toggleExpandAll: function () { var v = !this.app.state.allExpanded; this.app.setState({ allExpanded: v }); this.setAllExpanded(v); },
     toggleIsolate: function () {
       var self = this, v = !this.app.state.isolate;
@@ -1904,11 +1904,12 @@
       return saved;
     },
     captureDisplay: function () {
-      return { groupColours: this.app.captureGroupColours ? this.app.captureGroupColours() : null, detail: this.detailMode, lines: this.lineStyle, color: this.app.colorBy,
+      return { showDisconnected:this.showSA, groupColours: this.app.captureGroupColours ? this.app.captureGroupColours() : null, detail: this.detailMode, lines: this.lineStyle, color: this.app.colorBy,
         expanded: Object.keys(this.cards).filter(function (n) { return this.cards[n].expanded; }, this) };
     },
     restoreDisplay: function (display) {
       var self = this, d = display || {};
+      this.showSA=d.showDisconnected!==false;this.app.state.showStandalone=this.showSA;
       if (d.groupColours && this.app.restoreGroupColours) { this.app.restoreGroupColours(d.groupColours); this.app.rebuildColorMaps();
         ['sidebar','matrix','explorer'].forEach(function(k){if(self.app[k])self.app[k]._key=null;}); }
       if (['auto', 'names', 'cards'].includes(d.detail)) this.detailMode = d.detail;

@@ -84,9 +84,9 @@
       this.names=new Set(data && Array.isArray(data.tables)?data.tables.filter(function(n){return !!M.byName[n];}):[]);
       this.direction='both';this.depth='all';this.includeInactive=false;this.app.state.focusDepth=1000000;
       this.history=[];this.query='';this.filter='all';this.domain='';this.source='';this.message='';this._key=null;this._relationKey=null;this.optionsOpen=false;
-      this.app.canvas.workspaceNames=this.names;this.app.state.isolate=false;this.app.state.showStandalone=true;this.app.canvas.showSA=true;
+      this.app.canvas.workspaceNames=this.names;this.app.state.isolate=false;this.app.state.showStandalone=!data||data.showDisconnected!==false;this.app.canvas.showSA=this.app.state.showStandalone;
     },
-    persist:function(){store.setJSON(this.storageKey(),{tables:Array.from(this.names)});},
+    persist:function(){store.setJSON(this.storageKey(),{tables:Array.from(this.names),showDisconnected:this.app.canvas.showSA});},
     /* Hide either rail to give the canvas the full width. The inspector preference keeps the
        selection: the drawer comes straight back for the selected table when shown again. */
     setPanes:function(patch){
@@ -145,6 +145,7 @@
        cloud. A model with saved positions keeps every one of them. */
     showAll:function(){
       var cv=this.app.canvas;this.snapshot();
+      cv.showSA=true;this.app.state.showStandalone=true;
       this.names=new Set(this.app.model.tables.map(function(t){return t.name;}));
       this.app.state.isolate=false;this.app.state.selected=null;cv._activeSel=null;
       cv.workspaceNames=this.names;
@@ -266,7 +267,7 @@
       if(start){this.library.hidden=true;this.toolbar.hidden=true;this.nav.hidden=true;this.status.hidden=true;this.empty.hidden=false;this.renderEmpty();return;}
       this.empty.hidden=!!this.names.size;
       this.status.textContent=this.message || 'Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several';
-      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
+      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,this.legendOpen,st.showStandalone,st.activeFilter,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
       if(key!==this._key){this._key=key;this.renderLibrary();this.renderToolbar();this.renderEmpty();}
       this.renderNavigation();this.drawMap();
     },
@@ -334,11 +335,14 @@
       this.presetsBtn.setAttribute('aria-expanded',String(!!app.state.showPresets));
       var layouts=el('div',{cls:'ex-menu-anchor'},[this.presetsBtn]);
       if(app.state.showPresets)layouts.appendChild(app.topbar.presetsMenu());this.toolbar.appendChild(layouts);
+      this.renderLegend();
       this.displayBtn=button('Display',function(){self.optionsOpen=!self.optionsOpen;self._key=null;self.update();});
       this.displayBtn.setAttribute('aria-expanded',String(!!this.optionsOpen));
       var options=el('div',{cls:'ex-menu-anchor'},[this.displayBtn]);
       if(this.optionsOpen){var box=el('div',{cls:'ex-display-menu'});
         [['Auto layout',cv.layoutAlgo,[['star','Star'],['constellation','Constellation'],['layered','Layered'],['galaxy','Galaxy rows'],['columns','Star columns'],['waterfall','Waterfall'],['grid','Grid']],function(v){cv.setLayoutAlgo(v);self.arrangeSubset(true);} ],['Detail',cv.detailMode,[['auto','Auto'],['names','Names'],['cards','Cards']],function(v){cv.setDetailMode(v);} ],['Lines',cv.lineStyle,[['ortho','Straight'],['curve','Curved']],function(v){cv.setLineStyle(v);} ],['Colour by',app.colorBy,[['domain','Table group'],['source','Source']],function(v){cv.setColorMode(v);}],['Palette',app.paletteName,[['muted','Muted'],['vivid','Vivid']],function(v){app.setPalette(v);}]].forEach(function(p){var themed=p[0]==='Palette'&&g.ViewerTheme&&g.ViewerTheme.get()==='spellbook';if(themed){p[1]='spellbook';p[2]=[['spellbook','Spellbook']];}var sel=el('select',{disabled:themed,'aria-label':p[0],onChange:function(e){p[3](e.target.value);self._key=null;self.update();}},p[2].map(function(o){return el('option',{value:o[0],text:o[1]});}));sel.value=p[1];box.appendChild(el('label',{},[p[0],sel]));});
+        var disconnected=el('input',{type:'checkbox',checked:cv.showSA,'aria-label':'Show disconnected tables',onChange:function(){cv.toggleStandalone();self._key=null;self.update();}});
+        box.appendChild(el('label',{title:'Tables with no relationships. This does not change the Hide unrelated setting.'},['Show disconnected tables',disconnected]));
         box.appendChild(button('Edit group colours…',function(){self.optionsOpen=false;self._key=null;self.update();app.editGroupColours();}));
         box.appendChild(button(app.state.allExpanded?'Collapse all cards':'Expand all cards',function(){cv.toggleExpandAll();self.optionsOpen=false;self._key=null;self.update();}));
         box.appendChild(button(this.mapHidden?'Show overview map':'Hide overview map',function(){self.mapHidden=!self.mapHidden;self._key=null;self.update();}));
@@ -355,13 +359,17 @@
       var groups=cv.groupOrder||[],open=cv.expandedGroups?cv.expandedGroups.size:0;
       this.toolbar.appendChild(el('div',{cls:'ex-workspace-title'},[el('strong',{text:'Group canvas'}),
         el('span',{text:groups.length+' '+(app.colorBy==='source'?'sources':'table groups')+' · '+open+' expanded'})]));
-      var expand=button('Expand all',function(){cv.setAllGroups(true);self._clusterKey=null;self.update();});
+      var expand=button('Expand all',function(){cv.setAllGroups(true);self._clusterKey=null;self._key=null;self.update();});
       expand.disabled=!groups.length||open===groups.length;this.toolbar.appendChild(expand);
-      var collapse=button('Collapse all',function(){cv.setAllGroups(false);self._clusterKey=null;self.update();});
+      var collapse=button('Collapse all',function(){cv.setAllGroups(false);self._clusterKey=null;self._key=null;self.update();});
       collapse.disabled=!open;this.toolbar.appendChild(collapse);
       this.toolbar.appendChild(el('div',{cls:'ex-spacer'}));
       this.toolbar.appendChild(button('Fit',function(){cv.fitView();},false,'Fit every group in view'));
-      this.legendBtn=button('Legend',function(){self.legendOpen=!self.legendOpen;self._clusterKey=null;self.update();});
+      this.renderLegend();
+    },
+    renderLegend:function(){
+      var self=this,app=this.app,cv=app.canvas;
+      this.legendBtn=button('Legend',function(){self.legendOpen=!self.legendOpen;self._clusterKey=null;self._key=null;self.update();});
       this.legendBtn.setAttribute('aria-expanded',String(!!this.legendOpen));
       var anchor=el('div',{cls:'ex-menu-anchor'},[this.legendBtn]);
       if(this.legendOpen){
@@ -369,14 +377,14 @@
         box.appendChild(el('h3',{text:app.colorBy==='source'?'Source':'Table group'}));
         (app.legend&&app.legend.build?app.legend.build():[]).forEach(function(L){
           var active=app.state.activeFilter===L.key;
-          var row=el('button',{cls:'ex-legend-row'+(active?' is-active':''),title:L.tip,onClick:function(){cv.setFilter(active?null:L.key);self._clusterKey=null;self.update();}},[
+          var row=el('button',{cls:'ex-legend-row'+(active?' is-active':''),title:L.tip,onClick:function(){cv.setFilter(active?null:L.key);self._clusterKey=null;self._key=null;self.update();}},[
             el('span',{cls:'ex-legend-dot',style:'background:'+L.color}),
             el('span',{cls:'ex-legend-name',text:L.label}),
             el('span',{cls:'ex-legend-count',text:String(L.count)+(L.plus?' '+L.plus:'')})]);
           row.setAttribute('aria-pressed',String(active));box.appendChild(row);
         });
-        box.appendChild(button('Edit group colours…',function(){self.legendOpen=false;self._clusterKey=null;self.update();app.editGroupColours();}));
-        box.appendChild(button('Close legend',function(){self.legendOpen=false;self._clusterKey=null;self.update();}));
+        box.appendChild(button('Edit group colours…',function(){self.legendOpen=false;self._clusterKey=null;self._key=null;self.update();app.editGroupColours();}));
+        box.appendChild(button('Close legend',function(){self.legendOpen=false;self._clusterKey=null;self._key=null;self.update();}));
         anchor.appendChild(box);
       }
       this.toolbar.appendChild(anchor);

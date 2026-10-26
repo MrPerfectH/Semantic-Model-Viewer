@@ -1,7 +1,8 @@
 # Group colours
 
 Development feature: **Tables → Display → Colour by → Edit group colours…**.
-The group canvas also provides this command in its Legend menu.
+Both the Tables canvas and Table groups provide this command in their Legend menu.
+The legend identifies the current colour groups and lets you focus a group.
 
 Choose **Source** or **Table group**, select a group, and choose its colour. The
 preview shows both table roles: facts and dimensions share the group hue while
@@ -37,7 +38,12 @@ and palette changes can change the automatic hues; explicitly chosen colours rem
 
 ## Persistence
 
-Settings are stored per model in the viewer's local/VS Code storage. Saved views and
+Settings are stored per model. In VS Code, repository models use workspace storage;
+Fabric models use installation-wide extension storage, keyed by tenant, workspace
+and semantic model, so colours survive switching VS Code workspaces. Existing Fabric
+colour preferences migrate automatically from workspace storage; an existing
+installation-wide preference takes priority. These settings do not sync across
+computers. Browser preferences use local storage. Saved views and
 HTML snapshots carry the colour settings too. Colour editing does not write back to
 TMDL or BIM. Offline snapshots keep edits in their tab until another snapshot is
 saved. Older snapshots retain their recorded group layout.
@@ -46,3 +52,11 @@ Portable exports retain an opaque source-group identity and a connector/schema
 label so groups stay separate without adding connection settings to the snapshot.
 Power Query definitions still contain any endpoints present in their M code, as
 before. Source labels may therefore be less detailed in portable snapshots.
+
+## Disconnected tables
+
+**Tables → Display → Show disconnected tables** controls tables with no relationships.
+It is separate from Hide unrelated, which focuses the relationships of selected tables.
+Hiding disconnected tables preserves canvas membership and positions. The setting
+is remembered when reopening the model and is included in saved views and snapshots.
+**Show all** restores disconnected tables too.
