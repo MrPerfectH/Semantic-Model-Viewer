@@ -746,9 +746,6 @@
           else if (self.clusterOn) { self.selectTable(name); }
           else if (ev.altKey) { self.toggleMark(name); }
           else if (ev.shiftKey || ev.metaKey || ev.ctrlKey) { self.togglePin(name); }
-          /* focusGraph selects on its own, with the viewport it just aimed left alone —
-             selecting first would queue a deferred fit that lands on top of that aim */
-          else if (self._chip) { self.focusGraph(name); }
           else { self.selectTable(name); }
         };
         var cancel = function () {
@@ -1577,18 +1574,13 @@
       left = Math.max(190, Math.min(W - pw - 10, left)); top = Math.max(10, Math.min(H - ph - 10, top));
       pop.style.left = left + 'px'; pop.style.top = top + 'px';
     },
-    /* opts.keepView — the caller has already aimed the viewport (Center selected, a chip
-       click) and that aim wins. Without it the deferred fit would run after the caller's
-       synchronous centring and throw it away. */
-    selectTable: function (name, opts) {
-      var self = this, t = this.app.model.byName[name];
-      if (!t) return;
-      var keepView = !!(opts && opts.keepView);
+    /* Selection changes focus, never the viewport. Explicit navigation uses focusGraph. */
+    selectTable: function (name) {
+      if (!this.app.model.byName[name]) return;
+      // Opening the inspector resizes the host; cancel sticky Fit before that resize.
+      this._autoFit = false; this._pendingFit = false;
       if (this.selRel) { this.selRel = null; this.hideRelPopover(); }
-      /* Fit only once the inspector has actually opened: fitting first measures a canvas
-         that is about to lose ~330px on the right and leaves cards under the drawer. */
-      this.app.setState({ selected: name, activeFilter: null, msrQuery: '', expandedMeasure: null },
-        function () { if (!keepView && self.app.state.isolate) self.fitView(); });
+      this.app.setState({ selected: name, activeFilter: null, msrQuery: '', expandedMeasure: null });
       this.applyHighlight(name, null);
     },
     /* Background click: drops selection, filter and pins — a locked table stays focused. */
