@@ -1,8 +1,8 @@
 {
-  "version": "0.3.9",
+  "version": "0.5.0",
   "preRelease": true,
-  "bytes": 247893844,
-  "sha256": "80927c81ced7cdbe7146411dc79a16a098275b6ad41bace0b00e73f3177d0d8b",
+  "bytes": 247926231,
+  "sha256": "75da594d7b3ada54ca0a44461da14d05a28814af3c86a87b9087eca5b4af0643",
   "helperTargets": 6,
   "bundledNoticeSets": 6,
   "sourceModelsPackaged": false,

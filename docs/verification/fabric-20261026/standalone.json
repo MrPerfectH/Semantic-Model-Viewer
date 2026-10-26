@@ -13,10 +13,13 @@
     "serverAssets": true,
     "bundledMsal": true,
     "signedOut": true,
-    "sourceModelsPackaged": false
+    "sourceModelsPackaged": false,
+    "testedVersion": "0.5.0",
+    "archiveSha256": "e6d8c1b357c6b10cc0858981797dac29f89a448ca43c63a527632ff06d70e874"
   },
   "archive": {
-    "bytes": 242784400,
-    "sha256": "5ccfcaf819807c66ad3ba9dc40de01c4d578c6bb195504082c6cc36ba0d9d0cd"
+    "version": "0.5.0",
+    "bytes": 242815426,
+    "sha256": "e6d8c1b357c6b10cc0858981797dac29f89a448ca43c63a527632ff06d70e874"
   }
 }

@@ -8,7 +8,7 @@ This supersedes the outstanding-status list in the October 13 implementation rec
 | --- | --- | --- |
 | #65 feasibility | Standard Microsoft browser sign-in and live XMLA opening on macOS, Linux x64 and Windows x64; all six helpers compile | Controlled permission/source fidelity matrix; complete public distribution review |
 | #66 standalone | Live Mac standard browser sign-in, 36 workspaces and Direct Lake opening; synthetic browsing/search/failure coverage | Cross-platform standalone distribution acceptance remains under #72 |
-| #67 VS Code | Installed desktop previews on Mac, Omarchy and MSI; native Fabric tree, workspace-scoped models and real model opening | Final 0.3.9 package installed and live-open verified on Windows x64 |
+| #67 VS Code | Installed desktop previews on Mac, Omarchy and MSI; native Fabric tree, workspace-scoped models and real model opening | Integrated 0.5.0 package installed and live-open verified on Windows x64 |
 | #68 Read + Build | ADOMD consumer fallback implemented and exercised on a TOM-denied live model; 15 mapper assertions | Independently establish effective Read + Build-only permissions and compare to known source; full source definitions cannot be promised |
 | #69 cache/refresh | Automated cache/refresh/race checks in both hosts; installed Windows live refresh and signed-out cached reopening | No missing implementation identified; normal Windows profile restart retains credentials and model cache |
 | #70 lifecycle | Installed Windows sign-out, denied signed-out calls, wrong-account/wrong-tenant refresh rejection, cache retention and removal | Earlier Mac live tenant switch recorded in PR #149; strengthened isolation regressions pass |
@@ -27,7 +27,7 @@ No private model definitions, account names, tenant IDs, tokens or connection ID
 
 All six native targets are compiled and packaged; this is not runtime acceptance of Windows ARM64, Linux ARM64 or macOS x64. Desktop local extension hosts are supported; VS Code web/remote extension hosts are outside current acceptance. No model writes, model data refreshes, capacity resumes or billing changes were performed.
 
-The final **0.3.9** VSIX was transferred to MSI with a matching SHA-256 and installed in an isolated normal VS Code profile (without extension test mode). After live sign-in and model loading, a full restart restored `signedIn: true` and one saved model. Live opening worked again without another login. The extension lifecycle harness passed again on this installed 0.3.9 runtime. The final archive’s Windows runtime hashes match that installed/tested runtime.
+The earlier **0.3.9** VSIX was transferred to MSI with a matching SHA-256 and installed in an isolated normal VS Code profile (without extension test mode). After live sign-in and model loading, a full restart restored `signedIn: true` and one saved model. Live opening worked again without another login. The extension lifecycle harness passed again on that installed 0.3.9 runtime. These are historical lifecycle results; the integrated 0.5.0 preview is checked separately below.
 
 ## Live REST/XMLA fidelity comparison
 
@@ -37,7 +37,7 @@ This comparison discovered 22 engine-maintained TOM `rowNumber` columns that TMD
 
 ## Automated checks in this acceptance pass
 
-- Full repository/extension regression with .NET SDK enabled: **735 passed, zero failures, zero skips**.
+- Full repository/extension regression with .NET SDK enabled: **762 passed, zero failures, zero skips**.
 - Consumer metadata helper tests: **4 passed**, including native invalid-request sanitization and 15 mapping checks through the real viewer parser.
 - Real downloaded snapshot browser checks: **8 passed**, including Fabric XMLA/REST provenance export and offline re-export. These provenance cases are synthetic, not additional live REST service evidence.
 - New account-isolation regressions prove that interactive renewal rejects another tenant even for the same home account ID, and ambiguous restored account caches require explicit sign-in.
@@ -50,6 +50,12 @@ An allowlisted standalone ZIP now bundles the viewer/server, MSAL production dep
 `tools/fabric/verify-preview.py` extracted the actual archive and passed native-helper execution, viewer assets, localhost bridge availability and fresh signed-out MSAL initialization on **Linux x64 and MSI Windows x64**. These smoke checks do not claim an additional live Microsoft sign-in. The Mac test installation already has live evidence; the build workflow additionally signs both Mac helpers and smoke-tests a fresh signed archive on its Mac runner.
 
 Both local Mac preview helpers have also been ad hoc signed and their signatures verified on macOS; the signed ARM64 helper passed native invalid-request startup. The new preview workflow builds helpers, signs Mac bundles, runs regression tests, builds both distributions and tests the portable archive. The tag-release workflow reuses those jobs instead of packaging an extension without its helpers. CI execution of the new workflow remains pending until its results are recorded. Neither workflow publication nor notarization is implied by the local smoke tests.
+
+## Current-main integration
+
+The feature branch now includes `origin/main` at `06982ee` (stable 0.4.3), preserving the stable relationship-label, theme, layout, DAX and report-opening fixes. Merge conflicts were resolved by combining Fabric provenance/controls with theme support, retaining both snapshot asset sets, and keeping the stable changelog/video documentation. The preview version advances to **0.5.0**, avoiding a downgrade from stable 0.4.3. MSI installed the hash-verified 0.5.0 VSIX, reused the existing session, discovered 99 workspaces and opened the 21-table/11-relationship live model. All 21 canvas tables rendered, the compact header and theme control fit, and clicking a relationship confirmed its endpoints, cardinality and filter direction. No feature changes were merged into main.
+
+The integrated renderer passed **762 regression tests**, **8 downloaded snapshot browser checks**, and **5 fresh-launch/report tests** against the committed integration checkout. Both Linux and Windows portable smoke tests also pass on the hash-verified 0.5.0 archive. Current build/package receipts identify the 0.5.0 artifacts; earlier 0.3.9 installed-host evidence is retained as historical evidence for unchanged connection/lifecycle code.
 
 ## Reproduction
 
