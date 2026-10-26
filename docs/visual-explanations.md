@@ -10,12 +10,13 @@ PNG capture uses an installed Chrome or Chromium through its local DevTools prot
 
 Optional report scanning requires Python 3. Set `SMV_PYTHON` if its executable is not named `python3`.
 
-The bundled [agent skill](../skills/smv-explain/SKILL.md) can be linked into your agent's skills directory. It is not installed automatically.
+The Claude plugin installs the bundled [agent skill](../skills/smv-explain/SKILL.md). Standalone agents can link it into their skills directory. New view objects use version 2; the walkthrough envelope and result-data format remain version 1.
 
 ## Start with one image
 
 ```bash
-smv inspect "Sales.SemanticModel" > model.json
+smv relations "Sales.SemanticModel" --table Sales
+smv dependents "Sales.SemanticModel" --table Sales --details
 smv discover ./Models
 smv shot "Sales.SemanticModel" --view view.json --out explanation.png --json
 ```
@@ -26,7 +27,7 @@ A view uses actual model object names. Inspect includes formulas, relationship s
 
 ```json
 {
-  "version": 1,
+  "version": 2,
   "mode": "graph",
   "tables": ["Sales", "Date"],
   "highlights": [{"kind": "column", "table": "Sales", "name": "Net Amount"}],
@@ -39,9 +40,9 @@ A view uses actual model object names. Inspect includes formulas, relationship s
 }
 ```
 
-Supported modes are `graph`, `measures`, `matrix`, `clusters`, and `power-query`. Graph and cluster views target tables and expanded columns; graph views can target relationships by source name. Measures require a `focus` such as `{"kind":"measure","table":"Measures","name":"Sales LY"}`. Matrix highlights target table headers. Power Query focus uses `{"kind":"query","name":"<metadata ID>"}`.
+Supported modes are `graph`, `measures`, `matrix`, `clusters`, and `power-query`. Graph and cluster views target tables and expanded columns; graph views can target relationships by source name. Measures accept table, column or measure focus, such as `{"kind":"measure","table":"Measures","name":"Sales LY"}`. Matrix highlights target table headers. Power Query focus uses `{"kind":"query","name":"<metadata ID>"}`.
 
-`tables` selects the starting table workspace. Cluster and matrix modes retain their own overview semantics. `focus`, `highlights`, and callout objects must resolve and be visible. The tool rejects unsupported, unknown, ambiguous, or clipped targets. Reduce context or increase dimensions when the selected object cannot fit. Width and height range from 400 to 4096 CSS pixels; scale is 1 or 2. Captures use a clean in-memory snapshot session and do not read or change the ordinary viewer workspace.
+`tables` selects the starting table workspace. Cluster and matrix modes retain their own overview semantics. `focus`, `highlights`, and callout objects must resolve and be visible. The tool rejects unsupported, unknown, ambiguous, or clipped targets. Reduce context or increase dimensions when the selected object cannot fit. Version 2 width and height range from 320 to 4096 CSS pixels; scale is 1 or 2. Captures use a clean in-memory snapshot session and do not read or change the ordinary viewer workspace.
 
 `chrome: false` hides the top bar and graph side panels. `crop: "highlights"` crops around targets and labels with a margin; the default is the viewport. Captures use the classic viewer theme. Walkthrough pages support light and dark appearance, while embedded viewer images retain their captured appearance.
 
@@ -66,7 +67,7 @@ The example uses the synthetic Contoso model, illustrative numbers, and a calcul
   "steps": [{
     "id": "formula",
     "caption": "This is the formula we are discussing; no query has been executed.",
-    "view": {"version": 1, "mode": "measures", "focus": {"kind": "measure", "table": "Measures", "name": "Sales LY"}}
+    "view": {"version": 2, "mode": "measures", "focus": {"kind": "measure", "table": "Measures", "name": "Sales LY"}}
   }]
 }
 ```
@@ -152,7 +153,7 @@ smv session stop session.json
 
 The server binds to loopback and serves the generated view, not the source directory. Its URL contains a local access token. The session file is created with restrictive permissions where supported. Do not publish the session URL as a portable artifact.
 
-Matching session files reuse an existing server. Different inputs or watch settings require a different session file. An unreachable session produces an error; inspect and remove a stale session file before restarting. Stopping uses the live server's token rather than killing an arbitrary PID.
+Matching session files and compatible managed model sessions reuse an existing server. `session list` and `session stop --all` support managed cleanup. Different inputs or watch settings require a different session file. An unreachable session produces an error; inspect and remove a stale session file before restarting. Stopping uses the live server's token rather than killing an arbitrary PID.
 
 Watch checks source and view files every second. Reload the browser to see a refreshed artifact. Invalid or stale object references produce an error page and status instead of silently showing the previous explanation. Fixing the source or view restores serving. Foreground sessions stop with Ctrl+C; background sessions stop with the session command.
 

@@ -1,0 +1,53 @@
+table 'GL Entries'
+	lineageTag: 2812e8ce-9496-5599-8617-3dbb30007ffc
+
+	column 'Account Key'
+		dataType: int64
+		isHidden
+		lineageTag: 28403755-1aba-5886-96f0-d684ff79f66f
+		sourceColumn: account_key
+
+	column 'Cost Center Key'
+		dataType: int64
+		isHidden
+		lineageTag: 7d4545c8-7193-5071-b7c0-22dd6f4c7fc0
+		sourceColumn: cost_center_key
+
+	column 'Currency Key'
+		dataType: int64
+		isHidden
+		lineageTag: f29cb13c-5e9a-50cd-b365-bd052f6c95ca
+		sourceColumn: currency_key
+
+	column 'Posting Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: 1e0d4a56-6b9c-561e-8134-c662546cb66f
+		sourceColumn: posting_date
+
+	column 'Journal Number'
+		dataType: string
+		lineageTag: 7f28cc65-02d8-56c6-9d68-20c8b69b6580
+		sourceColumn: journal_number
+
+	column 'Debit Amount'
+		dataType: decimal
+		isHidden
+		lineageTag: 18540505-9145-5d54-b4ba-4d6dfe5d5f8f
+		sourceColumn: debit_amount
+
+	column 'Credit Amount'
+		dataType: decimal
+		isHidden
+		lineageTag: 605781a7-1f1c-5347-995f-26f834c79fbd
+		sourceColumn: credit_amount
+
+	partition 'GL Entries' = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="finance",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_gl_entries",Kind="Table"]}[Data]
+				in
+				    tbl

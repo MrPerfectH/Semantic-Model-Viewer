@@ -1,0 +1,24 @@
+table 'Exchange Rates'
+	lineageTag: 0f91593c-c045-553c-8f02-342a964f874f
+
+	column 'Currency Code'
+		dataType: string
+		sourceColumn: currency_code
+
+	column Rate
+		dataType: decimal
+		sourceColumn: rate
+
+	column 'Rate Date'
+		dataType: dateTime
+		sourceColumn: rate_date
+
+	partition 'Exchange Rates' = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="finance",Kind="Schema"]}[Data],
+				    tbl = db{[Name="exchange_rates",Kind="Table"]}[Data]
+				in
+				    tbl

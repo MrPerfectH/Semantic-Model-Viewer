@@ -1,0 +1,29 @@
+table Carrier
+	lineageTag: 1435a4af-e6cb-516d-98b2-1831afc38ae4
+
+	column CarrierKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: c49285c6-93d7-57a5-af06-9dd3ab56f816
+		sourceColumn: carrierkey
+
+	column 'Carrier Name'
+		dataType: string
+		lineageTag: da5436da-a584-5496-96cd-c788aaf4fac7
+		sourceColumn: carrier_name
+
+	column 'Service Level'
+		dataType: string
+		lineageTag: 36aedc6e-b944-538d-b28a-76e7d7b0ae0c
+		sourceColumn: service_level
+
+	partition Carrier = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="supply",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_carrier",Kind="Table"]}[Data]
+				in
+				    tbl

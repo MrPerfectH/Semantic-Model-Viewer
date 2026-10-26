@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "mode": "graph",
+  "tables": ["Sales", "Date"],
+  "focus": {"kind": "relationship", "name": "470d1e32-65ae-5dfe-9d87-b3bbfb96d912"},
+  "annotationsVisible": false,
+  "chrome": false,
+  "width": 1280,
+  "height": 900,
+  "scale": 1
+}

@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "mode": "graph",
+  "tables": ["Sales", "Date"],
+  "highlights": [{"kind": "table", "name": "Date"}],
+  "callouts": [{"object": {"kind": "table", "name": "Date"}, "text": "Start with the date table when discussing the time filter."}],
+  "chrome": false
+}

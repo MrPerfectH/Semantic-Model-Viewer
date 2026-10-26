@@ -35,6 +35,22 @@ In **Measures**, select a measure to follow its dependencies and inspect the DAX
 A `.pbip` file alone is not the model; `.pbix` files cannot be opened directly.
 See [supported input and troubleshooting](docs/installation.md#supported-input).
 
+## Claude Code
+
+Load the `semantic-model-viewer` plugin to open models, ask for visual explanations, and
+save offline snapshots from Claude Code. It runs the existing CLI through Claude's shell tools.
+Install from inside Claude Code:
+
+```text
+/plugin marketplace add MrPerfectH/Semantic-Model-Viewer#claude-marketplace
+/plugin install semantic-model-viewer@semantic-model-tools
+```
+
+Run `/semantic-model-viewer:setup` once for a stable `smv` command, then use `/semantic-model-viewer:open`. `smv show <model> --table "Cost Center" --related --dependents` opens a reusable side-by-side Tables/Measures workspace; `relations` and `dependents` give short metadata answers. Requires Node.js 22+ and Git. The plugin CLI has no runtime npm dependencies. No separate Viewer app installation is needed.
+See [plugin setup and commands](docs/claude-code-plugin.md).
+
+The [CLI workspace workflow](docs/cli-workspace-fetch.md) downloads Fabric definitions using an existing Azure CLI login, generates offline diagrams, and records source and renderer hashes. Local models require no cloud login. Choose opening behavior with `--open none|system`.
+
 ## Fabric connection (development preview)
 
 The `develop` preview adds work-account sign-in, workspace/model browsing, read-only metadata

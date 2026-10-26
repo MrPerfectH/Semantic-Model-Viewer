@@ -1,0 +1,54 @@
+table 'Marketing Spend'
+	lineageTag: 788da5c7-5836-5e71-bae4-320d95058ad6
+
+	column 'Campaign Key'
+		dataType: int64
+		isHidden
+		lineageTag: 64dc22e2-1ced-52c5-9cfc-9cc394f8a3db
+		sourceColumn: campaign_key
+
+	column 'Sales Channel Key'
+		dataType: int64
+		isHidden
+		lineageTag: c6d250cd-d030-5a0f-9d00-81801046e690
+		sourceColumn: sales_channel_key
+
+	column 'Currency Key'
+		dataType: int64
+		isHidden
+		lineageTag: 1a3b0e7b-6763-5aec-a90f-a2946698e985
+		sourceColumn: currency_key
+
+	column 'Spend Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: 1dbac0b4-a47b-5842-9379-bd19e1f3ae4c
+		sourceColumn: spend_date
+
+	column 'Spend Amount'
+		dataType: decimal
+		isHidden
+		lineageTag: ffe850b3-b030-5f05-8331-ab397282f1a6
+		sourceColumn: spend_amount
+
+	column Impressions
+		dataType: decimal
+		isHidden
+		lineageTag: f52fcd75-3b76-5d70-b06c-0ece5aa7abcd
+		sourceColumn: impressions
+
+	column Clicks
+		dataType: decimal
+		isHidden
+		lineageTag: 962955ef-5ef8-5a8d-8fbd-4240cdd7ab21
+		sourceColumn: clicks
+
+	partition 'Marketing Spend' = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="marketing",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_marketing_spend",Kind="Table"]}[Data]
+				in
+				    tbl

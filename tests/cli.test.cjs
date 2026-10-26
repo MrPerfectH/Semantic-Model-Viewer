@@ -106,3 +106,51 @@ test('TMDL relationship validation preserves parallel edges and rejects incomple
     assert.equal(payload(output).model.relationships.length, 2);
   }
 });
+
+test('focused inspection and filter paths use metadata direction and DAX dependencies', t => {
+  const dir = workspace(t), file = path.join(dir, 'Model with spaces.bim');
+  const tables = ['IFLO', 'Child', 'Bridge', 'Inactive', 'Unknown', 'Measures'].map(name => ({ name, columns: [{ name: 'Key', dataType: 'int64' }], measures: [] }));
+  tables[0].measures.push({ name: 'Home only', expression: '1' });
+  tables[5].measures.push({ name: 'Direct', expression: 'SUM(IFLO[Key])' }, { name: 'Indirect', expression: '[Direct] + 1' }, { name: 'Unrelated', expression: 'COUNTROWS(Child)' });
+  const edge = (name, fromTable, toTable, extra = {}) => ({ name, fromTable, toTable, fromColumn: 'Key', toColumn: 'Key', fromCardinality: 'many', toCardinality: 'one', ...extra });
+  fs.writeFileSync(file, JSON.stringify({ name: 'Queries', model: { tables, relationships: [
+    edge('normal', 'Child', 'IFLO'), edge('parallel', 'Child', 'IFLO'),
+    edge('bridge', 'Bridge', 'Child', { toCardinality: 'many', crossFilteringBehavior: 'bothDirections' }),
+    edge('inactive', 'Inactive', 'IFLO', { isActive: false }), edge('unknown', 'Unknown', 'IFLO', { crossFilteringBehavior: 'automatic' })
+  ] } }));
+  const inspect = run(dir, 'inspect', file, '--table', 'iflo'); successful(inspect);
+  const focused = JSON.parse(inspect.stdout);
+  assert.equal(focused.table.name, 'IFLO'); assert.equal(focused.tables, undefined);
+  assert.deepEqual(focused.measuresUsingTable.map(m => [m.table, m.name, m.direct]), [['Measures', 'Direct', true], ['Measures', 'Indirect', false]]);
+  assert.equal(focused.table.measures[0].name, 'Home only'); assert.equal(focused.relationships.length, 4);
+  const filters = run(dir, 'filters-by', file, 'iflo'); successful(filters);
+  const result = JSON.parse(filters.stdout);
+  assert.deepEqual(result.tables.map(t => [t.name, t.distance]), [['Child', 1], ['Bridge', 2]]);
+  assert.equal(result.tables[0].path[0].relationship.filterDirection, 'to -> from');
+  assert.deepEqual(result.tables[0].path[0].relationship.filters, [{ from: 'IFLO', to: 'Child' }]);
+  const bridge = result.tables[1].path[1].relationship;
+  assert.equal(bridge.manyToMany, true); assert.equal(bridge.filterDirection, 'both'); assert.equal(bridge.filters.length, 2);
+  assert.equal(result.relationships.filter(r => r.name === 'parallel').length, 1);
+  assert.deepEqual(result.unresolved.map(r => r.name), ['unknown']);
+  const direct = run(dir, 'filters-by', 'IFLO', '--model', file, '--direct', '--include-inactive'); successful(direct);
+  assert.deepEqual(JSON.parse(direct.stdout).tables.map(t => t.name), ['Child', 'Inactive']);
+  const incoming = run(dir, 'filters-by', file, 'IFLO', '--direction', 'incoming'); successful(incoming);
+  assert.deepEqual(JSON.parse(incoming.stdout).tables, []);
+  for (const args of [['inspect', file, '--table', 'Missing'], ['filters-by', file, 'Missing'], ['filters-by', file, 'IFLO', '--direction', 'sideways']]) assert.equal(run(dir, ...args).status, 1);
+});
+test('--where resolves the current executable without cache version assumptions', t => {
+  const dir = workspace(t), result = run(dir, '--where'); successful(result);
+  assert.equal(result.stdout.trim(), fs.realpathSync(cli));
+});
+
+test('TMDL filter paths retain unresolved directions and parallel edge evidence', t => {
+  const dir = workspace(t), model = path.join(dir, 'TMDL'); fs.mkdirSync(model);
+  fs.writeFileSync(path.join(model, 'model.tmdl'), 'model Model');
+  for (const name of ['Root', 'Child', 'Unknown']) fs.writeFileSync(path.join(model, name + '.tmdl'), 'table ' + name + '\n\tcolumn Key\n\t\tdataType: int64');
+  fs.writeFileSync(path.join(model, 'relationships.tmdl'), 'relationship first\n\tfromColumn: Child.Key\n\ttoColumn: Root.Key\nrelationship parallel\n\tfromColumn: Child.Key\n\ttoColumn: Root.Key\nrelationship automatic\n\tfromColumn: Unknown.Key\n\ttoColumn: Root.Key\n\tcrossFilteringBehavior: automatic');
+  const result = run(dir, 'filters-by', model, 'Root'); successful(result);
+  const data = JSON.parse(result.stdout);
+  assert.deepEqual(data.tables.map(t => t.name), ['Child']);
+  assert.equal(data.relationships.length, 3);
+  assert.equal(data.unresolved[0].name, 'automatic');
+});

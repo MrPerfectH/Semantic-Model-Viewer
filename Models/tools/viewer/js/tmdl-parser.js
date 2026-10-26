@@ -28,7 +28,7 @@
       else if((m=t.match(/^fromCardinality:\s*(\w+)/))) cur.fromCard=m[1];
       else if(/^isActive:\s*false/.test(t)) cur.inactive=true;
       else if((m=t.match(/^crossFilteringBehavior:\s*(\S+)/))){
-        cur.both=m[1]==='bothDirections';
+        cur.crossFilteringBehavior=m[1];cur.both=m[1]==='bothDirections';
       }
     });
     if(options && options.strictRelationships) out.forEach(function(r){
@@ -397,7 +397,7 @@
     var result=finalize(name, tables, rels, ctx, options); result.powerQuery=pqTMDL(files); return result;
   }
 
-  function parseBIM(j){
+  function parseBIM(j, options){
     var mdl=j.model||j, name=j.name||'';
     var skip=/^(LocalDateTable_|DateTableTemplate_)/;
     var txt=function(x){ return Array.isArray(x)?x.join('\n'):(x||''); };
@@ -420,7 +420,7 @@
     var rels=(mdl.relationships||[]).filter(function(r){return !skip.test(r.fromTable)&&!skip.test(r.toTable);}).map(function(r){
       return {name:r.name||'', from:r.fromTable, fromCol:r.fromColumn, to:r.toTable, toCol:r.toColumn,
         fromCard:String(r.fromCardinality||'many').toLowerCase(), toCard:String(r.toCardinality||'one').toLowerCase(),
-        inactive:r.isActive===false, both:r.crossFilteringBehavior==='bothDirections'};
+        inactive:r.isActive===false, both:r.crossFilteringBehavior==='bothDirections', crossFilteringBehavior:r.crossFilteringBehavior};
     });
     var ctx={exprs:{}, exprNames:[], params:{}};
     (mdl.expressions||[]).forEach(function(e){
@@ -430,7 +430,7 @@
     });
     tables.forEach(function(t){ var fl=t._flags||{}; fl.tableName=t.name; if(fl.partSrc && !ctx.exprs[t.name]) ctx.exprs[t.name]=fl.partSrc; });
     ctx.exprNames=Object.keys(ctx.exprs).sort(function(a,b){ return b.length-a.length; });
-    var result=finalize(name, tables, rels, ctx); result.powerQuery=pqBIM(mdl); return result;
+    var result=finalize(name, tables, rels, ctx, options); result.powerQuery=pqBIM(mdl); return result;
   }
 
   function parseAny(files){
