@@ -15,13 +15,13 @@ test('rejects malicious continuation before sending credentials', async () => {
 });
 test('polls LRO and decodes definition', async () => {
  const urls=[]; const tokens=[];
- const client=createFabricClient({getAccessToken:async(...args)=>{tokens.push(args);return 'secret';},wait:async()=>{},fetch:async url=>{urls.push(url);if(urls.length===1)return new Response(null,{status:202,headers:{'x-ms-operation-id':id}});return json(url.endsWith('/result')?definition:{status:'Succeeded'});}});
+ const client=createFabricClient({getAccessToken:async(...args)=>{tokens.push(args);return 'secret';},wait:async()=>{},fetch:async url=>{urls.push(url);if(url.endsWith('/workspaces/'+id))return json({},403);if(urls.length===2)return new Response(null,{status:202,headers:{'x-ms-operation-id':id}});return json(url.endsWith('/result')?definition:{status:'Succeeded'});}});
  assert.equal((await client.getModelDefinition(id,id,{transport:'rest'})).parts[0].content,'model Model');
- assert.equal(urls.length,3); assert.ok(tokens.every(t=>t[1]==='definition'));
+ assert.equal(urls.length,4); assert.equal(tokens[0][1],'capacity-preflight'); assert.ok(tokens.slice(1).every(t=>t[1]==='definition'));
 });
 test('read-only XMLA default does not request REST readwrite scope', async()=>{
- const fetched=[];const client=createFabricClient({getAccessToken:async audience=>{assert.equal(audience,'https://analysis.windows.net/powerbi/api');return 'token';},fetch:async url=>{fetched.push(url);return json({},403);},xmlaReader:async()=>({transport:'xmla',parts:[]})});
- assert.equal((await client.getModelDefinition(id,id)).transport,'xmla');assert.deepEqual(fetched,[`https://api.powerbi.com/v1.0/myorg/groups/${id}`]);
+ const fetched=[];const client=createFabricClient({getAccessToken:async (audience,purpose)=>{assert.ok(audience==='https://analysis.windows.net/powerbi/api'||purpose==='capacity-preflight');return 'token';},fetch:async url=>{fetched.push(url);return json({},403);},xmlaReader:async()=>({transport:'xmla',parts:[]})});
+ assert.equal((await client.getModelDefinition(id,id)).transport,'xmla');assert.deepEqual(fetched,[`https://api.fabric.microsoft.com/v1/workspaces/${id}`,`https://api.powerbi.com/v1.0/myorg/groups/${id}`]);
 });
 test('never falls back on expired login or hides XMLA errors',async()=>{
  const client=createFabricClient({getAccessToken:async()=> 'token',fetch:async()=>json({},401),xmlaReader:async()=>{throw Error('unavailable');}});
@@ -37,13 +37,13 @@ test('unconfigured login has actionable maintainer message',async()=>{
 
 test('suspended capacity stops metadata retrieval with an actionable error',async()=>{
  let opened=false;const urls=[];
- const client=createFabricClient({getAccessToken:async()=> 'token',fetch:async url=>{urls.push(url);return json(url.endsWith('/capacities')?{value:[{id:'capacity',state:'Suspended'}]}:{capacityId:'capacity'});},xmlaReader:async()=>{opened=true;}});
- await assert.rejects(client.getModelDefinition(id,id,{transport:'xmla'}),{code:'CapacitySuspended'});
- assert.equal(opened,false);assert.equal(urls.length,2);
+ const client=createFabricClient({getAccessToken:async()=> 'token',fetch:async url=>{urls.push(url);return url.startsWith('https://api.fabric')?json({},403):json(url.endsWith('/capacities')?{value:[{id,state:'Suspended'}]}:{id,capacityId:id});},xmlaReader:async()=>{opened=true;}});
+ await assert.rejects(client.getModelDefinition(id,id,{transport:'xmla'}),{code:'CapacityInactive'});
+ assert.equal(opened,false);assert.equal(urls.length,3);
 });
 test('capacity diagnostics do not require extra permissions or block an active XMLA connection',async()=>{
- for (const response of [json({},403),json({value:[{id:'capacity',state:'Active'}]})]) {
-  let tokenRequests=0;const client=createFabricClient({getAccessToken:async()=>{tokenRequests++;return 'token';},fetch:async url=>url.endsWith('/capacities')?response:json({capacityId:'capacity'}),xmlaReader:async()=>({transport:'xmla',parts:[]})});
-  assert.equal((await client.getModelDefinition(id,id,{transport:'xmla'})).transport,'xmla');assert.equal(tokenRequests,1);
+ for (const response of [json({},403),json({value:[{id,state:'Active'}]})]) {
+  let tokenRequests=0;const client=createFabricClient({getAccessToken:async()=>{tokenRequests++;return 'token';},fetch:async url=>url.endsWith('/capacities')?response.clone():json({id,capacityId:id}),xmlaReader:async()=>({transport:'xmla',parts:[]})});
+  assert.equal((await client.getModelDefinition(id,id,{transport:'xmla'})).transport,'xmla');assert.equal(tokenRequests,2);
  }
 });
