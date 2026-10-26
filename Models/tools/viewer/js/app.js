@@ -162,6 +162,7 @@
     this._usage = null; this._usageMeta = null;
     this._importModel = null; this._importHandle = null;
     this.repoHandle = null; this.repoPath = null; this.repoModels = null; this._repoLive = false;
+    this.fabric = g.FabricConnection ? new g.FabricConnection(this) : null;
     this.server = null;   // local app server (scripts/serve.py), detected at boot
     this._cbs = [];
 
@@ -310,6 +311,7 @@
     /* ---------- fact/dim role setup ---------- */
     roleRepo: function () {
       var key = this.modelKey;
+      if (/^fabric:/.test(key)) return null;
       return this._repoLive && (this.repoModels || []).find(function (r) { return r.handle && 'repo:' + r.path === key; });
     },
     assignRole: async function (name, role) {
@@ -538,6 +540,10 @@
 
     loadModel: function (key) {
       if (this.snapshotMode) return Promise.resolve();
+      if (this.fabric && /^fabric:/.test(key)) {
+        var cachedFabric = this.getStore().find(function (r) { return r.id === key && r.source && r.source.kind === 'fabric'; });
+        if (cachedFabric) { this.fabric.activate(cachedFabric); return Promise.resolve(); }
+      }
       if (this.host) return this.hostChooseModel(key);
       var self = this;
       var request = this._modelLoadRequest = (this._modelLoadRequest || 0) + 1;
@@ -577,6 +583,8 @@
       this.loadModel(id);
     },
     deleteModel: function (id) {
+      var fabricRecord = this.fabric && this.getStore().find(function (r) { return r.id === id && r.source && r.source.kind === 'fabric'; });
+      if (fabricRecord) return this.fabric.remove(fabricRecord);
       if (!this.setStore(this.getStore().filter(function (m) { return m.id !== id; }))) {
         this.setState({ repoError: 'Could not update browser storage. The model was not removed.' }); return;
       }
@@ -587,6 +595,15 @@
     /* The VS Code host supplies files; the core parser, canvas and measures stay shared. */
     hostOpenModel: function (record) {
       if (!record || !record.model || !Array.isArray(record.model.tables)) throw new Error('The selected model could not be read.');
+      if (record.source && record.source.kind === 'fabric') {
+        if (!g.FabricConnection) throw new Error('Fabric metadata support is unavailable. Reload the viewer.');
+        var source = g.FabricConnection.sourceOf(record.source);
+        var cached = { id: g.FabricConnection.key(source), name: record.name || record.model.name || 'Semantic model', at: Date.now(), source: source, model: JSON.parse(JSON.stringify(record.model)) };
+        var records = this.getStore().filter(function (r) { return r.id !== cached.id; }); records.push(cached);
+        if (!this.setStore(records)) throw new Error('Could not cache this Fabric model. Free local storage and try again. Your current model is unchanged.');
+        record = cached;
+        store.set('smv_current_v1', record.id);
+      }
       var self = this, same = this.state.loaded && record.id === this.modelKey;
       var saved = same ? { table: this.captureTableView(), measures: this.measures.captureSnapshot(),
         viewMode: this.state.viewMode, domains: this.captureDomains(), matrix: this.captureMatrix() } : null;
@@ -1093,7 +1110,7 @@
     },
     /* ---------- refresh the open model from its source folder ---------- */
     canRefreshSource: function () {
-      return !this.host && !this.snapshotMode && !!this.state.loaded && !!this.modelKey && this.modelKey !== 'builtin' && (this.canFS() || !!this.server);
+      return !(this.fabric && this.fabric.current() && this.fabric.current().source) && !this.host && !this.snapshotMode && !!this.state.loaded && !!this.modelKey && this.modelKey !== 'builtin' && (this.canFS() || !!this.server);
     },
     /* Folder imports remember their handle (IndexedDB), so refresh only re-confirms access.
        Models imported as loose files have no folder link: the first refresh asks for it once. */
@@ -1385,6 +1402,8 @@
       }
       if (this.host) {
         this.host.attach(this);
+        var cachedFabric = this.getStore().find(function (r) { return r.id === store.get('smv_current_v1') && r.source && r.source.kind === 'fabric'; });
+        if (cachedFabric && this.fabric) { this.fabric.activate(cachedFabric); return; }
         var initial = await this.host.loadDefault();
         if (initial) this.hostOpenModel(initial);
         else {
@@ -1414,6 +1433,7 @@
       } else {
         this.loadEmptyModel();
       }
+      if(this.server && this.fabric && new URLSearchParams(location.search).get('fabricSignIn')==='1'){history.replaceState(null,'',location.pathname);this.setState({showModelMenu:false});this.fabric.show();}
       var cached = store.getJSON('smv_repo_cache', null);
       if (cached && cached.length) this.repoModels = cached;
       if (this.server) {

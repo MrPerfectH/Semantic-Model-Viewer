@@ -5,7 +5,8 @@ const vscode = require('vscode');
 const { findModels } = require('./workspace');
 
 class ModelsTree {
-  constructor() {
+  constructor(fabric) {
+    this.fabric = fabric;
     this._emitter = new vscode.EventEmitter();
     this.onDidChangeTreeData = this._emitter.event;
     this.models = [];
@@ -15,7 +16,7 @@ class ModelsTree {
 
   async getChildren(element) {
     if (element) return [];
-    this.models = await findModels();
+    this.models = (await findModels()).concat(this.fabric ? this.fabric.entries() : []);
     vscode.commands.executeCommand('setContext', 'semanticModelViewer.hasModels', this.models.length > 0);
     return this.models;
   }
@@ -24,9 +25,9 @@ class ModelsTree {
     const item = new vscode.TreeItem(m.name, vscode.TreeItemCollapsibleState.None);
     item.id = m.id;
     item.description = m.path;
-    item.tooltip = m.path;
+    item.tooltip = m.kind === 'fabric' ? m.path + '\nLast fetched: ' + m.fetchedAt : m.path;
     item.resourceUri = m.uri;
-    item.iconPath = new vscode.ThemeIcon(m.kind === 'file' ? 'json' : 'type-hierarchy');
+    item.iconPath = new vscode.ThemeIcon(m.kind === 'fabric' ? 'cloud' : m.kind === 'file' ? 'json' : 'type-hierarchy');
     item.contextValue = 'semanticModel';
     item.command = { command: 'semanticModelViewer.openEntry', title: 'Open in Semantic Model Viewer', arguments: [m] };
     return item;

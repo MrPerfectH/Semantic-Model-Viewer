@@ -224,5 +224,23 @@ body[data-smv-interactive] .mv-dax-body{flex:none;}
 .mv-reference-measure{border-left:3px solid var(--smv-up,#6d28d9);background:color-mix(in srgb,var(--smv-up,#6d28d9) 12%,var(--smv-surface,#fff));}
 .mv-reference-chip:focus-visible{outline:2px solid var(--smv-down,#2563eb);outline-offset:2px;}
 
+/* Search previews are optional; filtering keeps the overview in place. */
+.mv-search-summary{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:14px 16px;margin-top:22px;border:1px solid var(--smv-up-border,#dcd0f7);border-radius:10px;background:var(--smv-up-soft,#f2edfd);color:var(--smv-up,#6d28d9);font-weight:600;}
+.mv-results-dialog{width:min(1120px,calc(100% - 32px));max-height:calc(100% - 48px);padding:24px;border:1px solid var(--smv-soft,#dce3ed);border-radius:14px;background:var(--smv-surface,#f4f5f7);color:var(--smv-ink,#273142);overflow:auto;font:13px 'IBM Plex Sans',system-ui,sans-serif;box-shadow:0 24px 80px #0f172a33;}
+.mv-results-dialog::backdrop{background:#0f172a66;}
+.mv-results-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px;}
+.mv-results-heading h2{font-size:22px;margin:0 0 7px;letter-spacing:-.4px;}
+.mv-results-heading p{margin:0;color:var(--smv-muted,#718096);overflow-wrap:anywhere;}
+.mv-results-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;}
+.mv-results-dialog .mv-result-card{grid-template-rows:auto minmax(100px,auto);min-height:210px;border-top:3px solid var(--smv-up,#6d28d9);}
+.mv-result-card .mv-dax-card-header{padding:16px;}
+.mv-result-card .mv-dax-card-header h3{margin:0 0 6px;}
+.mv-result-card .mv-dax-card-header .mv-button{margin-top:12px;}
+.mv-result-card .mv-dax-body{max-height:300px;}
+.mv-results-more{display:block;margin:20px auto 0;}
+.mv-results-more[hidden]{display:none;}
+.mv-results-empty{line-height:1.6;}
+@media(max-width:720px){.mv-results-dialog{padding:16px;}.mv-results-grid{grid-template-columns:1fr;}}
+.mv-result-card .mv-dax-ref{color:var(--smv-up,#6d28d9)!important;background:var(--smv-up-soft,#f2edfd)!important;border-color:var(--smv-up-border,#dcd0f7)!important;}
 /* Preserve compact prepared formulas with the shared source-reference cards. */
 body[data-smv-interactive] .mv-dax-card{min-height:0;grid-template-rows:auto auto auto;}

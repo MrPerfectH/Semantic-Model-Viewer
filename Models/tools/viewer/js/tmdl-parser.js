@@ -402,7 +402,8 @@
     var skip=/^(LocalDateTable_|DateTableTemplate_)/;
     var txt=function(x){ return Array.isArray(x)?x.join('\n'):(x||''); };
     var tables=(mdl.tables||[]).filter(function(t){return !skip.test(t.name);}).map(function(t){
-      var columns=(t.columns||[]).map(function(c){ var o={name:c.name, dataType:c.dataType||'', hidden:!!c.isHidden, isCalc:c.type==='calculated', isKey:!!c.isKey, rel:false}; var d=c.type==='calculated'?txt(c.expression).trim():''; if(d) o.dax=d; return o; });
+      // TOM includes engine-maintained row ordinals that source TMDL omits.
+      var columns=(t.columns||[]).filter(function(c){return c.type!=='rowNumber';}).map(function(c){ var o={name:c.name, dataType:c.dataType||'', hidden:!!c.isHidden, isCalc:c.type==='calculated', isKey:!!c.isKey, rel:false}; var d=c.type==='calculated'?txt(c.expression).trim():''; if(d) o.dax=d; return o; });
       var measures=(t.measures||[]).map(function(mm){ var o={name:mm.name, dax:txt(mm.expression).trim(), folder:mm.displayFolder||'', fmt:mm.formatString||''}; if(mm.isHidden) o.h=1; return o; });
       var isCG=!!t.calculationGroup;
       var isFP=(t.columns||[]).some(function(c){ return (c.extendedProperties||[]).some(function(p){return p.name==='ParameterMetadata';}); });

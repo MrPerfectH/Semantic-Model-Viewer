@@ -1,0 +1,34 @@
+name: Refresh pre-release documentation
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_version:
+        description: Existing public 0.5.x pre-release to preserve
+        required: true
+      version:
+        description: New 0.5.x pre-release version for the documentation refresh
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Refresh docs and verify the runtime is unchanged
+        env:
+          BASE_VERSION: ${{ inputs.base_version }}
+          VERSION: ${{ inputs.version }}
+        run: python3 scripts/refresh-preview-docs.py "$BASE_VERSION" "$VERSION"
+      - name: Publish documentation-only pre-release
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: npx --yes @vscode/vsce@4 publish --packagePath semantic-model-viewer-*.vsix --pre-release

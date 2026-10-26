@@ -10,7 +10,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/cli.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs tests/interactive-view.test.cjs tests/mcp-viewer.test.cjs",
+    "test": "node --test tests/cli.test.cjs tests/open-model.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs tests/interactive-view.test.cjs tests/mcp-viewer.test.cjs",
     "test:browser": "node --test tests/explanations.browser.cjs",
     "build:mcp-app": "node scripts/build-mcp-app.cjs",
     "test:interactive": "node --test tests/interactive-view.browser.cjs",
@@ -18,13 +18,14 @@
   },
   "files": [
     "bin/",
+    "scripts/open-model.cjs",
     "Models/tools/viewer/index.html",
     "Models/tools/viewer/*.css",
     "Models/tools/viewer/js/",
     "Models/tools/viewer/scripts/cli/",
+    "Models/tools/viewer/scripts/scan_report_usage.py",
     "docs/cli.md",
     "docs/snapshots.md",
-    "Models/tools/viewer/scripts/scan_report_usage.py",
     "docs/visual-explanations.md",
     "skills/smv-explain/",
     "examples/explanations/",

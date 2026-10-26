@@ -102,7 +102,7 @@
     if(view.focus)refs.push(view.focus);
     view.proposals.forEach(function(p){if(p.kind==='relationship'||p.kind==='arrow')refs.push(p.from,p.to);else if(p.kind==='group')refs=refs.concat(p.objects);else refs.push(p.object);});
     if(view.mode==='graph' || view.mode==='clusters'){
-      
+
       refs.forEach(function(r){
         var names=r.kind==='relationship'?[resolve(app.model,r).from,resolve(app.model,r).to]:[r.table || (r.kind==='table'?r.name:null)];
         names.filter(Boolean).forEach(function(n){if(app.explorer)app.explorer.ensureTable(n);});

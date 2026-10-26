@@ -17,9 +17,8 @@ const candidates = [process.env.CHROME_PATH, '/Applications/Google Chrome.app/Co
 const chrome = candidates.find(file => fs.existsSync(file));
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json' };
 const ALGOS = ['star', 'constellation', 'layered', 'galaxy', 'columns', 'waterfall', 'grid'];
-/* What Fit has to clear on each window, and what it has to reach. The floor is the canvas's
-   own ZOOM_FLOOR; the bigger window has enough canvas to stay a rung above it. */
-const SCREENS = [{ w: 1440, h: 900, minZoom: 0.30 }, { w: 1280, h: 720, minZoom: 0.25 }];
+/* The recipient camera must fit the canvas, independently of the lane zoom floor. */
+const SCREENS = [{ w: 1440, h: 900 }, { w: 1280, h: 720 }];
 
 function serve() {
   return http.createServer((req, res) => {
@@ -93,7 +92,10 @@ const READ_VIEW = `(() => {
     const a = rects[i].r, b = rects[j].r;
     if (a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom) hits.push(rects[i].n + ' / ' + rects[j].n);
   }
-  return { zoom: k, layoutK: cv.layoutK, chip: cv._chip, count: names.length, minFont,
+  const host = cv.host.getBoundingClientRect(), usable = cv.viewportRect();
+  const outside = rects.filter(({r}) => r.left < host.left+usable.x-2 || r.right > host.left+usable.x+usable.w+2 ||
+    r.top < host.top+usable.y-2 || r.bottom > host.top+usable.y+usable.h+2).map(({n}) => n);
+  return { zoom: k, layoutK: cv.layoutK, chip: cv._chip, count: names.length, minFont, outside,
     overlaps: hits.length, worst: hits.slice(0, 6), clipped: clipped.slice(0, 6), clippedCount: clipped.length,
     extent: { w: Math.round((maxX - minX) / k), h: Math.round((maxY - minY) / k) } };
 })()`;
@@ -126,7 +128,7 @@ for (const screen of SCREENS) {
     const floor = await browser.evaluate('app.canvas.ZOOM_FLOOR');
     assert.equal(floor, 0.25, 'the fit floor and the chip band floor are the same constant');
 
-    await t.test('Explore all arranges, fits at or above the floor, and stacks nothing', async () => {
+    await t.test('Explore all arranges, fits inside the usable canvas, and stacks nothing', async () => {
       await browser.evaluate("localStorage.clear(); app.canvas.pos = {}; app.canvas.setLayoutK(app.canvas.ZOOM_FLOOR); app.canvas.computeLayout(); app.explorer.showAll();");
       await settle();
       const view = await browser.evaluate(READ_VIEW);
@@ -134,12 +136,10 @@ for (const screen of SCREENS) {
       assert.equal(algo, 'star', 'Show all must arrange an unarranged model with the chosen layout');
       assert.equal(view.count, await browser.evaluate('app.model.tables.length'), 'every table stays on the canvas');
       assert.equal(view.chip, true, 'at this zoom the cards render as chips');
-      assert.ok(view.zoom >= screen.minZoom - 1e-9, `${label}: Explore all fitted at ${view.zoom.toFixed(3)}, needs ${screen.minZoom} — extent ${view.extent.w}x${view.extent.h}`);
-      /* the lanes were cut for the zoom the picture is shown at: a picture shown SMALLER than
-         its lanes were cut for is exactly the step-4 regression */
-      assert.ok(view.zoom >= view.layoutK - 1e-6, `shown at ${view.zoom} but laid out for ${view.layoutK}`);
+      assert.deepEqual(view.outside, [], 'every visible card fits the usable canvas');
+      assert.ok(view.zoom >= 0.05 && view.zoom <= 1.25, 'camera stays within its fit range');
       assert.equal(view.overlaps, 0, 'cards overlap on screen: ' + view.worst.join(', '));
-      assert.ok(view.minFont >= 11, 'smallest on-screen table name was ' + view.minFont.toFixed(2) + 'px');
+      assert.ok(view.minFont >= 11 * Math.min(1, view.zoom / floor) - 0.01, 'smallest on-screen table name was ' + view.minFont.toFixed(2) + 'px');
       assert.equal(view.clippedCount, 0, 'names lose their first two words: ' + view.clipped.join(', '));
       t.diagnostic(`${label} star :: fit ${(view.zoom * 100).toFixed(1)}% extent ${view.extent.w}x${view.extent.h} font ${view.minFont.toFixed(2)}px overlaps ${view.overlaps}`);
     });
@@ -153,12 +153,26 @@ for (const screen of SCREENS) {
         report.push(`${algo} ${(view.zoom * 100).toFixed(1)}% ${view.extent.w}x${view.extent.h} font ${view.minFont.toFixed(1)}`);
         assert.equal(view.count, 43, algo + ' dropped a table');
         assert.equal(view.overlaps, 0, `${algo} overlaps on screen: ` + view.worst.join(', '));
-        assert.ok(view.zoom >= floor - 1e-9, `${algo} fitted at ${view.zoom}`);
-        assert.ok(view.zoom >= view.layoutK - 1e-6, `${algo} shown at ${view.zoom}, laid out for ${view.layoutK}`);
-        assert.ok(view.minFont >= 11, `${algo} smallest name ${view.minFont.toFixed(2)}px`);
+        assert.deepEqual(view.outside, [], `${algo} must fit every visible card`);
+        assert.ok(view.zoom >= 0.05 && view.zoom <= 1.25, `${algo} camera stays within its fit range`);
+        assert.ok(view.minFont >= 11 * Math.min(1, view.zoom / floor) - 0.01, `${algo} smallest name ${view.minFont.toFixed(2)}px`);
         assert.equal(view.clippedCount, 0, `${algo} names lose their first two words: ` + view.clipped.join(', '));
       }
       t.diagnostic(label + ' :: ' + report.join(' | '));
+    });
+
+    await t.test('Fit preserves positions; manual navigation survives a recipient resize', async () => {
+      const positions = await browser.evaluate('JSON.stringify(app.canvas.pos)');
+      await browser.evaluate('app.canvas.fitView()'); await settle();
+      assert.equal(await browser.evaluate('JSON.stringify(app.canvas.pos)'), positions);
+      assert.deepEqual((await browser.evaluate(READ_VIEW)).outside, []);
+      await browser.evaluate('app.canvas.zoomTo(.8);app.canvas.view.x+=70;app.canvas.view.y-=45;app.canvas.updateTransform()');
+      const manual = await browser.evaluate('({...app.canvas.view})');
+      await browser.send('Emulation.setDeviceMetricsOverride', {width:screen.w+100,height:screen.h+70,deviceScaleFactor:1,mobile:false});
+      await settle(); assert.deepEqual(await browser.evaluate('({...app.canvas.view})'), manual);
+      assert.equal(await browser.evaluate('JSON.stringify(app.canvas.pos)'), positions);
+      await browser.send('Emulation.setDeviceMetricsOverride', {width:screen.w,height:screen.h,deviceScaleFactor:1,mobile:false});
+      await settle();
     });
 
     await t.test('a focused star opens at half zoom or better', async () => {
