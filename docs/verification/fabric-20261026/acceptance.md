@@ -27,7 +27,7 @@ No private model definitions, account names, tenant IDs, tokens or connection ID
 
 All six native targets are compiled and packaged; this is not runtime acceptance of Windows ARM64, Linux ARM64 or macOS x64. Desktop local extension hosts are supported; VS Code web/remote extension hosts are outside current acceptance. No model writes, model data refreshes, capacity resumes or billing changes were performed.
 
-The final **0.3.9** VSIX was transferred to MSI with a matching SHA-256 and installed in an isolated normal VS Code profile (without extension test mode). After live sign-in and model loading, a full restart restored `signedIn: true` and one saved model. Live opening worked again without another login. The extension lifecycle harness is rerun on this final installed package.
+The final **0.3.9** VSIX was transferred to MSI with a matching SHA-256 and installed in an isolated normal VS Code profile (without extension test mode). After live sign-in and model loading, a full restart restored `signedIn: true` and one saved model. Live opening worked again without another login. The extension lifecycle harness passed again on this installed 0.3.9 runtime. The final archive’s Windows runtime hashes match that installed/tested runtime.
 
 ## Live REST/XMLA fidelity comparison
 
@@ -43,6 +43,14 @@ This comparison discovered 22 engine-maintained TOM `rowNumber` columns that TMD
 - New account-isolation regressions prove that interactive renewal rejects another tenant even for the same home account ID, and ambiguous restored account caches require explicit sign-in.
 - Native preview packaging now requires every helper binary and bundled AMO, ADOMD and .NET license/notice files. Package metadata identifies 0.3.9 as a pre-release when built using `npm run package:preview`.
 
+## Standalone distribution
+
+An allowlisted standalone ZIP now bundles the viewer/server, MSAL production dependencies and all six self-contained XMLA helpers. It excludes source models, cached models and credentials. Python 3 and Node.js 22+ remain documented prerequisites; this is a portable distribution, not an installer that provisions those runtimes.
+
+`tools/fabric/verify-preview.py` extracted the actual archive and passed native-helper execution, viewer assets, localhost bridge availability and fresh signed-out MSAL initialization on **Linux x64 and MSI Windows x64**. These smoke checks do not claim an additional live Microsoft sign-in. The Mac test installation already has live evidence; the build workflow additionally signs both Mac helpers and smoke-tests a fresh signed archive on its Mac runner.
+
+Both local Mac preview helpers have also been ad hoc signed and their signatures verified on macOS; the signed ARM64 helper passed native invalid-request startup. The new preview workflow builds helpers, signs Mac bundles, runs regression tests, builds both distributions and tests the portable archive. The tag-release workflow reuses those jobs instead of packaging an extension without its helpers. CI execution of the new workflow remains pending until its results are recorded. Neither workflow publication nor notarization is implied by the local smoke tests.
+
 ## Reproduction
 
 Run `SMV_DOTNET=/path/to/dotnet npm test --prefix vscode-extension` with a .NET 8 SDK; run `node --test tests/snapshot.browser.cjs` with Chrome/Chromium installed. Publish native helpers with `tools/fabric/xmla/publish.sh`, sign Mac helpers on macOS, then run `npm run package:preview --prefix vscode-extension -- --out /absolute/output.vsix`.
@@ -52,6 +60,6 @@ The native lifecycle runner is intended only for an isolated installed-extension
 ## Remaining full-story gate
 
 1. Obtain a known test source and a verified editor and Read + Build-only identity. Compare available table/column/measure/relationship definitions, DAX and Power Query across Import, DirectQuery and Direct Lake. Do not infer effective permissions from successful discovery or a fallback result.
-2. Full public standalone artifact delivery must be verified for every platform claimed for that distribution. The current packaged native execution evidence primarily covers the VS Code distribution plus the Mac standalone test installation.
+2. Record the new multi-platform distribution workflow result, including its fresh signed-Mac archive smoke check. Portable Linux/Windows runtime smoke tests pass; runtime acceptance of all six architectures is not claimed.
 3. Verify final public standalone runtime delivery/signing/notarization and applicable bundled-component distribution requirements. Bundled license texts are now present; this does not itself complete the distribution review.
 4. Record maintainer acceptance in #72. Keep #64/#65/#68/#72 open until the relevant evidence exists. Do not mark the story complete merely because the main sign-in/open journey works.

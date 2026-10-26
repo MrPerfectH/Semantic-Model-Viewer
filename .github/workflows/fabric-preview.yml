@@ -1,0 +1,98 @@
+name: Build Fabric preview
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      prerelease:
+        type: boolean
+        default: true
+  pull_request:
+    paths:
+      - '.github/workflows/fabric-preview.yml'
+      - 'tools/fabric/**'
+      - 'vscode-extension/**'
+      - 'Models/tools/viewer/**'
+
+permissions:
+  contents: read
+
+jobs:
+  helpers:
+    if: github.ref == 'refs/heads/feature/fabric-connect' || github.head_ref == 'feature/fabric-connect' || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: bash tools/fabric/xmla/publish.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fabric-helpers-unsigned
+          path: tools/fabric/xmla/publish
+
+  sign-mac-helpers:
+    needs: helpers
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          name: fabric-helpers-unsigned
+          path: tools/fabric/xmla/publish
+      - run: |
+          chmod +x tools/fabric/xmla/publish/darwin-*/Smv.Fabric.Xmla
+          bash tools/fabric/xmla/sign-macos.sh
+      - name: Test the signed standalone archive on macOS
+        run: |
+          npm ci --omit=dev --prefix tools/fabric
+          python3 tools/fabric/build-preview.py --out dist/mac-smoke.zip
+          python3 tools/fabric/verify-preview.py dist/mac-smoke.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fabric-helpers-preview
+          path: tools/fabric/xmla/publish
+
+  package:
+    needs: sign-mac-helpers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/download-artifact@v4
+        with:
+          name: fabric-helpers-preview
+          path: tools/fabric/xmla/publish
+      - name: Restore executable permissions after artifact transfer
+        run: chmod +x tools/fabric/xmla/publish/{linux,darwin}-*/Smv.Fabric.Xmla
+      - run: npm ci --prefix vscode-extension
+      - run: npm ci --omit=dev --prefix tools/fabric
+      - run: npm test --prefix vscode-extension
+      - name: Package pre-release extension
+        if: github.event_name != 'push' || inputs.prerelease
+        run: npm run package:preview --prefix vscode-extension -- --out semantic-model-viewer-fabric-preview.vsix
+      - name: Package stable extension
+        if: github.event_name == 'push' && !inputs.prerelease
+        run: |
+          node vscode-extension/scripts/check-fabric-preview.js
+          npm run package --prefix vscode-extension -- --out semantic-model-viewer-fabric-preview.vsix
+      - run: python3 tools/fabric/build-preview.py --out dist/semantic-model-viewer-fabric-preview.zip
+      - run: python3 tools/fabric/verify-preview.py dist/semantic-model-viewer-fabric-preview.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: semantic-model-viewer-fabric-preview
+          path: |
+            vscode-extension/semantic-model-viewer-fabric-preview.vsix
+            dist/semantic-model-viewer-fabric-preview.zip

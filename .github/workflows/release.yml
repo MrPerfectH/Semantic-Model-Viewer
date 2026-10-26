@@ -8,7 +8,14 @@ permissions:
   contents: write
 
 jobs:
+  runtime:
+    uses: ./.github/workflows/fabric-preview.yml
+    permissions:
+      contents: read
+    with:
+      prerelease: false
   release:
+    needs: runtime
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,14 +32,11 @@ jobs:
             echo "Tag $GITHUB_REF_NAME does not match vscode-extension/package.json version $version" >&2
             exit 1
           fi
-      - name: Install and test
-        working-directory: vscode-extension
-        run: |
-          npm ci
-          npm test
-      - name: Build the VS Code extension
-        working-directory: vscode-extension
-        run: npm run package
+      - name: Download verified extension and standalone runtime
+        uses: actions/download-artifact@v4
+        with:
+          name: semantic-model-viewer-fabric-preview
+          path: dist/fabric
       - name: Bundle the static web app
         run: |
           mkdir -p dist/semantic-model-viewer-web
@@ -48,12 +52,12 @@ jobs:
           gh release create "$GITHUB_REF_NAME" \
             --title "Semantic Model Viewer $GITHUB_REF_NAME" \
             --generate-notes \
-            vscode-extension/*.vsix \
+            dist/fabric/*.vsix \
+            dist/fabric/*.zip \
             dist/*.zip
       - name: Publish to the VS Code Marketplace
         # Skipped until the VSCE_PAT repository secret exists.
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         if: env.VSCE_PAT != ''
-        working-directory: vscode-extension
-        run: npx vsce publish --packagePath *.vsix --skip-duplicate
+        run: npx --yes @vscode/vsce@4 publish --packagePath dist/fabric/*.vsix --skip-duplicate

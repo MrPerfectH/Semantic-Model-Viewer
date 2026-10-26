@@ -1,0 +1,22 @@
+{
+  "linux": {
+    "platform": "linux-x64",
+    "nativeHelper": true,
+    "serverAssets": true,
+    "bundledMsal": true,
+    "signedOut": true,
+    "sourceModelsPackaged": false
+  },
+  "windows": {
+    "platform": "win32-x64",
+    "nativeHelper": true,
+    "serverAssets": true,
+    "bundledMsal": true,
+    "signedOut": true,
+    "sourceModelsPackaged": false
+  },
+  "archive": {
+    "bytes": 242784400,
+    "sha256": "5ccfcaf819807c66ad3ba9dc40de01c4d578c6bb195504082c6cc36ba0d9d0cd"
+  }
+}
