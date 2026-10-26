@@ -1473,24 +1473,25 @@
       Object.keys(this.cards).forEach(function (n) {
         var c = self.cards[n];
         var t = c.table; var col = app.tableColor(t); var fact = app.isFact(t);
+        var ink = g.WorkspaceUI && g.WorkspaceUI.textOn ? g.WorkspaceUI.textOn(col) : '#ffffff';
         c.el.setAttribute('data-fact', String(fact));
         if (g.SMVHost && g.SMVHost.kind === 'vscode') c.el.style.setProperty('--smv-category', col);
         var head = c.head, role = c.roleEl, caretSvg = c.caret.firstChild;
-        if (c.rm) c.rm.style.color = fact ? 'rgba(255,255,255,.85)' : '#6b7280';
+        if (c.rm) c.rm.style.color = fact && vivid ? ink : fact ? 'rgba(255,255,255,.85)' : '#6b7280';
         head.style.boxShadow = 'none';
         if (fact && vivid) {
           head.style.borderLeftColor = 'transparent';
           head.style.background = col;
-          c.nm.style.color = '#fff';
-          role.style.background = 'rgba(255,255,255,.94)'; role.style.color = col;
+          c.nm.style.color = ink;
+          role.style.background = 'rgba(255,255,255,.94)'; role.style.color = ink === '#111111' ? ink : col;
           c.el.style.borderColor = tint(col, 0.55);
-          if (caretSvg) caretSvg.setAttribute('stroke', 'rgba(255,255,255,.78)');
-          if (c.src) c.src.style.color = 'rgba(255,255,255,.85)';
+          if (caretSvg) caretSvg.setAttribute('stroke', ink);
+          if (c.src) c.src.style.color = ink;
         } else if (fact) {
           head.style.borderLeftColor = col;
           head.style.background = mixHex('#1d2330', col, 0.26);
           c.nm.style.color = '#fff';
-          role.style.background = col; role.style.color = '#fff';
+          role.style.background = col; role.style.color = ink;
           c.el.style.borderColor = tint(col, 0.6);
           if (caretSvg) caretSvg.setAttribute('stroke', 'rgba(255,255,255,.78)');
           if (c.src) c.src.style.color = 'rgba(255,255,255,.85)';
@@ -1498,7 +1499,7 @@
           head.style.borderLeftColor = col;
           head.style.background = tint(col, vivid ? 0.07 : 0.1);
           c.nm.style.color = '#1f2430';
-          role.style.background = col; role.style.color = '#fff';
+          role.style.background = col; role.style.color = ink;
           c.el.style.borderColor = vivid ? '#e4e7ec' : tint(col, 0.35);
           if (caretSvg) caretSvg.setAttribute('stroke', '#b0b6c0');
           if (c.src) c.src.style.color = app.srcMeta(t).color;
@@ -1903,11 +1904,13 @@
       return saved;
     },
     captureDisplay: function () {
-      return { detail: this.detailMode, lines: this.lineStyle, color: this.app.colorBy,
+      return { groupColours: this.app.captureGroupColours ? this.app.captureGroupColours() : null, detail: this.detailMode, lines: this.lineStyle, color: this.app.colorBy,
         expanded: Object.keys(this.cards).filter(function (n) { return this.cards[n].expanded; }, this) };
     },
     restoreDisplay: function (display) {
       var self = this, d = display || {};
+      if (d.groupColours && this.app.restoreGroupColours) { this.app.restoreGroupColours(d.groupColours); this.app.rebuildColorMaps();
+        ['sidebar','matrix','explorer'].forEach(function(k){if(self.app[k])self.app[k]._key=null;}); }
       if (['auto', 'names', 'cards'].includes(d.detail)) this.detailMode = d.detail;
       if (['ortho', 'curve'].includes(d.lines)) this.lineStyle = d.lines;
       if (['domain', 'source'].includes(d.color)) { this.app.colorBy = d.color; this.app.state.colorBy = d.color; this.recolor(); }

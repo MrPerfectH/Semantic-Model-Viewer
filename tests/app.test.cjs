@@ -736,3 +736,41 @@ test('snapshot without saved explorer settings explores both active filter direc
   assert.deepEqual(plain({ d: explorer.direction, depth: explorer.depth, inactive: explorer.includeInactive, focus: app.state.focusDepth }),
     { d: 'outgoing', depth: 'two', inactive: false, focus: 2 });
 });
+
+test('table folders override special categories and ordinary ungrouped tables remain neutral', () => {
+  const {app}=harness();app.SOURCE_KINDS={};app.FALLBACK_COLOR='#8896aa';app.PALETTE=['#112233','#445566'];
+  const fixture=model([{name:'Explicit',tableGroup:'Manual tables',source:{kind:'manual'}},
+    {name:'Reserved',source:{kind:'manual'}},{name:'Ordinary',source:{kind:'db',schema:'finance'}}]);
+  app.prepareModel(fixture);
+  assert.equal(fixture.tables[0].domain,'group:Manual tables');
+  assert.equal(fixture.tables[1].domain,'@smv:manual');
+  assert.equal(fixture.tables[2].domain,'@smv:ungrouped');
+  assert.equal(app._domMap['@smv:ungrouped'],'#8896aa');
+  assert.equal(app._domMap['group:Manual tables'],'#112233');
+  assert.equal(app.srcKeyOf(fixture.tables[0]),'@smv:manual');
+});
+
+test('automatic group palette ranks once, keeps slots across added groups and isolates models', () => {
+  const {app}=harness();app.PALETTE=['#112233','#445566','#778899'];
+  let fixture=model([{name:'a',tableGroup:'B'},{name:'b',tableGroup:'B'},{name:'c',tableGroup:'A'}]);
+  app.prepareModel(fixture);assert.equal(app._domMap['group:B'],'#112233');assert.equal(app._domMap['group:A'],'#445566');
+  app._groupColours.domain['group:A'].colour='#abcdef';app.saveGroupColours();
+  fixture=model([{name:'a',tableGroup:'B'},...Array.from({length:5},(_,i)=>({name:'new'+i,tableGroup:'C'})),{name:'c',tableGroup:'A'}]);
+  app.prepareModel(fixture);assert.equal(app._domMap['group:B'],'#112233');assert.equal(app._domMap['group:C'],'#778899');assert.equal(app._domMap['group:A'],'#abcdef');
+  app._groupColours=null;app.prepareModel(fixture);assert.equal(app._domMap['group:A'],'#abcdef','survives reload');
+  app.modelKey='another';app.prepareModel(fixture);assert.equal(app._domMap['group:C'],'#112233');assert.notEqual(app._domMap['group:A'],'#abcdef');
+});
+
+test('source identities distinguish connections and schemas but ignore table names', () => {
+  const {app}=harness();const source={kind:'db',server:'server1',database:'warehouse',schema:'dbo'};
+  const key=app.srcKeyOf({source});
+  assert.equal(app.srcKeyOf({source:{...source,table:'Sales'}}),key);
+  for(const field of ['server','database','schema','workspace','lakehouse','dataflow'])assert.notEqual(app.srcKeyOf({source:{...source,[field]:'other'}}),key,field);
+  assert.equal(app.srcKeyOf({role:'calcgroup',source}),'@smv:calcgroup');
+});
+
+test('portable colour preferences validate values and retain independent modes', () => {
+  const {app}=harness();app.restoreGroupColours({source:{x:{slot:2,colour:'#abcdef'},bad:{slot:-3,colour:'red;position:fixed'}},domain:{x:{slot:1,colour:'#123456'}}});
+  const copy=app.captureGroupColours();assert.deepEqual(copy.source.bad,{});assert.equal(copy.source.x.colour,'#abcdef');assert.equal(copy.domain.x.colour,'#123456');
+  copy.source.x.colour='#ffffff';assert.equal(app.captureGroupColours().source.x.colour,'#abcdef');
+});

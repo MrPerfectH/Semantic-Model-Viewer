@@ -111,7 +111,7 @@ test('host default model retains the shared parser, dependency graph, table canv
   assert.ok(graph.names.includes('Base')); assert.ok(graph.names.includes('Derived'));
   app.explorer.add(['Sales'], { x: 45, y: 70 }); await flush();
   assert.deepEqual([...app.explorer.names], ['Sales']); assert.deepEqual(plain(app.canvas.pos.Sales), { x: 45, y: 70 });
-  for (const label of ['Tables', 'Measures', 'Domains', 'Matrix', 'Save snapshot', 'Choose model']) assert.ok(texts(h.document.getElementById('topbar')).includes(label), label);
+  for (const label of ['Tables', 'Measures', 'Table groups', 'Matrix', 'Save snapshot', 'Choose model']) assert.ok(texts(h.document.getElementById('topbar')).includes(label), label);
   h.isolated();
 });
 

@@ -97,13 +97,10 @@
      faintly tinted by the hue, plus a solid stripe, badge and outline carrying the colour. */
   var PALETTES = {
     muted: {
-      domain: {
-        'Finance / Supply': '#4f8ff7', 'Commercial': '#18b9a6', 'Vena': '#9b7bf0',
-        'Profit & Loss': '#e8a33d', 'Core Dims': '#6f7f96', 'Scenario / Helper': '#ee5f80',
-        'Calc Groups': '#27b5da', 'Field Params': '#42c274', 'Measures': '#d363e3', 'Other': '#8896aa'
-      },
-      schema: { finance: '#4f8ff7', commercial: '#18b9a6', supply: '#f27f45', whitespaces: '#9b7bf0', dimensions: '#6f7f96' },
+      domain: {},
+      schema: {},
       source: {
+        calcgroup:'#27b5da', fieldparam:'#42c274', measures:'#d363e3',
         databricks: '#4f8ff7', vertica: '#3b9de0', db: '#4a7ae0', oracle: '#e0605c', postgres: '#3f8fc4',
         mysql: '#2fa3b8', snowflake: '#27b5da', synapse: '#7479e0', lakehouse: '#22b88f', ssas: '#7d82e8',
         sap: '#4468b8', odbc: '#6f7f96', dataflow: '#9b7bf0', sharepoint: '#1fa89a', blob: '#18b9a6',
@@ -115,13 +112,10 @@
       fallback: '#8896aa'
     },
     vivid: {
-      domain: {
-        'Finance / Supply': '#2563eb', 'Commercial': '#0d9488', 'Vena': '#7c3aed',
-        'Profit & Loss': '#d97706', 'Core Dims': '#475569', 'Scenario / Helper': '#e11d48',
-        'Calc Groups': '#0891b2', 'Field Params': '#16a34a', 'Measures': '#c026d3', 'Other': '#64748b'
-      },
-      schema: { finance: '#2563eb', commercial: '#0d9488', supply: '#ea580c', whitespaces: '#7c3aed', dimensions: '#475569' },
+      domain: {},
+      schema: {},
       source: {
+        calcgroup:'#0891b2', fieldparam:'#16a34a', measures:'#c026d3',
         databricks: '#2563eb', vertica: '#0284c7', db: '#1d4ed8', oracle: '#b91c1c', postgres: '#0369a1',
         mysql: '#0e7490', snowflake: '#0891b2', synapse: '#4338ca', lakehouse: '#059669', ssas: '#4f46e5',
         sap: '#1e3a8a', odbc: '#475569', dataflow: '#7c3aed', sharepoint: '#0f766e', blob: '#0d9488',
@@ -140,7 +134,7 @@
     this.state = {
       loaded: false,
       modelName: 'Contoso Retail',
-      search: '', colorBy: 'domain', showStandalone: false, allExpanded: false,
+      search: '', colorBy: 'source', showStandalone: false, allExpanded: false,
       legendOpen: true, hintDismissed: false,
       selected: null, zoomPct: '100%', activeFilter: null,
       isolate: false, focusDepth: 1, viewMode: 'graph',
@@ -157,7 +151,7 @@
     this.snapshotMode = !!(g.Snapshots && (g.Snapshots.embedded || g.Snapshots.error));
     this.snapshotInfo = g.Snapshots && g.Snapshots.embedded || null;
     this.modelKey = 'builtin';
-    this.colorBy = 'domain';
+    this.colorBy = 'source';
     this.model = null;
     this._usage = null; this._usageMeta = null;
     this._importModel = null; this._importHandle = null;
@@ -265,7 +259,7 @@
       this.paletteName = PALETTES[name] ? name : 'muted';
       this.DOMAIN_COLORS = P.domain; this.SCHEMA_COLORS = P.schema; this.PALETTE = P.list;
       this.FALLBACK_COLOR = P.fallback;
-      this.SOURCE_COLORS = {};
+      this.SOURCE_COLORS = Object.assign({},P.source);
       Object.keys(this.SOURCE_KINDS).forEach(function (k) {
         var c = P.source[k] || P.source.other;
         self.SOURCE_KINDS[k].color = c; self.SOURCE_COLORS[k] = c;
@@ -293,19 +287,129 @@
       if (this.powerQueryWorkspace) this.powerQueryWorkspace.refreshAppearance();
       this.render(true);
     },
-    rebuildColorMaps: function () {
-      var self = this, domCounts = this._domCounts || {}, srcCounts = this._srcCounts || {};
-      this._domMap = {}; var pi = 0;
-      Object.keys(domCounts).sort(function (a, b) { return domCounts[b] - domCounts[a]; })
-        .forEach(function (d) { self._domMap[d] = self.DOMAIN_COLORS[d] || self.PALETTE[pi++ % self.PALETTE.length]; });
-      this._srcMap = {}; pi = 0;
-      Object.keys(srcCounts).sort(function (a, b) { return srcCounts[b] - srcCounts[a]; })
-        .forEach(function (k) { self._srcMap[k] = self.SCHEMA_COLORS[k] || self.SOURCE_COLORS[k] || self.PALETTE[pi++ % self.PALETTE.length]; });
+    specialColourKind: function (t) {
+      if (['calcgroup','fieldparam','measures'].includes(t.role)) return t.role;
+      return ['manual','calculated','parameter'].includes((t.source || {}).kind) ? t.source.kind : null;
     },
-    srcKeyOf: function (t) { var k = t.source.kind; if (k === 'databricks' || k === 'db') return t.source.schema || k; return k; },
+    groupKeyOf: function (t) {
+      if (t.tableGroup) return 'group:' + t.tableGroup;
+      if (t.snapshotGroup) return t.snapshotGroup;
+      return '@smv:' + (this.specialColourKind(t) || 'ungrouped');
+    },
+    groupLabel: function (mode, key) {
+      if (mode !== 'source' && key.indexOf('group:') === 0) return key.slice(6);
+      var special = {'@smv:calcgroup':'Calculation groups','@smv:fieldparam':'Field parameters','@smv:measures':'Measure tables',
+        '@smv:manual':'Manual tables','@smv:calculated':'Calculated tables','@smv:parameter':'Parameters','@smv:ungrouped':'Ungrouped'};
+      return special[key] || (this._sourceLabels || {})[key] || ((this.SOURCE_KINDS || {})[key] || {}).label || key;
+    },
+    colourStorageKey: function () { return 'smv-group-colours-v1:' + this.modelKey; },
+    captureGroupColours: function () { return JSON.parse(JSON.stringify(this._groupColours || {source:{},domain:{}})); },
+    restoreGroupColours: function (value) {
+      var clean = {source:Object.create(null),domain:Object.create(null)};
+      ['source','domain'].forEach(function(mode) {
+        var entries = value && value[mode];
+        if (!entries || typeof entries !== 'object') return;
+        Object.keys(entries).forEach(function(key) {
+          var item = entries[key]; if (!item || typeof item !== 'object') return;
+          var row = {};
+          if (Number.isInteger(item.slot) && item.slot >= 0 && item.slot < 100000) row.slot = item.slot;
+          if (typeof item.colour === 'string' && /^#[0-9a-f]{6}$/i.test(item.colour)) row.colour = item.colour;
+          clean[mode][key] = row;
+        });
+      });
+      this._groupColours = clean; this._colourModelKey = this.modelKey;
+    },
+    saveGroupColours: function () {
+      // Offline snapshots are self-contained; do not overwrite another snapshot's preferences.
+      if (!this.snapshotMode && !this._editingGroupColours && this._groupColours &&
+          (Object.keys(this._groupColours.source).length || Object.keys(this._groupColours.domain).length) &&
+          JSON.stringify(store.getJSON(this.colourStorageKey(),{})) !== JSON.stringify(this._groupColours))
+        store.setJSON(this.colourStorageKey(), this._groupColours);
+    },
+    rebuildColorMaps: function () {
+      var self = this;
+      if (!this._groupColours || this._colourModelKey !== this.modelKey)
+        this.restoreGroupColours(store.getJSON(this.colourStorageKey(), {}));
+      ['domain','source'].forEach(function(mode) {
+        var counts = (mode === 'source' ? self._srcCounts : self._domCounts) || {}, map = Object.create(null), entries = self._groupColours[mode];
+        var next = Object.keys(entries).reduce(function(n,k){return Math.max(n, Number.isInteger(entries[k].slot) ? entries[k].slot + 1 : 0);},0);
+        Object.keys(counts).sort(function(a,b){return counts[b]-counts[a] || a.localeCompare(b);}).forEach(function(key) {
+          var row = entries[key] || (entries[key] = {}), kind = key.indexOf('@smv:') === 0 ? key.slice(5) : null;
+          if (!kind && !Number.isInteger(row.slot)) row.slot = next++;
+          var defaults = {calcgroup:'#27b5da',fieldparam:'#42c274',measures:'#d363e3'};
+          var reserved = ['calcgroup','fieldparam','measures','manual','calculated','parameter'].map(function(k){return self.SOURCE_COLORS[k] || defaults[k];});
+          var palette = self.PALETTE.filter(function(c){return reserved.indexOf(c)<0;});if(!palette.length)palette=self.PALETTE;
+          var automatic = kind ? (self.SOURCE_COLORS[kind] || defaults[kind] || self.FALLBACK_COLOR) : palette[row.slot % palette.length];
+          map[key] = row.colour || automatic;
+        });
+        if (mode === 'source') self._srcMap = map; else self._domMap = map;
+      });
+      this.saveGroupColours();
+    },
+    srcKeyOf: function (t) {
+      if (t.snapshotSource) return t.snapshotSource;
+      var special = this.specialColourKind(t); if (special) return '@smv:' + special;
+      var s = t.source || {}, k = s.kind || 'other';
+      if (typeof s.colourIdentity === 'string' && /^source:[a-z0-9_-]+:[0-9a-f]{1,8}$/.test(s.colourIdentity)) return s.colourIdentity;
+      // Keep table names out: a source group describes the connection and schema.
+      var parts = [k,s.server||'',s.database||'',s.workspace||'',s.lakehouse||'',s.dataflow||'',s.schema||''];
+      var text = JSON.stringify(parts), hash = 2166136261;
+      for (var i=0;i<text.length;i++) { hash ^= text.charCodeAt(i); hash = Math.imul(hash,16777619); }
+      return 'source:' + k + ':' + (hash>>>0).toString(16);
+    },
     tableColor: function (t) {
       if (this.colorBy === 'source') return this._srcMap[this.srcKeyOf(t)] || this.FALLBACK_COLOR;
       return this._domMap[t.domain] || this.FALLBACK_COLOR;
+    },
+    editGroupColours: function () {
+      if (!this.model) return;
+      var app=this, el=U.el, mode=this.colorBy, original=this.captureGroupColours(), focus=document.activeElement;
+      this._editingGroupColours=true;
+      var dialog=el('dialog',{cls:'smv-colour-dialog','aria-labelledby':'smv-colour-title'});
+      var header=el('div',{cls:'smv-colour-heading'},[el('h2',{id:'smv-colour-title',text:'Group colours'}),el('button',{cls:'ex-button',text:'Cancel',onClick:cancel})]);
+      var select=el('select',{'aria-label':'Colour by',onChange:function(e){mode=e.target.value;draw();}},[
+        el('option',{value:'source',text:'Source'}),el('option',{value:'domain',text:'Table group'})]);select.value=mode;
+      dialog.appendChild(header);dialog.appendChild(el('label',{cls:'smv-colour-mode'},['Colour by',select]));
+      dialog.appendChild(el('p',{text:'Choose one colour per group. Facts keep a dark header; dimensions use a light tint.'}));
+      var content=el('div',{cls:'smv-colour-content'});dialog.appendChild(content);
+      var status=el('p',{cls:'smv-colour-status','aria-live':'polite'});dialog.appendChild(status);
+      var footer=el('div',{cls:'smv-colour-footer'});dialog.appendChild(footer);
+      footer.appendChild(el('button',{cls:'ex-button',text:'Reset this mode',onClick:function(){Object.keys(app._groupColours[mode]).forEach(function(k){delete app._groupColours[mode][k].colour;});app.rebuildColorMaps();draw();}}));
+      footer.appendChild(el('button',{cls:'ex-button ex-primary',text:'Apply colours',onClick:function(){app._editingGroupColours=false;app.saveGroupColours();if(app.colorBy!==mode)app.canvas.setColorMode(mode);app.refreshAppearance();dialog.close();}}));
+      function cancel(){app._editingGroupColours=false;app.restoreGroupColours(original);app.rebuildColorMaps();dialog.close();}
+      dialog.addEventListener('keydown',function(e){e.stopPropagation();});
+      dialog.addEventListener('cancel',function(e){e.preventDefault();cancel();});
+      dialog.addEventListener('close',function(){dialog.remove();if(focus&&focus.isConnected)focus.focus();});
+      function draw(){
+        U.clear(content);var counts=mode==='source'?app._srcCounts:app._domCounts,map=mode==='source'?app._srcMap:app._domMap;
+        var keys=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a]||a.localeCompare(b);});
+        var list=el('div',{cls:'smv-colour-list'}),preview=el('div',{cls:'smv-colour-preview'});content.appendChild(list);content.appendChild(preview);
+        var chosen=keys[0];
+        function show(key){
+          chosen=key;U.clear(preview);var colour=map[key],label=app.groupLabel(mode,key);
+          preview.appendChild(el('h3',{text:label}));preview.appendChild(el('p',{text:'Same group, two table roles'}));
+          [true,false].forEach(function(fact){
+            var examples=app.model.tables.filter(function(t){return (mode==='source'?app.srcKeyOf(t):t.domain)===key&&(fact?app.isFact(t):t.role==='dim');});
+            var t=examples[0],name=t?t.name:(fact?'Example fact':'Example dimension');
+            var chrome=g.WorkspaceUI.createCardChrome(document,{fact:fact,color:colour,label:name,badge:fact?'FACT':'DIM',subtitle:label,chips:[{value:t?t.columns.length:6,label:'cols'},{value:t?t.relCount:3,label:'rel'}]});
+            chrome.card.dataset.fact=String(fact);chrome.card.style.position='relative';chrome.card.style.width='100%';
+            // Apply the production recolouring routine to the production card anatomy.
+            var fake={app:Object.assign(Object.create(app),{tableColor:function(){return colour;},srcMeta:function(){return {color:colour};}}),cards:{preview:{table:{role:fact?'fact':'dim'},el:chrome.card,head:chrome.head,roleEl:chrome.badge,nm:chrome.title,src:chrome.subtitle,caret:document.createElement('span')}}};
+            g.GraphCanvas.prototype.recolor.call(fake);preview.appendChild(chrome.card);
+          });
+          preview.appendChild(el('p',{text:'Selection, locks and dimming keep their existing appearance.'}));
+          list.querySelectorAll('[data-group]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.group===key));});
+        }
+        keys.forEach(function(key){
+          var row=el('div',{cls:'smv-colour-row'}),name=app.groupLabel(mode,key);
+          var b=el('button',{cls:'ex-button',text:name+' · '+counts[key],data:{group:key},onClick:function(){show(key);}});row.appendChild(b);
+          var picker=el('input',{type:'color',value:map[key],'aria-label':'Colour for '+name,onInput:function(e){app._groupColours[mode][key].colour=e.target.value;map[key]=e.target.value;show(key);status.textContent='Preview updated. Apply colours to save.';}});row.appendChild(picker);
+          row.appendChild(el('button',{cls:'ex-button',text:'Auto',title:'Use the automatic group colour',onClick:function(){delete app._groupColours[mode][key].colour;app.rebuildColorMaps();map=mode==='source'?app._srcMap:app._domMap;picker.value=map[key];show(key);}}));list.appendChild(row);
+        });
+        if(chosen)show(chosen);
+        status.textContent=mode==='source'?'Automatic colours start with the largest source groups and keep their assignments.':'Tabular Editor table folders take priority over special categories. Ordinary ungrouped tables stay neutral.';
+      }
+      document.body.appendChild(dialog);draw();dialog.showModal();
     },
     isFact: function (t) { return t.role === 'fact'; },
     /* ---------- fact/dim role setup ---------- */
@@ -471,10 +575,14 @@
       model.msrHome = msrHome; model.msrUsedBy = usedBy;
       model.tableMeasureUsers = tableUsers; model.columnMeasureUsers = columnUsers;
       // dynamic color maps (curated colors first, palette for the rest)
-      var domCounts = {}, srcCounts = {};
+      var domCounts = Object.create(null), srcCounts = Object.create(null);
+      this._sourceLabels = Object.create(null);
       model.tables.forEach(function (t) {
+        t.domain = self.groupKeyOf(t);
         domCounts[t.domain] = (domCounts[t.domain] || 0) + 1;
         var k = self.srcKeyOf(t); srcCounts[k] = (srcCounts[k] || 0) + 1;
+        var src=t.source||{};self._sourceLabels[k]=src.colourLabel && ![src.server,src.database,src.workspace,src.lakehouse,src.dataflow].some(Boolean) ? src.colourLabel : [src.label || (self.SOURCE_KINDS && self.SOURCE_KINDS[src.kind] || {}).label || src.kind,src.server,src.database,src.workspace,src.lakehouse,src.dataflow,src.schema].filter(function(v){return v && v!=='unknown';}).join(' · ');
+        src.colourIdentity=k;src.colourLabel=[src.label||src.kind,src.schema].filter(function(v){return v && v!=='unknown';}).join(' · ');
       });
       this._domCounts = domCounts; this._srcCounts = srcCounts;
       this.rebuildColorMaps();
@@ -1333,8 +1441,17 @@
       this.snapshotMode = true; this.snapshotInfo = payload;
       this.modelKey = 'snapshot'; this.canvas.setLayoutKey('smv_layout_snapshot');
       var model = JSON.parse(JSON.stringify(payload.model)), workspace = payload.workspace || {}, cv = this.canvas, ex = this.explorer;
-      model.tables.forEach(function (table) { table.source = table.source || { kind: 'other' }; table.domain = table.domain || 'Other'; });
+      model.tables.forEach(function (table) {
+        table.source = table.source || {kind:'other'};
+        // Preserve the authored grouping and positions in older portable snapshots.
+        if (!model.groupingVersion) {
+          if (!table.tableGroup && table.domain && !/^(group:|@smv:)/.test(table.domain)) table.snapshotGroup=table.domain;
+          var s=table.source;table.snapshotSource=(s.kind==='databricks'||s.kind==='db')?(s.schema||s.kind):s.kind;
+        }
+        table.domain = table.domain || 'Other';
+      });
       // Exported role decisions are part of the snapshot. Do not apply recipient rules.
+      this.restoreGroupColours(payload.settings && payload.settings.groupColours);
       this.prepareModel(model); if(this.powerQueryWorkspace)this.powerQueryWorkspace.reset(); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
       this._usage = payload.usage && payload.usage.measures || null;
       this._usageMeta = payload.usage && payload.usage.meta || null;

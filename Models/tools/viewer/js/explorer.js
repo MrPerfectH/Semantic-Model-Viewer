@@ -274,6 +274,7 @@
        (connector kind, or the schema for Databricks / SQL), so the two always agree. */
     facetKey:function(kind,t){return kind==='source'?this.app.srcKeyOf(t):t.domain;},
     facetLabel:function(kind,key){
+      if(this.app.groupLabel)return this.app.groupLabel(kind,key);
       if(kind!=='source')return key;
       var kinds=this.app.SOURCE_KINDS||{};
       if(key==='manual')return 'Manual';if(key==='calculated')return 'Calculated';
@@ -290,7 +291,7 @@
       if(this.filter==='available'&&this.names.has(t.name))return false;
       if(this.domain&&this.facetKey('domain',t)!==this.domain)return false;
       if(this.source&&this.facetKey('source',t)!==this.source)return false;
-      return !q||[t.name,t.domain,t.role].join(' ').toLowerCase().includes(q)||t.columns.some(function(c){return c.name.toLowerCase().includes(q);});
+      return !q||[t.name,this.facetLabel('domain',t.domain),t.role].join(' ').toLowerCase().includes(q)||t.columns.some(function(c){return c.name.toLowerCase().includes(q);});
     },
     renderLibrary:function(){
       var self=this,app=this.app,active=document.activeElement,focus=active&&active===this.input,start=focus?active.selectionStart:0,scroll=this.list?this.list.scrollTop:0;
@@ -299,7 +300,7 @@
       this.input=el('input',{type:'search',placeholder:'Find tables or columns…','aria-label':'Search table library',value:this.query,onInput:function(e){self.query=e.target.value;self._key=null;self.update();}});this.library.appendChild(this.input);
       var filters=el('div',{cls:'ex-segments','aria-label':'Table library filter'});[['all','All tables'],['canvas','On canvas'],['available','Available']].forEach(function(p){var b=button(p[1],function(){self.filter=p[0];self._key=null;self.update();});b.setAttribute('aria-pressed',String(self.filter===p[0]));filters.appendChild(b);});this.library.appendChild(filters);
       var facets=el('div',{cls:'ex-facets'});
-      [['domain','Domain','All domains'],['source','Source','All sources']].forEach(function(f){
+      [['domain','Table group','All table groups'],['source','Source','All sources']].forEach(function(f){
         var opts=self.facetOptions(f[0]);if(self[f[0]]&&!opts.some(function(o){return o.key===self[f[0]];}))self[f[0]]='';
         if(opts.length<2&&!self[f[0]])return;
         var sel=el('select',{'aria-label':'Filter tables by '+f[1].toLowerCase(),onChange:function(e){self[f[0]]=e.target.value;self._key=null;self.update();}},
@@ -337,7 +338,8 @@
       this.displayBtn.setAttribute('aria-expanded',String(!!this.optionsOpen));
       var options=el('div',{cls:'ex-menu-anchor'},[this.displayBtn]);
       if(this.optionsOpen){var box=el('div',{cls:'ex-display-menu'});
-        [['Auto layout',cv.layoutAlgo,[['star','Star'],['constellation','Constellation'],['layered','Layered'],['galaxy','Galaxy rows'],['columns','Star columns'],['waterfall','Waterfall'],['grid','Grid']],function(v){cv.setLayoutAlgo(v);self.arrangeSubset(true);} ],['Detail',cv.detailMode,[['auto','Auto'],['names','Names'],['cards','Cards']],function(v){cv.setDetailMode(v);} ],['Lines',cv.lineStyle,[['ortho','Straight'],['curve','Curved']],function(v){cv.setLineStyle(v);} ],['Color',app.colorBy,[['domain','Domain'],['source','Source']],function(v){cv.setColorMode(v);}],['Palette',app.paletteName,[['muted','Muted'],['vivid','Vivid']],function(v){app.setPalette(v);}]].forEach(function(p){var themed=p[0]==='Palette'&&g.ViewerTheme&&g.ViewerTheme.get()==='spellbook';if(themed){p[1]='spellbook';p[2]=[['spellbook','Spellbook']];}var sel=el('select',{disabled:themed,'aria-label':p[0],onChange:function(e){p[3](e.target.value);self._key=null;self.update();}},p[2].map(function(o){return el('option',{value:o[0],text:o[1]});}));sel.value=p[1];box.appendChild(el('label',{},[p[0],sel]));});
+        [['Auto layout',cv.layoutAlgo,[['star','Star'],['constellation','Constellation'],['layered','Layered'],['galaxy','Galaxy rows'],['columns','Star columns'],['waterfall','Waterfall'],['grid','Grid']],function(v){cv.setLayoutAlgo(v);self.arrangeSubset(true);} ],['Detail',cv.detailMode,[['auto','Auto'],['names','Names'],['cards','Cards']],function(v){cv.setDetailMode(v);} ],['Lines',cv.lineStyle,[['ortho','Straight'],['curve','Curved']],function(v){cv.setLineStyle(v);} ],['Colour by',app.colorBy,[['domain','Table group'],['source','Source']],function(v){cv.setColorMode(v);}],['Palette',app.paletteName,[['muted','Muted'],['vivid','Vivid']],function(v){app.setPalette(v);}]].forEach(function(p){var themed=p[0]==='Palette'&&g.ViewerTheme&&g.ViewerTheme.get()==='spellbook';if(themed){p[1]='spellbook';p[2]=[['spellbook','Spellbook']];}var sel=el('select',{disabled:themed,'aria-label':p[0],onChange:function(e){p[3](e.target.value);self._key=null;self.update();}},p[2].map(function(o){return el('option',{value:o[0],text:o[1]});}));sel.value=p[1];box.appendChild(el('label',{},[p[0],sel]));});
+        box.appendChild(button('Edit group colours…',function(){self.optionsOpen=false;self._key=null;self.update();app.editGroupColours();}));
         box.appendChild(button(app.state.allExpanded?'Collapse all cards':'Expand all cards',function(){cv.toggleExpandAll();self.optionsOpen=false;self._key=null;self.update();}));
         box.appendChild(button(this.mapHidden?'Show overview map':'Hide overview map',function(){self.mapHidden=!self.mapHidden;self._key=null;self.update();}));
         box.appendChild(button('Table role rules',function(){app.setState({showRules:true});self.optionsOpen=false;self._key=null;self.update();}));
@@ -351,8 +353,8 @@
     renderClusterToolbar:function(){
       var self=this,app=this.app,cv=app.canvas;U.clear(this.toolbar);this._key=null;
       var groups=cv.groupOrder||[],open=cv.expandedGroups?cv.expandedGroups.size:0;
-      this.toolbar.appendChild(el('div',{cls:'ex-workspace-title'},[el('strong',{text:'Domain canvas'}),
-        el('span',{text:groups.length+' '+(app.colorBy==='source'?'sources':'domains')+' · '+open+' expanded'})]));
+      this.toolbar.appendChild(el('div',{cls:'ex-workspace-title'},[el('strong',{text:'Group canvas'}),
+        el('span',{text:groups.length+' '+(app.colorBy==='source'?'sources':'table groups')+' · '+open+' expanded'})]));
       var expand=button('Expand all',function(){cv.setAllGroups(true);self._clusterKey=null;self.update();});
       expand.disabled=!groups.length||open===groups.length;this.toolbar.appendChild(expand);
       var collapse=button('Collapse all',function(){cv.setAllGroups(false);self._clusterKey=null;self.update();});
@@ -364,7 +366,7 @@
       var anchor=el('div',{cls:'ex-menu-anchor'},[this.legendBtn]);
       if(this.legendOpen){
         var box=el('div',{cls:'ex-display-menu ex-legend-menu','data-canvas-overlay':true});
-        box.appendChild(el('h3',{text:app.colorBy==='source'?'Source':'Domain'}));
+        box.appendChild(el('h3',{text:app.colorBy==='source'?'Source':'Table group'}));
         (app.legend&&app.legend.build?app.legend.build():[]).forEach(function(L){
           var active=app.state.activeFilter===L.key;
           var row=el('button',{cls:'ex-legend-row'+(active?' is-active':''),title:L.tip,onClick:function(){cv.setFilter(active?null:L.key);self._clusterKey=null;self.update();}},[
@@ -373,6 +375,7 @@
             el('span',{cls:'ex-legend-count',text:String(L.count)+(L.plus?' '+L.plus:'')})]);
           row.setAttribute('aria-pressed',String(active));box.appendChild(row);
         });
+        box.appendChild(button('Edit group colours…',function(){self.legendOpen=false;self._clusterKey=null;self.update();app.editGroupColours();}));
         box.appendChild(button('Close legend',function(){self.legendOpen=false;self._clusterKey=null;self.update();}));
         anchor.appendChild(box);
       }
