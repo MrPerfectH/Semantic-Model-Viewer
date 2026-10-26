@@ -1,0 +1,19 @@
+{
+  "sourceCommit": "c4c134a2592440248860a30bf5800162caf3a2f4",
+  "workflow": "https://github.com/MrPerfectH/Semantic-Model-Viewer/actions/runs/40328665116",
+  "jobs": {
+    "helpers": "success",
+    "sign-mac-helpers": "success",
+    "package": "success"
+  },
+  "regressionTests": 762,
+  "snapshotBrowserTests": 8,
+  "standaloneSmokePlatforms": [
+    "darwin-arm64",
+    "linux-x64"
+  ],
+  "separateLocalStandaloneSmoke": [
+    "linux-x64",
+    "win32-x64"
+  ]
+}

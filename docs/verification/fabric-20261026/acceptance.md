@@ -49,7 +49,7 @@ An allowlisted standalone ZIP now bundles the viewer/server, MSAL production dep
 
 `tools/fabric/verify-preview.py` extracted the actual archive and passed native-helper execution, viewer assets, localhost bridge availability and fresh signed-out MSAL initialization on **Linux x64 and MSI Windows x64**. These smoke checks do not claim an additional live Microsoft sign-in. The Mac test installation already has live evidence; the build workflow additionally signs both Mac helpers and smoke-tests a fresh signed archive on its Mac runner.
 
-Both local Mac preview helpers have also been ad hoc signed and their signatures verified on macOS; the signed ARM64 helper passed native invalid-request startup. The new preview workflow builds helpers, signs Mac bundles, runs regression tests, builds both distributions and tests the portable archive. The tag-release workflow reuses those jobs instead of packaging an extension without its helpers. CI execution of the new workflow remains pending until its results are recorded. Neither workflow publication nor notarization is implied by the local smoke tests.
+Both local Mac preview helpers have also been ad hoc signed and their signatures verified on macOS; the signed ARM64 helper passed native invalid-request startup. The new preview workflow builds helpers, signs Mac bundles, runs regression tests, builds both distributions and tests the portable archive. The tag-release workflow reuses those jobs instead of packaging an extension without its helpers. The [multi-platform CI run](https://github.com/MrPerfectH/Semantic-Model-Viewer/actions/runs/40328665116) at `c4c134a` passed all helper, Mac-signing and package jobs, including a fresh Darwin ARM64 standalone smoke check, 762 regression tests and eight snapshot browser checks. It produced both distribution artifacts. No public release or publisher notarization is implied by those checks.
 
 ## Current-main integration
 
@@ -66,6 +66,5 @@ The native lifecycle runner is intended only for an isolated installed-extension
 ## Remaining full-story gate
 
 1. Obtain a known test source and a verified editor and Read + Build-only identity. Compare available table/column/measure/relationship definitions, DAX and Power Query across Import, DirectQuery and Direct Lake. Do not infer effective permissions from successful discovery or a fallback result.
-2. Record the new multi-platform distribution workflow result, including its fresh signed-Mac archive smoke check. Portable Linux/Windows runtime smoke tests pass; runtime acceptance of all six architectures is not claimed.
-3. Verify final public standalone runtime delivery/signing/notarization and applicable bundled-component distribution requirements. Bundled license texts are now present; this does not itself complete the distribution review.
-4. Record maintainer acceptance in #72. Keep #64/#65/#68/#72 open until the relevant evidence exists. Do not mark the story complete merely because the main sign-in/open journey works.
+2. Complete the maintainer distribution review of declared prerequisites, bundled-component terms, tested architecture limits and ad hoc signing. A publisher-notarized standalone Mac installer is not claimed or produced.
+3. Record maintainer acceptance in #72. Keep #64/#65/#68/#72 open until the relevant evidence exists. Do not mark the story complete merely because the main sign-in/open journey works.
