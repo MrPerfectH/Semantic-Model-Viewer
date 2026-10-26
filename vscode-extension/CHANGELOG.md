@@ -1,6 +1,20 @@
 # Changelog
 
-## 0.5.0 — Fabric development preview (unreleased)
+## 0.7.295 — pre-release (26 October 2026)
+
+- Connect to Fabric, browse workspace models, and save metadata for offline reopening.
+- Edit colours by source or table folder, with distinct fact and dimension styling and per-model persistence.
+- Add a compact, collapsible legend and always-accessible Source / Table folder switch.
+- Move disconnected-table and overview-map switches beside Fit and Center selected in the bottom canvas bar. Show Edit colours when the legend is open.
+- Preserve zoom and position when selecting tables.
+- Reduce relationship badge size beside compact tables while retaining cardinality, filter direction, and click targets.
+- Follow VS Code light, dark, and high-contrast themes; fix inherited backgrounds in Power Query code.
+- Preserve disconnected-table visibility in saved views and snapshots; remember Fabric colour preferences across workspaces for the same model.
+- Require VS Code 1.101 or later.
+
+The companion CLI and Claude plugin provide model-opening, focused views, snapshots, interactive sessions, and Fabric definition fetching. They have separate installation and authentication requirements and are **not bundled in the VS Code extension**.
+
+## Earlier Fabric development work (included in the 0.7 pre-release)
 
 - Require VS Code 1.101 or later for the Fabric host runtime.
 - Integrate Fabric into develop pre-releases with all six native helpers and component notices. Main promotion still requires final acceptance.
