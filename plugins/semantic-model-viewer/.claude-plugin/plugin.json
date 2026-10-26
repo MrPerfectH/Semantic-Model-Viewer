@@ -1,7 +1,7 @@
 {
   "name": "semantic-model-viewer",
   "displayName": "Semantic Model Viewer",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "description": "Explore Power BI semantic models through the Semantic Model Viewer CLI: focused browser views, offline snapshots and visual explanations.",
   "author": {
     "name": "MrPerfectH"

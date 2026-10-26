@@ -5,7 +5,7 @@ argument-hint: "[model path] [table]"
 disable-model-invocation: true
 ---
 
-Use the installed CLI from the user's project. If `smv` is on PATH use it; otherwise replace `smv` with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"`. The plugin root is supplied by Claude; never construct a versioned cache path. `/semantic-model-viewer:setup` installs a stable terminal command once.
+Use the installed CLI from the user's project. If `smv` is on PATH, check `smv --where --json` once per session to identify its source and version, then use it; otherwise replace `smv` with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"`. Respect the selected checkout or plugin runtime. If it is missing required commands or reports an older-plugin warning, explain the mismatch and use this plugin’s executable directly for this request; do not reinstall or switch the user’s PATH command silently. Do not repeatedly probe versions or run full inspect before a known diagram request. The plugin root is supplied by Claude; never construct a versioned cache path. `/semantic-model-viewer:setup` installs a stable terminal command once.
 
 Treat the diagram as the main answer to a modeling question. Present its URL or attach its image/file first, then explain the key arrow or calculation chain in one or two sentences. Do not stop at a JSON inventory when the user wants to understand relationships or dependencies.
 

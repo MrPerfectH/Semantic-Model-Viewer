@@ -9,15 +9,14 @@ folder, or a BIM file. Commands never modify model files or execute DAX, M or SQ
 Invoke `/semantic-model-viewer:setup` inside Claude. It runs:
 
 ```sh
-node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" install
+node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs" install --source plugin
 ```
 
 The stable `smv` launcher normally lives in `~/.local/bin` (Windows:
-`%LOCALAPPDATA%/SemanticModelViewer/bin`). It reads Claude's installed-plugin
-registry every time, so plugin cache version changes require no launcher update.
+`%LOCALAPPDATA%/SemanticModelViewer/bin`). Plugin setup reads Claude's installed-plugin registry every time, so cache upgrades require no launcher update. Installing from a repository checkout instead binds the launcher to that checkout and ignores the plugin registry. Choose explicitly with `install --source checkout|plugin`; no runtime is selected by guessing which version is newest.
 The installer reports whether that directory is on PATH. `--bin-dir` can select
 an existing user PATH directory. Shell startup files are not modified and unrelated
-commands are never replaced. `smv --where` reports the selected runtime for diagnosis.
+commands are never replaced. `smv --where` retains its path-only output; `smv --where --json` adds version, source, selection, update policy and warnings. `smv --version` reports the active version. Reinstall existing managed launchers once to adopt source selection. A missing checkout fails without falling back to a plugin. Plugin mode may use its original packaged copy if registry resolution fails, with a warning; it never falls back to a checkout. An older selected plugin also produces a warning when its version is below the installer version. No network freshness is implied.
 Agents can always run the bundled CLI using the host-provided plugin root above;
 they never need to guess a cache path or run `--where` before each operation.
 

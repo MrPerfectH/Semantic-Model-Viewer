@@ -5,7 +5,7 @@ packages, MCP server, separate app or VS Code extension.
 
 In Claude, run `/semantic-model-viewer:setup` once for a stable `smv` command on PATH.
 From a checkout, run `node bin/smv.cjs install` or invoke `node bin/smv.cjs` directly.
-There is no published npm release. The launcher follows installed plugin upgrades.
+There is no published npm release. A checkout install stays bound to that checkout; plugin setup follows Claude plugin upgrades. Use `install --source checkout|plugin` to choose explicitly. `smv --where --json` reports the active executable, version, selection and warnings; `smv --version` prints the version. Existing launchers must be reinstalled once to adopt this policy. Updating a checkout or plugin is a separate action; diagnostics perform no network checks.
 
 ```sh
 smv show 'Sales.SemanticModel' --table 'Cost Center' --related --dependents

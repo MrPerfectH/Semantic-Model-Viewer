@@ -145,3 +145,7 @@ See [CLI plugin workflow](cli-plugin-workflow.md) for the complete reference.
 
 
 The next CLI workspace workflow adds optional definition fetching through an existing Azure CLI login, `--open none|system` and provenance receipts. It does not bundle a login manager or require Azure CLI for local models. See [workspace workflow](cli-workspace-fetch.md).
+
+### Runtime selection
+
+Plugin setup installs `smv` in plugin mode, following registered plugin upgrades. Running `node bin/smv.cjs install` from a checkout defaults to that checkout, even if an older Claude plugin exists. Use `--source checkout` or `--source plugin` to choose explicitly. Reinstall an existing managed launcher once to adopt this behavior. `smv --where --json` identifies the active version, executable and selection; `smv --version` prints its version. No runtime or remote update is chosen silently. Agents should check once per session, then use a single `show` command for a known model/table rather than running repeated discovery or full inventories.
