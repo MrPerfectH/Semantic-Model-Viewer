@@ -656,7 +656,7 @@ test('library and inspector rails can be hidden and the choice persists across m
   const { explorer, app, cv, storage } = fixture();
   const widths = [];
   explorer.update = Object.getPrototypeOf(explorer).update;
-  explorer.renderLibrary = explorer.renderToolbar = explorer.renderEmpty = explorer.renderNavigation = explorer.drawMap = () => {};
+  explorer.renderLibrary = explorer.renderToolbar = explorer.renderEmpty = explorer.renderNavigation = explorer.renderLegend = explorer.drawMap = () => {};
   const main = cv.host.parentNode; // #main: the fixture parks the canvas host there
   main.style.setProperty = (name, value) => { widths.push(name + '=' + value); };
   app.state.loaded = true; app.sidebar = { _key: 'stale' };

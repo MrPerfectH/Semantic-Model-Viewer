@@ -1,7 +1,8 @@
 # Group colours
 
-Development feature: **Tables → Display → Colour by → Edit group colours…**.
-Both the Tables canvas and Table groups provide this command in their Legend menu.
+Development feature: **Tables → bottom bar → Source / Table folder**.
+Open **Legend → Edit colours** to customise the selected mode.
+The same controls are available on Table groups.
 The legend identifies the current colour groups and lets you focus a group.
 
 Choose **Source** or **Table group**, select a group, and choose its colour. The
@@ -55,8 +56,13 @@ before. Source labels may therefore be less detailed in portable snapshots.
 
 ## Disconnected tables
 
-**Tables → Display → Show disconnected tables** controls tables with no relationships.
+**Tables → bottom bar → Disconnected tables** controls tables with no relationships.
 It is separate from Hide unrelated, which focuses the relationships of selected tables.
 Hiding disconnected tables preserves canvas membership and positions. The setting
 is remembered when reopening the model and is included in saved views and snapshots.
 **Show all** restores disconnected tables too.
+
+The bottom bar keeps Source / Table folder visible with the legend collapsed.
+Legend and Overview map visibility are remembered as local reading preferences.
+The legend takes space below the canvas rather than covering the graph. Controls use
+13px text and wrap at narrower widths. These controls are not duplicated in Display.
