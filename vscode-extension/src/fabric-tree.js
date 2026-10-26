@@ -26,7 +26,7 @@ class FabricTree {
     return [...new Map(items.map(item => [item.id, item])).values()].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
   }
   async getChildren(element) {
-    if (element && element.kind !== 'workspace') return [];
+    if (element && !['workspace', 'workspaces'].includes(element.kind)) return [];
     const generation = this.generation;
     try {
       const { account } = await this.fabric.request({ action: 'status' });
@@ -34,27 +34,35 @@ class FabricTree {
       if (!account) return [{ kind: 'action', name: 'Sign in to Fabric…', command: 'semanticModelViewer.fabricBrowseSignIn', icon: 'sign-in' }];
       if (element && (element.accountId !== account.id || element.tenantId !== account.tenantId)) return [];
       const identity = { accountId: account.id, tenantId: account.tenantId };
+      if (!element) return [
+        { kind: 'message', name: account.name || 'Signed in to Fabric', detail: `Account: ${account.name || account.id}\nTenant: ${account.tenantId}`, icon: 'account', ...identity },
+        { kind: 'message', name: `Tenant: ${account.tenantId}`, icon: 'organization', ...identity },
+        { kind: 'action', name: 'Switch account…', command: 'semanticModelViewer.fabricSwitchAccount', icon: 'account' },
+        { kind: 'action', name: 'Sign out of Fabric', command: 'semanticModelViewer.fabricSignOut', icon: 'sign-out' },
+        { kind: 'workspaces', name: 'Workspaces', ...identity }
+      ];
+      const isWorkspace = element.kind === 'workspace';
       const cacheKey = JSON.stringify([account.id, account.tenantId, element && element.id]);
       if (!this.pending.has(cacheKey)) {
         const promise = (async () => {
-          const items = await this.list(element ? 'listModels' : 'listWorkspaces', { ...identity, ...(element ? { workspaceId: element.id } : {}) }, generation);
-          return items.map(item => ({ ...item, ...identity, kind: element ? 'model' : 'workspace', ...(element ? { workspace: { id: element.id, name: element.name } } : {}) }));
+          const items = await this.list(isWorkspace ? 'listModels' : 'listWorkspaces', { ...identity, ...(isWorkspace ? { workspaceId: element.id } : {}) }, generation);
+          return items.map(item => ({ ...item, ...identity, kind: isWorkspace ? 'model' : 'workspace', ...(isWorkspace ? { workspace: { id: element.id, name: element.name } } : {}) }));
         })();
         this.pending.set(cacheKey, promise);
         promise.catch(() => { if (this.pending.get(cacheKey) === promise) this.pending.delete(cacheKey); });
       }
       const items = await this.pending.get(cacheKey);
       if (generation !== this.generation) return [];
-      return items.length ? items : [{ kind: 'message', name: element ? 'No accessible semantic models' : 'No accessible workspaces', scope: element && element.id }];
+      return items.length ? items : [{ kind: 'message', name: isWorkspace ? 'No accessible semantic models' : 'No accessible workspaces', scope: element && element.id }];
     } catch (error) {
       if (generation !== this.generation) return [];
       return [{ kind: 'action', name: 'Could not load Fabric. Click to retry.', detail: error.message, scope: element && element.id, command: 'semanticModelViewer.refreshFabric', icon: 'warning' }];
     }
   }
   getTreeItem(node) {
-    const item = new vscode.TreeItem(node.name, node.kind === 'workspace' ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
+    const item = new vscode.TreeItem(node.name, node.kind === 'workspaces' ? vscode.TreeItemCollapsibleState.Expanded : node.kind === 'workspace' ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
     item.id = JSON.stringify([node.kind, node.tenantId, node.accountId, node.workspace && node.workspace.id, node.scope, node.id || node.name]);
-    item.iconPath = new vscode.ThemeIcon(node.kind === 'workspace' ? 'organization' : node.kind === 'model' ? 'database' : node.icon || 'info');
+    item.iconPath = new vscode.ThemeIcon(node.kind === 'workspaces' ? 'folder-library' : node.kind === 'workspace' ? 'organization' : node.kind === 'model' ? 'database' : node.icon || 'info');
     item.tooltip = node.detail || (node.workspace ? `${node.name}\n${node.workspace.name}\n${node.id}` : node.name);
     item.contextValue = node.kind === 'workspace' ? 'fabricWorkspace' : node.kind === 'model' ? 'fabricSemanticModel' : 'fabricAction';
     if (node.kind === 'model') item.command = { command: 'semanticModelViewer.openFabricTreeModel', title: 'Open semantic model', arguments: [node] };

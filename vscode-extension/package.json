@@ -132,31 +132,13 @@
           "command": "semanticModelViewer.open",
           "when": "view == semanticModelViewer.models",
           "group": "navigation@2"
-        },
-        {
-          "command": "semanticModelViewer.connectFabric",
-          "when": "view == semanticModelViewer.models",
-          "group": "navigation@3"
-        },
+        }
+      ],
+      "view/item/context": [
         {
           "command": "semanticModelViewer.refreshFabric",
-          "when": "view == semanticModelViewer.fabric",
-          "group": "navigation@1"
-        },
-        {
-          "command": "semanticModelViewer.fabricBrowseSignIn",
-          "when": "view == semanticModelViewer.fabric",
-          "group": "navigation@2"
-        },
-        {
-          "command": "semanticModelViewer.fabricSignOut",
-          "when": "view == semanticModelViewer.fabric",
-          "group": "connection@1"
-        },
-        {
-          "command": "semanticModelViewer.fabricSwitchAccount",
-          "when": "view == semanticModelViewer.fabric",
-          "group": "connection@2"
+          "when": "view == semanticModelViewer.models && viewItem == fabricRoot",
+          "group": "inline"
         }
       ]
     },
@@ -194,12 +176,6 @@
           "name": "Semantic Models",
           "icon": "images/activity.svg",
           "contextualTitle": "Semantic Models"
-        },
-        {
-          "id": "semanticModelViewer.fabric",
-          "name": "Fabric",
-          "icon": "images/activity.svg",
-          "contextualTitle": "Fabric"
         }
       ]
     },

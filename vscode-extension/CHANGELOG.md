@@ -1,5 +1,11 @@
 # Changelog
 
+## Next pre-release
+
+- Put Fabric connection controls directly in the Semantic Models sidebar, with the account, tenant ID, Switch account and Sign out above an expandable workspace/model tree.
+- Keep account controls visible when workspace discovery fails; refresh the sidebar after sign-in and sign-out.
+- Replace the Fabric-only pre-release introduction with the complete feature summary and explain the CLI’s separate setup.
+
 ## 0.7.295 — pre-release (26 October 2026)
 
 - Connect to Fabric, browse workspace models, and save metadata for offline reopening.
