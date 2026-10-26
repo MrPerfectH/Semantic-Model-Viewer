@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.3
+
+- Keep cardinality and filter-direction labels visible on parallel relationships when there is space elsewhere along the line, including inactive relationships. Preserve collision avoidance and the compact arrow view at low zoom.
+
 ## 0.4.2
 
 - Add animated workflow GIFs, video links, and the illustrated VS Code guide to the extension README shown in VS Code and Marketplace.
