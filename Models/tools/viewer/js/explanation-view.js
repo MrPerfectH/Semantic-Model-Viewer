@@ -21,7 +21,7 @@
   function validate(model, input) {
     if (!object(input) || ![1,2].includes(input.version)) fail('version must be 1 or 2');
     var v = JSON.parse(JSON.stringify(input));
-    var allowed = ['version','mode','tables','focus','highlights','callouts','width','height','scale','chrome','crop','proposals','context','state','annotationsVisible','banner','arrange'];
+    var allowed = ['version','mode','tables','focus','highlights','callouts','width','height','scale','chrome','crop','proposals','context','state','annotationsVisible','banner','arrange','paths','caption'];
     Object.keys(v).forEach(function (k) { if (!allowed.includes(k)) fail('unknown field ' + k); });
     v.mode = v.mode || 'graph';
     if (!['graph','measures','matrix','clusters','power-query'].includes(v.mode)) fail('unsupported mode ' + v.mode);
@@ -30,6 +30,13 @@
     if (![1,2].includes(v.scale)) fail('scale must be 1 or 2');
     if(v.annotationsVisible!==undefined&&typeof v.annotationsVisible!=='boolean')fail('annotationsVisible must be boolean');
     if (v.arrange !== undefined && typeof v.arrange !== 'boolean') fail('arrange must be boolean');
+    if(v.caption!==undefined&&(typeof v.caption!=='string'||!v.caption.trim()||v.caption.length>1000))fail('caption needs text of 1 to 1000 characters');
+    if(v.paths!==undefined){
+      if(!object(v.paths)||v.mode!=='graph'||Object.keys(v.paths).some(function(k){return !['direction','depth','includeInactive'].includes(k);}))fail('paths requires graph mode and direction, depth, includeInactive fields');
+      if(!['both','incoming','outgoing','connected'].includes(v.paths.direction))fail('invalid paths direction');
+      if(!Number.isInteger(v.paths.depth)||v.paths.depth<1||v.paths.depth>100)fail('paths depth must be 1 to 100');
+      if(typeof v.paths.includeInactive!=='boolean')fail('paths includeInactive must be boolean');
+    }
     if (v.tables !== undefined && object(v.tables)) {
       if(v.version!==2)fail('relative table sets require version 2');
       var spec=v.tables, selectors=['relatedTo','filteredBy','filters'].filter(function(k){return spec[k]!==undefined;});
@@ -96,6 +103,8 @@
   function frame() { return new Promise(function (done) { requestAnimationFrame(function () { requestAnimationFrame(done); }); }); }
   async function apply(app, input) {
     var view=validate(app.model,input), cv=app.canvas;
+    var previousCaption=document.getElementById('smv-question-caption');if(previousCaption)previousCaption.remove();
+    if(view.caption){var caption=document.createElement('section');caption.id='smv-question-caption';caption.setAttribute('aria-label','Diagram explanation');caption.style.cssText='flex:none;padding:12px 20px;border-bottom:1px solid var(--smv-line,#dbe2ec);background:var(--smv-paper,#fff);color:var(--smv-ink,#24324a);font:600 15px/1.5 system-ui;overflow-wrap:anywhere';caption.textContent=view.caption;var root=document.getElementById('root');if(root){var topbar=document.getElementById('topbar');root.insertBefore(caption,topbar?topbar.nextSibling:root.firstChild);}}
     document.body.dataset.smvReady='0';delete document.body.dataset.smvError;
     var style=document.getElementById('smv-explanation-style');
     if(!style){style=document.createElement('style');style.id='smv-explanation-style';document.head.appendChild(style);}
@@ -133,6 +142,7 @@
       if(view.focus.kind==='relationship')cv.selectRel(resolve(app.model,view.focus));
       else if(view.focus.kind==='table'||view.focus.kind==='column')cv.selectTable(view.focus.table||view.focus.name,{keepView:true});
     }
+    if(view.paths&&app.explorer){app.explorer.direction=view.paths.direction;app.explorer.includeInactive=view.paths.includeInactive;app.explorer.depth=view.paths.depth===1?'direct':view.paths.depth===2?'two':'all';app.explorer.refreshPaths();}
     // Arrange newly authored table sets after native focus is set. Restored
     // explored state below keeps its exact positions and viewport.
     if(view.mode==='graph' && view.arrange!==false && (view.tables||view.arrange===true) && !(view.state&&view.state.tableView) && app.explorer){await frame();app.explorer.arrangeSubset(false);}

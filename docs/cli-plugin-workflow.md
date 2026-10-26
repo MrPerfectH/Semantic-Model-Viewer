@@ -183,3 +183,27 @@ project helper for unique self-ignored artifact paths if needed:
 `node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-workspace.cjs"`.
 
 Every subcommand supports `--help` and errors include command-specific usage guidance.
+
+
+## Answer modeling questions with a diagram
+
+The agent should lead with a diagram and a short explanation, rather than a metadata dump.
+
+```sh
+smv show Retail.SemanticModel --table Date --with Sales
+smv show Retail.SemanticModel --table Sales --related --direction incoming
+smv show Retail.SemanticModel --table Date --related --direction outgoing
+smv show Retail.SemanticModel --table Sales --dependents
+smv show Retail.SemanticModel --table Date --with Sales --out date-sales.html
+smv show Retail.SemanticModel --table Sales --dependents --out calculations.png
+```
+
+`--with` shows the two endpoints and one shortest connecting path, including intermediate tables when necessary. It reports disconnected endpoints honestly, and distinguishes a physical connection from a directed filter path. Parallel relationships between visible tables remain available in the viewer, including inactive edges. `--include-inactive` permits potential paths through inactive edges; it does not activate them in Power BI. `--direct` restricts the search to one hop. The diagram inspector receives the same direction, depth and inactive settings used to build the answer. Live view identities distinguish different questions about the same table.
+
+`--out` produces one diagram without starting a session: HTML is interactive, PNG is an image requiring Chrome/Chromium. With no view selector, portable output defaults to the relationship diagram. Choose one view instead of combining `--related --dependents` with `--out`. The JSON receipt identifies the question, answer, diagram counts, file size and content scope. HTML contains full-model metadata/DAX behind the focused starting view. `snapshot --json` also returns a content/size receipt.
+
+Compact `relations` reports `filtersRoot` and `filteredByRoot` for each neighbour. `incoming` means tables that filter the root; `outgoing` means tables filtered by it. `counts.relationships`, `inactive` and `manyToMany` describe all incident edges, independently of traversal options. `countScope` documents that scope; `traversed` counts the union of one shortest path per result, which may omit parallel/alternative edges. `specialRelationships` names inactive incident relationships and bidirectional edges incident to the root or used on the selected shortest paths, without requesting full details.
+
+Compact `dependents` returns one shortest `via` chain per indirect measure, ending at a direct reference to the selected table; other chains may exist. `dependents --table Sales --measure "Gross Margin %" --details` returns only that calculation and its DAX. Counts cover all dependents while `returned` counts the selected results. These are static references, not evaluated DAX or relationship propagation.
+
+The Measures view's table/relationship counts describe its background table canvas, not the calculation graph. `dependentMeasures` describes its selected source; `renderedSummary.measureGraphNodes` counts measure nodes and excludes the virtual table/column source card. Zero dependent measures is a valid result; `show` explains why that diagram is nearly empty.

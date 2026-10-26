@@ -68,3 +68,43 @@ test('show reuses a compatible model server with a custom default view',async t=
   const {dir,model}=setup(t),view=path.join(dir,'initial.json');fs.writeFileSync(view,JSON.stringify({version:2,tables:['Date']}));
   const server=await api.serve(model,{view,background:true});const shown=run(dir,'show',model,'--table','Cost Center');assert.equal(shown.sessionId,server.sessionId);assert.equal(shown.reused,true);
 });
+
+test('compact answers explain filter direction, inactive names and shortest measure chains',t=>{
+  const {dir,model}=setup(t);
+  const rel=run(dir,'relations',model,'--table','Cost Center');
+  assert.ok(rel.tables.every(t=>t.filteredByRoot&&!t.filtersRoot));
+  const incoming=run(dir,'relations',model,'--table','Date','--direction','incoming');
+  const date=run(dir,'relations',model,'--table','Date');assert.equal(date.traversed.bidirectional,1);assert.equal(date.specialRelationships.bidirectional.length,1);
+  assert.equal(incoming.tables.length,0);assert.equal(incoming.traversed.relationships,0);
+  assert.equal(incoming.specialRelationships.inactive.length,3);assert.match(incoming.countScope.relationships,/independent/);
+  assert.ok(incoming.specialRelationships.inactive.some(r=>r.from.table==='Sales'&&r.from.column==='Ship Date'));
+  const deps=run(dir,'dependents',model,'--table','Sales','--measure','Gross Margin %','--details');
+  assert.equal(deps.measures.length,1);assert.ok(deps.measures[0].via.length);assert.equal(deps.measures[0].direct,false);assert.match(deps.measures[0].dax,/DIVIDE/);
+});
+test('two-table diagrams include intermediate connections without inventing filter flow',t=>{
+  const {dir}=setup(t),file=path.join(dir,'paths.bim');
+  fs.writeFileSync(file,JSON.stringify({name:'Paths',model:{tables:['Dimension','Left','Right','Disconnected'].map(name=>({name,columns:[{name:'Key',dataType:'int64'}],measures:[]})),relationships:['Left','Right'].map(name=>({name,fromTable:name,fromColumn:'Key',toTable:'Dimension',toColumn:'Key'}))}}));
+  const connected=run(dir,'relations',file,'--table','Left','--with','Right');
+  assert.deepEqual(connected.tables,['Left','Dimension','Right']);assert.equal(connected.filtersOther,false);assert.equal(connected.filteredByOther,false);
+  const none=run(dir,'relations',file,'--table','Left','--with','Disconnected');assert.equal(none.connected,false);
+  const out=path.join(dir,'diagram.html'),diagram=run(dir,'show',file,'--table','Left','--with','Right','--out',out);
+  assert.match(diagram.answer,/neither filters/);assert.equal(diagram.diagram.tables,3);assert.match(diagram.artifact.contents,/full-model/);
+  assert.match(fs.readFileSync(out,'utf8'),/Left/);assert.deepEqual(run(dir,'session','list'),[]);
+});
+test('question diagrams support direction, calculations and named live views',async t=>{
+  const {dir,model}=setup(t);
+  const paths=run(dir,'show',model,'--table','Cost Center','--related','--direction','incoming','--out',path.join(dir,'incoming.html'));
+  assert.match(paths.answer,/0 tables filter Cost Center/);assert.equal(paths.diagram.tables,1);
+  const calc=run(dir,'show',model,'--table','Sales','--dependents','--out',path.join(dir,'calculations.html'));
+  assert.equal(calc.diagram.mode,'measures');assert.equal(calc.diagram.dependentMeasures.total,34);
+  const live=run(dir,'show',model,'--table','Date','--with','Sales');assert.equal(live.views.length,1);assert.match(live.views[0].answer,/Date filters Sales/);
+  const status=await api.request(live.sessionFile,'status',undefined,live.views[0].id);assert.deepEqual(status.appliedView.tables,['Date','Sales']);assert.equal(status.appliedView.paths.direction,'connected');
+  const empty=run(dir,'show',model,'--table','Cost Center','--dependents');assert.match(empty.warnings.join(' '),/No calculations/);
+});
+
+
+test('question diagrams preserve older servers and reuse the current runtime on later calls',async t=>{
+  const {dir,model}=setup(t);const real=managed.version;t.mock.method(managed,'version',()=> '0.0.1');const old=await api.serve(model,{newSession:true});t.mock.method(managed,'version',real);
+  const first=run(dir,'show',model,'--table','Date','--with','Sales');assert.notEqual(first.sessionId,old.sessionId);assert.match(first.warnings.join(' '),/left running/);
+  const second=run(dir,'show',model,'--table','Date','--with','Sales');assert.equal(second.sessionId,first.sessionId);assert.equal(second.reused,true);assert.equal((await managed.list(model)).filter(r=>r.running).length,2);
+});

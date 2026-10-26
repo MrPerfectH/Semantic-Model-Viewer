@@ -145,3 +145,12 @@ check(smv.inspect().renderedSummary.tableCanvasTables===app.explorer.names.size,
 const current=smv.inspect().currentView;check(current.arrange===false,'explored state disables forced rearrangement');
 current.state.tableView.pos.Date.x+=123;await smv.apply(current);check(Math.abs(app.canvas.pos.Date.x-current.state.tableView.pos.Date.x)<1,'saved custom positions survive arrange restoration');
 `));
+
+test('authored question paths set the inspector direction and inactive state',{skip:!browser},async t=>verify(t,{version:2,tables:{filters:'Date',depth:1},focus:{kind:'table',name:'Date'},paths:{direction:'incoming',includeInactive:false,depth:1},caption:'No active tables filter Date.',arrange:true,banner:false},`
+check(document.getElementById('smv-question-caption').textContent==='No active tables filter Date.','question explanation is visible without the annotation banner');
+check(app.explorer.names.size===1,'incoming Date diagram has no invented filtering tables');
+check(app.explorer.direction==='incoming','question direction controls explorer');
+check(app.explorer.depth==='direct'&&!app.explorer.includeInactive,'question scope controls explorer');
+await smv.apply({version:2,tables:['Date','Sales'],focus:{kind:'table',name:'Date'},paths:{direction:'connected',includeInactive:true,depth:100},arrange:true,banner:false});
+check(app.explorer.direction==='connected'&&app.explorer.includeInactive,'inactive pair diagram controls match authored question');check(!document.getElementById('smv-question-caption'),'a later view clears the previous explanation');
+`));
