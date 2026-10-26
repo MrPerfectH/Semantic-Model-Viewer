@@ -24,7 +24,7 @@
       rels.push({
         other: other, dir: r.both ? '⇄' : (out ? '←' : '→'), join: join, card: card,
         rowStyle: 'display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:8px 16px;border:none;background:transparent;cursor:pointer;' + (r.inactive ? 'opacity:.55;' : ''),
-        dirStyle: 'width:24px;height:24px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;background:' + (out ? '#2563eb' : '#0d9488') + ';',
+        dirStyle: 'width:24px;height:24px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;background:' + (out ? 'var(--smv-down,#2563eb)' : 'var(--smv-up,#0d9488)') + ';',
         go: function () { app.focusTable(other); },
         pick: function () { if (app.explorer) app.explorer.ensureTable(other); app.canvas.selectRel(app.canvas.selRel === r ? null : r); },
         isSel: app.canvas.selRel === r
@@ -34,13 +34,13 @@
       var isRel = c.rel, hid = c.hidden, ty = app.shortType(c.dataType);
       var ckey = 'col|' + c.name, copen = !!(app.state.calcOpen || {})[ckey];
       return {
-        name: c.name, type: ty, isCalc: !!c.isCalc, dax: c.dax || '', open: copen,
+        name: c.name, trace: function () { app.measures.analyzeSource(t.name, c.name); }, type: ty, isCalc: !!c.isCalc, dax: c.dax || '', open: copen,
         toggle: function () { app.setState({ calcOpen: Object.assign({}, app.state.calcOpen, (function (o) { o[ckey] = !copen; return o; })({})) }); },
         rowStyle: 'display:flex;align-items:center;gap:10px;padding:5px 16px;' + (isRel ? ('background:' + tint('#f59e0b', 0.07) + ';') : ''),
-        dotStyle: isRel ? 'width:7px;height:7px;border-radius:50%;background:#f59e0b;flex:none;'
+        dotStyle: isRel ? 'width:7px;height:7px;border-radius:50%;background:var(--smv-gold,#f59e0b);flex:none;'
           : (hid ? 'width:7px;height:7px;border-radius:50%;border:1.5px solid #cbd0d8;flex:none;box-sizing:border-box;'
             : 'width:4px;height:4px;border-radius:50%;background:#cfd4dc;flex:none;margin:0 1.5px;'),
-        nameColor: hid ? '#b3b9c2' : (isRel ? '#b45309' : '#3a414d'),
+        nameColor: hid ? '#b3b9c2' : (isRel ? 'var(--smv-gold-ink,#b45309)' : '#3a414d'),
         typeStyle: ty ? "font:500 9.5px/1 'IBM Plex Mono',monospace;color:#9aa1ad;background:#eef1f4;border-radius:4px;padding:3px 5px;flex:none;" : 'display:none;'
       };
     });
@@ -57,7 +57,7 @@
         toggle: function () { app.setState({ expandedMeasure: open ? null : m.name }); },
         trace: function () {
           app.canvas.pinned.clear();
-          app.setState({ viewMode: 'measures', selMeasure: m.name, mvOpen: app.mvOpenFor(m.name), selected: null });
+          app.setState({ viewMode: 'measures', selMeasure: m.name, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvOpen: app.mvOpenFor(m.name), selected: null });
           app.canvas.applyHighlight(null, null);
         }
       };
@@ -106,7 +106,7 @@
       ]);
     };
 
-    var head = el('div', { style: 'flex:none;padding:15px 16px 13px;border-bottom:1px solid #edeff2;background:' + sel.tintBg + ';' }, [
+    var head = el('div', { cls: 'ex-inspector-head', style: 'flex:none;padding:15px 16px 13px;border-bottom:1px solid #edeff2;background:' + sel.tintBg + ';' }, [
       el('div', { style: 'display:flex;align-items:flex-start;gap:10px;' }, [
         el('span', { style: sel.roleGlyphStyle, text: sel.roleShort }),
         el('div', { style: 'flex:1;min-width:0;' }, [
@@ -161,7 +161,7 @@
         el('div', { style: 'display:flex;align-items:baseline;gap:6px;margin-bottom:6px;' }, [
           el('div', { style: 'flex:1;min-width:0;font-size:10px;color:#9aa1ad;', text: hint }),
           el('button', { text: 'Rules…', title: 'Edit the rules that decide fact / dim for every table', onClick: function () { app.setState({ showRules: true }); },
-            style: "border:none;background:none;padding:0;cursor:pointer;font:600 10px/1 'IBM Plex Sans';color:#2563eb;flex:none;" })
+            style: "border:none;background:none;padding:0;cursor:pointer;font:600 10px/1 'IBM Plex Sans';color:var(--smv-down,#2563eb);flex:none;" })
         ]),
         el('div', { style: 'display:flex;gap:6px;' }, rowKids),
         el('div', {style:'margin-top:7px;font-size:11px;overflow-wrap:anywhere;', text:app.state.roleSave && app.state.roleSave.name === sel.name ? app.state.roleSave.text : app.roleRepo() ? 'Changes save automatically to the repo TMDL file.' : 'Connect the repo folder to save changes in TMDL. Browser-only choices are not shared.'}),
@@ -185,7 +185,7 @@
       });
     };
     var fxBadge = function (title) {
-      return el('span', { title: title, text: 'fx', style: "flex:none;font:700 9px/1 'IBM Plex Mono',monospace;color:#7c2d92;background:#f8f5ff;border:1px solid #e2d8f5;border-radius:4px;padding:2px 4px;" });
+      return el('span', { title: title, text: 'fx', style: "flex:none;font:700 9px/1 'IBM Plex Mono',monospace;color:var(--smv-plum,#7c2d92);background:#f8f5ff;border:1px solid #e2d8f5;border-radius:4px;padding:2px 4px;" });
     };
 
     /* calculated table / field parameter: the DAX that builds the table */
@@ -201,7 +201,7 @@
           style: 'display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:5px 16px;border:none;background:transparent;cursor:pointer;'
         }, [
           el('span', { style: 'flex:none;display:flex;transition:transform .15s;transform:rotate(' + (ci.open ? '90deg' : '0deg') + ');', html: U.icon('chevRight', 10, '#9aa1ad') }),
-          el('span', { style: "flex:1;min-width:0;font:500 11.5px/1.3 'IBM Plex Mono',monospace;color:#7c2d92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;", text: ci.name })
+          el('span', { style: "flex:1;min-width:0;font:500 11.5px/1.3 'IBM Plex Mono',monospace;color:var(--smv-plum,#7c2d92);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;", text: ci.name })
         ]));
         if (ci.open) {
           wrap.appendChild(daxBox(ci.dax, '2px 16px 8px 34px'));
@@ -237,8 +237,11 @@
       });
     }
 
+    body.appendChild(el('div', { cls: 'mv-table-impact-action' }, el('button', { cls: 'mv-button mv-button-primary', text: 'Find dependent measures',
+      onClick: function () { app.measures.analyzeSource(sel.name); } })));
+
     if (sel.hasMeasures) {
-      body.appendChild(sectionTitle('Measures', sel.measureCount));
+      body.appendChild(sectionTitle('Measures stored here', sel.measureCount));
       if (sel.showMsrSearch) {
         var inp = el('input', {
           value: app.state.msrQuery || '', placeholder: 'Filter measures…', spellcheck: 'false',
@@ -252,13 +255,13 @@
         var kids = [
           el('span', { style: m.caretStyle, html: U.icon('chevRight', 10, '#9aa1ad') }),
           el('span', { style: 'flex:1;min-width:0;' }, [
-            el('span', { style: "display:block;font:500 11.5px/1.3 'IBM Plex Mono',monospace;color:#7c2d92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;", text: m.name })
+            el('span', { style: "display:block;font:500 11.5px/1.3 'IBM Plex Mono',monospace;color:var(--smv-plum,#7c2d92);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;", text: m.name })
           ].concat(m.hasFolder ? [el('span', { style: 'display:block;font-size:9.5px;color:#a9afba;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;', text: m.folder })] : []))
         ];
         if (m.hid) kids.push(el('span', { title: 'Hidden in the model (isHidden)', style: 'flex:none;display:flex;color:#9aa1ad;', html: U.icon('eyeOff', 10) }));
         if (m.hasUse) kids.push(el('span', {
           title: m.useTip, text: m.use + ' pg',
-          style: "flex:none;font:600 8.5px/1 'IBM Plex Mono',monospace;color:#2563eb;background:#f2f7ff;border:1px solid #d4e3fb;border-radius:4px;padding:2px 4px;cursor:help;"
+          style: "flex:none;font:600 8.5px/1 'IBM Plex Mono',monospace;color:var(--smv-down,#2563eb);background:#f2f7ff;border:1px solid #d4e3fb;border-radius:4px;padding:2px 4px;cursor:help;"
         }));
         var wrap = el('div', {}, el('button', {
           cls: 'hv-f5f7f9', onClick: m.toggle,
@@ -287,12 +290,14 @@
         c.dax ? fxBadge('Calculated column — click to read the DAX') : null,
         el('span', { style: c.typeStyle, text: c.type })
       ];
-      if (!c.dax) { body.appendChild(el('div', { cls: 'hv-f0f2f5', style: c.rowStyle }, rowKids)); return; }
-      var wrap = el('div', {}, el('button', {
+      var trace = el('button', { cls: 'mv-column-impact-action', text: 'Find measures', title: 'Find measures referencing ' + sel.name + '[' + c.name + ']',
+        'aria-label': 'Find measures referencing ' + sel.name + '[' + c.name + ']', onClick: c.trace });
+      var label = c.dax ? el('button', {
         cls: 'hv-f0f2f5', onClick: c.toggle, title: 'Show / hide the column DAX',
-        style: c.rowStyle + 'width:100%;text-align:left;border:none;cursor:pointer;box-sizing:border-box;'
-      }, rowKids));
-      if (c.open) wrap.appendChild(daxBox(c.dax, '2px 16px 8px 34px'));
+        style: c.rowStyle + 'flex:1;min-width:0;text-align:left;border:none;cursor:pointer;box-sizing:border-box;'
+      }, rowKids) : el('div', { cls: 'hv-f0f2f5', style: c.rowStyle + 'flex:1;min-width:0;' }, rowKids);
+      var wrap = el('div', {}, el('div', { style: 'display:flex;align-items:center;padding-right:8px;' }, [label, trace]));
+      if (c.open && c.dax) wrap.appendChild(daxBox(c.dax, '2px 16px 8px 34px'));
       body.appendChild(wrap);
     });
 

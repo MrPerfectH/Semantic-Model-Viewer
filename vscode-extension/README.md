@@ -42,6 +42,34 @@ metadata; **Remove Saved Fabric Model…** removes the saved metadata and associ
 HTML snapshots can be shared without a Fabric connection and contain the model metadata you
 choose to export, including available definitions.
 
+## Watch the workflows
+
+[Full illustrated VS Code guide](https://github.com/MrPerfectH/Semantic-Model-Viewer/blob/main/docs/vscode-guide.md). These recordings use the synthetic Contoso Retail model. Select a video link to watch it in your browser.
+
+### Install and open a model
+
+[Watch installation — 10 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/install-extension.mp4) · [Watch opening a model and exploring DAX — 35 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/vscode-to-dax-v4.mp4)
+
+![Find the extension, install it, and choose a model](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/install-extension.gif)
+
+### Focus the table canvas
+
+[Watch the table workflow — 24 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/focus-tables.mp4)
+
+![Select a table and dim unrelated tables](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/dim-and-switch.gif)
+
+![Hide unrelated tables and arrange the focused canvas](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/hide-and-arrange.gif)
+
+### Follow a table into its measures and DAX
+
+![Find direct and indirect measures that depend on Sales](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/table-to-dependent-measures-v2.gif)
+
+![Inspect a dependent measure and double-click to analyze it](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/select-dependent-measure-v3.gif)
+
+![Expand referenced measures with Inline measures](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/inline-dax-v2.gif)
+
+The installation recording shows 0.3.9; its installation steps still apply. Feature recordings were made during development and demonstrate features available in stable 0.4.0 and newer.
+
 ## Measures
 
 Follow the logic behind a measure. Trace what feeds it and what depends on it, then compare the DAX without losing your place.
@@ -52,6 +80,8 @@ Follow the logic behind a measure. Trace what feeds it and what depends on it, t
 | Dependency flow | DAX comparison |
 | --- | --- |
 | [![Gross Margin % dependency flow at 100% zoom, with upstream measures in purple and a downstream measure in blue](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-flow.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-flow.png) | [![Gross Margin % and Gross Profit formulas beside their dependency graph](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-dax.png)](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/70ed5cdc473812c586874efc6e4ff00f4aeb2700/docs/img/marketplace/measure-dax.png) |
+
+Select **Table or column** in the Measures library, or **Find dependent measures** in the table inspector, to analyze a source. Inspecting a result keeps that source selected. Colored reference chips beneath each formula open the corresponding analysis. Use **Direct only** to exclude indirect dependent measures. This is static DAX reference analysis; calculated-column/table defining expressions and relationship filter propagation are outside its scope.
 
 ## Tables
 

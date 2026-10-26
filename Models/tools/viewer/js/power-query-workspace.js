@@ -34,8 +34,9 @@
   }
   function chromeFor(row,node,app,detail){
     var table=row&&row.table&&app&&app.model&&app.model.byName&&app.model.byName[row.table],p=g.PALETTES&&(g.PALETTES[app&&app.paletteName]||g.PALETTES.muted),color=p&&p.fallback||'#8896aa',badge={query:'Q',parameter:'P',function:'F'}[row&&row.classification]||'Q',fact=false;
+    if(g.ViewerTheme&&p){p=g.ViewerTheme.palette(p);color=p.fallback;}
     if(table){color=app.tableColor(table);fact=app.isFact(table);badge={fact:'FACT',dim:'DIM',helper:'HLP',calcgroup:'CG',fieldparam:'FP',measures:'M',standalone:'STD',unknown:'UNK'}[table.role]||'TBL';}
-    else if(row&&row.classification==='parameter')color='#79519f';
+    else if(row&&row.classification==='parameter')color=g.ViewerTheme&&g.ViewerTheme.get()==='spellbook'?'#806679':'#79519f';
     detail=detail||describe(row,node);
     return Object.freeze({color:color,headerTint:fact?'#1d2330':g.U&&U.tint?U.tint(color,.1):'#f7f9fc',badge:badge,badgeTitle:table?table.role:(row&&row.classification||node.kind),subtitle:detail.status,fact:fact});
   }
@@ -121,6 +122,16 @@
   Workspace.prototype.clearJob=function(){if(this.job){this.job.rows=null;this.job.snapshot=null;this.job=null;}this.jobRows=null;if(this.worker){this.worker.onmessage=null;this.worker.onerror=null;this.worker.terminate();this.worker=null;}if(this.workerURL){URL.revokeObjectURL(this.workerURL);this.workerURL=null;}if(this.timer){clearTimeout(this.timer);this.timer=null;}};
   Workspace.prototype.invalidate=function(){this.cancelPendingInspection();this.generation++;this.navigationEpoch++;this.clearJob();this.context=null;this.pendingTable=null;this.viewMode='flow';this.modeStates={};this.history=[];this.layoutHistory=[];this.membership=null;this.listFacet='all';this.groupFilter='all';this.focusMode='dim';this.direction='connected';this.depth=1;this.selectedId=null;this.analyzedId=null;this.flowRootId=null;this.inspectorOpen=false;this.category='all';this.query='';this.capture=null;this.jobRows=null;this.sets=null;this.jobId=null;this.popover.hidden=true;this.popover.replaceChildren();this.globalDetails.replaceChildren();this.canvas.setContext(null);this.inspector.setContext(null);this.list.replaceChildren();this.banner.replaceChildren();if(this.flowBar)this.flowBar.hidden=true;if(this.viewNotice)this.viewNotice.hidden=true;this.search.value='';this.filter.value='all';this.filter.disabled=true;this.search.disabled=true;if(this.groupSelect){this.groupSelect.value='all';this.groupSelect.disabled=true;}if(this.filter.options)Array.from(this.filter.options).forEach(function(o){o.textContent=o.value[0].toUpperCase()+o.value.slice(1);});this.count.textContent='';this.backButton.disabled=true;this.dock();};
   Workspace.prototype.reset=function(){this.pendingSnapshot=null;this.invalidate();this.phase='idle';this.message.textContent='';this.cancelButton.hidden=true;this.retryButton.hidden=true;};
+  // Same generation retains graph positions, viewport, selection and navigation.
+  Workspace.prototype.refreshAppearance=function(){
+    if(!this.context)return;
+    var self=this,by=new Map();
+    this.context.byNodeId.forEach(function(entry,id){by.set(id,Object.freeze(Object.assign({},entry,{chrome:chromeFor(entry.metadataRow,entry.node,self.app,entry.presentation)})));});
+    this.context=Object.assign({},this.context,{byNodeId:by});
+    var layout=this.canvas.captureLayout(),viewport=this.canvas.getViewport();
+    this.canvas.setContext(this.context);this.canvas.restoreLayout(layout);this.canvas.setViewport(viewport);
+    this.inspector.setContext(this.context);this.applyFilters();
+  };
   Workspace.prototype.update=function(){if(!this.alive)return;if(this.capture&&!same(this.capture,this.app.model))this.reset();var active=this.app.state.loaded&&this.app.state.viewMode==='power-query';this.host.hidden=!active;if(this.active!==active){this.active=active;this.canvas.suspend(!active);this.inspector.suspend(!active);}if(active&&this.phase==='idle')this.start();};
   Workspace.prototype.start=function(){var self=this;this.invalidate();var generation=this.generation;this.capture=capture(this.app.model);if(!this.capture.metadata){this.phase='ready';this.message.textContent='Power Query definitions are unavailable in this model or older snapshot. Open the original model and save a new snapshot to include available M.';return;}
     // Clone once before the async build; no source rows or graph IDs are guessed.

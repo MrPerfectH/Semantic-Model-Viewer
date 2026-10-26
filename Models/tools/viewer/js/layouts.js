@@ -1038,10 +1038,10 @@
         html: '<div style="height:7px;background:' + col + ';"></div>' +
           '<div style="padding:12px 14px 12px;">' +
           '<div style="display:flex;align-items:baseline;gap:8px;">' +
-          '<div style="flex:1;min-width:0;font:600 14px/1.25 \'IBM Plex Sans\',sans-serif;color:#1f2430;overflow-wrap:anywhere;">' + U.esc(label) + '</div>' +
+          '<div style="flex:1;min-width:0;font:600 14px/1.25 \'IBM Plex Sans\',sans-serif;color:var(--smv-ink,#1f2430);overflow-wrap:anywhere;">' + U.esc(label) + '</div>' +
           '<div style="font:700 21px/1 \'IBM Plex Mono\',monospace;color:' + col + ';">' + tables.length + '</div>' +
           '</div>' +
-          '<div style="margin-top:7px;font:500 10.5px/1.6 \'IBM Plex Mono\',monospace;color:#8b92a0;">' + facts + ' fact · ' + dims + ' dim' + (other ? (' · ' + other + ' other') : '') + '<br>' + (internal[k] || 0) + ' internal · ' + (external[k] || 0) + ' external rels</div>' +
+          '<div style="margin-top:7px;font:500 10.5px/1.6 \'IBM Plex Mono\',monospace;color:var(--smv-muted,#8b92a0);">' + facts + ' fact · ' + dims + ' dim' + (other ? (' · ' + other + ' other') : '') + '<br>' + (internal[k] || 0) + ' internal · ' + (external[k] || 0) + ' external rels</div>' +
           '<div style="margin-top:8px;font:600 10px/1 \'IBM Plex Sans\',sans-serif;color:' + col + ';">Click to expand ▾</div>' +
           '</div>'
       });
@@ -1050,8 +1050,8 @@
       var pill = el('div', {
         style: 'position:absolute;display:none;height:36px;align-items:center;gap:9px;padding:0 12px;background:' + tint(col, 0.12) + ';border:1.5px solid ' + tint(col, 0.5) + ';border-radius:9px;cursor:pointer;font-family:\'IBM Plex Sans\',sans-serif;box-sizing:border-box;',
         html: '<span style="width:10px;height:10px;border-radius:3px;background:' + col + ';flex:none;"></span>' +
-          '<span style="flex:1;min-width:0;font:600 12.5px/1 \'IBM Plex Sans\',sans-serif;color:#1f2430;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + U.esc(label) + ' · ' + tables.length + ' tables</span>' +
-          '<span style="font:600 10px/1 \'IBM Plex Sans\',sans-serif;color:#6b7280;flex:none;">collapse ✕</span>'
+          '<span style="flex:1;min-width:0;font:600 12.5px/1 \'IBM Plex Sans\',sans-serif;color:var(--smv-ink,#1f2430);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + U.esc(label) + ' · ' + tables.length + ' tables</span>' +
+          '<span style="font:600 10px/1 \'IBM Plex Sans\',sans-serif;color:var(--smv-muted,#6b7280);flex:none;">collapse ✕</span>'
       });
       self.world.appendChild(elx); self.world.appendChild(pill);
       var gg = { key: k, tables: tables, col: col, label: label, el: elx, pill: pill, x: 0, y: 0, w: 252, h: 150, cols: 1 };
@@ -1193,20 +1193,20 @@
       return lines.join('<br>');
     };
     var hover = function (p, rels) {
-      p.addEventListener('mouseenter', function (e) { p.setAttribute('stroke', '#2563eb'); p.setAttribute('opacity', '1'); self.showTip(tipFor(rels), e); });
+      p.addEventListener('mouseenter', function (e) { p.setAttribute('stroke', 'var(--smv-burgundy,#2563eb)'); p.setAttribute('opacity', '1'); self.showTip(tipFor(rels), e); });
       p.addEventListener('mousemove', function (e) { self.moveTip(e); });
-      p.addEventListener('mouseleave', function () { p.setAttribute('stroke', '#8f9bb3'); p.setAttribute('opacity', '0.55'); self.hideTip(); });
+      p.addEventListener('mouseleave', function () { p.setAttribute('stroke', 'var(--smv-gold,#8f9bb3)'); p.setAttribute('opacity', '0.55'); self.hideTip(); });
     };
     var badge = function (x, y, n) {
       if (n < 2) return;
-      self.svg.appendChild(sv('circle', { cx: x, cy: y, r: 10, fill: '#fff', stroke: '#c3cbd8', 'stroke-width': '1.2' }));
-      self.svg.appendChild(sv('text', { x: x, y: y + 3.5, 'text-anchor': 'middle', style: "font:600 10px 'IBM Plex Mono',monospace;fill:#4b5563;", text: String(n) }));
+      self.svg.appendChild(sv('circle', { cx: x, cy: y, r: 10, fill: '#fff', stroke: 'var(--smv-line,#c3cbd8)', 'stroke-width': '1.2' }));
+      self.svg.appendChild(sv('text', { x: x, y: y + 3.5, 'text-anchor': 'middle', style: "font:600 10px 'IBM Plex Mono',monospace;fill:var(--smv-muted,#4b5563);", text: String(n) }));
     };
     Object.keys(agg).forEach(function (k) {
       var a = agg[k];
       var A = center(a.a), B = center(a.b);
       var w = 1.6 + Math.min(5, a.rels.length * 0.55);
-      var p = mk(self._edgePath(A.x, A.y, B.x, B.y), w, '#8f9bb3', 0.55);
+      var p = mk(self._edgePath(A.x, A.y, B.x, B.y), w, 'var(--smv-gold,#8f9bb3)', 0.55);
       hover(p, a.rels);
       badge((A.x + B.x) / 2, (A.y + B.y) / 2, a.rels.length);
     });
@@ -1217,13 +1217,13 @@
       var ax = B.x > p0.x + c.w / 2 ? p0.x + c.w : p0.x;
       var ay = p0.y + (c.headH ? c.headH / 2 : 24);
       var w = 1.5 + Math.min(4, m.rels.length * 0.5);
-      var p = mk(self._edgePath(ax, ay, B.x, B.y), w, '#8f9bb3', 0.55);
+      var p = mk(self._edgePath(ax, ay, B.x, B.y), w, 'var(--smv-gold,#8f9bb3)', 0.55);
       hover(p, m.rels);
       badge((ax + B.x) / 2, (ay + B.y) / 2, m.rels.length);
     });
     direct.forEach(function (r) {
       var g0 = self.routeOf(r);
-      var p = mk(self.edgeGeom(g0, 0).d, 1.5, '#8f9bb3', 0.55);
+      var p = mk(self.edgeGeom(g0, 0).d, 1.5, 'var(--smv-gold,#8f9bb3)', 0.55);
       if (r.inactive) p.setAttribute('stroke-dasharray', '6 5');
       hover(p, [r]);
     });

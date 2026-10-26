@@ -264,17 +264,17 @@
       var fact = app.isFact(t);
       var chrome = g.WorkspaceUI ? g.WorkspaceUI.cardStyles({fact:fact,color:app.tableColor(t),headerTint:U.tint(app.tableColor(t),.1)}) : {};
       var card = el('div', {
-        data: { name: t.name },
+        data: { name: t.name, fact: String(fact) },
         style: 'position:absolute;width:' + this.CARD_W + 'px;background:#fff;border:1px solid #e4e7ec;border-radius:' + (fact ? '7px' : '13px') +
           ';box-shadow:0 1px 2px rgba(20,30,50,.05),0 4px 12px rgba(20,30,50,.07);font-family:\'IBM Plex Sans\',sans-serif;overflow:hidden;transition:box-shadow .15s,opacity .15s,border-color .15s;'
       });
       var sm = app.srcMeta(t);
-      var head = el('div', { data: { head: '1' }, style: chrome.head || 'display:flex;align-items:flex-start;gap:9px;padding:10px 11px 10px 12px;cursor:grab;border-left:4px solid transparent;' });
+      var head = el('div', { data: { head: '1' }, style: 'position:relative;' + (chrome.head || 'display:flex;align-items:flex-start;gap:9px;padding:10px 11px 10px 12px;cursor:grab;border-left:4px solid transparent;') });
       var rmap = { fact: 'FACT', dim: 'DIM', helper: 'HLP', calcgroup: 'CG', fieldparam: 'FP', measures: 'M', standalone: 'STD', unknown: 'UNK' };
       var role = el('span', { text: rmap[t.role] || 'TBL', style: 'font:700 8.5px/1 "IBM Plex Mono",monospace;letter-spacing:.4px;padding:4px 5px;border-radius:4px;flex:none;color:#fff;margin-top:1px;' });
       var titleWrap = el('div', { style: chrome.titleWrap || 'flex:1;min-width:0;' });
-      var nm = el('div', { text: t.name, title: t.name, style: 'font:600 13.5px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:-.2px;color:#1f2430;word-break:break-word;' });
-      var src = el('div', {
+      var nm = el('div', { data:{title:'1'}, text: t.name, title: t.name, style: 'font:600 13.5px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:-.2px;color:#1f2430;word-break:break-word;' });
+      var src = el('div', { data:{src:'1'},
         title: sm.kind + (sm.detail && sm.detail !== '—' ? ' · ' + sm.detail : '') + (sm.via ? '\nvia ' + sm.via : '') + (sm.server ? '\n' + sm.server : ''),
         html: '<span style="margin-right:4px;opacity:.85;">' + sm.icon + '</span>' + U.esc(sm.detail && sm.detail !== '—' ? sm.detail : sm.kind),
         style: 'font:500 10px/1.4 "IBM Plex Mono",monospace;color:' + sm.color + ';overflow-wrap:anywhere;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;'
@@ -288,13 +288,13 @@
       caret.addEventListener('click', function (e) { e.stopPropagation(); self.toggleCard(t.name); });
       var lock = el('button', {
         title: 'Lock focus on this table — the highlight stays when you click elsewhere', html: U.icon('lock', 11),
-        style: 'flex:none;width:20px;height:20px;border:none;border-radius:5px;background:transparent;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;'
+        style: 'position:absolute;top:9px;right:57px;width:20px;height:20px;border:none;border-radius:5px;background:inherit;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;'
       });
       lock.addEventListener('mousedown', function (e) { e.stopPropagation(); });
       lock.addEventListener('click', function (e) { e.stopPropagation(); self.toggleLock(t.name); });
       var rm = el('button', {
         title: 'Remove ' + t.name + ' from this layout (Delete)', 'aria-label': 'Remove ' + t.name + ' from layout', html: '&times;',
-        style: 'flex:none;width:20px;height:20px;border:none;border-radius:5px;background:transparent;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;font:400 17px/1 "IBM Plex Sans",sans-serif;'
+        style: 'position:absolute;top:9px;right:35px;width:20px;height:20px;border:none;border-radius:5px;background:inherit;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;font:400 17px/1 "IBM Plex Sans",sans-serif;'
       });
       rm.addEventListener('mousedown', function (e) { e.stopPropagation(); });
       rm.addEventListener('click', function (e) { e.stopPropagation(); if (app.explorer) app.explorer.removeMany([t.name]); });
@@ -303,7 +303,7 @@
       var meta = el('div', { data: { meta: '1' }, style: chrome.meta || 'display:flex;align-items:center;gap:6px;padding:9px 11px 10px 16px;border-top:1px solid #eef0f3;' });
       var chip = function (num, label) {
         return el('span', {
-          html: '<b style="font-weight:600;color:#5b6472;">' + num + '</b> <span style="color:#9aa1ad;">' + label + '</span>',
+          html: '<b style="font-weight:600;color:var(--smv-muted,#5b6472);">' + num + '</b> <span style="color:var(--smv-muted,#9aa1ad);">' + label + '</span>',
           style: 'font:500 10px/1 "IBM Plex Mono",monospace;background:#f3f5f8;border-radius:5px;padding:4px 7px;'
         });
       };
@@ -351,18 +351,18 @@
             style: 'display:flex;align-items:center;gap:7px;width:100%;text-align:left;height:24px;padding:0 11px 0 14px;border:none;background:transparent;cursor:pointer;'
           });
           row.appendChild(el('span', {
-            html: '<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:#c9a3d6;"></span>',
+            html: '<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--smv-up-border,#c9a3d6);"></span>',
             style: 'flex:none;width:12px;display:flex;align-items:center;justify-content:center;'
           }));
           row.appendChild(el('span', {
-            text: m.name, style: 'flex:1;min-width:0;font:500 11px/1.3 "IBM Plex Mono",monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:' + (m.h ? '#b3b9c2' : '#7c2d92') + ';'
+            text: m.name, style: 'flex:1;min-width:0;font:500 11px/1.3 "IBM Plex Mono",monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:' + (m.h ? '#b3b9c2' : 'var(--smv-plum,#7c2d92)') + ';'
           }));
           if (m.h) row.appendChild(el('span', {
-            title: 'Hidden in the model (isHidden)', style: 'flex:none;display:flex;color:#9aa1ad;', html: U.icon('eyeOff', 10)
+            title: 'Hidden in the model (isHidden)', style: 'flex:none;display:flex;color:var(--smv-muted,#9aa1ad);', html: U.icon('eyeOff', 10)
           }));
           if (u) row.appendChild(el('span', {
             title: app.useTip(u), text: u.length + ' pg',
-            style: "flex:none;font:600 8.5px/1 'IBM Plex Mono',monospace;color:#2563eb;background:#f2f7ff;border:1px solid #d4e3fb;border-radius:4px;padding:2px 4px;cursor:help;"
+            style: "flex:none;font:600 8.5px/1 'IBM Plex Mono',monospace;color:var(--smv-burgundy,#2563eb);background:var(--smv-accent-soft,#f2f7ff);border:1px solid var(--smv-line,#d4e3fb);border-radius:4px;padding:2px 4px;cursor:help;"
           }));
           row.addEventListener('click', function (e) {
             e.stopPropagation();
@@ -478,6 +478,8 @@
       if (this.world) this.world.style.willChange = '';
     },
     updateTransform: function () {
+      // A camera changed by pan, zoom, focus or a saved view belongs to the reader.
+      if (!this._applyingFit) { this._autoFit = false; this._pendingFit = false; }
       this.holdLayer();
       if (this.world) this.world.style.transform = 'translate(' + this.view.x + 'px,' + this.view.y + 'px) scale(' + this.view.k + ')';
       this.applyLOD();
@@ -1021,6 +1023,18 @@
           seats.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t,
             orient: vertical ? 'v' : 'h', toA: toA, bare: bare });
         });
+        // Staggering can clamp all preferred seats against the same card. Search
+        // the remaining run before dropping cardinality, especially for parallel
+        // active/inactive relationships whose labels need different positions.
+        if (len >= need && !bare) {
+          var inset = L.w / 2 + L.m;
+          var count = Math.min(128, Math.max(1, Math.ceil((len - 2 * inset) / (8 * this.labelUnit()))));
+          for (var j = 0; j <= count; j++) {
+            var t = (inset + (len - 2 * inset) * j / count) / len;
+            seats.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t,
+              orient: vertical ? 'v' : 'h', toA: toA, bare: false });
+          }
+        }
       }
       if (!spots.length) spots = short;
       if (!spots.length) {
@@ -1454,6 +1468,7 @@
       Object.keys(this.cards).forEach(function (n) {
         var c = self.cards[n];
         var t = c.table; var col = app.tableColor(t); var fact = app.isFact(t);
+        c.el.setAttribute('data-fact', String(fact));
         var head = c.head, role = c.roleEl, caretSvg = c.caret.firstChild;
         if (c.rm) c.rm.style.color = fact ? 'rgba(255,255,255,.85)' : '#6b7280';
         head.style.boxShadow = 'none';
@@ -1510,9 +1525,9 @@
         });
         row.appendChild(el('span', { text: rmap[t.role] || 'TBL', style: 'font:700 8.5px/1 "IBM Plex Mono",monospace;letter-spacing:.4px;padding:4px 5px;border-radius:4px;color:#fff;background:' + col + ';flex:none;' }));
         row.appendChild(el('span', { style: 'flex:1;min-width:0;' }, [
-          el('span', { style: 'display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:#9aa1ad;font-weight:600;', text: label }),
+          el('span', { style: 'display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--smv-muted,#9aa1ad);font-weight:600;', text: label }),
           el('span', { style: 'display:block;font-size:12.5px;font-weight:600;color:#1f2430;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', text: t.name }),
-          el('span', { style: 'display:block;font:500 10.5px/1.3 "IBM Plex Mono",monospace;color:#5b6472;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;', text: colName })
+          el('span', { style: 'display:block;font:500 10.5px/1.3 "IBM Plex Mono",monospace;color:var(--smv-muted,#5b6472);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;', text: colName })
         ]));
         row.appendChild(el('span', { text: card, style: 'flex:none;width:24px;height:24px;border-radius:7px;background:#eef0f3;color:#1f2430;font:700 13px/24px "IBM Plex Sans",sans-serif;text-align:center;' }));
         return row;
@@ -1532,12 +1547,12 @@
         el('div', { style: 'display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#1f2430;white-space:nowrap;' }, [
           el('span', { text: self.cardText(r), style: 'min-width:0;overflow:hidden;text-overflow:ellipsis;' }),
           el('span', { style: 'flex:1;' }),
-          el('span', { text: r.both ? '⇄' : '→', style: 'font-size:14px;color:#5b6472;' })
+          el('span', { text: r.both ? '⇄' : '→', style: 'font-size:14px;color:var(--smv-muted,#5b6472);' })
         ]),
-        el('div', { style: 'font-size:11px;color:#5b6472;line-height:1.4;', text: dirTxt })
+        el('div', { style: 'font-size:11px;color:var(--smv-muted,#5b6472);line-height:1.4;', text: dirTxt })
       ]));
       pop.appendChild(tableRow(tt, r.toCol, r.toCard === 'many' ? '*' : '1', 'to'));
-      pop.appendChild(el('div', { style: 'padding:6px 12px 9px;font-size:10px;color:#9aa1ad;', text: 'Click a table to focus it · Esc closes' }));
+      pop.appendChild(el('div', { style: 'padding:6px 12px 9px;font-size:10px;color:var(--smv-muted,#9aa1ad);', text: 'Click a table to focus it · Esc closes' }));
       pop.style.display = 'block';
       this.positionRelPopover();
     },
@@ -1612,7 +1627,7 @@
           var c = self.cards[n];
           var isSel = sel === c.table.name;
           c.el.style.opacity = '1';
-          c.el.style.boxShadow = isSel ? '0 0 0 2px #2563eb,0 10px 26px rgba(37,99,235,.24)' : '0 1px 2px rgba(20,30,50,.05),0 3px 10px rgba(20,30,50,.06)';
+          c.el.style.boxShadow = isSel ? '0 0 0 2px var(--smv-burgundy,#2563eb),0 10px 26px var(--smv-accent-halo,rgba(37,99,235,.24))' : '0 1px 2px rgba(20,30,50,.05),0 3px 10px rgba(20,30,50,.06)';
           c.el.style.zIndex = isSel ? '6' : '';
         });
         this.refreshVisibility(); this.renderLines(); return;
@@ -1636,7 +1651,7 @@
         var isSel = sel === name, isPin = self.pinned.has(name), isLock = self.locked === name;
         var ring = SHADOW_BASE;
         if (isLock) ring = '0 0 0 2.5px ' + EDGE.lock + ',0 10px 26px rgba(31,36,48,.28)';
-        else if (isSel) ring = '0 0 0 2px ' + EDGE.out + ',0 10px 26px rgba(37,99,235,.24)';
+        else if (isSel) ring = '0 0 0 2px ' + EDGE.out + ',0 10px 26px var(--smv-accent-halo,rgba(37,99,235,.24))';
         else if (isPin) ring = '0 0 0 2px ' + EDGE.pin + ',0 8px 22px rgba(124,58,237,.2)';
         else if (dist && dist.get(name) === 1) ring = '0 0 0 1.5px ' + EDGE[side[name] || 'out'] + ',0 3px 10px rgba(20,30,50,.06)';
         else if (dist && dist.get(name) >= 2) ring = '0 0 0 1.5px ' + EDGE.hop + ',0 3px 10px rgba(20,30,50,.06)';
@@ -1657,7 +1672,7 @@
         b.style.display = 'flex'; b.style.background = EDGE.lock; b.style.color = '#fff';
         b.title = 'Unlock — stop keeping this table focused';
       } else {
-        b.style.display = 'none'; b.style.background = 'transparent';
+        b.style.display = 'none'; b.style.background = 'inherit';
         b.style.color = fact ? 'rgba(255,255,255,.85)' : '#6b7280';
         b.title = 'Lock focus on this table — the highlight stays when you click elsewhere';
       }
@@ -1695,10 +1710,46 @@
       return fitRect(size, boxes, 24);
     },
     fitView: function () {
-      var f = this.fitSolve();
+      this._autoFit = true;
+      this.watchSize();
+      this.refitView();
+      // The shell/iframe can finish mounting after the model-load microtask.
+      if (!this._fitFrame && typeof requestAnimationFrame === 'function') {
+        var self = this;
+        this._fitFrame = requestAnimationFrame(function () {
+          self._fitFrame = 0;
+          if (self._autoFit) self.refitView();
+        });
+      }
+    },
+    refitView: function () {
+      // Layout zoom controls lane spacing, not the recipient's camera minimum.
+      // Chip metrics stop growing at ZOOM_FLOOR, so smaller windows can still fit.
+      var f = this.fitSolve(null, 0.05);
       if (!f) return;
       this.view = f;
-      this.updateTransform();
+      this._applyingFit = true;
+      try {
+        this.updateTransform();
+        // The chip height is conservative (up to three title lines). Center the
+        // boxes actually mounted at the solved zoom, rather than that estimate.
+        if (!this.clusterOn && this.host.getBoundingClientRect) {
+          var base = this.host.getBoundingClientRect(), rect = this.viewportRect();
+          var boxes = Object.keys(this.cards).map(function (n) { return this.cards[n].el; }, this)
+            .filter(function (node) { return node.style.display !== 'none' && node.getBoundingClientRect; })
+            .map(function (node) { return node.getBoundingClientRect(); })
+            .filter(function (b) { return b.width && b.height; });
+          if (boxes.length) {
+            var left = Math.min.apply(null, boxes.map(function (b) { return b.left; }));
+            var right = Math.max.apply(null, boxes.map(function (b) { return b.right; }));
+            var top = Math.min.apply(null, boxes.map(function (b) { return b.top; }));
+            var bottom = Math.max.apply(null, boxes.map(function (b) { return b.bottom; }));
+            this.view.x += base.left + rect.x + rect.w / 2 - (left + right) / 2;
+            this.view.y += base.top + rect.y + rect.h / 2 - (top + bottom) / 2;
+            this.updateTransform();
+          }
+        }
+      } finally { this._applyingFit = false; }
     },
     /* The arithmetic behind Fit, with nothing applied: the view it WOULD land on. The arrange
        loop needs the answer before it commits, because the zoom the picture ends up shown at
@@ -1724,12 +1775,13 @@
       var rect = this.viewportRect();
       var availW = Math.max(200, rect.w), availH = Math.max(200, rect.h);
       /* A chip widens *and* grows taller as the zoom drops, so the bounds depend on the
-         answer. One refinement pass settles it: measure at the current zoom, then re-measure
-         at the zoom that came out of it — which is the zoom the cards will be drawn at. The
+         answer. Refine at the candidate zoom until stable (at most eight passes), which
+         is the zoom the cards will be drawn at. The
          candidate size has to be the size at that candidate zoom, never the stale measured
          one, or the second pass floors on the first and Fit never converges. */
       var k = startK || this.view.k, minX = 0, minY = 0, maxX = 0, maxY = 0, pass;
-      for (pass = 0; pass < 2; pass++) {
+      for (pass = 0; pass < (floor < ZOOM_FLOOR ? 8 : 2); pass++) {
+        var previousK = k;
         minX = 1e9; minY = 1e9; maxX = -1e9; maxY = -1e9;
         cards.forEach(function (c) {
           var p = self.gp(c.table.name); if (!p) return;
@@ -1744,10 +1796,10 @@
         });
         if (minX > maxX) return { x: 0, y: 0, k: 1 };
         var bw = Math.max(1, maxX - minX), bh = Math.max(1, maxY - minY);
-        /* Fit stops at the floor — and at the zoom the current positions were laid out for,
-           which is never below it. Zooming out past that is what makes the chips outgrow the
-           gaps between them; a picture that still does not fit is panned instead. */
+        /* Arrangement solves keep their lane zoom floor. The visible camera passes an
+           explicit lower floor so it can fit saved positions on a smaller recipient. */
         k = Math.max(floor, Math.min(1.25, Math.min(availW / bw, availH / bh)));
+        if (Math.abs(k - previousK) < 0.00001) break;
       }
       var cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
       return { k: k, x: rect.x + availW / 2 - cx * k, y: rect.y + availH / 2 - cy * k };
@@ -1791,7 +1843,8 @@
       var self = this;
       if (this._sizeWatch || typeof ResizeObserver !== 'function') return;
       this._sizeWatch = new ResizeObserver(function () {
-        if (self._pendingFit && self.host.clientWidth && self.host.clientHeight) self.fitView();
+        if (self._autoFit) self.refitView();
+        else if (self._pendingFit && self.host.clientWidth && self.host.clientHeight) self.fitView();
       });
       this._sizeWatch.observe(this.host);
     },

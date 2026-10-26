@@ -12,6 +12,34 @@ No install needed. The demo opens with a synthetic "Contoso Retail" model alread
 
 [![Semantic Model Viewer showing the Contoso Retail demo model: fact and dimension tables with their relationships on a canvas](docs/img/marketplace/tables.png)](https://MrPerfectH.github.io/Semantic-Model-Viewer/)
 
+## Watch the workflows
+
+[Full illustrated VS Code guide](https://github.com/MrPerfectH/Semantic-Model-Viewer/blob/main/docs/vscode-guide.md). These recordings use the synthetic Contoso Retail model. Select a video link to watch it in your browser.
+
+### Install and open a model
+
+[Watch installation — 10 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/install-extension.mp4) · [Watch opening a model and exploring DAX — 35 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/vscode-to-dax-v4.mp4)
+
+![Find the extension, install it, and choose a model](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/install-extension.gif)
+
+### Focus the table canvas
+
+[Watch the table workflow — 24 seconds](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/focus-tables.mp4)
+
+![Select a table and dim unrelated tables](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/dim-and-switch.gif)
+
+![Hide unrelated tables and arrange the focused canvas](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/hide-and-arrange.gif)
+
+### Follow a table into its measures and DAX
+
+![Find direct and indirect measures that depend on Sales](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/table-to-dependent-measures-v2.gif)
+
+![Inspect a dependent measure and double-click to analyze it](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/select-dependent-measure-v3.gif)
+
+![Expand referenced measures with Inline measures](https://raw.githubusercontent.com/MrPerfectH/Semantic-Model-Viewer/1bdb507f88d4c16df39b04f341e918a60cd4a940/docs/media/vscode-guide/inline-dax-v2.gif)
+
+The installation recording shows 0.3.9; its installation steps still apply. Feature recordings were made during development and demonstrate features available in stable 0.4.0 and newer.
+
 ## Why use it
 
 * **Explore tables and relationships.** Build a canvas of just the tables you care about, with a star
@@ -79,11 +107,16 @@ can create another one. Close extra windows normally; your saved models and layo
 
 ### VS Code
 
-Download `semantic-model-viewer-<version>.vsix` from the
-[Releases page](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases), then in VS Code run
-**Extensions: Install from VSIX…** from the Command Palette (or
-`code --install-extension <file>.vsix`). Details: [vscode-extension/README.md](vscode-extension/README.md).
-To update, install the newer `.vsix`.
+[VS Code quick start, installation instructions, and short videos](docs/vscode-guide.md).
+
+Install **Semantic Model Viewer** by **MrPerfectH** from the
+[VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer).
+VS Code delivers updates through its normal extension update mechanism.
+
+For manual installation, download the latest VSIX from
+[GitHub Releases](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/latest)
+and run **Extensions: Install from VSIX…**. See the
+[extension README](vscode-extension/README.md) for details.
 
 ### Online demo
 
@@ -100,6 +133,14 @@ no npm install. The live app uses Google Fonts for IBM Plex Sans/Mono (cached af
 first visit; the system font is used if they cannot be loaded) and loads the PNG export
 library on demand. Interactive snapshots bundle their own scripts/styles, use system fonts,
 and run entirely offline.
+
+Use the **Appearance** selector in the top bar to switch between **Classic** and
+**Spellbook**, a parchment theme with burgundy controls and book-inspired headings.
+Spellbook uses a coordinated olive, muted-plum and antique-gold palette across all five
+views, including table badges, measure dependencies and Power Query. The Classic
+Muted/Vivid palette preference is retained when switching back.
+The choice is remembered in your browser or VS Code workspace. Interactive snapshots
+include the chosen theme and its artwork; changing it in a snapshot stays in that tab.
 
 ```
 Models/tools/viewer/
@@ -149,7 +190,7 @@ Open your model, choose the starting view, and click **Save snapshot**. Share th
 single downloaded HTML file. The recipient opens it in a desktop browser and can
 explore **Tables, Measures, Domains, and Matrix** without installing anything or
 connecting to the semantic model. Saved table views, formulas, comparisons, focus,
-layout preferences, and graph positions travel with the file.
+layout preferences, appearance, and graph positions travel with the file.
 
 ### Generate a snapshot from TMDL
 
@@ -162,6 +203,13 @@ node bin/smv.cjs snapshot "Models/demo/Contoso Retail.SemanticModel" --out snaps
 Open the file in a browser to explore the model. Optionally use `--tables` or
 `--measure` to choose the starting view; the full model remains available.
 No extra packages or browser are needed to export. See [CLI usage](docs/cli.md).
+
+To open a fresh view directly from TMDL, use
+`node scripts/open-model.cjs "/absolute/path/Model.SemanticModel"`.
+It generates a new offline snapshot on every launch, validates relationship
+endpoints, and records the model source and Viewer revision beside the HTML.
+It avoids copied web assets and stale local servers. See the
+[launch and installation instructions](docs/cli.md#open-a-fresh-local-view).
 
 A snapshot contains the **full model metadata and DAX**, even if the starting canvas
 is empty or focused on a few tables. It is frozen at the displayed creation time.
@@ -205,7 +253,7 @@ See how queries, parameters, functions, and table partitions feed each other. Fo
 | --- | --- |
 | [![Environment, StartYear, and RawSales feed StageSales, with ServerName upstream of RawSales](docs/img/marketplace/power-query-flow.png)](docs/img/marketplace/power-query-flow.png) | [![StageSales input flow beside its inputs, consumer, and complete read-only M expression](docs/img/marketplace/power-query-inspector.png)](docs/img/marketplace/power-query-inspector.png) |
 
-Links come from static analysis of M. No query runs and no source data is read. Unconfirmed links remain explicit; raw M is excluded from shared snapshots.
+Links come from static analysis of M. No query runs and no source data is read. Unconfirmed links remain explicit; available Power Query definitions are included in shared snapshots.
 
 ### Additional (Domains and Matrix)
 
@@ -412,6 +460,31 @@ State that persists in `localStorage`: `lsa_model_layout_v1` (built-in model car
 positions), `smv_layout_<id>` / `smv_presets_<id>` (imported models), `smv_models_v1`,
 `smv_current_v1`, `smv-detail`, `smv-layout`, `smv-lines`, `smv-mvw`, `smv_repo_name`,
 `smv_repo_cache`, `smv-measures-workspace-v1`.
+
+### Table and column references in measure dependencies
+
+The Measures graph defaults to measures only. Enable **Show table and column references**
+to add source tables, using the same colors as the Tables canvas. Cards contain only the
+columns connected to measures visible in the graph. A dashed **Whole table** link attaches
+to the table header (for example, `COUNTROWS(Sales)`); a solid column link attaches to its
+row (for example, `SUM(Sales[Amount])`). A measure's home table does not imply a dependency.
+
+Select a source table header to find measures referencing that table or any of its columns.
+Select a column row to narrow the source. The table details drawer also provides
+**Find dependent measures**, and each column has **Find measures**. Source analysis includes
+indirect dependents through measures, a **Direct only** filter, and searchable results.
+Selecting a dependent measure inspects its DAX without changing the source; **Analyze this
+measure** returns to measure analysis. Source selection, graph settings, and inspected DAX
+are preserved in interactive snapshots.
+
+This is static DAX reference detection, not complete engine lineage. Calculated columns
+and calculated tables can be sources, but their defining expressions are not expanded.
+Relationship filter propagation and calculation-item expressions are not traced. Qualified
+column references and explicit table references are resolved against the model; unqualified
+bracket names resolve to measures first, then columns in the measure's home table. Ambiguous
+row-context references outside that table and virtual columns are not fully resolved.
+Graphs are limited to 500 measures and 200 source table/column rows, with visible notices;
+dependent-measure lists show up to 120 matches at once and can be narrowed by search.
 
 ## Regression checks
 

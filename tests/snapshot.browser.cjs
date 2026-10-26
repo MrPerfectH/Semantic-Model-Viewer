@@ -16,7 +16,7 @@ async function openBrowser() {
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'smv-snapshot-'));
   const child = spawn(chrome, ['--headless=new', '--remote-debugging-port=0', '--no-first-run', '--no-default-browser-check', '--disable-background-networking', '--disable-sync', '--disable-extensions', '--user-data-dir=' + profile, 'about:blank'], { stdio: ['ignore', 'ignore', 'pipe'] });
   const endpoint = await new Promise((resolve, reject) => {
-    let output = ''; const timer = setTimeout(() => reject(new Error('Chrome did not start: ' + output)), 15000);
+    let output = ''; const timer = setTimeout(() => { child.kill('SIGKILL'); reject(new Error('Chrome did not start: ' + output)); }, 30000);
     child.stderr.on('data', chunk => { output += chunk; const match = output.match(/DevTools listening on (ws:\/\/\S+)/); if (match) { clearTimeout(timer); resolve(match[1]); } });
     child.once('error', error => { clearTimeout(timer); reject(error); });
     child.once('exit', code => { clearTimeout(timer); reject(new Error('Chrome exited during startup: ' + code + ' ' + output)); });
@@ -33,7 +33,16 @@ async function openBrowser() {
   } const promise = waiting.get(data.id); if (!promise) return; waiting.delete(data.id); data.error ? promise.reject(new Error(data.error.message)) : promise.resolve(data.result); });
   const send = (method, params = {}) => new Promise((resolve, reject) => { const seq = ++id; waiting.set(seq, {resolve,reject}); socket.send(JSON.stringify({id:seq,method,params})); });
   const evaluate = async expression => { const result = await send('Runtime.evaluate', {expression, awaitPromise:true, returnByValue:true}); if (result.exceptionDetails) throw new Error(result.exceptionDetails.text + ': ' + JSON.stringify(result.exceptionDetails.exception)); return result.result.value; };
-  return { send, evaluate, downloads, async close() { socket.close(); child.kill('SIGTERM'); await new Promise(resolve => child.once('exit', resolve)); fs.rmSync(profile, {recursive:true,force:true}); } };
+  return { send, evaluate, downloads, async close() {
+    if (child.exitCode === null && child.signalCode === null) await new Promise(resolve => {
+      const timeout = setTimeout(() => child.kill('SIGKILL'), 5000);
+      child.once('exit', () => { clearTimeout(timeout); resolve(); });
+      if (socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify({id:++id,method:'Browser.close'}));
+      else child.kill('SIGTERM');
+    });
+    socket.close();
+    await fs.promises.rm(profile, {recursive:true,force:true,maxRetries:10,retryDelay:100});
+  } };
 }
 
 
@@ -52,8 +61,9 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
     catch {res.writeHead(404);res.end('Not found');}
   });
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
-  const browser=await openBrowser();
-  t.after(async()=>{await browser.close();if(server.listening)await new Promise(resolve=>server.close(resolve));fs.rmSync(downloadDir,{recursive:true,force:true});});
+  let browser;
+  t.after(async()=>{try{if(browser)await browser.close();}finally{server.closeAllConnections();if(server.listening)await new Promise(resolve=>server.close(resolve));fs.rmSync(downloadDir,{recursive:true,force:true});}});
+  browser=await openBrowser();
   await browser.send('Page.enable');
   await browser.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
   await browser.send('Browser.setDownloadBehavior',{behavior:'allowAndName',downloadPath:downloadDir,eventsEnabled:true});

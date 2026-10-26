@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.9 — Fabric Preview (unreleased)
+## 0.5.0 — Fabric Preview (unreleased)
 
 - Require VS Code 1.101 or later for the Fabric host runtime. — Fabric feature branch
 
@@ -11,6 +11,36 @@
 - Package self-contained XMLA helpers with component notices; use metadata-only consumer fallback when full definitions are unavailable.
 - Reject token renewal into a different tenant and require explicit selection when multiple cached accounts are present.
 - Standard login and live XMLA opening tested on macOS, Linux x64 and Windows x64. Controlled permission/fidelity checks and public standalone distribution acceptance remain open.
+
+## 0.4.3
+
+- Keep cardinality and filter-direction labels visible on parallel relationships when there is space elsewhere along the line, including inactive relationships. Preserve collision avoidance and the compact arrow view at low zoom.
+
+## 0.4.2
+
+- Add animated workflow GIFs, video links, and the illustrated VS Code guide to the extension README shown in VS Code and Marketplace.
+
+## 0.4.1
+
+- Keep the Measures overview visible while searching or filtering. Open matching formulas in an optional dialog with the same syntax colors and reference navigation as the Measures workspace.
+
+## 0.4.0
+
+- Analyze a table or column to find directly and indirectly dependent measures. Filter to direct references, search the results, and inspect a formula while keeping the source selected.
+- Follow colored table, column and measure reference chips from original or inlined DAX. Each formula card shows its own references.
+- Browse filtered measures with a formula overview.
+- Preserve source analysis, inspected formula, display preferences and graph viewport in interactive HTML snapshots. Snapshots without saved Explore settings start with directly connected tables, including inactive relationships.
+- Keep table cards the same height on hover so relationship lines stay attached.
+- Keep at least 240 pixels of graph canvas in stacked Measures layouts, with DAX reachable by scrolling and an accurate narrow-layout label.
+- Unify the Spellbook palette across workspaces and simplify the Tables toolbar.
+
+Dependency analysis reads static DAX references; it does not execute DAX or follow calculated-column/table defining expressions or relationship filter propagation. The existing snapshot CLI remains available. Guided onboarding, agent sessions and visual explanations, MCP/inline apps, and Power BI External Tools installation are not part of this release.
+
+## 0.3.9
+
+- Add an optional Spellbook theme with parchment surfaces and burgundy accents. Use the Classic dropdown in the top toolbar to select Spellbook.
+- Remember the selected theme and preserve it in offline snapshots.
+- Include Power Query definitions and workspace state in offline snapshots.
 
 ## 0.3.8
 

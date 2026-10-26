@@ -2,7 +2,7 @@
   "name": "semantic-model-viewer",
   "displayName": "Semantic Model Viewer",
   "description": "Explore Power BI semantic models: tables and relationships, measure dependencies and DAX, and Power Query lineage. Save interactive HTML snapshots for offline sharing.",
-  "version": "0.3.9",
+  "version": "0.5.0",
   "license": "MIT",
   "publisher": "MrPerfectH",
   "repository": {

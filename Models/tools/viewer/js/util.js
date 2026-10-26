@@ -9,7 +9,7 @@
     Object.keys(props).forEach(function (k) {
       var v = props[k];
       if (v == null || v === false) return;
-      if (k === 'style') node.style.cssText = v;
+      if (k === 'style') node.style.cssText = g.ViewerTheme ? g.ViewerTheme.inlineStyle(v) : v;
       else if (k === 'text') node.textContent = v;
       else if (k === 'html') node.innerHTML = v;
       else if (k === 'cls') node.className = v;

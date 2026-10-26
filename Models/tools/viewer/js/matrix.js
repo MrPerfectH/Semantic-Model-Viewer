@@ -48,12 +48,12 @@
     var inner = el('div', { style: 'padding:28px 30px 36px;width:max-content;min-width:100%;' });
     wrap.appendChild(inner); this.host.appendChild(wrap); this.el = wrap;
 
-    inner.appendChild(el('div', { text: 'MODEL STRUCTURE', style: 'font-size:10px;font-weight:700;letter-spacing:1.3px;color:#687991;' }));
+    inner.appendChild(el('div', { text: 'MODEL STRUCTURE', style: 'font-size:10px;font-weight:700;letter-spacing:1.3px;color:var(--smv-muted,#687991);' }));
     inner.appendChild(el('h1', { text: 'Fact relationship matrix', style: 'margin:7px 0 8px;font-size:25px;font-weight:600;letter-spacing:-.7px;color:#182943;' }));
     inner.appendChild(el('p', { text: 'Fact tables × related tables across the full model. This view is independent of your diagram layout.', style: 'margin:0 0 20px;font-size:12px;line-height:1.6;color:#65748a;max-width:720px;' }));
     if (!mx) {
-      inner.appendChild(el('div', { style: 'max-width:620px;padding:26px;border:1px solid #dfe6f0;border-radius:14px;background:#fff;' }, [
-        el('h2', { text: 'No connected fact tables', style: 'margin:0 0 10px;font-size:17px;color:#263951;' }),
+      inner.appendChild(el('div', { style: 'max-width:620px;padding:26px;border:1px solid var(--smv-line,#dfe6f0);border-radius:14px;background:#fff;' }, [
+        el('h2', { text: 'No connected fact tables', style: 'margin:0 0 10px;font-size:17px;color:var(--smv-ink,#263951);' }),
         el('p', { text: 'This matrix uses tables classified as Fact that have at least one relationship. Explore every table in the table workspace, or review the rules used to classify your model.', style: 'margin:0 0 18px;font-size:13px;line-height:1.7;color:#65748a;' }),
         el('div', { style: 'display:flex;flex-wrap:wrap;gap:8px;' }, [
           el('button', { cls: 'ex-button ex-primary', text: 'Explore tables', onClick: function () { app.setViewMode('graph'); } }),
@@ -91,26 +91,26 @@
     mx.rowTables.forEach(function (t) {
       var rc = mx.cellMap[t.name];
       var row = el('tr', { cls: 'hv-eef2f7' });
-      row.appendChild(el('th', { scope: 'row', style: 'position:sticky;left:0;z-index:2;background:#fff;border-bottom:1px solid #edf1f6;padding:0;' }, el('button', {
+      row.appendChild(el('th', { scope: 'row', style: 'position:sticky;left:0;z-index:2;background:#fff;border-bottom:1px solid var(--smv-line,#edf1f6);padding:0;' }, el('button', {
         title: 'Open ' + t.name + ' in the table diagram', 'aria-label': 'Open related table ' + t.name + ' in the diagram', onClick: openT(t.name),
         style: 'display:flex;align-items:center;gap:8px;height:40px;width:100%;padding:0 12px;border:none;background:transparent;cursor:pointer;text-align:left;'
       }, [
         el('span', { style: 'width:9px;height:9px;border-radius:50%;background:' + app.tableColor(t) + ';flex:none;' }),
-        el('span', { text: t.name, style: "flex:1;min-width:0;font:500 11.5px/1 'IBM Plex Sans',sans-serif;color:#2b3140;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" }),
-        el('span', { text: String(Object.keys(rc).length), title: 'Connected fact tables', style: "font:500 10px/1 'IBM Plex Mono',monospace;color:#72829a;flex:none;" })
+        el('span', { text: t.name, style: "flex:1;min-width:0;font:500 11.5px/1 'IBM Plex Sans',sans-serif;color:var(--smv-ink,#2b3140);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" }),
+        el('span', { text: String(Object.keys(rc).length), title: 'Connected fact tables', style: "font:500 10px/1 'IBM Plex Mono',monospace;color:var(--smv-muted,#72829a);flex:none;" })
       ])));
       mx.facts.forEach(function (f, i) {
         var rels = rc[i];
         if (!rels) {
-          row.appendChild(el('td', { 'aria-label': 'No direct relationship', style: 'border-bottom:1px solid #edf1f6;text-align:center;padding:0;' },
-            el('span', { 'aria-hidden': 'true', text: '·', style: 'color:#c9d3e1;' })));
+          row.appendChild(el('td', { 'aria-label': 'No direct relationship', style: 'border-bottom:1px solid var(--smv-line,#edf1f6);text-align:center;padding:0;' },
+            el('span', { 'aria-hidden': 'true', text: '·', style: 'color:var(--smv-line,#c9d3e1);' })));
           return;
         }
-        var dot = "width:16px;height:16px;border-radius:50%;background:#2563eb;display:flex;align-items:center;justify-content:center;font:700 9px/1 'IBM Plex Mono',monospace;color:#fff;";
-        if (rels.every(function (x) { return x.inactive; })) dot = 'width:16px;height:16px;border-radius:50%;background:transparent;border:2px dashed #94a3b8;display:flex;align-items:center;justify-content:center;color:#52647d;font-size:9px;';
-        else if (rels.some(function (x) { return x.both; })) dot += 'box-shadow:0 0 0 3px rgba(37,99,235,.22);';
+        var dot = "width:16px;height:16px;border-radius:50%;background:var(--smv-burgundy,#2563eb);display:flex;align-items:center;justify-content:center;font:700 9px/1 'IBM Plex Mono',monospace;color:#fff;";
+        if (rels.every(function (x) { return x.inactive; })) dot = 'width:16px;height:16px;border-radius:50%;background:transparent;border:2px dashed var(--smv-muted,#94a3b8);display:flex;align-items:center;justify-content:center;color:#52647d;font-size:9px;';
+        else if (rels.some(function (x) { return x.both; })) dot += 'box-shadow:0 0 0 3px var(--smv-accent-halo,rgba(37,99,235,.22));';
         var title = rels.map(function (x) { return x.from + '[' + x.fromCol + '] = ' + x.to + '[' + x.toCol + '] · ' + (x.inactive ? 'inactive' : 'active') + ' · ' + (x.both ? 'bidirectional filtering' : x.to + ' filters ' + x.from); }).join('\n');
-        row.appendChild(el('td', { style: 'border-bottom:1px solid #edf1f6;padding:0;' }, el('button', {
+        row.appendChild(el('td', { style: 'border-bottom:1px solid var(--smv-line,#edf1f6);padding:0;' }, el('button', {
           title: title, 'aria-label': t.name + ' and ' + f.name + ': ' + rels.length + ' relationship' + (rels.length === 1 ? '' : 's') + '. ' + title + '. Open ' + t.name + ' in the diagram.', onClick: openT(t.name),
           style: 'border:none;background:transparent;height:40px;width:100%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;'
         }, el('span', { 'aria-hidden': 'true', style: dot, text: rels.length > 1 ? String(rels.length) : '' }))));
