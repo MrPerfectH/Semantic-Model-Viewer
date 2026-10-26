@@ -1022,6 +1022,18 @@
           seats.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t,
             orient: vertical ? 'v' : 'h', toA: toA, bare: bare });
         });
+        // Staggering can clamp all preferred seats against the same card. Search
+        // the remaining run before dropping cardinality, especially for parallel
+        // active/inactive relationships whose labels need different positions.
+        if (len >= need && !bare) {
+          var inset = L.w / 2 + L.m;
+          var count = Math.min(128, Math.max(1, Math.ceil((len - 2 * inset) / (8 * this.labelUnit()))));
+          for (var j = 0; j <= count; j++) {
+            var t = (inset + (len - 2 * inset) * j / count) / len;
+            seats.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t,
+              orient: vertical ? 'v' : 'h', toA: toA, bare: false });
+          }
+        }
       }
       if (!spots.length) spots = short;
       if (!spots.length) {
