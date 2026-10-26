@@ -43,3 +43,8 @@ For manual view work use `session add-view "<state>" --name "<label>" --view "<v
 `session list` finds managed sessions; an older runtime produces a warning. Do not terminate someone’s exploration to upgrade it: use `--new-session` when needed. Stop temporary sessions explicitly. `/semantic-model-viewer:stop` supports managed-session cleanup. Background sessions outlive conversations.
 
 Read `${CLAUDE_PLUGIN_ROOT}/docs/cli-plugin-workflow.md` for detailed commands. No model queries execute. Metadata provided to Claude follows its configured provider's data handling.
+
+
+If the user identifies a Fabric workspace and model rather than local files, use `smv show --workspace "<workspace>" --model "<model>" --table "<table>"` or `smv fetch --workspace "<workspace>" --model "<model>"`. This reuses an existing Azure CLI login; the plugin never signs in or stores credentials. Definition retrieval requires edit access, not just Read + Build. On access failure explain the limitation and offer a local TMDL/BIM source. Never ask for tokens in chat. Consult `${CLAUDE_PLUGIN_ROOT}/docs/cli-workspace-fetch.md`.
+
+Use `--open none` for a host browser pane; explicitly invoke the host's own display tool with the returned URL/file. Use `--open system` only when the user wants the machine's browser/application. Respect `SMV_OPENER`. A successful launcher is not a rendered acknowledgement. Show the diagram's source identity and fetch time when relevant; unchanged local files do not prove the remote model is current. Export receipts include content/model/renderer/artifact hashes and identify full-model HTML metadata.

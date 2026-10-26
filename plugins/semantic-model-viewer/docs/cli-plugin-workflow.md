@@ -207,3 +207,8 @@ Compact `relations` reports `filtersRoot` and `filteredByRoot` for each neighbou
 Compact `dependents` returns one shortest `via` chain per indirect measure, ending at a direct reference to the selected table; other chains may exist. `dependents --table Sales --measure "Gross Margin %" --details` returns only that calculation and its DAX. Counts cover all dependents while `returned` counts the selected results. These are static references, not evaluated DAX or relationship propagation.
 
 The Measures view's table/relationship counts describe its background table canvas, not the calculation graph. `dependentMeasures` describes its selected source; `renderedSummary.measureGraphNodes` counts measure nodes and excludes the virtual table/column source card. Zero dependent measures is a valid result; `show` explains why that diagram is nearly empty.
+
+
+## Workspace downloads, opening preferences and receipts
+
+See [fetching a workspace model](cli-workspace-fetch.md). `smv fetch --workspace <name|UUID> --model <name|UUID>` downloads a definition for offline use. `show --workspace … --model … --table …` combines the fetch and diagram. Use `--open none|system`, `--opener <executable>`, or `SMV_OPENER` to control presentation. Exported diagrams have a sibling provenance receipt with source, renderer and artifact hashes.

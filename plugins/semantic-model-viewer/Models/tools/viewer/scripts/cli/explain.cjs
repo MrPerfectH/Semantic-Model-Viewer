@@ -19,6 +19,7 @@ function reportUsage(report,model){
   }finally{fs.rmSync(dir,{recursive:true,force:true});}
 }
 function prepare(source,input,options={}){
+  const sourceContentHash=require('./provenance.cjs').contentHash(source);
   const context=runtime(),{model,app}=readModel(context,source),view=validate(model,input);
   const focus={tables:view.tables || model.tables.map(t=>t.name),measure:view.mode==='measures'&&view.focus&&view.focus.kind==='measure'?view.focus.name:null};
   let html=snapshot(context,app,focus,{usage:options.report?reportUsage(options.report,model):null});
@@ -31,13 +32,13 @@ function prepare(source,input,options={}){
   const root=path.resolve(__dirname,'../..');
   [...context.Snapshots.files,'index.html','js/explanation-view.js','js/interactive-view.js','scripts/cli/explain.cjs','scripts/cli/results.cjs','scripts/cli/model.cjs','scripts/cli/capture.cjs'].sort().forEach(file=>rendererHash.update(file).update(fs.readFileSync(path.join(root,file))));
   const renderer={format:'smv-explanation',version:1,sha256:rendererHash.digest('hex')};
-  return {html,view,model,analysis:app,summary:require('./query.cjs').summary(model,app,view),renderer,hash:crypto.createHash('sha256').update(JSON.stringify(context.Snapshots.modelData(model))).digest('hex')};
+  return {html,view,model,analysis:app,sourceContentHash,provenance:require('./provenance.cjs').describe(source),summary:require('./query.cjs').summary(model,app,view),renderer,hash:crypto.createHash('sha256').update(JSON.stringify(context.Snapshots.modelData(model))).digest('hex')};
 }
 async function shot(source,input,output,options={}){
   if(path.extname(output).toLowerCase()!=='.png')throw new Error('Image output must use .png');
   if(fs.existsSync(output)&&!options.force)throw new Error('Output exists; use --force: '+output);
   const p=prepare(source,input,options);fs.mkdirSync(path.dirname(path.resolve(output)),{recursive:true});
-  const result=await capture(p.html,output,p.view,options);return {...result,modelHash:p.hash,renderer:p.renderer};
+  let result;const evidence=await require('./provenance.cjs').publish(source,p,output,options,async candidate=>{result=await capture(p.html,candidate,p.view,options);});return {...result,path:path.resolve(output),modelHash:p.hash,renderer:p.renderer,...evidence};
 }
 function validateExplanation(spec){
   if(!spec || spec.version!==1)throw new Error('Explanation version must be 1');

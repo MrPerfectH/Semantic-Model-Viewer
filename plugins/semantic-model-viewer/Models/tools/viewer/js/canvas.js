@@ -269,7 +269,7 @@
           ';box-shadow:0 1px 2px rgba(20,30,50,.05),0 4px 12px rgba(20,30,50,.07);font-family:\'IBM Plex Sans\',sans-serif;overflow:hidden;transition:box-shadow .15s,opacity .15s,border-color .15s;'
       });
       var sm = app.srcMeta(t);
-      var head = el('div', { data: { head: '1' }, style: chrome.head || 'display:flex;align-items:flex-start;gap:9px;padding:10px 11px 10px 12px;cursor:grab;border-left:4px solid transparent;' });
+      var head = el('div', { data: { head: '1' }, style: 'position:relative;' + (chrome.head || 'display:flex;align-items:flex-start;gap:9px;padding:10px 11px 10px 12px;cursor:grab;border-left:4px solid transparent;') });
       var rmap = { fact: 'FACT', dim: 'DIM', helper: 'HLP', calcgroup: 'CG', fieldparam: 'FP', measures: 'M', standalone: 'STD', unknown: 'UNK' };
       var role = el('span', { text: rmap[t.role] || 'TBL', style: 'font:700 8.5px/1 "IBM Plex Mono",monospace;letter-spacing:.4px;padding:4px 5px;border-radius:4px;flex:none;color:#fff;margin-top:1px;' });
       var titleWrap = el('div', { style: chrome.titleWrap || 'flex:1;min-width:0;' });
@@ -288,13 +288,13 @@
       caret.addEventListener('click', function (e) { e.stopPropagation(); self.toggleCard(t.name); });
       var lock = el('button', {
         title: 'Lock focus on this table — the highlight stays when you click elsewhere', html: U.icon('lock', 11),
-        style: 'flex:none;width:20px;height:20px;border:none;border-radius:5px;background:transparent;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;'
+        style: 'position:absolute;top:9px;right:57px;width:20px;height:20px;border:none;border-radius:5px;background:inherit;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;'
       });
       lock.addEventListener('mousedown', function (e) { e.stopPropagation(); });
       lock.addEventListener('click', function (e) { e.stopPropagation(); self.toggleLock(t.name); });
       var rm = el('button', {
         title: 'Remove ' + t.name + ' from this layout (Delete)', 'aria-label': 'Remove ' + t.name + ' from layout', html: '&times;',
-        style: 'flex:none;width:20px;height:20px;border:none;border-radius:5px;background:transparent;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;font:400 17px/1 "IBM Plex Sans",sans-serif;'
+        style: 'position:absolute;top:9px;right:35px;width:20px;height:20px;border:none;border-radius:5px;background:inherit;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;font:400 17px/1 "IBM Plex Sans",sans-serif;'
       });
       rm.addEventListener('mousedown', function (e) { e.stopPropagation(); });
       rm.addEventListener('click', function (e) { e.stopPropagation(); if (app.explorer) app.explorer.removeMany([t.name]); });
@@ -1235,10 +1235,10 @@
       var g = sv('g', { transform: 'translate(' + spot.x.toFixed(1) + ',' + spot.y.toFixed(1) + ') scale(' + u.toFixed(4) + ')', opacity: op, style: 'pointer-events:none;' });
       g.appendChild(sv('rect', {
         x: -(vert ? H : W) / 2, y: -(vert ? W : H) / 2, width: vert ? H : W, height: vert ? W : H, rx: H / 2,
-        fill: filled ? col : '#fff', stroke: col, 'stroke-width': heavy ? 1.7 : 1.3,
+        fill: filled ? col : (window.ViewerTheme ? window.ViewerTheme.paint('surface', '#fff') : '#fff'), stroke: col, 'stroke-width': heavy ? 1.7 : 1.3,
         'stroke-dasharray': r.inactive ? '3 2.5' : null
       }));
-      var ink = filled ? '#fff' : col;
+      var ink = filled ? (window.ViewerTheme ? window.ViewerTheme.contrastText(col, '#fff') : '#fff') : col;
       /* `s` is a distance along the line, positive towards table A */
       var along = function (s) { return 'translate(' + (vert ? 0 : s).toFixed(1) + ',' + (vert ? s : 0).toFixed(1) + ')'; };
       var glyph = function (ch, s) {
@@ -1288,7 +1288,9 @@
     },
     /* Drawing-only width policy shared with the Power Query canvas. */
     edgeStrokeWidth: function (zoom, isSel, active, hop, chip) {
-      var thin = Math.max(1.15, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : 1.15))) / zoom;
+      var hosted = g.SMVHost && g.SMVHost.kind === 'vscode';
+      var floor = hosted && ['dark', 'high-contrast'].includes(g.SMVHost.theme) ? 1.5 : 1.15;
+      var thin = Math.max(floor, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : floor))) / zoom;
       return Math.max(thin, isSel ? (chip ? 4.4 : 3.4) : (active ? (chip ? 3.4 : 2.6) : (hop ? (chip ? 2.8 : 2) : (chip ? 2.2 : 1.4))));
     },
     renderLines: function () {
@@ -1350,11 +1352,12 @@
            the focused ones are drawn heavier so the selection reads at a glance */
         var baseW = self.edgeStrokeWidth(self.view.k, isSel, active, hop, chip);
         if (active || hop || isSel) {
-          self.svg.appendChild(sv('path', { d: d, fill: 'none', stroke: '#fff', 'stroke-width': baseW * 2.1, 'stroke-linecap': 'round', opacity: 0.95 }));
+          self.svg.appendChild(sv('path', { d: d, fill: 'none', stroke: g.ViewerTheme ? g.ViewerTheme.paint('paper', '#fff') : '#fff', 'stroke-width': baseW * 2.1, 'stroke-linecap': 'round', opacity: 0.95 }));
         }
         var path = sv('path', { d: d, fill: 'none', stroke: col, 'stroke-width': baseW, 'stroke-linecap': 'round', style: 'pointer-events:none;' });
         if (r.inactive) path.setAttribute('stroke-dasharray', (baseW * 1.9).toFixed(1) + ' ' + (baseW * 1.6).toFixed(1));
-        var baseOp = dim ? 0.12 : ((active || isSel) ? 1 : (hop ? 0.9 : (r.inactive ? (chip ? 0.68 : 0.6) : (chip ? 0.82 : 0.72))));
+        var hostedDark = g.SMVHost && g.SMVHost.kind === 'vscode' && ['dark', 'high-contrast'].includes(g.SMVHost.theme);
+        var baseOp = dim ? 0.12 : ((active || isSel) ? 1 : (hop ? 0.9 : (r.inactive ? (hostedDark ? 0.84 : (chip ? 0.68 : 0.6)) : (hostedDark ? 0.96 : (chip ? 0.82 : 0.72)))));
         path.setAttribute('opacity', baseOp);
         path.setAttribute('data-smv-kind', 'relationship');
         path.setAttribute('data-smv-name', r.name || '');
@@ -1362,7 +1365,7 @@
         var op = dim ? 0.12 : 1;
         var dot = Math.max(2.6 / self.view.k, active || isSel ? 3.4 : 2.6);
         self.svg.appendChild(sv('circle', { cx: g0.ax, cy: g0.ay, r: dot, fill: col, opacity: op }));
-        self.svg.appendChild(sv('circle', { cx: g0.bx, cy: g0.by, r: dot * 1.18, fill: '#fff', stroke: col, 'stroke-width': Math.max(1.6 / self.view.k, active || isSel ? 2 : 1.6), opacity: op }));
+        self.svg.appendChild(sv('circle', { cx: g0.bx, cy: g0.by, r: dot * 1.18, fill: g.ViewerTheme ? g.ViewerTheme.paint('surface', '#fff') : '#fff', stroke: col, 'stroke-width': Math.max(1.6 / self.view.k, active || isSel ? 2 : 1.6), opacity: op }));
         /* a wide invisible stroke is the click / hover target — the visible line is thin */
         var hit = sv('path', { d: d, fill: 'none', stroke: 'rgba(0,0,0,0)', 'stroke-width': Math.max(chip ? 22 : 16, 16 / self.view.k), 'stroke-linecap': 'round', style: 'pointer-events:stroke;cursor:pointer;' });
         var hoverOn = function (e) {
@@ -1383,8 +1386,8 @@
         bind(hit);
         item.hit = hit;
         if (!dim) {
-          var ink = kind === 'base' && !isSel ? '#7d8593' : col;
-          var op2 = active || hop || isSel ? 1 : (chip ? 0.95 : 0.85);
+          var ink = kind === 'base' && !isSel ? (hostedDark ? EDGE.base : (g.ViewerTheme ? g.ViewerTheme.paint('muted', '#7d8593') : '#7d8593')) : col;
+          var op2 = hostedDark || active || hop || isSel ? 1 : (chip ? 0.95 : 0.85);
           /* One label per edge, through one seat picker and one `placed` ledger, so it can
              never land on a card or on another edge's label. Above PILL_ZOOM it is the
              combined cardinality pill — where the line has a run long enough to carry it;
@@ -1444,7 +1447,7 @@
         c.el.style.display = vis ? '' : 'none';
       });
     },
-    showTip: function (html, e) { this.tip.innerHTML = html; this.tip.style.display = 'block'; this.moveTip(e); },
+    showTip: function (html, e) { this.tip.innerHTML = g.ViewerTheme ? g.ViewerTheme.inlineHTML(html) : html; this.tip.style.display = 'block'; this.moveTip(e); },
     moveTip: function (e) { var r = this.host.getBoundingClientRect(); this.tip.style.left = (e.clientX - r.left + 14) + 'px'; this.tip.style.top = (e.clientY - r.top + 14) + 'px'; },
     hideTip: function () { this.tip.style.display = 'none'; },
 
@@ -1456,6 +1459,7 @@
         var c = self.cards[n];
         var t = c.table; var col = app.tableColor(t); var fact = app.isFact(t);
         c.el.setAttribute('data-fact', String(fact));
+        if (g.SMVHost && g.SMVHost.kind === 'vscode') c.el.style.setProperty('--smv-category', col);
         var head = c.head, role = c.roleEl, caretSvg = c.caret.firstChild;
         if (c.rm) c.rm.style.color = fact ? 'rgba(255,255,255,.85)' : '#6b7280';
         head.style.boxShadow = 'none';
@@ -1659,7 +1663,7 @@
         b.style.display = 'flex'; b.style.background = EDGE.lock; b.style.color = '#fff';
         b.title = 'Unlock — stop keeping this table focused';
       } else {
-        b.style.display = 'none'; b.style.background = 'transparent';
+        b.style.display = 'none'; b.style.background = 'inherit';
         b.style.color = fact ? 'rgba(255,255,255,.85)' : '#6b7280';
         b.title = 'Lock focus on this table — the highlight stays when you click elsewhere';
       }

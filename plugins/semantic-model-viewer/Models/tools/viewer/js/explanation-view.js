@@ -103,6 +103,7 @@
   function frame() { return new Promise(function (done) { requestAnimationFrame(function () { requestAnimationFrame(done); }); }); }
   async function apply(app, input) {
     var view=validate(app.model,input), cv=app.canvas;
+    document.body.dataset.smvInteractive='1';
     var previousCaption=document.getElementById('smv-question-caption');if(previousCaption)previousCaption.remove();
     if(view.caption){var caption=document.createElement('section');caption.id='smv-question-caption';caption.setAttribute('aria-label','Diagram explanation');caption.style.cssText='flex:none;padding:12px 20px;border-bottom:1px solid var(--smv-line,#dbe2ec);background:var(--smv-paper,#fff);color:var(--smv-ink,#24324a);font:600 15px/1.5 system-ui;overflow-wrap:anywhere';caption.textContent=view.caption;var root=document.getElementById('root');if(root){var topbar=document.getElementById('topbar');root.insertBefore(caption,topbar?topbar.nextSibling:root.firstChild);}}
     document.body.dataset.smvReady='0';delete document.body.dataset.smvError;
@@ -122,7 +123,7 @@
       if(!view.focus||view.focus.kind==='measure')app.setState({selMeasure:view.focus?view.focus.name:null,dependencySource:null,mvSourceMode:'measures',gPin:null,gExtra:{},gHover:null});
       else app.measures.analyzeSource(view.focus.kind==='table'?view.focus.name:view.focus.table,view.focus.kind==='column'?view.focus.name:null);
       await frame();
-      app.measures.setWorkspaceMode('split',false);
+      var measureState=app.measures.captureSnapshot();measureState.preferences=Object.assign({},measureState.preferences,{mode:innerWidth<900?'graph':'split',orientation:'tb',wrap:true});measureState.graph={autoFit:true};app.measures.restoreSnapshot(measureState);
     }
     var refs=view.highlights.concat(view.callouts.map(function(c){return c.object;}));
     if(view.focus)refs.push(view.focus);
@@ -134,6 +135,7 @@
         names.filter(Boolean).forEach(function(n){if(app.explorer)app.explorer.ensureTable(n);});
         if(r.kind==='column' || r.kind==='measure'){var c=cv.cards[r.table];if(c&&!c.expanded)cv.toggleCard(r.table);}
       });
+      if(!view.state||!view.state.tableView){var endpoints=[];if(view.focus&&view.focus.kind==='relationship'){var relationship=resolve(app.model,view.focus);endpoints=[relationship.from,relationship.to];}cv.restoreDisplay({detail:'cards',expanded:Array.from(new Set(endpoints.concat(refs.filter(function(r){return r.kind==='column';}).map(function(r){return r.table;}))))});}
       await frame();
       if(view.mode==='clusters'&&cv.groups){Object.keys(cv.groups).forEach(function(k){cv.expandedGroups.add(k);});cv.reflowClusters();cv.refreshVisibility();}
       cv.fitView();

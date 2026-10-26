@@ -75,8 +75,8 @@ async function start(source,options){
     return {...evidence,state:click?'waiting-for-apply':'awaiting-viewer',message:click?'Waiting for Apply click in the viewer. Use --apply only when explicitly taking over.':'Waiting for the viewer to receive and apply the requested view.'};
   }
   function clientRows(e){return histories(e).map(c=>({clientId:c.clientId,viewId:c.viewId,revision:c.revision,sourceRevision:c.sourceRevision,explored:c.explored,pendingRevision:c.pendingRevision,receivedAt:c.receivedAt,fresh:Date.now()-c.receivedAt<5000,appliedSummary:c.appliedSummary,renderedSummary:c.renderedSummary}));}
-  function viewStatus(e){return {id:e.id,label:e.label,url:viewUrl(e.id),revision:e.revision,sourceRevision:e.prepared.hash,summary:e.prepared.summary,application:application(e),clients:clientRows(e),error:e.error};}
-  function status(e=entries.get('default')){return {...state,url:viewUrl(e.id),viewId:e.id,workspaceUrl:workspaceUrl(),workspaceApplication:{views:entries.size-1,acknowledgedViews:[...entries.values()].filter(v=>v.id!=='default'&&application(v).browserAcknowledged).length,freshClients:[...clients.values()].filter(c=>Date.now()-c.receivedAt<5000).length},revision:e.revision,sourceRevision:e.prepared.hash,appliedView:e.prepared.view,authoredSummary:e.prepared.summary,application:application(e),inputFingerprint:lastAttempt,error:e.error,clients:clientRows(e),views:[...entries.values()].map(viewStatus),presentation:presentation({...state,revision:e.revision})};}
+  function viewStatus(e){return {sourceIdentity:e.prepared.provenance,id:e.id,label:e.label,url:viewUrl(e.id),revision:e.revision,sourceRevision:e.prepared.hash,summary:e.prepared.summary,application:application(e),clients:clientRows(e),error:e.error};}
+  function status(e=entries.get('default')){return {...state,sourceIdentity:e.prepared.provenance,url:viewUrl(e.id),viewId:e.id,workspaceUrl:workspaceUrl(),workspaceApplication:{views:entries.size-1,acknowledgedViews:[...entries.values()].filter(v=>v.id!=='default'&&application(v).browserAcknowledged).length,freshClients:[...clients.values()].filter(c=>Date.now()-c.receivedAt<5000).length},revision:e.revision,sourceRevision:e.prepared.hash,appliedView:e.prepared.view,authoredSummary:e.prepared.summary,application:application(e),inputFingerprint:lastAttempt,error:e.error,clients:clientRows(e),views:[...entries.values()].map(viewStatus),presentation:presentation({...state,revision:e.revision})};}
   async function body(req){let text='';for await(const chunk of req){text+=chunk;if(Buffer.byteLength(text)>2*1024*1024)throw fault('REQUEST_TOO_LARGE','Session payload exceeds 2MB');}try{return JSON.parse(text);}catch{throw fault('JSON_INVALID','Invalid session JSON');}}
   function stable(){if(fingerprint(source,view,report)!==lastAttempt)throw fault('SOURCE_CHANGED','Source changed; refresh or restart before updating');}
   function choose(e,payload={}){const fresh=alive(e),candidates=payload.clientId?fresh.filter(c=>c.clientId===payload.clientId):fresh;
@@ -145,23 +145,23 @@ async function waitForApply(file,revision,{seconds,clientId,viewId}={}){
   while(true){const status=await request(file,'status',undefined,viewId);if(status.revision!==revision)throw fault('REVISION_CONFLICT','Requested view changed while waiting for acknowledgement',{expected:revision,actual:status.revision});const viewers=status.clients.filter(c=>c.fresh&&(!clientId||c.clientId===clientId));const confirmed=!status.error&&viewers.length>0&&viewers.every(c=>c.revision===revision&&c.sourceRevision===status.sourceRevision);
     if(confirmed||Date.now()>=end)return {state:confirmed?'applied':status.application.state,confirmed,timedOut:!confirmed,clientId:clientId||null,viewId:status.viewId,revision,application:status.application,clients:status.clients};await new Promise(r=>setTimeout(r,Math.min(200,Math.max(0,end-Date.now()))));}
 }
-function open(url){const command=process.platform==='darwin'?'open':process.platform==='win32'?'rundll32.exe':'xdg-open';const args=process.platform==='win32'?['url.dll,FileProtocolHandler',url]:[url];return new Promise((resolve,reject)=>{const child=spawn(command,args,{stdio:'ignore'});child.once('error',reject);child.once('exit',code=>code===0?resolve():reject(new Error('Browser launcher exited '+code)));});}
+async function open(url,options={}){return require('./opener.cjs').open(url,options,'system');}
 async function exportSession(file,options){
   const info=await request(file,'snapshot',{basis:options.basis,expectedRevision:options.revision,clientId:options.clientId},options.viewId);
   const p=prepare(info.source,info.view,{report:info.report});if(p.hash!==info.sourceRevision)throw fault('SOURCE_CHANGED','Source changed before export');
   const output=path.resolve(options.out);fs.mkdirSync(path.dirname(output),{recursive:true});
-  if(fs.existsSync(output)&&!options.force)throw fault('OUTPUT_EXISTS','Output exists');
+  require('./provenance.cjs').reserveOutput(output,options.force);
   if(!['.png','.html'].includes(path.extname(output)))throw fault('OUTPUT_INVALID','Session export requires .html or .png');
-  const temp=fs.mkdtempSync(path.join(path.dirname(output),'.smv-export-')),artifact=path.join(temp,path.basename(output));
+  const temp=fs.mkdtempSync(path.join(path.dirname(output),'.smv-export-')),artifact=path.join(temp,path.basename(output));let evidence;
   try{
     if(path.extname(output)==='.png')await require('./capture.cjs').capture(p.html,artifact,p.view,options);
     else fs.writeFileSync(artifact,p.html,{flag:'wx'});
     // Revalidate the actual source fingerprint even when source watching is off.
     await request(file,'snapshot',{basis:'authored',expectedRevision:info.revision},options.viewId);
     if(fs.existsSync(output)&&!options.force)throw fault('OUTPUT_EXISTS','Output exists');
-    fs.renameSync(artifact,output);
+    evidence=await require('./provenance.cjs').publish(info.source,p,output,options,async candidate=>fs.copyFileSync(artifact,candidate));
   }finally{fs.rmSync(temp,{recursive:true,force:true});}
-  return {...info,path:output,containsFullMetadata:true};
+  return {...info,path:output,containsFullMetadata:true,...evidence,opening:await require('./opener.cjs').open(output,options)};
 }
 if(require.main===module)serve(process.argv[2],JSON.parse(process.argv[3])).then(s=>process.stdout.write(s.url+'\n')).catch(e=>{console.error(e.message);process.exitCode=1;});
 module.exports={serve,request,open,fingerprint,exportSession,presentation,waitForApply};

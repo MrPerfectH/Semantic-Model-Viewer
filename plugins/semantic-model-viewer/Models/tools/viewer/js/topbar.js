@@ -45,7 +45,7 @@
     [['graph','Tables'],['measures','Measures'],['power-query','Power Query'],['clusters','Domains'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
     this.host.appendChild(nav);
     var actions=el('div',{cls:'ex-header-actions'});
-    if(g.ViewerTheme){
+    if(g.ViewerTheme&&!(g.SMVHost&&g.SMVHost.kind==='vscode')){
       var theme=el('select',{cls:'ex-theme-select','aria-label':'Appearance',title:'Choose the viewer appearance',onChange:function(e){g.ViewerTheme.set(e.target.value);}},[
         el('option',{value:'classic',text:'Classic'}),el('option',{value:'spellbook',text:'Spellbook'})]);
       theme.value=g.ViewerTheme.get();actions.appendChild(theme);
