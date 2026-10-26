@@ -1,6 +1,6 @@
 # Fabric connection (unreleased)
 
-This feature is developed on `feature/fabric-connect` under GitHub issues #64–#72. It must not merge into `main` before the complete-feature acceptance gate in #72. The implementation is available for development; production Microsoft application provisioning and live-tenant verification are still required.
+This feature is developed on `feature/fabric-connect` under GitHub issues #64–#72. It must not merge into `main` before the complete-feature acceptance gate in #72. The implementation is available as a Fabric preview. Standard browser sign-in and live XMLA model opening have passed on macOS, Linux x64 and Windows x64. See the [current acceptance record](verification/fabric-20261026/acceptance.md) for exact evidence and remaining limits.
 
 ## User journey
 
@@ -16,7 +16,7 @@ Offline snapshots contain model metadata according to the existing snapshot poli
 
 ## Maintainer setup and development
 
-The default sign-in uses the Power BI Desktop public-client identity (`ea0616ba-638b-4df5-95b9-636659ae5121`) and Power BI `.default` permissions, following the authentication approach documented by [Tabular Editor](https://docs.tabulareditor.com/en/features/te-cli/te-cli-auth.html). Users do not register an application. A publisher-owned registration remains available through the developer override. Microsoft consent, MFA, Conditional Access and tenant restrictions still apply; the shared identity does not guarantee access. Real tenant sign-in and REST metadata access must be verified before release.
+The default sign-in uses the Power BI Desktop public-client identity (`ea0616ba-638b-4df5-95b9-636659ae5121`) and Power BI `.default` permissions, following the authentication approach documented by [Tabular Editor](https://docs.tabulareditor.com/en/features/te-cli/te-cli-auth.html). Users do not register an application. A publisher-owned registration remains available through the developer override. Microsoft consent, MFA, Conditional Access and tenant restrictions still apply; the shared identity does not guarantee access. Standard sign-in and XMLA access have live evidence; the optional REST definition path also passed a live Direct Lake comparison against XMLA. This does not establish all model modes or permission personas.
 
 For standalone development, install Node.js 22 or later in addition to Python, run `npm ci --prefix tools/fabric`, and build the self-contained XMLA helpers using the .NET 8 SDK and `tools/fabric/xmla/publish.sh`. Launch the existing Python server. `SMV_FABRIC_CLIENT_ID` remains an optional developer override. These are maintainer/developer steps; packaged distributions must provision the ID and runtime dependencies before release. Standalone tokens remain in the helper process memory, so reopening the process may require Microsoft sign-in. VS Code uses SecretStorage for the MSAL cache.
 
@@ -30,6 +30,6 @@ See [transport details](../tools/fabric/README.md) for scopes, supported endpoin
 
 Automated tests cover transport pagination/LROs, safe origins and paths, authentication cancellation/account isolation, localhost session protection, model cache/refresh races, snapshot regressions, and extension-host integration. Browser checks exercise the actual unconfigured state and synthetic workspace/model responses; those are not live Fabric connectivity evidence.
 
-Still required before release/main merge: publisher application provisioning, real sign-in/consent behavior, editor and Read + Build metadata coverage, Import/DirectQuery/Direct Lake fidelity, Windows/macOS installed-app and packaged-extension checks, and maintainer acceptance. The feasibility and final acceptance tickets remain open.
+Before full acceptance/main merge, complete controlled editor versus Read + Build source comparisons, the Import/DirectQuery/Direct Lake fidelity matrix, remaining installed-host lifecycle checks, public standalone distribution/signing review, and maintainer acceptance. The six compiled helper targets are not six verified runtime targets. The current acceptance record distinguishes completed live checks from remaining checks; the October 13 verification record is historical.
 
 A suspended Fabric capacity cannot serve its models. The viewer reports this state when its existing permissions allow capacity diagnostics; it never resumes a capacity or changes billing.

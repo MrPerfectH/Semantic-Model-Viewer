@@ -80,6 +80,15 @@ test('expired session tokens fall back to MSAL renewal', async () => {
  assert.equal(await m.auth.getAccessToken('https://api.fabric.microsoft.com'),'renewed');
  assert.equal(renewals,1);
 });
+test('token renewal cannot silently change tenant for the same home account', async () => {
+ const m=mock({silent:async()=>{const e=new Error();e.name='InteractionRequiredAuthError';throw e;},resultAccount:{...a,tenantId:'other-tenant'}});
+ await assert.rejects(m.auth.getAccessToken('https://api.fabric.microsoft.com'),{code:'AccountMismatch'});
+});
+test('multiple cached tenant accounts require an explicit sign-in selection', async () => {
+ const auth=createAuth({clientId:id,msalFactory:()=>({getTokenCache:()=>({getAllAccounts:async()=>[a,{...a,tenantId:'other-tenant'}]})})});
+ assert.equal((await auth.status()).account,null);
+ await assert.rejects(auth.getAccessToken('https://api.fabric.microsoft.com'),{code:'NotSignedIn'});
+});
 test('custom application token reuse does not cross API resources or definition permissions', async () => {
  let renewals=0;
  const m=mock({expiresOn:new Date(Date.now()+3600000),silent:async()=>{renewals++;return {account:a,accessToken:'separate',expiresOn:new Date(Date.now()+3600000)};}});

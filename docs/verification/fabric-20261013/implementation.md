@@ -1,5 +1,7 @@
 # Fabric implementation verification — 2026-10-13
 
+Historical record. For current implementation and live platform status, see [the October 26 acceptance record](../fabric-20261026/acceptance.md). The outstanding items below describe October 13, not the current preview.
+
 This is implementation evidence for the unmerged `feature/fabric-connect` branch and issues #64–#72. It is not live-tenant acceptance.
 
 ## Checks completed

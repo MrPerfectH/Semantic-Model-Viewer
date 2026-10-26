@@ -206,6 +206,27 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
     await assertOffline();
     if(process.env.SMV_SNAPSHOT_OUTPUT){fs.mkdirSync(process.env.SMV_SNAPSHOT_OUTPUT,{recursive:true});fs.copyFileSync(files.measures,path.join(process.env.SMV_SNAPSHOT_OUTPUT,'Contoso Retail interactive snapshot.html'));}
   });
+  await t.test('Fabric provenance survives offline export without live identities or credentials', async () => {
+    for (const method of ['xmla', 'rest']) {
+      await load(pathToFileURL(files.measures).href);
+      await browser.evaluate(`app.snapshotInfo.source=${JSON.stringify({
+        fetchedAt:'2026-10-13T12:00:00Z',method,coverage:'consumer-metadata',warnings:['Definitions unavailable under test permissions'],
+        tenantId:'private-test-tenant',workspaceId:'private-test-workspace',modelId:'private-test-model',accountId:'private-test-account',accessToken:'synthetic-secret-token'
+      })}`);
+      const exported = await save('fabric-'+method);
+      const payload = payloadAt(exported);
+      assert.deepEqual(payload.source, {fetchedAt:'2026-10-13T12:00:00Z',method,coverage:'consumer-metadata',warnings:['Definitions unavailable under test permissions']});
+      assert.notEqual(payload.createdAt,payload.source.fetchedAt);
+      assert.doesNotMatch(fs.readFileSync(exported,'utf8'), /private-test-(?:tenant|workspace|model|account)|synthetic-secret-token/);
+      await load(pathToFileURL(exported).href);
+      assert.equal(await browser.evaluate('app.model.tables.length'),43);
+      assert.equal(await browser.evaluate('app.snapshotInfo.source.coverage'),'consumer-metadata');
+      assert.equal(await browser.evaluate("[...document.querySelectorAll('button')].some(b=>/^(Connect to Fabric|Refresh Fabric)$/.test(b.textContent.trim()))"),false);
+      const reexported = await save('fabric-'+method+'-recipient');
+      assert.deepEqual(payloadAt(reexported).source,payload.source);
+      await assertOffline();
+    }
+  });
   await t.test('CLI snapshots open focused, fit the viewport and remain fully explorable offline', async () => {
     await load(pathToFileURL(cliFiles.tables).href);
     assert.deepEqual(await browser.evaluate('[...app.canvas.workspaceNames].sort()'), ['Customer', 'Date', 'Sales']);

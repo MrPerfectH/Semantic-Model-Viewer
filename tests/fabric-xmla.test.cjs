@@ -5,6 +5,16 @@ const {spawnSync} = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
 const executable = path.join(__dirname,'../tools/fabric/xmla/publish',process.platform+'-'+process.arch,process.platform==='win32'?'Smv.Fabric.Xmla.exe':'Smv.Fabric.Xmla');
+test('TOM system row ordinals do not become semantic columns',()=>{
+ require('../Models/tools/viewer/js/roles.js');require('../Models/tools/viewer/js/tmdl-parser.js');
+ const model=globalThis.TMDLParser.parseAny([{path:'model.bim',name:'model.bim',text:JSON.stringify({model:{tables:[{name:'Sales',columns:[
+  {name:'Engine ordinal',type:'rowNumber',isHidden:true,dataType:'int64'},
+  {name:'RowNumber',type:'data',dataType:'int64'},
+  {name:'Hidden business column',type:'data',isHidden:true,dataType:'string'}
+ ]}]}})}]);
+ assert.deepEqual(model.tables[0].columns.map(c=>c.name),['RowNumber','Hidden business column']);
+ assert.equal(model.tables[0].columns[1].hidden,true);
+});
 test('published XMLA helper rejects invalid requests without leaking credentials or paths', {skip:!fs.existsSync(executable)&&'Build platform XMLA helper first'},()=>{
  const result=spawnSync(executable,[],{input:JSON.stringify({workspaceId:'invalid',modelId:'invalid',accessToken:'synthetic-secret-token'}),encoding:'utf8',timeout:10000});
  assert.equal(result.status,1);

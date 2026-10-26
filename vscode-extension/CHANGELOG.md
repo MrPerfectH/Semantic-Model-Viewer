@@ -1,13 +1,16 @@
 # Changelog
 
-## Unreleased
+## 0.3.9 — Fabric Preview (unreleased)
 
 - Require VS Code 1.101 or later for the Fabric host runtime. — Fabric feature branch
 
 - Add work-account sign-in, workspace/model browsing, and explicit XMLA or Fabric definition API metadata access.
 - Cache metadata for offline reopening and support refresh, account switching, sign-out, removal, and existing HTML snapshots.
 - Keep authentication in the extension host with VS Code SecretStorage.
-- Require publisher authentication setup, packaged platform helpers, and live tenant acceptance before release.
+- Add native Fabric → workspace → model browsing, workspace-scoped searchable lists, and compact metadata status.
+- Package self-contained XMLA helpers with component notices; use metadata-only consumer fallback when full definitions are unavailable.
+- Reject token renewal into a different tenant and require explicit selection when multiple cached accounts are present.
+- Standard login and live XMLA opening tested on macOS, Linux x64 and Windows x64. Controlled permission/fidelity checks and public standalone distribution acceptance remain open.
 
 ## 0.3.8
 

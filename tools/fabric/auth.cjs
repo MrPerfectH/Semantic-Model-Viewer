@@ -14,7 +14,7 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
   let browserLogin = false; let browserError = null;
   let deviceLogin = null; let deviceError = null; let deviceRequest = null;
   const accessTokens = new Map();
-  let client; let pending; let interactiveBusy = false; let selectedId; let generation = 0;
+  let client; let pending; let interactiveBusy = false; let selectedId; let selectedTenantId; let generation = 0;
   async function init() {
     if (!clientId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(clientId)) throw new FabricError('NotConfigured', 'Fabric sign-in is awaiting application setup by the Semantic Model Viewer maintainers.');
     if (!client) {
@@ -33,7 +33,7 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
     return result;
   }
   function accountInfo(account) { return account ? { id: account.homeAccountId, name: account.username, tenantId: account.tenantId } : null; }
-  async function account() { const accounts = await (await init()).getTokenCache().getAllAccounts(); return accounts.find(a => a.homeAccountId === selectedId) || accounts[0] || null; }
+  async function account() { const accounts = await (await init()).getTokenCache().getAllAccounts(); return selectedId ? accounts.find(a => a.homeAccountId === selectedId && a.tenantId === selectedTenantId) || null : accounts.length === 1 ? accounts[0] : null; }
   async function interactive(audience, prompt, purpose, browserFlow) {
     if (interactiveBusy) throw new FabricError('SignInInProgress', 'Microsoft sign-in is already in progress.');
     interactiveBusy = true;
@@ -69,10 +69,10 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
       await (browserFlow ? browserFlow.ready(url) : openBrowser(url));
       const code = await callback;
       const result = await app.acquireTokenByCode({ code, scopes, redirectUri, codeVerifier: verifier });
-      if (prompt !== 'select_account' && selectedId && result.account.homeAccountId !== selectedId) { await app.getTokenCache().removeAccount(result.account); throw new FabricError('AccountMismatch', 'Use the same Microsoft account, or switch accounts in the viewer first.'); }
+      if (prompt !== 'select_account' && selectedId && (result.account.homeAccountId !== selectedId || result.account.tenantId !== selectedTenantId)) { await app.getTokenCache().removeAccount(result.account); throw new FabricError('AccountMismatch', 'Use the same Microsoft account, or switch accounts in the viewer first.'); }
       if (generation !== currentGeneration) { await app.getTokenCache().removeAccount(result.account); throw new FabricError('Cancelled', 'Microsoft sign-in cancelled.'); }
-      if (prompt === 'select_account') { for (const previous of await app.getTokenCache().getAllAccounts()) { if (previous.homeAccountId !== result.account.homeAccountId) await app.getTokenCache().removeAccount(previous); } }
-      selectedId = result.account.homeAccountId;
+      if (prompt === 'select_account') { for (const previous of await app.getTokenCache().getAllAccounts()) { if ((previous.homeAccountId !== result.account.homeAccountId || previous.tenantId !== result.account.tenantId)) await app.getTokenCache().removeAccount(previous); } }
+      selectedId = result.account.homeAccountId; selectedTenantId = result.account.tenantId;
       if (prompt === 'select_account') accessTokens.clear();
       return remember(result, audience, purpose);
     } finally { if(callbackResponse && !callbackResponse.writableEnded) callbackResponse.writeHead(302, {'Location':browserFlow.returnUri,'Cache-Control':'no-store','Referrer-Policy':'no-referrer'}).end(); clearTimeout(timer); server?.close(); server?.closeAllConnections(); if(generation === currentGeneration) { pending = null; interactiveBusy = false; } }
@@ -105,8 +105,8 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
           const result = await app.acquireTokenByDeviceCode(deviceRequest);
           if (generation !== currentGeneration) { if(result?.account) await app.getTokenCache().removeAccount(result.account); throw new FabricError('Cancelled','Microsoft sign-in cancelled.'); }
           if (!result?.account) throw new FabricError('SignInDenied','Microsoft sign-in did not complete.');
-          selectedId = result.account.homeAccountId;
-          for (const previous of await app.getTokenCache().getAllAccounts()) if (previous.homeAccountId !== selectedId) await app.getTokenCache().removeAccount(previous);
+          selectedId = result.account.homeAccountId; selectedTenantId = result.account.tenantId;
+          for (const previous of await app.getTokenCache().getAllAccounts()) if ((previous.homeAccountId !== selectedId || previous.tenantId !== selectedTenantId)) await app.getTokenCache().removeAccount(previous);
           accessTokens.clear();
           remember(result, POWER_BI_AUDIENCE);
           deviceLogin = null;
@@ -122,7 +122,7 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
       const app = await init(); const selected = await account();
       if (!selected) throw new FabricError('NotSignedIn', 'Sign in with your Microsoft work account.');
       if (generation !== currentGeneration) throw new FabricError('Cancelled', 'Microsoft token request cancelled.');
-      selectedId = selected.homeAccountId;
+      selectedId = selected.homeAccountId; selectedTenantId = selected.tenantId;
       const key = tokenKey(selected, audience, purpose);
       const cached = accessTokens.get(key);
       if (cached && cached.expires > Date.now() + 60000) return cached.token;
@@ -135,7 +135,7 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
         return (await interactive(audience, undefined, purpose)).accessToken;
       }
     },
-    async signOut() { generation++; accessTokens.clear(); browserLogin = false; browserError = null; pending?.(); if(deviceRequest) deviceRequest.cancel = true; deviceRequest = null; deviceLogin = null; deviceError = null; interactiveBusy = false; if (clientId) { const app = await init(); for (const a of await app.getTokenCache().getAllAccounts()) await app.getTokenCache().removeAccount(a); } selectedId = null; await saveTokens(null); },
+    async signOut() { generation++; accessTokens.clear(); browserLogin = false; browserError = null; pending?.(); if(deviceRequest) deviceRequest.cancel = true; deviceRequest = null; deviceLogin = null; deviceError = null; interactiveBusy = false; if (clientId) { const app = await init(); for (const a of await app.getTokenCache().getAllAccounts()) await app.getTokenCache().removeAccount(a); } selectedId = null; selectedTenantId = null; await saveTokens(null); },
     cancel() { generation++; browserLogin = false; browserError = null; pending?.(); if(deviceRequest) deviceRequest.cancel = true; deviceRequest = null; deviceLogin = null; deviceError = null; interactiveBusy = false; }
   };
 }
