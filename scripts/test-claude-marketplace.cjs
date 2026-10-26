@@ -83,7 +83,7 @@ try {
   for (const skill of ['open', 'explain', 'snapshot', 'stop', 'smv-explain', 'setup']) assert.ok(inventory.includes(skill), 'Missing skill: ' + skill);
   assert.match(inventory, /MCP servers \(0\)/, 'CLI plugin must not register an MCP server');
   console.log('Testing the installed CLI in a separate project without node_modules...');
-  run(process.execPath, ['--test', 'tests/claude-plugin.test.cjs'], root, {
+  run(process.execPath, ['--test', 'tests/claude-plugin.test.cjs', 'tests/cli-workspace.test.cjs'], root, {
     env: { ...env, SMV_PLUGIN_TEST_ROOT: pluginRoot }, stdio: 'inherit'
   });
   console.log('PASS: CLI-only marketplace install, command discovery, live viewer, selection, HTML export and session cleanup.');

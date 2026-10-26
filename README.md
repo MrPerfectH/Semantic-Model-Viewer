@@ -579,3 +579,6 @@ uncertainty remain visible. No M is executed or included in default shared snaps
 The [interactive agent workflow](docs/interactive-viewer.md) uses the CLI to open focused Tables and Measures views in the integrated browser, reuse a live session for follow-up questions, read selections, and export acknowledged viewer state. MCP is optional; the browser workflow needs no embedded chat UI.
 
 The [bundled Claude plugin workflow](docs/cli-plugin-workflow.md) adds one-command question diagrams and focused metadata queries.
+
+
+The [CLI workspace workflow](docs/cli-workspace-fetch.md) downloads a Fabric definition through an existing Azure CLI login, generates an offline diagram, and records source/renderer hashes. Local models require no cloud login. Opening behavior is selectable with `--open none|system`.

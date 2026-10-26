@@ -723,7 +723,7 @@ test('displayed DAX references use the same resolution rules as dependency index
   }
 });
 
-test('snapshot without saved explorer settings opens with connected tables, so a dimension shows its facts', () => {
+test('snapshot without saved explorer settings explores both active filter directions, so a dimension shows its facts', () => {
   const { app } = harness();
   const explorer = { loadModel() {}, direction: 'incoming', depth: 'all', includeInactive: false };
   Object.assign(app.canvas, { setLayoutKey() {}, applyPreset() {}, setPresets() {}, updateTransform() {}, renderLines() {}, view: { x: 0, y: 0, k: 1 } });
@@ -731,7 +731,7 @@ test('snapshot without saved explorer settings opens with connected tables, so a
   const payload = overrides => ({ model: model([{ name: 'Date' }, { name: 'Sales' }]), workspace: overrides });
   app.loadSnapshot(payload({}));
   assert.deepEqual(plain({ d: explorer.direction, depth: explorer.depth, inactive: explorer.includeInactive, focus: app.state.focusDepth }),
-    { d: 'connected', depth: 'direct', inactive: true, focus: 1 });
+    { d: 'both', depth: 'all', inactive: false, focus: 1000000 });
   app.loadSnapshot(payload({ explorer: { direction: 'outgoing', depth: 'two', includeInactive: false } }));
   assert.deepEqual(plain({ d: explorer.direction, depth: explorer.depth, inactive: explorer.includeInactive, focus: app.state.focusDepth }),
     { d: 'outgoing', depth: 'two', inactive: false, focus: 2 });

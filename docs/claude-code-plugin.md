@@ -3,7 +3,7 @@
 The `semantic-model-viewer` plugin runs the Semantic Model Viewer CLI through
 Claude's shell tools. It includes the viewer runtime and six skills: setup, open,
 explain, snapshot, stop and the automatically selected model explanation skill.
-Version 0.4.0 is CLI-only: it registers no MCP server and needs no runtime npm
+Version 0.5.0 is CLI-only: it registers no MCP server and needs no runtime npm
 packages. Users do not install the separate Viewer app or VS Code extension.
 
 ## Install through Claude
@@ -142,3 +142,6 @@ return small JSON answers; add `--details` for evidence. `session list` and
 `session stop --all` manage only registered Viewer servers. New view JSON uses
 version 2 throughout; the version 1 walkthrough envelope is a separate format.
 See [CLI plugin workflow](cli-plugin-workflow.md) for the complete reference.
+
+
+The next CLI workspace workflow adds optional definition fetching through an existing Azure CLI login, `--open none|system` and provenance receipts. It does not bundle a login manager or require Azure CLI for local models. See [workspace workflow](cli-workspace-fetch.md).

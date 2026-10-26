@@ -411,7 +411,7 @@ test('legacy presets clear prior focus even if the formerly selected table remai
   explorer.showAll(); cv.selectTable('A'); cv.pinned.add('B'); cv.locked = 'B';
   explorer.setFocus(true, 2); app.state.activeFilter = 'Old domain';
   cv.applyPreset({ name: 'Legacy', tables: ['A', 'B'], pos: { A: { x: 2, y: 3 } } });
-  assert.deepEqual(copy(cv.captureFocus()), { selected: null, isolate: false, depth: 1, pinned: [], locked: null });
+  assert.deepEqual(copy(cv.captureFocus()), { selected: null, isolate: false, depth: 1, pinned: [], locked: null, paths: { direction: 'both', includeInactive: false } });
   assert.equal(app.state.activeFilter, null);
   assert.equal(cv._activeSel, null);
   assert.deepEqual([...explorer.names], ['A', 'B']);
@@ -441,7 +441,7 @@ test('restoring an empty named view clears focus and leaves every card hidden', 
   explorer.showAll(); cv.selectTable('B'); cv.pinned.add('B'); cv.locked = 'A'; explorer.setFocus(true, 2);
   cv.applyPreset(empty);
   assert.equal(explorer.names.size, 0);
-  assert.deepEqual(copy(cv.captureFocus()), { selected: null, isolate: false, depth: 1, pinned: [], locked: null });
+  assert.deepEqual(copy(cv.captureFocus()), { selected: null, isolate: false, depth: 1000000, pinned: [], locked: null, paths: { direction: 'both', includeInactive: false } });
   for (const card of Object.values(cv.cards)) assert.equal(card.el.style.display, 'none');
 });
 
