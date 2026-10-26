@@ -1,0 +1,36 @@
+table Warehouse
+	lineageTag: eb257388-0229-55a8-b63d-4b500edea23e
+
+	column WarehouseKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: 4e0569df-57a2-5300-9713-4a49f328a7ab
+		sourceColumn: warehousekey
+
+	column 'Warehouse Name'
+		dataType: string
+		lineageTag: 2d804140-c82f-59a9-806b-18d1d825c7fd
+		sourceColumn: warehouse_name
+
+	column Capacity
+		dataType: int64
+		summarizeBy: sum
+		lineageTag: f26af3b3-9538-5981-90fb-973b0b91cfcc
+		sourceColumn: capacity
+
+	column 'Geography Key'
+		dataType: int64
+		isHidden
+		lineageTag: c5a105d5-b62f-501e-ae9c-d3328acabcbc
+		sourceColumn: geography_key
+
+	partition Warehouse = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="supply",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_warehouse",Kind="Table"]}[Data]
+				in
+				    tbl

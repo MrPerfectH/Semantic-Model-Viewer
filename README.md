@@ -42,6 +42,20 @@ If no model appears, check that the selected folder contains `definition/*.tmdl`
 
 After opening a model, the optional welcome offers contextual tips for Tables, Measures, and sharing. **Skip tour**, **Close**, or **Skip remaining tips** keep you in control; **Help** restarts guidance. Tips never rearrange your canvas or change your model. Preferences stay in this browser/app profile or VS Code profile; snapshots do not launch onboarding.
 
+## Claude Code
+
+Load the `semantic-model-viewer` plugin to open models, ask for visual explanations, and
+save offline snapshots from Claude Code. It runs the existing CLI through Claude's shell tools.
+Install from inside Claude Code:
+
+```text
+/plugin marketplace add MrPerfectH/Semantic-Model-Viewer#claude-marketplace
+/plugin install semantic-model-viewer@semantic-model-tools
+```
+
+Run `/semantic-model-viewer:setup` once for a stable `smv` command, then use `/semantic-model-viewer:open`. `smv show <model> --table "Cost Center" --related --dependents` opens a reusable side-by-side Tables/Measures workspace; `relations` and `dependents` give short metadata answers. Requires Node.js 22+ and Git. The plugin CLI has no runtime npm dependencies. No separate Viewer app installation is needed.
+See [plugin setup and commands](docs/claude-code-plugin.md).
+
 ## Install (2 minutes)
 
 The viewer runs on your own computer from a copy of this repo. A small local app
@@ -563,3 +577,5 @@ preserves positions until explicitly invoked. Static analysis is partial; cycles
 uncertainty remain visible. No M is executed or included in default shared snapshots.
 
 The [interactive agent workflow](docs/interactive-viewer.md) uses the CLI to open focused Tables and Measures views in the integrated browser, reuse a live session for follow-up questions, read selections, and export acknowledged viewer state. MCP is optional; the browser workflow needs no embedded chat UI.
+
+The [bundled Claude plugin workflow](docs/cli-plugin-workflow.md) adds one-command question diagrams and focused metadata queries.

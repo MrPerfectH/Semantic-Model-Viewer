@@ -1,0 +1,65 @@
+table 'Sales Orders'
+	lineageTag: 2fb4b843-ed7f-54ac-99b1-e4c4b40c674b
+
+	column 'Customer Key'
+		dataType: int64
+		isHidden
+		lineageTag: 68561052-b123-5209-90d6-ab037e436b59
+		sourceColumn: customer_key
+
+	column 'Sales Channel Key'
+		dataType: int64
+		isHidden
+		lineageTag: 21f75d8d-a2d7-5c10-bb5e-4f195e416503
+		sourceColumn: sales_channel_key
+
+	column 'Payment Method Key'
+		dataType: int64
+		isHidden
+		lineageTag: c331e63e-2be6-5d86-a198-0a0f64540f54
+		sourceColumn: payment_method_key
+
+	column 'Employee Key'
+		dataType: int64
+		isHidden
+		lineageTag: 4e3d3954-2a40-5694-90e1-bb0813a18690
+		sourceColumn: employee_key
+
+	column 'Order Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: 481decdf-f5fa-5d80-ba16-f80300f0c81c
+		sourceColumn: order_date
+
+	column 'Order Number'
+		dataType: string
+		lineageTag: befdd914-2660-5bd3-b96f-77e261ead09d
+		sourceColumn: order_number
+
+	column 'Line Count'
+		dataType: decimal
+		isHidden
+		lineageTag: d4a2c9f9-527b-50a5-b228-e1598e0bf3bd
+		sourceColumn: line_count
+
+	column 'Order Total'
+		dataType: decimal
+		isHidden
+		lineageTag: 8af5bcb4-5612-527a-943e-9cee8fcd405d
+		sourceColumn: order_total
+
+	column 'Tax Amount'
+		dataType: decimal
+		isHidden
+		lineageTag: 235d1b83-5b7d-5689-b600-8e7711beb0ca
+		sourceColumn: tax_amount
+
+	partition 'Sales Orders' = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="sales",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_sales_orders",Kind="Table"]}[Data]
+				in
+				    tbl

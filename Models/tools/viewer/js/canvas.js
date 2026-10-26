@@ -1885,8 +1885,8 @@
       this.app.state.focusDepth = Number.isFinite(f.depth) && f.depth > 0 ? Math.floor(f.depth) : 1;
       var ex = this.app.explorer;
       if (ex) {
-        ex.direction = f.paths && ['incoming','outgoing','connected'].includes(f.paths.direction) ? f.paths.direction : 'connected';
-        ex.includeInactive = !f.paths || f.paths.includeInactive !== false;
+        ex.direction = f.paths && ['both','incoming','outgoing','connected'].includes(f.paths.direction) ? f.paths.direction : focus ? 'connected' : 'both';
+        ex.includeInactive = f.paths ? f.paths.includeInactive !== false : !!focus;
         ex.depth = this.app.state.focusDepth === 1 ? 'direct' : this.app.state.focusDepth === 2 ? 'two' : 'all';
       }
       this.app.state.isolate = !!f.isolate && !!(this._activeSel || this.locked || this.pinned.size);

@@ -1,0 +1,29 @@
+table 'Cost Center'
+	lineageTag: c8d81dad-4363-50c2-9269-2ba1924b1abf
+
+	column CostCenterKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: 6555bae2-84b3-5c39-8be8-9b329e078f94
+		sourceColumn: costcenterkey
+
+	column 'Cost Center Name'
+		dataType: string
+		lineageTag: d8958020-f093-5c5d-95fa-5f9e6e4b60ea
+		sourceColumn: cost_center_name
+
+	column Owner
+		dataType: string
+		lineageTag: 83729b9d-8ece-5395-b98e-fbd9d8971539
+		sourceColumn: owner
+
+	partition 'Cost Center' = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="finance",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_cost_center",Kind="Table"]}[Data]
+				in
+				    tbl

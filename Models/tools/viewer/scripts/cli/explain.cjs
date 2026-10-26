@@ -20,7 +20,7 @@ function reportUsage(report,model){
 }
 function prepare(source,input,options={}){
   const context=runtime(),{model,app}=readModel(context,source),view=validate(model,input);
-  const focus={tables:view.tables || model.tables.map(t=>t.name),measure:view.mode==='measures'?view.focus.name:null};
+  const focus={tables:view.tables || model.tables.map(t=>t.name),measure:view.mode==='measures'&&view.focus&&view.focus.kind==='measure'?view.focus.name:null};
   let html=snapshot(context,app,focus,{usage:options.report?reportUsage(options.report,model):null});
   const interactive=fs.readFileSync(path.join(__dirname,'../../js/interactive-view.js'),'utf8').replace(/<\/script/gi,'<\\/script');
   const adapter=fs.readFileSync(path.join(__dirname,'../../js/explanation-view.js'),'utf8').replace(/<\/script/gi,'<\\/script');
@@ -31,7 +31,7 @@ function prepare(source,input,options={}){
   const root=path.resolve(__dirname,'../..');
   [...context.Snapshots.files,'index.html','js/explanation-view.js','js/interactive-view.js','scripts/cli/explain.cjs','scripts/cli/results.cjs','scripts/cli/model.cjs','scripts/cli/capture.cjs'].sort().forEach(file=>rendererHash.update(file).update(fs.readFileSync(path.join(root,file))));
   const renderer={format:'smv-explanation',version:1,sha256:rendererHash.digest('hex')};
-  return {html,view,model,renderer,hash:crypto.createHash('sha256').update(JSON.stringify(context.Snapshots.modelData(model))).digest('hex')};
+  return {html,view,model,analysis:app,summary:require('./query.cjs').summary(model,app,view),renderer,hash:crypto.createHash('sha256').update(JSON.stringify(context.Snapshots.modelData(model))).digest('hex')};
 }
 async function shot(source,input,output,options={}){
   if(path.extname(output).toLowerCase()!=='.png')throw new Error('Image output must use .png');

@@ -1,0 +1,38 @@
+name: Claude plugin
+
+on:
+  pull_request:
+  push:
+    branches: [claude-marketplace]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  marketplace-install:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install the tested Claude CLI
+        run: npm install --global @anthropic-ai/claude-code@2.1.280
+      - name: Validate plugin and marketplace manifests
+        run: |
+          claude plugin validate --strict .claude-plugin/plugin.json
+          claude plugin validate --strict .claude-plugin/marketplace.json
+      - name: Build standalone CLI-only payload
+        run: npm run build:plugin
+      - name: Test focused CLI queries and session state
+        run: node --test tests/cli.test.cjs tests/interactive-view.test.cjs tests/browser-defaults.test.cjs tests/full-workflow.test.cjs
+      - name: Test CLI-only plugin and session lifecycle
+        run: npm run test:plugin
+      - name: Install the plugin into a fresh Claude configuration
+        run: npm run test:marketplace

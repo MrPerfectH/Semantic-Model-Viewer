@@ -17,7 +17,7 @@
   }
   function TableExplorer(app) {
     this.app = app; this.names = new Set(); this.query = ''; this.filter = 'all'; this.domain = ''; this.source = ''; this.history = [];
-    this.direction = 'connected'; this.depth = 'direct'; this.includeInactive = true; this.message = '';
+    this.direction = 'both'; this.depth = 'all'; this.includeInactive = false; this.message = '';
     /* Pane visibility is a reading preference, not part of a layout, so it is shared by
        every model and survives a model switch. */
     var panes = store.getJSON('smv_panes_v1', {}) || {};
@@ -82,7 +82,7 @@
     loadModel:function(){
       var data=store.getJSON(this.storageKey(),null), M=this.app.model;
       this.names=new Set(data && Array.isArray(data.tables)?data.tables.filter(function(n){return !!M.byName[n];}):[]);
-      this.direction='connected';this.depth='direct';this.includeInactive=true;this.app.state.focusDepth=1;
+      this.direction='both';this.depth='all';this.includeInactive=false;this.app.state.focusDepth=1000000;
       this.history=[];this.query='';this.filter='all';this.domain='';this.source='';this.message='';this._key=null;this._relationKey=null;this.optionsOpen=false;
       this.app.canvas.workspaceNames=this.names;this.app.state.isolate=false;this.app.state.showStandalone=true;this.app.canvas.showSA=true;
     },
@@ -208,9 +208,9 @@
       [[false,'Dim unrelated'],[true,'Hide unrelated']].forEach(function(o){var b=button(o[1],function(){self.setFocus(o[0],self.depth==='direct'?1:self.depth==='two'?2:1000000);});b.setAttribute('aria-pressed',String(!!app.state.isolate===o[0]));focus.appendChild(b);});
       box.appendChild(focus);
       box.appendChild(el('h3',{text:'Explore filter paths'}));
-      box.appendChild(el('p',{cls:'ex-muted',text:'These settings control highlighted tables and lines, and which tables are added. Hidden tables stay in your saved view.'}));
+      box.appendChild(el('p',{cls:'ex-muted',text:'Shows tables that filter this table or are filtered by it. Settings change the highlighted paths and which tables are added; model filter directions stay unchanged.'}));
       var direction=el('select',{'aria-label':'Relationship direction',onChange:function(e){self.direction=e.target.value;self.refreshPaths();}},[
-        el('option',{value:'incoming',text:'Tables that filter this table'}),el('option',{value:'outgoing',text:'Tables filtered by this table'}),el('option',{value:'connected',text:'All connected tables'})]);direction.value=this.direction;
+        el('option',{value:'both',text:'Filters in both directions'}),el('option',{value:'incoming',text:'Tables that filter this table'}),el('option',{value:'outgoing',text:'Tables filtered by this table'}),el('option',{value:'connected',text:'All connected tables'})]);direction.value=this.direction;
       var depth=el('select',{'aria-label':'Relationship distance',onChange:function(e){self.depth=e.target.value;self.refreshPaths();}},[el('option',{value:'direct',text:'Direct only'}),el('option',{value:'two',text:'Up to 2 connections'}),el('option',{value:'all',text:'Direct + indirect'})]);depth.value=this.depth;
       box.appendChild(direction);box.appendChild(depth);
       var check=el('input',{type:'checkbox',onChange:function(e){self.includeInactive=e.target.checked;self.refreshPaths();}});check.checked=this.includeInactive;

@@ -10,13 +10,16 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/cli.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs tests/interactive-view.test.cjs tests/mcp-viewer.test.cjs",
+    "test": "node --test tests/cli.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs tests/interactive-view.test.cjs tests/mcp-viewer.test.cjs tests/claude-plugin.test.cjs tests/browser-defaults.test.cjs tests/full-workflow.test.cjs",
     "test:browser": "node --test tests/explanations.browser.cjs",
     "build:mcp-app": "node scripts/build-mcp-app.cjs",
     "test:interactive": "node --test tests/interactive-view.browser.cjs",
-    "prepack": "npm run build:mcp-app"
+    "test:marketplace": "node scripts/test-claude-marketplace.cjs",
+    "test:plugin": "node --test tests/claude-plugin.test.cjs",
+    "build:plugin": "node scripts/build-claude-plugin.cjs"
   },
   "files": [
+    ".claude-plugin/",
     "bin/",
     "Models/tools/viewer/index.html",
     "Models/tools/viewer/*.css",
@@ -27,18 +30,22 @@
     "Models/tools/viewer/scripts/scan_report_usage.py",
     "docs/visual-explanations.md",
     "skills/smv-explain/",
+    "skills/open/",
+    "skills/explain/",
+    "skills/snapshot/",
+    "docs/claude-code-plugin.md",
     "examples/explanations/",
     "Models/demo/",
-    "docs/interactive-viewer.md",
-    "integrations/mcp/"
+    "scripts/claude-workspace.cjs",
+    "docs/cli-plugin-workflow.md",
+    "skills/stop/",
+    "skills/setup/"
   ],
-  "dependencies": {
+  "devDependencies": {
+    "esbuild": "0.28.2",
     "@modelcontextprotocol/client": "2.3.1",
     "@modelcontextprotocol/ext-apps": "2.0.3",
     "@modelcontextprotocol/server": "2.3.1",
     "zod": "4.6.7"
-  },
-  "devDependencies": {
-    "esbuild": "0.28.2"
   }
 }

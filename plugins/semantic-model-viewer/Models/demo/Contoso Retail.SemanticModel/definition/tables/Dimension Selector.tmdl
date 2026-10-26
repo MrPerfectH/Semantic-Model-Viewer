@@ -1,0 +1,31 @@
+table 'Dimension Selector'
+	lineageTag: bc260928-d631-5187-b39a-105a35dfc474
+
+	column 'Dimension Selector'
+		dataType: string
+		sourceColumn: [Value1]
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Dimension Selector Fields'
+		isHidden
+		dataType: string
+		sourceColumn: [Value2]
+
+	column 'Dimension Selector Order'
+		isHidden
+		dataType: int64
+		sourceColumn: [Value3]
+
+	partition 'Dimension Selector' = calculated
+		mode: import
+		source =
+				{
+				    ("Product", NAMEOF('Product'[Product Name]), 0),
+				    ("Category", NAMEOF('Product Category'[Category]), 1),
+				    ("Country", NAMEOF(Geography[Country]), 2),
+				    ("Channel", NAMEOF('Sales Channel'[Channel]), 3)
+				}
