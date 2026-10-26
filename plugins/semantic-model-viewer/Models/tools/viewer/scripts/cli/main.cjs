@@ -9,7 +9,7 @@ const HELP = `Semantic Model Viewer — offline snapshots and agent-authored vis
 Usage:
   smv --where
   smv install [--bin-dir <directory>]
-  smv show <model> --table <name> [--related] [--dependents]
+  smv show <model> --table <name> [--with <table> | --related | --dependents] [--out diagram.html|diagram.png]
   smv relations|dependents <model> --table <name> [--details]
   smv session list | smv session stop --all
   smv inspect <model> [--table <name>]
@@ -83,7 +83,7 @@ async function run(args) {
   const { values, positionals } = parseArgs({ args, allowPositionals: true, options: {
     out: { type: 'string', short: 'o' }, tables: { type: 'string' }, table: { type: 'string', multiple: true },
     measure: { type: 'string' }, name: { type: 'string' },
-    view: { type:'string' }, force: { type: 'boolean' }, help: { type: 'boolean', short: 'h' }
+    view: { type:'string' }, json: { type:'boolean' }, force: { type: 'boolean' }, help: { type: 'boolean', short: 'h' }
   } });
   if (values.help || args.length === 0) { process.stdout.write(HELP); return; }
   const [command, source] = positionals;
@@ -100,7 +100,8 @@ async function run(args) {
   const content = values.view?require('./explain.cjs').prepare(source,require('./explain.cjs').readJSON(values.view)).html:snapshot(context, app, selection(model, values));
   fs.mkdirSync(path.dirname(output), { recursive: true });
   fs.writeFileSync(output, content, { flag: values.force ? 'w' : 'wx' });
-  process.stdout.write(output + '\n');
+  const receipt={path:output,bytes:Buffer.byteLength(content),contents:'Full-model metadata and DAX; starting view may be focused.'};
+  process.stdout.write(values.json?JSON.stringify(receipt)+'\n':output+'\n');
 }
 async function explanationCommand(args) {
   const {values,positionals}=parseArgs({args,allowPositionals:true,options:{view:{type:'string'},report:{type:'string'},out:{type:'string',short:'o'},browser:{type:'string'},force:{type:'boolean'},json:{type:'boolean'}}});
@@ -153,9 +154,10 @@ async function sessionCommand(args){
   process.stdout.write(positionals[0]==='session'?JSON.stringify(result,null,values.json?0:2)+'\n':values.json?JSON.stringify(result)+'\n':(result.url||JSON.stringify(result))+'\n');
 }
 async function workflowCommand(args){
-  const {values,positionals}=parseArgs({args,allowPositionals:true,options:{table:{type:'string'},model:{type:'string'},related:{type:'boolean'},dependents:{type:'boolean'},direction:{type:'string'},direct:{type:'boolean'},'include-inactive':{type:'boolean'},details:{type:'boolean'},json:{type:'boolean'},session:{type:'string'},'new-session':{type:'boolean'},watch:{type:'boolean'},'bin-dir':{type:'string'}}});
-  const allowed={install:['bin-dir','json'],show:['table','model','related','dependents','direction','direct','include-inactive','session','new-session','watch','json'],relations:['table','model','direction','direct','include-inactive','details','json'],dependents:['table','model','direct','details','json']}[positionals[0]];
+  const {values,positionals}=parseArgs({args,allowPositionals:true,options:{table:{type:'string'},model:{type:'string'},related:{type:'boolean'},dependents:{type:'boolean'},direction:{type:'string'},direct:{type:'boolean'},'include-inactive':{type:'boolean'},details:{type:'boolean'},json:{type:'boolean'},session:{type:'string'},'new-session':{type:'boolean'},watch:{type:'boolean'},'bin-dir':{type:'string'},with:{type:'string'},out:{type:'string',short:'o'},force:{type:'boolean'},browser:{type:'string'},measure:{type:'string'}}});
+  const allowed={install:['bin-dir','json'],show:['table','model','related','dependents','direction','direct','include-inactive','session','new-session','watch','json','with','out','force','browser'],relations:['table','model','direction','direct','include-inactive','details','json','with'],dependents:['table','model','direct','details','json','measure']}[positionals[0]];
   for(const key of Object.keys(values))if(!allowed.includes(key))throw new Error('--'+key+' is not supported by '+positionals[0]);
+  for(const key of ['with','out','measure'])if(values[key]!==undefined&&!values[key].trim())throw new Error('--'+key+' cannot be empty');
   if(values.table!==undefined&&!values.table.trim())throw new Error('--table cannot be empty');
   if(values.model!==undefined&&!values.model.trim())throw new Error('--model cannot be empty');
   let result;
@@ -167,7 +169,7 @@ async function workflowCommand(args){
     else if(positionals.length===2){const models=require('./discover.cjs').discover([process.cwd()]);if(models.length!==1)throw new Error('Provide --model or a model path with --table; found '+models.length+' local models');source=models[0].path;table=positionals[1];if(/backup/i.test(source))throw new Error('A backup model requires an explicit model path');}
     else throw new Error('Provide a model path and --table <name>');
     const options={...values,table,newSession:values['new-session'],includeInactive:values['include-inactive']};
-    result=positionals[0]==='show'?await require('./show.cjs').show(source,options):require('./query.cjs').focused(source,table,positionals[0],options);
+    result=positionals[0]==='show'?await require('./show.cjs').show(source,options):values.with?require('./query.cjs').between(source,table,values.with,options):require('./query.cjs').focused(source,table,positionals[0],options);
   }
   process.stdout.write(JSON.stringify(result,null,2)+'\n');
 }

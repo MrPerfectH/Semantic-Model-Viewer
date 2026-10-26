@@ -48,3 +48,8 @@ Use shell CLI commands for every operation. In the Claude Code plugin, run `node
 `smv explain build` produces an `interactive.html` walkthrough with actual viewer steps as well as static outputs. Stop sessions started for temporary work with `smv session stop state.json`. Source watching refreshes the served artifact; reload the browser to see the new view.
 
 For the common table explanation, prefer `smv show <model> --table "<name>" --related --dependents`: one managed server, a combined workspace, and independent view URLs. Version 2 view files also support `tables:{"relatedTo":"<table>"}`, `arrange:true` and `banner:false`. See the CLI workflow document. The explanation walkthrough envelope remains version 1; its embedded view specifications use version 2.
+
+
+## Start with a question diagram
+
+For a relationship between two tables run `smv show <model> --table "<A>" --with "<B>"`. For upstream tables use `--related --direction incoming`; downstream tables use `--related --direction outgoing`; calculation dependencies use `--dependents`. Give the diagram URL first and explain what its arrows mean. `--out diagram.html` or `--out diagram.png` generates one portable diagram in the same command, without authoring view JSON. HTML contains the full model metadata and DAX. PNG needs Chrome/Chromium. Use qualified endpoint names and inactive-edge evidence from `relations`; use the `via` chain from `dependents` to explain an indirect calculation. A physical connection through intermediate tables does not necessarily propagate filters; follow the reported filter direction rather than inferring from proximity.

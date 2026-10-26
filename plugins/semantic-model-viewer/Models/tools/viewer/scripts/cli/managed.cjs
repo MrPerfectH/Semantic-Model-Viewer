@@ -18,7 +18,7 @@ async function list(source){const rows=[];for(const record of records()){
     rows.push({record,...live,running:true});
   }catch(e){rows.push({record,sessionId:record.sessionId,source:record.source,sessionFile:record.file,pluginVersion:record.pluginVersion,running:false,error:e.message});}
 }return rows;}
-async function find(source,options={}){const rows=await list(source);return rows.find(r=>r.running&&r.protocolVersion===2&&r.report===(options.report?path.resolve(options.report):null)&&r.watch===!!options.watch&&(options.forNamedViews||r.view===(options.view?path.resolve(options.view):null))&&(r.watch||r.inputFingerprint===require('./session.cjs').fingerprint(r.source,r.view,r.report)));}
+async function find(source,options={}){const rows=await list(source);return rows.sort((a,b)=>Number(b.pluginVersion===version())-Number(a.pluginVersion===version())).find(r=>r.running&&r.protocolVersion===2&&r.report===(options.report?path.resolve(options.report):null)&&r.watch===!!options.watch&&(options.forNamedViews||r.view===(options.view?path.resolve(options.view):null))&&(r.watch||r.inputFingerprint===require('./session.cjs').fingerprint(r.source,r.view,r.report)));}
 async function stopAll(source){const rows=await list(source),stopped=[],stale=[],errors=[];for(const row of rows){
   if(!row.running){stale.push(row.sessionId);continue;}
   try{await require('./session.cjs').request(row.sessionFile,'stop');stopped.push(row.sessionId);}catch(e){errors.push({sessionId:row.sessionId,error:e.message});}

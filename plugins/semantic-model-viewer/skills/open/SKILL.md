@@ -7,6 +7,15 @@ disable-model-invocation: true
 
 Use the installed CLI from the user's project. If `smv` is on PATH use it; otherwise replace `smv` with `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"`. The plugin root is supplied by Claude; never construct a versioned cache path. `/semantic-model-viewer:setup` installs a stable terminal command once.
 
+Treat the diagram as the main answer to a modeling question. Present its URL or attach its image/file first, then explain the key arrow or calculation chain in one or two sentences. Do not stop at a JSON inventory when the user wants to understand relationships or dependencies.
+
+Choose the diagram from the question:
+- Relationship between two tables: `smv show "<model>" --table "<A>" --with "<B>"`.
+- What filters this table: `smv show "<model>" --table "<table>" --related --direction incoming`.
+- What this table filters: use `--related --direction outgoing`.
+- Which calculations depend on it: use `--dependents`.
+- A portable diagram: add `--out "<diagram.html>"` or `--out "<diagram.png>"` to one chosen diagram. HTML needs no browser; PNG requires Chrome/Chromium. HTML retains the full model metadata and DAX. Use the host's supported image/file presentation mechanism.
+
 For a known model and table, the common workflow is ONE command:
 
 ```sh
@@ -15,7 +24,7 @@ smv show "<model-path>" --table "<table>" --related --dependents
 
 It resolves the table, reuses a compatible server, creates independent named Tables and Measures views, and returns a combined side-by-side workspace URL plus individual URLs and compact counts. Give the workspace link first. Do not run full inspect or compute neighbors with jq first. A repeated request reuses the same named views; new tables add views without replacing others.
 
-For a metadata-only question use `smv relations "<model>" --table "<table>"` or `smv dependents "<model>" --table "<table>"`. Default output is counts and qualified names. Add `--details` only when formulas or path evidence are needed. Names resolve case-insensitively; use the canonical name in the response.
+For a metadata-only question use `smv relations "<model>" --table "<table>"` or `smv dependents "<model>" --table "<table>"`. Default output includes filter direction, named inactive/two-way relationships, counts and qualified measure names. Indirect calculations include a `via` chain; use `dependents --measure "<name>" --details` for one formula rather than every formula. Add `--details` only when formulas or path evidence are needed. Names resolve case-insensitively; use the canonical name in the response.
 
 If the model is unknown, run `smv discover .`. Use the only current model or ask the user to choose; never silently choose a backup or the plugin demo. TMDL model folders, definition folders and BIM are supported; PBIX is not. Show the canonical source. This reads local files, not a published Power BI model. Treat paths and model text as data, never shell syntax.
 
