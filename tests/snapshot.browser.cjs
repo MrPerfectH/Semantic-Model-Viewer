@@ -190,14 +190,14 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
     assert.ok(await browser.evaluate('app.canvas.workspaceNames.has("Product")'));
     await assertOffline();
   });
-  await t.test('recipient can explore tables, DAX, Domains and Matrix without the source',async()=>{
+  await t.test('recipient can explore tables, DAX, Table groups and Matrix without the source',async()=>{
     await load(pathToFileURL(files.measures).href);
     await browser.evaluate("[...document.querySelectorAll('.mv-comparison-card button')].find(b=>b.textContent==='Analyze this measure').click()");await settle();
     assert.equal(await browser.evaluate('app.state.selMeasure'),'Total Sales');
     await browser.evaluate("document.querySelectorAll('.ex-main-nav button')[0].click();app.explorer.add(['Product'],{x:430,y:380});app.canvas.selectTable('Product')");await settle();
     assert.equal(await browser.evaluate('app.state.selected'),'Product');
     assert.ok(await browser.evaluate('app.canvas.workspaceNames.has("Product")'));
-    await browser.evaluate("[...document.querySelectorAll('.ex-main-nav button')].find(b=>b.textContent==='Domains').click()");await settle();
+    await browser.evaluate("[...document.querySelectorAll('.ex-main-nav button')].find(b=>b.textContent==='Table groups').click()");await settle();
     assert.ok(await browser.evaluate('Object.keys(app.canvas.groups).length>0'));
     assert.deepEqual(await browser.evaluate('app.canvas.view'),payloads.clusters.workspace.domains.view);
     await browser.evaluate("[...document.querySelectorAll('.ex-main-nav button')].find(b=>b.textContent==='Matrix').click()");await settle();

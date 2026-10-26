@@ -50,9 +50,18 @@ test('Spellbook palette preserves axes and Classic preference without mutating s
   c.ViewerTheme.init();assert.equal(c.ViewerTheme.palette(base),base);
   c.ViewerTheme.set('spellbook');const themed=c.ViewerTheme.palette(base);
   for(const axis of ['domain','schema','source'])assert.deepEqual(Object.keys(themed[axis]),Object.keys(base[axis]));
-  assert.equal(themed.domain.Commercial,'#68734d');assert.equal(themed.domain.Vena,'#67576e');
+  assert.notEqual(themed.domain.Commercial,themed.domain.Vena);
+  assert.equal(themed.domain.Commercial,themed.list[0], 'group names no longer have project-specific palette rules');
   assert.notEqual(themed.edge.in,themed.edge.out);
   assert.ok(themed.list.every(color=>/^#[0-9a-f]{6}$/.test(color)));
   assert.equal(JSON.stringify(base),original);assert.equal(storage.get('smv-palette'),'vivid');
   c.ViewerTheme.set('classic');assert.equal(c.ViewerTheme.palette(base),base);
+});
+
+test('VS Code automatic palettes retain distinct hues instead of passing map indices as contrast settings',()=>{
+  const {context:c}=runtime();c.SMVHost={kind:'vscode',theme:'dark'};c.document.body={};
+  c.getComputedStyle=()=>({getPropertyValue:()=> '#1e1e1e'});
+  const base={domain:{},schema:{},source:{},edge:{},list:['#4f8ff7','#18b9a6','#9b7bf0'],fallback:'#8896aa'};
+  const result=c.ViewerTheme.palette(base);
+  assert.equal(new Set(result.list).size,3);assert.ok(result.list.every(c=>c!=='#ffffff'));
 });

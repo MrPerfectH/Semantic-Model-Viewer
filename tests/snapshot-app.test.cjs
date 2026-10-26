@@ -163,7 +163,7 @@ test('recipient UI keeps four analysis modes and Save snapshot but has no model 
   const host = node(); new context.TopBar(app, host).update();
   const flatten = n => [n, ...(n.children || []).flatMap(flatten)];
   const all = flatten(host), buttons = all.filter(n => n.tag === 'button').map(n => n.textContent);
-  for (const label of ['Tables', 'Measures', 'Domains', 'Matrix', 'Save snapshot']) assert.ok(buttons.includes(label), label);
+  for (const label of ['Tables', 'Measures', 'Table groups', 'Matrix', 'Save snapshot']) assert.ok(buttons.includes(label), label);
   for (const label of ['Open model', 'PNG']) assert.equal(buttons.includes(label), false);
   assert.ok(all.some(n => n.textContent === 'Offline snapshot'));
   assert.equal(all.some(n => n.attrs?.title === 'Switch or import a model'), false);

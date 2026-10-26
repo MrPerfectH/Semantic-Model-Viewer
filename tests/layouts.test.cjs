@@ -706,7 +706,7 @@ test('Escape closes the Display popover first, then Saved views, and returns foc
   assert.equal(explorer.closeMenus(), false, 'Escape with nothing open is left to other handlers');
 });
 
-test('a press outside closes every open toolbar popover without stealing focus', () => {
+test('a press outside closes toolbar popovers but keeps the docked legend open', () => {
   const context = runtime();
   const focused = [];
   let updates = 0;
@@ -719,7 +719,7 @@ test('a press outside closes every open toolbar popover without stealing focus',
 
   assert.equal(explorer.closeMenus(true), true);
   assert.equal(explorer.optionsOpen, false);
-  assert.equal(explorer.legendOpen, false);
+  assert.equal(explorer.legendOpen, true, 'the legend is a persistent dock, not a popover');
   assert.equal(app.state.showPresets, false);
   assert.deepEqual(focused, [], 'clicking elsewhere keeps the focus where the user clicked');
 

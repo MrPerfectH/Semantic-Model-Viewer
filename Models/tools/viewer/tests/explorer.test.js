@@ -656,7 +656,7 @@ test('library and inspector rails can be hidden and the choice persists across m
   const { explorer, app, cv, storage } = fixture();
   const widths = [];
   explorer.update = Object.getPrototypeOf(explorer).update;
-  explorer.renderLibrary = explorer.renderToolbar = explorer.renderEmpty = explorer.renderNavigation = explorer.drawMap = () => {};
+  explorer.renderLibrary = explorer.renderToolbar = explorer.renderEmpty = explorer.renderNavigation = explorer.renderLegend = explorer.drawMap = () => {};
   const main = cv.host.parentNode; // #main: the fixture parks the canvas host there
   main.style.setProperty = (name, value) => { widths.push(name + '=' + value); };
   app.state.loaded = true; app.sidebar = { _key: 'stale' };
@@ -687,4 +687,18 @@ test('library and inspector rails can be hidden and the choice persists across m
   explorer.toggleLibrary(); explorer.toggleInspector();
   assert.equal(fixture(storage).explorer.libraryHidden, false);
   assert.equal(fixture(storage).explorer.inspectorHidden, false);
+});
+
+test('disconnected visibility persists without removing canvas membership and round-trips in views',()=>{
+ const {app,cv,explorer,storage}=fixture();
+ app.model.tables.forEach((t,i)=>t.relCount=i===2?0:1);
+ explorer.showAll();
+ const display=cv.captureDisplay();
+ cv.toggleStandalone();
+ assert.equal(cv.cards.C.el.style.display,'none');assert.equal(cv.cards.A.el.style.display,'');
+ assert.equal(explorer.names.has('C'),true);
+ assert.equal(storage.get(explorer.storageKey()).showDisconnected,false);
+ explorer.loadModel();cv.refreshVisibility();assert.equal(cv.showSA,false);
+ cv.restoreDisplay(display);cv.refreshVisibility();assert.equal(cv.cards.C.el.style.display,'');
+ cv.toggleStandalone();explorer.showAll();assert.equal(cv.showSA,true);
 });

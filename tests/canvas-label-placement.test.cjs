@@ -42,3 +42,18 @@ test('low zoom keeps the existing arrow-only representation', () => {
   const c = canvas(false, 0.3);
   assert.ok(c.edgeGeom({}, 0, 0, []).spots.every(s => s.bare));
 });
+
+for (const vertical of [false, true]) {
+  test(`compact relationship badges reserve their smaller ${vertical ? 'vertical' : 'horizontal'} bounds`, () => {
+    const c = canvas(vertical, 0.51), spot = { orient: vertical ? 'v' : 'h', bare: false };
+    const full = c.pillBox(spot);
+    c._chip = true;
+    const compact = c.pillBox(spot);
+    assert.ok(Math.abs(compact.w / full.w - 0.78) < 1e-9);
+    assert.ok(Math.abs(compact.h / full.h - 0.78) < 1e-9);
+    assert.ok(Math.abs((vertical ? compact.w : compact.h) * c.view.k - 15.6) < 1e-9);
+    const arrow = c.labelDims(true);
+    c._chip = false;
+    assert.deepEqual(c.labelDims(true), arrow, 'arrow-only geometry retains its readable floor');
+  });
+}

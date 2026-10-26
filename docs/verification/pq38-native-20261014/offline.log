@@ -1,0 +1,11 @@
+✔ actual exported files retain available Power Query metadata when reopened and re-exported offline (1233.337569ms)
+ℹ {"input":"/tmp/smv-pq38-native/workspace/workspace snapshot 2026-10-14.html","reexportBytes":875505,"access":{"network":0,"storage":0,"errors":[]}}
+ℹ {"input":"/tmp/smv-pq38-native/workspace/PQ38 snapshot 2026-10-14.html","reexportBytes":857114,"access":{"network":0,"storage":0,"errors":[]}}
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1296.228434

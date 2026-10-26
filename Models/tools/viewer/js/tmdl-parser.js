@@ -72,6 +72,7 @@
         if((m=t.match(/^measure\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)\s*=\s*(.*)$/))){ curMeas={name:unq(m[1].replace(/"/g,'')), dax:(m[2]||'').trim(), folder:'', fmt:''}; table.measures.push(curMeas); mode='measure'; continue; }
         if(/^calculationGroup\b/.test(t)){ isCG=true; mode='cg'; continue; }
         if((m=t.match(/^partition\s+.*?=\s*(\w+)\s*$/))){ partKind=m[1]; mode='partition'; continue; }
+        if((m=t.match(/^annotation\s+TabularEditor_TableGroup\s*=\s*(.*)$/i))){ table.tableGroup=m[1].trim().replace(/^"(.*)"$/,function(_,v){return v.replace(/""/g,'"');}); continue; }
         if((m=t.match(/^annotation\s+SMV_Role\s*=\s*(\w+)/i))){ table.roleAnnotation=m[1].toLowerCase(); continue; }
         continue;
       }
@@ -213,6 +214,14 @@
     if(!r.conn) return {kind:'other', label:'Other', via:r.via||null};
     var c = r.conn, all = r.text, out = {kind:c.kind, label:c.label};
     if(r.via) out.via = r.via;
+    // Connection-level navigation identifies groups; table/entity names do not.
+    [['workspace', /workspaceId\s*=\s*"([^"]+)"/i], ['lakehouse', /lakehouseId\s*=\s*"([^"]+)"/i],
+     ['dataflow', /dataflowId\s*=\s*"([^"]+)"/i], ['database', /\{\[Name\s*=\s*"([^"]+)"\s*,\s*Kind\s*=\s*"(?:Database|Catalog)"\]\}/i]].forEach(function(pair){
+      var value=firstOf(all,pair[1]);if(value)out[pair[0]]=value;
+    });
+    var database=litOrParam(firstOf(all,/\b(?:Sql|PostgreSQL|MySQL)\.Database\s*\(\s*(?:"[^"]+"|[A-Za-z_]\w*)\s*,\s*("[^"]+"|[A-Za-z_]\w*)/),ctx);
+    if(database)out.database=database;
+
 
     /* the object name almost always sits in the partition itself, the server/schema upstream */
     var tab = firstOf(part, /\{\[Name\s*=\s*"([^"]+)"\s*,\s*Kind\s*=\s*"(?:Table|View)"\]\}/)
@@ -227,7 +236,7 @@
       out.schema = sch || 'unknown';
       out.table = tab || '?';
       out.detail = (sch? sch+'.' : '') + (tab || '?');
-      var srv = litOrParam(firstOf(all, /\b(?:Vertica|Sql|Oracle|PostgreSQL|MySQL|Snowflake|Odbc)\.\w+\s*\(\s*("[^"]+"|[A-Za-z_]\w*)/), ctx);
+      var srv = litOrParam(firstOf(all, /\b(?:Vertica|Sql|Oracle|PostgreSQL|MySQL|Snowflake|Odbc|Databricks)\.\w+\s*\(\s*("[^"]+"|[A-Za-z_]\w*)/), ctx);
       if(srv) out.server = srv;
       return out;
     }
@@ -282,11 +291,10 @@
       if(ann) t.ann=ann.toLowerCase();
       t.role=t.role||role;
       var domMap={calcgroup:'Calc Groups', fieldparam:'Field Params', measures:'Measures'};
-      t.domain = t.domain || domMap[t.role] || (t.source.schema && t.source.schema!=='unknown' ? cap(t.source.schema)
-        : (t.source.kind==='manual'?'Manual':(t.source.kind==='calculated'?'Calculated':(t.source.label||'Other'))));
+      t.domain = t.tableGroup || domMap[t.role] || (t.source.kind==='manual'?'Manual':t.source.kind==='calculated'?'Calculated':'Ungrouped');
       t.colCount=t.columns.length; t.measureCount=t.measures.length; t.relCount=rc[t.name]||0;
     });
-    return {name:name, tables:tables, relationships:rels};
+    return {name:name, groupingVersion:1, tables:tables, relationships:rels};
   }
 
   /* Shared queries (expressions.tmdl) hold the real connector calls and the
@@ -411,7 +419,8 @@
       var p=(t.partitions||[])[0];
       if(p&&p.source){ partKind=(p.source.type==='calculated')?'calculated':(p.source.type||'m'); partSrc=txt(p.source.expression); }
       var roleAnn=(t.annotations||[]).find(function(a){return a.name==='SMV_Role';});
-      var out={name:t.name, columns:columns, measures:measures, roleAnnotation: roleAnn?String(roleAnn.value):undefined, _flags:{isCG:isCG,isFP:isFP,partKind:partKind,partSrc:partSrc}};
+      var groupAnn=(t.annotations||[]).find(function(a){return a.name==='TabularEditor_TableGroup';});
+      var out={tableGroup:groupAnn?String(groupAnn.value||'').trim():'',name:t.name, columns:columns, measures:measures, roleAnnotation: roleAnn?String(roleAnn.value):undefined, _flags:{isCG:isCG,isFP:isFP,partKind:partKind,partSrc:partSrc}};
       if(partKind==='calculated'&&partSrc.trim()) out.dax=partSrc.trim();
       if(t.calculationGroup&&Array.isArray(t.calculationGroup.calculationItems)) out.calcItems=t.calculationGroup.calculationItems.map(function(ci){
         var o={name:ci.name, dax:txt(ci.expression).trim(), fmt:''}; var f=ci.formatStringDefinition; if(f) o.fmt=txt(f.expression||f).trim(); return o; });

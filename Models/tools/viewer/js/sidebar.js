@@ -70,7 +70,7 @@
     });
     return {
       tableDax: t.dax || '', calcItems: calcItems,
-      name: t.name, domain: t.domain, role: t.role, roleShort: rmap[t.role] || 'TBL', roleLabel: rlabel[t.role] || 'Table',
+      name: t.name, domain: app.groupLabel ? app.groupLabel('domain',t.domain) : t.domain, role: t.role, roleShort: rmap[t.role] || 'TBL', roleLabel: rlabel[t.role] || 'Table',
       roleGlyphStyle: "font:700 9px/1 'IBM Plex Mono',monospace;letter-spacing:.5px;padding:5px 6px;border-radius:5px;color:#fff;background:" + col + ';flex:none;',
       tintBg: tint(col, 0.08),
       srcIcon: sm.icon, srcIconStyle: 'font-size:15px;color:' + sm.color + ';flex:none;width:20px;text-align:center;',

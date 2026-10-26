@@ -81,17 +81,23 @@ function focusState(canvas) {
 }
 const viewport = canvas => ({ ...canvas.view });
 
-/* selectTable defers its fit until the inspector has opened, which means the fit lands after
-   whatever the caller did next. A caller that has already aimed the viewport — Center
-   selected, a click on a chip — says so, and keeps the aim it just made. */
-test('an explicit focus keeps the viewport it aimed at; an ordinary selection still refits', () => {
-  const { canvas } = fixture({ isolated: true });
-  canvas.fitCount = 0;
-  canvas.selectTable('B');
-  assert.equal(canvas.fitCount, 1, 'selecting a table in isolate mode refits the canvas');
-  canvas.selectTable('C', { keepView: true });
-  assert.equal(canvas.fitCount, 1, 'an explicit focus is not undone by a deferred fit');
-  assert.equal(canvas.app.state.selected, 'C', 'it still selects the table');
+test('card and compact-label clicks preserve viewport in Dim and Hide modes', () => {
+  for (const isolated of [false, true]) for (const zoom of [0.21, 0.45, 1]) {
+    const { canvas, win } = fixture({ isolated, zoom });
+    canvas._chip = zoom < 0.5;
+    canvas._autoFit = true; canvas._pendingFit = true;
+    const before = viewport(canvas);
+    canvas.focusGraph = () => { throw new Error('Selection must not navigate'); };
+    for (const name of ['B', 'C']) {
+      canvas.cards[name].head.fire('mousedown'); win.fire('mouseup');
+      assert.equal(canvas.app.state.selected, name);
+      assert.equal(canvas._activeSel, name);
+      assert.deepEqual(viewport(canvas), before);
+      assert.equal(canvas.fitCount, 0);
+      assert.equal(canvas._autoFit, false);
+      assert.equal(canvas._pendingFit, false);
+    }
+  }
 });
 
 test('panning preserves selected table, pins, lock, relationship and isolate visibility', () => {
