@@ -95,7 +95,10 @@ jobs:
         run: node scripts/preview-version.cjs
       - name: Package pre-release extension
         if: github.event_name != 'push' || inputs.prerelease
-        run: npm run package:preview --prefix vscode-extension -- --out semantic-model-viewer-fabric-preview.vsix
+        run: |
+          cat vscode-extension/PRE-RELEASE.md vscode-extension/README.md > /tmp/smv-preview-readme.md
+          cp /tmp/smv-preview-readme.md vscode-extension/README.md
+          npm run package:preview --prefix vscode-extension -- --out semantic-model-viewer-fabric-preview.vsix
       - name: Package stable extension
         if: github.event_name == 'push' && !inputs.prerelease
         run: |
