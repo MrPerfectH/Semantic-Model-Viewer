@@ -17,6 +17,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: fabric-preview-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   helpers:
     if: github.ref == 'refs/heads/feature/fabric-connect' || github.head_ref == 'feature/fabric-connect' || startsWith(github.ref, 'refs/tags/v')
@@ -80,6 +84,10 @@ jobs:
       - run: npm ci --prefix vscode-extension
       - run: npm ci --omit=dev --prefix tools/fabric
       - run: npm test --prefix vscode-extension
+      - name: Verify downloaded offline snapshots in Chrome
+        run: |
+          command -v google-chrome || command -v chromium
+          node --test tests/snapshot.browser.cjs
       - name: Package pre-release extension
         if: github.event_name != 'push' || inputs.prerelease
         run: npm run package:preview --prefix vscode-extension -- --out semantic-model-viewer-fabric-preview.vsix
