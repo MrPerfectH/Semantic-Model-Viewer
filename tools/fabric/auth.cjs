@@ -75,6 +75,9 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
       selectedId = result.account.homeAccountId; selectedTenantId = result.account.tenantId;
       if (prompt === 'select_account') accessTokens.clear();
       return remember(result, audience, purpose);
+    } catch (error) {
+      if (error instanceof FabricError) throw error;
+      throw new FabricError('SignInFailed', 'Microsoft sign-in did not complete. Check your connection and sign in again.');
     } finally { if(callbackResponse && !callbackResponse.writableEnded) callbackResponse.writeHead(302, {'Location':browserFlow.returnUri,'Cache-Control':'no-store','Referrer-Policy':'no-referrer'}).end(); clearTimeout(timer); server?.close(); server?.closeAllConnections(); if(generation === currentGeneration) { pending = null; interactiveBusy = false; } }
   }
   return {
@@ -85,7 +88,7 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
       const before = generation;
       let ready, failed;const started = new Promise((resolve,reject)=>{ready=resolve;failed=reject;});
       interactive(clientId === POWER_BI_DESKTOP_CLIENT_ID ? POWER_BI_AUDIENCE : FABRIC_AUDIENCE,'select_account',undefined,{returnUri,ready:url=>ready({url})})
-        .catch(error=>{if(before===generation) browserError=error.message || 'Microsoft sign-in failed.';failed(error);})
+        .catch(error=>{if(before===generation) browserError=error instanceof FabricError ? error.message : 'Microsoft sign-in failed. Sign in again.';failed(error);})
         .finally(()=>{if(before===generation) browserLogin=false;});
       return started;
     },
@@ -110,7 +113,7 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
           accessTokens.clear();
           remember(result, POWER_BI_AUDIENCE);
           deviceLogin = null;
-        } catch(error) { if (generation === currentGeneration) { deviceLogin = null; deviceError = 'Microsoft device sign-in was cancelled, expired, or denied. Try again.'; } failed(error); }
+        } catch(error) { if (generation === currentGeneration) { deviceLogin = null; deviceError = 'Microsoft device sign-in did not complete. Check your connection and try again.'; } failed(error); }
         finally { if(generation === currentGeneration) {deviceRequest = null; interactiveBusy = false;} }
       })();
       return started;
@@ -131,6 +134,7 @@ function createAuth({ clientId, openBrowser, loadTokens = async () => null, save
       catch (error) {
         if (generation !== currentGeneration) throw new FabricError('Cancelled', 'Microsoft token request cancelled.');
         if (error instanceof FabricError) throw error;
+        if (purpose === 'capacity-preflight') throw new FabricError('CapacityUnknown', 'Capacity visibility is unavailable.');
         if (error.name !== 'InteractionRequiredAuthError') throw new FabricError('TokenFailed', 'Microsoft could not renew this session. Sign in again.');
         return (await interactive(audience, undefined, purpose)).accessToken;
       }

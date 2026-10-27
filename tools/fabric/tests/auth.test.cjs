@@ -98,3 +98,23 @@ test('custom application token reuse does not cross API resources or definition 
  assert.equal(await m.auth.getAccessToken('https://api.fabric.microsoft.com','definition'),'separate');
  assert.equal(renewals,2);
 });
+
+test('advisory capacity preflight never opens interactive consent or asks for capacity scope', async () => {
+ const {scopesFor}=require('../auth.cjs');
+ for(const clientId of [id,POWER_BI_DESKTOP_CLIENT_ID]) assert.ok(!scopesFor('https://api.fabric.microsoft.com','capacity-preflight',clientId).some(s=>s.includes('Capacity.')));
+ let prompts=0;
+ const auth=createAuth({clientId:id,openBrowser:async()=>{prompts++;},msalFactory:()=>({getTokenCache:()=>({getAllAccounts:async()=>[a]}),acquireTokenSilent:async()=>{const e=new Error('SECRET');e.name='InteractionRequiredAuthError';throw e;}})});
+ await assert.rejects(auth.getAccessToken('https://api.fabric.microsoft.com','capacity-preflight'),{code:'CapacityUnknown'});assert.equal(prompts,0);
+});
+test('normal interaction-required renewal still uses the supported interactive flow', async () => {
+ const m=mock({silent:async()=>{const e=new Error('SECRET');e.name='InteractionRequiredAuthError';throw e;}});
+ assert.equal(await m.auth.getAccessToken('https://api.fabric.microsoft.com','definition'),'new');
+});
+test('browser renewal failure has a fixed canceled or expired message without MSAL text', async () => {
+ let request;
+ const auth=createAuth({clientId:id,openBrowser:async()=>{},msalFactory:()=>({getTokenCache:()=>({getAllAccounts:async()=>[a]}),getAuthCodeUrl:async r=>{request=r;return 'https://login.microsoftonline.com/test';},acquireTokenByCode:async()=>{throw new Error('SECRET tenant account request URL');}})});
+ await auth.beginBrowserSignIn('http://localhost:8945/?fabricSignIn=1');
+ const url=new URL(request.redirectUri);url.searchParams.set('state',request.state);url.searchParams.set('code','test');await fetch(url,{redirect:'manual'});
+ await new Promise(resolve=>setImmediate(resolve));
+ const status=await auth.status();assert.match(status.browserError,/sign-in did not complete/);assert.ok(!JSON.stringify(status).includes('SECRET'));
+});

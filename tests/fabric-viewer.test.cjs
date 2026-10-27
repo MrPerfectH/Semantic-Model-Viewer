@@ -67,3 +67,20 @@ test('workspace discovery remains available while browsing models and appending 
   assert.deepEqual(c.workspaceItems,[{id:'w',name:'Workspace'}]);assert.equal(c.workspaceNext,'more-workspaces');
   assert.deepEqual(c.items.map(i=>i.id),['m1','m2']);assert.equal(c.next,null);
 });
+
+test('real REST diagnostics propagate through bridge and host UI without cached success or raw objects',async()=>{
+ const {createService}=require('../tools/fabric/bridge.cjs');
+ const {createFabricClient}=require('../tools/fabric/client.cjs');
+ const W='00000000-0000-0000-0000-000000000001',M='00000000-0000-0000-0000-000000000002',R='aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
+ const responses=[new Response('{}',{status:403}),new Response(null,{status:202,headers:{'x-ms-operation-id':R}}),new Response(JSON.stringify({status:'Failed',error:{errorCode:'UnknownError',isRetriable:false,requestId:R,message:'SECRET'}}))];
+ const client=createFabricClient({getAccessToken:async()=> 'SECRET TOKEN',wait:async()=>{},fetch:async()=>responses.shift()});
+ client.listWorkspaces=async()=>[{id:W,displayName:'Workspace'}];client.listModels=async()=>[{id:M,displayName:'Model'}];
+ const service=createService({auth:{status:async()=>({account:{id:'a',tenantId:'tenant'}})},client});
+ const {c,app,opened}=harness();c.transport='rest';c.workspace={id:W,name:'Workspace'};app.host={fabricRequest:payload=>service.request(payload)};
+ app.setStore([{id:'old',name:'Cached',model:{tables:[]}}]);
+ await c.run(async function(n){await this.open({id:M,name:'Model'},n);});
+ assert.match(c.error,/Code: UnknownError/);assert.match(c.error,/Retriable: false/);assert.ok(c.error.includes(R));assert.match(c.error,/Capacity observed during preflight: Unknown/);
+ for(const secret of ['SECRET',W,M,'https://','[object Object]'])assert.ok(!c.error.includes(secret));
+ assert.equal(app.message.snapshotError,c.error);assert.equal(opened.length,0);assert.equal(app.getStore()[0].name,'Cached');
+ await service.dispose();
+});
