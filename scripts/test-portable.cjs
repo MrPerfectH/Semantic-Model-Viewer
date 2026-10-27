@@ -8,7 +8,9 @@ const temp=fs.mkdtempSync(path.join(os.tmpdir(),'SMV portable unicode α '));
 const env={...process.env,PATH:'',SMV_STATE_DIR:path.join(temp,'state'),SMV_PACKAGE_CACHE:path.join(temp,'cache'),SMV_RUNTIME_CACHE:path.join(temp,'runtime-cache'),SMV_OPENER:'none'};delete env.SMV_NODE;
 const run=(args,selected=root)=>{
  const launcher=path.join(selected,'bin',process.platform==='win32'?'smv.cmd':'smv');
- const result=process.platform==='win32'?spawnSync(process.env.ComSpec||'C:\\Windows\\System32\\cmd.exe',['/d','/s','/c','"'+[launcher,...args].map(arg=>'"'+String(arg)+'"').join(' ')+'"'],{env,encoding:'utf8',cwd:temp,timeout:45000}):spawnSync('/bin/sh',[launcher,...args],{env,encoding:'utf8',cwd:temp,timeout:45000});
+ // cmd.exe consumes its own quoted command string. Preserve those quotes rather
+ // than applying Node's default Windows executable argument escaping a second time.
+ const result=process.platform==='win32'?spawnSync(process.env.ComSpec||'C:\\Windows\\System32\\cmd.exe',['/d','/s','/c','"'+[launcher,...args].map(arg=>'"'+String(arg)+'"').join(' ')+'"'],{env,encoding:'utf8',cwd:temp,timeout:45000,windowsVerbatimArguments:true}):spawnSync('/bin/sh',[launcher,...args],{env,encoding:'utf8',cwd:temp,timeout:45000});
  assert.equal(result.status,0,result.stderr||String(result.error));return result.stdout;
 };
 let session,cached;const changedModes=[];
