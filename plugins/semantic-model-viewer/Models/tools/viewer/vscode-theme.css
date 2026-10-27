@@ -79,8 +79,8 @@
 :root[data-host=vscode] :is(#canvas [data-name],#canvas [data-body],.wui-card){background:var(--smv-surface)!important}
 :root[data-host=vscode] :is(#canvas [data-head],.wui-card-head){background:color-mix(in srgb,var(--smv-category,var(--smv-line)) 18%,var(--smv-surface))!important;border-left-color:var(--smv-category,var(--smv-line))!important}
 /* Keep fact and dimension cards distinct in VS Code's host palette. */
-:root[data-host=vscode] #canvas [data-name][data-fact="true"] [data-head]{background:color-mix(in srgb,var(--smv-category,var(--smv-line)) 32%,var(--smv-surface))!important}
-:root[data-host=vscode] #canvas [data-name][data-fact="false"] [data-head]{background:color-mix(in srgb,var(--smv-category,var(--smv-line)) 10%,var(--smv-surface))!important}
+:root[data-host=vscode] :is(#canvas [data-name][data-fact="true"] [data-head],.smv-colour-preview .wui-card[data-fact="true"] .wui-card-head){background:color-mix(in srgb,var(--smv-category,var(--smv-line)) 32%,var(--smv-surface))!important}
+:root[data-host=vscode] :is(#canvas [data-name][data-fact="false"] [data-head],.smv-colour-preview .wui-card[data-fact="false"] .wui-card-head){background:color-mix(in srgb,var(--smv-category,var(--smv-line)) 10%,var(--smv-surface))!important}
 :root[data-host=vscode] :is(#canvas [data-title],.wui-card-title){color:var(--smv-ink)!important}
 :root[data-host=vscode] :is(#canvas [data-src],.wui-card-subtitle,.pqc-node-subtitle,.pqc-fact .pqc-node-subtitle,.pqc-source,.pqi-source-provider,.wui-card-chip *){color:var(--smv-diagram-subtitle)!important}
 :root[data-host=vscode] #canvas [data-head] button{background:var(--smv-surface)!important;color:var(--smv-ink)!important}

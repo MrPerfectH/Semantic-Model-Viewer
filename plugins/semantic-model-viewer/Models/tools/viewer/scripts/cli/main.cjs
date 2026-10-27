@@ -10,6 +10,7 @@ Usage:
   smv fetch --workspace <name|UUID> --model <name|UUID> [--out <new-folder>]
   smv --where [--json]
   smv --version
+  smv workspace
   smv install [--source checkout|plugin] [--bin-dir <directory>]
   smv show <model> --table <name> [--with <table> | --related | --dependents] [--out diagram.html|diagram.png]
   smv relations|dependents <model> --table <name> [--details]
@@ -59,6 +60,7 @@ async function run(args) {
   // or its dependencies in the CLI-only plugin payload.
   const adapter=path.resolve(__dirname,'../../../../../integrations/mcp/server.cjs');
   if(args[0]==='mcp'&&fs.existsSync(adapter))return require(adapter).start();
+  if(args[0]==='workspace'){if(args.length!==1)throw new Error('Use workspace without arguments');process.stdout.write(JSON.stringify(require('../../../../../scripts/claude-workspace.cjs').prepare())+'\n');return;}
   if(args[0]==='fetch')return fetchCommand(args.slice(1));
   if(['show','relations','dependents','install'].includes(args[0]))return workflowCommand(args);
   if (args[0] === '--where' || args[0] === '--version') {
@@ -67,7 +69,8 @@ async function run(args) {
     const api=require('./runtime.cjs'),config=api.currentConfig();
     // Direct invocation always describes this executable, without registry redirection.
     const runtime=api.resolveRuntime({...config,source:'checkout'});
-    runtime.source=config.source;runtime.selection='direct';runtime.registry=null;
+    runtime.source=config.packageHost?'bundled':config.source;runtime.selection='direct';runtime.registry=null;
+    runtime.packageHost=config.packageHost;runtime.javascriptRuntime={executable:process.execPath,version:process.version};
     runtime.updatePolicy='Direct invocation of this executable; no runtime substitution.';
     process.stdout.write((args[0]==='--version'?runtime.version:json?JSON.stringify(runtime):runtime.executable)+'\n');return;
   }

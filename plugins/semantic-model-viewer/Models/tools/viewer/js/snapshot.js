@@ -16,15 +16,15 @@
   function safeJSON(value) { return JSON.stringify(value).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029'); }
   function assetPath(url) { return String(url).replace(/^\.\//, '').split(/[?#]/)[0]; }
   function modelData(model) {
-    var result = { name: String(model.name || ''), tables: model.tables.map(function(t){
-      var row = pick(t, ['name','domain','role','baseRole','autoRole','roleVia','ann','description','hidden']);
+    var result = { groupingVersion:1, name: String(model.name || ''), tables: model.tables.map(function(t){
+      var row = pick(t, ['name','tableGroup','snapshotGroup','snapshotSource','domain','role','baseRole','autoRole','roleVia','ann','description','hidden']);
       row.columns = (t.columns || []).map(function(c){return pick(c,['name','dataType','hidden','isCalc','isKey','rel','description','dax']);});
       row.measures = (t.measures || []).map(function(m){var measure=pick(m,['name','dax','fmt','folder','h','description']);measure.dax=String(measure.dax||'');return measure;});
       if (typeof t.dax === 'string' && t.dax) row.dax = t.dax;
       if (Array.isArray(t.calcItems)) row.calcItems = t.calcItems.map(function(ci){return pick(ci,['name','dax','fmt']);});
       row.colCount = row.columns.length; row.measureCount = row.measures.length;
       // Separate connection settings are omitted; endpoints written in M remain in the query definitions.
-      row.source = pick(t.source, ['kind','schema','table','via']);
+      row.source = pick(t.source, ['kind','schema','table','via','colourIdentity','colourLabel']);
       if (!row.source.kind) row.source.kind = 'other';
       return row;
     }), relationships: (model.relationships || []).map(function(r){return pick(r,['name','from','to','fromCol','toCol','fromCard','toCard','both','inactive','isActive','crossFilteringBehavior']);}) };
@@ -60,7 +60,7 @@
     var tableView=app.captureTableView?clone(app.captureTableView()):{version:2,name:'Snapshot starting view',tables:cv.workspaceNames?Array.from(cv.workspaceNames):model.tables.map(function(t){return t.name;}),
       pos:clone(cv.pos),view:clone(app.state.viewMode==='graph'?cv.view:(app._tableViewport||cv.view)),focus:cv.captureFocus(),display:cv.captureDisplay()};
     return {format:FORMAT,version:VERSION,name:model.name,createdAt:new Date().toISOString(),source:sourceData(app),model:model,usage:usageData(app),
-      settings:{theme:g.ViewerTheme?g.ViewerTheme.get():'classic',roleRules:app.getRules?app.getRules().map(function(r){return pick(r,['role','name','sides','measures','kind']);}):[]},
+      settings:{groupColours:app.captureGroupColours?app.captureGroupColours():null,theme:g.ViewerTheme?g.ViewerTheme.get():'classic',roleRules:app.getRules?app.getRules().map(function(r){return pick(r,['role','name','sides','measures','kind']);}):[]},
       workspace:{viewMode:app.state.viewMode,powerQuery:app.powerQueryWorkspace&&app.powerQueryWorkspace.captureSnapshot?app.powerQueryWorkspace.captureSnapshot():null,tableView:tableView,presets:clone(cv.getPresets()),matrix:app.captureMatrix?clone(app.captureMatrix()):null,
         explorer:ex?{query:ex.query,filter:ex.filter,direction:ex.direction,depth:ex.depth,includeInactive:!!ex.includeInactive,mapHidden:!!ex.mapHidden,libraryHidden:!!ex.libraryHidden,inspectorHidden:!!ex.inspectorHidden}:{},
         domains:app.captureDomains?clone(app.captureDomains()):{expandedGroups:Array.from(cv.expandedGroups || []),positions:Object.keys(cv.groups || {}).map(function(key){var group=cv.groups[key];return {key:key,x:group.x,y:group.y};}),tablePositions:clone(cv.cpos || {}),view:clone(cv.view)}},

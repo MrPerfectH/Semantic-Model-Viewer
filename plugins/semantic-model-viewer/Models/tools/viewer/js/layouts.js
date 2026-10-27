@@ -985,6 +985,7 @@
   /* ---------- cluster mode ---------- */
   P.groupKeyOf = function (t) { return this.app.colorBy === 'source' ? this.app.srcKeyOf(t) : t.domain; };
   P.groupLabelOf = function (k) {
+    if (this.app.groupLabel) return this.app.groupLabel(this.app.colorBy,k);
     if (this.app.colorBy !== 'source') return k;
     var map = { manual: 'Manual', calculated: 'Calculated', other: 'Other' };
     return map[k] || k;

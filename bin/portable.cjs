@@ -10,7 +10,7 @@ try{
     require('./smv.cjs');
   }else{
     const info=JSON.parse(fs.readFileSync(infoFile,'utf8'));
-    if(!/^[a-f0-9]{64}$/.test(info.sha256))throw new Error('Invalid portable package identity');
+    if(!/^[a-f0-9]{64}$/.test(info.sha256)||!info.files||info.sha256!==require('node:crypto').createHash('sha256').update(JSON.stringify(info.files)).digest('hex'))throw new Error('Invalid portable package identity');
     let selected=root;
     const live=['show','open','serve'].includes(args[0])&&!args.includes('--out')&&!args.includes('-o');
     if(live){
@@ -29,13 +29,14 @@ try{
             const actual=require('node:crypto').createHash('sha256').update(fs.readFileSync(path.join(temp,file))).digest('hex');
             if(actual!==expected)throw new Error('Package changed during session preparation: '+file);
           }
+          if(process.platform!=='win32')fs.chmodSync(path.join(temp,'runtime',target,'node'),0o700);
           try{fs.renameSync(temp,selected);}catch(error){if(!['EEXIST','ENOTEMPTY','EPERM'].includes(error.code)||!fs.existsSync(path.join(selected,'build-info.json')))throw error;}
         }finally{fs.rmSync(temp,{recursive:true,force:true});}
       }
       if(fs.lstatSync(selected).isSymbolicLink())throw new Error('Package cache must not be a symbolic link');
     }
     const target=(process.platform==='win32'?'win':process.platform)+'-'+process.arch;
-    const executable=path.join(selected,'runtime',target,process.platform==='win32'?'node.exe':'node');
+    const executable=selected===root?process.execPath:path.join(selected,'runtime',target,process.platform==='win32'?'node.exe':'node');
     const result=spawnSync(executable,[path.join(selected,'bin/smv.cjs'),...args],{stdio:'inherit'});
     if(result.error)throw result.error;process.exitCode=result.status===null?1:result.status;
   }

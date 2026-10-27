@@ -72,15 +72,13 @@
       hostPalette.edge.base = readable('#a8b7c9', 'paper', 4.5);
       hostPalette.edge.lock = hex(rgb(paint('ink', dark() ? '#ffffff' : '#1f2430')) || [31,36,48]);
       hostPalette.edge.marked = readable('#b4584f');
-      hostPalette.list = base.list.map(readable); hostPalette.fallback = readable(base.fallback);
+      hostPalette.list = base.list.map(function(colour){return readable(colour);}); hostPalette.fallback = readable(base.fallback);
       return hostPalette;
     }
     if (current !== 'spellbook') return base;
     var result = {domain:{}, schema:{}, source:{}, list:pigments.slice(),
       edge:{base:'#a08045',out:'#68734d',in:'#806679',hop:'#a08045',pin:'#713b43',lock:'#713b43',marked:'#98634e'}, fallback:'#76614c'};
-    var domains = {'Finance / Supply':'#806679',Commercial:'#68734d',Vena:'#67576e',
-      'Profit & Loss':'#80612f','Core Dims':'#76614c','Scenario / Helper':'#98634e',
-      'Calc Groups':'#80612f','Field Params':'#53624b',Measures:'#713b43',Other:'#76614c'};
+    var domains = {};
     ['domain','schema','source'].forEach(function(axis) {
       Object.keys(base[axis]).forEach(function(key,i) { result[axis][key] = axis === 'domain' ? domains[key] || pigments[i % pigments.length] : pigments[i % pigments.length]; });
     });

@@ -5,7 +5,7 @@ argument-hint: "[all | model path | session file]"
 disable-model-invocation: true
 ---
 
-Use the package-local CLI: `"${CLAUDE_PLUGIN_ROOT}/bin/smv"` on macOS/Linux, or `"${CLAUDE_PLUGIN_ROOT}/bin/smv.cmd"` on Windows. It includes a private runtime in complete release packages; no PATH command, setup skill, npm or separate Node installation is required. In commands below, `smv` means this bundled launcher, never a PATH lookup. Never construct a versioned cache path.
+Use the package-local CLI: `/bin/sh "${CLAUDE_PLUGIN_ROOT}/bin/smv"` on macOS/Linux, or `"${CLAUDE_PLUGIN_ROOT}/bin/smv.cmd"` on Windows. It includes a private runtime in complete release packages; no PATH command, setup skill, npm or separate Node installation is required. In commands below, `smv` means this bundled launcher, never a PATH lookup. Never construct a versioned cache path.
 
 Run `session list` first. It reports only SMV-managed records, including source, runtime version, named views, running/stale state and browser acknowledgements. Keep unrelated work the user is exploring.
 

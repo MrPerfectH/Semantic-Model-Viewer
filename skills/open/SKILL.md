@@ -5,7 +5,7 @@ argument-hint: "[model path] [table]"
 disable-model-invocation: true
 ---
 
-Use the package-local CLI: `"${CLAUDE_PLUGIN_ROOT}/bin/smv"` on macOS/Linux, or `"${CLAUDE_PLUGIN_ROOT}/bin/smv.cmd"` on Windows. In examples below, `smv` means this bundled launcher. Do not look up a global CLI, run setup, or probe the Claude cache. Complete release packages carry their own runtime.
+Use the package-local CLI: `/bin/sh "${CLAUDE_PLUGIN_ROOT}/bin/smv"` on macOS/Linux, or `"${CLAUDE_PLUGIN_ROOT}/bin/smv.cmd"` on Windows. In examples below, `smv` means this bundled launcher. Do not look up a global CLI, run setup, or probe the Claude cache. Complete release packages carry their own runtime.
 
 Treat the diagram as the main answer to a modeling question. Present its URL or attach its image/file first, then explain the key arrow or calculation chain in one or two sentences. Do not stop at a JSON inventory when the user wants to understand relationships or dependencies.
 

@@ -1,5 +1,5 @@
 'use strict';
-const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),crypto=require('node:crypto');
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const {execFileSync}=require('node:child_process');
 const lock=require('../runtime/node-lock.json');
 const sha=data=>crypto.createHash('sha256').update(data).digest('hex');
@@ -26,6 +26,7 @@ async function vendor(target,output){
     fs.copyFileSync(binary,path.join(staged,name));if(name==='node')fs.chmodSync(path.join(staged,name),0o755);
     fs.copyFileSync(path.join(base,'LICENSE'),path.join(staged,'LICENSE'));
     const manifest={version:lock.version,target,origin:lock.origin+entry.archive,archiveSha256:entry.sha256,files:{[name]:sha(fs.readFileSync(binary)),LICENSE:sha(fs.readFileSync(path.join(base,'LICENSE')))}};
+    const checksum=name+'.sha256';fs.writeFileSync(path.join(staged,checksum),manifest.files[name]+'\n');manifest.files[checksum]=sha(fs.readFileSync(path.join(staged,checksum)));
     fs.writeFileSync(path.join(staged,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');fs.renameSync(staged,output);return manifest;
   }finally{fs.rmSync(temp,{recursive:true,force:true});}
 }

@@ -46,7 +46,8 @@
     "docs/cli-workspace-fetch.md",
     "packages/engine/",
     "runtime/node-lock.json",
-    "docs/bundled-agent-delivery.md"
+    "docs/bundled-agent-delivery.md",
+    "docs/codex-plugin.md"
   ],
   "devDependencies": {
     "esbuild": "0.28.2",

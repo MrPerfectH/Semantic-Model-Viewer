@@ -12,9 +12,9 @@ This is a desktop Node extension. It does not claim browser-only vscode.dev supp
 
 ## Claude Code and Codex
 
-Complete release payloads use `bin/smv` (macOS/Linux) or `bin/smv.cmd` (Windows x64). They include unchanged upstream Node binaries and full Node licenses. No first-use download or npm install runs. `SMV_NODE` is an explicit developer override for source-only builds, never an implicit PATH fallback.
+Complete release payloads use `/bin/sh <plugin-root>/bin/smv` (macOS/Linux) or `bin/smv.cmd` (Windows x64). They include unchanged upstream Node binaries and full Node licenses. No first-use download or npm install runs. If an archive extractor strips executable bits, the POSIX launcher verifies the binary checksum and restores execution in its own cache without modifying the installation. `SMV_NODE` is an explicit developer override for source-only builds, never an implicit PATH fallback.
 
-Claude skills use the host-provided plugin root. Codex receives a separate generated package with portable `plugin.json`, a compatibility `.codex-plugin/plugin.json`, and adapted skills that resolve resources relative to their loaded location. Neither agent workflow requires PATH setup. Codex's package is not represented as a Claude-only manifest.
+Claude skills use the host-provided plugin root. Codex receives a separate generated package with portable `plugin.json`, a compatibility `.codex-plugin/plugin.json`, and adapted skills that resolve resources relative to their loaded location. [Codex setup and local catalog format](codex-plugin.md) are documented separately from Claude. Neither agent workflow requires PATH setup. Codex's package is not represented as a Claude-only manifest.
 
 Live terminal sessions copy the verified application plus the current platform's runtime into an immutable content-addressed user cache before starting. Upgrading or removing the plugin copy does not remove a running session's assets. Cache generations are retained; stop sessions before manually removing unused generations. Models and generated artifacts are not stored in the plugin package.
 

@@ -66,7 +66,17 @@ test('runtime assembly rejects corrupt downloads and inputs before producing a p
  await assert.rejects(vendor('linux-x64',path.join(temp,'runtime')),/checksum mismatch/);
  assert.deepEqual(fs.readdirSync(temp),[]);
  const target=path.join(temp,'linux-x64');fs.mkdirSync(target);fs.writeFileSync(path.join(target,'node'),'corrupt');fs.writeFileSync(path.join(target,'LICENSE'),'test');
- fs.writeFileSync(path.join(target,'manifest.json'),JSON.stringify({version:lock.version,target:'linux-x64',archiveSha256:lock.targets['linux-x64'].sha256,files:{node:'0'.repeat(64),LICENSE:'0'.repeat(64)}}));
+ fs.writeFileSync(path.join(target,'manifest.json'),JSON.stringify({version:lock.version,target:'linux-x64',archiveSha256:lock.targets['linux-x64'].sha256,files:{node:'0'.repeat(64),'node.sha256':'0'.repeat(64),LICENSE:'0'.repeat(64)}}));
  assert.throws(()=>require('../scripts/build-portable.cjs').build({out:path.join(temp,'payload'),runtimeRoot:temp,targets:['linux-x64']}),/checksum mismatch/);
  assert.equal(fs.existsSync(path.join(temp,'payload')),false);
+});
+
+test('permission recovery refuses a corrupt private runtime without executing it',t=>{
+ if(process.platform==='win32')return t.skip('Windows uses executable extensions rather than Unix permission bits');
+ const temp=fs.mkdtempSync(path.join(os.tmpdir(),'smv stripped corrupt '));t.after(()=>fs.rmSync(temp,{recursive:true,force:true}));
+ const target=process.platform+'-'+process.arch,bin=path.join(temp,'bin'),runtime=path.join(temp,'runtime',target),cache=path.join(temp,'cache');
+ fs.mkdirSync(bin);fs.mkdirSync(runtime,{recursive:true});fs.copyFileSync(path.join(root,'bin/smv'),path.join(bin,'smv'));
+ fs.writeFileSync(path.join(runtime,'node'),'This must never execute',{mode:0o644});fs.writeFileSync(path.join(runtime,'node.sha256'),'f'.repeat(64)+'\n');
+ const result=spawnSync('/bin/sh',[path.join(bin,'smv'),'--version'],{env:{PATH:'',HOME:temp,SMV_RUNTIME_CACHE:cache},encoding:'utf8'});
+ assert.notEqual(result.status,0);assert.match(result.stderr,/checksum mismatch/);assert.deepEqual(fs.readdirSync(cache),[]);
 });

@@ -62,7 +62,8 @@ function currentConfig() {
   const root = path.resolve(__dirname, '../../../../..');
   const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
   const version = JSON.parse(fs.readFileSync(path.join(root, '.claude-plugin', 'plugin.json'), 'utf8')).version;
-  return { fallback: fs.realpathSync(path.join(root, 'bin/smv.cjs')), source: pkg.name === 'semantic-model-viewer-plugin' ? 'plugin' : 'checkout', pluginFallback: pkg.name === 'semantic-model-viewer-plugin', installerVersion: version,
+  let packageHost=null;try{packageHost=JSON.parse(fs.readFileSync(path.join(root,'build-info.json'),'utf8')).host;}catch{}
+  return { packageHost, fallback: fs.realpathSync(path.join(root, 'bin/smv.cjs')), source: pkg.name === 'semantic-model-viewer-plugin' ? 'plugin' : 'checkout', pluginFallback: pkg.name === 'semantic-model-viewer-plugin', installerVersion: version,
     registry: path.resolve(process.env.SMV_INSTALL_REGISTRY || path.join(process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude'), 'plugins', 'installed_plugins.json')) };
 }
 module.exports = { resolveRuntime, runLauncher, currentConfig };

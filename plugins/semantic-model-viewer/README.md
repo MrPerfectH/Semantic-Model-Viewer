@@ -1,3 +1,5 @@
+> 0.6.0 delivery candidate: complete release artifacts include a private runtime and require no separate CLI/Node installation. The public source marketplace is unchanged until those artifacts are published. See [bundled delivery](bundled-agent-delivery.md).
+
 # Claude Code plugin
 
 The `semantic-model-viewer` plugin runs the Semantic Model Viewer CLI through

@@ -16,7 +16,7 @@ function htmlForView(html,revision){
     const fail=error=>host.postMessage({type:'failed',revision:${revision},error:String(error.message||error)});
     const wait=()=>{
       if(window.app&&app.state.loaded&&window.SMV_AGENT_VIEW){
-        try{Snapshots.embedded=Snapshots.validate(payload);Snapshots.error=null;U.store.useMemory(Snapshots.seedStorage(payload));app.loadSnapshot(payload);SMVExplanation.start(window.SMV_AGENT_VIEW);window.smv.ready().then(()=>host.postMessage({type:'applied',revision:${revision}})).catch(fail);}catch(error){fail(error);}
+        try{Snapshots.embedded=Snapshots.validate(payload);Snapshots.error=null;U.store.useMemory(Snapshots.seedStorage(payload));if(app.onboarding&&typeof app.onboarding.dispose==='function')app.onboarding.dispose();app.onboarding=null;app.loadSnapshot(payload);SMVExplanation.start(window.SMV_AGENT_VIEW);window.smv.ready().then(()=>host.postMessage({type:'applied',revision:${revision}})).catch(fail);}catch(error){fail(error);}
       }else if(Date.now()<end)setTimeout(wait,50);else fail(new Error('Editor diagram initialization timed out'));
     };wait();
   })();</script>`;
@@ -74,8 +74,9 @@ function register(context){
     const result={sourceIdentity:sourceIdentity,counts:plan.counts,warnings:plan.warnings,views,note:'Panels are opened in the editor. awaiting-viewer is not a rendered acknowledgement; repeat the same show request to read the latest panel status without resetting exploration.'};
     plans.set(requestKey,{hash:recordHash,keys,result});return result;
   }
+  const messages={discover:'Finding semantic models',inspect:'Reading model metadata',relations:'Tracing table filter paths',dependents:'Tracing calculation dependencies',show:'Opening model diagrams',snapshot:'Saving a portable model diagram'};
   const disposables=['discover','inspect','relations','dependents','show','snapshot'].map(kind=>vscode.lm.registerTool('smv_'+kind,{
-    prepareInvocation(){return {invocationMessage:'Semantic Model Viewer: '+kind};},
+    prepareInvocation(){return {invocationMessage:messages[kind]};},
     async invoke(options,token){const result=await run(kind,options.input,token);return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(JSON.stringify(result))]);}
   }));
   return {run,status:()=>[...panels.values()].map(state=>({label:state.panel.title,status:state.status,error:state.error,revision:state.revision})),dispose(){for(const item of disposables)item.dispose();for(const state of panels.values())state.panel.dispose();panels.clear();}};

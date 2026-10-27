@@ -1,7 +1,24 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),crypto=require('node:crypto');
 const OWNER='semantic-model-viewer';
-function version(){try{return JSON.parse(fs.readFileSync(path.resolve(__dirname,'../../../../../.claude-plugin/plugin.json'),'utf8')).version;}catch{return 'development';}}
+function version(){const root=path.resolve(__dirname,'../../../../..');try{return JSON.parse(fs.readFileSync(path.join(root,'build-info.json'),'utf8')).engineVersion;}catch{}try{return JSON.parse(fs.readFileSync(path.join(root,'.claude-plugin/plugin.json'),'utf8')).version;}catch{return 'development';}}
+function identity(){
+  const root=path.resolve(__dirname,'../../../../..');let info;
+  try{info=JSON.parse(fs.readFileSync(path.join(root,'build-info.json'),'utf8'));}catch{}
+  let engineHash=info&&info.engineHash;
+  if(!engineHash){
+    const files=[];
+    for(const directory of ['Models/tools/viewer','Models/tools/viewer/js','Models/tools/viewer/scripts/cli','packages/engine']){
+      const base=path.join(root,directory);if(!fs.existsSync(base))continue;
+      for(const entry of fs.readdirSync(base,{withFileTypes:true}))if(entry.isFile()&&(/\.(js|cjs|css)$/.test(entry.name)||entry.name==='index.html'))files.push(directory+'/'+entry.name);
+    }
+    if(fs.existsSync(path.join(root,'Models/tools/viewer/scripts/scan_report_usage.py')))files.push('Models/tools/viewer/scripts/scan_report_usage.py');
+    const entries=Object.fromEntries(files.sort().map(file=>[file,crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex')]));
+    engineHash=crypto.createHash('sha256').update(JSON.stringify(entries)).digest('hex');
+  }
+  return {engineVersion:module.exports.version(),engineHash,nodeVersion:process.versions.node,protocolVersion:2,packageId:info?info.sha256:null};
+}
+function compatible(state,current=identity()){return state.pluginVersion===current.engineVersion&&!!state.runtimeIdentity&&state.runtimeIdentity.engineHash===current.engineHash&&state.runtimeIdentity.nodeVersion===current.nodeVersion;}
 function directory(){const root=path.resolve(process.env.SMV_STATE_DIR||path.join(os.homedir(),'.local','state','semantic-model-viewer'));
   fs.mkdirSync(root,{recursive:true,mode:0o700});if(fs.lstatSync(root).isSymbolicLink())throw new Error('SMV state directory must not be a symlink');return root;}
 function canonical(source){let file=fs.realpathSync(source);if(path.basename(file)==='definition'&&fs.existsSync(path.join(file,'model.tmdl')))file=path.dirname(file);return file;}
@@ -18,7 +35,7 @@ async function list(source){const rows=[];for(const record of records()){
     rows.push({record,...live,running:true});
   }catch(e){rows.push({record,sessionId:record.sessionId,source:record.source,sessionFile:record.file,pluginVersion:record.pluginVersion,running:false,error:e.message});}
 }return rows;}
-async function find(source,options={}){const rows=await list(source);return rows.sort((a,b)=>Number(b.pluginVersion===version())-Number(a.pluginVersion===version())).find(r=>r.running&&r.protocolVersion===2&&r.report===(options.report?path.resolve(options.report):null)&&r.watch===!!options.watch&&(options.forNamedViews||r.view===(options.view?path.resolve(options.view):null))&&(r.watch||r.inputFingerprint===require('./session.cjs').fingerprint(r.source,r.view,r.report)));}
+async function find(source,options={}){const rows=await list(source),current=identity();return rows.sort((a,b)=>Number(compatible(b,current))-Number(compatible(a,current))||Number(b.pluginVersion===version())-Number(a.pluginVersion===version())).find(r=>r.running&&r.protocolVersion===2&&r.report===(options.report?path.resolve(options.report):null)&&r.watch===!!options.watch&&(options.forNamedViews||r.view===(options.view?path.resolve(options.view):null))&&(r.watch||r.inputFingerprint===require('./session.cjs').fingerprint(r.source,r.view,r.report)));}
 async function stopAll(source){const rows=await list(source),stopped=[],stale=[],errors=[];for(const row of rows){
   if(!row.running){stale.push(row.sessionId);continue;}
   try{await require('./session.cjs').request(row.sessionFile,'stop');stopped.push(row.sessionId);}catch(e){errors.push({sessionId:row.sessionId,error:e.message});}
@@ -29,4 +46,4 @@ async function lock(source,run){const name=crypto.createHash('sha256').update(so
     if(Date.now()>end)throw new Error('Another SMV session is starting; retry shortly');await new Promise(r=>setTimeout(r,100));}}
   try{return await run();}finally{try{if(JSON.parse(fs.readFileSync(file,'utf8')).nonce===nonce)fs.unlinkSync(file);}catch{}}
 }
-module.exports={OWNER,version,directory,canonical,register,records,forget,list,find,stopAll,lock};
+module.exports={OWNER,version,identity,compatible,directory,canonical,register,records,forget,list,find,stopAll,lock};

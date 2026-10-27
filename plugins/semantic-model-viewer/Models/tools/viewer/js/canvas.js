@@ -746,9 +746,6 @@
           else if (self.clusterOn) { self.selectTable(name); }
           else if (ev.altKey) { self.toggleMark(name); }
           else if (ev.shiftKey || ev.metaKey || ev.ctrlKey) { self.togglePin(name); }
-          /* focusGraph selects on its own, with the viewport it just aimed left alone —
-             selecting first would queue a deferred fit that lands on top of that aim */
-          else if (self._chip) { self.focusGraph(name); }
           else { self.selectTable(name); }
         };
         var cancel = function () {
@@ -1167,21 +1164,18 @@
       });
       return out;
     },
-    /* World units per screen pixel of label. Labels are sized for the reader, not the model:
-       like the bare arrow they are drawn in screen pixels and scaled by 1/zoom, so the pill is
-       the same size on screen whether the picture is at 50% or 200%. The chip view thickens
-       its lines and the label follows a little — not the full 1.6x the chip strokes take,
-       because the label already holds its on-screen size and a 30px pill beside an 11px
-       table name would be the loudest thing on the canvas. */
-    labelUnit: function () { return (this._chip ? 1.12 : 1) / Math.max(0.05, this.view.k); },
+    /* Compact cards use a smaller 39 × 15.6px relationship badge. Keep a readable
+       screen-size floor rather than shrinking indefinitely with zoom. Full cards retain
+       the 50 × 20px badge; the invisible line hit target remains unchanged. */
+    labelUnit: function () { return (this._chip ? 0.78 : 1) / Math.max(0.05, this.view.k); },
     /* The label an edge carries, horizontal, in world units: the combined cardinality pill,
        or (`bare`) the arrowhead on its own — below PILL_ZOOM always, above it when no run of
        the line has room for the pill. `m` is the margin a seat has to leave on each side.
        Seat eligibility, the stagger along a shared channel and the collision ledger all read
        through here, so the box that is reserved is always the box that is drawn. */
     labelDims: function (bare) {
-      var u = this.labelUnit();
       if (bare == null) bare = this.view.k < this.PILL_ZOOM;
+      var u = bare ? 1 / Math.max(0.05, this.view.k) : this.labelUnit();
       if (!bare) return { w: this.PILL_W * u, h: this.PILL_H * u, m: 10 * u };
       return { w: 16 * u, h: 12 * u, m: 6 * u };
     },
@@ -1457,7 +1451,7 @@
         var c = self.cards[n];
         var vis = true;
         if (iso) vis = visSet.has(c.table.name);
-        else if (c.table.relCount === 0) vis = self.showSA;
+        if (c.table.relCount === 0 && !self.showSA) vis = false;
         if (self.workspaceNames && !self.workspaceNames.has(n)) vis = false;
         c.el.style.display = vis ? '' : 'none';
       });
@@ -1473,24 +1467,25 @@
       Object.keys(this.cards).forEach(function (n) {
         var c = self.cards[n];
         var t = c.table; var col = app.tableColor(t); var fact = app.isFact(t);
+        var ink = g.WorkspaceUI && g.WorkspaceUI.textOn ? g.WorkspaceUI.textOn(col) : '#ffffff';
         c.el.setAttribute('data-fact', String(fact));
         if (g.SMVHost && g.SMVHost.kind === 'vscode') c.el.style.setProperty('--smv-category', col);
         var head = c.head, role = c.roleEl, caretSvg = c.caret.firstChild;
-        if (c.rm) c.rm.style.color = fact ? 'rgba(255,255,255,.85)' : '#6b7280';
+        if (c.rm) c.rm.style.color = fact && vivid ? ink : fact ? 'rgba(255,255,255,.85)' : '#6b7280';
         head.style.boxShadow = 'none';
         if (fact && vivid) {
           head.style.borderLeftColor = 'transparent';
           head.style.background = col;
-          c.nm.style.color = '#fff';
-          role.style.background = 'rgba(255,255,255,.94)'; role.style.color = col;
+          c.nm.style.color = ink;
+          role.style.background = 'rgba(255,255,255,.94)'; role.style.color = ink === '#111111' ? ink : col;
           c.el.style.borderColor = tint(col, 0.55);
-          if (caretSvg) caretSvg.setAttribute('stroke', 'rgba(255,255,255,.78)');
-          if (c.src) c.src.style.color = 'rgba(255,255,255,.85)';
+          if (caretSvg) caretSvg.setAttribute('stroke', ink);
+          if (c.src) c.src.style.color = ink;
         } else if (fact) {
           head.style.borderLeftColor = col;
           head.style.background = mixHex('#1d2330', col, 0.26);
           c.nm.style.color = '#fff';
-          role.style.background = col; role.style.color = '#fff';
+          role.style.background = col; role.style.color = ink;
           c.el.style.borderColor = tint(col, 0.6);
           if (caretSvg) caretSvg.setAttribute('stroke', 'rgba(255,255,255,.78)');
           if (c.src) c.src.style.color = 'rgba(255,255,255,.85)';
@@ -1498,7 +1493,7 @@
           head.style.borderLeftColor = col;
           head.style.background = tint(col, vivid ? 0.07 : 0.1);
           c.nm.style.color = '#1f2430';
-          role.style.background = col; role.style.color = '#fff';
+          role.style.background = col; role.style.color = ink;
           c.el.style.borderColor = vivid ? '#e4e7ec' : tint(col, 0.35);
           if (caretSvg) caretSvg.setAttribute('stroke', '#b0b6c0');
           if (c.src) c.src.style.color = app.srcMeta(t).color;
@@ -1576,18 +1571,13 @@
       left = Math.max(190, Math.min(W - pw - 10, left)); top = Math.max(10, Math.min(H - ph - 10, top));
       pop.style.left = left + 'px'; pop.style.top = top + 'px';
     },
-    /* opts.keepView — the caller has already aimed the viewport (Center selected, a chip
-       click) and that aim wins. Without it the deferred fit would run after the caller's
-       synchronous centring and throw it away. */
-    selectTable: function (name, opts) {
-      var self = this, t = this.app.model.byName[name];
-      if (!t) return;
-      var keepView = !!(opts && opts.keepView);
+    /* Selection changes focus, never the viewport. Explicit navigation uses focusGraph. */
+    selectTable: function (name) {
+      if (!this.app.model.byName[name]) return;
+      // Opening the inspector resizes the host; cancel sticky Fit before that resize.
+      this._autoFit = false; this._pendingFit = false;
       if (this.selRel) { this.selRel = null; this.hideRelPopover(); }
-      /* Fit only once the inspector has actually opened: fitting first measures a canvas
-         that is about to lose ~330px on the right and leaves cards under the drawer. */
-      this.app.setState({ selected: name, activeFilter: null, msrQuery: '', expandedMeasure: null },
-        function () { if (!keepView && self.app.state.isolate) self.fitView(); });
+      this.app.setState({ selected: name, activeFilter: null, msrQuery: '', expandedMeasure: null });
       this.applyHighlight(name, null);
     },
     /* Background click: drops selection, filter and pins — a locked table stays focused. */
@@ -1684,7 +1674,7 @@
       }
     },
     setFilter: function (key) { this.pinned.clear(); this.app.setState({ activeFilter: key, selected: null }); this.applyHighlight(null, key); },
-    toggleStandalone: function () { var v = !this.app.state.showStandalone; this.app.setState({ showStandalone: v }); this.applyVisibility(v); this.renderLines(); },
+    toggleStandalone: function () { var v = !this.app.state.showStandalone; this.app.setState({ showStandalone: v }); this.applyVisibility(v); this.renderLines(); if(this.app.explorer){this.app.explorer.persist();this.app.explorer._key=null;this.app.explorer.update();} },
     toggleExpandAll: function () { var v = !this.app.state.allExpanded; this.app.setState({ allExpanded: v }); this.setAllExpanded(v); },
     toggleIsolate: function () {
       var self = this, v = !this.app.state.isolate;
@@ -1903,11 +1893,14 @@
       return saved;
     },
     captureDisplay: function () {
-      return { detail: this.detailMode, lines: this.lineStyle, color: this.app.colorBy,
+      return { showDisconnected:this.showSA, groupColours: this.app.captureGroupColours ? this.app.captureGroupColours() : null, detail: this.detailMode, lines: this.lineStyle, color: this.app.colorBy,
         expanded: Object.keys(this.cards).filter(function (n) { return this.cards[n].expanded; }, this) };
     },
     restoreDisplay: function (display) {
       var self = this, d = display || {};
+      this.showSA=d.showDisconnected!==false;this.app.state.showStandalone=this.showSA;
+      if (d.groupColours && this.app.restoreGroupColours) { this.app.restoreGroupColours(d.groupColours); this.app.rebuildColorMaps();
+        ['sidebar','matrix','explorer'].forEach(function(k){if(self.app[k])self.app[k]._key=null;}); }
       if (['auto', 'names', 'cards'].includes(d.detail)) this.detailMode = d.detail;
       if (['ortho', 'curve'].includes(d.lines)) this.lineStyle = d.lines;
       if (['domain', 'source'].includes(d.color)) { this.app.colorBy = d.color; this.app.state.colorBy = d.color; this.recolor(); }

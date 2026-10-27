@@ -14,9 +14,10 @@ function convert(output){
     text=text.replace(/the the agent/g,'the agent');
     text=text.replace(/\/semantic-model-viewer:setup/g,'the optional CLI setup workflow');
     text=text.replace(/Otherwise use an installed `smv` command, or `node bin\/smv.cjs` from the Semantic Model Viewer checkout\./g,'Always use the bundled executable, not a global command.');
-    const intro='Resolve <plugin-root> from the location of this loaded skill: start in the directory containing SKILL.md and go up two directory levels. Treat it as a filesystem path and quote it. Do not invent a host environment variable or guess a versioned cache directory. Invoke "<plugin-root>/bin/smv" on macOS/Linux, or "<plugin-root>/bin/smv.cmd" on Windows. No setup or global Node/CLI is needed in a complete portable package.\n\n';
+    const intro='Resolve <plugin-root> from the location of this loaded skill: start in the directory containing SKILL.md and go up two directory levels. Treat it as a filesystem path and quote it. Do not invent a host environment variable or guess a versioned cache directory. Invoke /bin/sh "<plugin-root>/bin/smv" on macOS/Linux, or "<plugin-root>/bin/smv.cmd" on Windows. No setup or global Node/CLI is needed in a complete portable package.\n\n';
     const end=text.indexOf('\n---',4)+4;text=text.slice(0,end)+'\n\n'+intro+text.slice(end);fs.writeFileSync(file,text);
   }
+  fs.copyFileSync(path.join(output,'docs/codex-plugin.md'),path.join(output,'README.md'));
   const pkg=JSON.parse(fs.readFileSync(path.join(output,'package.json'),'utf8'));pkg.name='semantic-model-viewer-codex-plugin';fs.writeFileSync(path.join(output,'package.json'),JSON.stringify(pkg,null,2)+'\n');
   return output;
 }

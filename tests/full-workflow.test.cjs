@@ -35,7 +35,7 @@ test('show reuses one model session, creates independent named views and reports
   const stopped=run(dir,'session','stop','--all','--model',model);assert.deepEqual(stopped.stopped,[first.sessionId]);
 });
 test('managed sessions warn about old runtime versions and bulk cleanup leaves foreign files alone',async t=>{
-  const {model,dir}=setup(t);const real=managed.version;t.mock.method(managed,'version',()=> '0.0.1');const server=await api.serve(model,{newSession:true});managed.version.mock.restore();
+  const {model,dir}=setup(t);t.mock.method(managed,'version',()=> '0.0.1');const server=await api.serve(model,{newSession:true});managed.version.mock.restore();
   const again=await api.serve(model,{background:true});assert.equal(again.sessionId,server.sessionId);assert.ok(again.warnings.length);
   const foreign=path.join(managed.directory(),'foreign.json');fs.writeFileSync(foreign,JSON.stringify({file:'/unrelated',pid:process.pid}));await managed.stopAll();assert.ok(fs.existsSync(foreign));
 });
@@ -104,7 +104,7 @@ test('question diagrams support direction, calculations and named live views',as
 
 
 test('question diagrams preserve older servers and reuse the current runtime on later calls',async t=>{
-  const {dir,model}=setup(t);const real=managed.version;t.mock.method(managed,'version',()=> '0.0.1');const old=await api.serve(model,{newSession:true});managed.version.mock.restore();
+  const {dir,model}=setup(t);t.mock.method(managed,'version',()=> '0.0.1');const old=await api.serve(model,{newSession:true});managed.version.mock.restore();
   const exec=require('node:util').promisify(require('node:child_process').execFile);const invoke=async()=>JSON.parse((await exec(process.execPath,[cli,'show',model,'--table','Date','--with','Sales'],{cwd:dir,env:process.env,timeout:20000})).stdout);
   const first=await invoke();assert.notEqual(first.sessionId,old.sessionId);assert.match(first.warnings.join(' '),/left running/);
   const second=await invoke();assert.equal(second.sessionId,first.sessionId);assert.equal(second.reused,true);assert.equal((await managed.list(model)).filter(r=>r.running).length,2);

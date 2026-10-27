@@ -14,7 +14,7 @@ works independently of VS Code and includes any loaded report usage.
 
 - The full set of tables, columns, relationships, measure expressions, dependencies,
   effective table roles, and already-loaded report usage.
-- The starting analysis view: Tables, Measures, Power Query, Domains, or Matrix.
+- The starting analysis view: Tables, Measures, Power Query, Table groups, or Matrix.
 - Table membership, positions, selection, focus, pins, zoom, card display, and named
   saved views. A blank or focused canvas still includes the full model for exploration.
 - Selected and compared measures, expanded dependencies, library filters, DAX mode,

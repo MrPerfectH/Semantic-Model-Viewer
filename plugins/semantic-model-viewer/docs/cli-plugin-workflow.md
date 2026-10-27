@@ -1,3 +1,5 @@
+> Complete 0.6.0 release packages carry a private runtime. Agents invoke the package-local `bin/smv` (`bin/smv.cmd` on Windows) directly; setup/PATH instructions below are optional human/developer workflows. Source-only packages retain an explicit Node requirement. See [delivery and release status](bundled-agent-delivery.md).
+
 # CLI plugin workflow (0.3)
 
 Requires Node.js 22+. The plugin is CLI-only, with no runtime npm dependencies or

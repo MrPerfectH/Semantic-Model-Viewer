@@ -32,6 +32,11 @@ jobs:
         run: |
           node scripts/test-portable.cjs dist/claude
           node scripts/test-portable.cjs dist/codex
+      - name: Recover archive extraction that stripped executable modes
+        if: runner.os != 'Windows'
+        env:
+          SMV_TEST_STRIPPED_EXEC: '1'
+        run: node scripts/test-portable.cjs dist/claude
       - uses: actions/upload-artifact@v4
         with:
           name: smv-private-node-${{ matrix.target }}
@@ -63,6 +68,11 @@ jobs:
           done
           npm run build:portable -- --host claude --targets linux-x64,linux-arm64,darwin-x64,darwin-arm64,win-x64 --runtime-root dist/runtimes --out dist/claude-universal --zip dist/smv-claude-portable.zip
           npm run build:portable -- --host codex --targets linux-x64,linux-arm64,darwin-x64,darwin-arm64,win-x64 --runtime-root dist/runtimes --out dist/codex-universal --zip dist/smv-codex-portable.zip
+      - name: Install complete packages with the native host managers
+        run: |
+          npm install --global @anthropic-ai/claude-code@2.1.280 @openai/codex@0.162.1
+          node scripts/test-agent-install.cjs claude dist/claude-universal
+          node scripts/test-agent-install.cjs codex dist/codex-universal
       - uses: actions/upload-artifact@v4
         with:
           name: semantic-model-viewer-complete-agent-packages

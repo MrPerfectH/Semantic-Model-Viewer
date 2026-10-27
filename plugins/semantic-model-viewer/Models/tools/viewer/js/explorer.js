@@ -21,6 +21,7 @@
     /* Pane visibility is a reading preference, not part of a layout, so it is shared by
        every model and survives a model switch. */
     var panes = store.getJSON('smv_panes_v1', {}) || {};
+    this.legendOpen = panes.legendOpen !== false; this.mapHidden = !!panes.mapHidden;
     this.libraryHidden = !!panes.libraryHidden; this.inspectorHidden = !!panes.inspectorHidden;
     this.library = document.getElementById('table-library'); this.toolbar = document.getElementById('workspace-toolbar');
     this.empty = document.getElementById('canvas-empty'); this.nav = document.getElementById('canvas-navigation');
@@ -29,6 +30,8 @@
     this.mapHost.appendChild(el('div',{cls:'ex-map-label',text:'OVERVIEW'})); this.mapHost.appendChild(this.map);
     var self = this, host = app.canvas.host;
     var dropSurface=document.getElementById('main');
+    this.legendDock=el('section',{id:'canvas-legend','aria-label':'Colour legend',hidden:true});dropSurface.appendChild(this.legendDock);
+    if(typeof ResizeObserver!=='undefined'){this.footerObserver=new ResizeObserver(function(){self.layoutFooter();});this.footerObserver.observe(this.nav);this.footerObserver.observe(this.legendDock);}
     dropSurface.addEventListener('dragover', function (e) { if (Array.from(e.dataTransfer.types).includes(MIME)) {var r=host.getBoundingClientRect();if(app.state.viewMode!=='graph'||e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom){host.classList.remove('ex-drop');return;}e.preventDefault();e.stopPropagation();e.dataTransfer.dropEffect='copy';host.classList.add('ex-drop');} });
     dropSurface.addEventListener('dragleave', function () {host.classList.remove('ex-drop');});
     window.addEventListener('dragend', function () {host.classList.remove('ex-drop');dropSurface.classList.remove('ex-dragging');});
@@ -48,7 +51,7 @@
     /* A press anywhere outside an open toolbar popover closes it. Presses on the menu or on
        its own button are left alone (the button toggles by itself). */
     window.addEventListener('pointerdown', function(e){
-      if(!(self.legendOpen||self.optionsOpen||app.state.showPresets))return;
+      if(!(self.optionsOpen||app.state.showPresets))return;
       if(e.target&&e.target.closest&&e.target.closest('.ex-menu-anchor'))return;
       self.closeMenus(true);
     },true);
@@ -68,12 +71,12 @@
     closeMenus:function(outside){
       var app=this.app,self=this;
       if(outside){
-        var any=this.legendOpen||this.optionsOpen||app.state.showPresets;
-        this.legendOpen=false;this.optionsOpen=false;this._clusterKey=null;this._key=null;
+        var any=this.optionsOpen||app.state.showPresets;
+        this.optionsOpen=false;this._clusterKey=null;this._key=null;
         if(app.state.showPresets)app.setState({showPresets:false});else if(any)this.update();
         return any;
       }
-      if(this.legendOpen){this.legendOpen=false;this._clusterKey=null;this.update();if(this.legendBtn&&this.legendBtn.focus)this.legendBtn.focus();return true;}
+      if(this.legendOpen){this.legendOpen=false;this.saveChrome();this._clusterKey=null;this.update();if(this.legendBtn&&this.legendBtn.focus)this.legendBtn.focus();return true;}
       if(this.optionsOpen){this.optionsOpen=false;this._key=null;this.update();if(this.displayBtn&&this.displayBtn.focus)this.displayBtn.focus();return true;}
       if(app.state.showPresets){app.setState({showPresets:false},function(){if(self.presetsBtn&&self.presetsBtn.focus)self.presetsBtn.focus();});return true;}
       return false;
@@ -84,17 +87,18 @@
       this.names=new Set(data && Array.isArray(data.tables)?data.tables.filter(function(n){return !!M.byName[n];}):[]);
       this.direction='both';this.depth='all';this.includeInactive=false;this.app.state.focusDepth=1000000;
       this.history=[];this.query='';this.filter='all';this.domain='';this.source='';this.message='';this._key=null;this._relationKey=null;this.optionsOpen=false;
-      this.app.canvas.workspaceNames=this.names;this.app.state.isolate=false;this.app.state.showStandalone=true;this.app.canvas.showSA=true;
+      this.app.canvas.workspaceNames=this.names;this.app.state.isolate=false;this.app.state.showStandalone=!data||data.showDisconnected!==false;this.app.canvas.showSA=this.app.state.showStandalone;
     },
-    persist:function(){store.setJSON(this.storageKey(),{tables:Array.from(this.names)});},
+    persist:function(){store.setJSON(this.storageKey(),{tables:Array.from(this.names),showDisconnected:this.app.canvas.showSA});},
     /* Hide either rail to give the canvas the full width. The inspector preference keeps the
        selection: the drawer comes straight back for the selected table when shown again. */
     setPanes:function(patch){
       if(patch.libraryHidden!==undefined)this.libraryHidden=!!patch.libraryHidden;
       if(patch.inspectorHidden!==undefined)this.inspectorHidden=!!patch.inspectorHidden;
-      store.setJSON('smv_panes_v1',{libraryHidden:this.libraryHidden,inspectorHidden:this.inspectorHidden});
+      this.saveChrome();
       this._key=null;this.app.sidebar._key=null;this.update();this.app.setState({});
     },
+    saveChrome:function(){store.setJSON('smv_panes_v1',{libraryHidden:this.libraryHidden,inspectorHidden:this.inspectorHidden,legendOpen:this.legendOpen,mapHidden:this.mapHidden});},
     toggleLibrary:function(){this.setPanes({libraryHidden:!this.libraryHidden});},
     toggleInspector:function(){this.setPanes({inspectorHidden:!this.inspectorHidden});},
     snapshot:function(){this.history.push({names:Array.from(this.names),pos:JSON.parse(JSON.stringify(this.app.canvas.pos)),view:Object.assign({},this.app.canvas.view),focus:this.app.canvas.captureFocus(),display:this.app.canvas.captureDisplay()});if(this.history.length>25)this.history.shift();},
@@ -145,6 +149,7 @@
        cloud. A model with saved positions keeps every one of them. */
     showAll:function(){
       var cv=this.app.canvas;this.snapshot();
+      cv.showSA=true;this.app.state.showStandalone=true;
       this.names=new Set(this.app.model.tables.map(function(t){return t.name;}));
       this.app.state.isolate=false;this.app.state.selected=null;cv._activeSel=null;
       cv.workspaceNames=this.names;
@@ -241,7 +246,7 @@
          canvases speak one visual language instead of the old floating chip plus legend. */
       var clusters=st.loaded&&st.viewMode==='clusters';
       var width=this.libraryHidden?0:window.innerWidth<1050?234:268,drawer=graph&&st.selected&&!this.inspectorHidden?330:0;
-      this.library.hidden=!graph||this.libraryHidden;this.empty.hidden=!graph;this.nav.hidden=!graph;
+      this.library.hidden=!graph||this.libraryHidden;this.empty.hidden=!graph;this.nav.hidden=!graph&&!clusters;this.legendDock.hidden=(!graph&&!clusters)||!this.legendOpen;
       this.toolbar.hidden=!graph&&!clusters;this.status.hidden=!graph&&!clusters;
       this.mapHost.hidden=!graph||!this.names.size||this.mapHidden;
       var main=document.getElementById('main');
@@ -249,12 +254,13 @@
       main.classList.toggle('ex-start',start);
       main.classList.toggle('ex-graph',!!graph);
       main.classList.toggle('ex-clusters',!!clusters);
-      main.style.setProperty('--library-width',width+'px');
+      main.style.setProperty('--library-width',(graph?width:0)+'px');
       main.style.setProperty('--inspector-width',drawer+'px');
       if(graph){cv.host.style.left=width+'px';cv.host.style.right=drawer+'px';cv.host.style.top='62px';cv.host.style.bottom='30px';}
       else if(clusters){cv.host.style.left='0';cv.host.style.right='0';cv.host.style.top='62px';cv.host.style.bottom='30px';}
       else{cv.host.style.left='0';cv.host.style.right='0';cv.host.style.top='0';cv.host.style.bottom='0';}
       cv.host.hidden = st.viewMode !== 'graph' && st.viewMode !== 'clusters';
+      if(graph||clusters){this.renderNavigation();this.renderLegend();this.layoutFooter();}
       if(clusters){
         this.status.textContent='click a group to expand or collapse · drag to arrange · scroll to zoom';
         var ckey=[app.modelKey,app.colorBy,cv.expandedGroups?cv.expandedGroups.size:0,cv.groupOrder?cv.groupOrder.length:0,this.legendOpen,st.activeFilter].join('|');
@@ -263,10 +269,10 @@
       }
       this._clusterKey=null;
       if(!graph)return;
-      if(start){this.library.hidden=true;this.toolbar.hidden=true;this.nav.hidden=true;this.status.hidden=true;this.empty.hidden=false;this.renderEmpty();return;}
+      if(start){this.library.hidden=true;this.toolbar.hidden=true;this.nav.hidden=true;this.legendDock.hidden=true;this.status.hidden=true;this.empty.hidden=false;this.renderEmpty();return;}
       this.empty.hidden=!!this.names.size;
       this.status.textContent=this.message || 'Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several';
-      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
+      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,this.legendOpen,st.showStandalone,st.activeFilter,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
       if(key!==this._key){this._key=key;this.renderLibrary();this.renderToolbar();this.renderEmpty();}
       this.renderNavigation();this.drawMap();
     },
@@ -274,6 +280,7 @@
        (connector kind, or the schema for Databricks / SQL), so the two always agree. */
     facetKey:function(kind,t){return kind==='source'?this.app.srcKeyOf(t):t.domain;},
     facetLabel:function(kind,key){
+      if(this.app.groupLabel)return this.app.groupLabel(kind,key);
       if(kind!=='source')return key;
       var kinds=this.app.SOURCE_KINDS||{};
       if(key==='manual')return 'Manual';if(key==='calculated')return 'Calculated';
@@ -290,7 +297,7 @@
       if(this.filter==='available'&&this.names.has(t.name))return false;
       if(this.domain&&this.facetKey('domain',t)!==this.domain)return false;
       if(this.source&&this.facetKey('source',t)!==this.source)return false;
-      return !q||[t.name,t.domain,t.role].join(' ').toLowerCase().includes(q)||t.columns.some(function(c){return c.name.toLowerCase().includes(q);});
+      return !q||[t.name,this.facetLabel('domain',t.domain),t.role].join(' ').toLowerCase().includes(q)||t.columns.some(function(c){return c.name.toLowerCase().includes(q);});
     },
     renderLibrary:function(){
       var self=this,app=this.app,active=document.activeElement,focus=active&&active===this.input,start=focus?active.selectionStart:0,scroll=this.list?this.list.scrollTop:0;
@@ -299,7 +306,7 @@
       this.input=el('input',{type:'search',placeholder:'Find tables or columns…','aria-label':'Search table library',value:this.query,onInput:function(e){self.query=e.target.value;self._key=null;self.update();}});this.library.appendChild(this.input);
       var filters=el('div',{cls:'ex-segments','aria-label':'Table library filter'});[['all','All tables'],['canvas','On canvas'],['available','Available']].forEach(function(p){var b=button(p[1],function(){self.filter=p[0];self._key=null;self.update();});b.setAttribute('aria-pressed',String(self.filter===p[0]));filters.appendChild(b);});this.library.appendChild(filters);
       var facets=el('div',{cls:'ex-facets'});
-      [['domain','Domain','All domains'],['source','Source','All sources']].forEach(function(f){
+      [['domain','Table group','All table groups'],['source','Source','All sources']].forEach(function(f){
         var opts=self.facetOptions(f[0]);if(self[f[0]]&&!opts.some(function(o){return o.key===self[f[0]];}))self[f[0]]='';
         if(opts.length<2&&!self[f[0]])return;
         var sel=el('select',{'aria-label':'Filter tables by '+f[1].toLowerCase(),onChange:function(e){self[f[0]]=e.target.value;self._key=null;self.update();}},
@@ -337,9 +344,8 @@
       this.displayBtn.setAttribute('aria-expanded',String(!!this.optionsOpen));
       var options=el('div',{cls:'ex-menu-anchor'},[this.displayBtn]);
       if(this.optionsOpen){var box=el('div',{cls:'ex-display-menu'});
-        [['Auto layout',cv.layoutAlgo,[['star','Star'],['constellation','Constellation'],['layered','Layered'],['galaxy','Galaxy rows'],['columns','Star columns'],['waterfall','Waterfall'],['grid','Grid']],function(v){cv.setLayoutAlgo(v);self.arrangeSubset(true);} ],['Detail',cv.detailMode,[['auto','Auto'],['names','Names'],['cards','Cards']],function(v){cv.setDetailMode(v);} ],['Lines',cv.lineStyle,[['ortho','Straight'],['curve','Curved']],function(v){cv.setLineStyle(v);} ],['Color',app.colorBy,[['domain','Domain'],['source','Source']],function(v){cv.setColorMode(v);}],['Palette',app.paletteName,[['muted','Muted'],['vivid','Vivid']],function(v){app.setPalette(v);}]].forEach(function(p){var themed=p[0]==='Palette'&&g.ViewerTheme&&g.ViewerTheme.get()==='spellbook';if(themed){p[1]='spellbook';p[2]=[['spellbook','Spellbook']];}var sel=el('select',{disabled:themed,'aria-label':p[0],onChange:function(e){p[3](e.target.value);self._key=null;self.update();}},p[2].map(function(o){return el('option',{value:o[0],text:o[1]});}));sel.value=p[1];box.appendChild(el('label',{},[p[0],sel]));});
+        [['Auto layout',cv.layoutAlgo,[['star','Star'],['constellation','Constellation'],['layered','Layered'],['galaxy','Galaxy rows'],['columns','Star columns'],['waterfall','Waterfall'],['grid','Grid']],function(v){cv.setLayoutAlgo(v);self.arrangeSubset(true);} ],['Detail',cv.detailMode,[['auto','Auto'],['names','Names'],['cards','Cards']],function(v){cv.setDetailMode(v);} ],['Lines',cv.lineStyle,[['ortho','Straight'],['curve','Curved']],function(v){cv.setLineStyle(v);} ],['Palette',app.paletteName,[['muted','Muted'],['vivid','Vivid']],function(v){app.setPalette(v);}]].forEach(function(p){var themed=p[0]==='Palette'&&g.ViewerTheme&&g.ViewerTheme.get()==='spellbook';if(themed){p[1]='spellbook';p[2]=[['spellbook','Spellbook']];}var sel=el('select',{disabled:themed,'aria-label':p[0],onChange:function(e){p[3](e.target.value);self._key=null;self.update();}},p[2].map(function(o){return el('option',{value:o[0],text:o[1]});}));sel.value=p[1];box.appendChild(el('label',{},[p[0],sel]));});
         box.appendChild(button(app.state.allExpanded?'Collapse all cards':'Expand all cards',function(){cv.toggleExpandAll();self.optionsOpen=false;self._key=null;self.update();}));
-        box.appendChild(button(this.mapHidden?'Show overview map':'Hide overview map',function(){self.mapHidden=!self.mapHidden;self._key=null;self.update();}));
         box.appendChild(button('Table role rules',function(){app.setState({showRules:true});self.optionsOpen=false;self._key=null;self.update();}));
         box.appendChild(button('Close display settings',function(){self.optionsOpen=false;self._key=null;self.update();}));options.appendChild(box);
       }this.toolbar.appendChild(options);
@@ -351,32 +357,33 @@
     renderClusterToolbar:function(){
       var self=this,app=this.app,cv=app.canvas;U.clear(this.toolbar);this._key=null;
       var groups=cv.groupOrder||[],open=cv.expandedGroups?cv.expandedGroups.size:0;
-      this.toolbar.appendChild(el('div',{cls:'ex-workspace-title'},[el('strong',{text:'Domain canvas'}),
-        el('span',{text:groups.length+' '+(app.colorBy==='source'?'sources':'domains')+' · '+open+' expanded'})]));
-      var expand=button('Expand all',function(){cv.setAllGroups(true);self._clusterKey=null;self.update();});
+      this.toolbar.appendChild(el('div',{cls:'ex-workspace-title'},[el('strong',{text:'Group canvas'}),
+        el('span',{text:groups.length+' '+(app.colorBy==='source'?'sources':'table groups')+' · '+open+' expanded'})]));
+      var expand=button('Expand all',function(){cv.setAllGroups(true);self._clusterKey=null;self._key=null;self.update();});
       expand.disabled=!groups.length||open===groups.length;this.toolbar.appendChild(expand);
-      var collapse=button('Collapse all',function(){cv.setAllGroups(false);self._clusterKey=null;self.update();});
+      var collapse=button('Collapse all',function(){cv.setAllGroups(false);self._clusterKey=null;self._key=null;self.update();});
       collapse.disabled=!open;this.toolbar.appendChild(collapse);
       this.toolbar.appendChild(el('div',{cls:'ex-spacer'}));
-      this.toolbar.appendChild(button('Fit',function(){cv.fitView();},false,'Fit every group in view'));
-      this.legendBtn=button('Legend',function(){self.legendOpen=!self.legendOpen;self._clusterKey=null;self.update();});
-      this.legendBtn.setAttribute('aria-expanded',String(!!this.legendOpen));
-      var anchor=el('div',{cls:'ex-menu-anchor'},[this.legendBtn]);
-      if(this.legendOpen){
-        var box=el('div',{cls:'ex-display-menu ex-legend-menu','data-canvas-overlay':true});
-        box.appendChild(el('h3',{text:app.colorBy==='source'?'Source':'Domain'}));
-        (app.legend&&app.legend.build?app.legend.build():[]).forEach(function(L){
-          var active=app.state.activeFilter===L.key;
-          var row=el('button',{cls:'ex-legend-row'+(active?' is-active':''),title:L.tip,onClick:function(){cv.setFilter(active?null:L.key);self._clusterKey=null;self.update();}},[
-            el('span',{cls:'ex-legend-dot',style:'background:'+L.color}),
-            el('span',{cls:'ex-legend-name',text:L.label}),
-            el('span',{cls:'ex-legend-count',text:String(L.count)+(L.plus?' '+L.plus:'')})]);
-          row.setAttribute('aria-pressed',String(active));box.appendChild(row);
-        });
-        box.appendChild(button('Close legend',function(){self.legendOpen=false;self._clusterKey=null;self.update();}));
-        anchor.appendChild(box);
-      }
-      this.toolbar.appendChild(anchor);
+    },
+    layoutFooter:function(){
+      if(!this.nav||this.nav.hidden)return;
+      var h=this.nav.offsetHeight||52,d=this.legendOpen?(this.legendDock.offsetHeight||160):0;
+      this.legendDock.style.bottom=(30+h)+'px';
+      this.app.canvas.host.style.bottom=(30+h+d)+'px';
+      this.mapHost.style.bottom=(42+h+d)+'px';
+    },
+    renderLegend:function(){
+      var self=this,app=this.app,cv=app.canvas;U.clear(this.legendDock);
+      this.legendDock.hidden=!this.legendOpen;
+      if(!this.legendOpen)return;
+      var grid=el('div',{cls:'ex-legend-grid'});
+      (app.legend&&app.legend.build?app.legend.build():[]).forEach(function(L){
+        var active=app.state.activeFilter===L.key;
+        var parts=L.label.split(' · '),label=parts.length>2?parts[0]+' · … · '+parts[parts.length-1]:L.label;
+        var row=el('button',{cls:'ex-legend-row'+(active?' is-active':''),title:L.label+' — '+L.tip,onClick:function(){cv.setFilter(active?null:L.key);self._key=null;self.update();}},[
+          el('span',{cls:'ex-legend-dot',style:'background:'+L.color}),el('span',{cls:'ex-legend-name',text:label}),el('span',{cls:'ex-legend-count',text:String(L.count)+(L.plus?' '+L.plus:'')})]);
+        row.setAttribute('aria-pressed',String(active));grid.appendChild(row);
+      });this.legendDock.appendChild(grid);
     },
     renderEmpty:function(){
       var self=this,app=this.app;U.clear(this.empty);
@@ -401,7 +408,23 @@
       var starters=app.model.tables.filter(function(t){return t.relCount>0;}).sort(function(a,b){return b.relCount-a.relCount;}).slice(0,3);
       var samples=el('div',{cls:'ex-starters'});starters.forEach(function(t){samples.appendChild(button(t.name,function(){self.add([t.name]);app.focusTable(t.name);},false,t.name+' · '+t.relCount+' relationships'));});this.empty.firstChild.appendChild(samples);
     },
-    renderNavigation:function(){var cv=this.app.canvas,self=this,key=this.app.state.selected||'';if(this._navKey===key&&this.nav.firstChild){this.nav.querySelector('.ex-zoom-value').textContent=this.app.state.zoomPct;return;}this._navKey=key;U.clear(this.nav);this.nav.appendChild(button('−',function(){cv.zoomOut();},false,'Zoom out'));this.nav.appendChild(el('span',{cls:'ex-zoom-value',text:this.app.state.zoomPct}));this.nav.appendChild(button('+',function(){cv.zoomIn();},false,'Zoom in'));this.nav.appendChild(button('Fit',function(){cv.fitView();},false,'Fit all tables in this layout'));if(this.app.state.selected)this.nav.appendChild(button('Center selected',function(){cv.focusGraph(self.app.state.selected);}));},
+    renderNavigation:function(){
+      var app=this.app,cv=app.canvas,self=this,key=[app.state.selected,app.colorBy,cv.showSA,this.mapHidden,this.legendOpen,app.state.viewMode].join('|');
+      if(this._navKey===key&&this.nav.firstChild){this.nav.querySelector('.ex-zoom-value').textContent=app.state.zoomPct;return;}
+      this._navKey=key;U.clear(this.nav);
+      var zoom=el('div',{cls:'ex-footer-group'});this.nav.appendChild(zoom);
+      zoom.appendChild(button('−',function(){cv.zoomOut();},false,'Zoom out'));zoom.appendChild(el('span',{cls:'ex-zoom-value',text:app.state.zoomPct}));zoom.appendChild(button('+',function(){cv.zoomIn();},false,'Zoom in'));zoom.appendChild(button('Fit',function(){cv.fitView();}));
+      if(app.state.selected)zoom.appendChild(button('Center selected',function(){cv.focusGraph(app.state.selected);}));
+      function toggle(label,on,action){var input=el('input',{type:'checkbox',role:'switch',checked:on,'aria-label':label,onChange:action});return el('label',{cls:'ex-footer-toggle'},[el('span',{text:label}),input]);}
+      if(app.state.viewMode==='graph'){
+        this.nav.appendChild(toggle('Disconnected tables',cv.showSA,function(){cv.toggleStandalone();self.update();}));
+        this.nav.appendChild(toggle('Overview map',!this.mapHidden,function(){self.mapHidden=!self.mapHidden;self.saveChrome();self.update();}));
+      }
+      var mode=el('div',{cls:'ex-footer-group',role:'group','aria-label':'Colour by'},[el('span',{text:'Colour by'})]);
+      [['source','Source'],['domain','Table folder']].forEach(function(pair){var b=button(pair[1],function(){cv.setColorMode(pair[0]);self.update();});b.setAttribute('aria-pressed',String(app.colorBy===pair[0]));b.classList.add('ex-mode');mode.appendChild(b);});this.nav.appendChild(mode);
+      var legend=toggle('Legend',this.legendOpen,function(){self.legendOpen=!self.legendOpen;self.saveChrome();self.update();});this.legendBtn=legend.lastChild;this.nav.appendChild(legend);
+      if(this.legendOpen)this.nav.appendChild(button('Edit colours',function(){app.editGroupColours();}));
+    },
     drawMap:function(){
       if(this._mapFrame)return;var self=this;this._mapFrame=requestAnimationFrame(function(){self._mapFrame=null;self.paintMap();});
     },
