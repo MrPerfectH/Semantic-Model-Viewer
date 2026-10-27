@@ -9,7 +9,7 @@ try{
   if(['inspect','relations','dependents'].includes(kind))parentPort.postMessage({value:engine[kind](loaded,input.table,input)});
   else{
     const plan=engine.plan(loaded,input);
-    const prepared=plan.views.map(item=>{const rendered=engine.render(loaded,item.view,{deferStart:true});return {...item,prepared:{html:rendered.html,summary:rendered.summary,renderer:rendered.renderer}};});
+    const prepared=plan.views.map(item=>{const rendered=engine.render(loaded,item.view);return {...item,prepared:{html:rendered.html,summary:rendered.summary,renderer:rendered.renderer}};});
     parentPort.postMessage({plan,prepared,sourceIdentity:loaded.sourceIdentity,sourceContentHash:loaded.sourceContentHash});
   }
 }catch(error){parentPort.postMessage({error:error.message});}

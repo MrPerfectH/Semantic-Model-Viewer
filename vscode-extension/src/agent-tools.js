@@ -4,20 +4,15 @@ const {findModels,readModelFiles}=require('./workspace');
 function htmlForView(html,revision){
   const nonce=crypto.randomBytes(18).toString('base64');
   const csp=`default-src 'none'; script-src 'nonce-${nonce}'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; worker-src blob:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'`;
-  const embedded=html.match(/<script id="smv-snapshot-data"[^>]*>([\s\S]*?)<\/script>/);
-  if(!embedded)throw new Error('Prepared diagram is missing its model snapshot');
-  const data=JSON.stringify(embedded[1]).replace(/</g,'\\u003c');
-  html=html.replace(/<script\b/g,`<script nonce="${nonce}"`);
-  // Initialize from the prepared records after the editor document has booted.
-  // The editor's asynchronous webview loader does not guarantee that snapshot.js
-  // can discover the JSON data element while its assets are being evaluated.
+  // Match whole script blocks so nonce insertion cannot rewrite JavaScript
+  // regexes or strings that themselves contain the text "<script".
+  html=html.replace(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi,(_tag,attributes,body)=>`<script nonce="${nonce}"${attributes}>${body}</script>`);
   const acknowledgement=`<script nonce="${nonce}">(()=>{
-    const host=acquireVsCodeApi(),payload=JSON.parse(${data}),end=Date.now()+20000;
+    const host=acquireVsCodeApi(),end=Date.now()+20000;
     const fail=error=>host.postMessage({type:'failed',revision:${revision},error:String(error.message||error)});
     const wait=()=>{
-      if(window.app&&app.state.loaded&&window.SMV_AGENT_VIEW){
-        try{Snapshots.embedded=Snapshots.validate(payload);Snapshots.error=null;U.store.useMemory(Snapshots.seedStorage(payload));if(app.onboarding&&typeof app.onboarding.dispose==='function')app.onboarding.dispose();app.onboarding=null;app.loadSnapshot(payload);SMVExplanation.start(window.SMV_AGENT_VIEW);window.smv.ready().then(()=>host.postMessage({type:'applied',revision:${revision}})).catch(fail);}catch(error){fail(error);}
-      }else if(Date.now()<end)setTimeout(wait,50);else fail(new Error('Editor diagram initialization timed out'));
+      if(window.smv)window.smv.ready().then(()=>host.postMessage({type:'applied',revision:${revision}})).catch(fail);
+      else if(Date.now()<end)setTimeout(wait,50);else fail(new Error('Editor diagram initialization timed out'));
     };wait();
   })();</script>`;
   return html.replace('<head>',`<head><meta http-equiv="Content-Security-Policy" content="${csp}">`).replace('</body>',acknowledgement+'</body>');

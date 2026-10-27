@@ -32,6 +32,7 @@ test('native tools use the packaged worker, require workspace trust, preserve vi
  // Do not reuse another test's host binding.
  for(const file of ['agent-tools.js','workspace.js'])delete require.cache[require.resolve(path.join(ext,'src',file))];
  const api=require(path.join(ext,'src/agent-tools')).register({extensionPath:ext});t.after(()=>api.dispose());
+ t.mock.method(require('node:crypto'),'randomBytes',()=>Buffer.alloc(18,255));
  assert.equal(tools.size,6);
  const discover=await api.run('discover');assert.equal(discover.models.length,1);
  const input={model:discover.models[0].id,table:'Sales',related:true,dependents:true};
@@ -39,6 +40,10 @@ test('native tools use the packaged worker, require workspace trust, preserve vi
  for(const [index,panel] of vscode._panels.entries()){
   assert.match(panel.webview.html,/Content-Security-Policy/);assert.match(panel.webview.html,/connect-src 'none'/);
   assert.deepEqual(panel.options.localResourceRoots,[]);
+  const code=panel.webview.html.match(/<script[^>]*data-smv-asset="js\/snapshot.js"[^>]*>([\s\S]*?)<\/script>/)[1];
+  const expected=fs.readFileSync(path.join(root,'Models/tools/viewer/js/snapshot.js'),'utf8').replace(/<\/script/gi,'<\\/script');
+  assert.equal(code,expected,'Slash-containing CSP nonces must not modify embedded JavaScript');
+  assert.doesNotThrow(()=>new (require('node:vm').Script)(code));
   panel.webview.receive({type:'applied',revision:first.views[index].revision-1});
  }
  let again=await api.run('show',input);assert.ok(again.views.every(v=>v.reused&&v.status==='awaiting-viewer'));
