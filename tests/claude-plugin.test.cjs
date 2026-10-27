@@ -38,10 +38,11 @@ test('plugin runs discover, inspect, live sessions and HTML exports with no node
     const target = path.join(plugin, name); fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.cpSync(path.join(root, name), target, { recursive: true });
   }
+  fs.writeFileSync(path.join(plugin, 'package.json'), JSON.stringify({ name: 'semantic-model-viewer-plugin', private: true }));
   fs.cpSync(path.join(root, 'Models/demo/Contoso Retail.SemanticModel'), path.join(project, 'Sales.SemanticModel'), { recursive: true });
   const cli = path.join(plugin, 'bin/smv.cjs');
   function run(script, args) {
-    return spawnSync(process.execPath, [script, ...args], { cwd: project, env: process.env, encoding: 'utf8', timeout: 15000 });
+    return spawnSync(process.execPath, [script, ...args], { cwd: project, env: { ...process.env, SMV_INSTALL_REGISTRY: path.join(directory, 'registry.json') }, encoding: 'utf8', timeout: 15000 });
   }
   function successful(script, args) {
     const result = run(script, args);
@@ -63,6 +64,11 @@ test('plugin runs discover, inspect, live sessions and HTML exports with no node
   assert.equal(models.length, 1);
   assert.equal(models[0].path, path.join(project, 'Sales.SemanticModel'));
   assert.equal(invoke('--where').trim(), fs.realpathSync(cli));
+  const identity = json('--where', '--json');
+  assert.equal(identity.source, 'plugin'); assert.equal(identity.selection, 'direct');
+  assert.equal(invoke('--version').trim(), identity.version);
+  const installed = json('install', '--bin-dir', path.join(directory, 'launcher'), '--json');
+  assert.equal(installed.source, 'plugin'); assert.equal(installed.runtime.selection, 'plugin-fallback');
   const focused = json('inspect', models[0].path, '--table', 'Sales');
   assert.equal(focused.table.name, 'Sales');
   assert.equal(focused.tables, undefined);

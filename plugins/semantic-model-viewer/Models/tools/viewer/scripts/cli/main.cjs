@@ -8,8 +8,10 @@ const HELP = `Semantic Model Viewer — offline snapshots and agent-authored vis
 
 Usage:
   smv fetch --workspace <name|UUID> --model <name|UUID> [--out <new-folder>]
-  smv --where
-  smv install [--bin-dir <directory>]
+  smv --where [--json]
+  smv --version
+  smv workspace
+  smv install [--source checkout|plugin] [--bin-dir <directory>]
   smv show <model> --table <name> [--with <table> | --related | --dependents] [--out diagram.html|diagram.png]
   smv relations|dependents <model> --table <name> [--details]
   smv session list | smv session stop --all
@@ -58,11 +60,19 @@ async function run(args) {
   // or its dependencies in the CLI-only plugin payload.
   const adapter=path.resolve(__dirname,'../../../../../integrations/mcp/server.cjs');
   if(args[0]==='mcp'&&fs.existsSync(adapter))return require(adapter).start();
+  if(args[0]==='workspace'){if(args.length!==1)throw new Error('Use workspace without arguments');process.stdout.write(JSON.stringify(require('../../../../../scripts/claude-workspace.cjs').prepare())+'\n');return;}
   if(args[0]==='fetch')return fetchCommand(args.slice(1));
   if(['show','relations','dependents','install'].includes(args[0]))return workflowCommand(args);
-  if (args[0] === '--where') {
-    if (args.length !== 1) throw new Error('Use smv --where without other arguments');
-    process.stdout.write(require('node:fs').realpathSync(path.resolve(__dirname, '../../../../../bin/smv.cjs')) + '\n'); return;
+  if (args[0] === '--where' || args[0] === '--version') {
+    const json=args[0]==='--where'&&args.length===2&&args[1]==='--json';
+    if(args.length!==1&&!json)throw new Error('Use --where [--json] or --version');
+    const api=require('./runtime.cjs'),config=api.currentConfig();
+    // Direct invocation always describes this executable, without registry redirection.
+    const runtime=api.resolveRuntime({...config,source:'checkout'});
+    runtime.source=config.packageHost?'bundled':config.source;runtime.selection='direct';runtime.registry=null;
+    runtime.packageHost=config.packageHost;runtime.javascriptRuntime={executable:process.execPath,version:process.version};
+    runtime.updatePolicy='Direct invocation of this executable; no runtime substitution.';
+    process.stdout.write((args[0]==='--version'?runtime.version:json?JSON.stringify(runtime):runtime.executable)+'\n');return;
   }
   if (['inspect', 'filters-by'].includes(args[0])) {
     const { values, positionals } = parseArgs({ args, allowPositionals: true, options: {
@@ -169,8 +179,8 @@ async function sessionCommand(args){
   process.stdout.write(positionals[0]==='session'?JSON.stringify(result,null,values.json?0:2)+'\n':values.json?JSON.stringify(result)+'\n':(result.url||JSON.stringify(result))+'\n');
 }
 async function workflowCommand(args){
-  const {values,positionals}=parseArgs({args,allowPositionals:true,options:{table:{type:'string'},model:{type:'string'},related:{type:'boolean'},dependents:{type:'boolean'},direction:{type:'string'},direct:{type:'boolean'},'include-inactive':{type:'boolean'},details:{type:'boolean'},json:{type:'boolean'},session:{type:'string'},'new-session':{type:'boolean'},watch:{type:'boolean'},'bin-dir':{type:'string'},with:{type:'string'},out:{type:'string',short:'o'},force:{type:'boolean'},browser:{type:'string'},measure:{type:'string'},open:{type:'string'},opener:{type:'string'},workspace:{type:'string'},tenant:{type:'string'},'token-stdin':{type:'boolean'}}});
-  const allowed={install:['bin-dir','json'],show:['table','model','related','dependents','direction','direct','include-inactive','session','new-session','watch','json','with','out','force','browser','open','opener','workspace','tenant','token-stdin'],relations:['table','model','direction','direct','include-inactive','details','json','with'],dependents:['table','model','direct','details','json','measure']}[positionals[0]];
+  const {values,positionals}=parseArgs({args,allowPositionals:true,options:{table:{type:'string'},model:{type:'string'},related:{type:'boolean'},dependents:{type:'boolean'},direction:{type:'string'},direct:{type:'boolean'},'include-inactive':{type:'boolean'},details:{type:'boolean'},json:{type:'boolean'},session:{type:'string'},'new-session':{type:'boolean'},watch:{type:'boolean'},'bin-dir':{type:'string'},source:{type:'string'},with:{type:'string'},out:{type:'string',short:'o'},force:{type:'boolean'},browser:{type:'string'},measure:{type:'string'},open:{type:'string'},opener:{type:'string'},workspace:{type:'string'},tenant:{type:'string'},'token-stdin':{type:'boolean'}}});
+  const allowed={install:['bin-dir','source','json'],show:['table','model','related','dependents','direction','direct','include-inactive','session','new-session','watch','json','with','out','force','browser','open','opener','workspace','tenant','token-stdin'],relations:['table','model','direction','direct','include-inactive','details','json','with'],dependents:['table','model','direct','details','json','measure']}[positionals[0]];
   for(const key of Object.keys(values))if(!allowed.includes(key))throw new Error('--'+key+' is not supported by '+positionals[0]);
   for(const key of ['with','out','measure'])if(values[key]!==undefined&&!values[key].trim())throw new Error('--'+key+' cannot be empty');
   if(values.table!==undefined&&!values.table.trim())throw new Error('--table cannot be empty');
@@ -178,7 +188,7 @@ async function workflowCommand(args){
   require('./opener.cjs').policy(values);
   if((values.tenant||values['token-stdin'])&&!values.workspace)throw new Error('--tenant and --token-stdin require --workspace');
   let result;
-  if(positionals[0]==='install'){if(positionals.length!==1)throw new Error('install takes options only');result=require('./install.cjs').install({binDir:values['bin-dir']});}
+  if(positionals[0]==='install'){if(positionals.length!==1)throw new Error('install takes options only');result=require('./install.cjs').install({binDir:values['bin-dir'],source:values.source});}
   else{
     let source,table;
     if(values.workspace){if(positionals[0]!=='show'||positionals.length!==1||!values.model||!values.table)throw new Error('Use show --workspace <name|UUID> --model <name|UUID> --table <name>');const fetched=await require('./fabric.cjs').fetchModel({workspace:values.workspace,model:values.model,tenant:values.tenant,tokenStdin:values['token-stdin']});source=fetched.path;table=values.table;}

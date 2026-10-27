@@ -43,7 +43,7 @@
     var model=el('div',{cls:'ex-brand'},[el('span',{cls:'ex-logo',html:U.ICON.logo}),identity]);
     if(st.showModelMenu&&!offline)model.appendChild(this.modelMenu());this.host.appendChild(model);
     var nav=el('nav',{cls:'ex-main-nav','aria-label':'Analysis views'});
-    [['graph','Tables'],['measures','Measures'],['power-query','Power Query'],['clusters','Domains'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
+    [['graph','Tables'],['measures','Measures'],['power-query','Power Query'],['clusters','Table groups'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
     this.host.appendChild(nav);
     var actions=el('div',{cls:'ex-header-actions'});
     if(g.ViewerTheme&&!(g.SMVHost&&g.SMVHost.kind==='vscode')){
@@ -52,7 +52,8 @@
       theme.value=g.ViewerTheme.get();actions.appendChild(theme);
     }
     if(!offline && app.fabric && app.fabric.available()){
-      actions.appendChild(el('button',{cls:'ex-button',text:'Connect to Fabric',onClick:function(){app.fabric.show();}}));
+      /* VS Code signs in from the Fabric tree in the side bar; the toolbar button there is opt-in */
+      if(!(app.host && app.host.caps && app.host.caps.connectButton===false))actions.appendChild(el('button',{cls:'ex-button',text:'Connect to Fabric',onClick:function(){app.fabric.show();}}));
       if(fabricSource){
         actions.appendChild(el('button',{cls:'ex-button',text:app.fabric.busy?'Refreshing…':'Refresh Fabric',disabled:app.fabric.busy,onClick:function(){app.fabric.refresh();}}));
       }
@@ -236,14 +237,16 @@
     var tot = {}, vis = {}, hid = {};
     app.model.tables.forEach(function (t) {
       var k = keyOf(t); tot[k] = (tot[k] || 0) + 1;
-      if (showSA || t.relCount > 0) vis[k] = (vis[k] || 0) + 1; else hid[k] = (hid[k] || 0) + 1;
+      var card=app.canvas && app.canvas.cards && app.canvas.cards[t.name];
+      var visible=card ? card.el.style.display!=='none' : (showSA || t.relCount>0);
+      if (visible) vis[k] = (vis[k] || 0) + 1; else hid[k] = (hid[k] || 0) + 1;
     });
     var map = app.colorBy === 'source' ? app._srcMap : app._domMap;
     return Object.keys(tot).sort(function (a, b) { return tot[b] - tot[a]; }).map(function (k) {
       return {
-        key: k, label: app.colorBy === 'source' ? (labelMap[k] || k) : k, color: map[k] || app.FALLBACK_COLOR,
+        key: k, label: app.groupLabel ? app.groupLabel(app.colorBy,k) : (app.colorBy === 'source' ? (labelMap[k] || k) : k), color: map[k] || app.FALLBACK_COLOR,
         count: vis[k] || 0, plus: hid[k] ? ('+' + hid[k]) : '',
-        tip: hid[k] ? ((vis[k] || 0) + ' on canvas · ' + hid[k] + ' standalone hidden — use the Standalone toggle to show ' + (hid[k] === 1 ? 'it' : 'them')) : (tot[k] + ' tables')
+        tip: hid[k] ? ((vis[k] || 0) + ' on canvas · ' + hid[k] + ' not currently visible') : (tot[k] + ' tables')
       };
     });
   };
@@ -259,7 +262,7 @@
       onClick: function () { app.setState({ legendOpen: !st.legendOpen }); },
       style: "display:flex;align-items:center;gap:6px;width:100%;border:none;background:transparent;cursor:pointer;padding:2px 2px 6px;font-family:'IBM Plex Sans',sans-serif;"
     }, [
-      el('span', { style: 'flex:1;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:#8b92a0;font-weight:700;', text: app.colorBy === 'source' ? 'Source' : 'Domain' }),
+      el('span', { style: 'flex:1;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:#8b92a0;font-weight:700;', text: app.colorBy === 'source' ? 'Source' : 'Table group' }),
       el('span', { style: 'flex:none;display:flex;transition:transform .15s;transform:rotate(' + (st.legendOpen ? '0deg' : '180deg') + ');', html: U.icon('chevDown', 12, '#a8aeb9') })
     ]));
     if (st.legendOpen) {

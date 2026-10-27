@@ -35,10 +35,19 @@ function readModel(context, source, name) {
     }
   }
   if (!bim) walk(target);
-  const model = bim ? context.TMDLParser.parseBIM(JSON.parse(fs.readFileSync(target,'utf8')), { strictRelationships: true }) : context.TMDLParser.parseTMDL(files, { strictRelationships: true });
-  if (!model.tables.length) throw new Error('No tables found in the model.');
   const folder = path.basename(target) === 'definition' ? path.dirname(target) : target;
-  model.name = name || model.name || path.basename(folder).replace(/\.SemanticModel$/i, '');
+  return readRecords(context, bim ? [{name:'model.bim',text:fs.readFileSync(target,'utf8')}] : files, name, path.basename(folder).replace(/\.SemanticModel$/i, ''));
+}
+
+function readRecords(context, files, name, fallback) {
+  const definition = files.some(file => file.path === 'definition/model.tmdl');
+  const tmdl = files.filter(file => /\.tmdl$/i.test(file.name) && (!definition || (file.path || '').startsWith('definition/')));
+  // Match filesystem loading: an explicit TMDL definition wins over a sibling
+  // BIM export, which may be a stale cache of the same model.
+  const bim = !tmdl.some(file => file.name.toLowerCase() === 'model.tmdl') && files.find(file => file.name.toLowerCase() === 'model.bim');
+  const model = bim ? context.TMDLParser.parseBIM(JSON.parse(bim.text), { strictRelationships:true }) : context.TMDLParser.parseTMDL(tmdl, { strictRelationships:true });
+  if (!model.tables.length) throw new Error('No tables found in the model.');
+  model.name = name || model.name || fallback || 'Semantic model';
   // The viewer indexes tables and measures by name. Reject ambiguous input rather
   // than exporting the wrong object when the source violates that assumption.
   for (const [kind, names] of [['table', model.tables.map(t => t.name)], ['measure', model.tables.flatMap(t => t.measures.map(m => m.name))]]) {
@@ -99,4 +108,4 @@ function snapshot(context, app, focus, options = {}) {
   return context.Snapshots.buildHTML(fs.readFileSync(path.join(viewerRoot, 'index.html'), 'utf8'), sources, payload);
 }
 
-module.exports = { runtime, readModel, selection, snapshot };
+module.exports = { runtime, readModel, readRecords, selection, snapshot };

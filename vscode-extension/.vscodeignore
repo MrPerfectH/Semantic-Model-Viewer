@@ -16,3 +16,5 @@
 
 # vsce selects production dependencies; MSAL remains in the extension host.
 !node_modules/**
+
+!engine/**

@@ -1,0 +1,95 @@
+name: Bundled agent delivery
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-runtime:
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, target: linux-x64 }
+          - { os: ubuntu-24.04-arm, target: linux-arm64 }
+          - { os: macos-latest, target: darwin-arm64 }
+          - { os: macos-15-intel, target: darwin-x64 }
+          - { os: windows-latest, target: win-x64 }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Download and verify pinned private runtime
+        run: node scripts/vendor-node.cjs --target ${{ matrix.target }} --out dist/runtimes/${{ matrix.target }}
+      - name: Build complete Claude and Codex packages
+        run: |
+          npm run build:portable -- --host claude --targets ${{ matrix.target }} --runtime-root dist/runtimes --out dist/claude
+          npm run build:portable -- --host codex --targets ${{ matrix.target }} --runtime-root dist/runtimes --out dist/codex
+      - name: Run diagrams and exports with Node absent from PATH
+        run: |
+          node scripts/test-portable.cjs dist/claude
+          node scripts/test-portable.cjs dist/codex
+      - name: Recover archive extraction that stripped executable modes
+        if: runner.os != 'Windows'
+        env:
+          SMV_TEST_STRIPPED_EXEC: '1'
+        run: node scripts/test-portable.cjs dist/claude
+      - uses: actions/upload-artifact@v4
+        with:
+          name: smv-private-node-${{ matrix.target }}
+          path: dist/runtimes/${{ matrix.target }}/
+          retention-days: 1
+          compression-level: 6
+  universal-packages:
+    needs: native-runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: smv-private-node-*
+          path: dist/downloads
+      - name: Restore executable modes and build universal artifacts
+        run: |
+          mkdir -p dist/runtimes
+          for target in linux-x64 linux-arm64 darwin-x64 darwin-arm64 win-x64; do
+            mv "dist/downloads/smv-private-node-$target" "dist/runtimes/$target"
+            if [ "$target" != win-x64 ]; then chmod +x "dist/runtimes/$target/node"; fi
+          done
+          npm run build:portable -- --host claude --targets linux-x64,linux-arm64,darwin-x64,darwin-arm64,win-x64 --runtime-root dist/runtimes --out dist/claude-universal --zip dist/smv-claude-portable.zip
+          npm run build:portable -- --host codex --targets linux-x64,linux-arm64,darwin-x64,darwin-arm64,win-x64 --runtime-root dist/runtimes --out dist/codex-universal --zip dist/smv-codex-portable.zip
+      - name: Install complete packages with the native host managers
+        run: |
+          npm install --global @anthropic-ai/claude-code@2.1.280 @openai/codex@0.162.1
+          node scripts/test-agent-install.cjs claude dist/claude-universal
+          node scripts/test-agent-install.cjs codex dist/codex-universal
+      - uses: actions/upload-artifact@v4
+        with:
+          name: semantic-model-viewer-complete-agent-packages
+          path: |
+            dist/smv-*-portable.zip
+            dist/smv-*-portable.zip.sha256
+          retention-days: 3
+          compression-level: 0
+  vscode-host:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: npm ci --prefix vscode-extension
+      - run: node vscode-extension/scripts/sync-viewer.js
+      - name: Exercise native tools and real rendered panes in VS Code
+        run: xvfb-run -a node scripts/test-vscode-agent.cjs

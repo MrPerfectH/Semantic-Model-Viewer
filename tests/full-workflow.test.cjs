@@ -35,7 +35,7 @@ test('show reuses one model session, creates independent named views and reports
   const stopped=run(dir,'session','stop','--all','--model',model);assert.deepEqual(stopped.stopped,[first.sessionId]);
 });
 test('managed sessions warn about old runtime versions and bulk cleanup leaves foreign files alone',async t=>{
-  const {model,dir}=setup(t);const real=managed.version;t.mock.method(managed,'version',()=> '0.0.1');const server=await api.serve(model,{newSession:true});t.mock.method(managed,'version',real);
+  const {model,dir}=setup(t);t.mock.method(managed,'version',()=> '0.0.1');const server=await api.serve(model,{newSession:true});managed.version.mock.restore();
   const again=await api.serve(model,{background:true});assert.equal(again.sessionId,server.sessionId);assert.ok(again.warnings.length);
   const foreign=path.join(managed.directory(),'foreign.json');fs.writeFileSync(foreign,JSON.stringify({file:'/unrelated',pid:process.pid}));await managed.stopAll();assert.ok(fs.existsSync(foreign));
 });
@@ -43,7 +43,7 @@ test('stable launcher follows plugin registry updates and refuses to replace unr
   const {dir}=setup(t),bin=path.join(dir,'bin'),registry=path.join(dir,'registry.json');const oldRegistry=process.env.SMV_INSTALL_REGISTRY;process.env.SMV_INSTALL_REGISTRY=registry;t.after(()=>{if(oldRegistry===undefined)delete process.env.SMV_INSTALL_REGISTRY;else process.env.SMV_INSTALL_REGISTRY=oldRegistry;});
   function plugin(version,text){const p=path.join(dir,'cache',version);fs.mkdirSync(path.join(p,'bin'),{recursive:true});fs.mkdirSync(path.join(p,'.claude-plugin'));fs.writeFileSync(path.join(p,'.claude-plugin','plugin.json'),JSON.stringify({name:'semantic-model-viewer'}));fs.writeFileSync(path.join(p,'bin','smv.cjs'),'process.stdout.write('+JSON.stringify(text)+')');return p;}
   const v1=plugin('1','first'),v2=plugin('2','second');const set=p=>fs.writeFileSync(registry,JSON.stringify({plugins:{'semantic-model-viewer@semantic-model-tools':[{scope:'user',installPath:p}]}}));set(v1);
-  const installed=require('../Models/tools/viewer/scripts/cli/install.cjs').install({binDir:bin});const file=process.platform==='win32'?path.join(bin,'smv.cjs'):installed.path;
+  const installed=require('../Models/tools/viewer/scripts/cli/install.cjs').install({binDir:bin,source:'plugin'});const file=process.platform==='win32'?path.join(bin,'smv.cjs'):installed.path;
   assert.equal(spawnSync(process.execPath,[file],{encoding:'utf8'}).stdout,'first');set(v2);assert.equal(spawnSync(process.execPath,[file],{encoding:'utf8'}).stdout,'second');
   fs.writeFileSync(file,'unrelated');assert.throws(()=>require('../Models/tools/viewer/scripts/cli/install.cjs').install({binDir:bin}),/unrelated command/);assert.equal(fs.readFileSync(file,'utf8'),'unrelated');
 });
@@ -104,8 +104,70 @@ test('question diagrams support direction, calculations and named live views',as
 
 
 test('question diagrams preserve older servers and reuse the current runtime on later calls',async t=>{
-  const {dir,model}=setup(t);const real=managed.version;t.mock.method(managed,'version',()=> '0.0.1');const old=await api.serve(model,{newSession:true});t.mock.method(managed,'version',real);
+  const {dir,model}=setup(t);t.mock.method(managed,'version',()=> '0.0.1');const old=await api.serve(model,{newSession:true});managed.version.mock.restore();
   const exec=require('node:util').promisify(require('node:child_process').execFile);const invoke=async()=>JSON.parse((await exec(process.execPath,[cli,'show',model,'--table','Date','--with','Sales'],{cwd:dir,env:process.env,timeout:20000})).stdout);
   const first=await invoke();assert.notEqual(first.sessionId,old.sessionId);assert.match(first.warnings.join(' '),/left running/);
   const second=await invoke();assert.equal(second.sessionId,first.sessionId);assert.equal(second.reused,true);assert.equal((await managed.list(model)).filter(r=>r.running).length,2);
+});
+
+test('checkout installation cannot be redirected by an older registered plugin; diagnostics identify selection',t=>{
+  const {dir}=setup(t),bin=path.join(dir,'bin'),registry=path.join(dir,'registry.json');
+  const plugin=path.join(dir,'old-plugin');fs.mkdirSync(path.join(plugin,'bin'),{recursive:true});fs.mkdirSync(path.join(plugin,'.claude-plugin'));
+  fs.writeFileSync(path.join(plugin,'bin/smv.cjs'),'process.stdout.write("OLD PLUGIN")');
+  fs.writeFileSync(path.join(plugin,'.claude-plugin/plugin.json'),JSON.stringify({name:'semantic-model-viewer',version:'0.1.0'}));
+  const alias=path.join(dir,'registered-plugin');fs.symlinkSync(plugin,alias,'junction');
+  fs.writeFileSync(registry,JSON.stringify({plugins:{'semantic-model-viewer@semantic-model-tools':[{scope:'user',installPath:alias}]}}));
+  const savedRegistry=process.env.SMV_INSTALL_REGISTRY;process.env.SMV_INSTALL_REGISTRY=registry;t.after(()=>{if(savedRegistry===undefined)delete process.env.SMV_INSTALL_REGISTRY;else process.env.SMV_INSTALL_REGISTRY=savedRegistry;});
+  const installer=require('../Models/tools/viewer/scripts/cli/install.cjs');
+  fs.mkdirSync(bin);fs.writeFileSync(path.join(bin,process.platform==='win32'?'smv.cjs':'smv'),'// SMV_MANAGED_LAUNCHER_V1\nprocess.stdout.write("legacy plugin-first launcher")');
+  const installed=installer.install({binDir:bin});assert.equal(installed.source,'checkout');
+  const file=process.platform==='win32'?path.join(bin,'smv.cjs'):installed.path;
+  const run=args=>spawnSync(process.execPath,[file,...args],{encoding:'utf8'});
+  let result=run(['--where','--json']);assert.equal(result.status,0,result.stderr);
+  let info=JSON.parse(result.stdout);assert.equal(info.executable,fs.realpathSync(cli));assert.equal(info.source,'checkout');assert.equal(info.registry,null);
+  assert.equal(run(['--where']).stdout.trim(),fs.realpathSync(cli));
+  assert.equal(run(['--version']).stdout.trim(),info.version);
+  installer.install({binDir:bin,source:'plugin'});
+  result=run(['--where','--json']);info=JSON.parse(result.stdout);
+  assert.equal(info.executable,fs.realpathSync(path.join(plugin,'bin/smv.cjs')));assert.equal(info.version,'0.1.0');assert.equal(info.source,'plugin');assert.match(result.stderr,/older than installer/);
+  assert.equal(run([]).stdout,'OLD PLUGIN');
+  assert.throws(()=>installer.install({binDir:bin,source:'newest'}),/source must be/);
+  fs.unlinkSync(registry);assert.throws(()=>installer.install({binDir:bin,source:'plugin'}),/No usable Viewer plugin/);
+  const runtime=require('../Models/tools/viewer/scripts/cli/runtime.cjs');
+  assert.throws(()=>runtime.resolveRuntime({...runtime.currentConfig(),fallback:path.join(dir,'missing'),source:'checkout'}),/No other runtime was substituted/);
+  const direct=spawnSync(process.execPath,[cli,'--where','--json'],{encoding:'utf8'});
+  assert.equal(direct.status,0,direct.stderr);assert.equal(JSON.parse(direct.stdout).selection,'direct');
+});
+
+test('plugin install defaults to upgrade tracking and survives removal of its original cache directory',t=>{
+  const {dir}=setup(t),registry=path.join(dir,'registry.json'),bin=path.join(dir,'bin');
+  const initial=path.join(dir,'plugin-initial'),updated=path.join(dir,'plugin-updated');
+  function fixture(root,version){
+    fs.mkdirSync(path.join(root,'Models/tools/viewer/scripts/cli'),{recursive:true});fs.mkdirSync(path.join(root,'bin'));fs.mkdirSync(path.join(root,'.claude-plugin'));
+    fs.writeFileSync(path.join(root,'package.json'),JSON.stringify({name:'semantic-model-viewer-plugin'}));
+    fs.writeFileSync(path.join(root,'.claude-plugin/plugin.json'),JSON.stringify({name:'semantic-model-viewer',version}));
+    fs.writeFileSync(path.join(root,'bin/smv.cjs'),'process.stdout.write('+JSON.stringify(version)+')');
+    for(const file of ['runtime.cjs','install.cjs'])fs.copyFileSync(path.join(__dirname,'../Models/tools/viewer/scripts/cli',file),path.join(root,'Models/tools/viewer/scripts/cli',file));
+  }
+  fixture(initial,'0.5.2');fixture(updated,'0.5.3');const savedRegistry=process.env.SMV_INSTALL_REGISTRY;process.env.SMV_INSTALL_REGISTRY=registry;t.after(()=>{if(savedRegistry===undefined)delete process.env.SMV_INSTALL_REGISTRY;else process.env.SMV_INSTALL_REGISTRY=savedRegistry;});
+  const install=require(path.join(initial,'Models/tools/viewer/scripts/cli/install.cjs')).install;
+  const result=install({binDir:bin});assert.equal(result.source,'plugin');assert.equal(result.runtime.selection,'plugin-fallback');
+  const file=process.platform==='win32'?path.join(bin,'smv.cjs'):result.path;
+  const set=entries=>fs.writeFileSync(registry,JSON.stringify({plugins:{'semantic-model-viewer@semantic-model-tools':entries}}));
+  set([{scope:'user',installPath:path.join(dir,'gone')},{scope:'user',installPath:updated}]);
+  fs.rmSync(initial,{recursive:true,force:true});
+  let output=spawnSync(process.execPath,[file],{encoding:'utf8'});assert.equal(output.status,0,output.stderr);assert.equal(output.stdout,'0.5.3');
+  fs.rmSync(updated,{recursive:true,force:true});
+  output=spawnSync(process.execPath,[file],{encoding:'utf8'});assert.notEqual(output.status,0);assert.match(output.stderr,/No other runtime was substituted/);
+});
+
+test('question diagrams replace incompatible engine identities even when the plugin version is unchanged',async t=>{
+  const {model}=setup(t),realIdentity=managed.identity;
+  t.mock.method(managed,'identity',()=>({...realIdentity(),engineHash:'0'.repeat(64)}));
+  const previous=await api.serve(model,{newSession:true});managed.identity.mock.restore();
+  const current=await require('../Models/tools/viewer/scripts/cli/show.cjs').show(model,{table:'Date',related:true,dependents:true});
+  assert.equal(current.pluginVersion,previous.pluginVersion);assert.notEqual(current.sessionId,previous.sessionId);
+  assert.equal((await api.request(previous.sessionFile,'status')).sessionId,previous.sessionId,'existing exploration remains alive');
+  const repeated=await require('../Models/tools/viewer/scripts/cli/show.cjs').show(model,{table:'Date',related:true,dependents:true});
+  assert.equal(repeated.sessionId,current.sessionId);assert.ok(repeated.reused);
 });

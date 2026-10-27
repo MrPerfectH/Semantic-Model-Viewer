@@ -50,7 +50,7 @@ async function serve(source,options={}){
   };
   return options.session?launch():managed.lock(source,launch);
 }
-function reused(old){const {record,...state}=old;return {reused:true,...state,warnings:old.pluginVersion===managed.version()?[]:['This session runs plugin '+(old.pluginVersion||'unknown/legacy')+'; the installed plugin is '+managed.version()+'. Use --new-session to start the new runtime.']};}
+function reused(old){const {record,...state}=old;return {reused:true,...state,warnings:managed.compatible(old)?[]:['This session uses a different engine/runtime identity (plugin '+(old.pluginVersion||'unknown/legacy')+'); the installed plugin is '+managed.version()+'. Use --new-session to start the new runtime.']};}
 async function start(source,options){
   const file=path.resolve(options.session),view=options.view?path.resolve(options.view):null,report=options.report?path.resolve(options.report):null;
   const entries=new Map(),clients=new Map();let interval,closing=false,lastAttempt='';
@@ -61,7 +61,7 @@ async function start(source,options){
     lastAttempt=next;
   }
   rebuild();
-  const state={version:1,protocolVersion:2,managedBy:managed.OWNER,sessionId:options.sessionId||crypto.randomUUID(),sessionFile:file,pluginVersion:managed.version(),source,view,report,watch:!!options.watch,pid:process.pid,startedAt:new Date().toISOString()};
+  const state={version:1,protocolVersion:2,managedBy:managed.OWNER,sessionId:options.sessionId||crypto.randomUUID(),sessionFile:file,pluginVersion:managed.version(),runtimeIdentity:managed.identity(),source,view,report,watch:!!options.watch,pid:process.pid,startedAt:new Date().toISOString()};
   const viewUrl=id=>{const u=new URL(state.url);if(id!=='default')u.searchParams.set('view',id);return u.href;};
   const workspaceUrl=()=>{const u=new URL(state.url);u.pathname='/workspace';return u.href;};
   function histories(e){return [...clients.values()].filter(c=>c.viewId===e.id);}

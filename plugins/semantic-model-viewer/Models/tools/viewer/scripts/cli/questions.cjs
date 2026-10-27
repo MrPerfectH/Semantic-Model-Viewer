@@ -4,7 +4,7 @@ function build(source,options={}){
   if(!options.table||!options.table.trim())throw new Error('show requires --table <name>');
   if(options.with&&options.dependents)throw new Error('--with is a table relationship diagram; use a separate --dependents view');
   if(options.with&&options.direction)throw new Error('--with finds a relationship connection; omit --direction');
-  const loaded=query.load(source,options.table),table=loaded.table.name,canonical=loaded.source;
+  const loaded=options.loaded||query.load(source,options.table),table=loaded.table.name,canonical=loaded.source;
   const relations=query.focused(canonical,table,'relations',{...options,loaded}),dependents=query.focused(canonical,table,'dependents',{...options,loaded});
   const views=[],warnings=[],direction=options.direction||'both',depth=options.direct?1:100;
   let answer;

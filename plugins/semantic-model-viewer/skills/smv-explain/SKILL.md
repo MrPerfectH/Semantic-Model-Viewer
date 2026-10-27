@@ -3,13 +3,13 @@ name: smv-explain
 description: Illustrate semantic-model explanations with the Semantic Model Viewer CLI using annotated model views, external results, and proposed changes. Use when a user wants to understand model logic, discuss a suspected issue, or see a modeling idea.
 ---
 
-Use `smv` on PATH or `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"` from the host-provided plugin root. No `--where` call is needed for ordinary work; it is diagnostic only. Never construct a versioned cache path. `/semantic-model-viewer:setup` installs the stable terminal command once.
+Use the package-local CLI: `/bin/sh "${CLAUDE_PLUGIN_ROOT}/bin/smv"` on macOS/Linux, or `"${CLAUDE_PLUGIN_ROOT}/bin/smv.cmd"` on Windows. It includes a private runtime in complete release packages; no PATH command, setup skill, npm or separate Node installation is required. In commands below, `smv` means this bundled launcher, never a PATH lookup. Never construct a versioned cache path.
 
 # Illustrate a model explanation
 
-When loaded through the Claude Code plugin, use `node "${CLAUDE_PLUGIN_ROOT}/bin/smv.cjs"` from the user's project, and read guides under `${CLAUDE_PLUGIN_ROOT}/docs/`. Otherwise use an installed `smv` command, or `node bin/smv.cjs` from the Semantic Model Viewer checkout. `smv --help` lists commands. Keep scope with the user's question: one useful image is sufficient when a walkthrough adds no value. Store generated artifacts in the user's project, not the plugin installation.
+When loaded through the Claude Code plugin, use `/bin/sh "${CLAUDE_PLUGIN_ROOT}/bin/smv"` from the user's project, and read guides under `${CLAUDE_PLUGIN_ROOT}/docs/`. Always use the bundled executable for plugin requests; do not switch to a global command. `smv --help` lists commands. Keep scope with the user's question: one useful image is sufficient when a walkthrough adds no value. Store generated artifacts in the user's project, not the plugin installation.
 
-For known tables start with `smv relations <model-path> --table "<name>"` and `smv dependents <model-path> --table "<name>"`; add `--details` for formulas or path evidence. Use `smv inspect <model-path>` only for a broader schema/query-ID inventory. Inputs are a TMDL model folder or a BIM file. Do not guess identifiers from labels. `smv discover <folder>` lists model paths if needed.
+For a known table diagram, start with ONE `smv show <model-path> --table "<name>" --related --dependents` call. For metadata-only questions use `smv relations <model-path> --table "<name>"` and `smv dependents <model-path> --table "<name>"`; add `--details` for formulas or path evidence. Use `smv inspect <model-path>` only for a broader schema/query-ID inventory. Inputs are a TMDL model folder or a BIM file. Do not guess identifiers from labels. `smv discover <folder>` lists model paths if needed.
 
 Create a version 2 JSON view. For example:
 
@@ -43,7 +43,7 @@ Use `smv serve <model> --view view.json --background --session state.json --json
 
 Use `smv session status` to read the current requested revision. Send `smv session update <state.json> --revision <n> --view <file> --json`; `awaiting-viewer` is not an applied acknowledgement. Respect Apply/Keep exploring. Read `smv session selection <state.json> --json` to identify “this one”; use `--client` when several tabs are active. Do not guess from labels. Export with an explicit `--basis authored|current` and the current `--revision`.
 
-Use shell CLI commands for every operation. In the Claude Code plugin, run `node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-workspace.cjs"` from the user's project for gitignored artifact paths and existing session records. Show the exact local source; confirm backup-looking folders before relying on them. Reuse matching sessions and stop temporary ones explicitly. Browser panes and exported files are the presentation routes; do not promise inline chat. Use native file attachments or links without pasting full HTML or bypassing host publication rules. Read `${CLAUDE_PLUGIN_ROOT}/docs/cli-plugin-workflow.md` in the plugin, or `docs/cli-plugin-workflow.md` in a checkout.
+Use shell CLI commands for every operation. In the Claude Code plugin, run `/bin/sh "${CLAUDE_PLUGIN_ROOT}/bin/smv" workspace` from the user's project for gitignored artifact paths and existing session records. Show the exact local source; confirm backup-looking folders before relying on them. Reuse matching sessions and stop temporary ones explicitly. Browser panes and exported files are the presentation routes; do not promise inline chat. Use native file attachments or links without pasting full HTML or bypassing host publication rules. Read `${CLAUDE_PLUGIN_ROOT}/docs/cli-plugin-workflow.md` in the plugin, or `docs/cli-plugin-workflow.md` in a checkout.
 
 `smv explain build` produces an `interactive.html` walkthrough with actual viewer steps as well as static outputs. Stop sessions started for temporary work with `smv session stop state.json`. Source watching refreshes the served artifact; reload the browser to see the new view.
 
