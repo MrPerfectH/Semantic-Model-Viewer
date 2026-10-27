@@ -62,7 +62,7 @@
   FabricConnection.prototype.refresh=function(){
     var record=this.current();if(!record || !record.source)return;
     this.transport=record.source.method || 'xmla';this.workspace={id:record.source.workspaceId};this.account={tenantId:record.source.tenantId,accountId:record.source.accountId};
-    this.run(async function(n){await this.open({id:record.source.modelId,name:record.name},n);if(n===this.generation)this.app.setState({snapshotMessage:'Refreshed from Fabric. Your views are kept.',snapshotError:''});});
+    this.run(async function(n){await this.open({id:record.source.modelId,name:record.name},n);if(n===this.generation&&this.app.modelKey===record.id)this.app.setState({snapshotMessage:'Refreshed from Fabric.',snapshotError:''});});
   };
   FabricConnection.prototype.remove=async function(record){
     this.generation++;

@@ -111,3 +111,8 @@
 :root[data-host=vscode] body:is(.vscode-high-contrast,.vscode-high-contrast-light) :is(button,select,input,textarea,.wui-card,#canvas [data-name],.smv-guide,.pqi-reader){border-color:var(--smv-line)!important}
 :root[data-host=vscode] body:is(.vscode-high-contrast,.vscode-high-contrast-light) :is(.pqc-selected,.ex-table-row.selected,.mv-library-row.is-selected){outline:2px solid var(--smv-active-border)!important;outline-offset:2px}
 :root[data-host=vscode] body:is(.vscode-high-contrast,.vscode-high-contrast-light) .pqc-edge-dim{opacity:.85}
+
+/* Inspector tiles have legacy translucent white inline surfaces. Match both sides
+   of the contrast pair to the host, independent of table/category colours. */
+:root[data-host=vscode] :is(.ex-inspector-source,.ex-inspector-stat){background:var(--smv-surface)!important;border-color:var(--smv-line)!important;color:var(--smv-ink)!important}
+:root[data-host=vscode] :is(.ex-inspector-source,.ex-inspector-stat) *{color:var(--smv-ink)!important}

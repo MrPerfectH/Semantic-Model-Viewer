@@ -279,15 +279,14 @@
       if (open[id]) delete open[id]; else open[id] = true;
       if (this.gCanvasEl) this.renderFlow();
     },
-    /* First look at a measure: a readable zoom, never below 60%, with the analyzed node in
+    /* First look at a measure: a readable zoom, never below 100%, with the analyzed node in
        the middle of the pane. Pure arithmetic, so the headless test can assert the root sits
        inside the viewport this returns. */
     initialViewport: function (G, paneW, paneH) {
       var w = Math.max(1, paneW || 0), h = Math.max(1, paneH || 0);
-      var fit = Math.min((w - 32) / Math.max(1, G.w), (h - 32) / Math.max(1, G.h));
-      // Source rows need readable labels. Start at 100% around the analysis root;
+      // Start at readable 100% around the analysis root;
       // Fit all remains an explicit overview action for wider diagrams.
-      var zoom = G.sources && G.sources.length ? 1 : Math.max(.6, Math.min(1, fit));
+      var zoom = 1;
       var R = (G.xy && G.xy[G.root]) || { x: 0, y: 0, w: 0 };
       var frameW = Math.ceil(G.w * zoom), frameH = Math.ceil(G.h * zoom);
       var ox = Math.max(0, (w - frameW) / 2), oy = Math.max(0, (h - frameH) / 2);
