@@ -63,7 +63,7 @@ function harness() {
   };
   context.window = context; vm.createContext(context);
   const load = file => vm.runInContext(fs.readFileSync(path.join(viewerDir, 'js', file), 'utf8'), context, { filename: file });
-  for (const file of ['util.js', 'snapshot.js', 'roles.js', 'tmdl-parser.js', 'canvas.js', 'layouts.js', 'matrix.js', 'dax-format.js', 'measures.js', 'sidebar.js', 'topbar.js', 'rules.js', 'relationships.js', 'explorer.js', 'host-vscode.js']) load(file);
+  for (const file of ['util.js', 'snapshot.js', 'roles.js', 'tmdl-parser.js', 'canvas.js', 'layouts.js', 'matrix.js', 'dax-format.js', 'measures.js', 'sidebar.js', 'topbar.js', 'rules.js', 'relationships.js', 'explorer.js', 'host-vscode.js', 'fabric.js']) load(file);
   const sidebarUpdate = context.Sidebar.prototype.update;
   for (const name of ['Legend', 'Hint', 'MatrixView', 'MeasuresView', 'Sidebar', 'ImportModal', 'RulesModal', 'TableExplorer']) context[name].prototype.update = function () {};
   const cv = context.GraphCanvas.prototype;
@@ -113,6 +113,17 @@ test('host default model retains the shared parser, dependency graph, table canv
   assert.deepEqual([...app.explorer.names], ['Sales']); assert.deepEqual(plain(app.canvas.pos.Sales), { x: 45, y: 70 });
   for (const label of ['Tables', 'Measures', 'Table groups', 'Matrix', 'Save snapshot', 'Choose model']) assert.ok(texts(h.document.getElementById('topbar')).includes(label), label);
   h.isolated();
+});
+
+test('the model VS Code asks to open beats the last cached Fabric model', async () => {
+  const fabricId = 'fabric:tenant:workspace:old-scorecard';
+  const cached = { id: fabricId, name: 'Old scorecard', at: 1, source: { kind: 'fabric', tenantId: 'tenant', workspaceId: 'workspace', modelId: 'old-scorecard', fetchedAt: '2026-10-01T00:00:00Z' }, model: model('Old scorecard') };
+  const storage = { smv_models_v1: JSON.stringify([cached]), smv_current_v1: fabricId };
+  const h = harness(), app = await h.boot({ storage, open: record('workspace:first', 'Distribution') });
+  assert.equal(app.modelKey, 'workspace:first');
+  assert.equal(app.state.modelName, 'Distribution');
+  const h2 = harness(), app2 = await h2.boot({ storage });
+  assert.equal(app2.modelKey, fabricId, 'with nothing requested the cached Fabric model is still restored');
 });
 
 test('choosing models uses host requests and keeps table membership, coordinates and usage isolated', async () => {

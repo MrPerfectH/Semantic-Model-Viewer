@@ -23,7 +23,7 @@ The browser demo opens with a synthetic **Contoso Retail** model. No installatio
 | --- | --- | --- |
 | Windows portable | Extract the ZIP and double-click **Run Semantic Model Viewer.cmd**. | Windows x64 and a browser; no installation or separate Python setup. |
 | Browser | Open the demo, then choose **Open model** to import your own model. | A desktop browser; Chrome/Edge also support connecting a repository folder. |
-| VS Code | Install the extension, open your project folder, then select a model in **Semantic Models**. | VS Code; no Python or Power BI Desktop needed for local model files. |
+| VS Code | Install the extension, open your project folder, then select a model in **Semantic Model Viewer**. | VS Code; no Python or Power BI Desktop needed for local model files. |
 | Mac / run from source | Follow the [repository setup](docs/installation.md#run-from-a-repository-checkout). | Python 3 and a browser. |
 
 See the [portable download instructions](docs/installation.md#windows-portable-version) for package availability.

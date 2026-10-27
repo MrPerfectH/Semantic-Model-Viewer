@@ -10,7 +10,7 @@ The recordings use the synthetic Contoso Retail model.
 ## VS Code extension
 
 The viewer also runs inside VS Code. Open a workspace containing a `.SemanticModel`
-folder or `model.bim`, then use the **Semantic Models** Activity Bar or **Semantic
+folder or `model.bim`, then use the **Semantic Model Viewer** Activity Bar or **Semantic
 Model Viewer: Open Model…**. It uses the same table workspace, measures, and offline
 snapshot format as the web app. Model files refresh when edited; layouts are saved
 per model in the VS Code workspace.

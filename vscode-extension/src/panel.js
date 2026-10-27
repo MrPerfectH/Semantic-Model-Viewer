@@ -172,7 +172,7 @@ class ViewerPanel {
             }
             if (!this.isCurrent(panel, epoch)) continue;
             this.pendingOpen = null; this.ready = true;
-            await this.post({ type: 'init', storage: this.storageDump(), models: models.map(pub), caps: { fabric: true }, open }, panel);
+            await this.post({ type: 'init', storage: this.storageDump(), models: models.map(pub), caps: { fabric: true, connectButton: vscode.workspace.getConfiguration('semanticModelViewer').get('showConnectToFabricButton', false) }, open }, panel);
             if (open) this.afterOpen(entry, panel, epoch);
             return;
           }

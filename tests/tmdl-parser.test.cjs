@@ -199,3 +199,20 @@ test('Python and browser parsers agree on table folders and connection grouping 
     assert.deepEqual(py.tables[i].source,JSON.parse(JSON.stringify(browser.tables[i].source)));
   }
 });
+
+test('Direct Lake entity partitions are a Direct Lake source, not a calculated table', () => {
+  const entity = { name: 'F_Koszty', columns: [{ name: 'Id' }], partitions: [{ mode: 'directLake', source: { type: 'entity', entityName: 'F_Koszty', schemaName: 'dbo', expressionSource: 'DatabaseQuery' } }] };
+  const calc = { name: 'Okres', columns: [{ name: 'Id' }], partitions: [{ source: { type: 'calculated', expression: 'DISTINCT(Date[Year])' } }] };
+  const input = { model: { tables: [entity, calc] } };
+  const bim = parser().parseBIM(input);
+  assert.deepEqual(JSON.parse(JSON.stringify(bim.tables[0].source)), { kind: 'directlake', label: 'Direct Lake', detail: 'dbo.F_Koszty', schema: 'dbo', table: 'F_Koszty' });
+  assert.equal(bim.tables[1].source.kind, 'calculated');
+  const tmdl = parser().parseAny([file('definition/tables/F_Koszty.tmdl', "table F_Koszty\n\tcolumn Id\n\t\tdataType: int64\n\n\tpartition F_Koszty = entity\n\t\tmode: directLake\n\t\tsource\n\t\t\tentityName: F_Koszty\n\t\t\tschemaName: dbo\n\t\t\texpressionSource: DatabaseQuery\n")]);
+  assert.equal(tmdl.tables[0].source.kind, 'directlake');
+  assert.equal(tmdl.tables[0].source.detail, 'dbo.F_Koszty');
+  const { spawnSync } = require('node:child_process');
+  const script = `import importlib.util,json,sys\ns=importlib.util.spec_from_file_location('parser',sys.argv[1]);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\nprint(json.dumps(m.parse_bim(json.load(sys.stdin))))`;
+  const r = spawnSync('python3', ['-c', script, path.join(jsDir, '../scripts/tmdl_to_model_data.py')], { input: JSON.stringify(input), encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  assert.deepEqual(JSON.parse(r.stdout).tables[0].source, JSON.parse(JSON.stringify(bim.tables[0].source)));
+});
