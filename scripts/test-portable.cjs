@@ -11,12 +11,6 @@ const run=(args,selected=root)=>{
  // cmd.exe consumes its own quoted command string. Preserve those quotes rather
  // than applying Node's default Windows executable argument escaping a second time.
  const result=process.platform==='win32'?spawnSync(process.env.ComSpec||'C:\\Windows\\System32\\cmd.exe',['/d','/s','/c','"'+[launcher,...args].map(arg=>'"'+String(arg)+'"').join(' ')+'"'],{env,encoding:'utf8',cwd:temp,timeout:45000,windowsVerbatimArguments:true}):spawnSync('/bin/sh',[launcher,...args],{env,encoding:'utf8',cwd:temp,timeout:45000});
- if(result.status!==0){
-  // Keep synthetic-path failures actionable on runners unavailable locally.
-  let reported;try{reported=JSON.parse(result.stderr).error.message.match(/^Model does not exist: (.*?) Run smv /)?.[1];}catch{}
-  const expected=args[0]==='show'?args[1]:null;
-  console.error(JSON.stringify({portableInvocation:{args,cwd:temp,expectedModelExists:expected?fs.existsSync(expected):null,reportedModel:reported,reportedMatchesExpected:reported?reported===expected:null,reportedModelExists:reported?fs.existsSync(reported):null,childDiagnostics:fs.existsSync(path.join(temp,'child-argv.jsonl'))?fs.readFileSync(path.join(temp,'child-argv.jsonl'),'utf8'):null}}));
- }
  assert.equal(result.status,0,result.stderr||String(result.error));return result.stdout;
 };
 let session,cached;const changedModes=[];
@@ -24,13 +18,11 @@ if(process.platform!=='win32'&&process.env.SMV_TEST_STRIPPED_EXEC==='1')for(cons
 try{
  assert.equal(run(['--version']).trim(),info.engineVersion);
  const where=JSON.parse(run(['--where','--json']));assert.ok(where.executable.startsWith(root));
- const model=path.join(temp,'User model.SemanticModel');fs.cpSync(path.join(root,'Models/demo/Contoso Retail.SemanticModel'),model,{recursive:true});
+ // A filter keeps Node 22 on its JS traversal instead of the native directory
+ // copy fast path, which mishandles non-ASCII Windows destinations. The live
+ // package cache already uses a filter and therefore follows this same path.
+ const model=path.join(temp,'User model.SemanticModel');fs.cpSync(path.join(root,'Models/demo/Contoso Retail.SemanticModel'),model,{recursive:true,filter:()=>true});
  assert.ok(fs.existsSync(path.join(model,'definition/model.tmdl')),'Copied model must exist before launcher invocation');
- if(process.platform==='win32'){
-  const probe=path.join(temp,'probe.cjs');
-  fs.writeFileSync(probe,`const fs=require('node:fs');fs.appendFileSync(${JSON.stringify(path.join(temp,'child-argv.jsonl'))},JSON.stringify({argv:process.argv,cwd:process.cwd(),modelExists:fs.existsSync(${JSON.stringify(model)})})+'\\n');`);
-  env.NODE_OPTIONS=(env.NODE_OPTIONS||'')+' --require '+JSON.stringify(probe);
- }
  const show=JSON.parse(run(['show',model,'--table','Sales','--related','--dependents']));session=show.sessionFile;
  assert.equal(show.views.length,2);assert.ok(show.workspaceUrl);
  cached=path.join(env.SMV_PACKAGE_CACHE,info.sha256);assert.ok(fs.existsSync(path.join(cached,'runtime',target,process.platform==='win32'?'node.exe':'node')));
