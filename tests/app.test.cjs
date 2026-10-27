@@ -301,6 +301,24 @@ test('a returning user (smv_current_v1 already set) still boots straight into th
 });
 
 
+test('VS Code opens the model that was clicked, not the last cached Fabric model', async () => {
+  const { app, storage } = harness();
+  const old = { id: 'fabric:t:w:old', name: 'Scorecard', source: { kind: 'fabric' }, model: model([{ name: 'Old' }]) };
+  storage.set('smv_models_v1', JSON.stringify([old]));
+  storage.set('smv_current_v1', old.id);
+  const activated = [], opened = [], requested = { name: 'Distribution', model: model([{ name: 'New' }]) };
+  app.fabric = { activate: r => activated.push(r.id) };
+  app.hostOpenModel = r => opened.push(r.name);
+  app.host = { attach() {}, loadDefault: async () => requested };
+  await app.init();
+  assert.deepEqual(opened, ['Distribution']);
+  assert.deepEqual(activated, []);
+  opened.length = 0;
+  app.host.loadDefault = async () => null;
+  await app.init();
+  assert.deepEqual(activated, [old.id], 'with nothing requested the last Fabric model is still restored');
+});
+
 test('model switches restore lane zoom with positions and discard the previous model size cache', async () => {
   const { app, storage } = harness();
   app.canvas.app = app;

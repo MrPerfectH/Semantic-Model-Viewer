@@ -396,6 +396,15 @@ def source_of(fl: dict, ctx: dict = None) -> dict:
     part = fl.get("partSrc") or ""
     if fl.get("partKind") == "calculated":
         return {"kind": "calculated"}
+    # Direct Lake: an entity partition reads a lake table straight from OneLake, no M or DAX behind it
+    if fl.get("partKind") == "entity" or re.search(r"(?:^|\n)\s*mode:\s*directLake\b", part, re.I):
+        entity = first_of(part, r"(?:^|\n)\s*entityName:\s*(.+?)\s*(?:\n|$)")
+        dl_schema = first_of(part, r"(?:^|\n)\s*schemaName:\s*(.+?)\s*(?:\n|$)")
+        out = {"kind": "directlake", "label": "Direct Lake",
+               "detail": (dl_schema + "." if dl_schema else "") + (entity or "?")}
+        if dl_schema: out["schema"] = dl_schema
+        if entity: out["table"] = entity
+        return out
     if not part:
         return {"kind": "calculated"}
     # a query parameter is not a data source, it is a knob feeding one
@@ -701,6 +710,11 @@ def parse_bim(j: dict, rules: list = None) -> dict:
             src = parts[0]["source"]
             part_kind = "calculated" if src.get("type") == "calculated" else (src.get("type") or "m")
             part_src = txt(src.get("expression"))
+            if part_kind == "entity":
+                part_src = "\n".join(x for x in (
+                    "mode: " + str(parts[0].get("mode") or "directLake"),
+                    "entityName: " + str(src.get("entityName") or ""),
+                    ("schemaName: " + str(src["schemaName"])) if src.get("schemaName") else "") if x)
         role_ann = next((a for a in (t.get("annotations") or []) if a.get("name") == "SMV_Role"), None)
         group_ann = next((a for a in (t.get("annotations") or []) if a.get("name") == "TabularEditor_TableGroup"), None)
         row = {"tableGroup": str(group_ann.get("value") or "").strip() if group_ann else "",

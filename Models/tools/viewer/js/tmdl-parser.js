@@ -204,6 +204,13 @@
     ctx = ctx || {exprs:{}, exprNames:[], params:{}};
     var part = fl.partSrc || '';
     if(fl.partKind==='calculated') return {kind:'calculated'};
+    /* Direct Lake: an entity partition reads a lake table straight from OneLake, no M or DAX behind it */
+    if(fl.partKind==='entity' || /(^|\n)\s*mode:\s*directLake\b/i.test(part)){
+      var entity=firstOf(part,/(?:^|\n)\s*entityName:\s*(.+?)\s*(?:\n|$)/), dlSchema=firstOf(part,/(?:^|\n)\s*schemaName:\s*(.+?)\s*(?:\n|$)/);
+      var dl={kind:'directlake', label:'Direct Lake', detail:(dlSchema?dlSchema+'.':'')+(entity||'?')};
+      if(dlSchema) dl.schema=dlSchema; if(entity) dl.table=entity;
+      return dl;
+    }
     if(!part) return {kind:'calculated'};
     /* a query parameter is not a data source, it is a knob feeding one */
     if(/meta\s*\[[^\]]*IsParameterQuery\s*=\s*true/i.test(part)) return {kind:'parameter', label:'Parameter', detail:(part.match(/^\s*([^\n]{0,40}?)\s*meta\b/)||[])[1]||''};
@@ -417,7 +424,8 @@
       var isFP=(t.columns||[]).some(function(c){ return (c.extendedProperties||[]).some(function(p){return p.name==='ParameterMetadata';}); });
       var partKind='', partSrc='';
       var p=(t.partitions||[])[0];
-      if(p&&p.source){ partKind=(p.source.type==='calculated')?'calculated':(p.source.type||'m'); partSrc=txt(p.source.expression); }
+      if(p&&p.source){ partKind=(p.source.type==='calculated')?'calculated':(p.source.type||'m'); partSrc=txt(p.source.expression);
+        if(partKind==='entity') partSrc=['mode: '+(p.mode||'directLake'),'entityName: '+(p.source.entityName||''),p.source.schemaName?'schemaName: '+p.source.schemaName:''].filter(Boolean).join('\n'); }
       var roleAnn=(t.annotations||[]).find(function(a){return a.name==='SMV_Role';});
       var groupAnn=(t.annotations||[]).find(function(a){return a.name==='TabularEditor_TableGroup';});
       var out={tableGroup:groupAnn?String(groupAnn.value||'').trim():'',name:t.name, columns:columns, measures:measures, roleAnnotation: roleAnn?String(roleAnn.value):undefined, _flags:{isCG:isCG,isFP:isFP,partKind:partKind,partSrc:partSrc}};

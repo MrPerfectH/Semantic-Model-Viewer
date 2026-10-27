@@ -52,7 +52,8 @@
       theme.value=g.ViewerTheme.get();actions.appendChild(theme);
     }
     if(!offline && app.fabric && app.fabric.available()){
-      actions.appendChild(el('button',{cls:'ex-button',text:'Connect to Fabric',onClick:function(){app.fabric.show();}}));
+      /* VS Code signs in from the Fabric tree in the side bar; the toolbar button there is opt-in */
+      if(!(app.host && app.host.caps && app.host.caps.connectButton===false))actions.appendChild(el('button',{cls:'ex-button',text:'Connect to Fabric',onClick:function(){app.fabric.show();}}));
       if(fabricSource){
         actions.appendChild(el('button',{cls:'ex-button',text:app.fabric.busy?'Refreshing…':'Refresh Fabric',disabled:app.fabric.busy,onClick:function(){app.fabric.refresh();}}));
       }
