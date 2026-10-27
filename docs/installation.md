@@ -5,7 +5,7 @@ or the local desktop app for a separate window. The browser and local app parse
 model metadata on your computer without uploading it.
 
 - **Browser:** [open the viewer](https://MrPerfectH.github.io/Semantic-Model-Viewer/), then choose **Open model**. No installation is required.
-- **VS Code:** [install from the Marketplace](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer), open your project folder, then select a model in **Semantic Models**. No Python is required.
+- **VS Code:** [install from the Marketplace](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer), open your project folder, then select a model in **Semantic Model Viewer**. No Python is required.
 - **Windows portable:** extract the portable ZIP and run the launcher; no installation or separate Python setup is required. See package availability below.
 - **Mac / source:** use the repository setup below with Python 3.
 
