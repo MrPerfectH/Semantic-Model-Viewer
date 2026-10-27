@@ -150,6 +150,11 @@
           "default": "",
           "markdownDescription": "Path to a `*.SemanticModel` folder or a `model.bim` to open by default, absolute or relative to the workspace folder. Leave empty to choose from the models found in the workspace."
         },
+        "semanticModelViewer.showConnectToFabricButton": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Show the **Connect to Fabric** button in the viewer toolbar. Off by default: in VS Code you sign in and open models from **Fabric** in the Semantic Models side bar. **Refresh Fabric** still shows when a Fabric model is open. Takes effect the next time a viewer tab opens."
+        },
         "semanticModelViewer.exclude": {
           "type": "array",
           "items": {

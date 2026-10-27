@@ -102,7 +102,7 @@
       source: {
         calcgroup:'#27b5da', fieldparam:'#42c274', measures:'#d363e3',
         databricks: '#4f8ff7', vertica: '#3b9de0', db: '#4a7ae0', oracle: '#e0605c', postgres: '#3f8fc4',
-        mysql: '#2fa3b8', snowflake: '#27b5da', synapse: '#7479e0', lakehouse: '#22b88f', ssas: '#7d82e8',
+        mysql: '#2fa3b8', snowflake: '#27b5da', synapse: '#7479e0', lakehouse: '#22b88f', directlake: '#1fb5c9', ssas: '#7d82e8',
         sap: '#4468b8', odbc: '#6f7f96', dataflow: '#9b7bf0', sharepoint: '#1fa89a', blob: '#18b9a6',
         salesforce: '#38b2ee', folder: '#c9a042', excel: '#42c274', csv: '#38b060', web: '#e8764a',
         odata: '#d99a3e', parameter: '#908a84', manual: '#e8a33d', calculated: '#d363e3', other: '#8896aa'
@@ -117,7 +117,7 @@
       source: {
         calcgroup:'#0891b2', fieldparam:'#16a34a', measures:'#c026d3',
         databricks: '#2563eb', vertica: '#0284c7', db: '#1d4ed8', oracle: '#b91c1c', postgres: '#0369a1',
-        mysql: '#0e7490', snowflake: '#0891b2', synapse: '#4338ca', lakehouse: '#059669', ssas: '#4f46e5',
+        mysql: '#0e7490', snowflake: '#0891b2', synapse: '#4338ca', lakehouse: '#059669', directlake: '#0e8fa3', ssas: '#4f46e5',
         sap: '#1e3a8a', odbc: '#475569', dataflow: '#7c3aed', sharepoint: '#0f766e', blob: '#0d9488',
         salesforce: '#0ea5e9', folder: '#a16207', excel: '#16a34a', csv: '#15803d', web: '#c2410c',
         odata: '#b45309', parameter: '#78716c', manual: '#d97706', calculated: '#c026d3', other: '#64748b'
@@ -172,6 +172,7 @@
       snowflake: { label: 'Snowflake', icon: '❄' },
       synapse: { label: 'Synapse', icon: '⛃' },
       lakehouse: { label: 'Fabric', icon: '⛃' },
+      directlake: { label: 'Direct Lake', icon: '⛃' },
       ssas: { label: 'Analysis Services', icon: '⛃' },
       sap: { label: 'SAP', icon: '⛃' },
       odbc: { label: 'ODBC', icon: '⛁' },
@@ -1519,10 +1520,11 @@
       }
       if (this.host) {
         this.host.attach(this);
-        var cachedFabric = this.getStore().find(function (r) { return r.id === store.get('smv_current_v1') && r.source && r.source.kind === 'fabric'; });
-        if (cachedFabric && this.fabric) { this.fabric.activate(cachedFabric); return; }
+        /* The model the extension just asked for always wins; the last cached Fabric model is only a fallback */
         var initial = await this.host.loadDefault();
+        var cachedFabric = this.getStore().find(function (r) { return r.id === store.get('smv_current_v1') && r.source && r.source.kind === 'fabric'; });
         if (initial) this.hostOpenModel(initial);
+        else if (cachedFabric && this.fabric) this.fabric.activate(cachedFabric);
         else {
           this.model = {name:'',tables:[],relationships:[]}; this.prepareModel(this.model);
           this.setState({modelName:'Choose a model',showModelMenu:false});
