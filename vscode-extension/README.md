@@ -127,7 +127,7 @@ Step back to see the model as a whole. **Domains** groups related tables into a 
 ## Open a model
 
 1. Open a workspace containing a `*.SemanticModel` folder or `model.bim`.
-2. Select a model in the **Semantic Models** Activity Bar view. You can also run
+2. Select a model in the **Semantic Model Viewer** Activity Bar view. You can also run
    **Semantic Model Viewer: Open Model…**, or right-click a model folder or `model.bim`
    and choose **Open in Semantic Model Viewer**.
 3. Use the viewer's model menu to switch between models in the workspace.

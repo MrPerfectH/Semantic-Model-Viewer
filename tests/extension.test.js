@@ -31,7 +31,9 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   const allRows = await tree.getChildren();
   assert.equal(allRows[0].kind, 'fabricRoot');
   assert.equal(tree.getTreeItem(allRows[0]).collapsibleState, vscode.TreeItemCollapsibleState.Expanded);
-  const rows = allRows.filter(row => row.kind !== 'fabricRoot');
+  assert.equal(allRows[1].kind, 'localRoot');
+  assert.equal(tree.getTreeItem(allRows[1]).label, 'Local');
+  const rows = await tree.getChildren(allRows[1]);
   assert.deepStrictEqual(rows.map((row) => row.id), ['ws:Fixture Model.SemanticModel', 'ws:power-query/model.bim'],
     'the tree discovers both the TMDL folder and standalone BIM fixture');
   const item = tree.getTreeItem(rows[0]);

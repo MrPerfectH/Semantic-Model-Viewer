@@ -10,7 +10,7 @@ Use **version 0.4.0 or newer** for the table and column dependency features show
 2. Search for **Semantic Model Viewer**. Select the extension published by **MrPerfectH**.
    For an exact match, search `@id:MrPerfectH.semantic-model-viewer`.
 3. Choose **Install** and follow the VS Code prompts.
-4. Open your project folder and select **Semantic Models** in the Activity Bar.
+4. Open your project folder and select **Semantic Model Viewer** in the Activity Bar.
 
 If Marketplace installation is unavailable, download `semantic-model-viewer-<version>.vsix` from [GitHub Releases](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/latest). Open the Command Palette (**Cmd+Shift+P** on macOS, **Ctrl+Shift+P** on Windows/Linux), run **Extensions: Install from VSIX…**, and choose the downloaded file. To update a VSIX installation, repeat with the newer file. Reload VS Code if prompted.
 
@@ -23,7 +23,7 @@ Use VS Code 1.85 or newer. Local file exploration does not require Python, Power
 ## Open a semantic model
 
 1. Use **File → Open Folder…** to open your PBIP project folder or a repository containing your models.
-2. Select **Semantic Models** in the Activity Bar. The extension lists compatible models in the workspace; choose the one you want to explore.
+2. Select **Semantic Model Viewer** in the Activity Bar. The extension lists compatible models in the workspace; choose the one you want to explore.
 3. Start in **Tables**, or switch to **Measures** to inspect a calculation.
 
 Supported local inputs are `*.SemanticModel` folders with TMDL definitions and `model.bim`. A `.pbix` file alone is not a supported local input. If a model is missing, check the opened folder and run **Semantic Model Viewer: Refresh Model List**. You can also right-click a supported model and choose **Open in Semantic Model Viewer**.
