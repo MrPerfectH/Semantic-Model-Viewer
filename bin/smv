@@ -1,0 +1,19 @@
+#!/bin/sh
+# Package-local entry point. Never searches PATH for a different SMV or Node.
+set -eu
+case "$0" in */*) self=$0 ;; *) self=$(command -v "$0") ;; esac
+root=$(CDPATH= cd -P -- "${self%/*}/.." && pwd)
+if [ -n "${SMV_NODE:-}" ]; then
+  node=$SMV_NODE
+else
+  system=$(/usr/bin/uname -s)
+  machine=$(/usr/bin/uname -m)
+  case "$system" in Darwin) system=darwin ;; Linux) system=linux ;; *) echo "SMV: unsupported platform $system; use a qualified package for your system." >&2; exit 1 ;; esac
+  case "$machine" in x86_64) machine=x64 ;; arm64|aarch64) machine=arm64 ;; *) echo "SMV: unsupported architecture $machine." >&2; exit 1 ;; esac
+  node="$root/runtime/$system-$machine/node"
+fi
+if [ ! -x "$node" ]; then
+  echo 'SMV: this source package does not contain a private runtime for this platform. Install a complete portable plugin package. For development only, set SMV_NODE to an absolute Node.js 22+ executable.' >&2
+  exit 1
+fi
+exec "$node" "$root/bin/portable.cjs" "$@"

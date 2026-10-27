@@ -224,3 +224,11 @@ Version 0.2.0 integrates the VS Code extension work recovered from
 the earlier 0.1.0 package, which targeted the former `viewer/` source directory.
 
 </details>
+
+## Copilot diagrams (development preview)
+
+The extension bundles the shared semantic-model engine and contributes native Copilot tools for discovery, focused inspection, relationships, dependent calculations, diagrams and portable HTML. Enable Semantic Model Viewer tools in Copilot, then ask: “Show Sales, the tables connected to it, and calculations depending on it.” No global `smv`, separate Node installation or MCP server is required for these editor tools. They read models from the trusted open workspace and display Tables and Measures diagrams in adjacent editor panes. Repeating an unchanged question preserves exploration; source changes produce a new frozen snapshot. `awaiting-viewer` becomes `applied` only after the view acknowledges that revision. Snapshot export asks for a destination and includes full-model metadata/formulas.
+
+Claude Code and Codex receive separate complete CLI packages with their own runtimes; the extension is not required for those apps. See [bundled agent delivery and release boundaries](../docs/bundled-agent-delivery.md).
+
+Metadata returned to Copilot becomes part of the configured agent conversation; local parsing does not execute DAX, M or SQL.

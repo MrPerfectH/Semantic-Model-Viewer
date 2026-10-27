@@ -46,7 +46,7 @@ Install from inside Claude Code:
 /plugin install semantic-model-viewer@semantic-model-tools
 ```
 
-Run `/semantic-model-viewer:setup` once for a stable `smv` command, then use `/semantic-model-viewer:open`. `smv show <model> --table "Cost Center" --related --dependents` opens a reusable side-by-side Tables/Measures workspace; `relations` and `dependents` give short metadata answers. Requires Node.js 22+ and Git. The plugin CLI has no runtime npm dependencies. No separate Viewer app installation is needed.
+Use `/semantic-model-viewer:open` for diagrams. `/semantic-model-viewer:setup` is optional for a global terminal command. `smv show <model> --table "Cost Center" --related --dependents` opens a reusable side-by-side Tables/Measures workspace; `relations` and `dependents` give short metadata answers. Requires Node.js 22+ and Git. The plugin CLI has no runtime npm dependencies. No separate Viewer app installation is needed.
 See [plugin setup and commands](docs/claude-code-plugin.md).
 
 The [CLI workspace workflow](docs/cli-workspace-fetch.md) downloads Fabric definitions using an existing Azure CLI login, generates offline diagrams, and records source and renderer hashes. Local models require no cloud login. Choose opening behavior with `--open none|system`.
@@ -188,3 +188,5 @@ For code contributions, read [CONTRIBUTING](CONTRIBUTING.md); report security is
 Built and maintained by **Przemek Harazny** ([@MrPerfectH](https://github.com/MrPerfectH))
 as a personal open-source project. Released under the [MIT License](LICENSE).
 Demo models and screenshots use synthetic data.
+
+The [bundled agent delivery candidate](docs/bundled-agent-delivery.md) adds native VS Code tools and complete Claude Code/Codex packages with private runtimes. Source-only Git payloads retain an explicit Node requirement until complete artifacts are published.

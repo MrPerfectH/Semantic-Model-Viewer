@@ -10,14 +10,15 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/cli.test.cjs tests/open-model.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs tests/interactive-view.test.cjs tests/mcp-viewer.test.cjs tests/claude-plugin.test.cjs tests/browser-defaults.test.cjs tests/full-workflow.test.cjs tests/cli-workspace.test.cjs",
-
+    "test": "node --test tests/agent-delivery.test.cjs tests/cli.test.cjs tests/open-model.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs tests/interactive-view.test.cjs tests/mcp-viewer.test.cjs tests/claude-plugin.test.cjs tests/browser-defaults.test.cjs tests/full-workflow.test.cjs tests/cli-workspace.test.cjs",
     "test:browser": "node --test tests/explanations.browser.cjs",
     "build:mcp-app": "node scripts/build-mcp-app.cjs",
     "test:interactive": "node --test tests/interactive-view.browser.cjs",
     "test:marketplace": "node scripts/test-claude-marketplace.cjs",
     "test:plugin": "node --test tests/claude-plugin.test.cjs",
-    "build:plugin": "node scripts/build-claude-plugin.cjs"
+    "build:plugin": "node scripts/build-claude-plugin.cjs",
+    "build:portable": "node scripts/build-portable.cjs",
+    "build:codex-plugin": "node scripts/build-codex-plugin.cjs"
   },
   "files": [
     ".claude-plugin/",
@@ -42,7 +43,10 @@
     "docs/cli-plugin-workflow.md",
     "skills/stop/",
     "skills/setup/",
-    "docs/cli-workspace-fetch.md"
+    "docs/cli-workspace-fetch.md",
+    "packages/engine/",
+    "runtime/node-lock.json",
+    "docs/bundled-agent-delivery.md"
   ],
   "devDependencies": {
     "esbuild": "0.28.2",

@@ -75,7 +75,9 @@ function activate(context) {
     vscode.workspace.onDidChangeWorkspaceFolders(() => tree.refresh()),
     { dispose: () => { panel.dispose(); tree.dispose(); fabricTree.dispose(); fabric.dispose(); } }
   );
-  return { panel, tree, fabricTree };
+  const agentTools = vscode.lm && typeof vscode.lm.registerTool === 'function' ? require('./agent-tools').register(context) : null;
+  if (agentTools) context.subscriptions.push(agentTools);
+  return { panel, tree, fabricTree, agentTools };
 }
 
 function deactivate() { if (panel) panel.dispose(); }

@@ -36,7 +36,7 @@
     "commands": [
       {
         "command": "semanticModelViewer.open",
-        "title": "Open Model\u2026",
+        "title": "Open Model…",
         "category": "Semantic Model Viewer",
         "icon": "$(type-hierarchy)"
       },
@@ -63,7 +63,7 @@
       },
       {
         "command": "semanticModelViewer.connectFabric",
-        "title": "Connect to Fabric\u2026",
+        "title": "Connect to Fabric…",
         "category": "Semantic Model Viewer",
         "icon": "$(cloud)"
       },
@@ -74,12 +74,12 @@
       },
       {
         "command": "semanticModelViewer.removeFabricModel",
-        "title": "Remove Saved Fabric Model\u2026",
+        "title": "Remove Saved Fabric Model…",
         "category": "Semantic Model Viewer"
       },
       {
         "command": "semanticModelViewer.fabricSwitchAccount",
-        "title": "Switch Fabric Account\u2026",
+        "title": "Switch Fabric Account…",
         "category": "Semantic Model Viewer"
       },
       {
@@ -156,7 +156,7 @@
             "type": "string"
           },
           "default": [],
-          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**`. Hidden folders (`.worktrees`, `.pbi`, `.venv`\u2026), `node_modules` and `.git` are always skipped."
+          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**`. Hidden folders (`.worktrees`, `.pbi`, `.venv`…), `node_modules` and `.git` are always skipped."
         }
       }
     },
@@ -184,6 +184,271 @@
         "view": "semanticModelViewer.models",
         "contents": "Start here: open a project folder containing a *.SemanticModel folder with TMDL definitions or model.bim. A .pbix or .pbip file alone is not supported.\n[Open folder](command:vscode.openFolder)\n[Refresh model list](command:semanticModelViewer.refreshModels)\n[Try the demo in your browser](https://MrPerfectH.github.io/Semantic-Model-Viewer/)\n[Connect to Fabric](command:semanticModelViewer.connectFabric)"
       }
+    ],
+    "languageModelTools": [
+      {
+        "name": "smv_discover",
+        "displayName": "Semantic Model Viewer: discover",
+        "toolReferenceName": "smvDiscover",
+        "canBeReferencedInPrompt": true,
+        "modelDescription": "Find semantic models in the open workspace. Returns model IDs; never chooses a backup implicitly.",
+        "inputSchema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {},
+          "required": []
+        },
+        "when": "isWorkspaceTrusted",
+        "userDescription": "Find semantic models in the open workspace."
+      },
+      {
+        "name": "smv_inspect",
+        "displayName": "Semantic Model Viewer: inspect",
+        "toolReferenceName": "smvInspect",
+        "canBeReferencedInPrompt": true,
+        "modelDescription": "Inspect local semantic model metadata. Use a table for focused details; use show for diagrams.",
+        "inputSchema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "model": {
+              "type": "string",
+              "description": "Model ID, URI or exact name from smv_discover. Omit only when exactly one current model exists."
+            },
+            "table": {
+              "type": "string",
+              "description": "Table name to explain."
+            },
+            "with": {
+              "type": "string",
+              "description": "Optional second table for a relationship diagram."
+            },
+            "related": {
+              "type": "boolean"
+            },
+            "dependents": {
+              "type": "boolean"
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "both",
+                "incoming",
+                "outgoing"
+              ]
+            },
+            "direct": {
+              "type": "boolean"
+            },
+            "includeInactive": {
+              "type": "boolean"
+            }
+          },
+          "required": []
+        },
+        "when": "isWorkspaceTrusted",
+        "userDescription": "Inspect local semantic model metadata."
+      },
+      {
+        "name": "smv_relations",
+        "displayName": "Semantic Model Viewer: relations",
+        "toolReferenceName": "smvRelations",
+        "canBeReferencedInPrompt": true,
+        "modelDescription": "Find tables filtering or filtered by a table, including direction and inactive relationships. Static metadata only.",
+        "inputSchema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "model": {
+              "type": "string",
+              "description": "Model ID, URI or exact name from smv_discover. Omit only when exactly one current model exists."
+            },
+            "table": {
+              "type": "string",
+              "description": "Table name to explain."
+            },
+            "with": {
+              "type": "string",
+              "description": "Optional second table for a relationship diagram."
+            },
+            "related": {
+              "type": "boolean"
+            },
+            "dependents": {
+              "type": "boolean"
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "both",
+                "incoming",
+                "outgoing"
+              ]
+            },
+            "direct": {
+              "type": "boolean"
+            },
+            "includeInactive": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "table"
+          ]
+        },
+        "when": "isWorkspaceTrusted",
+        "userDescription": "Find tables filtering or filtered by a table, including direction and inactive relationships."
+      },
+      {
+        "name": "smv_dependents",
+        "displayName": "Semantic Model Viewer: dependents",
+        "toolReferenceName": "smvDependents",
+        "canBeReferencedInPrompt": true,
+        "modelDescription": "Find calculations referencing a table and shortest chains through measures. Does not evaluate DAX.",
+        "inputSchema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "model": {
+              "type": "string",
+              "description": "Model ID, URI or exact name from smv_discover. Omit only when exactly one current model exists."
+            },
+            "table": {
+              "type": "string",
+              "description": "Table name to explain."
+            },
+            "with": {
+              "type": "string",
+              "description": "Optional second table for a relationship diagram."
+            },
+            "related": {
+              "type": "boolean"
+            },
+            "dependents": {
+              "type": "boolean"
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "both",
+                "incoming",
+                "outgoing"
+              ]
+            },
+            "direct": {
+              "type": "boolean"
+            },
+            "includeInactive": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "table"
+          ]
+        },
+        "when": "isWorkspaceTrusted",
+        "userDescription": "Find calculations referencing a table and shortest chains through measures."
+      },
+      {
+        "name": "smv_show",
+        "displayName": "Semantic Model Viewer: show",
+        "toolReferenceName": "smvShow",
+        "canBeReferencedInPrompt": true,
+        "modelDescription": "Open visual semantic model diagrams inside VS Code. For a known model/table call this directly, without full inspect first. Default: related tables and dependent calculations in adjacent editor panes. No CLI installation or Node on PATH is required. For two tables provide with. Panels are frozen metadata snapshots; repeat to reveal preserved exploration and read rendering status.",
+        "inputSchema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "model": {
+              "type": "string",
+              "description": "Model ID, URI or exact name from smv_discover. Omit only when exactly one current model exists."
+            },
+            "table": {
+              "type": "string",
+              "description": "Table name to explain."
+            },
+            "with": {
+              "type": "string",
+              "description": "Optional second table for a relationship diagram."
+            },
+            "related": {
+              "type": "boolean"
+            },
+            "dependents": {
+              "type": "boolean"
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "both",
+                "incoming",
+                "outgoing"
+              ]
+            },
+            "direct": {
+              "type": "boolean"
+            },
+            "includeInactive": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "table"
+          ]
+        },
+        "when": "isWorkspaceTrusted",
+        "userDescription": "Open visual semantic model diagrams inside VS Code."
+      },
+      {
+        "name": "smv_snapshot",
+        "displayName": "Semantic Model Viewer: snapshot",
+        "toolReferenceName": "smvSnapshot",
+        "canBeReferencedInPrompt": true,
+        "modelDescription": "Save one portable HTML diagram using a user-controlled Save dialog. Choose related:true or dependents:true. The HTML includes full-model metadata and formulas, even outside the initial diagram.",
+        "inputSchema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "model": {
+              "type": "string",
+              "description": "Model ID, URI or exact name from smv_discover. Omit only when exactly one current model exists."
+            },
+            "table": {
+              "type": "string",
+              "description": "Table name to explain."
+            },
+            "with": {
+              "type": "string",
+              "description": "Optional second table for a relationship diagram."
+            },
+            "related": {
+              "type": "boolean"
+            },
+            "dependents": {
+              "type": "boolean"
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "both",
+                "incoming",
+                "outgoing"
+              ]
+            },
+            "direct": {
+              "type": "boolean"
+            },
+            "includeInactive": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "table"
+          ]
+        },
+        "when": "isWorkspaceTrusted",
+        "userDescription": "Save one portable HTML diagram using a user-controlled Save dialog."
+      }
     ]
   },
   "scripts": {
@@ -195,7 +460,8 @@
     "package:preview": "npm run sync-viewer && node scripts/check-fabric-preview.js && vsce package --pre-release"
   },
   "devDependencies": {
-    "@types/vscode": "^1.85.0",
+    "@types/vscode": "1.101.0",
+    "@vscode/test-electron": "3.1.0",
     "@vscode/vsce": "^4.0.0"
   },
   "icon": "images/icon.png",

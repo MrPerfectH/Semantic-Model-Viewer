@@ -17,8 +17,8 @@ async function show(source,options){
     return {receipt,receiptPath,opening,source:plan.source,table:plan.table,question:item.label,answer:item.answer,diagram:prepared.summary,legend:plan.legend,counts:plan.counts,warnings:plan.warnings,artifact:{path:target,format:ext.slice(1),bytes:fs.statSync(target).size,contents:ext==='.html'?'Interactive viewer containing full-model metadata and DAX; the starting diagram is focused.':'Image of the focused diagram.'},...(item.evidence?{evidence:item.evidence}: {})};
   }
   let state=await session.serve(plan.source,{background:true,reuseNamed:true,session:options.session,newSession:options.newSession,watch:options.watch});
-  if(state.pluginVersion!==require('./managed.cjs').version()){
-    if(options.session)throw new Error('The selected session runs a different plugin version. Omit --session and use --new-session for question diagrams.');
+  if(!require('./managed.cjs').compatible(state)){
+    if(options.session)throw new Error('The selected session runs a different plugin version or engine/runtime identity. Omit --session and use --new-session for question diagrams.');
     const previous=state;
     state=await session.serve(plan.source,{background:true,reuseNamed:true,newSession:true,watch:options.watch});
     state.warnings=[...(state.warnings||[]),`Started a current viewer for question diagrams; the existing ${previous.pluginVersion} session was left running.`];
@@ -27,7 +27,7 @@ async function show(source,options){
   const views=plan.views.map(item=>({...item,id:item.key+'-'+crypto.createHash('sha256').update(JSON.stringify([plan.table,options.with||null,options.direction||'both',!!options.direct,!!options.includeInactive])).digest('hex').slice(0,12)}));
   const result=await session.request(state.sessionFile,'views',{views:views.map(({id,label,view})=>({id,label,view}))});
   const opening=await opener.open(result.workspaceUrl,options);
-  return {opening,sourceIdentity:result.views[0].sourceIdentity,source:plan.source,table:plan.table,sessionId:state.sessionId,sessionFile:state.sessionFile,reused:!!state.reused,pluginVersion:state.pluginVersion,warnings:[...(state.warnings||[]),...plan.warnings],counts:plan.counts,workspaceUrl:result.workspaceUrl,
+  return {opening,sourceIdentity:result.views[0].sourceIdentity,source:plan.source,table:plan.table,sessionId:state.sessionId,sessionFile:state.sessionFile,reused:!!state.reused,pluginVersion:state.pluginVersion,runtimeIdentity:state.runtimeIdentity,warnings:[...(state.warnings||[]),...plan.warnings],counts:plan.counts,workspaceUrl:result.workspaceUrl,
     views:result.views.map(v=>({id:v.id,label:v.label,answer:views.find(item=>item.id===v.id).answer,url:v.url,revision:v.revision,summary:v.summary,application:v.application})),
     legend:plan.legend,note:'Open workspaceUrl to explore these diagrams. Counts are computed from local metadata; browser application requires a fresh acknowledgement.'};
 }

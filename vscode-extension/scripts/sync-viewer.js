@@ -80,3 +80,6 @@ if (fs.existsSync(xmlaPublish)) {
     verifyHelper(xmlaPublish, packagedPublish);
   }
 }
+
+// Native Copilot tools use the same parser/query/view planner as the CLI.
+require('../../scripts/sync-engine.cjs').sync(path.join(root, 'engine'), check);
