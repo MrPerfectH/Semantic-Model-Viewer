@@ -128,3 +128,25 @@ test('unified sidebar routes sign-in and sign-out and refreshes identity without
     assert.deepEqual(manifest.contributes.views.semanticModelViewer.map(v => v.id), ['semanticModelViewer.models']);
   } finally { sub.dispose(); vscode.context.subscriptions.forEach(d => d.dispose()); }
 });
+
+test('offline Fabric metadata is grouped separately from workspace files and exclusions open workspace settings',async()=>{
+ const active=extension.activate(vscode.context);
+ const cached={id:'fabric:synthetic',kind:'fabric',name:'Synthetic cached model',path:'Workspace / Synthetic',fetchedAt:'2026-10-27'};
+ active.tree.fabric.entries=()=>[cached];
+ try{
+  const local=(await active.tree.getChildren()).find(n=>n.kind==='localRoot');
+  assert.equal(active.tree.getTreeItem(local).label,'On this device');
+  const rows=await active.tree.getChildren(local);
+  assert.equal(rows.includes(cached),false);
+  const group=rows.find(n=>n.kind==='cachedRoot');assert.ok(group);
+  assert.match(active.tree.getTreeItem(group).tooltip,/not workspace files/);
+  assert.deepEqual(await active.tree.getChildren(group),[cached]);
+  const item=active.tree.getTreeItem(cached);assert.match(item.description,/Cached/);assert.equal(item.command.arguments[0],cached);
+  const action=rows.find(n=>n.command==='semanticModelViewer.configureExclusions');assert.ok(action);
+  let opened;const sub=vscode.commands.registerCommand('workbench.action.openWorkspaceSettings',setting=>{opened=setting;});
+  await vscode.commands.executeCommand(action.command);assert.equal(opened,'semanticModelViewer.exclude');sub.dispose();
+  let fired=0;const listener=active.tree.onDidChangeTreeData(()=>fired++);
+  for(const change of vscode._configurationListeners)change({affectsConfiguration:key=>key==='semanticModelViewer.exclude'});
+  assert.ok(fired>0);listener.dispose();
+ }finally{vscode.context.subscriptions.forEach(d=>d.dispose());}
+});

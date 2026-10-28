@@ -24,7 +24,7 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   const restore = install(vscode);
   const ext = require(path.join(EXT, 'src', 'extension.js'));
   const { panel, tree } = ext.activate(vscode.context);
-  assert.strictEqual(vscode.context.subscriptions.length, 15, 'twelve commands, unified tree view, folder listener and panel disposable registered');
+  assert.strictEqual(vscode.context.subscriptions.length, 17, 'commands, unified tree view, folder/configuration listeners and panel disposable registered');
 
   /* --- Activity Bar tree: one row per model, click opens it --- */
   assert.strictEqual(vscode._trees['semanticModelViewer.models'], tree, 'tree provider registered under the view id');
@@ -32,8 +32,11 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   assert.equal(allRows[0].kind, 'fabricRoot');
   assert.equal(tree.getTreeItem(allRows[0]).collapsibleState, vscode.TreeItemCollapsibleState.Expanded);
   assert.equal(allRows[1].kind, 'localRoot');
-  assert.equal(tree.getTreeItem(allRows[1]).label, 'Local');
-  const rows = await tree.getChildren(allRows[1]);
+  assert.equal(tree.getTreeItem(allRows[1]).label, 'On this device');
+  const localRows = await tree.getChildren(allRows[1]);
+  const exclude = localRows.find(row => row.command === 'semanticModelViewer.configureExclusions');
+  assert.ok(exclude, 'exclusions are discoverable alongside workspace files');
+  const rows = localRows.filter(row => row.kind !== 'action');
   assert.deepStrictEqual(rows.map((row) => row.id), ['ws:Fixture Model.SemanticModel', 'ws:power-query/model.bim'],
     'the tree discovers both the TMDL folder and standalone BIM fixture');
   const item = tree.getTreeItem(rows[0]);

@@ -136,3 +136,11 @@ button:disabled{opacity:.45;cursor:default!important}
 @media(max-width:780px){.ex-graph:has(#drawer>div) #canvas-navigation{max-width:none}#canvas-navigation,#canvas-legend{right:0}#canvas-navigation{gap:6px 12px}.ex-legend-grid{grid-template-columns:1fr}}
 
 #canvas-legend .ex-legend-name,#canvas-legend .ex-legend-count{font-size:13px}
+
+/* At extreme split heights, scroll the workspace instead of collapsing its canvas. */
+@media(max-height:500px){
+  #root{overflow-y:auto!important}
+  #root>#main{flex-shrink:0;min-height:360px!important}
+  #topbar{gap:6px!important;padding:6px 12px!important;min-height:48px!important}
+  .ex-snapshot-status{top:8px;max-height:72px;overflow:auto;padding:7px 10px}
+}

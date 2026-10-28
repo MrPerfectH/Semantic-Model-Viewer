@@ -93,6 +93,7 @@ function makeVscode(opts) {
         vscode._watchers.push(w); return w;
       },
       openTextDocument: async (uri) => { vscode._opened.push(uri); return { uri }; },
+      onDidChangeConfiguration: (h) => { vscode._configurationListeners.push(h); return new Disposable(); },
       onDidChangeWorkspaceFolders: (h) => { vscode._folderListeners.push(h); return new Disposable(); }
     },
     window: {
@@ -128,7 +129,7 @@ function makeVscode(opts) {
       registerCommand: (id, fn) => { commands.set(id, fn); return new Disposable(() => commands.delete(id)); },
       executeCommand: async (id, ...args) => { if (id === 'setContext') { vscode._contexts[args[0]] = args[1]; return; } const fn = commands.get(id); return fn ? fn(...args) : undefined; }
     },
-    _writes: [], _saveDialogs: [], _opened: [], _shown: [], _watchers: [], _panels: panels, _state: state, _trees: {}, _folderListeners: [], _contexts: {},
+    _writes: [], _saveDialogs: [], _opened: [], _shown: [], _watchers: [], _panels: panels, _state: state, _trees: {}, _folderListeners: [], _configurationListeners: [], _contexts: {},
     context: {
       extensionUri: Uri.file(opts.extensionRoot),
       subscriptions: [],

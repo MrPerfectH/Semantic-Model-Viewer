@@ -1042,7 +1042,7 @@
           '<div style="flex:1;min-width:0;font:600 14px/1.25 \'IBM Plex Sans\',sans-serif;color:var(--smv-ink,#1f2430);overflow-wrap:anywhere;">' + U.esc(label) + '</div>' +
           '<div style="font:700 21px/1 \'IBM Plex Mono\',monospace;color:' + col + ';">' + tables.length + '</div>' +
           '</div>' +
-          '<div style="margin-top:7px;font:500 10.5px/1.6 \'IBM Plex Mono\',monospace;color:var(--smv-muted,#8b92a0);">' + facts + ' fact · ' + dims + ' dim' + (other ? (' · ' + other + ' other') : '') + '<br>' + (internal[k] || 0) + ' internal · ' + (external[k] || 0) + ' external rels</div>' +
+          '<div style="margin-top:7px;font:500 12px/1.6 \'IBM Plex Mono\',monospace;color:var(--smv-ink,#526070);">' + facts + ' fact · ' + dims + ' dim' + (other ? (' · ' + other + ' other') : '') + '<br>' + (internal[k] || 0) + ' internal · ' + (external[k] || 0) + ' external rels</div>' +
           '<div style="margin-top:8px;font:600 10px/1 \'IBM Plex Sans\',sans-serif;color:' + col + ';">Click to expand ▾</div>' +
           '</div>'
       });

@@ -118,7 +118,7 @@ for (const screen of SCREENS) {
       await new Promise(resolve => setTimeout(resolve, 25));
     }
     assert.equal(await browser.evaluate('app.model.tables.length'), 0, 'Fresh profiles start with no selected model');
-    await browser.evaluate("[...document.querySelectorAll('button')].find(button=>button.textContent.includes('Contoso Retail')&&button.textContent.includes('built-in')).click()");
+    await browser.evaluate("[...document.querySelectorAll('button')].find(button=>button.textContent==='Try the demo').click()");
     for (let n = 0; ; n++) {
       if (await browser.evaluate('app.modelKey==="builtin"&&app.model.tables.length===43')) break;
       if (n > 200) throw new Error('The selected bundled model never finished loading');

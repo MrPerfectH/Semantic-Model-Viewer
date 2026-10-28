@@ -630,7 +630,7 @@
       this.measures._gC = null; this.measures._railKey = null; this.measures._mainKey = null; this.measures._daxKey = null;
       this.matrix._key = null; this.sidebar._key = null;
       var state = {
-        loaded: true, allExpanded: false, modelName: name, selected: null, activeFilter: null, search: '',
+        snapshotMessage: '', snapshotError: '', loaded: true, allExpanded: false, modelName: name, selected: null, activeFilter: null, search: '',
         isolate: false, showModelMenu: !!opts.showModelMenu, msrQuery: '', expandedMeasure: null, calcOpen: {},
         selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvSourceQuery: '', mvSourceOpen: {}, mvImpactQuery: '', mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, viewMode: 'graph',
         showRules: false
@@ -715,7 +715,8 @@
       }
       var self = this, same = this.state.loaded && record.id === this.modelKey;
       var saved = same ? { table: this.captureTableView(), measures: this.measures.captureSnapshot(),
-        viewMode: this.state.viewMode, domains: this.captureDomains(), matrix: this.captureMatrix() } : null;
+        viewMode: this.state.viewMode, domains: this.captureDomains(), matrix: this.captureMatrix(),
+        powerQuery: this.powerQueryWorkspace && this.powerQueryWorkspace.captureSnapshot() } : null;
       this._hostRequest = (this._hostRequest || 0) + 1; this._modelLoadRequest = (this._modelLoadRequest || 0) + 1;
       var model = record.model;
       model.tables.forEach(function (table) { table.source = table.source || {kind:'other'}; table.domain = table.domain || 'Other'; });
@@ -730,13 +731,14 @@
       cv._activeSel = null; cv._isoSet = null; cv.clusterOn = false; cv.groups = null; cv.expandedGroups = new Set();
       cv.computeLayout(); this.measures._gC = null; this.measures._railKey = null; this.measures._mainKey = null; this.measures._daxKey = null;
       this.matrix._key = null; this.sidebar._key = null;
-      this.setState({ loaded: true, modelName: record.name || model.name || 'Semantic model', viewMode: 'graph',
+      this.setState({ snapshotMessage: '', snapshotError: '', loaded: true, modelName: record.name || model.name || 'Semantic model', viewMode: 'graph',
         allExpanded: false, selected: null, activeFilter: null, search: '', isolate: false, showModelMenu: false,
         selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvSourceQuery: '', mvSourceOpen: {}, mvImpactQuery: '', mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, showRules: false, repoError: '' }, function () {
         cv.build(); cv.fitView();
         if (saved) {
           cv.applyPreset(saved.table); self._tableWorkspace = self.captureTableView(); self._tableViewport = Object.assign({}, cv.view);
           self.measures.restoreSnapshot(saved.measures); self._domainWorkspace = saved.domains; self._matrixWorkspace = saved.matrix;
+          if (self.powerQueryWorkspace) self.powerQueryWorkspace.restoreSnapshot(saved.powerQuery);
           self.setViewMode(saved.viewMode);
         }
       });
