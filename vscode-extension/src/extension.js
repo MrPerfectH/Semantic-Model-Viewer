@@ -8,9 +8,50 @@ const { ViewerPanel } = require('./panel');
 const { ModelsTree } = require('./tree');
 const { FabricTree } = require('./fabric-tree');
 const { FabricConnection } = require('./fabric');
+const { listPowerBiModels } = require('./powerbi');
+const { parseLaunchUri, createRegistration, updateRegistration } = require('./external-tool');
 
 let panel = null;
 let tree = null;
+
+function isLocalWindows() {
+  return process.platform === 'win32' && !(vscode.env && vscode.env.remoteName);
+}
+
+async function registrationCommand(context, remove = false) {
+  if (!isLocalWindows()) {
+    await vscode.window.showInformationMessage('Power BI ribbon registration is available from local VS Code on Windows.');
+    return;
+  }
+  const action = remove ? 'Remove button' : 'Add button';
+  const common = process.env['CommonProgramFiles(x86)'];
+  const target = common ? require('path').join(common, 'Microsoft Shared', 'Power BI Desktop', 'External Tools', 'Semantic Model Viewer VS Code.pbitool.json') : 'Semantic Model Viewer VS Code.pbitool.json in the machine-wide Common Files / Microsoft Shared / Power BI Desktop / External Tools folder';
+  const selected = await vscode.window.showInformationMessage(
+    (remove ? 'Remove' : 'Add') + ' the Semantic Model Viewer (VS Code) button ' + (remove ? 'from' : 'to') + ' Power BI Desktop?',
+    { modal: true, detail: (remove ? 'This removes ' : 'This writes ') + target + '. Windows may ask you to approve Windows PowerShell to make this change. Normal viewer launches do not require administrator access.' }, action);
+  if (selected !== action) return;
+  try {
+    const registration = remove ? null : createRegistration(vscode.env.appRoot, vscode.env.uriScheme, context.extensionPath);
+    await updateRegistration(context.extensionPath, registration, remove);
+    await vscode.window.showInformationMessage('Power BI button ' + (remove ? 'removed' : 'added') + '. Restart Power BI Desktop to update its External Tools ribbon.');
+  } catch (error) {
+    await vscode.window.showErrorMessage('Could not update the Power BI button: ' + error.message);
+  }
+}
+
+async function handlePowerBiUri(uri) {
+  if (!isLocalWindows()) {
+    await vscode.window.showInformationMessage('Power BI Desktop launch links require local VS Code on Windows.');
+    return;
+  }
+  try {
+    const model = parseLaunchUri(uri);
+    await panel.showEmpty();
+    if (model) await panel.show(model);
+  } catch (error) {
+    await vscode.window.showErrorMessage('Could not open the Power BI model: ' + error.message);
+  }
+}
 
 async function openCommand() {
   const def = await resolveDefaultModel();
@@ -34,6 +75,28 @@ async function openUriCommand(uri) {
   const m = await modelFromUri(uri);
   if (!m) { vscode.window.showErrorMessage('Not a *.SemanticModel folder or model.bim: ' + uri.fsPath); return; }
   await panel.show(m);
+}
+
+async function connectPowerBiCommand(context) {
+  if (!isLocalWindows()) {
+    vscode.window.showInformationMessage('Power BI Desktop connection is available from local VS Code on Windows.');
+    return;
+  }
+  try {
+    const models = await listPowerBiModels(context.extensionPath);
+    if (!models.length) {
+      await panel.showEmpty();
+      vscode.window.showInformationMessage('No open Power BI Desktop model found. Open a model in Desktop, then connect again.');
+      return;
+    }
+    const choice = models.length === 1 ? models[0] : await vscode.window.showQuickPick(
+      models.map((model) => ({ label: model.name, description: model.server, model })),
+      { placeHolder: 'Choose an open Power BI Desktop model', matchOnDescription: true }
+    );
+    if (choice) await panel.show(choice.model || choice);
+  } catch (error) {
+    vscode.window.showErrorMessage('Could not connect to Power BI Desktop: ' + ((error && error.message) || error));
+  }
 }
 
 function activate(context) {
@@ -72,6 +135,10 @@ function activate(context) {
     vscode.commands.registerCommand('semanticModelViewer.refresh', () => panel.refresh()),
     vscode.commands.registerCommand('semanticModelViewer.configureExclusions', () => vscode.commands.executeCommand('workbench.action.openWorkspaceSettings', 'semanticModelViewer.exclude')),
     vscode.commands.registerCommand('semanticModelViewer.refreshModels', () => tree.refresh()),
+    vscode.commands.registerCommand('semanticModelViewer.connectPowerBI', () => connectPowerBiCommand(context)),
+    vscode.commands.registerCommand('semanticModelViewer.registerPowerBI', () => registrationCommand(context)),
+    vscode.commands.registerCommand('semanticModelViewer.unregisterPowerBI', () => registrationCommand(context, true)),
+    vscode.window.registerUriHandler({ handleUri: handlePowerBiUri }),
     vscode.window.registerTreeDataProvider('semanticModelViewer.models', tree),
     vscode.workspace.onDidChangeWorkspaceFolders(() => tree.refresh()),
     vscode.workspace.onDidChangeConfiguration(event => { if (event.affectsConfiguration('semanticModelViewer.exclude')) tree.refresh(); }),

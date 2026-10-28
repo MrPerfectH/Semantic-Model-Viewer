@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { findModels, readModelFiles } = require('./workspace');
+const { readPowerBiModel } = require('./powerbi');
 
 const STORAGE_PREFIX = 'smv:';
 const VIEW_TYPE = 'semanticModelViewer';
@@ -99,6 +100,11 @@ class ViewerPanel {
   get mediaUri() { return vscode.Uri.joinPath(this.context.extensionUri, 'media'); }
   isCurrent(panel, epoch) { return this.panel === panel && this.epoch === epoch; }
 
+  async showEmpty() {
+    if (this.panel) this.panel.dispose();
+    await this.show(null);
+  }
+
   async show(entry) {
     if (!this.panel) {
       const panel = vscode.window.createWebviewPanel(VIEW_TYPE, 'Semantic Model Viewer', vscode.ViewColumn.Active, {
@@ -137,6 +143,10 @@ class ViewerPanel {
   }
 
   async modelMessage(entry) {
+    if (entry.kind === 'powerbi') {
+      const connected = await readPowerBiModel(this.context.extensionPath, entry);
+      return { type: 'model', modelId: connected.id, name: connected.name, path: connected.path, files: connected.files };
+    }
     const files = entry.kind === 'fabric' ? entry.files : await readModelFiles(entry);
     return { type: 'model', modelId: entry.id, name: entry.name, path: entry.path, files, source: entry.kind === 'fabric' ? { kind: 'fabric', tenantId: entry.tenantId, accountId: entry.accountId, workspaceId: entry.workspaceId, modelId: entry.modelId, fetchedAt: entry.fetchedAt, method: entry.method, coverage: entry.coverage, warnings: entry.warnings } : undefined };
   }
@@ -228,6 +238,7 @@ class ViewerPanel {
       }
       case 'openFile': {
         if (!this.current) throw new Error('Open a model first.');
+        if (this.current.kind === 'powerbi') throw new Error('The connected Power BI model has no local source file to open.');
         if (this.current.kind === 'fabric') {
           const file = this.current.files.find(f => f.path === msg.path);
           if (!file) throw new Error('Model source file not found.');
@@ -289,7 +300,7 @@ class ViewerPanel {
 
   setupWatcher(entry) {
     this.disposeWatcher();
-    if (entry.kind === 'fabric') return;
+    if (entry.kind === 'fabric' || entry.kind === 'powerbi') return;
     const panel = this.panel;
     const bump = () => {
       clearTimeout(this.watchTimer);

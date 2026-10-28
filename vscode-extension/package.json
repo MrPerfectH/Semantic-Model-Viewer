@@ -32,7 +32,8 @@
   ],
   "main": "./src/extension.js",
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onUri"
   ],
   "contributes": {
     "commands": [
@@ -111,6 +112,22 @@
         "command": "semanticModelViewer.installCli",
         "title": "Install CLI for External Terminals",
         "category": "Semantic Model Viewer"
+      },
+      {
+        "command": "semanticModelViewer.connectPowerBI",
+        "title": "Connect to Power BI Desktop",
+        "category": "Semantic Model Viewer",
+        "icon": "$(database)"
+      },
+      {
+        "command": "semanticModelViewer.registerPowerBI",
+        "title": "Add to Power BI External Tools",
+        "category": "Semantic Model Viewer"
+      },
+      {
+        "command": "semanticModelViewer.unregisterPowerBI",
+        "title": "Remove from Power BI External Tools",
+        "category": "Semantic Model Viewer"
       }
     ],
     "menus": {
@@ -150,6 +167,11 @@
           "command": "semanticModelViewer.configureExclusions",
           "when": "view == semanticModelViewer.models",
           "group": "navigation@3"
+        },
+        {
+          "command": "semanticModelViewer.connectPowerBI",
+          "when": "view == semanticModelViewer.models",
+          "group": "navigation@4"
         }
       ],
       "view/item/context": [
@@ -205,7 +227,7 @@
     "viewsWelcome": [
       {
         "view": "semanticModelViewer.models",
-        "contents": "Start here: open a project folder containing a *.SemanticModel folder with TMDL definitions or model.bim. A .pbix or .pbip file alone is not supported.\n[Open folder](command:vscode.openFolder)\n[Refresh model list](command:semanticModelViewer.refreshModels)\n[Try the demo in your browser](https://MrPerfectH.github.io/Semantic-Model-Viewer/)\n[Connect to Fabric](command:semanticModelViewer.connectFabric)"
+        "contents": "Start here: open a project folder containing a *.SemanticModel folder with TMDL definitions or model.bim. A .pbix or .pbip file alone is not supported.\n[Open folder](command:vscode.openFolder)\n[Refresh model list](command:semanticModelViewer.refreshModels)\n[Try the demo in your browser](https://MrPerfectH.github.io/Semantic-Model-Viewer/)\n[Connect to Fabric](command:semanticModelViewer.connectFabric)\n[Connect to Power BI Desktop](command:semanticModelViewer.connectPowerBI)\n[Add to Power BI External Tools](command:semanticModelViewer.registerPowerBI)"
       }
     ],
     "languageModelTools": [
@@ -508,7 +530,7 @@
   "scripts": {
     "sync-viewer": "node scripts/sync-viewer.js",
     "check-viewer": "node scripts/sync-viewer.js --check",
-    "vscode:prepublish": "npm run sync-viewer",
+    "vscode:prepublish": "node scripts/prepare-powerbi.cjs && npm run sync-viewer",
     "package": "vsce package",
     "test": "npm run sync-viewer && npm run check-viewer && node --test --test-concurrency=1 ../tests/*.test.cjs ../tools/fabric/tests/*.test.cjs ../tests/extension.test.js ../Models/tools/viewer/tests/*.test.js",
     "package:preview": "npm run sync-viewer && node scripts/check-fabric-preview.js && vsce package --pre-release"

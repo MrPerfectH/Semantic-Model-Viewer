@@ -105,6 +105,7 @@ function makeVscode(opts) {
       showOpenDialog: async () => (opts.openDialog ? opts.openDialog() : undefined),
       showSaveDialog: async (options) => { vscode._saveDialogs.push(options); return opts.saveDialog ? opts.saveDialog(options) : undefined; },
       showTextDocument: async (doc, options) => { vscode._shown.push({ doc, options }); },
+      registerUriHandler: handler => { vscode._uriHandler = handler; return new Disposable(); },
       registerTreeDataProvider: (id, provider) => { vscode._trees[id] = provider; return new Disposable(); },
       withProgress: (o, task) => task({ report: () => { } }),
       createOutputChannel: () => ({ lines: [], appendLine(l) { this.lines.push(l); log(l); }, show() { }, dispose() { this.disposed = true; } }),
