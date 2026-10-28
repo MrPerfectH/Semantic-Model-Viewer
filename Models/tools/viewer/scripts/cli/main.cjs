@@ -18,7 +18,7 @@ Usage:
   smv session list | smv session stop --all
   smv inspect <model> [--table <name>]
   smv filters-by <model> <table> [--direction outgoing|incoming|both] [--direct] [--include-inactive]
-  smv discover <folder>...
+  smv discover <folder>... [--all]
   smv explain validate <explanation.json>
   smv results import <file or -> [--format csv --metadata metadata.json]
   smv serve <model> [--view view.json] [--watch] [--background --session state.json]
@@ -30,7 +30,8 @@ Usage:
   smv explain build <explanation.json> --out <directory>
   smv snapshot <model-folder> --out snapshot.html [--tables Sales,Date | --measure "Total Sales"]
 
-Model: one TMDL .SemanticModel folder, its definition folder, or model.bim.
+Model: one TMDL .SemanticModel folder, its definition folder, or model.bim, or a
+model name or discovery ID found below the current folder (for example "Contoso Retail").
 
 Options:
   -o, --out <file>       Required HTML output
@@ -45,6 +46,9 @@ Requires Node.js 22+. No extra packages or browser required to export.
 Snapshots include full Viewer model metadata and DAX, even when focused.
 Source files are read locally and never modified. No DAX execution is performed.
 `;
+
+// A model argument may be a path or a model name/ID found below the current folder.
+function modelRef(ref) { return require('./discover.cjs').resolve(ref); }
 
 async function main(args) {
   const help = require('./help.cjs');
@@ -86,16 +90,16 @@ async function run(args) {
       if (positionals.length > 2) throw new Error('inspect accepts one model path. Quote paths containing spaces; use --table <name> for a table filter');
       if (values.model || values.direction || values.direct || values['include-inactive']) throw new Error('inspect supports --table and --json; filter-path options belong to filters-by');
       if (values.table !== undefined && !values.table.trim()) throw new Error('--table cannot be empty');
-      result = query.inspect(positionals[1], values.table);
+      result = query.inspect(modelRef(positionals[1]), values.table);
     } else {
       const source = values.model || positionals[1], table = values.model ? positionals[1] : positionals[2];
       if (positionals.length !== (values.model ? 2 : 3) || values.table || !table?.trim()) throw new Error('Expected filters-by <model> <table> or filters-by <table> --model <model>');
-      result = query.filtersBy(source, table, { direction: values.direction, direct: values.direct, includeInactive: values['include-inactive'] });
+      result = query.filtersBy(modelRef(source), table, { direction: values.direction, direct: values.direct, includeInactive: values['include-inactive'] });
     }
     process.stdout.write(JSON.stringify(result, null, 2) + '\n'); return;
   }
   if (['serve','open','session'].includes(args[0]))return sessionCommand(args);
-  if (args[0] === 'discover') { if(args.length<2)throw new Error('discover requires at least one folder');process.stdout.write(JSON.stringify(require('./discover.cjs').discover(args.slice(1)),null,2)+'\n');return; }
+  if (args[0] === 'discover') { const folders=args.slice(1).filter(a=>a!=='--all');if(!folders.length)throw new Error('discover requires at least one folder');process.stdout.write(JSON.stringify(require('./discover.cjs').discover(folders,{all:args.includes('--all')}),null,2)+'\n');return; }
   if (args[0] === 'results') return resultsCommand(args.slice(1));
   if (args[0] === 'shot' || args[0] === 'explain') return explanationCommand(args);
   const { values, positionals } = parseArgs({ args, allowPositionals: true, options: {
@@ -104,10 +108,11 @@ async function run(args) {
     view: { type:'string' }, json: { type:'boolean' }, open:{type:'string'},opener:{type:'string'}, force: { type: 'boolean' }, help: { type: 'boolean', short: 'h' }
   } });
   if (values.help || args.length === 0) { process.stdout.write(HELP); return; }
-  const [command, source] = positionals;
+  const [command, ref] = positionals;
   if (command !== 'snapshot') throw new Error('Unknown command '+JSON.stringify(command)+'. Run smv --help.');
-  if (!source) throw new Error('Missing model path for snapshot');
+  if (!ref) throw new Error('Missing model path for snapshot');
   if (positionals.length !== 2) throw new Error('snapshot accepts one model path. Quote paths containing spaces');
+  const source = modelRef(ref);
   if (!values.out) throw new Error('--out is required.');
   require('./opener.cjs').policy(values);
   const output = path.resolve(values.out);
@@ -134,7 +139,7 @@ async function explanationCommand(args) {
     result=api.validateFile(positionals[2]);process.stdout.write(JSON.stringify(result)+'\n');return;
   }
   if(!values.out)throw new Error('--out is required');
-  if(positionals[0]==='shot'&&positionals.length===2&&values.view)result=await api.shot(positionals[1],api.readJSON(values.view),values.out,values);
+  if(positionals[0]==='shot'&&positionals.length===2&&values.view)result=await api.shot(modelRef(positionals[1]),api.readJSON(values.view),values.out,values);
   else if(positionals[0]==='explain'&&positionals[1]==='build'&&positionals.length===3)result=await api.build(positionals[2],values.out,values);
   else throw new Error('Expected shot <model> --view <json> --out <png> or explain build <json> --out <directory>');
   result.opening=await require('./opener.cjs').open(result.path||result.interactive||result.html,values);
@@ -174,7 +179,7 @@ async function sessionCommand(args){
   }else{
     if(positionals.length!==2)throw new Error('Expected serve|open <model> [--view file] [--watch] [--background --session state.json]');
     if(values.port!==undefined&&(!/^\d+$/.test(values.port)||Number(values.port)>65535))throw new Error('Port must be 0 to 65535');
-    result=await api.serve(positionals[1],{...values,newSession:values['new-session'],port:values.port===undefined?0:Number(values.port),background:positionals[0]==='open'||values.background});
+    result=await api.serve(modelRef(positionals[1]),{...values,newSession:values['new-session'],port:values.port===undefined?0:Number(values.port),background:positionals[0]==='open'||values.background});
     result.opening=await require('./opener.cjs').open(result.url,values,positionals[0]==='open'?'system':'none');
     if(!values.json&&result.opening.message)process.stderr.write(result.opening.message+'\n');
   }
@@ -184,7 +189,7 @@ async function compareCommand(args){
   const {values,positionals}=parseArgs({args,allowPositionals:true,options:{measure:{type:'string'},with:{type:'string'},out:{type:'string',short:'o'},force:{type:'boolean'},json:{type:'boolean'},session:{type:'string'},'new-session':{type:'boolean'},watch:{type:'boolean'},open:{type:'string'},opener:{type:'string'},browser:{type:'string'}}});
   if(positionals.length!==2)throw new Error('Expected compare <model> --measure <first> --with <second>');
   for(const k of ['measure','with','out'])if(values[k]!==undefined&&!values[k].trim())throw new Error('--'+k+' cannot be empty');
-  const result=await require('./compare.cjs').compare(positionals[1],{...values,newSession:values['new-session']});
+  const result=await require('./compare.cjs').compare(modelRef(positionals[1]),{...values,newSession:values['new-session']});
   process.stdout.write(JSON.stringify(result,null,2)+'\n');
 }
 async function workflowCommand(args){
@@ -201,9 +206,9 @@ async function workflowCommand(args){
   else{
     let source,table;
     if(values.workspace){if(positionals[0]!=='show'||positionals.length!==1||!values.model||!values.table)throw new Error('Use show --workspace <name|UUID> --model <name|UUID> --table <name>');const fetched=await require('./fabric.cjs').fetchModel({workspace:values.workspace,model:values.model,tenant:values.tenant,tokenStdin:values['token-stdin']});source=fetched.path;table=values.table;}
-    else if(values.table){if(positionals.length!==2||values.model)throw new Error('Use <command> <model> --table <name>');source=positionals[1];table=values.table;}
-    else if(values.model){if(positionals.length!==2)throw new Error('Use <command> <table> --model <model>');source=values.model;table=positionals[1];}
-    else if(positionals.length===2){const models=require('./discover.cjs').discover([process.cwd()]);if(models.length!==1)throw new Error('Provide --model or a model path with --table; found '+models.length+' local models');source=models[0].path;table=positionals[1];if(/backup/i.test(source))throw new Error('A backup model requires an explicit model path');}
+    else if(values.table){if(positionals.length!==2||values.model)throw new Error('Use <command> <model> --table <name>');source=modelRef(positionals[1]);table=values.table;}
+    else if(values.model){if(positionals.length!==2)throw new Error('Use <command> <table> --model <model>');source=modelRef(values.model);table=positionals[1];}
+    else if(positionals.length===2){const models=require('./discover.cjs').discover([process.cwd()]).filter(m=>m.role==='model');if(models.length!==1)throw new Error('Provide --model <name or path>; found '+models.length+' local models'+(models.length?': '+models.slice(0,8).map(m=>m.name).join(', '):''));source=models[0].path;table=positionals[1];}
     else throw new Error('Provide a model path and --table <name>');
     const options={...values,table,newSession:values['new-session'],includeInactive:values['include-inactive']};
     result=positionals[0]==='show'?await require('./show.cjs').show(source,options):values.with?require('./query.cjs').between(source,table,values.with,options):require('./query.cjs').focused(source,table,positionals[0],options);
