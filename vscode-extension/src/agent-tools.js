@@ -14,7 +14,7 @@ function htmlForView(html,revision){
     const wait=()=>{
       if(window.smv){
         const timeout=setTimeout(()=>fail(new Error('Editor diagram readiness timed out: '+document.visibilityState+', '+innerWidth+'x'+innerHeight)),Math.max(0,end-Date.now()));
-        window.smv.ready().then(()=>{clearTimeout(timeout);if(settled)return;settled=true;host.postMessage({type:'applied',revision:${revision}});},error=>{clearTimeout(timeout);fail(error);});
+        window.smv.ready().then(()=>{clearTimeout(timeout);if(settled)return;try{const rendered={visibility:document.visibilityState,width:innerWidth,height:innerHeight,workspace:window.app&&window.app.state.viewMode,summary:window.smv.inspect?window.smv.inspect().renderedSummary:null};host.postMessage({type:'applied',revision:${revision},rendered});settled=true;}catch(error){fail(error);}},error=>{clearTimeout(timeout);fail(error);});
       }
       else if(Date.now()<end)setTimeout(wait,50);else fail(new Error('Editor diagram initialization timed out'));
     };wait();
@@ -64,9 +64,9 @@ function register(context){
         const panel=vscode.window.createWebviewPanel('semanticModelViewer.diagram',item.label,{viewColumn:i===0?vscode.ViewColumn.Active:vscode.ViewColumn.Beside,preserveFocus:false},{enableScripts:true,retainContextWhenHidden:true,localResourceRoots:[]});
         state={panel,status:'awaiting-viewer'};panels.set(key,state);
         panel.onDidDispose(()=>{if(panels.get(key)===state)panels.delete(key);});
-        panel.webview.onDidReceiveMessage(message=>{if(message&&message.revision===state.revision&&['applied','failed'].includes(message.type)){state.status=message.type;state.error=typeof message.error==='string'?message.error.slice(0,1000):undefined;}});
+        panel.webview.onDidReceiveMessage(message=>{if(message&&message.revision===state.revision&&['applied','failed'].includes(message.type)){state.status=message.type;state.rendered=message.type==='applied'?message.rendered:undefined;state.error=typeof message.error==='string'?message.error.slice(0,1000):undefined;}});
       }
-      state.summary=item.prepared.summary;state.renderer=item.prepared.renderer;state.revision=++revision;state.hash=sourceContentHash;state.status='awaiting-viewer';state.error=undefined;
+      state.summary=item.prepared.summary;state.renderer=item.prepared.renderer;state.revision=++revision;state.hash=sourceContentHash;state.status='awaiting-viewer';state.error=undefined;state.rendered=undefined;
       state.panel.webview.html=htmlForView(item.prepared.html,state.revision);
       // Creation already opens the requested group. Revealing again before VS Code
       // assigns viewColumn can race the pending Beside placement on a cold host.
@@ -81,6 +81,6 @@ function register(context){
     prepareInvocation(){return {invocationMessage:messages[kind]};},
     async invoke(options,token){const result=await run(kind,options.input,token);return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(JSON.stringify(result))]);}
   }));
-  return {run,status:()=>[...panels.values()].map(state=>({label:state.panel.title,status:state.status,error:state.error,revision:state.revision})),dispose(){for(const item of disposables)item.dispose();for(const state of panels.values())state.panel.dispose();panels.clear();}};
+  return {run,status:()=>[...panels.values()].map(state=>({label:state.panel.title,status:state.status,error:state.error,revision:state.revision,visible:state.panel.visible,active:state.panel.active,column:state.panel.viewColumn,rendered:state.rendered})),dispose(){for(const item of disposables)item.dispose();for(const state of panels.values())state.panel.dispose();panels.clear();}};
 }
 module.exports={register,htmlForView};

@@ -2,6 +2,10 @@
 
 ## Next pre-release
 
+- Lead CLI help and agent guidance with the live interactive viewer; confirm static PNG and offline HTML exports on stderr while preserving JSON stdout (#179).
+- Add an accessible Measure library toggle, collapse it in focused explanations, preserve its snapshot state, and start new focused dependency graphs Left → right while retaining explicit vertical layouts (#180).
+- Include real renderer workspace, viewport and node counts in native editor acceptance evidence.
+
 - Keep matrix columns within usable widths on supported Windows VS Code hosts; retain horizontal scrolling for dense models.
 - Preserve Power Query context on same-model refresh and clear stale refresh messages when opening models.
 - Improve inspector theme contrast, matrix and measure readability, and short-window scrolling.

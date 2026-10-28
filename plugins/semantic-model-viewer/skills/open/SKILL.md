@@ -14,7 +14,7 @@ Choose the diagram from the question:
 - What filters this table: `smv show "<model>" --table "<table>" --related --direction incoming`.
 - What this table filters: use `--related --direction outgoing`.
 - Which calculations depend on it: use `--dependents`.
-- A portable diagram: add `--out "<diagram.html>"` or `--out "<diagram.png>"` to one chosen diagram. HTML needs no browser; PNG requires Chrome/Chromium. HTML retains the full model metadata and DAX. Use the host's supported image/file presentation mechanism.
+- Only for docs or snapshots: `--out "<diagram.png>"` exports a static image and starts no server. Omit `--out` for the live interactive viewer. For a portable diagram, add `--out "<diagram.html>"` or `--out "<diagram.png>"` to one chosen diagram. HTML needs no browser; PNG requires Chrome/Chromium. HTML retains the full model metadata and DAX. Use the host's supported image/file presentation mechanism.
 
 For a known model and table, the common workflow is ONE command:
 

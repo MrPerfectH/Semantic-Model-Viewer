@@ -8,6 +8,17 @@ const { spawnSync } = require('node:child_process');
 const root = process.env.SMV_PLUGIN_TEST_ROOT || path.resolve(__dirname, '..');
 const read = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 
+test('Git marketplace plugin ships current focused-view controls and live/export guidance', { skip: !!process.env.SMV_PLUGIN_TEST_ROOT }, () => {
+  const marketplace = read(path.join(root, '.claude-plugin/marketplace.json'));
+  const plugin = path.resolve(root, marketplace.plugins.find(p => p.name === 'semantic-model-viewer').source);
+  for (const file of [
+    'Models/tools/viewer/js/explanation-view.js', 'Models/tools/viewer/js/interactive-view.js',
+    'Models/tools/viewer/js/measures.js', 'Models/tools/viewer/measures.css',
+    'Models/tools/viewer/scripts/cli/help.cjs', 'Models/tools/viewer/scripts/cli/show.cjs',
+    'skills/open/SKILL.md', 'skills/smv-explain/SKILL.md', 'docs/cli.md', 'docs/cli-plugin-workflow.md'
+  ]) assert.ok(fs.readFileSync(path.join(plugin, file)).equals(fs.readFileSync(path.join(root, file))), 'Git marketplace plugin is stale: ' + file);
+});
+
 test('Viewer plugin declares CLI commands and no MCP registration or runtime dependencies', () => {
   const manifest = read(path.join(root, '.claude-plugin/plugin.json'));
   assert.equal(manifest.name, 'semantic-model-viewer');

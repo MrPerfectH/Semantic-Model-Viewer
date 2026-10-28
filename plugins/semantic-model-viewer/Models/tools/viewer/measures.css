@@ -283,3 +283,9 @@ body[data-smv-interactive] .mv-dax-card{min-height:0;grid-template-rows:auto aut
 .mv-comparison-picker-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:24px}
 
 .mv-comparison-settings .mv-source-controls{padding:0;border:0}
+
+.mv-library-control{flex:none;padding:8px 20px;border-bottom:1px solid var(--smv-line,#dbe2ec);background:var(--smv-paper,#fff);}
+.mv-workspace[data-library-collapsed=true]>.mv-library,.mv-workspace[data-library-collapsed=true]>.mv-resize{display:none!important;}
+body[data-smv-interactive] .mv-workspace[data-library-collapsed=false]>.mv-library{display:flex!important;position:absolute;inset:0 auto 0 0;z-index:150;width:280px!important;min-width:0;max-width:85%;}
+
+.mv-main-column{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;}
