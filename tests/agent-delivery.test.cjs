@@ -89,3 +89,24 @@ test('permission recovery refuses a corrupt private runtime without executing it
  const result=spawnSync('/bin/sh',[path.join(bin,'smv'),'--version'],{env:{PATH:'',HOME:temp,SMV_RUNTIME_CACHE:cache},encoding:'utf8'});
  assert.notEqual(result.status,0);assert.match(result.stderr,/checksum mismatch/);assert.deepEqual(fs.readdirSync(cache),[]);
 });
+
+test('editor readiness is bounded and a late completion cannot overwrite timeout evidence', async t => {
+ const { makeVscode, install } = require('./vscode-mock');
+ const restore = install(makeVscode({ folders: [], extensionRoot: ext }));
+ let htmlForView;try{({htmlForView}=require('../vscode-extension/src/agent-tools'));}finally{restore();}
+ const script = htmlForView('<head></head><body></body>', 42).match(/<script[^>]*>([\s\S]*?)<\/script>/)[1];
+ const vm = require('node:vm');
+ const messages=[],timers=new Map();let resolveReady,sequence=0;
+ const ready=new Promise(resolve=>{resolveReady=resolve;});
+ vm.runInNewContext(script, {window:{smv:{ready:()=>ready}},document:{visibilityState:'hidden'},innerWidth:800,innerHeight:600,Date,
+  acquireVsCodeApi:()=>({postMessage:message=>messages.push(message)}),
+  setTimeout:(fn,ms)=>{timers.set(++sequence,{fn,ms});return sequence;},clearTimeout:id=>timers.delete(id)});
+ assert.equal(timers.size,1);const timeout=[...timers.values()][0];assert.ok(timeout.ms<=20000);
+ timeout.fn();assert.equal(messages.length,1);assert.equal(messages[0].type,'failed');assert.equal(messages[0].revision,42);
+ assert.match(messages[0].error,/readiness timed out: hidden, 800x600/);
+ resolveReady();await Promise.resolve();assert.equal(messages.length,1,'A timed-out revision stays failed until explicitly retried');
+ const success=[],pending=new Map();
+ vm.runInNewContext(script,{window:{smv:{ready:()=>Promise.resolve()}},document:{visibilityState:'visible'},innerWidth:800,innerHeight:600,Date,
+  acquireVsCodeApi:()=>({postMessage:message=>success.push(message)}),setTimeout:fn=>{pending.set(1,fn);return 1;},clearTimeout:id=>pending.delete(id)});
+ await Promise.resolve();assert.equal(success[0].type,'applied');assert.equal(success[0].revision,42);assert.equal(pending.size,0);
+});

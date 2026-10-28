@@ -9,9 +9,13 @@ function htmlForView(html,revision){
   html=html.replace(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi,(_tag,attributes,body)=>`<script nonce="${nonce}"${attributes}>${body}</script>`);
   const acknowledgement=`<script nonce="${nonce}">(()=>{
     const host=acquireVsCodeApi(),end=Date.now()+20000;
-    const fail=error=>host.postMessage({type:'failed',revision:${revision},error:String(error.message||error)});
+    let settled=false;
+    const fail=error=>{if(settled)return;settled=true;host.postMessage({type:'failed',revision:${revision},error:String(error.message||error)});};
     const wait=()=>{
-      if(window.smv)window.smv.ready().then(()=>host.postMessage({type:'applied',revision:${revision}})).catch(fail);
+      if(window.smv){
+        const timeout=setTimeout(()=>fail(new Error('Editor diagram readiness timed out: '+document.visibilityState+', '+innerWidth+'x'+innerHeight)),Math.max(0,end-Date.now()));
+        window.smv.ready().then(()=>{clearTimeout(timeout);if(settled)return;settled=true;host.postMessage({type:'applied',revision:${revision}});},error=>{clearTimeout(timeout);fail(error);});
+      }
       else if(Date.now()<end)setTimeout(wait,50);else fail(new Error('Editor diagram initialization timed out'));
     };wait();
   })();</script>`;
@@ -57,7 +61,7 @@ function register(context){
       // Repeated questions reveal the explored panel instead of resetting it.
       if(state&&state.hash===sourceContentHash&&state.status!=='failed'){state.panel.reveal(undefined,true);views.push({label:item.label,status:state.status,error:state.error,revision:state.revision,reused:true,summary:item.prepared.summary,renderer:item.prepared.renderer});continue;}
       if(!state){
-        const panel=vscode.window.createWebviewPanel('semanticModelViewer.diagram',item.label,{viewColumn:i===0?vscode.ViewColumn.Active:vscode.ViewColumn.Beside,preserveFocus:true},{enableScripts:true,retainContextWhenHidden:true,localResourceRoots:[]});
+        const panel=vscode.window.createWebviewPanel('semanticModelViewer.diagram',item.label,{viewColumn:i===0?vscode.ViewColumn.Active:vscode.ViewColumn.Beside,preserveFocus:false},{enableScripts:true,retainContextWhenHidden:true,localResourceRoots:[]});
         state={panel,status:'awaiting-viewer'};panels.set(key,state);
         panel.onDidDispose(()=>{if(panels.get(key)===state)panels.delete(key);});
         panel.webview.onDidReceiveMessage(message=>{if(message&&message.revision===state.revision&&['applied','failed'].includes(message.type)){state.status=message.type;state.error=typeof message.error==='string'?message.error.slice(0,1000):undefined;}});
@@ -66,7 +70,7 @@ function register(context){
       state.panel.webview.html=htmlForView(item.prepared.html,state.revision);
       // Creation already opens the requested group. Revealing again before VS Code
       // assigns viewColumn can race the pending Beside placement on a cold host.
-      if(!created)state.panel.reveal(undefined,true);
+      if(!created)state.panel.reveal(undefined,false);
       views.push({label:item.label,status:state.status,error:state.error,revision:state.revision,reused:false,summary:item.prepared.summary,renderer:item.prepared.renderer});
     }
     const result={sourceIdentity:sourceIdentity,counts:plan.counts,warnings:plan.warnings,views,note:'Panels are opened in the editor. awaiting-viewer is not a rendered acknowledgement; repeat the same show request to read the latest panel status without resetting exploration.'};
