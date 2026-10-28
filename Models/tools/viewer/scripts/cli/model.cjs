@@ -10,7 +10,7 @@ function runtime() {
   const context = { console, Set, Map, module: { exports: {} }, addEventListener() {} };
   context.window = context;
   vm.createContext(context);
-  for (const file of ['util.js', 'roles.js', 'tmdl-parser.js', 'snapshot.js', 'canvas.js', 'layouts.js', 'relationships.js', 'measures.js', 'app.js']) {
+  for (const file of ['util.js', 'roles.js', 'tmdl-parser.js', 'snapshot.js', 'canvas.js', 'layouts.js', 'relationships.js', 'dax-format.js', 'measure-comparison.js', 'measures.js', 'app.js']) {
     vm.runInContext(fs.readFileSync(path.join(viewerRoot, 'js', file), 'utf8'), context, { filename: file });
   }
   context.U.store.useMemory({});

@@ -22,6 +22,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  private-runtimes:
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/feature/fabric-connect' || github.head_ref == 'feature/fabric-connect' || startsWith(github.ref, 'refs/tags/v')
+    uses: ./.github/workflows/bundled-agent-delivery.yml
   helpers:
     if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/feature/fabric-connect' || github.head_ref == 'feature/fabric-connect' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
@@ -65,7 +68,7 @@ jobs:
           path: tools/fabric/xmla/publish
 
   package:
-    needs: sign-mac-helpers
+    needs: [sign-mac-helpers, private-runtimes]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -93,22 +96,41 @@ jobs:
         if: github.ref == 'refs/heads/develop'
         working-directory: vscode-extension
         run: node scripts/preview-version.cjs
-      - name: Package pre-release extension
-        if: github.event_name != 'push' || inputs.prerelease
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: smv-private-node-*
+          path: dist/runtime-downloads
+      - name: Restore verified runtime inputs
         run: |
-          cat vscode-extension/PRE-RELEASE.md vscode-extension/README.md > /tmp/smv-preview-readme.md
-          cp /tmp/smv-preview-readme.md vscode-extension/README.md
-          npm run package:preview --prefix vscode-extension -- --out semantic-model-viewer-fabric-preview.vsix
-      - name: Package stable extension
-        if: github.event_name == 'push' && !inputs.prerelease
+          mkdir -p dist/runtimes
+          for target in linux-x64 linux-arm64 darwin-x64 darwin-arm64 win-x64; do
+            mv "dist/runtime-downloads/smv-private-node-$target" "dist/runtimes/$target"
+            if [ "$target" != win-x64 ]; then chmod +x "dist/runtimes/$target/node"; fi
+          done
+      - name: Package platform extensions with the complete CLI
+        env:
+          PRERELEASE: ${{ github.event_name != 'push' || inputs.prerelease }}
         run: |
-          node vscode-extension/scripts/check-fabric-preview.js
-          npm run package --prefix vscode-extension -- --out semantic-model-viewer-fabric-preview.vsix
+          if [ "$PRERELEASE" = "true" ]; then
+            cat vscode-extension/PRE-RELEASE.md vscode-extension/README.md > /tmp/smv-preview-readme.md
+            cp /tmp/smv-preview-readme.md vscode-extension/README.md
+          fi
+          for target in linux-x64 linux-arm64 darwin-x64 darwin-arm64 win-x64; do
+            rm -rf vscode-extension/cli
+            npm run build:vscode-cli -- --target "$target" --runtime-root dist/runtimes
+            node vscode-extension/scripts/check-bundled-cli.cjs "$target"
+            if [ "$PRERELEASE" = "true" ]; then
+              npm run package:preview --prefix vscode-extension -- --target "$target" --out "semantic-model-viewer-$target.vsix"
+            else
+              node vscode-extension/scripts/check-fabric-preview.js
+              npm run package --prefix vscode-extension -- --target "$target" --out "semantic-model-viewer-$target.vsix"
+            fi
+          done
       - run: python3 tools/fabric/build-preview.py --out dist/semantic-model-viewer-fabric-preview.zip
       - run: python3 tools/fabric/verify-preview.py dist/semantic-model-viewer-fabric-preview.zip
       - uses: actions/upload-artifact@v4
         with:
           name: semantic-model-viewer-fabric-preview
           path: |
-            vscode-extension/semantic-model-viewer-fabric-preview.vsix
+            vscode-extension/semantic-model-viewer-*.vsix
             dist/semantic-model-viewer-fabric-preview.zip

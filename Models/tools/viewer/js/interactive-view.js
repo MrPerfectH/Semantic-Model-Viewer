@@ -18,10 +18,11 @@
   }
   function selection(app){
     if(app.state.viewMode==='measures'){
-      var name=app.state.gPin||app.state.selMeasure;
+      var pair=app.measures.comparison,row=pair?pair.active:null,state=pair?pair.views[row].app.state:app.state;
+      var name=state.gPin||state.selMeasure;
       var table=app.model.tables.find(function(t){return t.measures.some(function(m){return m.name===name;});});
       var source=app.state.dependencySource;
-      return table?{kind:'measure',table:table.name,name:name}:source?(source.column==null?{kind:'table',name:source.table}:{kind:'column',table:source.table,name:source.column}):null;
+      return table?Object.assign({kind:'measure',table:table.name,name:name},pair?{comparisonRow:row}:{}):source?(source.column==null?{kind:'table',name:source.table}:{kind:'column',table:source.table,name:source.column}):null;
     }
     if(selected&&(selected.kind==='column'||selected.kind==='query'))return clone(selected);
     if(app.canvas.selRel)return {kind:'relationship',name:app.canvas.selRel.name};
@@ -41,7 +42,7 @@
   function browseMeasures(app) {
     if(document.body.classList.contains('smv-browse-open')){closeLibrary(true);return;}
     browseSnapshot=app.measures.captureSnapshot();dirty=true;
-    app.measures.cancelSnapshotViewport();app.setState({selMeasure:null,gPin:null,gHover:null});
+    app.measures.cancelSnapshotViewport();if(!app.measures.comparison)app.setState({selMeasure:null,gPin:null,gHover:null});
     document.body.classList.add('smv-browse-open');
     var control=document.querySelector('[data-smv-browse]');
     if(control){control.textContent='Close measures';control.setAttribute('aria-expanded','true');}
@@ -139,11 +140,13 @@ body[data-smv-interactive] .mv-library{display:none!important}body[data-smv-inte
     var app=g.app,cv=app.canvas,view=clone(authored);view.version=2;view.mode=app.state.viewMode;view.width=innerWidth;view.height=innerHeight;view.arrange=false;view.annotationsVisible=active?!active.isHidden():true;
     view.tables=Array.from(app.explorer.names);
     if(view.mode==='measures')view.focus=selection(app);else if(selection(app))view.focus=selection(app);else delete view.focus;
-    if(view.mode!=='measures')delete view.context;
+    if(view.mode!=='measures'){delete view.context;delete view.comparison;}
+    if(view.mode==='measures'&&app.measures.comparison){view.comparison=clone(app.measures.comparison.spec);view.focus=clone(view.comparison.left);}else delete view.comparison;
     view.state={tableView:{pos:clone(cv.pos),view:clone(cv.view),expanded:Object.keys(cv.cards).filter(function(n){return cv.cards[n].expanded;}),display:cv.captureDisplay(),focus:cv.captureFocus()},measures:app.measures.captureSnapshot(),selection:selection(app)};
+    if(view.mode!=='measures'&&view.state.measures)delete view.state.measures.comparison;
     return view;
   }
-  function receipt(){var app=g.app,rendered={workspace:app.state.viewMode,tableCanvasTables:Array.from(app.explorer.names).filter(function(n){return app.canvas.cards[n]&&app.canvas.cards[n].el.style.display!=='none';}).length};if(app.state.viewMode==='measures')rendered.measureGraphNodes=app.measures._g?app.measures._g.nodes.length:0;return {renderedSummary:rendered,version:1,revision:revision,sourceRevision:g.SMV_SOURCE_REVISION||null,view:clone(authored),explored:dirty,selection:selection(g.app),selectedAt:selectedAt,workspace:g.app.state.viewMode,currentView:snapshot(),pendingRevision:pending?pending.revision:null,clientId:clientId};}
+  function receipt(){var app=g.app,rendered={workspace:app.state.viewMode,tableCanvasTables:Array.from(app.explorer.names).filter(function(n){return app.canvas.cards[n]&&app.canvas.cards[n].el.style.display!=='none';}).length};if(app.state.viewMode==='measures'){if(app.measures.comparison){rendered.comparisonLeftNodes=app.measures.comparison.views[0]._g?app.measures.comparison.views[0]._g.nodes.length:0;rendered.comparisonRightNodes=app.measures.comparison.views[1]._g?app.measures.comparison.views[1]._g.nodes.length:0;}rendered.measureGraphNodes=app.measures.comparison?app.measures.comparison.views.reduce(function(n,v){return n+(v._g?v._g.nodes.length:0);},0):app.measures._g?app.measures._g.nodes.length:0;}return {renderedSummary:rendered,version:1,revision:revision,sourceRevision:g.SMV_SOURCE_REVISION||null,view:clone(authored),explored:dirty,selection:selection(g.app),selectedAt:selectedAt,workspace:g.app.state.viewMode,currentView:snapshot(),pendingRevision:pending?pending.revision:null,clientId:clientId};}
   var clientId=typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():String(Math.random());
   function connect(smv,input){
     api=smv;authored=clone(input);selected=input.state&&input.state.selection||input.focus||null;
@@ -151,7 +154,7 @@ body[data-smv-interactive] .mv-library{display:none!important}body[data-smv-inte
     smv.apply=function(v){var requested=clone(v);var task=applyQueue.then(async function(){busy=true;try{var result=await baseApply(requested);selected=requested.state&&requested.state.selection||requested.focus||null;dirty=false;return result;}finally{busy=false;}});applyQueue=task.catch(function(){});return task;};
     smv.reset=async function(){return smv.apply(authored);};
     smv.step=async function(i){if(!g.SMV_STEPS||!g.SMV_STEPS[i])throw new Error('Unknown step');currentStep=i;authored=clone(g.SMV_STEPS[i].view);return smv.reset();};
-    smv.reveal=async function(r){var v=clone(authored);v.focus=r;if(r.kind==='measure')v.mode='measures';else if(r.kind==='query')v.mode='power-query';else if(v.mode==='measures'||v.mode==='power-query')v.mode='graph';if(v.mode!=='measures')delete v.context;delete v.state;await smv.apply(v);dirty=true;return smv.inspect();};
+    smv.reveal=async function(r){var v=clone(authored);v.focus=r;if(r.kind==='measure')v.mode='measures';else if(r.kind==='query')v.mode='power-query';else if(v.mode==='measures'||v.mode==='power-query')v.mode='graph';if(v.mode!=='measures')delete v.context;delete v.comparison;delete v.state;await smv.apply(v);dirty=true;return smv.inspect();};
     smv.loadView=async function(v,nextRevision){authored=clone(v);revision=nextRevision;dirty=false;pending=null;selected=null;return smv.reset();};
     smv.inspect=receipt;
     smv.offer=async function(update){

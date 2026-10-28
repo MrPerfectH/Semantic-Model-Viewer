@@ -33,11 +33,15 @@ test('native tools use the packaged worker, require workspace trust, preserve vi
  for(const file of ['agent-tools.js','workspace.js'])delete require.cache[require.resolve(path.join(ext,'src',file))];
  const api=require(path.join(ext,'src/agent-tools')).register({extensionPath:ext});t.after(()=>api.dispose());
  t.mock.method(require('node:crypto'),'randomBytes',()=>Buffer.alloc(18,255));
- assert.equal(tools.size,6);
+ assert.equal(tools.size,7);
  const discover=await api.run('discover');assert.equal(discover.models.length,1);
+ const pairInput={model:discover.models[0].id,measure:'Total Sales',with:'Sales LY'};
+ const comparison=await api.run('compare',pairInput);assert.equal(comparison.views.length,1);assert.equal(comparison.views[0].summary.comparison.roots[1].name,'Sales LY');
+ const comparisonPanel=vscode._panels.pop();comparisonPanel.dispose();
  const input={model:discover.models[0].id,table:'Sales',related:true,dependents:true};
  const first=await api.run('show',input);assert.equal(first.views.length,2);assert.equal(vscode._panels.length,2);
  for(const [index,panel] of vscode._panels.entries()){
+  assert.ok(!panel.revealed,'New panels must keep their pending creation placement without an immediate reveal');
   assert.match(panel.webview.html,/Content-Security-Policy/);assert.match(panel.webview.html,/connect-src 'none'/);
   assert.deepEqual(panel.options.localResourceRoots,[]);
   const code=panel.webview.html.match(/<script[^>]*data-smv-asset="js\/snapshot.js"[^>]*>([\s\S]*?)<\/script>/)[1];
@@ -84,4 +88,25 @@ test('permission recovery refuses a corrupt private runtime without executing it
  fs.writeFileSync(path.join(runtime,'node'),'This must never execute',{mode:0o644});fs.writeFileSync(path.join(runtime,'node.sha256'),'f'.repeat(64)+'\n');
  const result=spawnSync('/bin/sh',[path.join(bin,'smv'),'--version'],{env:{PATH:'',HOME:temp,SMV_RUNTIME_CACHE:cache},encoding:'utf8'});
  assert.notEqual(result.status,0);assert.match(result.stderr,/checksum mismatch/);assert.deepEqual(fs.readdirSync(cache),[]);
+});
+
+test('editor readiness is bounded and a late completion cannot overwrite timeout evidence', async t => {
+ const { makeVscode, install } = require('./vscode-mock');
+ const restore = install(makeVscode({ folders: [], extensionRoot: ext }));
+ let htmlForView;try{({htmlForView}=require('../vscode-extension/src/agent-tools'));}finally{restore();}
+ const script = htmlForView('<head></head><body></body>', 42).match(/<script[^>]*>([\s\S]*?)<\/script>/)[1];
+ const vm = require('node:vm');
+ const messages=[],timers=new Map();let resolveReady,sequence=0;
+ const ready=new Promise(resolve=>{resolveReady=resolve;});
+ vm.runInNewContext(script, {window:{smv:{ready:()=>ready}},document:{visibilityState:'hidden'},innerWidth:800,innerHeight:600,Date,
+  acquireVsCodeApi:()=>({postMessage:message=>messages.push(message)}),
+  setTimeout:(fn,ms)=>{timers.set(++sequence,{fn,ms});return sequence;},clearTimeout:id=>timers.delete(id)});
+ assert.equal(timers.size,1);const timeout=[...timers.values()][0];assert.ok(timeout.ms<=20000);
+ timeout.fn();assert.equal(messages.length,1);assert.equal(messages[0].type,'failed');assert.equal(messages[0].revision,42);
+ assert.match(messages[0].error,/readiness timed out: hidden, 800x600/);
+ resolveReady();await Promise.resolve();assert.equal(messages.length,1,'A timed-out revision stays failed until explicitly retried');
+ const success=[],pending=new Map();
+ vm.runInNewContext(script,{window:{smv:{ready:()=>Promise.resolve()}},document:{visibilityState:'visible'},innerWidth:800,innerHeight:600,Date,
+  acquireVsCodeApi:()=>({postMessage:message=>success.push(message)}),setTimeout:fn=>{pending.set(1,fn);return 1;},clearTimeout:id=>pending.delete(id)});
+ await Promise.resolve();assert.equal(success[0].type,'applied');assert.equal(success[0].revision,42);assert.equal(pending.size,0);
 });

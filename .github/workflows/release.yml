@@ -7,6 +7,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: stable-release
+  cancel-in-progress: false
+
 jobs:
   runtime:
     uses: ./.github/workflows/fabric-preview.yml
@@ -45,6 +49,15 @@ jobs:
         with:
           name: semantic-model-viewer-fabric-preview
           path: dist/fabric
+      - name: Download tested complete agent packages
+        uses: actions/download-artifact@v4
+        with:
+          name: semantic-model-viewer-complete-agent-packages
+          path: dist/agents
+      - name: Verify archives and prepare immutable installation catalogs
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: node scripts/prepare-agent-release.cjs --assets dist/agents --tag "$RELEASE_TAG" --repository "$GITHUB_REPOSITORY" --out dist/catalog
       - name: Bundle the static web app
         run: |
           mkdir -p dist/semantic-model-viewer-web
@@ -57,16 +70,40 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
+          gh release create "$GITHUB_REF_NAME" --draft \
             --title "Semantic Model Viewer $GITHUB_REF_NAME" \
             --notes-file .github/release-introduction.md \
             --generate-notes \
-            dist/fabric/*.vsix \
-            dist/fabric/*.zip \
-            dist/*.zip
+            dist/fabric/vscode-extension/*.vsix \
+            dist/fabric/dist/*.zip \
+            dist/*.zip \
+            dist/agents/*.zip \
+            dist/agents/*.sha256 \
+            dist/catalog/*
+          gh release edit "$GITHUB_REF_NAME" --draft=false
+      - name: Update the Claude marketplace only after the archives are public
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "$GITHUB_REF_NAME" --pattern smv-claude-portable.zip --dir dist/published
+          cmp dist/agents/smv-claude-portable.zip dist/published/smv-claude-portable.zip
+          git fetch origin claude-marketplace
+          git worktree add --detach dist/marketplace origin/claude-marketplace
+          node scripts/update-agent-catalog.cjs dist/marketplace/.claude-plugin/marketplace.json dist/catalog/claude-marketplace.json
+          git -C dist/marketplace config user.name github-actions[bot]
+          git -C dist/marketplace config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git -C dist/marketplace add .claude-plugin/marketplace.json
+          if ! git -C dist/marketplace diff --cached --quiet; then
+            git -C dist/marketplace commit -m "Release bundled SMV agent plugin $GITHUB_REF_NAME"
+            git -C dist/marketplace push origin HEAD:claude-marketplace
+          fi
       - name: Publish to the VS Code Marketplace
         # Skipped until the VSCE_PAT repository secret exists.
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         if: env.VSCE_PAT != ''
-        run: npx --yes @vscode/vsce@4 publish --packagePath dist/fabric/*.vsix --skip-duplicate
+        run: |
+          for package in dist/fabric/vscode-extension/*.vsix; do
+            test -f "$package"
+            npx --yes @vscode/vsce@4 publish --packagePath "$package" --skip-duplicate
+          done

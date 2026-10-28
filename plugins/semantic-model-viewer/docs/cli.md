@@ -92,3 +92,5 @@ They are exploration artifacts, not backups of every TMDL property. See
 [Visual explanations](visual-explanations.md) covers annotated images, walkthroughs,
 external results and proposals. The walkthrough envelope and imported dataset formats
 remain version 1; their embedded **view specifications use version 2**.
+
+Compare two calculations with `smv compare <model> --measure "<A>" --with "<B>"`. This opens one native paired Measures view, with inline DAX and source references; use `--out comparison.html` for a portable file. See [measure comparison](measure-comparison.md) for colors, scope limits and saved state.

@@ -19,4 +19,6 @@
 
 !engine/**
 
+# Platform release includes the complete terminal CLI and private Node.
+!cli/**
 !resources/windows/**

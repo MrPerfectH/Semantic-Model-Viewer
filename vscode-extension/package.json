@@ -32,13 +32,14 @@
   ],
   "main": "./src/extension.js",
   "activationEvents": [
+    "onStartupFinished",
     "onUri"
   ],
   "contributes": {
     "commands": [
       {
         "command": "semanticModelViewer.open",
-        "title": "Open Model…",
+        "title": "Open Model\u2026",
         "category": "Semantic Model Viewer",
         "icon": "$(type-hierarchy)"
       },
@@ -65,7 +66,7 @@
       },
       {
         "command": "semanticModelViewer.connectFabric",
-        "title": "Connect to Fabric…",
+        "title": "Connect to Fabric\u2026",
         "category": "Semantic Model Viewer",
         "icon": "$(cloud)"
       },
@@ -76,12 +77,12 @@
       },
       {
         "command": "semanticModelViewer.removeFabricModel",
-        "title": "Remove Saved Fabric Model…",
+        "title": "Remove Saved Fabric Model\u2026",
         "category": "Semantic Model Viewer"
       },
       {
         "command": "semanticModelViewer.fabricSwitchAccount",
-        "title": "Switch Fabric Account…",
+        "title": "Switch Fabric Account\u2026",
         "category": "Semantic Model Viewer"
       },
       {
@@ -106,6 +107,11 @@
         "title": "Exclude Workspace Model Folders\u2026",
         "category": "Semantic Model Viewer",
         "icon": "$(filter)"
+      },
+      {
+        "command": "semanticModelViewer.installCli",
+        "title": "Install CLI for External Terminals",
+        "category": "Semantic Model Viewer"
       },
       {
         "command": "semanticModelViewer.connectPowerBI",
@@ -195,7 +201,7 @@
             "type": "string"
           },
           "default": [],
-          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**` or `**/tests/fixtures/**`. Use **Exclude Workspace Model Folders…** in the Semantic Model Viewer sidebar. This filters discovery only; cached Fabric models are listed separately. Hidden folders (`.worktrees`, `.pbi`, `.venv`\u2026), `node_modules` and `.git` are always skipped."
+          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**` or `**/tests/fixtures/**`. Use **Exclude Workspace Model Folders\u2026** in the Semantic Model Viewer sidebar. This filters discovery only; cached Fabric models are listed separately. Hidden folders (`.worktrees`, `.pbi`, `.venv`\u2026), `node_modules` and `.git` are always skipped."
         }
       }
     },
@@ -487,6 +493,37 @@
         },
         "when": "isWorkspaceTrusted",
         "userDescription": "Save one portable HTML diagram using a user-controlled Save dialog."
+      },
+      {
+        "name": "smv_compare",
+        "displayName": "Compare semantic model measures",
+        "toolReferenceName": "smvCompare",
+        "canBeReferencedInPrompt": true,
+        "modelDescription": "Compare two measures using native dependency diagrams and inline DAX. Includes shared and side-specific measure, table and column references. Static written definitions only; does not evaluate DAX or prove numeric equivalence. No CLI installation required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "type": "string",
+              "description": "Model ID from smv_discover; optional if only one model exists."
+            },
+            "measure": {
+              "type": "string",
+              "description": "First measure name, optionally qualified."
+            },
+            "with": {
+              "type": "string",
+              "description": "Second measure name, optionally qualified."
+            }
+          },
+          "required": [
+            "measure",
+            "with"
+          ],
+          "additionalProperties": false
+        },
+        "when": "isWorkspaceTrusted",
+        "userDescription": "Open paired dependency diagrams and inline DAX comparison for two measures."
       }
     ]
   },

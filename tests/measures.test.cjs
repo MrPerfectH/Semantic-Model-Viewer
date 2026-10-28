@@ -618,3 +618,14 @@ test('snapshot restores source browsing and formula display preferences', () => 
   assert.equal(app.state.mvSourcePicking,true);assert.equal(app.state.mvSourceQuery,'amount');assert.equal(app.state.mvImpactQuery,'profit');
   assert.deepEqual(Object.keys(app.state.mvSourceOpen),['Sales']);
 });
+
+test('paired comparison fits its bounded overview without changing ordinary opening zoom', () => {
+  const { view } = harness();
+  const graph = { w: 1600, h: 800, root: 'Margin', xy: { Margin: { x: 900, y: 200, w: 190 } } };
+  assert.equal(view.initialViewport(graph, 824, 424).zoom, 1);
+  view.options.comparison = true;
+  const opening = view.initialViewport(graph, 824, 424);
+  assert.equal(opening.zoom, .5);
+  assert.equal(opening.scrollLeft, 0);
+  assert.equal(opening.scrollTop, 0);
+});
