@@ -38,8 +38,7 @@ function installExternal(root, storage, options = {}) {
   if (platform !== 'win32') fs.chmodSync(command, 0o755);
   return { command, binDir: bin, identity: info.sha256 };
 }
-function register(context) {
-  const vscode = require('vscode');
+function register(context, vscode) {
   const root = path.join(context.extensionPath, 'cli');
   const available = fs.existsSync(path.join(root, 'build-info.json'));
   const disposables = [];
