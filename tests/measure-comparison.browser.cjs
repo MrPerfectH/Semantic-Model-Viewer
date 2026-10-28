@@ -43,6 +43,9 @@ const c=app.measures.comparison;check(c.active===1&&c.layout==='rows'&&!c.rows[0
 
 test('shared settings apply to both rows, persist and keep both roots visually focused',{skip:!browser},async t=>verify(t,{width:1600,height:1500},`
 const c=app.measures.comparison;check(!document.querySelector('[aria-label="Comparison layout"]'),'desktop one-at-a-time option removed');
+check(!c.strip.querySelector('.mv-comparison-summary'),'no generated comparison explanation');
+check(c.settingControls.sources.type==='checkbox'&&c.settingControls.sources.checked,'source control matches native checked checkbox');
+check(c.settingControls.sources.closest('label').textContent==='Show table and column references','native source label');
 check(c.views.every(v=>v.mainEl.querySelectorAll('.mv-view-controls').length===0),'duplicate view settings removed');
 check(c.views.every(v=>v.mainEl.querySelectorAll('[aria-label="DAX layout"]').length===0),'duplicate DAX settings removed');
 for(const v of c.views)for(const name of ['Sales Amount','Gross Margin LY'])if(v._nodeEls[name])check(v._nodeEls[name].btn.dataset.comparisonFocus,'both comparison roots are marked in either graph');

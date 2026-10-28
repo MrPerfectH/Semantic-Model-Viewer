@@ -10,7 +10,7 @@
     this.settings=Object.assign({mode:'split',split:'beside',orientation:'lr',sources:true,inline:true,plain:true,fmt:'original',wrap:true},saved&&saved.comparison.rows&&saved.comparison.rows[0]&&saved.comparison.rows[0].preferences||{});
     var self=this;U.clear(owner.host);owner._built=false;
     this.shell=el('div',{cls:'mv-workspace mv-comparison-shell'});this.workspace=el('div',{cls:'mv-comparison-workspace'});
-    this.strip=el('div',{cls:'mv-comparison-strip'});this.summary=el('p',{cls:'mv-comparison-summary',text:this.analysis.summary});
+    this.strip=el('div',{cls:'mv-comparison-strip'});
     var controls=el('div',{cls:'mv-comparison-controls'});
     this.analysis.roots.forEach(function(root,i){
       var select=el('select',{cls:'mv-layout-select','aria-label':i?'Second measure':'First measure',onChange:function(){var pair=self.analysis.roots.slice();pair[i]={kind:'measure',table:self.model.msrHome[select.value],name:select.value};try{self.replaceRoots(pair);}catch(error){select.value=root.name;self.notice.textContent=error.message;}}});
@@ -20,7 +20,7 @@
     controls.appendChild(el('button',{cls:'mv-button',text:'Exit comparison',onClick:function(){owner.clearComparison();self.app.setState({selMeasure:self.analysis.roots[self.active].name,dependencySource:null,gPin:null,gExtra:{},gHover:null});}}));
     this.sharedControls=this.buildControls();
     this.notice=el('p',{cls:'mv-comparison-notice',role:'status',text:this.analysis.warnings.join(' ')});
-    this.strip.append(controls,this.sharedControls,this.summary,el('p',{cls:'mv-comparison-legend',text:'Blue: shared object · Pink: shared written definition · Amber: side-specific logic or connection · Membership is within this analyzed scope. Expanded DAX is for inspection; it does not preserve implicit context transition.'}),this.notice);
+    this.strip.append(controls,this.sharedControls,el('p',{cls:'mv-comparison-legend',text:'Blue: shared object · Pink: shared written definition · Amber: side-specific logic or connection · Membership is within this analyzed scope. Expanded DAX is for inspection; it does not preserve implicit context transition.'}),this.notice);
     this.tabbar=el('div',{cls:'mv-comparison-tabs',role:'tablist','aria-label':'Compared measures'});this.rowHost=el('div',{cls:'mv-comparison-rows'});
     this.workspace.append(this.strip,this.tabbar,this.rowHost);this.shell.appendChild(this.workspace);owner.host.appendChild(this.shell);
     this.analysis.roots.forEach(function(root,i){
@@ -62,7 +62,9 @@
       function toggle(key,label){var control=el('button',{cls:'mv-button',text:label,'aria-pressed':String(!!self.settings[key]),onClick:function(){self.setSetting(key,!self.settings[key]);}});self.settingControls[key]=control;bar.appendChild(control);}
       select('split','DAX position for both measures',[['beside','DAX beside graph'],['below','DAX below graph']]);
       select('orientation','Graph direction for both measures',[['lr','Left → right'],['tb','Top → bottom'],['bt','Bottom → top']]);
-      toggle('sources','Table and column references');toggle('wrap','Wrap lines');toggle('inline','Inline measures');toggle('plain','Compact');
+      var sources=el('input',{type:'checkbox',checked:!!self.settings.sources,onChange:function(e){self.setSetting('sources',e.target.checked);}});self.settingControls.sources=sources;
+      bar.appendChild(el('div',{cls:'mv-source-controls'},el('label',{},[sources,el('span',{text:'Show table and column references'})])));
+      toggle('wrap','Wrap lines');toggle('inline','Inline measures');toggle('plain','Compact');
       select('fmt','DAX layout for both measures',[['original','Original'],['long','Long lines'],['short','Short lines']]);
       bar.appendChild(el('button',{cls:'mv-button',text:'Loaded originals',onClick:function(){self.settings.inline=false;self.settings.fmt='original';self.setSetting('inline',false);}}));
       return bar;
@@ -74,7 +76,7 @@
     },
     syncControls:function(){
       var self=this;
-      Object.keys(this.settingControls).forEach(function(k){var c=self.settingControls[k];if(k.indexOf('mode-')===0)c.setAttribute('aria-pressed',String(self.settings.mode===k.slice(5)));else if(c.tagName==='SELECT')c.value=self.settings[k];else c.setAttribute('aria-pressed',String(!!self.settings[k]));});
+      Object.keys(this.settingControls).forEach(function(k){var c=self.settingControls[k];if(k.indexOf('mode-')===0)c.setAttribute('aria-pressed',String(self.settings.mode===k.slice(5)));else if(c.tagName==='SELECT')c.value=self.settings[k];else if(c.type==='checkbox')c.checked=!!self.settings[k];else c.setAttribute('aria-pressed',String(!!self.settings[k]));});
       this.settingControls.plain.hidden=!this.settings.inline;this.settingControls.split.hidden=this.settings.mode!=='split';
     },
     applySettings:function(v){
