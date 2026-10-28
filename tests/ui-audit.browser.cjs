@@ -97,8 +97,11 @@ test('UI audit: refresh context, host contrast, matrix and short-height scrollin
   await browser.evaluate("app.setViewMode('matrix')");
   for(const width of [1440,700]){
    await browser.send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
-   const r=await browser.evaluate(`(()=>{const table=document.querySelector('#matrix table'),section=table.closest('section'),label=table.querySelector('thead button span');return {width:table.getBoundingClientRect().width,available:section.clientWidth,label:parseFloat(getComputedStyle(label).fontSize),scroll:section.scrollWidth};})()`);
+   const r=await browser.evaluate(`(()=>{const table=document.querySelector('#matrix table'),section=table.closest('section'),label=table.querySelector('thead button span');return {width:table.getBoundingClientRect().width,available:section.clientWidth,label:parseFloat(getComputedStyle(label).fontSize),scroll:section.scrollWidth,minWidth:parseFloat(getComputedStyle(table).minWidth),column:table.querySelectorAll('thead th')[1].getBoundingClientRect().width,container:table.parentElement.getBoundingClientRect().width};})()`);
    assert.ok(r.width>=r.available-50,JSON.stringify(r));assert.ok(r.label>=13);if(width===700)assert.ok(r.scroll>r.available);
+   assert.ok(r.container<=r.available+1,'Matrix container must stay within the viewport: '+JSON.stringify(r));
+   assert.ok(r.width<=Math.max(r.minWidth,r.available-48)+2,'Matrix width must not grow through cyclic intrinsic sizing: '+JSON.stringify(r));
+   assert.ok(r.column>=59&&r.column<200,'Fact columns must remain visible and usable: '+JSON.stringify(r));
   }
  });
  await t.test('335px height retains a scrollable canvas instead of collapsing it',async()=>{
