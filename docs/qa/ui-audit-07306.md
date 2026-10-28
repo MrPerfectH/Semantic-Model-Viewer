@@ -47,6 +47,7 @@ Final targeted measure/refresh rerun: **57 passed**. Generated extension media w
 
 Reapplied commit `63154ef` onto current `origin/develop` at `41cae20`. Resolved only the exclusion-setting description conflict; retained the newer agent tools and bundled delivery contributions. The assigned branch's unrelated commits were left intact on that branch. Added user-facing changelog notes and included `ui-audit.browser.cjs` in the existing CI browser job.
 
+- Full current viewer/extension/Fabric suite (`npm test --prefix vscode-extension`): **867 passed, 2 skipped, 0 failed** (869 total).
 - Chromium: `tests/ui-audit.browser.cjs`, `tests/measures-layout.browser.cjs`, `tests/snapshot.browser.cjs`, and `tests/demo-initial-viewport.browser.cjs`: **39 passed, 0 failed/skipped**.
 - Local prerelease VSIX packaging succeeded (`npm run package --prefix vscode-extension -- --pre-release --out /tmp/smv-ui-audit-integration.vsix`). This is a local build, not a stable publication.
 - Focused-star exploration: **12 passed, 2 failed** (one nested assertion and its parent); the 1280×720 focused star still fits at **39.5%**, below the existing 50% requirement. Re-running the same test (with the corrected demo-button selector) against an archived current `origin/develop` viewer reproduced the identical 39.5% failure. The threshold remains unchanged.
