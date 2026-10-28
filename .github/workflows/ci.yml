@@ -41,7 +41,7 @@ jobs:
         timeout-minutes: 5
         env:
           CHROME_PATH: /usr/bin/google-chrome
-        run: node --test --test-concurrency=1 tests/ui-audit.browser.cjs tests/measures-layout.browser.cjs tests/snapshot.browser.cjs tests/demo-initial-viewport.browser.cjs
+        run: node --test --test-concurrency=1 tests/browser-startup.test.cjs tests/ui-audit.browser.cjs tests/measures-layout.browser.cjs tests/snapshot.browser.cjs tests/demo-initial-viewport.browser.cjs
       - name: Package the extension
         working-directory: vscode-extension
         env:
