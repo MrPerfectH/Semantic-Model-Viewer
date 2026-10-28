@@ -119,11 +119,14 @@ jobs:
             rm -rf vscode-extension/cli
             npm run build:vscode-cli -- --target "$target" --runtime-root dist/runtimes
             node vscode-extension/scripts/check-bundled-cli.cjs "$target"
+            # Private Node/.NET runtimes use win-x64; VS Code uses win32-x64.
+            vsix_target="$target"
+            if [ "$target" = win-x64 ]; then vsix_target=win32-x64; fi
             if [ "$PRERELEASE" = "true" ]; then
-              npm run package:preview --prefix vscode-extension -- --target "$target" --out "semantic-model-viewer-$target.vsix"
+              npm run package:preview --prefix vscode-extension -- --target "$vsix_target" --out "semantic-model-viewer-$vsix_target.vsix"
             else
               node vscode-extension/scripts/check-fabric-preview.js
-              npm run package --prefix vscode-extension -- --target "$target" --out "semantic-model-viewer-$target.vsix"
+              npm run package --prefix vscode-extension -- --target "$vsix_target" --out "semantic-model-viewer-$vsix_target.vsix"
             fi
           done
       - run: python3 tools/fabric/build-preview.py --out dist/semantic-model-viewer-fabric-preview.zip
