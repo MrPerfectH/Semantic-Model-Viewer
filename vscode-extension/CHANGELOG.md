@@ -2,6 +2,7 @@
 
 ## Next pre-release
 
+- Keep matrix columns within usable widths on supported Windows VS Code hosts; retain horizontal scrolling for dense models.
 - Preserve Power Query context on same-model refresh and clear stale refresh messages when opening models.
 - Improve inspector theme contrast, matrix and measure readability, and short-window scrolling.
 - Group cached Fabric metadata under On this device and expose workspace discovery exclusions.
