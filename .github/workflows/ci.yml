@@ -82,5 +82,7 @@ jobs:
             echo "::error::Configure the VSCE_PAT repository secret to publish pre-releases."
             exit 1
           fi
-          test -f dist/vscode-extension/semantic-model-viewer-fabric-preview.vsix
-          npx --yes @vscode/vsce@4 publish --packagePath dist/vscode-extension/semantic-model-viewer-fabric-preview.vsix --pre-release --skip-duplicate
+          for package in dist/vscode-extension/*.vsix; do
+            test -f "$package"
+            npx --yes @vscode/vsce@4 publish --packagePath "$package" --pre-release --skip-duplicate
+          done

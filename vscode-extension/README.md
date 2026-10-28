@@ -10,6 +10,14 @@ Fabric connection, or Python is required for local files.
 The screenshots below use only the synthetic **Contoso Retail** demo. Select an image to
 open it at full size.
 
+## CLI and agent tools
+
+Platform release packages include `smv` and its private runtime. Open a new integrated terminal after installation and run `smv --version`; no separate Node or CLI installation is required. Copilot can use the native Semantic Model Viewer tools directly to inspect models and open diagrams.
+
+For an external terminal, run **Semantic Model Viewer: Install CLI for External Terminals** from the Command Palette. It reports the launcher location and whether your user bin directory is on PATH. It preserves existing commands and does not edit your shell configuration. Claude Code and Codex can also install their own complete Viewer plugin, which includes the same CLI engine.
+
+Supported bundled CLI targets: macOS x64/arm64, Linux glibc x64/arm64, and Windows x64. Browser-only VS Code and remote terminals are outside this local desktop delivery guarantee. Developer VSIX builds require the explicit CLI assembly step described in [bundled delivery](https://github.com/MrPerfectH/Semantic-Model-Viewer/blob/develop/docs/bundled-agent-delivery.md).
+
 ## Fabric connection (development preview)
 
 Requires desktop VS Code 1.101 or later for its Node.js 22 extension host.

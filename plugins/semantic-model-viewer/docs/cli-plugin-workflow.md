@@ -1,12 +1,12 @@
-> Complete 0.6.0 release packages carry a private runtime. Agents invoke the package-local `bin/smv` (`bin/smv.cmd` on Windows) directly; setup/PATH instructions below are optional human/developer workflows. Source-only packages retain an explicit Node requirement. See [delivery and release status](bundled-agent-delivery.md).
+> Complete release packages carry a private runtime. Agents invoke the package-local `bin/smv` (`bin/smv.cmd` on Windows) directly; setup/PATH instructions below are optional human/developer workflows. Source-only packages retain an explicit Node requirement. See [delivery and release status](bundled-agent-delivery.md).
 
-# CLI plugin workflow (0.3)
+# CLI plugin workflow
 
 Requires Node.js 22+. The plugin is CLI-only, with no runtime npm dependencies or
 MCP server. Model inputs are a local TMDL `.SemanticModel` folder, its `definition`
 folder, or a BIM file. Commands never modify model files or execute DAX, M or SQL.
 
-## One-time terminal setup
+## Optional legacy global terminal setup (requires system Node)
 
 Invoke `/semantic-model-viewer:setup` inside Claude. It runs:
 

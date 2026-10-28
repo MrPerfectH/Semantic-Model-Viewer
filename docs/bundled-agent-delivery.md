@@ -1,4 +1,4 @@
-# Bundled agent delivery (0.6.0 candidate)
+# Bundled CLI and agent delivery
 
 The existing two-pane diagram experience is preserved. A complete agent package contains the application, its renderer and a private Node runtime; agents call its own launcher. A global `smv` command and the setup skill are optional. Runtime/application selection never probes another installed plugin.
 
@@ -9,6 +9,14 @@ The extension contributes discovery, inspection, relationships, dependent calcul
 Analysis runs in a cancellable worker using VS Code's Node host. Model records are read through `workspace.fs`; their URI identity is retained. A TMDL definition takes precedence over sibling BIM caches, matching the CLI. The tool only selects models discovered in the open trusted workspace. It never silently selects a backup. Two diagram panels appear beside each other. Repeating an unchanged question reveals those panels and preserves exploration. Changed source records replace the frozen snapshot. Status remains `awaiting-viewer` until that revision acknowledges application; this is distinct from computed counts. HTML export asks the user for a destination and includes the full parsed model and formulas.
 
 This is a desktop Node extension. It does not claim browser-only vscode.dev support. Remote model records retain URI identities, but the existing Fabric UI and source-file navigation retain their own remote limitations. These new tools do not establish full remote-extension acceptance.
+
+### Terminal CLI bundled with the VS Code extension
+
+Platform release VSIXs contain the complete CLI and a private Node runtime for macOS x64/arm64, Linux glibc x64/arm64, or Windows x64. VS Code selects the matching Marketplace package. The extension verifies and copies its CLI into user storage, creates an executable launcher, and adds that stable directory to PATH for new integrated terminals through the terminal environment collection. Activation runs after startup; existing terminals may need to be reopened. No global Node, npm, CLI setup or runtime download is required.
+
+For terminals outside VS Code, **Semantic Model Viewer: Install CLI for External Terminals** writes a managed launcher into the user's bin directory. This optional action copies a verified, immutable package into extension global storage. It preserves other smv commands and does not modify shell startup files or system PATH. If the user's bin directory is not on PATH, the command reports that clearly. Once explicitly installed, later extension activations update the launcher; old package generations remain available for sessions. Remote VS Code terminals are outside this local desktop CLI guarantee.
+
+Development builds without `cli/build-info.json` retain native tools but do not advertise a bundled terminal CLI. Release packaging verifies all payload hashes and the VSIX target before packaging.
 
 ## Claude Code and Codex
 
@@ -34,10 +42,16 @@ npm run build:portable -- --host codex --targets linux-x64 --runtime-root dist/r
 
 The release workflow assembles a universal package from macOS x64/arm64, Linux glibc x64/arm64 and Windows x64 runtimes. Windows ARM64 and Linux musl/Alpine are not qualified. Binary and archive checksums, engine/renderer file digests, upstream notices and artifact sizes accompany builds. The package build rejects unknown/corrupt runtime inputs; no system protections are disabled. Native platform jobs qualify actual runtime startup; downloaded macOS Gatekeeper and Windows security behavior still need release acceptance on user machines.
 
-Source-only `build:plugin` and Git marketplace payloads do not include runtime binaries and must not be advertised as no-Node installations. Complete archives are separate release artifacts. Claude supports a checksum-pinned archive source; the public catalog must be changed to that actual immutable release URL only when the artifact is published. Organization-sync restrictions differ from direct Claude Code archive installs.
+Source-only `build:plugin` and Git marketplace payloads do not include runtime binaries and must not be advertised as no-Node installations. Complete archives are published by the stable tag workflow after native runtime, installed-host and no-Node acceptance. Claude supports a checksum-pinned archive source; the release workflow changes the public `claude-marketplace` catalog to the actual immutable release URL only after publishing the archive and downloading it again for a byte comparison. Other catalog entries are preserved. Organization-sync restrictions differ from direct Claude Code archive installs.
 
-Codex supports portable plugin uploads/local catalogs and Git-backed catalogs. This implementation tests a complete package through an isolated local catalog. Public plugin-directory submission or another supported binary distribution channel remains a separate release action; pointing at a source-only Git tree does not make runtime binaries appear. Do not publish placeholder URLs or claim public distribution is complete from source changes alone.
+Codex supports portable plugin uploads/local catalogs and Git-backed catalogs. This implementation tests a complete package through an isolated local catalog. The release includes `smv-codex-marketplace.zip`: extract it, then add that folder as a Codex marketplace and install the plugin. This is plugin installation, not separate CLI setup. The complete plugin ZIP is also published for compatible upload interfaces. Public plugin-directory submission remains a separate external action; pointing at a source-only Git tree does not make runtime binaries appear. Do not publish placeholder URLs or claim public distribution is complete from source changes alone.
 
 References: [VS Code tools](https://code.visualstudio.com/api/extension-guides/ai/tools), [extension hosts](https://code.visualstudio.com/api/advanced-topics/extension-host), [Claude archive sources](https://code.claude.com/docs/en/plugins/marketplace-reference), [Claude limits](https://code.claude.com/docs/en/plugins/host-marketplace), [Codex packaging](https://developers.openai.com/plugins/build/plugins), [Node downloads and verification](https://nodejs.org/en/download).
 
 Prepared archive catalogs can be generated with `node scripts/write-portable-marketplace.cjs --archive <actual-zip> --url <immutable-published-https-url> --out <new-catalog.json>`. This writes a checksum-pinned catalog; it neither uploads nor publishes it.
+
+## Stable release sequence
+
+The release tag must match the extension version and point to `main`. The reusable delivery workflow qualifies five private runtimes, builds platform VSIX CLI payloads, tests a packaged VSIX in a real VS Code host (including a terminal with empty PATH), installs complete Claude/Codex packages using their actual managers, and builds universal agent archives. The stable release uploads platform VSIXs, agent archives, checksums, installation instructions, and a checksum-pinned Claude catalog as one draft, then publishes it. It updates the existing Claude catalog and publishes each target VSIX to Marketplace when `VSCE_PAT` is configured. Pre-release VSIX publication uses the same platform payloads, but does not promote stable agent catalogs.
+
+The extension and plugin have independent version numbers; release artifacts record the engine version, renderer digest, runtime version and source commit. Creating source changes or CI artifacts alone is not a stable release. A successful public release and catalog publication are the final delivery evidence.

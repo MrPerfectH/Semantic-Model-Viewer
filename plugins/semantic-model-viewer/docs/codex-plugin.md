@@ -4,7 +4,11 @@ The complete plugin includes the CLI, viewer and a private runtime. Users instal
 
 Ask: **“Show Sales, its related tables, and the calculations depending on it.”** The agent uses one `show` command and presents the existing paired Tables/Measures workspace. Relationships, dependency chains, focused metadata queries and portable HTML use the same engine as the Claude plugin and VS Code tools. Model metadata is parsed locally; returned metadata follows the configured agent provider's data handling. No DAX, M or SQL is executed.
 
-This 0.6.0 candidate has not been submitted to the public plugin directory. Complete binary packages are release artifacts; the Git source tree alone is not a no-Node installation. Public installation instructions must point to the published complete package rather than asking users to assemble a CLI.
+This plugin has not been submitted to the public plugin directory. Complete binary packages are release artifacts; the Git source tree alone is not a no-Node installation. Public installation instructions must point to the published complete package rather than asking users to assemble a CLI.
+
+## Install from a stable release
+
+Download `smv-codex-marketplace.zip` from the GitHub release, verify its sibling SHA-256 checksum, and extract it into a permanent user-owned folder. Add the extracted folder with `codex plugin marketplace add <folder>`, then install `semantic-model-viewer@semantic-model-tools` through the plugin UI or `codex plugin add`. The archive already includes the catalog, plugin, CLI and private runtime. No CLI assembly or Node installation is needed. The release also includes a standalone Codex plugin ZIP for compatible plugin-upload interfaces.
 
 ## Authoring and local acceptance
 

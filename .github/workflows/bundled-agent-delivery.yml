@@ -2,6 +2,7 @@ name: Bundled agent delivery
 on:
   pull_request:
   workflow_dispatch:
+  workflow_call:
 permissions:
   contents: read
 jobs:
@@ -28,6 +29,11 @@ jobs:
         run: |
           npm run build:portable -- --host claude --targets ${{ matrix.target }} --runtime-root dist/runtimes --out dist/claude
           npm run build:portable -- --host codex --targets ${{ matrix.target }} --runtime-root dist/runtimes --out dist/codex
+      - name: Build and exercise the VS Code terminal CLI
+        run: |
+          npm run build:vscode-cli -- --target ${{ matrix.target }} --runtime-root dist/runtimes
+          node scripts/test-portable.cjs vscode-extension/cli
+          node scripts/test-vscode-cli.cjs vscode-extension/cli
       - name: Run diagrams and exports with Node absent from PATH
         run: |
           node scripts/test-portable.cjs dist/claude
@@ -68,17 +74,22 @@ jobs:
           done
           npm run build:portable -- --host claude --targets linux-x64,linux-arm64,darwin-x64,darwin-arm64,win-x64 --runtime-root dist/runtimes --out dist/claude-universal --zip dist/smv-claude-portable.zip
           npm run build:portable -- --host codex --targets linux-x64,linux-arm64,darwin-x64,darwin-arm64,win-x64 --runtime-root dist/runtimes --out dist/codex-universal --zip dist/smv-codex-portable.zip
+      - name: Build the ready-to-register Codex marketplace archive
+        run: node scripts/build-codex-marketplace.cjs --plugin dist/codex-universal --out dist/codex-marketplace --zip dist/smv-codex-marketplace.zip
       - name: Install complete packages with the native host managers
         run: |
           npm install --global @anthropic-ai/claude-code@2.1.280 @openai/codex@0.162.1
           node scripts/test-agent-install.cjs claude dist/claude-universal
-          node scripts/test-agent-install.cjs codex dist/codex-universal
+          python3 -m zipfile -e dist/smv-codex-marketplace.zip dist/codex-marketplace-installed
+          node scripts/test-agent-install.cjs codex dist/codex-marketplace-installed
       - uses: actions/upload-artifact@v4
         with:
           name: semantic-model-viewer-complete-agent-packages
           path: |
             dist/smv-*-portable.zip
             dist/smv-*-portable.zip.sha256
+            dist/smv-codex-marketplace.zip
+            dist/smv-codex-marketplace.zip.sha256
           retention-days: 3
           compression-level: 0
   vscode-host:
@@ -91,5 +102,15 @@ jobs:
           node-version: 22
       - run: npm ci --prefix vscode-extension
       - run: node vscode-extension/scripts/sync-viewer.js
+      - run: node scripts/vendor-node.cjs --target linux-x64 --out dist/host-runtimes/linux-x64
+      - run: npm run build:vscode-cli -- --target linux-x64 --runtime-root dist/host-runtimes
+      - name: Package and extract the release VSIX
+        run: |
+          mkdir -p dist
+          npm run package --prefix vscode-extension -- --target linux-x64 --out ../dist/smv-linux-x64.vsix
+          python3 -m zipfile -e dist/smv-linux-x64.vsix dist/installed-vsix
       - name: Exercise native tools and real rendered panes in VS Code
+        env:
+          SMV_TEST_CLI_REQUIRED: '1'
+          SMV_VSCODE_EXTENSION_PATH: dist/installed-vsix/extension
         run: xvfb-run -a node scripts/test-vscode-agent.cjs

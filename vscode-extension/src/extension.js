@@ -79,7 +79,9 @@ function activate(context) {
   );
   const agentTools = vscode.lm && typeof vscode.lm.registerTool === 'function' ? require('./agent-tools').register(context) : null;
   if (agentTools) context.subscriptions.push(agentTools);
-  return { panel, tree, fabricTree, agentTools };
+  const cli = require('./cli').register(context);
+  context.subscriptions.push(cli);
+  return { panel, tree, fabricTree, agentTools, cli };
 }
 
 function deactivate() { if (panel) panel.dispose(); }

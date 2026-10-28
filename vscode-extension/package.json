@@ -31,12 +31,14 @@
     "fabric"
   ],
   "main": "./src/extension.js",
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "contributes": {
     "commands": [
       {
         "command": "semanticModelViewer.open",
-        "title": "Open Model…",
+        "title": "Open Model\u2026",
         "category": "Semantic Model Viewer",
         "icon": "$(type-hierarchy)"
       },
@@ -63,7 +65,7 @@
       },
       {
         "command": "semanticModelViewer.connectFabric",
-        "title": "Connect to Fabric…",
+        "title": "Connect to Fabric\u2026",
         "category": "Semantic Model Viewer",
         "icon": "$(cloud)"
       },
@@ -74,12 +76,12 @@
       },
       {
         "command": "semanticModelViewer.removeFabricModel",
-        "title": "Remove Saved Fabric Model…",
+        "title": "Remove Saved Fabric Model\u2026",
         "category": "Semantic Model Viewer"
       },
       {
         "command": "semanticModelViewer.fabricSwitchAccount",
-        "title": "Switch Fabric Account…",
+        "title": "Switch Fabric Account\u2026",
         "category": "Semantic Model Viewer"
       },
       {
@@ -104,6 +106,11 @@
         "title": "Exclude Workspace Model Folders\u2026",
         "category": "Semantic Model Viewer",
         "icon": "$(filter)"
+      },
+      {
+        "command": "semanticModelViewer.installCli",
+        "title": "Install CLI for External Terminals",
+        "category": "Semantic Model Viewer"
       }
     ],
     "menus": {
@@ -172,7 +179,7 @@
             "type": "string"
           },
           "default": [],
-          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**` or `**/tests/fixtures/**`. Use **Exclude Workspace Model Folders…** in the Semantic Model Viewer sidebar. This filters discovery only; cached Fabric models are listed separately. Hidden folders (`.worktrees`, `.pbi`, `.venv`\u2026), `node_modules` and `.git` are always skipped."
+          "markdownDescription": "Extra glob patterns to skip when looking for models, e.g. `**/Archive/**` or `**/tests/fixtures/**`. Use **Exclude Workspace Model Folders\u2026** in the Semantic Model Viewer sidebar. This filters discovery only; cached Fabric models are listed separately. Hidden folders (`.worktrees`, `.pbi`, `.venv`\u2026), `node_modules` and `.git` are always skipped."
         }
       }
     },

@@ -39,4 +39,8 @@ jobs:
       - name: Publish to the VS Code Marketplace
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
-        run: npx --yes @vscode/vsce@4 publish --packagePath dist/*.vsix --skip-duplicate
+        run: |
+          for package in dist/*.vsix; do
+            test -f "$package"
+            npx --yes @vscode/vsce@4 publish --packagePath "$package" --skip-duplicate
+          done

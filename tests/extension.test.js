@@ -24,7 +24,7 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   const restore = install(vscode);
   const ext = require(path.join(EXT, 'src', 'extension.js'));
   const { panel, tree } = ext.activate(vscode.context);
-  assert.strictEqual(vscode.context.subscriptions.length, 17, 'commands, unified tree view, folder/configuration listeners and panel disposable registered');
+  assert.strictEqual(vscode.context.subscriptions.length, 18, 'commands, unified tree view, folder/configuration listeners and panel disposable registered');
 
   /* --- Activity Bar tree: one row per model, click opens it --- */
   assert.strictEqual(vscode._trees['semanticModelViewer.models'], tree, 'tree provider registered under the view id');

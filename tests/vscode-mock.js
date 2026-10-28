@@ -132,6 +132,7 @@ function makeVscode(opts) {
     _writes: [], _saveDialogs: [], _opened: [], _shown: [], _watchers: [], _panels: panels, _state: state, _trees: {}, _folderListeners: [], _configurationListeners: [], _contexts: {},
     context: {
       extensionUri: Uri.file(opts.extensionRoot),
+      extensionPath: opts.extensionRoot,
       subscriptions: [],
       globalState: {
         keys: () => Array.from(globalState.keys()),

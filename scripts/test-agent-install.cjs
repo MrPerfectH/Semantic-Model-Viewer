@@ -5,7 +5,10 @@ if(process.platform==='win32')throw new Error('Host installer acceptance runs on
 const temp=fs.mkdtempSync(path.join(os.tmpdir(),'smv complete installer '));
 try{
  const catalog=path.join(temp,'catalog'),plugin=path.join(catalog,'plugins/semantic-model-viewer'),config=path.join(temp,'config');
- fs.mkdirSync(path.dirname(plugin),{recursive:true});fs.cpSync(path.resolve(input),plugin,{recursive:true});fs.mkdirSync(config);
+ const suppliedCatalog=host==='codex'&&fs.existsSync(path.join(input,'.agents/plugins/marketplace.json'));
+ if(suppliedCatalog)fs.cpSync(path.resolve(input),catalog,{recursive:true});
+ else{fs.mkdirSync(path.dirname(plugin),{recursive:true});fs.cpSync(path.resolve(input),plugin,{recursive:true});}
+ fs.mkdirSync(config);
  const env={...process.env,...(host==='claude'?{CLAUDE_CONFIG_DIR:config}:{CODEX_HOME:config})};
  if(process.env.SMV_TEST_INSTALL_WITHOUT_PATH==='1')env.PATH='';
  const command=host==='claude'?(process.env.SMV_CLAUDE_COMMAND||'claude'):(process.env.SMV_CODEX_COMMAND||'codex');
@@ -17,9 +20,10 @@ try{
   invoke(['plugin','marketplace','add',catalog]);invoke(['plugin','install','semantic-model-viewer@smv-complete-test','--scope','user','--json']);
   installed=JSON.parse(fs.readFileSync(path.join(config,'plugins/installed_plugins.json'),'utf8')).plugins['semantic-model-viewer@smv-complete-test'][0].installPath;
  }else{
-  fs.mkdirSync(path.join(catalog,'.agents/plugins'),{recursive:true});
-  fs.writeFileSync(path.join(catalog,'.agents/plugins/marketplace.json'),JSON.stringify({name:'smv-complete-test',plugins:[{name:'semantic-model-viewer',source:{source:'local',path:'./plugins/semantic-model-viewer'},policy:{installation:'AVAILABLE',authentication:'ON_USE'},category:'Productivity'}]}));
-  invoke(['plugin','marketplace','add',catalog,'--json']);installed=JSON.parse(invoke(['plugin','add','semantic-model-viewer@smv-complete-test','--json'])).installedPath;
+  if(!suppliedCatalog){fs.mkdirSync(path.join(catalog,'.agents/plugins'),{recursive:true});
+  fs.writeFileSync(path.join(catalog,'.agents/plugins/marketplace.json'),JSON.stringify({name:'smv-complete-test',plugins:[{name:'semantic-model-viewer',source:{source:'local',path:'./plugins/semantic-model-viewer'},policy:{installation:'AVAILABLE',authentication:'ON_USE'},category:'Productivity'}]}));}
+  const marketplace=JSON.parse(fs.readFileSync(path.join(catalog,'.agents/plugins/marketplace.json'),'utf8')).name;
+  invoke(['plugin','marketplace','add',catalog,'--json']);installed=JSON.parse(invoke(['plugin','add','semantic-model-viewer@'+marketplace,'--json'])).installedPath;
  }
  assert.ok(installed);assert.ok(fs.existsSync(path.join(installed,'build-info.json')));
  const result=execFileSync(process.execPath,[path.join(__dirname,'test-portable.cjs'),installed],{env,encoding:'utf8',timeout:120000});

@@ -12,7 +12,7 @@ try{
     const info=JSON.parse(fs.readFileSync(infoFile,'utf8'));
     if(!/^[a-f0-9]{64}$/.test(info.sha256)||!info.files||info.sha256!==require('node:crypto').createHash('sha256').update(JSON.stringify(info.files)).digest('hex'))throw new Error('Invalid portable package identity');
     let selected=root;
-    const live=['show','open','serve'].includes(args[0])&&!args.includes('--out')&&!args.includes('-o');
+    const live=['show','compare','open','serve'].includes(args[0])&&!args.includes('--out')&&!args.includes('-o');
     if(live){
       const cache=path.resolve(process.env.SMV_PACKAGE_CACHE||path.join(os.homedir(),'.cache','semantic-model-viewer','packages'));
       selected=path.join(cache,info.sha256);

@@ -5,13 +5,12 @@
 The `semantic-model-viewer` plugin runs the Semantic Model Viewer CLI through
 Claude's shell tools. It includes the viewer runtime and six skills: setup, open,
 explain, snapshot, stop and the automatically selected model explanation skill.
-Version 0.5.0 is CLI-only: it registers no MCP server and needs no runtime npm
+The plugin is CLI-only: it registers no MCP server and needs no runtime npm
 packages. Users do not install the separate Viewer app or VS Code extension.
 
 ## Install through Claude
 
-Requires Claude Code with plugin support, Node.js 22+ and Git on the machine
-running Claude. Add the marketplace once inside a Claude Code session:
+Requires Claude Code with plugin support and access to the local model files. Complete release packages include their own Node runtime; no separate Node or CLI installation is required. Git is used when adding the repository marketplace. Add the marketplace once inside a Claude Code session:
 
 ```text
 /plugin marketplace add MrPerfectH/Semantic-Model-Viewer#claude-marketplace
@@ -28,7 +27,6 @@ own `semantic-model-tools` marketplace, not an Anthropic directory listing. The
 same catalog can list a separate Semantic Model Cleaner plugin later.
 
 ```text
-/semantic-model-viewer:setup
 /semantic-model-viewer:open Sales.SemanticModel Cost Center
 /semantic-model-viewer:explain Sales.SemanticModel how does Sales LY use dates?
 /semantic-model-viewer:snapshot Sales.SemanticModel
@@ -42,7 +40,7 @@ configuration is needed.
 
 ## CLI workflow
 
-The skills call `node <plugin-root>/bin/smv.cjs` from the user's project. They
+The skills call `/bin/sh <plugin-root>/bin/smv` on macOS/Linux or `<plugin-root>/bin/smv.cmd` on Windows from the user's project. They use the package's private runtime, not a PATH lookup. They
 use `show` for combined browser views and `relations`/`dependents` for focused metadata; `discover` finds models and `inspect` supplies broad inventories, `session` commands for revisions, selection and exports, and
 `snapshot` for standalone HTML. See [the exact CLI workflow](cli-plugin-workflow.md).
 
@@ -97,14 +95,14 @@ CLI records it creates, not arbitrary processes or historical protocol sessions.
 
 If commands are missing, check `/plugin` for the installed version and loading
 errors. Avoid loading an older checkout with `--plugin-dir` at the same time.
-If a shell command cannot find Node, install Node.js 22+ on that machine. If the
+If the packaged launcher reports a missing runtime, check that the installed plugin came from a complete release archive. Source-only development payloads require an explicit developer runtime. If the
 browser cannot reach the local URL, export an offline file rather than exposing
 the model publicly. Paths on another computer cannot be used locally.
 
 ## Develop and verify
 
 Developers can load the checkout directly with `claude --plugin-dir <checkout>`.
-Running the plugin's CLI needs no npm install. Repository development and legacy
+Source checkouts require Node.js 22+ (`node bin/smv.cjs`), or an explicit `SMV_NODE` for the package-local launcher. Complete portable packages need neither a system runtime nor npm install. Repository development and legacy
 adapter tests have dev dependencies; use `npm ci` to run the full test suite.
 
 `npm run test:plugin` tests the Viewer CLI from a separate project, using an
@@ -122,22 +120,18 @@ make an LLM request. To verify the published source:
 npm run test:marketplace -- MrPerfectH/Semantic-Model-Viewer#claude-marketplace
 ```
 
-`npm run build:plugin -- --out <new-directory>` creates a self-contained plugin
+`npm run build:plugin -- --out <new-directory>` creates a source-only plugin
 payload from the package's file list. It omits the repository's adapter code,
 development dependencies and marketplace catalog, and writes a dependency-free
-package manifest. The catalog installs `plugins/semantic-model-viewer` from the
-dedicated `claude-marketplace` branch, so Claude does not install the repository's
-development packages alongside the plugin.
+package manifest. For complete releases use `build:portable`, which adds verified runtime binaries. The stable release workflow updates the dedicated `claude-marketplace` branch to an immutable, checksum-pinned release archive only after publication.
 
-CI runs the checks on Linux, macOS and Windows. Publish the source changes and a
-freshly built `plugins/semantic-model-viewer` payload together, with a new plugin
-manifest version. Build releases from a clean checkout so unrelated work is not
+CI tests native private runtimes on Linux, macOS and Windows, and installs complete Claude/Codex payloads with their actual host managers. Source-only marketplace checks remain separate. Update the plugin manifest version for a release. Build releases from a clean checkout so unrelated work is not
 included in viewer assets. Shell-command behavior in an interactive Claude
 session still needs a user smoke test.
 
-## CLI 0.3 workflow
+## Agent workflow
 
-Run `/semantic-model-viewer:setup` once for a stable `smv` terminal command. Then
+In these examples `smv` means the bundled launcher; agents do not run setup.
 `smv show <model> --table "Cost Center" --related --dependents` returns one reusable
 workspace with independent Tables and Measures views. `relations` and `dependents`
 return small JSON answers; add `--details` for evidence. `session list` and
@@ -146,8 +140,8 @@ version 2 throughout; the version 1 walkthrough envelope is a separate format.
 See [CLI plugin workflow](cli-plugin-workflow.md) for the complete reference.
 
 
-The next CLI workspace workflow adds optional definition fetching through an existing Azure CLI login, `--open none|system` and provenance receipts. It does not bundle a login manager or require Azure CLI for local models. See [workspace workflow](cli-workspace-fetch.md).
+The CLI workspace workflow supports optional definition fetching through an existing Azure CLI login, `--open none|system` and provenance receipts. It does not bundle a login manager or require Azure CLI for local models. See [workspace workflow](cli-workspace-fetch.md).
 
 ### Runtime selection
 
-Plugin setup installs `smv` in plugin mode, following registered plugin upgrades. Running `node bin/smv.cjs install` from a checkout defaults to that checkout, even if an older Claude plugin exists. Use `--source checkout` or `--source plugin` to choose explicitly. Reinstall an existing managed launcher once to adopt this behavior. `smv --where --json` identifies the active version, executable and selection; `smv --version` prints its version. No runtime or remote update is chosen silently. Agents should check once per session, then use a single `show` command for a known model/table rather than running repeated discovery or full inventories.
+The optional legacy setup skill requires system Node.js 22+ and installs a global `smv` in plugin mode, following registered plugin upgrades. Running `node bin/smv.cjs install` from a checkout defaults to that checkout, even if an older Claude plugin exists. Use `--source checkout` or `--source plugin` to choose explicitly. Reinstall an existing managed launcher once to adopt this behavior. `smv --where --json` identifies the active version, executable and selection; `smv --version` prints its version. No runtime or remote update is chosen silently. Agents should check once per session, then use a single `show` command for a known model/table rather than running repeated discovery or full inventories.
