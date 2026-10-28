@@ -41,7 +41,7 @@
   }
   function browseMeasures(app) {
     if(document.body.classList.contains('smv-browse-open')){closeLibrary(true);return;}
-    browseSnapshot=app.measures.captureSnapshot();dirty=true;
+    browseSnapshot=app.measures.captureSnapshot();app.measures.setLibraryCollapsed(false);dirty=true;
     app.measures.cancelSnapshotViewport();if(!app.measures.comparison)app.setState({selMeasure:null,gPin:null,gHover:null});
     document.body.classList.add('smv-browse-open');
     var control=document.querySelector('[data-smv-browse]');

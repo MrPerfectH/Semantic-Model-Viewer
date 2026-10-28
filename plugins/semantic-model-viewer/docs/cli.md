@@ -17,6 +17,13 @@ smv session stop --all
 smv --help
 ```
 
+`show` launches the live interactive viewer by default. Omit `--out` for exploration.
+`--out diagram.png` exports a **static image** and starts **no server**; reserve it
+for documentation or snapshots. `--out diagram.html` saves a standalone interactive
+HTML snapshot without a live server. Both exports confirm their mode on stderr;
+stdout remains JSON. Choose one diagram with `--related`, `--dependents` or `--with`
+when exporting.
+
 `show` returns one reusable side-by-side Tables/Measures workspace and independent
 view URLs. Focused queries return small counts and names; use `--details` for DAX
 or relationship evidence. Full `inspect` remains available for broad inventories.

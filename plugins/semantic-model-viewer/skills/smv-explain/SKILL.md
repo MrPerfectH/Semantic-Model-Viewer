@@ -7,11 +7,11 @@ Use the package-local CLI: `/bin/sh "${CLAUDE_PLUGIN_ROOT}/bin/smv"` on macOS/Li
 
 # Illustrate a model explanation
 
-When loaded through the Claude Code plugin, use `/bin/sh "${CLAUDE_PLUGIN_ROOT}/bin/smv"` from the user's project, and read guides under `${CLAUDE_PLUGIN_ROOT}/docs/`. Always use the bundled executable for plugin requests; do not switch to a global command. `smv --help` lists commands. Keep scope with the user's question: one useful image is sufficient when a walkthrough adds no value. Store generated artifacts in the user's project, not the plugin installation.
+When loaded through the Claude Code plugin, use `/bin/sh "${CLAUDE_PLUGIN_ROOT}/bin/smv"` from the user's project, and read guides under `${CLAUDE_PLUGIN_ROOT}/docs/`. Always use the bundled executable for plugin requests; do not switch to a global command. `smv --help` lists commands. Lead with the live interactive viewer for exploration and explanations: omit --out. Use static images only when the user needs documentation or a snapshot. Store generated artifacts in the user's project, not the plugin installation.
 
 For a known table diagram, start with ONE `smv show <model-path> --table "<name>" --related --dependents` call. For metadata-only questions use `smv relations <model-path> --table "<name>"` and `smv dependents <model-path> --table "<name>"`; add `--details` for formulas or path evidence. Use `smv inspect <model-path>` only for a broader schema/query-ID inventory. Inputs are a TMDL model folder or a BIM file. Do not guess identifiers from labels. `smv discover <folder>` lists model paths if needed.
 
-Create a version 2 JSON view. For example:
+For documentation images or an explicitly requested snapshot, create a version 2 JSON view. For example:
 
 ```json
 {
@@ -52,6 +52,6 @@ For the common table explanation, prefer `smv show <model> --table "<name>" --re
 
 ## Start with a question diagram
 
-For a relationship between two tables run `smv show <model> --table "<A>" --with "<B>"`. For upstream tables use `--related --direction incoming`; downstream tables use `--related --direction outgoing`; calculation dependencies use `--dependents`. Give the diagram URL first and explain what its arrows mean. `--out diagram.html` or `--out diagram.png` generates one portable diagram in the same command, without authoring view JSON. HTML contains the full model metadata and DAX. PNG needs Chrome/Chromium. Use qualified endpoint names and inactive-edge evidence from `relations`; use the `via` chain from `dependents` to explain an indirect calculation. A physical connection through intermediate tables does not necessarily propagate filters; follow the reported filter direction rather than inferring from proximity.
+For a relationship between two tables run `smv show <model> --table "<A>" --with "<B>"`. For upstream tables use `--related --direction incoming`; downstream tables use `--related --direction outgoing`; calculation dependencies use `--dependents`. Give the diagram URL first and explain what its arrows mean. `--out diagram.png` exports a static image and starts no server; omit `--out` to launch the live interactive viewer instead. Use it only for docs or snapshots. `--out diagram.html` exports a standalone interactive snapshot, also without a server. HTML contains the full model metadata and DAX. PNG needs Chrome/Chromium. Use qualified endpoint names and inactive-edge evidence from `relations`; use the `via` chain from `dependents` to explain an indirect calculation. A physical connection through intermediate tables does not necessarily propagate filters; follow the reported filter direction rather than inferring from proximity.
 
 For two-measure questions, use one `smv compare <model> --measure "<A>" --with "<B>"` call. Open `views[0].url`, or use `--out comparison.html` for a portable file. It reuses the native Measures workspace and shows source references and inline DAX. Read `docs/measure-comparison.md` for scope and color semantics. Preserve the distinction between shared objects and extra connections. Do not claim numeric equivalence or relationship-context simulation from static references.

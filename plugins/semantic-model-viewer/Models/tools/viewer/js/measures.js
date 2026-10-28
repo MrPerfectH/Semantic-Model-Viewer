@@ -17,6 +17,7 @@
   var instanceId = 0;
   function MeasuresView(app, host, options) {
     this.options = options || {};
+    this.libraryId = "mv-library-" + (instanceId + 1);
     this.markerId = "mv-flow-arrow-" + (++instanceId);
     this.app = app;
     this.host = host;
@@ -37,6 +38,7 @@
     this._showSources = prefs.sources === true;
     this._fmt = choice(prefs.fmt, ['original', 'long', 'short'], 'long');
     this._folds = {};
+    this._libraryCollapsed = prefs.libraryCollapsed === true;
   }
 
   MeasuresView.prototype = {
@@ -72,6 +74,7 @@
         version: 1, selectedMeasure: selected, comparisonMeasure: comparison, source: source, directOnly: !!source && data.directOnly === true,
         extraMeasures: selected && !source ? validNames(data.extraMeasures, measures, CAP) : [],
         library: {
+          collapsed: library.collapsed === true,
           query: typeof library.query === 'string' ? library.query.slice(0, 10000) : '',
           visibility: choice(library.visibility, ['all', 'visible', 'hidden'], 'all'),
           homeTable: typeof library.homeTable === 'string' && tables.has(library.homeTable) ? library.homeTable : '',
@@ -115,7 +118,7 @@
       return this.sanitizeSnapshot({
         selectedMeasure: state.selMeasure, comparisonMeasure: state.gPin, source: state.dependencySource, directOnly: state.dependencyDirectOnly,
         extraMeasures: Object.keys(state.gExtra || {}).filter(function (name) { return !!state.gExtra[name]; }),
-        library: { query: state.mvQuery, visibility: state.mvFilter, homeTable: state.mvTable,
+        library: { collapsed: this._libraryCollapsed, query: state.mvQuery, visibility: state.mvFilter, homeTable: state.mvTable,
           openFolders: Object.keys(state.mvOpen || {}).filter(function (name) { return !!state.mvOpen[name]; }), width: state.mvW,
           sourceMode: this.sourceMode(), pickingSource: !!state.mvSourcePicking, sourceQuery: state.mvSourceQuery, impactQuery: state.mvImpactQuery,
           openTables: Object.keys(state.mvSourceOpen || {}).filter(function (name) { return !!state.mvSourceOpen[name]; }) },
@@ -134,6 +137,7 @@
       if (!value || value.version !== 1 || !this.app.model || !Array.isArray(this.app.model.tables) || !this.app.model.byName) return false;
       var data = this.sanitizeSnapshot(value), prefs = data.preferences, self = this;
       this.cancelSnapshotViewport();
+      this._libraryCollapsed = data.library.collapsed;
       this._workspaceMode = prefs.mode; this._splitLayout = prefs.split; this._graphOrientation = prefs.orientation;
       this._splitShares = { beside: prefs.besideShare, below: prefs.belowShare }; this._wrapDax = prefs.wrap; this._showSources = prefs.sources; this._fmt = prefs.fmt; this._inlineDax = prefs.inline; this._plainDax = prefs.plain;
       this._mainKey = null; this._railKey = null; this._daxKey = null; this._gC = null; this._shellModel = null;
@@ -1001,15 +1005,15 @@
       var self = this, app = this.app;
       U.clear(this.host);
       var wrap = el('div', { cls: 'mv-workspace' });
-      var pane = el('aside', { cls: 'mv-library', 'aria-label': 'Measure library', style: this.paneStyle() });
+      var pane = el('aside', { id: this.libraryId, cls: 'mv-library', 'aria-label': 'Measure library', style: this.paneStyle() });
       var top = el('div', { cls: 'mv-library-top' });
       top.appendChild(el('div', { cls: 'mv-library-heading' }, [
         el('span', { cls: 'mv-eyebrow', text: 'MEASURE LIBRARY' }),
         el('button', { cls: 'mv-text-button', text: 'Overview', onClick: function () { app.setState({ selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, gPin: null, gHover: null }); } })
       ]));
-      if(document.body.dataset.smvInteractive&&window.SMVInteractive)top.querySelector('.mv-library-heading').appendChild(el('button', {
+      top.querySelector('.mv-library-heading').appendChild(el('button', {
         cls:'mv-text-button',text:'Close','aria-label':'Close measure library',
-        onClick:function(){window.SMVInteractive.closeLibrary(true);}
+        onClick:function(){if(window.SMVInteractive)window.SMVInteractive.closeLibrary(true);self.setLibraryCollapsed(true,true);}
       }));
       var sourceModes = el('div', { cls: 'mv-filter-tabs mv-start-tabs', role: 'group', 'aria-label': 'Start analysis from' });
       this.sourceModeButtons = {};
@@ -1072,9 +1076,31 @@
         }
       });
       this.mainEl = el('main', { cls: 'mv-main', 'aria-label': 'Measure analysis' });
-      wrap.appendChild(pane); wrap.appendChild(resizer); wrap.appendChild(this.mainEl);
+      this.workspace = wrap; this.libraryResizer = resizer;
+      pane.addEventListener('keydown',function(e){if(e.key==='Escape'&&!e.target.closest('dialog')){e.preventDefault();self.setLibraryCollapsed(true,true);}});
+      wrap.appendChild(pane); wrap.appendChild(resizer);
+      var column = el('div', {cls:'mv-main-column'});
+      if (!this.options.comparison) {
+        this.libraryToggle = el('button', { cls:'mv-button', text:'Measure library', 'aria-controls':this.libraryId, 'aria-expanded':String(!this._libraryCollapsed), onClick:function(){self.setLibraryCollapsed(!self._libraryCollapsed,true);} });
+        column.appendChild(el('div',{cls:'mv-library-control'},[this.libraryToggle]));
+      }
+      column.appendChild(this.mainEl); wrap.appendChild(column);
       this.host.appendChild(wrap);
       this._built = true; this._shellModel = app.modelKey;
+    },
+    setLibraryCollapsed: function (collapsed, focus) {
+      if (collapsed && window.SMVInteractive && document.body.classList.contains('smv-browse-open')) window.SMVInteractive.closeLibrary(true);
+      this._libraryCollapsed = !!collapsed;
+      var prefs = store.getJSON(PREF_KEY, {}) || {}; prefs.libraryCollapsed = this._libraryCollapsed; store.setJSON(PREF_KEY, prefs);
+      this.updateLibrary();
+      if (focus) { var target = collapsed ? this.libraryToggle : this.qInput; if (target) target.focus(); }
+    },
+    updateLibrary: function () {
+      if (!this.workspace) return;
+      this.workspace.dataset.libraryCollapsed = String(this._libraryCollapsed);
+      this.pane.inert = this._libraryCollapsed;
+      this.libraryResizer.hidden = this._libraryCollapsed;
+      if (this.libraryToggle) this.libraryToggle.setAttribute('aria-expanded', String(!this._libraryCollapsed));
     },
     paneStyle: function () { return 'width:' + Math.max(240, Math.min(480, this.app.state.mvW || 296)) + 'px;'; },
     libraryQueryField: function () { return this.sourceMode() === 'measures' ? 'mvQuery' : this.app.state.mvSourcePicking || !this.app.state.dependencySource ? 'mvSourceQuery' : 'mvImpactQuery'; },
@@ -1423,7 +1449,7 @@
     },
     savePreferences: function () {
       if (this.options.comparison) return;
-      store.setJSON(PREF_KEY, { mode: this._workspaceMode, split: this._splitLayout, orientation: this._graphOrientation,
+      store.setJSON(PREF_KEY, { libraryCollapsed: this._libraryCollapsed, mode: this._workspaceMode, split: this._splitLayout, orientation: this._graphOrientation,
         besideShare: this._splitShares.beside, belowShare: this._splitShares.below, wrap: this._wrapDax, sources: this._showSources, fmt: this._fmt });
     },
     setWorkspaceMode: function (mode, persist) {
@@ -2015,6 +2041,7 @@
       this.pane.style.cssText = this.paneStyle();
       this.renderRail();
       this.renderMain();
+      this.updateLibrary();
       this.restorePendingViewport();
     }
   };
