@@ -68,7 +68,14 @@ counts. It follows static DAX table/column references and downstream measure cha
 merely storing a measure in the table does not imply use. `--details` adds path
 and relationship evidence or DAX. These are metadata summaries, not executed results.
 A lone table argument auto-discovers only when the current folder contains exactly
-one non-backup model; otherwise supply its path explicitly.
+one working model; otherwise supply its path or name.
+
+Every command that takes a model accepts a path, or a model name or discovery ID
+found below the current folder: `smv show "Contoso Retail" --table Inventory`.
+Names match case-insensitively. `smv discover <folder>` lists working models first,
+with `format` and `role`. Copies inside test, fixture, verification, backup or build
+folders, and inside packaged plugins, are hidden while a working model exists;
+`--all` lists them with a `reason`. Ambiguous or unknown names fail with candidates.
 
 For a broad inventory, `inspect <model>` remains available. `inspect <model>
 --table <name>` returns that table, its relationships and measure-user formulas.
