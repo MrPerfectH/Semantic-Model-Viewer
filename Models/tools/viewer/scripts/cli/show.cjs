@@ -14,6 +14,7 @@ async function show(source,options,providedPlan){
     const prepared=api.prepare(source,item.view);
     if(plan.modelHash&&plan.modelHash!==prepared.hash)throw Object.assign(new Error('Source changed while planning the comparison; retry with stable files'),{code:'SOURCE_CHANGED'});
     const {receipt,receiptPath}=await provenance.publish(source,prepared,target,options,async candidate=>{if(ext==='.png')await require('./capture.cjs').capture(prepared.html,candidate,prepared.view,options);else fs.writeFileSync(candidate,prepared.html,{flag:'wx'});});
+    process.stderr.write(ext==='.png'?'smv show: exported a static image; no server was started. Omit --out for the live interactive viewer.\n':'smv show: exported a standalone interactive HTML snapshot; no server was started. Omit --out for the live viewer.\n');
     const opening=await opener.open(target,options);
     return {...(plan.analysis?{analysis:plan.analysis}:{}),receipt,receiptPath,opening,source:plan.source,table:plan.table,question:item.label,answer:item.answer,diagram:prepared.summary,legend:plan.legend,counts:plan.counts,warnings:plan.warnings,artifact:{path:target,format:ext.slice(1),bytes:fs.statSync(target).size,contents:ext==='.html'?'Interactive viewer containing full-model metadata and DAX; the starting diagram is focused.':'Image of the focused diagram.'},...(item.evidence?{evidence:item.evidence}: {})};
   }

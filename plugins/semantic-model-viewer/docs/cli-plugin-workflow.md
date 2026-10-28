@@ -24,6 +24,16 @@ they never need to guess a cache path or run `--where` before each operation.
 
 ## Common task: one command
 
+Omit `--out` to launch the live interactive viewer. `--out diagram.png` exports
+a static image and starts no server; use it for documentation or snapshots only.
+`--out diagram.html` saves a standalone interactive snapshot without a live server.
+Exports confirm the mode on stderr and preserve JSON on stdout.
+
+Focused calculation diagrams start Left → right with the Measure library collapsed.
+Use the visible **Measure library** button to browse; Escape closes it and returns
+keyboard focus. Library visibility is saved with Measures snapshots. Explicit
+Top → bottom / Bottom → top choices and saved orientations remain available.
+
 ```sh
 smv show 'Sales.SemanticModel' --table 'Cost Center' --related --dependents
 ```

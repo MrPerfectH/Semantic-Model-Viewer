@@ -171,3 +171,14 @@ test('question diagrams replace incompatible engine identities even when the plu
   const repeated=await require('../Models/tools/viewer/scripts/cli/show.cjs').show(model,{table:'Date',related:true,dependents:true});
   assert.equal(repeated.sessionId,current.sessionId);assert.ok(repeated.reused);
 });
+
+test('show export announces offline mode on stderr and keeps stdout as JSON',t=>{
+  const {dir,model}=setup(t),target=path.join(dir,'dependency.html');
+  const result=spawnSync(process.execPath,[cli,'show',model,'--table','Inventory','--dependents','--out',target,'--open','none','--json'],{cwd:dir,encoding:'utf8',timeout:20000});
+  assert.equal(result.status,0,result.stderr);const output=JSON.parse(result.stdout);
+  assert.equal(output.artifact.format,'html');assert.equal(output.sessionFile,undefined);
+  assert.match(result.stderr,/standalone interactive HTML snapshot; no server was started/);
+  assert.deepEqual(run(dir,'session','list'),[]);
+  const help=spawnSync(process.execPath,[cli,'show','--help'],{encoding:'utf8'});
+  assert.match(help.stdout,/static image.*starts no server/);assert.match(help.stdout,/omit --out to launch the live interactive viewer/);
+});

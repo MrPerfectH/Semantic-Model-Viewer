@@ -189,3 +189,24 @@ check(app.explorer.depth==='direct'&&!app.explorer.includeInactive,'question sco
 await smv.apply({version:2,tables:['Date','Sales'],focus:{kind:'table',name:'Date'},paths:{direction:'connected',includeInactive:true,depth:100},arrange:true,banner:false});
 check(app.explorer.direction==='connected'&&app.explorer.includeInactive,'inactive pair diagram controls match authored question');check(!document.getElementById('smv-question-caption'),'a later view clears the previous explanation');
 `));
+
+test('focused dependency library is discoverable without a footer and persists with explicit layout',{skip:!browser},async t=>verify(t,{version:2,mode:'measures',focus:{kind:'table',name:'Inventory'},banner:false,width:640,height:900},`
+const v=app.measures,control=()=>document.querySelector('.mv-library-control button');
+check(v._graphOrientation==='lr','focused graphs default left to right');
+check(control().getBoundingClientRect().width>0,'library toggle visible with hidden footer');
+check(control().getAttribute('aria-expanded')==='false'&&v.pane.inert,'focused library collapsed and untabbable');
+control().click();await frame();check(control().getAttribute('aria-expanded')==='true'&&!v.pane.inert,'library opens');check(document.activeElement===v.qInput,'focus moves to search');
+v.pane.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));await frame();check(v._libraryCollapsed&&document.activeElement===control(),'Escape collapses and returns focus');
+control().click();v.setGraphOrientation('bt');await frame();const saved=smv.inspect().currentView;check(saved.state.measures.library.collapsed===false,'open library captured');
+await smv.apply(saved);await frame();check(!v._libraryCollapsed&&v._graphOrientation==='bt','snapshot restores library and explicit vertical option');
+const snap=Snapshots.capture(app);v.setLibraryCollapsed(true);app.loadSnapshot(snap);await frame();await frame();check(!v._libraryCollapsed,'native snapshot restores visibility');
+v.setLibraryCollapsed(true);await smv.reset();check(v._libraryCollapsed&&v._graphOrientation==='lr','reset returns to focused defaults');
+`));
+
+test('show PNG export confirms static output without polluting JSON',{skip:!browser},t=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'smv-show-png-'));t.after(()=>fs.rmSync(dir,{recursive:true,force:true}));
+ const result=require('node:child_process').spawnSync(process.execPath,[path.join(__dirname,'../bin/smv.cjs'),'show',model,'--table','Inventory','--dependents','--out',path.join(dir,'inventory.png'),'--open','none','--json'],{encoding:'utf8',timeout:30000});
+ assert.equal(result.status,0,result.stderr);const output=JSON.parse(result.stdout);
+ assert.equal(output.artifact.format,'png');assert.equal(output.sessionFile,undefined);assert.match(result.stderr,/exported a static image; no server was started/);
+ assert.equal(fs.readFileSync(output.artifact.path).subarray(1,4).toString(),'PNG');
+});
