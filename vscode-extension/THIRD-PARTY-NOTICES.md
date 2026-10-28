@@ -7,3 +7,5 @@ Semantic Model Viewer is licensed under MIT. Bundled dependencies remain subject
 - Self-contained .NET 8 runtime and transitive native components: see `DOTNET-LICENSE.txt` and `DOTNET-THIRD-PARTY-NOTICES.txt` in the same notices folder.
 
 These terms are separate from the application's MIT license. No Microsoft endorsement is implied.
+
+Power BI Desktop connections include Microsoft.AnalysisServices 19.118.3 and its .NET Framework dependencies. Their license declarations, available notices, and AMO license are included under `resources/windows/amo`. These components retain their own terms. See `tools/powerbi/THIRD-PARTY-NOTICES.md` in the source repository.
