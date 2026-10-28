@@ -45,7 +45,10 @@
     var mx = this.build();
     var openT = function (n) { return function () { app.focusTable(n); }; };
     var wrap = el('section', { 'aria-label': 'Fact relationship matrix', style: 'position:absolute;inset:0;z-index:20;background:#f6f8fc;overflow:auto;' });
-    var inner = el('div', { style: 'padding:24px 24px 32px;box-sizing:border-box;min-width:100%;width:max-content;' });
+    // A percentage-width table inside max-content creates a cyclic intrinsic width
+    // in Chromium versions used by supported VS Code hosts. Let the table's own
+    // minimum width provide horizontal scrolling for dense models instead.
+    var inner = el('div', { style: 'padding:24px 24px 32px;box-sizing:border-box;width:100%;' });
     wrap.appendChild(inner); this.host.appendChild(wrap); this.el = wrap;
 
     inner.appendChild(el('div', { text: 'MODEL STRUCTURE', style: 'font-size:10px;font-weight:700;letter-spacing:1.3px;color:var(--smv-muted,#687991);' }));
