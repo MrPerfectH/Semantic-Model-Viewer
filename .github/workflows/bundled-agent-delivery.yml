@@ -116,4 +116,13 @@ jobs:
         env:
           SMV_TEST_CLI_REQUIRED: '1'
           SMV_VSCODE_EXTENSION_PATH: dist/installed-vsix/extension
-        run: xvfb-run -a node scripts/test-vscode-agent.cjs
+        run: xvfb-run -a node scripts/test-vscode-agent.cjs 2>&1 | tee dist/vscode-host.log
+      - name: Preserve native host failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smv-vscode-host-diagnostics
+          path: |
+            dist/vscode-host.log
+            .vscode-test/user-data/logs/
+          retention-days: 3

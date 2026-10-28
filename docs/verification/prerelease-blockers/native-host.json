@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "host": "vscode",
+  "vscodeVersion": "1.101.0",
+  "nodeVersion": "v22.15.1",
+  "views": [
+    {
+      "label": "Sales \u00b7 Filter paths",
+      "status": "applied",
+      "summary": {
+        "mode": "graph",
+        "focus": {
+          "kind": "table",
+          "name": "Sales"
+        },
+        "countScope": "tables and relationships describe the authored table canvas, including inactive edges between visible tables",
+        "tables": 12,
+        "relationships": 15,
+        "activeRelationships": 14,
+        "inactiveRelationships": 1,
+        "manyToMany": 0,
+        "dependentMeasures": {
+          "direct": 6,
+          "indirect": 28,
+          "total": 34
+        }
+      }
+    },
+    {
+      "label": "Calculations depending on Sales",
+      "status": "applied",
+      "summary": {
+        "mode": "measures",
+        "focus": {
+          "kind": "table",
+          "name": "Sales"
+        },
+        "countScope": "tables and relationships describe the background table canvas; dependentMeasures describes the selected calculation source",
+        "tables": 43,
+        "relationships": 68,
+        "activeRelationships": 65,
+        "inactiveRelationships": 3,
+        "manyToMany": 0,
+        "dependentMeasures": {
+          "direct": 6,
+          "indirect": 28,
+          "total": 34
+        }
+      }
+    }
+  ],
+  "rendered": [
+    {
+      "label": "Sales \u00b7 Filter paths",
+      "status": "applied",
+      "revision": 1,
+      "visible": true,
+      "active": false,
+      "column": 1,
+      "rendered": {
+        "visibility": "visible",
+        "width": 220,
+        "height": 420,
+        "workspace": "graph",
+        "summary": {
+          "workspace": "graph",
+          "tableCanvasTables": 12
+        }
+      }
+    },
+    {
+      "label": "Calculations depending on Sales",
+      "status": "applied",
+      "revision": 2,
+      "visible": true,
+      "active": true,
+      "column": 2,
+      "rendered": {
+        "visibility": "visible",
+        "width": 220,
+        "height": 420,
+        "workspace": "measures",
+        "summary": {
+          "workspace": "measures",
+          "tableCanvasTables": 43,
+          "measureGraphNodes": 34
+        }
+      }
+    }
+  ],
+  "packagedVsixSha256": "d46f809cb6b133d818d9a24a38d13d88ae5d50dfd4025f9acbe971e81d9adc0e",
+  "privateCliNodeVersion": "22.23.4"
+}

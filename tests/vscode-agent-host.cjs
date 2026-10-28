@@ -30,6 +30,10 @@ async function run(){
  console.log('SMV host groups '+JSON.stringify(vscode.window.tabGroups.all.map(g=>({column:g.viewColumn,tabs:g.tabs.map(t=>t.label)}))));
  while(statuses.some(view=>view.status==='awaiting-viewer')&&Date.now()<deadline){await new Promise(resolve=>setTimeout(resolve,250));statuses=agentTools.status();}
  assert.ok(statuses.every(view=>view.status==='applied'),JSON.stringify({statuses,groups:vscode.window.tabGroups.all.map(g=>({column:g.viewColumn,tabs:g.tabs.map(t=>({label:t.label,active:t.isActive}))}))}));
+ console.log('SMV host rendered '+JSON.stringify(statuses));
+ assert.equal(statuses[0].rendered.workspace,'graph');assert.equal(statuses[1].rendered.workspace,'measures');
+ assert.ok(statuses[0].rendered.summary.tableCanvasTables>0);assert.ok(statuses[1].rendered.summary.measureGraphNodes>0);
+ assert.ok(statuses.every(view=>view.rendered.width>0&&view.rendered.height>0&&view.rendered.visibility==='visible'),'Acknowledgements must come from visible, sized panes');
  result=await agentTools.run('show',input);
  assert.ok(result.views.every(view=>view.reused),'Reading acknowledgement must preserve existing exploration');
  const locations=result.views.map(view=>vscode.window.tabGroups.all.find(group=>group.tabs.some(tab=>tab.label===view.label)));
