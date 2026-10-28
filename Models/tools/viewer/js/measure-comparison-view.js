@@ -6,26 +6,27 @@
     this.owner=owner;this.app=owner.app;this.model=this.app.model;
     this.analysis=MeasureComparison.analyze(this.model,spec.left,spec.right,{maxMeasures:spec.maxMeasures||200});
     this.spec={version:1,left:this.analysis.roots[0],right:this.analysis.roots[1],maxMeasures:spec.maxMeasures||200};
-    var opening=saved&&saved.comparison||spec;this.active=opening.active===1?1:0;this.layout=opening.layout==='tabs'?'tabs':'rows';this.views=[];this.rows=[];this.tabs=[];
+    var opening=saved&&saved.comparison||spec;this.active=opening.active===1?1:0;this.layout='rows';this.views=[];this.rows=[];this.tabs=[];
+    this.settings=Object.assign({mode:'split',split:'beside',orientation:'lr',sources:true,inline:true,plain:true,fmt:'original',wrap:true},saved&&saved.comparison.rows&&saved.comparison.rows[0]&&saved.comparison.rows[0].preferences||{});
     var self=this;U.clear(owner.host);owner._built=false;
-    this.shell=el('div',{cls:'mv-comparison-shell'});this.workspace=el('div',{cls:'mv-comparison-workspace'});
+    this.shell=el('div',{cls:'mv-workspace mv-comparison-shell'});this.workspace=el('div',{cls:'mv-comparison-workspace'});
     this.strip=el('div',{cls:'mv-comparison-strip'});this.summary=el('p',{cls:'mv-comparison-summary',text:this.analysis.summary});
     var controls=el('div',{cls:'mv-comparison-controls'});
     this.analysis.roots.forEach(function(root,i){
-      var select=el('select',{cls:'mv-layout-select','aria-label':i?'Second measure':'First measure',onChange:function(){var pair=self.analysis.roots.slice();pair[i]={kind:'measure',table:self.model.msrHome[select.value],name:select.value};try{owner.setComparison(Object.assign({},self.spec,{left:pair[0],right:pair[1],active:self.active,layout:self.layout}));}catch(error){select.value=root.name;self.notice.textContent=error.message;}}});
+      var select=el('select',{cls:'mv-layout-select','aria-label':i?'Second measure':'First measure',onChange:function(){var pair=self.analysis.roots.slice();pair[i]={kind:'measure',table:self.model.msrHome[select.value],name:select.value};try{self.replaceRoots(pair);}catch(error){select.value=root.name;self.notice.textContent=error.message;}}});
       Object.keys(self.model.msrHome).sort().forEach(function(n){select.appendChild(el('option',{value:n,text:n}));});select.value=root.name;
       controls.appendChild(el('label',{},[el('span',{text:i?'with':'Compare'}),select]));
     });
-    var layout=el('select',{cls:'mv-layout-select','aria-label':'Comparison layout',onChange:function(){self.layout=layout.value;self.refresh();}},[el('option',{value:'rows',text:'Both measures'}),el('option',{value:'tabs',text:'One at a time'})]);layout.value=this.layout;
-    controls.append(layout,el('button',{cls:'mv-button',text:'Exit comparison',onClick:function(){owner.clearComparison();self.app.setState({selMeasure:self.analysis.roots[self.active].name,dependencySource:null,gPin:null,gExtra:{},gHover:null});}}));
+    controls.appendChild(el('button',{cls:'mv-button',text:'Exit comparison',onClick:function(){owner.clearComparison();self.app.setState({selMeasure:self.analysis.roots[self.active].name,dependencySource:null,gPin:null,gExtra:{},gHover:null});}}));
+    this.sharedControls=this.buildControls();
     this.notice=el('p',{cls:'mv-comparison-notice',role:'status',text:this.analysis.warnings.join(' ')});
-    this.strip.append(controls,this.summary,el('p',{cls:'mv-comparison-legend',text:'Blue: shared object · Pink: shared written definition · Amber: side-specific logic or connection · Membership is within this analyzed scope. Expanded DAX is for inspection; it does not preserve implicit context transition.'}),this.notice);
+    this.strip.append(controls,this.sharedControls,this.summary,el('p',{cls:'mv-comparison-legend',text:'Blue: shared object · Pink: shared written definition · Amber: side-specific logic or connection · Membership is within this analyzed scope. Expanded DAX is for inspection; it does not preserve implicit context transition.'}),this.notice);
     this.tabbar=el('div',{cls:'mv-comparison-tabs',role:'tablist','aria-label':'Compared measures'});this.rowHost=el('div',{cls:'mv-comparison-rows'});
     this.workspace.append(this.strip,this.tabbar,this.rowHost);this.shell.appendChild(this.workspace);owner.host.appendChild(this.shell);
     this.analysis.roots.forEach(function(root,i){
       var rowApp=Object.create(self.app);rowApp.state=Object.assign({},self.app.state,{viewMode:'measures',selMeasure:root.name,dependencySource:null,gPin:null,gHover:null,gExtra:{},mvQuery:'',mvOpen:self.app.mvOpenFor(root.name),mvTable:''});
       var host=el('div',{cls:'mv-comparison-child'}),row=el('section',{cls:'mv-comparison-row',data:{comparisonRow:String(i)},'aria-label':'Comparison '+(i?'B':'A')+': '+root.name});
-      var view=new MeasuresView(rowApp,host,{comparison:true,onGraphChange:function(){self.schedule();},comparisonRoots:self.analysis.roots.map(function(r){return r.name;}),comparisonGroups:function(){return Object.assign({},self.views[0].graphGroupState(),self.views[1].graphGroupState());},analysis:function(){return self.analysis;},onPickMeasure:function(n){var pair=self.analysis.roots.slice();if(n===pair[1-i].name){self.notice.textContent='Choose two different comparison roots.';return;}pair[i]={kind:'measure',table:self.model.msrHome[n],name:n};owner.setComparison(Object.assign({},self.spec,{left:pair[0],right:pair[1],active:self.active,layout:self.layout}));},layout:function(v){return self.buildLayout(v);},decorateObject:function(node,kind,table,name){self.decorateObject(node,kind,table,name);},decorateEdge:function(node,edge){self.decorateEdge(node,edge);}});
+      var view=new MeasuresView(rowApp,host,{comparison:true,comparisonSide:i,onSplitShare:function(layout,value){self.views.forEach(function(v,j){if(j!==i){v._splitShares[layout]=value;if(v.analysisBody)v.applyWorkspaceLayout();}});},onGraphChange:function(){self.schedule();},comparisonRoots:self.analysis.roots.map(function(r){return r.name;}),comparisonGroups:function(){return Object.assign({},self.views[0].graphGroupState(),self.views[1].graphGroupState());},analysis:function(){return self.analysis;},onPickMeasure:function(n){var pair=self.analysis.roots.slice();if(n===pair[1-i].name){self.notice.textContent='Choose two different comparison roots.';return;}pair[i]={kind:'measure',table:self.model.msrHome[n],name:n};self.replaceRoots(pair);},layout:function(v){return self.buildLayout(v);},decorateObject:function(node,kind,table,name){self.decorateObject(node,kind,table,name);},decorateEdge:function(node,edge){self.decorateEdge(node,edge);}});
       view._showSources=true;view._inlineDax=true;view._plainDax=true;view._fmt='original';view._wrapDax=true;view._splitShares.beside=.65;
       rowApp.measures=view;
       rowApp.setState=function(patch,cb){
@@ -43,17 +44,53 @@
       self.tabs.push(tab);self.tabbar.appendChild(tab);
     });
     this.views.forEach(function(v,i){if(saved&&Array.isArray(saved.comparison.rows)&&saved.comparison.rows[i]){var state=Object.assign({},saved.comparison.rows[i],{selectedMeasure:self.analysis.roots[i].name,source:null});v.restoreSnapshot(state);if(saved.comparison.folds&&saved.comparison.folds[i])v._folds=JSON.parse(JSON.stringify(saved.comparison.folds[i]));}});
+    this.settings=Object.assign({},this.settings,this.views[0].captureSnapshot().preferences);
+    this.views[1]._splitShares=Object.assign({},this.views[0]._splitShares);this.syncControls();
     this.resize=function(){self.refresh();};g.addEventListener('resize',this.resize);
   }
   MeasureComparisonView.prototype={
+    replaceRoots:function(pair){
+      var state=this.captureSnapshot();state.comparison.left=pair[0];state.comparison.right=pair[1];
+      state.comparison.rows.forEach(function(row,i){row.selectedMeasure=pair[i].name;row.comparisonMeasure=null;row.extraMeasures=[];row.graph={autoFit:true};});state.comparison.folds=[{},{}];
+      this.owner.setComparison(Object.assign({},this.spec,{left:pair[0],right:pair[1]}),state);
+    },
+    buildControls:function(){
+      var self=this,bar=el('div',{cls:'mv-comparison-settings','aria-label':'Settings for both measures'});this.settingControls={};
+      var modes=el('div',{cls:'mv-mode-switch',role:'group','aria-label':'Analysis view for both measures'});
+      [['split','Split view'],['dax','DAX'],['graph','Dependencies']].forEach(function(item){var button=el('button',{text:item[1],'aria-pressed':String(self.settings.mode===item[0]),onClick:function(){self.setSetting('mode',item[0]);}});self.settingControls['mode-'+item[0]]=button;modes.appendChild(button);});bar.appendChild(modes);
+      function select(key,label,options){var control=el('select',{cls:'mv-layout-select','aria-label':label,onChange:function(){self.setSetting(key,control.value);}},options.map(function(item){return el('option',{value:item[0],text:item[1]});}));control.value=self.settings[key];self.settingControls[key]=control;bar.appendChild(control);}
+      function toggle(key,label){var control=el('button',{cls:'mv-button',text:label,'aria-pressed':String(!!self.settings[key]),onClick:function(){self.setSetting(key,!self.settings[key]);}});self.settingControls[key]=control;bar.appendChild(control);}
+      select('split','DAX position for both measures',[['beside','DAX beside graph'],['below','DAX below graph']]);
+      select('orientation','Graph direction for both measures',[['lr','Left → right'],['tb','Top → bottom'],['bt','Bottom → top']]);
+      toggle('sources','Table and column references');toggle('wrap','Wrap lines');toggle('inline','Inline measures');toggle('plain','Compact');
+      select('fmt','DAX layout for both measures',[['original','Original'],['long','Long lines'],['short','Short lines']]);
+      bar.appendChild(el('button',{cls:'mv-button',text:'Loaded originals',onClick:function(){self.settings.inline=false;self.settings.fmt='original';self.setSetting('inline',false);}}));
+      return bar;
+    },
+    setSetting:function(key,value){
+      this.settings[key]=value;var self=this;
+      this.views.forEach(function(v){if(['sources','orientation'].includes(key)){v.rememberGraphViewport();v._gC=null;v._mainKey=null;}v._daxKey=null;});
+      this.syncControls();this.update();
+    },
+    syncControls:function(){
+      var self=this;
+      Object.keys(this.settingControls).forEach(function(k){var c=self.settingControls[k];if(k.indexOf('mode-')===0)c.setAttribute('aria-pressed',String(self.settings.mode===k.slice(5)));else if(c.tagName==='SELECT')c.value=self.settings[k];else c.setAttribute('aria-pressed',String(!!self.settings[k]));});
+      this.settingControls.plain.hidden=!this.settings.inline;this.settingControls.split.hidden=this.settings.mode!=='split';
+    },
+    applySettings:function(v){
+      var s=this.settings;v._workspaceMode=s.mode;v._splitLayout=s.split;v._graphOrientation=s.orientation;v._showSources=s.sources;v._wrapDax=s.wrap;v._inlineDax=s.inline;v._plainDax=s.plain;v._fmt=s.fmt;
+      if(v.daxGrid)v.daxGrid.classList.toggle('mv-no-wrap',!s.wrap);
+      if(v.orientationSelect)v.orientationSelect.value=s.orientation;
+      if(v.directionLabel)v.updateDirectionLabel();
+    },
     schedule:function(){if(this.frame)return;var self=this;this.frame=requestAnimationFrame(function(){self.frame=0;self.update();});},
     update:function(){
       if(this.model!==this.app.model){var spec=this.spec;try{this.owner.setComparison(spec);}catch(error){this.owner.clearComparison();this.app.state.selMeasure=null;this.owner.update();}return;}
       var on=this.app.state.viewMode==='measures'&&this.app.state.loaded;this.shell.hidden=!on;if(!on)return;
-      this.views.forEach(function(v){v.update();if(v.pane&&!v._comparisonResize)v._comparisonResize=v.pane.nextElementSibling;});this.refresh();
+      var self=this;this.views.forEach(function(v){self.applySettings(v);v.update();if(v.pane&&!v._comparisonResize)v._comparisonResize=v.pane.nextElementSibling;});this.refresh();
     },
     refresh:function(){
-      var self=this,narrow=innerWidth<=1100,tabbed=narrow||this.layout==='tabs';this.workspace.dataset.layout=tabbed?'tabs':'rows';
+      var self=this,narrow=innerWidth<=1100,tabbed=narrow;this.workspace.dataset.layout=tabbed?'tabs':'rows';
       this.views.forEach(function(v,i){
         self.rows[i].hidden=tabbed&&i!==self.active;self.tabs[i].setAttribute('aria-selected',String(i===self.active));self.tabs[i].tabIndex=i===self.active?0:-1;
         // Reuse the active native library and its resizer; state stays with its row.
@@ -70,6 +107,8 @@
     decorateObject:function(node,kind,table,name){
       node.dataset.smvKind=kind;node.dataset.smvName=name;if(table)node.dataset.smvTable=table;
       var membership=MeasureComparison.membership(this.analysis,kind,table,name);node.dataset.comparisonMembership=membership;
+      var rootIndex=kind==='measure'?this.analysis.roots.findIndex(function(r){return r.table===table&&r.name===name;}):-1;
+      if(rootIndex>=0){node.dataset.comparisonFocus=rootIndex===0?'A':'B';node.title+=' · Comparison focus '+node.dataset.comparisonFocus;}else delete node.dataset.comparisonFocus;
       node.classList.toggle('mv-compare-only',membership==='left'||membership==='right');node.classList.toggle('mv-compare-common',membership==='shared');
       node.title+=(membership==='shared'?' · Shared object':membership==='unknown'?' · Membership unknown within scope':' · Only in '+(membership==='left'?'A':'B')+' within the analyzed scope');
     },

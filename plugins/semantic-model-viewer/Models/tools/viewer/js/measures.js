@@ -1282,6 +1282,7 @@
           el('span', { text: matchCount + (matchCount === 1 ? ' matching measure' : ' matching measures'), 'aria-live': 'polite' }),
           el('button', { cls: 'mv-button mv-button-primary', text: 'View matching results', onClick: function () { self.openMatchingResults(); } })
         ]) : null,
+        all.length>1 && !this.options.comparison ? el('button',{cls:'mv-button mv-button-primary',text:'Compare measures',onClick:function(){self.openComparisonPicker();}}) : null,
         stats,
         all.length ? el('h2', { text: all[0].n ? 'Start with a widely used measure' : 'Explore your measures' }) : null,
         list,
@@ -1305,7 +1306,7 @@
       if (usage) metadata.appendChild(el('span', { cls: 'mv-chip mv-chip-blue', text: usage.length + (usage.length === 1 ? ' report page' : ' report pages'), title: app.useTip(usage) }));
       else if (!usage && app._usage) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'No direct report usage', title: 'Not directly referenced in ' + ((app._usageMeta && app._usageMeta.report) || 'the scanned report') + '. It may feed other measures that are used.' }));
       var header = el('header', { cls: 'mv-analysis-header' });
-      var heading = el('div', { cls: 'mv-heading-block' }, [el('div', { cls: 'mv-eyebrow', text: 'ANALYZING MEASURE' }), el('h1', { text: sn }), metadata]);
+      var heading = el('div', { cls: 'mv-heading-block' }, [el('div', { cls: 'mv-eyebrow', text: this.options.comparison ? 'COMPARISON FOCUS ' + (this.options.comparisonSide===1?'B':'A') : 'ANALYZING MEASURE' }), el('h1', { text: sn }), metadata]);
       if (source) {
         U.clear(heading);
         heading.appendChild(el('div', { cls: 'mv-eyebrow', text: source.column == null ? 'ANALYZING TABLE' : 'ANALYZING COLUMN' }));
@@ -1315,7 +1316,7 @@
         heading.appendChild(el('button', { cls: 'mv-text-button', text: 'Back to ' + source.table, onClick: function () { app.focusTable(source.table); } }));
       }
       header.appendChild(heading);
-      if (!source && !this.options.comparison) header.appendChild(el('button', {cls:'mv-button',text:'Compare measures',onClick:function(){var second=app.state.gPin || Object.keys(M.msrHome).find(function(n){return n!==sn;});if(second)self.setComparison({version:1,left:{kind:'measure',table:M.msrHome[sn],name:sn},right:{kind:'measure',table:M.msrHome[second],name:second},maxMeasures:200});}}));
+      if (!this.options.comparison && Object.keys(M.msrHome).length>1) header.appendChild(el('button', {cls:'mv-button',text:'Compare measures',onClick:function(){self.openComparisonPicker();}}));
       var modes = el('div', { cls: 'mv-mode-switch', role: 'group', 'aria-label': 'Analysis view' });
       this._modeButtons = {};
       [['split', 'Split view'], ['dax', 'DAX'], ['graph', 'Dependencies']].forEach(function (item) {
@@ -1325,7 +1326,7 @@
       this.splitSelect = el('select', { cls: 'mv-layout-select', 'aria-label': 'DAX position in split view',
         onChange: function (e) { self.setSplitLayout(e.target.value); }
       }, [el('option', { value: 'beside', text: 'DAX beside graph' }), el('option', { value: 'below', text: 'DAX below graph' })]);
-      header.appendChild(el('div', { cls: 'mv-view-controls' }, [modes, this.splitSelect])); body.appendChild(header);
+      if (!this.options.comparison) header.appendChild(el('div', { cls: 'mv-view-controls' }, [modes, this.splitSelect])); body.appendChild(header);
       this.analysisBody = el('div', { cls: 'mv-analysis-body' });
 
       var graphPane = el('section', { cls: 'mv-graph-panel', 'aria-label': 'Measure dependency graph' });
@@ -1336,11 +1337,12 @@
       var graphHeading = el('div', { cls: 'mv-panel-heading' }, [el('div', {}, [
         el('h2', { text: 'Dependency flow' }), this.directionLabel
       ]), this.orientationSelect]);
+      if(this.options.comparison)this.orientationSelect.hidden=true;
       this.updateDirectionLabel();
       graphPane.appendChild(graphHeading);
       this.sourceToggle = el('input', { type: 'checkbox', checked: this._showSources, onChange: function (e) { self.setShowSources(e.target.checked); } });
       var sourceControls = el('div', { cls: 'mv-source-controls' }, el('label', {}, [this.sourceToggle, el('span', { text: 'Show table and column references' })]));
-      graphPane.appendChild(sourceControls);
+      if (!this.options.comparison) graphPane.appendChild(sourceControls);
       var graphToolbar = el('div', { cls: 'mv-graph-toolbar', role: 'group', 'aria-label': 'Graph navigation' });
       var graphButton = function (label, title, click) { return el('button', { cls: 'mv-button', text: label, title: title, 'aria-label': title, onClick: click }); };
       this.zoomLabel = graphButton('100%', 'Reset dependency graph zoom to 100%', function () { self.setGraphZoom(1); self.gCenter(); });
@@ -1368,7 +1370,7 @@
       graphPane.appendChild(el('div', { cls: 'mv-graph-footer' }, [
         el('span', { cls: 'mv-legend-up', text: '● Upstream' }), el('span', { cls: 'mv-legend-down', text: '● Downstream' }), this.statEl,
         this._showSources ? el('span', { cls: 'mv-graph-help', text: 'Whole table: dashed link to header · Column: solid link to row' }) : null,
-        el('span', { cls: 'mv-graph-help', text: 'Click to compare · Enter to analyze' })
+        el('span', { cls: 'mv-graph-help', text: this.options.comparison ? 'Click to inspect · Enter to replace this focus' : 'Click to compare · Enter to analyze' })
       ]));
       this.analysisBody.appendChild(graphPane);
       this.splitDivider = el('div', { cls: 'mv-split-divider', role: 'separator', tabindex: '0',
@@ -1392,7 +1394,7 @@
         self.wrapBtn.setAttribute('aria-pressed', String(self._wrapDax));
         self.savePreferences();
       } });
-      daxPane.appendChild(el('div', { cls: 'mv-panel-heading' }, [el('div', {}, [el('h2', { text: 'DAX workspace' }), el('p', { text: 'Read the formula. Compare the logic.' })]), this.wrapBtn]));
+      daxPane.appendChild(el('div', { cls: 'mv-panel-heading' }, [el('div', {}, [el('h2', { text: 'DAX workspace' }), el('p', { text: 'Read the formula. Compare the logic.' })]), this.options.comparison ? null : this.wrapBtn]));
       this.daxGrid = el('div', { cls: 'mv-dax-grid' + (this._wrapDax === false ? ' mv-no-wrap' : '') });
       daxPane.appendChild(this.daxGrid);
       this.analysisBody.appendChild(daxPane); body.appendChild(this.analysisBody); this.mainEl.appendChild(body);
@@ -1477,6 +1479,7 @@
     setSplitShare: function (value, persist) {
       this._splitShares[this._effectiveSplit || this._splitLayout] = share(value, .5);
       this.applyWorkspaceLayout();
+      if(this.options.onSplitShare)this.options.onSplitShare(this._effectiveSplit || this._splitLayout,this._splitShares[this._effectiveSplit || this._splitLayout]);
       if (persist) this.savePreferences();
     },
     beginSplitResize: function (e) {
@@ -1643,7 +1646,7 @@
         rec.btn.title = N.tip;
         if (self.options.decorateObject) self.options.decorateObject(rec.btn, 'measure', app.model.msrHome[N.name], N.name);
         rec.btn.dataset.smvKind='measure'; rec.btn.dataset.smvTable=app.model.msrHome[N.name]; rec.btn.dataset.smvName=N.name;
-        rec.btn.setAttribute('aria-label', N.name + '. Click or Space to compare. Enter to analyze.');
+        rec.btn.setAttribute('aria-label', N.name + (rec.btn.dataset.comparisonFocus ? '. Comparison focus ' + rec.btn.dataset.comparisonFocus + '.' : '') + (self.options.comparison ? ' Click to inspect. Enter to replace this focus.' : '. Click or Space to compare. Enter to analyze.'));
         rec.btn.setAttribute('aria-pressed', String(app.state.gPin === N.name));
         rec.btn.setAttribute('aria-current', String(app.state.selMeasure === N.name));
         rec.upBtn.style.cssText = N.upBadgeS; rec.upBtn.textContent = N.upMore; rec.upBtn.title = N.upTip;
@@ -1819,7 +1822,7 @@
       };
       copy.addEventListener('click', function () { copyText(raw); });
       var actions = el('div', { cls: 'mv-dax-actions' }, [status, copy]);
-      if (this.options.comparison) actions.appendChild(el('button',{cls:'mv-button',text:'Loaded original',onClick:function(){self._inlineDax=false;self._fmt='original';self._daxKey=null;self.renderDax();}}));
+
       if (inl && !this.options.comparison) {
         var asQuery = el('button', { cls: 'mv-button', text: 'Copy as query', 'aria-label': 'Copy inlined DAX for ' + card.name + ' as a query',
           title: 'Copies EVALUATE ROW ( "Value", ... ). Paste it into DAX Studio and run it.',
@@ -1832,7 +1835,7 @@
         actions.insertBefore(el('button', { cls: 'mv-button', text: 'Collapse all', onClick: function () { F.collapse(); } }), copy);
         actions.insertBefore(el('button', { cls: 'mv-button', text: 'Expand all', onClick: function () { F.expand(); } }), copy);
       }
-      if (canInline && raw) {
+      if (canInline && raw && !this.options.comparison) {
         var layout = el('select', { cls: 'mv-layout-select', 'aria-label': 'DAX layout', title: 'DAX layout: original text, or SQLBI-style short or long lines',
           onChange: function () { self._fmt = layout.value; self.savePreferences(); self._daxKey = null; self.renderDax(); } },
           [['original', 'Original'], ['long', 'Long lines'], ['short', 'Short lines']].map(function (o) { return el('option', { value: o[0], text: o[1] }); }));
@@ -1958,6 +1961,23 @@
 
     },
 
+    openComparisonPicker: function () {
+      if(this._comparisonPicker){this._comparisonPicker.focus();return;}
+      var self=this,app=this.app,names=Object.keys(app.model.msrHome).sort();if(names.length<2)return;
+      var previous=document.activeElement,dialog=el('dialog',{cls:'mv-comparison-picker','aria-label':'Compare measures'});
+      var start=el('button',{cls:'mv-button mv-button-primary',text:'Start comparison',type:'submit',disabled:true}),selects=[];
+      var form=el('form',{onSubmit:function(event){event.preventDefault();if(start.disabled)return;var pair=selects.map(function(select){return {kind:'measure',table:app.model.msrHome[select.value],name:select.value};});dialog.close();self.setComparison({version:1,left:pair[0],right:pair[1],maxMeasures:200});}});
+      form.append(el('h2',{text:'Compare measures'}),el('p',{text:'Choose two calculations to compare their dependencies and DAX.'}));
+      ['First measure','Second measure'].forEach(function(label,i){
+        var select=el('select',{'aria-label':label,onChange:function(){start.disabled=!selects[0].value||!selects[1].value||selects[0].value===selects[1].value;}});
+        select.appendChild(el('option',{value:'',text:'Choose a measure…'}));names.forEach(function(name){select.appendChild(el('option',{value:name,text:name+' · '+app.model.msrHome[name]}));});
+        select.value=i?(app.state.gPin!==app.state.selMeasure?app.state.gPin||'':''):app.state.selMeasure||'';selects.push(select);form.appendChild(el('label',{},[el('span',{text:label}),select]));
+      });
+      start.disabled=!selects[0].value||!selects[1].value||selects[0].value===selects[1].value;
+      form.appendChild(el('div',{cls:'mv-comparison-picker-actions'},[el('button',{cls:'mv-button',text:'Cancel',type:'button',onClick:function(){dialog.close();}}),start]));
+      dialog.appendChild(form);dialog.addEventListener('close',function(){dialog.remove();self._comparisonPicker=null;if(previous&&previous.isConnected)previous.focus();});
+      document.body.appendChild(dialog);this._comparisonPicker=dialog;this._comparisonPickerModel=app.model;dialog.showModal();selects[selects[0].value?1:0].focus();
+    },
     setComparison: function (spec, snapshot) {
       if(!spec||spec.version!==1||spec.maxMeasures!==undefined&&(!Number.isInteger(spec.maxMeasures)||spec.maxMeasures<1||spec.maxMeasures>200))throw new Error('Invalid comparison scope');
       MeasureComparison.analyze(this.app.model,spec.left,spec.right,{maxMeasures:spec.maxMeasures||200});
@@ -1974,6 +1994,7 @@
       if (this.comparison) { this.comparison.update(); return; }
       var app = this.app;
       var on = app.state.viewMode === 'measures' && app.state.loaded;
+      if(this._comparisonPicker&&(!on||this._comparisonPickerModel!==app.model))this._comparisonPicker.close();
       if (this._matchingDialog && (!on || this._matchingModel !== app.model)) this.closeMatchingResults();
       if (!on) {
         if (this._built) this.rememberGraphViewport();
