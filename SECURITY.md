@@ -33,6 +33,22 @@ The optional agent CLI sessions and MCP integration have additional behavior des
 - **It stops by itself.** The installed app starts the server with `--idle-exit 180`, so it
   stops about three minutes after the window closes. Nothing runs at login.
 
+## VS Code Power BI Desktop connection
+
+The optional Windows connection uses PowerShell and Desktop's local Tabular Object Model
+libraries to read model metadata. It does not run DAX or M, process data, or save changes
+to the Desktop model. A temporary BIM export is deleted after the extension reads it;
+metadata remains in the viewer and can be included in snapshots you save. Power Query
+definitions can contain endpoint strings or sensitive parameter values.
+
+The optional External Tools command writes a dedicated machine-wide Power BI registration
+file, requesting administrator approval only when folder permissions require it. It launches
+VS Code as the normal user; it does not elevate the viewer. Its launch-link handler accepts
+only localhost/127.0.0.1 endpoints and never accepts file paths, remote servers, or output
+destinations from a link. This is a local metadata reader, not a restricted credential for
+the Desktop model. PowerShell's process-level execution policy flag does not override
+organization policies. Remove the registration through the extension before uninstalling it.
+
 ## Agent CLI sessions and MCP integration
 
 The CLI reads local metadata and can start a separate loopback-only session server. Its random-token URLs authorize access to that session. It accepts authenticated POST requests for view updates, viewer acknowledgements, selection reads, exports and shutdown; cross-origin browser mutations are rejected. These operations affect the session and generated artifacts, not the source TMDL/BIM files. Background CLI sessions run until explicitly stopped.

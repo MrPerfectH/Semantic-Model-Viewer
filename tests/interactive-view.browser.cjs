@@ -74,7 +74,7 @@ test('MCP App runs the real viewer through the official host bridge',{skip:!brow
   t.after(async()=>{await client.close();owned.cleanup();});await Promise.all([owned.server.connect(a),client.connect(b)]);
   const opened=await client.callTool({name:'smv_open',arguments:{model:'Models/demo/Contoso Retail.SemanticModel',view:tables}});
   const resource=await client.readResource({uri:URI});let synchronized=false;
-  const checks=`<script>addEventListener('unhandledrejection',e=>parent.postMessage({testError:e.reason?.message},'*'));{const load=smv.loadView;smv.loadView=async(...args)=>{const result=await load(...args);const check=(v,m)=>{if(!v)throw new Error(m)};for(let i=0;i<30&&document.documentElement.dataset.smvColorScheme!=='dark';i++)await new Promise(r=>requestAnimationFrame(r));check(document.documentElement.dataset.smvColorScheme==='dark','host theme not applied');check(getComputedStyle(document.documentElement).getPropertyValue('--smv-ink').trim()==='#e4e9f3','host dark tokens');check([...document.querySelectorAll('button')].some(b=>b.textContent==='Expand workspace'),'missing workspace action');await SMV_EXPAND_WORKSPACE();await SMV_SAVE_OFFLINE();return result;};}</script>`;
+  const checks=`<script>addEventListener('unhandledrejection',e=>parent.postMessage({testError:e.reason?.message},'*'));{const load=smv.loadView;smv.loadView=async(...args)=>{const result=await load(...args);const check=(v,m)=>{if(!v)throw new Error(m)};for(let i=0;i<30&&document.documentElement.dataset.smvColorScheme!=='dark';i++)await new Promise(r=>requestAnimationFrame(r));check(document.documentElement.dataset.smvColorScheme==='dark','host theme not applied');check(getComputedStyle(document.documentElement).getPropertyValue('--smv-ink').trim()==='#e4e9f3','host dark tokens');check([...document.querySelectorAll('button')].some(b=>b.textContent==='Expand workspace'),'missing workspace action');await SMV_EXPAND_WORKSPACE();await SMV_SAVE_OFFLINE();await smv.sync();await smv.sync();return result;};}</script>`;
   const closing=resource.contents[0].text.lastIndexOf('</body>');resource.contents[0].text=resource.contents[0].text.slice(0,closing)+checks+resource.contents[0].text.slice(closing);
   const http=require('node:http');
   const relay=http.createServer(async(req,res)=>{res.setHeader('Access-Control-Allow-Origin','*');res.setHeader('Access-Control-Allow-Headers','Content-Type');if(req.method==='OPTIONS'){res.end();return;}let text='';for await(const c of req)text+=c;try{const args=JSON.parse(text);const result=await client.callTool(args);if(args.name==='smv_app_sync'&&args.arguments.receipt.sourceRevision===opened.structuredContent.sourceRevision&&args.arguments.receipt.currentView.tables.includes('Sales'))synchronized=true;res.setHeader('Content-Type','application/json');res.end(JSON.stringify(result));}catch(e){res.statusCode=500;res.end(JSON.stringify({error:e.message}));}});
@@ -97,3 +97,72 @@ window.smv={ready:()=>ready};setTimeout(()=>reject(new Error('MCP App never sync
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'smv-app-bridge-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
   await capture(html,path.join(root,'bridge.png'),{width:1440,height:1000,scale:1});assert.equal(synchronized,true);
 });
+
+
+test('embedded sync asks only on an explicit click and never retries a denial',{skip:!browser},async t=>{
+  const p=prepare(model,measure),html=p.html.replace('</head>',`<script>window.syncCalls=0;window.SMV_MCP_SYNC=async()=>{syncCalls++;throw new Error('Permission declined');};</script></head>`);
+  return verify(t,measure,`
+await new Promise(r=>setTimeout(r,1700));check(syncCalls===0,'opening an embedded view must not request tool permission');
+const sync=[...document.querySelectorAll('button')].find(b=>b.textContent==='Sync view');check(sync,'explicit sync action');sync.click();
+for(let i=0;i<30&&sync.disabled;i++)await frame();check(syncCalls===1,'one tool call per explicit click');check(document.querySelector('.smv-status').textContent.includes('Permission declined'),'denial feedback');
+await new Promise(r=>setTimeout(r,1700));check(syncCalls===1,'denied sync must not retry');
+await smv.offer({revision:2,sourceRevision:SMV_SOURCE_REVISION,view:${JSON.stringify(tables)}});await frame();check(syncCalls===1,'applying an agent update must not request permission');
+`,html);
+});
+
+test('table and column Measures focus round-trip without a disconnected receipt', { skip: !browser }, async t => verify(t, { version: 2, mode: 'measures', focus: { kind: 'table', name: 'Sales' }, banner: false }, `
+check(app.state.dependencySource.table==='Sales','table dependency view opens');
+check(app.state.selMeasure===null,'table is not treated as a measure');
+check(getComputedStyle(document.querySelector('.smv-explanation-controls')).display==='none','plain exploration hides banner');
+const saved=smv.inspect().currentView;check(saved.focus.kind==='table'&&saved.focus.name==='Sales','receipt preserves table focus');
+SMVExplanation.validate(app.model,saved);await smv.apply(saved);check(app.state.dependencySource.table==='Sales','table view restores');
+await smv.apply({version:2,mode:'measures',focus:{kind:'column',table:'Sales',name:'Net Amount'},banner:false});
+check(app.state.dependencySource.column==='Net Amount','column dependency view opens');
+SMVExplanation.validate(app.model,smv.inspect().currentView);
+await smv.apply({version:2,mode:'measures',banner:false});
+check(app.state.selMeasure===null&&app.state.dependencySource===null,'Measures overview opens');
+SMVExplanation.validate(app.model,smv.inspect().currentView);
+await smv.apply(${JSON.stringify(measure)});check(app.state.dependencySource===null&&app.state.selMeasure==='Sales LY','measure focus clears source mode');
+`));
+test('quiet views expose pending Apply and explicit apply bypasses exploration', { skip: !browser }, async t => verify(t, { ...tables, banner: false }, `
+const controls=()=>document.querySelector('.smv-explanation-controls');
+check(getComputedStyle(controls()).display==='none','banner initially hidden');
+document.body.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}));
+const view={...${JSON.stringify(measure)},banner:false};
+check((await smv.offer({revision:2,sourceRevision:SMV_SOURCE_REVISION,view})).state==='pending','normal update respects exploration');
+check(getComputedStyle(controls()).display!=='none','pending Apply remains visible');
+check(document.querySelector('.smv-pending').textContent.includes('Apply'),'Apply action present');
+check((await smv.offer({revision:3,sourceRevision:SMV_SOURCE_REVISION,view,apply:true})).state==='applied','explicit apply takes over');
+check(smv.inspect().revision===3&&app.state.selMeasure==='Sales LY','new view acknowledged');
+check(getComputedStyle(controls()).display==='none','quiet after acknowledgement');
+`));
+
+test('authored table sets start compact and clicking tables shows both filter directions',{skip:!browser},async t=>verify(t,{version:2,mode:'graph',tables:['Date','Sales','Returns','Budget','Forecast','Inventory','Purchases','Shipments','Sales Orders'],focus:{kind:'table',name:'Date'},banner:false},`
+const points=[...app.explorer.names].map(n=>app.canvas.pos[n]);
+check(new Set(points.map(p=>Math.round(p.y))).size>2,'table set must not start as a horizontal row');
+const host=app.canvas.host.getBoundingClientRect();
+for(const name of app.explorer.names){const box=app.canvas.cards[name].el.getBoundingClientRect();check(box.left>=host.left-1&&box.right<=host.right+1,'authored fit must wait for inspector width: '+name);}
+check(app.explorer.direction==='both','default must include incoming and outgoing filter paths');
+let related=app.explorer.related();check(related.names.has('Sales'),'Date must show the fact table it filters');
+app.canvas.selectTable('Sales');await frame();
+related=app.explorer.related();check(related.names.has('Date'),'Sales must show its filtering dimension');
+const controls=app.explorer.relationControls();check(controls.querySelector('[aria-label="Relationship direction"]').value==='both','inspector default matches canvas');
+const saved=app.canvas.captureFocus();app.explorer.direction='incoming';app.canvas.restoreFocus(saved);check(app.explorer.direction==='both','saved focus preserves both directions');check(app.explorer.depth==='all','saved focus preserves indirect paths');
+`));
+
+test('version 2 relative selectors and explicit arrange preserve later explored positions',{skip:!browser},async t=>verify(t,{version:2,tables:{relatedTo:'Date',depth:1},focus:{kind:'table',name:'Date'},arrange:true,banner:false},`
+check(app.explorer.names.has('Sales'),'relative table set resolved in browser');
+check(app.explorer.names.has('Date'),'relative root retained');
+check(smv.inspect().renderedSummary.tableCanvasTables===app.explorer.names.size,'rendered counts match canvas');
+const current=smv.inspect().currentView;check(current.arrange===false,'explored state disables forced rearrangement');
+current.state.tableView.pos.Date.x+=123;await smv.apply(current);check(Math.abs(app.canvas.pos.Date.x-current.state.tableView.pos.Date.x)<1,'saved custom positions survive arrange restoration');
+`));
+
+test('authored question paths set the inspector direction and inactive state',{skip:!browser},async t=>verify(t,{version:2,tables:{filters:'Date',depth:1},focus:{kind:'table',name:'Date'},paths:{direction:'incoming',includeInactive:false,depth:1},caption:'No active tables filter Date.',arrange:true,banner:false},`
+check(document.getElementById('smv-question-caption').textContent==='No active tables filter Date.','question explanation is visible without the annotation banner');
+check(app.explorer.names.size===1,'incoming Date diagram has no invented filtering tables');
+check(app.explorer.direction==='incoming','question direction controls explorer');
+check(app.explorer.depth==='direct'&&!app.explorer.includeInactive,'question scope controls explorer');
+await smv.apply({version:2,tables:['Date','Sales'],focus:{kind:'table',name:'Date'},paths:{direction:'connected',includeInactive:true,depth:100},arrange:true,banner:false});
+check(app.explorer.direction==='connected'&&app.explorer.includeInactive,'inactive pair diagram controls match authored question');check(!document.getElementById('smv-question-caption'),'a later view clears the previous explanation');
+`));
