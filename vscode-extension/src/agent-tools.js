@@ -53,7 +53,7 @@ function register(context){
     const views=[],keys=[];
     for(let i=0;i<prepared.length;i++){
       check(token);const item=prepared[i],key=JSON.stringify([entry.id,plan.identity||plan.table,item.key,input.with||'',input.direction||'both',!!input.direct,!!input.includeInactive]);
-      keys.push(key);let state=panels.get(key);
+      keys.push(key);let state=panels.get(key);const created=!state;
       // Repeated questions reveal the explored panel instead of resetting it.
       if(state&&state.hash===sourceContentHash&&state.status!=='failed'){state.panel.reveal(undefined,true);views.push({label:item.label,status:state.status,error:state.error,revision:state.revision,reused:true,summary:item.prepared.summary,renderer:item.prepared.renderer});continue;}
       if(!state){
@@ -63,7 +63,10 @@ function register(context){
         panel.webview.onDidReceiveMessage(message=>{if(message&&message.revision===state.revision&&['applied','failed'].includes(message.type)){state.status=message.type;state.error=typeof message.error==='string'?message.error.slice(0,1000):undefined;}});
       }
       state.summary=item.prepared.summary;state.renderer=item.prepared.renderer;state.revision=++revision;state.hash=sourceContentHash;state.status='awaiting-viewer';state.error=undefined;
-      state.panel.webview.html=htmlForView(item.prepared.html,state.revision);state.panel.reveal(undefined,true);
+      state.panel.webview.html=htmlForView(item.prepared.html,state.revision);
+      // Creation already opens the requested group. Revealing again before VS Code
+      // assigns viewColumn can race the pending Beside placement on a cold host.
+      if(!created)state.panel.reveal(undefined,true);
       views.push({label:item.label,status:state.status,error:state.error,revision:state.revision,reused:false,summary:item.prepared.summary,renderer:item.prepared.renderer});
     }
     const result={sourceIdentity:sourceIdentity,counts:plan.counts,warnings:plan.warnings,views,note:'Panels are opened in the editor. awaiting-viewer is not a rendered acknowledgement; repeat the same show request to read the latest panel status without resetting exploration.'};

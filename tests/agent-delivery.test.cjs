@@ -41,6 +41,7 @@ test('native tools use the packaged worker, require workspace trust, preserve vi
  const input={model:discover.models[0].id,table:'Sales',related:true,dependents:true};
  const first=await api.run('show',input);assert.equal(first.views.length,2);assert.equal(vscode._panels.length,2);
  for(const [index,panel] of vscode._panels.entries()){
+  assert.ok(!panel.revealed,'New panels must keep their pending creation placement without an immediate reveal');
   assert.match(panel.webview.html,/Content-Security-Policy/);assert.match(panel.webview.html,/connect-src 'none'/);
   assert.deepEqual(panel.options.localResourceRoots,[]);
   const code=panel.webview.html.match(/<script[^>]*data-smv-asset="js\/snapshot.js"[^>]*>([\s\S]*?)<\/script>/)[1];

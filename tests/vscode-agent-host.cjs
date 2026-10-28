@@ -12,7 +12,7 @@ async function run(){
  const deadline=Date.now()+25000;let statuses=agentTools.status();
  console.log('SMV host groups '+JSON.stringify(vscode.window.tabGroups.all.map(g=>({column:g.viewColumn,tabs:g.tabs.map(t=>t.label)}))));
  while(statuses.some(view=>view.status==='awaiting-viewer')&&Date.now()<deadline){await new Promise(resolve=>setTimeout(resolve,250));statuses=agentTools.status();}
- assert.ok(statuses.every(view=>view.status==='applied'),JSON.stringify(statuses));
+ assert.ok(statuses.every(view=>view.status==='applied'),JSON.stringify({statuses,groups:vscode.window.tabGroups.all.map(g=>({column:g.viewColumn,tabs:g.tabs.map(t=>({label:t.label,active:t.isActive}))}))}));
  result=await agentTools.run('show',input);
  assert.ok(result.views.every(view=>view.reused),'Reading acknowledgement must preserve existing exploration');
  const locations=result.views.map(view=>vscode.window.tabGroups.all.find(group=>group.tabs.some(tab=>tab.label===view.label)));
