@@ -24,14 +24,19 @@ Inspector source/statistic tiles exceeded 4.5:1 in all four built-in themes: min
 
 Keyboard Space on Gross Profit opened the comparison DAX while Total Sales remained the analyzed measure. Synthetic expressions and references were displayed correctly. Screen-reader speech and color-vision simulation were not tested.
 
+Relationship inspection showed the exact synthetic endpoints `Sales[Product Key]` and `Product[ProductKey]`, many-to-one cardinality, and `Product filters Sales`.
+
 Screenshots and machine-readable results are retained in the local validation artifact directory, `~/.local/share/smv-validation/2026-10-28/`, including before/after matrix captures. All screenshots use synthetic data.
 
 ## Automated validation
 
 - UI-audit, measure-layout and snapshot browser suites: 33 passed.
 - Full extension suite: 866 passed, 2 skipped, one wall-clock layout-performance assertion failed at 322 ms under concurrent validation load. No layout source was changed. A focused rerun of the layout suite passed all 36 tests; the timing threshold was not weakened.
+- After integrating #176, the full suite completed with 879 passed, 3 skipped, and the same existing timing assertion failed at 431 ms against its 300 ms limit. Focused Power BI/extension integration checks passed 14 tests with one Windows-only test skipped on Linux. These results disclose a load-sensitive timing gate; they are not an all-green local full-suite claim.
 - Required pull-request CI must pass before merge.
 
 ## Release limitations
 
-The pre-existing focused-star fit at 1280×720 remains below its 50% zoom target. Read-only P&G Fabric acceptance is separate from these synthetic UI checks; existing permission-denied model requests do not prove successful live open/refresh. No stable version was published by this validation.
+The pre-existing focused-star fit at 1280×720 remains below its 50% zoom target. Read-only P&G Fabric acceptance was checked separately in the existing signed-in Windows host: fresh workspace/model discovery and two XMLA opens succeeded in another workspace on 28 October. This is successful live metadata-read evidence; native refresh-state preservation was tested with the synthetic model in the isolated updated UI host. Earlier permission-denied model requests in GroomingDH remain access limitations.
+
+During verification, develop added the Power BI Desktop integration through #176. Its source was merged into this fix branch without conflicts. Native External Tools checks and their version/provenance limits are recorded in `docs/verification/powerbi-external-tool-windows.md`; they are not silently attributed to this UI run. No stable version was published by this validation.
