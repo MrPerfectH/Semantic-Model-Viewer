@@ -32,7 +32,19 @@ function installExternal(root, storage, options = {}) {
   }
   fs.mkdirSync(bin, { recursive: true });
   const launcher = platform === 'win32'
-    ? '@rem ' + MARK + '\r\n@call "' + path.join(target, 'bin', 'smv.cmd').replace(/%/g, '%%') + '" %*\r\n'
+    // Batch files are decoded using the console code page. Switch before the
+    // UTF-8 path is read, then restore the caller's page and command exit code.
+    ? [
+      '@rem ' + MARK,
+      '@setlocal DisableDelayedExpansion',
+      '@set "SMV_CLI_CODEPAGE="',
+      '@for /f "tokens=2 delims=:" %%C in (\'"%SystemRoot%\\System32\\chcp.com"\') do @set "SMV_CLI_CODEPAGE=%%C"',
+      '@"%SystemRoot%\\System32\\chcp.com" 65001 >nul',
+      '@call "' + path.join(target, 'bin', 'smv.cmd').replace(/%/g, '%%') + '" %*',
+      '@set "SMV_CLI_EXIT=%errorlevel%"',
+      '@if defined SMV_CLI_CODEPAGE "%SystemRoot%\\System32\\chcp.com" %SMV_CLI_CODEPAGE% >nul',
+      '@endlocal & exit /b %SMV_CLI_EXIT%', '',
+    ].join('\r\n')
     : '#!/bin/sh\n# ' + MARK + '\nexec /bin/sh ' + quote(path.join(target, 'bin', 'smv')) + ' "$@"\n';
   fs.writeFileSync(command, launcher, { mode: 0o755 });
   if (platform !== 'win32') fs.chmodSync(command, 0o755);
