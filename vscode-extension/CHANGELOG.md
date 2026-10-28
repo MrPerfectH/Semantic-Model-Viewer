@@ -2,6 +2,10 @@
 
 ## Next pre-release
 
+- Preserve Power Query context on same-model refresh and clear stale refresh messages when opening models.
+- Improve inspector theme contrast, matrix and measure readability, and short-window scrolling.
+- Group cached Fabric metadata under On this device and expose workspace discovery exclusions.
+
 - Put Fabric connection controls directly in the Semantic Models sidebar, with the account, tenant ID, Switch account and Sign out above an expandable workspace/model tree.
 - Keep account controls visible when workspace discovery fails; refresh the sidebar after sign-in and sign-out.
 - Replace the Fabric-only pre-release introduction with the complete feature summary and explain the CLI’s separate setup.

@@ -42,3 +42,13 @@ Concrete follow-up: run the synthetic Contoso model in an extension development 
 - Regression coverage: `tests/extension-viewer.test.cjs`, `fabric-viewer.test.cjs`, `power-query-workspace.test.cjs`, `fabric-tree.test.cjs`, `extension.test.js`, `vscode-mock.js`, `measures.test.cjs`, `ui-audit.browser.cjs`, `star-layout.browser.cjs`.
 
 Final targeted measure/refresh rerun: **57 passed**. Generated extension media was synchronized and checked; generated files remain ignored, as usual.
+
+## Integration verification (28 October 2026)
+
+Reapplied commit `63154ef` onto current `origin/develop` at `41cae20`. Resolved only the exclusion-setting description conflict; retained the newer agent tools and bundled delivery contributions. The assigned branch's unrelated commits were left intact on that branch. Added user-facing changelog notes and included `ui-audit.browser.cjs` in the existing CI browser job.
+
+- Chromium: `tests/ui-audit.browser.cjs`, `tests/measures-layout.browser.cjs`, `tests/snapshot.browser.cjs`, and `tests/demo-initial-viewport.browser.cjs`: **39 passed, 0 failed/skipped**.
+- Local prerelease VSIX packaging succeeded (`npm run package --prefix vscode-extension -- --pre-release --out /tmp/smv-ui-audit-integration.vsix`). This is a local build, not a stable publication.
+- Focused-star exploration: **12 passed, 2 failed** (one nested assertion and its parent); the 1280×720 focused star still fits at **39.5%**, below the existing 50% requirement. Re-running the same test (with the corrected demo-button selector) against an archived current `origin/develop` viewer reproduced the identical 39.5% failure. The threshold remains unchanged.
+- MSI installation and live-tenant acceptance are separate checks, not validated by these synthetic UI regressions. No live tenant requests were made.
+- Develop CI currently builds and publishes prereleases automatically. This integration does not change main, create stable release tags, or publish a stable release.
