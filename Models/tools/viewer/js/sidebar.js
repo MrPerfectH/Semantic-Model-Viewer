@@ -100,7 +100,7 @@
     var isLocked = app.canvas.locked === sel.name;
 
     var stat = function (n, label) {
-      return el('div', { style: 'flex:1;text-align:center;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.05);border-radius:7px;padding:6px 4px;' }, [
+      return el('div', { cls: 'ex-inspector-stat', style: 'flex:1;text-align:center;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.05);border-radius:7px;padding:6px 4px;' }, [
         el('div', { style: "font-size:16px;font-weight:600;font-family:'IBM Plex Mono',monospace;line-height:1;", text: String(n) }),
         el('div', { style: 'font-size:9.5px;color:#9aa1ad;margin-top:3px;', text: label })
       ]);
@@ -124,7 +124,7 @@
           style: 'width:26px;height:26px;border:none;background:#eef0f3;border-radius:7px;cursor:pointer;color:#6b7280;font-size:16px;flex:none;line-height:1;'
         })
       ]),
-      el('div', { style: 'margin-top:11px;display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.05);border-radius:8px;' }, [
+      el('div', { cls: 'ex-inspector-source', style: 'margin-top:11px;display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.05);border-radius:8px;' }, [
         el('span', { style: sel.srcIconStyle, text: sel.srcIcon }),
         el('div', { style: 'min-width:0;' }, [
           el('div', { style: 'font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:#9aa1ad;font-weight:600;', text: sel.srcKindLabel }),

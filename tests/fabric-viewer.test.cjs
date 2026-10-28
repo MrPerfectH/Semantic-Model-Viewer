@@ -67,3 +67,12 @@ test('workspace discovery remains available while browsing models and appending 
   assert.deepEqual(c.workspaceItems,[{id:'w',name:'Workspace'}]);assert.equal(c.workspaceNext,'more-workspaces');
   assert.deepEqual(c.items.map(i=>i.id),['m1','m2']);assert.equal(c.next,null);
 });
+
+test('refresh completed after switching models cannot post a success notification on the new model',async()=>{
+ const {c,app}=harness();const source={tenantId:'tenant',workspaceId:'workspace',modelId:'model'};
+ app.modelKey=key(source);app.setStore([{id:app.modelKey,name:'Cached',source,model:{tables:[]}}]);
+ let resolve;c.request=()=>new Promise(r=>resolve=r);let pending;
+ const run=c.run;c.run=function(fn){return pending=run.call(this,fn);};
+ c.refresh();app.modelKey='different';resolve({tenantId:'tenant',model:{tables:[],relationships:[]}});await pending;
+ assert.equal(app.modelKey,'different');assert.equal(app.message,undefined);
+});

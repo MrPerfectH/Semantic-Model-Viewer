@@ -370,7 +370,7 @@ test('the graph opens on the analyzed measure at a readable zoom, in every orien
     const graph = view.gLayout(ROOT, {}, 500, orientation);
     for (const [w, h] of [[900, 520], [1180, 700], [420, 300]]) {
       const open = view.initialViewport(graph, w, h);
-      assert.ok(open.zoom >= 0.6, orientation + ' opens at ' + open.zoom);
+      assert.equal(open.zoom, 1, orientation + ' opens at readable 100% zoom');
       assert.ok(open.zoom <= 1, orientation + ' never opens zoomed in');
       const root = graph.xy[ROOT];
       const left = open.zoom * root.x + Math.max(0, (w - Math.ceil(graph.w * open.zoom)) / 2) - open.scrollLeft;

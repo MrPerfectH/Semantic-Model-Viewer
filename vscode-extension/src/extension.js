@@ -70,9 +70,11 @@ function activate(context) {
     vscode.commands.registerCommand('semanticModelViewer.openFolder', openUriCommand),
     vscode.commands.registerCommand('semanticModelViewer.openEntry', (entry) => (entry && (entry.uri || entry.kind === 'fabric') ? panel.show(entry) : openCommand())),
     vscode.commands.registerCommand('semanticModelViewer.refresh', () => panel.refresh()),
+    vscode.commands.registerCommand('semanticModelViewer.configureExclusions', () => vscode.commands.executeCommand('workbench.action.openWorkspaceSettings', 'semanticModelViewer.exclude')),
     vscode.commands.registerCommand('semanticModelViewer.refreshModels', () => tree.refresh()),
     vscode.window.registerTreeDataProvider('semanticModelViewer.models', tree),
     vscode.workspace.onDidChangeWorkspaceFolders(() => tree.refresh()),
+    vscode.workspace.onDidChangeConfiguration(event => { if (event.affectsConfiguration('semanticModelViewer.exclude')) tree.refresh(); }),
     { dispose: () => { panel.dispose(); tree.dispose(); fabricTree.dispose(); fabric.dispose(); } }
   );
   const agentTools = vscode.lm && typeof vscode.lm.registerTool === 'function' ? require('./agent-tools').register(context) : null;

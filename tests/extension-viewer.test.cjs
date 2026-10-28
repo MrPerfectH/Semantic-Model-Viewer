@@ -218,3 +218,22 @@ test('host model switching restores each model lane zoom before layout and fit',
   assert.equal(app.canvas.layoutK, 0.42);
   h.isolated();
 });
+
+test('refresh captures Power Query before reset and restores it before activating the view; model changes clear status', async () => {
+  const h = harness(), app = await h.boot({ open: record() });
+  const saved = { version: 1, navigation: { selectedId: 'StageSales', analyzedId: 'StageSales' } };
+  let pending = saved, resets = 0, restores = 0;
+  app.powerQueryWorkspace = {
+    captureSnapshot() { return pending; }, reset() { resets++; pending = null; },
+    restoreSnapshot(data) { restores++; pending = data; },
+    update() { if (app.state.viewMode === 'power-query') assert.deepEqual(pending, saved); }
+  };
+  app.setViewMode('power-query'); await flush();
+  h.receive({ type: 'model', ...record() }); await flush();
+  assert.equal(resets, 1); assert.equal(restores, 1); assert.deepEqual(pending, saved);
+  assert.equal(app.state.viewMode, 'power-query');
+  app.setState({ snapshotMessage: 'Refreshed from Fabric.', snapshotError: 'Old error' });
+  h.receive({ type: 'model', ...record('workspace:second', 'Second model') }); await flush();
+  assert.equal(pending, null); assert.equal(restores, 1);
+  assert.equal(app.state.snapshotMessage, ''); assert.equal(app.state.snapshotError, ''); h.isolated();
+});
