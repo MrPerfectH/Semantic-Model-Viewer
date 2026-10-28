@@ -14,7 +14,10 @@
   function bounded(value, min, max, fallback) { return typeof value === 'number' && isFinite(value) ? Math.max(min, Math.min(max, value)) : fallback; }
   function record(value) { return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; }
 
-  function MeasuresView(app, host) {
+  var instanceId = 0;
+  function MeasuresView(app, host, options) {
+    this.options = options || {};
+    this.markerId = "mv-flow-arrow-" + (++instanceId);
     this.app = app;
     this.host = host;
     this._built = false;
@@ -25,7 +28,7 @@
     this._groupEls = {};
     this._edgeEls = {};
     this._gC = null;
-    var prefs = store.getJSON(PREF_KEY, {}) || {};
+    var prefs = this.options.comparison ? {} : store.getJSON(PREF_KEY, {}) || {};
     this._workspaceMode = choice(prefs.mode, ['split', 'dax', 'graph'], 'split');
     this._splitLayout = choice(prefs.split, ['beside', 'below'], 'beside');
     this._graphOrientation = choice(prefs.orientation, ['lr', 'tb', 'bt'], 'lr');
@@ -107,6 +110,7 @@
       this._lastGraphViewport = { model: this.app.model, selected: this.graphRoot(), context: this.graphViewportContext(), graph: this.captureGraphViewport() };
     },
     captureSnapshot: function () {
+      if (this.comparison) return this.comparison.captureSnapshot();
       var state = this.app.state;
       return this.sanitizeSnapshot({
         selectedMeasure: state.selMeasure, comparisonMeasure: state.gPin, source: state.dependencySource, directOnly: state.dependencyDirectOnly,
@@ -125,6 +129,8 @@
       this._snapshotFrame = 0; this._snapshotViewport = null;
     },
     restoreSnapshot: function (value) {
+      if (!this.options.comparison && value && value.comparison) { this.setComparison(value.comparison, value); return true; }
+      if (this.comparison) this.clearComparison();
       if (!value || value.version !== 1 || !this.app.model || !Array.isArray(this.app.model.tables) || !this.app.model.byName) return false;
       var data = this.sanitizeSnapshot(value), prefs = data.preferences, self = this;
       this.cancelSnapshotViewport();
@@ -234,6 +240,7 @@
        their first member and members keep the order the layer gave them. */
     gGroupColumns: function (cols, root, total, expanded) {
       var self = this, slots = [], hidden = new Set(), groupOf = {}, on = total > GROUP_MIN;
+      var protectedNames = new Set([root].concat(this.options.comparisonRoots || []));
       /* home table + folder is parsed out of the measure metadata, so resolve it once per
          name rather than three times per name per column */
       var meta = {};
@@ -242,10 +249,10 @@
         var out = [];
         if (!on) { col.forEach(function (n) { out.push({ kind: 'node', name: n }); }); slots.push(out); return; }
         var byKey = {};
-        col.forEach(function (n) { if (n !== root) { var k = meta[n].key; (byKey[k] = byKey[k] || []).push(n); } });
+        col.forEach(function (n) { if (!protectedNames.has(n)) { var k = meta[n].key; (byKey[k] = byKey[k] || []).push(n); } });
         var done = {};
         col.forEach(function (n) {
-          if (n === root) { out.push({ kind: 'node', name: n }); return; }
+          if (protectedNames.has(n)) { out.push({ kind: 'node', name: n }); return; }
           var k = meta[n].key;
           if (done[k]) return;
           done[k] = 1;
@@ -278,6 +285,7 @@
       var open = this.graphGroupState();
       if (open[id]) delete open[id]; else open[id] = true;
       if (this.gCanvasEl) this.renderFlow();
+      if(this.options.onGraphChange)this.options.onGraphChange();
     },
     /* First look at a measure: a readable zoom, never below 60%, with the analyzed node in
        the middle of the pane. Pure arithmetic, so the headless test can assert the root sits
@@ -287,6 +295,7 @@
       var fit = Math.min((w - 32) / Math.max(1, G.w), (h - 32) / Math.max(1, G.h));
       // Source rows need readable labels. Start at 100% around the analysis root;
       // Fit all remains an explicit overview action for wider diagrams.
+      if (this.options.comparison) return {zoom:Math.max(.2,Math.min(1,(w-24)/G.w,(h-24)/G.h)),scrollLeft:0,scrollTop:0};
       var zoom = G.sources && G.sources.length ? 1 : Math.max(.6, Math.min(1, fit));
       var R = (G.xy && G.xy[G.root]) || { x: 0, y: 0, w: 0 };
       var frameW = Math.ceil(G.w * zoom), frameH = Math.ceil(G.h * zoom);
@@ -296,7 +305,7 @@
         scrollLeft: Math.max(0, Math.min(Math.max(0, frameW - w), cx - w / 2)),
         scrollTop: Math.max(0, Math.min(Math.max(0, frameH - h), cy - h / 2)) };
     },
-    gLayout: function (root, extra, cap, orientation) {
+    gLayout: function (root, extra, cap, orientation, scope) {
       var self = this;
       orientation = choice(orientation || this._graphOrientation, ['lr', 'tb', 'bt'], 'lr');
       var vertical = orientation !== 'lr', direction = orientation === 'bt' ? -1 : 1;
@@ -314,7 +323,7 @@
         }
         return seen;
       };
-      var upSet = bfs('up'), dnSet = bfs('down');
+      var upSet = scope ? new Set(scope) : bfs('up'), dnSet = scope ? new Set([root]) : bfs('down');
       var initial=Array.from(new Set([].concat(Array.from(upSet),Array.from(dnSet))));
       if(this._explanationContext){initial.sort(function(a,b){return (dist[a]-dist[b])||a.localeCompare(b);});initial=initial.slice(0,this._explanationContext.limit);}
       // The authored limit bounds only the opening neighborhood. Explicit branch
@@ -361,7 +370,7 @@
         });
       }
       var GAP = 96, PX = 100, PY = 84, SLOT_GAP = 12;
-      var grouping = this.gGroupColumns(cols, root, names.length, this.graphGroupState(root));
+      var grouping = this.gGroupColumns(cols, root, names.length, this.options.comparisonGroups ? this.options.comparisonGroups() : this.graphGroupState(root));
       var hidden = grouping.hidden;
       var visible = names.filter(function (n) { return !hidden.has(n); });
       /* Column width follows the measure names only. A group header is longer than most of
@@ -563,10 +572,10 @@
       var self = this, app = this.app;
       var root = this.graphRoot(), extra = app.state.gExtra || {};
       var key = (app.modelKey || '') + '|' + JSON.stringify(this._explanationContext) + '|' + root + '|' + this._showSources + '|' + !!app.state.dependencyDirectOnly + '|' + this._graphOrientation + '|' + Object.keys(extra).sort().join('\u0001')
-        + '|' + Object.keys(this.graphGroupState(root)).sort().join('\u0001') + '|' + app.colorBy + '|' + app.paletteName;
+        + '|' + Object.keys(this.options.comparisonGroups ? this.options.comparisonGroups() : this.graphGroupState(root)).sort().join('\u0001') + '|' + app.colorBy + '|' + app.paletteName;
       if (!this._gC || this._gC.k !== key) {
-        var layout = this.gLayout(root, extra, CAP);
-        this._gC = { k: key, g: this._showSources ? this.addSourceLayout(layout) : layout };
+        var layout = this.options.layout ? this.options.layout(this) : this.gLayout(root, extra, CAP);
+        this._gC = { k: key, g: this.options.layout ? layout : this._showSources ? this.addSourceLayout(layout) : layout };
       }
       var G = this._gC.g;
       var pinN = app.state.gPin && app.state.gPin !== root ? app.state.gPin : null;
@@ -702,6 +711,7 @@
       });
     },
     pickMeasure: function (n) {
+      if(this.options.onPickMeasure){this.options.onPickMeasure(n);return;}
       var self = this, app = this.app;
       if (window.SMVInteractive) window.SMVInteractive.closeLibrary(false);
       this.cancelSnapshotViewport();
@@ -797,7 +807,7 @@
     },
     /* Format a measure's DAX with the local formatter; `inline` also splices in every measure it uses. */
     formatDax: function (name, dax, inline, style) {
-      var self = this, app = this.app, opts = { style: style };
+      var self = this, app = this.app, opts = { style: style, strict: !!this.options.comparison };
       if (!inline) return DaxFormat.format(dax, opts);
       return DaxFormat.formatInlined(dax, name, function (ref) {
         var t = self.daxToks(ref)[0];
@@ -809,13 +819,16 @@
     daxCard: function (name, inline) {
       var self = this, app = this.app;
       var m = app.msrOf(name); if (!m) return null;
-      var rel = this._gRel || {}, dax = (m.dax || '').trim();
+      var rel = this._gRel || {}, dax = this.options.comparison ? String(m.dax || '') : (m.dax || '').trim();
       var u = app.msrUse(name);
       var flags = { hid: !!m.h, hasUse: !!u, useN: u ? u.length : 0, useTip: app.useTip(u) };
       if (!dax) return Object.assign({ name: name, table: app.model.msrHome[name] || '', toks: [{ isM: false, isT: true, txt: '— no expression —', s: 'color:var(--smv-muted,#9aa1ad);' }] }, flags);
       var style = this._fmt || 'long';
       if (typeof DaxFormat !== 'undefined' && (style !== 'original' || inline)) {
-        var printed = this.formatDax(name, dax, inline, style === 'original' ? 'long' : style);
+        var printed;
+        try { printed = this.formatDax(name, dax, inline, style === 'original' ? 'long' : style); }
+        catch (error) { if (!this.options.comparison) throw error; return { name:name, table:app.model.msrHome[name] || '', toks:[{txt:dax,s:''}], warning:'Formatting unavailable. Showing the loaded original formula.' }; }
+        if (this.options.analysis) MeasureComparison.annotate(printed, name, this.options.analysis());
         return Object.assign({ name: name, table: app.model.msrHome[name] || '', printed: printed, text: DaxFormat.toText(printed),
           inlined: inline ? { count: printed.count, cycles: printed.cycles, capped: printed.capped } : null }, flags);
       }
@@ -1302,6 +1315,7 @@
         heading.appendChild(el('button', { cls: 'mv-text-button', text: 'Back to ' + source.table, onClick: function () { app.focusTable(source.table); } }));
       }
       header.appendChild(heading);
+      if (!source && !this.options.comparison) header.appendChild(el('button', {cls:'mv-button',text:'Compare measures',onClick:function(){var second=app.state.gPin || Object.keys(M.msrHome).find(function(n){return n!==sn;});if(second)self.setComparison({version:1,left:{kind:'measure',table:M.msrHome[sn],name:sn},right:{kind:'measure',table:M.msrHome[second],name:second},maxMeasures:200});}}));
       var modes = el('div', { cls: 'mv-mode-switch', role: 'group', 'aria-label': 'Analysis view' });
       this._modeButtons = {};
       [['split', 'Split view'], ['dax', 'DAX'], ['graph', 'Dependencies']].forEach(function (item) {
@@ -1346,7 +1360,7 @@
       this.gFrame = el('div', { cls: 'mv-graph-frame' });
       this.gCanvasEl = el('div', { cls: 'mv-graph-canvas' });
       this.gSvg = sv('svg', { width: 1, height: 1, style: 'position:absolute;z-index:1;left:0;top:0;pointer-events:none;', 'aria-hidden': 'true' });
-      this.gSvg.appendChild(sv('defs', {}, sv('marker', { id: 'mv-flow-arrow', viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto-start-reverse' }, sv('path', { d: 'M 0 0 L 10 5 L 0 10 z', fill: 'context-stroke' }))));
+      this.gSvg.appendChild(sv('defs', {}, sv('marker', { id: this.markerId, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto-start-reverse' }, sv('path', { d: 'M 0 0 L 10 5 L 0 10 z', fill: 'context-stroke' }))));
       this.gCanvasEl.appendChild(this.gSvg); this.gFrame.appendChild(this.gCanvasEl); this.gScroll.appendChild(this.gFrame);
       this._gEl = this.gScroll; this._gScrolledFor = null; this._gZoom = 1; this._gAutoFit = false;
       graphPane.appendChild(this.gScroll);
@@ -1406,6 +1420,7 @@
       }
     },
     savePreferences: function () {
+      if (this.options.comparison) return;
       store.setJSON(PREF_KEY, { mode: this._workspaceMode, split: this._splitLayout, orientation: this._graphOrientation,
         besideShare: this._splitShares.beside, belowShare: this._splitShares.below, wrap: this._wrapDax, sources: this._showSources, fmt: this._fmt });
     },
@@ -1504,10 +1519,12 @@
           style: 'left:' + s.x + 'px;top:' + s.y + 'px;width:' + s.w + 'px;--mv-source-color:' + s.color + ';--mv-source-tint:' + U.tint(s.color, .08) + ';' });
         var row = function (cn, label, header) {
           var active = selected && selected.table === s.table && selected.column === cn;
-          return el('button', { cls: (header ? 'mv-source-header' : 'mv-source-column') + (active ? ' is-selected' : ''),
-            text: label, title: header ? 'Find measures referencing ' + s.table + ' or any of its columns' : 'Find measures referencing ' + s.table + '[' + cn + ']',
-            'aria-label': header ? 'Analyze table ' + s.table : 'Analyze column ' + s.table + '[' + cn + ']',
-            'aria-pressed': String(!!active), onClick: function () { self.analyzeSource(s.table, cn); } });
+          var button = el('button', { cls: (header ? 'mv-source-header' : 'mv-source-column') + (active ? ' is-selected' : ''),
+            text: label, title: self.options.comparison ? 'Open table relationships for ' + s.table + (cn == null ? '' : ' · reference: ' + cn) : header ? 'Find measures referencing ' + s.table + ' or any of its columns' : 'Find measures referencing ' + s.table + '[' + cn + ']',
+            'aria-label': self.options.comparison ? 'Open table relationships for ' + s.table : header ? 'Analyze table ' + s.table : 'Analyze column ' + s.table + '[' + cn + ']',
+            'aria-pressed': String(!!active), onClick: function () { if (!self.options.comparison) self.analyzeSource(s.table, cn); else app.focusTable(s.table); } });
+          if (self.options.decorateObject) self.options.decorateObject(button, header ? 'table' : 'column', header ? '' : s.table, header ? s.table : cn);
+          return button;
         };
         card.appendChild(row(null, s.table, true));
         s.columns.forEach(function (cn) { card.appendChild(row(cn, cn, false)); });
@@ -1542,7 +1559,7 @@
         seenE[E.key] = 1;
         var p = self._edgeEls[E.key];
         if (!p) {
-          p = sv('path', { fill: 'none', 'marker-end': 'url(#mv-flow-arrow)' });
+          p = sv('path', { fill: 'none', 'marker-end': 'url(#' + self.markerId + ')' });
           self._edgeEls[E.key] = p;
           self.gSvg.appendChild(p);
           p.appendChild(sv('title', {}));
@@ -1551,6 +1568,7 @@
         p.setAttribute('stroke-dasharray', E.da);
         p.style.cssText = E.st;
         p.firstChild.textContent = E.label || 'Dependency';
+        if (self.options.decorateEdge) self.options.decorateEdge(p, E);
         if (!self._edgeLabels) self._edgeLabels = {};
         var label = self._edgeLabels[E.key];
         if (E.label && !label) { label = sv('text', { 'class': 'mv-source-edge-label' }); self._edgeLabels[E.key] = label; self.gSvg.appendChild(label); }
@@ -1623,6 +1641,8 @@
         rec.btn.style.cssText = N.s;
         rec.btn.textContent = N.name;
         rec.btn.title = N.tip;
+        if (self.options.decorateObject) self.options.decorateObject(rec.btn, 'measure', app.model.msrHome[N.name], N.name);
+        rec.btn.dataset.smvKind='measure'; rec.btn.dataset.smvTable=app.model.msrHome[N.name]; rec.btn.dataset.smvName=N.name;
         rec.btn.setAttribute('aria-label', N.name + '. Click or Space to compare. Enter to analyze.');
         rec.btn.setAttribute('aria-pressed', String(app.state.gPin === N.name));
         rec.btn.setAttribute('aria-current', String(app.state.selMeasure === N.name));
@@ -1687,7 +1707,7 @@
       });
       var body = el('pre', { cls: 'mv-dax-body mv-dax-fold' + (plain ? ' mv-dax-plain' : ''), tabindex: '0', 'aria-label': 'DAX formula for ' + card.name });
       var refCache = {};
-      var segment = function (p) {
+      var rawSegment = function (p) {
         if (p.k === 'inl') {
           return el('button', { cls: 'mv-dax-ref mv-dax-chip', style: self.depthChipStyle(p.depth || 0), text: p.v,
             title: (p.depth ? 'Inlined measure, level ' + p.depth : 'The analyzed measure') + '. Click to show it on the flow.',
@@ -1702,6 +1722,11 @@
           return el('span', { style: 'color:var(--smv-olive,#0f766e);', text: p.v });
         }
         return el('span', { style: STYLE[p.k] || STYLE.txt, text: p.v });
+      };
+      var segment = function (p) {
+        var node = rawSegment(p);
+        if (p.comparison) { node.classList.add('mv-compare-' + p.comparison); node.title = (node.title ? node.title + '. ' : '') + (p.comparison === 'shared' ? 'Shared written definition' : p.comparison === 'different' ? 'Side-specific written logic' : 'Membership unknown within the analyzed scope'); }
+        return node;
       };
       var foldButton = function (reg, collapsed) {
         return el('button', { cls: 'mv-dax-fold-btn', text: collapsed ? '▸' : '▾', 'aria-expanded': String(!collapsed),
@@ -1730,6 +1755,7 @@
           var code = el('span', { cls: 'mv-dax-line' });
           if (L.indent) code.appendChild(document.createTextNode(Array(L.indent + 1).join('    ')));
           parts.forEach(function (p) { code.appendChild(segment(p)); });
+          if (self.options.comparison) self.tintComparisonLine(row, parts);
           row.appendChild(code); body.appendChild(row);
         });
         return body;
@@ -1758,7 +1784,7 @@
             code.appendChild(moreButton(coll));
             P.lines[coll.to].parts.slice(coll.closePart).forEach(function (p) { code.appendChild(segment(p)); });
           }
-          if (card.inlined) tint(row, i);
+          if (self.options.comparison) self.tintComparisonLine(row, L.parts); else if (card.inlined) tint(row, i);
           row.appendChild(gutter); row.appendChild(code); body.appendChild(row);
           i = coll ? coll.to + 1 : i + 1;
         }
@@ -1775,11 +1801,15 @@
       draw();
       return body;
     },
+    tintComparisonLine: function (row, parts) {
+      var kinds = Array.from(new Set(parts.filter(function(p){return !p.ghost && p.v.trim();}).map(function(p){return p.comparison || 'unknown';})));
+      if (kinds.length === 1) row.classList.add('mv-compare-' + kinds[0]);
+    },
     daxHeader: function (card, label, dotStyle, onClose, canInline) {
-      var self = this, m = this.app.msrOf(card.name), raw = card.text || ((m && m.dax) || '').trim();
+      var self = this, m = this.app.msrOf(card.name), raw = card.text || (this.options.comparison ? String((m && m.dax) || '') : ((m && m.dax) || '').trim());
       var inl = !!card.inlined;
       var copy = el('button', { cls: 'mv-button', text: inl ? 'Copy inlined DAX' : 'Copy DAX', 'aria-label': (inl ? 'Copy inlined DAX for ' : 'Copy DAX for ') + card.name,
-        title: inl ? 'Copies plain DAX with every measure replaced by its DAX. No labels, nothing folded. Paste it into Tabular Editor as a measure expression.' : 'Copies the DAX as shown' });
+        title: inl ? 'Copies plain DAX with every measure replaced by its DAX. No labels, nothing folded. For inspection only: expansion does not preserve implicit context transition.' : 'Copies the DAX as shown' });
       var status = el('span', { cls: 'mv-copy-status', role: 'status', 'aria-live': 'polite' });
       var copyText = function (text) {
         if (!navigator.clipboard || !navigator.clipboard.writeText) {
@@ -1789,7 +1819,8 @@
       };
       copy.addEventListener('click', function () { copyText(raw); });
       var actions = el('div', { cls: 'mv-dax-actions' }, [status, copy]);
-      if (inl) {
+      if (this.options.comparison) actions.appendChild(el('button',{cls:'mv-button',text:'Loaded original',onClick:function(){self._inlineDax=false;self._fmt='original';self._daxKey=null;self.renderDax();}}));
+      if (inl && !this.options.comparison) {
         var asQuery = el('button', { cls: 'mv-button', text: 'Copy as query', 'aria-label': 'Copy inlined DAX for ' + card.name + ' as a query',
           title: 'Copies EVALUATE ROW ( "Value", ... ). Paste it into DAX Studio and run it.',
           onClick: function () { copyText('EVALUATE\nROW (\n    "Value",\n' + raw.replace(/^/gm, '    ') + '\n)'); } });
@@ -1811,7 +1842,7 @@
           onClick: function () { self._inlineDax = !self._inlineDax; self._daxKey = null; self.renderDax(); } });
         actions.insertBefore(layout, actions.firstChild);
         if (this._inlineDax) {
-          var plainBtn = el('button', { cls: 'mv-button', text: 'Plain text', 'aria-pressed': String(!!this._plainDax),
+          var plainBtn = el('button', { cls: 'mv-button', text: this.options.comparison ? 'Compact' : 'Plain text', 'aria-pressed': String(!!this._plainDax),
             title: 'Show the full inlined DAX as plain text: no labels, no folding. This is what Copy inlined DAX copies.',
             onClick: function () { self._plainDax = !self._plainDax; self._daxKey = null; self.renderDax(); } });
           actions.insertBefore(plainBtn, layout);
@@ -1878,7 +1909,7 @@
       return el('article', { cls: 'mv-dax-card' + (comparing ? ' mv-comparison-card' : ''),
         data: { smvKind: 'measure', smvName: card.name, smvTable: card.table } }, [
         this.daxHeader(card, label, 'width:8px;height:8px;border-radius:2px;flex:none;background:' + color + ';', close, canInline),
-        body, this.referenceSection(card)
+        body, card.warning ? el('p',{cls:'mv-reference-note',role:'status',text:card.warning}) : null, this.referenceSection(card)
       ]);
     },
     renderSourceDax: function () {
@@ -1904,6 +1935,12 @@
       U.clear(this.daxGrid);
       var left = this.daxCard(sn, this._inlineDax);
       if (!left) return;
+      if (this.options.comparison) {
+        this.daxGrid.dataset.inlineComparison = String(!!this._inlineDax);
+        var inspection = pinName ? this.daxCard(pinName, this._inlineDax) : left;
+        this.daxGrid.appendChild(this.formulaCard(inspection, pinName ? 'Inspecting · comparison root remains ' + sn : 'Comparison root', 'var(--smv-burgundy,#1f2430)', pinName ? function(){app.setState({gPin:null});} : null, true, false));
+        return;
+      }
       this.daxGrid.appendChild(this.formulaCard(left, 'Analyzed measure', 'var(--smv-burgundy,#1f2430)', null, true, false));
       var pinCard = pinName ? this.daxCard(pinName) : null;
       this.daxGrid.setAttribute('data-comparing', String(!!pinCard));
@@ -1921,7 +1958,20 @@
 
     },
 
+    setComparison: function (spec, snapshot) {
+      if(!spec||spec.version!==1||spec.maxMeasures!==undefined&&(!Number.isInteger(spec.maxMeasures)||spec.maxMeasures<1||spec.maxMeasures>200))throw new Error('Invalid comparison scope');
+      MeasureComparison.analyze(this.app.model,spec.left,spec.right,{maxMeasures:spec.maxMeasures||200});
+      if (!this.comparison) { this.rememberGraphViewport();this.cancelSnapshotViewport();if(this._graphObserver){this._graphObserver.disconnect();this._graphObserver=null;}if(this._matchingDialog)this.closeMatchingResults(); }
+      if (this.comparison) this.comparison.destroy();
+      this.comparison = new MeasureComparisonView(this, spec, snapshot);
+      this.comparison.update();
+    },
+    clearComparison: function () {
+      if (!this.comparison) return;
+      this.comparison.destroy(); this.comparison = null; this._built = false; this._gC = null; this._mainKey = null; this._railKey = null; this._daxKey = null; this._flowKey=null;this._nodeEls={};this._edgeEls={};this._edgeLabels={};this._groupEls={};this._sourceLayer=null;this._gScrolledFor=null;this._initViewportFor=null;U.clear(this.host);
+    },
     update: function () {
+      if (this.comparison) { this.comparison.update(); return; }
       var app = this.app;
       var on = app.state.viewMode === 'measures' && app.state.loaded;
       if (this._matchingDialog && (!on || this._matchingModel !== app.model)) this.closeMatchingResults();

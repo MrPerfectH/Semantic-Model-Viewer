@@ -80,6 +80,7 @@ function between(source,requested,other,options={}){
     basis:'One shortest relationship connection, including intermediate tables when needed. A connection does not imply filter propagation; filtersOther and filteredByOther follow directed metadata paths. '+graph.explanation};
 }
 function summary(model,app,view){
+  if(view.comparison){const result=require('../../js/measure-comparison.js').analyze(model,view.comparison.left,view.comparison.right,{maxMeasures:view.comparison.maxMeasures||200});return {mode:'measures',comparison:{roots:result.roots,counts:result.counts,complete:result.complete,warnings:result.warnings},countScope:'Static upstream references, including roots; not evaluated results.'};}
   const exploredSource=view.state&&view.state.measures&&view.state.measures.source;
   const table=exploredSource?exploredSource.table:view.focus&&(['table','column'].includes(view.focus.kind))?(view.focus.kind==='table'?view.focus.name:view.focus.table):null;
   const visible=view.tables||model.tables.map(t=>t.name),set=new Set(visible);

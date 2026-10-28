@@ -13,6 +13,7 @@ Usage:
   smv workspace
   smv install [--source checkout|plugin] [--bin-dir <directory>]
   smv show <model> --table <name> [--with <table> | --related | --dependents] [--out diagram.html|diagram.png]
+  smv compare <model> --measure <first> --with <second> [--out comparison.html|comparison.png]
   smv relations|dependents <model> --table <name> [--details]
   smv session list | smv session stop --all
   smv inspect <model> [--table <name>]
@@ -61,6 +62,7 @@ async function run(args) {
   const adapter=path.resolve(__dirname,'../../../../../integrations/mcp/server.cjs');
   if(args[0]==='mcp'&&fs.existsSync(adapter))return require(adapter).start();
   if(args[0]==='workspace'){if(args.length!==1)throw new Error('Use workspace without arguments');process.stdout.write(JSON.stringify(require('../../../../../scripts/claude-workspace.cjs').prepare())+'\n');return;}
+  if(args[0]==='compare')return compareCommand(args);
   if(args[0]==='fetch')return fetchCommand(args.slice(1));
   if(['show','relations','dependents','install'].includes(args[0]))return workflowCommand(args);
   if (args[0] === '--where' || args[0] === '--version') {
@@ -177,6 +179,13 @@ async function sessionCommand(args){
     if(!values.json&&result.opening.message)process.stderr.write(result.opening.message+'\n');
   }
   process.stdout.write(positionals[0]==='session'?JSON.stringify(result,null,values.json?0:2)+'\n':values.json?JSON.stringify(result)+'\n':(result.url||JSON.stringify(result))+'\n');
+}
+async function compareCommand(args){
+  const {values,positionals}=parseArgs({args,allowPositionals:true,options:{measure:{type:'string'},with:{type:'string'},out:{type:'string',short:'o'},force:{type:'boolean'},json:{type:'boolean'},session:{type:'string'},'new-session':{type:'boolean'},watch:{type:'boolean'},open:{type:'string'},opener:{type:'string'},browser:{type:'string'}}});
+  if(positionals.length!==2)throw new Error('Expected compare <model> --measure <first> --with <second>');
+  for(const k of ['measure','with','out'])if(values[k]!==undefined&&!values[k].trim())throw new Error('--'+k+' cannot be empty');
+  const result=await require('./compare.cjs').compare(positionals[1],{...values,newSession:values['new-session']});
+  process.stdout.write(JSON.stringify(result,null,2)+'\n');
 }
 async function workflowCommand(args){
   const {values,positionals}=parseArgs({args,allowPositionals:true,options:{table:{type:'string'},model:{type:'string'},related:{type:'boolean'},dependents:{type:'boolean'},direction:{type:'string'},direct:{type:'boolean'},'include-inactive':{type:'boolean'},details:{type:'boolean'},json:{type:'boolean'},session:{type:'string'},'new-session':{type:'boolean'},watch:{type:'boolean'},'bin-dir':{type:'string'},source:{type:'string'},with:{type:'string'},out:{type:'string',short:'o'},force:{type:'boolean'},browser:{type:'string'},measure:{type:'string'},open:{type:'string'},opener:{type:'string'},workspace:{type:'string'},tenant:{type:'string'},'token-stdin':{type:'boolean'}}});

@@ -34,6 +34,8 @@ try{
   const response=spawnSync(process.execPath,['-e',"fetch(process.argv[1]).then(async r=>{if(!r.ok||!(await r.text()).includes('Sales'))process.exitCode=1}).catch(e=>{console.error(e);process.exitCode=1})",show.views[0].url],{env,encoding:'utf8',timeout:15000});assert.equal(response.status,0,response.stderr);
  }finally{fs.renameSync(moved,root);}
  const repeated=JSON.parse(run(['show',model,'--table','Sales','--related','--dependents']));assert.equal(repeated.sessionId,show.sessionId);assert.ok(repeated.reused);
+ const compared=JSON.parse(run(['compare',model,'--measure','Total Sales','--with','Sales LY']));assert.equal(compared.sessionId,show.sessionId);assert.equal(compared.views.length,1);assert.ok(compared.analysis.counts.shared>0);
+ const comparisonOut=path.join(temp,'comparison.html');run(['compare',model,'--measure','Total Sales','--with','Sales LY','--out',comparisonOut]);assert.ok(fs.statSync(comparisonOut).size>100000);
  const out=path.join(temp,'offline.html');run(['snapshot',model,'--out',out]);assert.ok(fs.statSync(out).size>100000);assert.ok(fs.existsSync(out+'.receipt.json'));
  console.log(JSON.stringify({passed:true,host:info.host,target,nodeVersion:info.nodeVersion,engineVersion:info.engineVersion,views:show.views.length,noNodeOnPath:true,strippedModesRecovered:process.env.SMV_TEST_STRIPPED_EXEC==='1',upgradeSurvived:true,snapshotBytes:fs.statSync(out).size}));
 }finally{

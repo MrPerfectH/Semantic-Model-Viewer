@@ -244,3 +244,29 @@ body[data-smv-interactive] .mv-dax-body{flex:none;}
 .mv-result-card .mv-dax-ref{color:var(--smv-up,#6d28d9)!important;background:var(--smv-up-soft,#f2edfd)!important;border-color:var(--smv-up-border,#dcd0f7)!important;}
 /* Preserve compact prepared formulas with the shared source-reference cards. */
 body[data-smv-interactive] .mv-dax-card{min-height:0;grid-template-rows:auto auto auto;}
+
+/* Two comparison rows retain the native library, dependency canvas and DAX UI. */
+.mv-comparison-shell{display:flex;flex:1;min-width:0;min-height:0;height:100%}
+.mv-comparison-workspace{display:flex;flex:1;flex-direction:column;min-width:0;min-height:0}
+.mv-comparison-strip{flex:none;padding:10px 16px;border-bottom:1px solid var(--smv-line);background:var(--smv-paper,#fff)}
+.mv-comparison-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.mv-comparison-controls label{display:flex;align-items:center;gap:7px}.mv-comparison-controls select{max-width:220px}
+.mv-comparison-summary{font-size:12px;line-height:1.5;margin:8px 0 4px}.mv-comparison-legend,.mv-comparison-notice{font-size:11px;color:var(--smv-muted);line-height:1.5;margin:4px 0}.mv-comparison-notice:empty{display:none}
+.mv-comparison-rows{flex:1;min-height:0;overflow:auto;scrollbar-gutter:stable}.mv-comparison-row{height:calc((100vh - 180px)/2);min-height:730px;display:flex;flex-direction:column;border-bottom:1px solid var(--smv-line)}
+.mv-comparison-row[hidden]{display:none}.mv-comparison-row>.mv-main{flex:1;min-height:0}.mv-comparison-child{display:none}
+.mv-comparison-row .mv-analysis-header{padding:12px 16px}.mv-comparison-row .mv-analysis-header h1{font-size:19px;margin:3px 0 6px}.mv-comparison-row .mv-analysis-body{padding:10px}
+.mv-comparison-row .mv-panel-heading{padding:9px 12px}.mv-comparison-row .mv-graph-toolbar,.mv-comparison-row .mv-source-controls,.mv-comparison-row .mv-graph-footer{padding:7px 10px}
+.mv-comparison-row .mv-dax-card{box-shadow:none}.mv-comparison-row .mv-dax-card-header{padding:10px 12px}
+.mv-comparison-tabs{display:none;gap:6px;padding:8px 12px;border-bottom:1px solid var(--smv-line)}.mv-comparison-tabs button{border:1px solid var(--smv-line);border-radius:5px;padding:6px 10px;background:var(--smv-paper,#fff);color:var(--smv-ink);cursor:pointer}.mv-comparison-tabs button[aria-selected=true]{font-weight:600;background:var(--smv-soft)}
+.mv-comparison-workspace[data-layout=tabs] .mv-comparison-tabs{display:flex}.mv-comparison-workspace[data-layout=tabs] .mv-comparison-row{height:100%;min-height:700px}
+.mv-comparison-row .mv-compare-only{background:#fff0d6!important;color:#704300!important;border-color:#cc963f!important;box-shadow:none!important}.mv-comparison-row .mv-compare-only[aria-current=true]{background:#ffe3b3!important;color:#583600!important;border:2px solid #a76b14!important}
+.mv-comparison-row .mv-compare-common{box-shadow:inset 3px 0 #2563eb!important}
+.mv-comparison-row .mv-dax-grid[data-inline-comparison=true] .mv-card-references{display:none}
+.mv-comparison-row .mv-dax-row.mv-compare-shared{background:#fce7f3;border-left:3px solid #d47ba6}.mv-comparison-row .mv-dax-row.mv-compare-different{background:#fff0d6;border-left:3px solid #cc963f}
+.mv-comparison-row .mv-dax-line>.mv-compare-shared{background:#fce7f3!important;border-color:#dfa0c2!important}.mv-comparison-row .mv-dax-line>.mv-compare-different{background:#fff0d6!important;border-color:#cc963f!important}
+.mv-comparison-row .mv-dax-row{min-height:24px;line-height:24px}
+@media(max-width:1100px){.mv-comparison-shell>.mv-library,.mv-comparison-shell>.mv-resize{display:none}.mv-comparison-controls select{max-width:160px}}
+@media(max-width:600px){.mv-comparison-strip{padding:8px}.mv-comparison-controls{gap:6px}.mv-comparison-row .mv-analysis-header{padding:10px}.mv-comparison-row .mv-analysis-body{padding:6px}}
+
+.mv-comparison-shell[hidden]{display:none}
+
+.mv-comparison-row .mv-compare-shared{color:#5d2443!important}.mv-comparison-row .mv-compare-different{color:#704300!important}

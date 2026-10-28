@@ -1,0 +1,219 @@
+{
+  "name": "Contoso Retail · measure comparison",
+  "compatibilityLevel": 1600,
+  "model": {
+    "culture": "en-US",
+    "tables": [
+      {
+        "name": "Measures",
+        "columns": [],
+        "measures": [
+          {
+            "name": "Gross Sales",
+            "expression": "SUMX ( Sales, Sales[Quantity] * Sales[Unit Price] )",
+            "displayFolder": "Sales",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Discount Amount",
+            "expression": "SUM ( Sales[Discount Amount] )",
+            "displayFolder": "Sales",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Return Amount",
+            "expression": "SUM ( Returns[Amount] )",
+            "displayFolder": "Sales",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Sales Amount",
+            "expression": "[Gross Sales] - [Discount Amount] - [Return Amount]",
+            "displayFolder": "Sales",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Sales Amount LY",
+            "expression": "CALCULATE (\n    [Sales Amount],\n    SAMEPERIODLASTYEAR ( 'Date'[Date] )\n)",
+            "displayFolder": "Sales",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Material Cost",
+            "expression": "SUMX ( Sales, Sales[Quantity] * Sales[Unit Cost] )",
+            "displayFolder": "Margin",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Delivery Cost",
+            "expression": "SUM ( Sales[Delivery Cost] )",
+            "displayFolder": "Margin",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Total Cost",
+            "expression": "[Material Cost] + [Delivery Cost]",
+            "displayFolder": "Margin",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Marketing Cost",
+            "expression": "CALCULATE ( SUM ( Expenses[Amount] ), Expenses[Type] = \"Marketing\" )",
+            "displayFolder": "Margin",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Admin Cost",
+            "expression": "CALCULATE ( SUM ( Expenses[Amount] ), Expenses[Type] = \"Admin\" )",
+            "displayFolder": "Margin",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Operating Cost",
+            "expression": "[Marketing Cost] + [Admin Cost]",
+            "displayFolder": "Margin",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Gross Margin",
+            "expression": "[Sales Amount] - [Total Cost]",
+            "displayFolder": "Margin",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Gross Margin LY",
+            "expression": "CALCULATE (\n    [Sales Amount] - [Total Cost],\n    SAMEPERIODLASTYEAR ( 'Date'[Date] )\n)",
+            "displayFolder": "Margin",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Net Margin",
+            "expression": "[Gross Margin] - [Operating Cost]",
+            "displayFolder": "Margin",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Net Margin %",
+            "expression": "VAR Revenue = [Sales Amount]\nVAR Contribution = [Net Margin]\nRETURN\n    DIVIDE ( Contribution, Revenue )",
+            "displayFolder": "Margin",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Net Margin % LY",
+            "expression": "CALCULATE (\n    [Net Margin %],\n    SAMEPERIODLASTYEAR ( 'Date'[Date] )\n)",
+            "displayFolder": "Margin",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Sales Amount YTD",
+            "expression": "CALCULATE ( [Sales Amount], DATESYTD ( 'Date'[Date] ) )",
+            "displayFolder": "Time intelligence",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Sales Growth %",
+            "expression": "DIVIDE ( [Sales Amount] - [Sales Amount LY], [Sales Amount LY] )",
+            "displayFolder": "Time intelligence",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Margin by Product",
+            "expression": "VAR ProductsToShow =\n    FILTER (\n        VALUES ( Sales[Product] ),\n        CALCULATE ( [Sales Amount] ) > 0\n    )\nVAR MarginTotal =\n    SUMX (\n        ProductsToShow,\n        VAR Revenue = CALCULATE ( [Sales Amount] )\n        VAR Contribution = CALCULATE ( [Net Margin] )\n        RETURN\n            IF ( Revenue > 0, DIVIDE ( Contribution, Revenue ) )\n    )\nRETURN\n    DIVIDE ( MarginTotal, COUNTROWS ( ProductsToShow ) )",
+            "displayFolder": "Margin",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Margin by Product LY",
+            "expression": "CALCULATE (\n    [Margin by Product],\n    SAMEPERIODLASTYEAR ( 'Date'[Date] )\n)",
+            "displayFolder": "Margin",
+            "formatString": "#,0.00"
+          }
+        ]
+      },
+      {
+        "name": "Sales",
+        "columns": [
+          {
+            "name": "Quantity",
+            "dataType": "double"
+          },
+          {
+            "name": "Unit Price",
+            "dataType": "double"
+          },
+          {
+            "name": "Unit Cost",
+            "dataType": "double"
+          },
+          {
+            "name": "Discount Amount",
+            "dataType": "double"
+          },
+          {
+            "name": "Delivery Cost",
+            "dataType": "double"
+          },
+          {
+            "name": "Product",
+            "dataType": "string"
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime"
+          }
+        ]
+      },
+      {
+        "name": "Returns",
+        "columns": [
+          {
+            "name": "Amount",
+            "dataType": "double"
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime"
+          }
+        ]
+      },
+      {
+        "name": "Expenses",
+        "columns": [
+          {
+            "name": "Amount",
+            "dataType": "double"
+          },
+          {
+            "name": "Type",
+            "dataType": "string"
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime"
+          }
+        ]
+      },
+      {
+        "name": "Date",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "dateTime"
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "SalesDate",
+        "fromTable": "Sales",
+        "fromColumn": "Date",
+        "toTable": "Date",
+        "toColumn": "Date",
+        "fromCardinality": "many",
+        "toCardinality": "one",
+        "isActive": true
+      }
+    ]
+  }
+}

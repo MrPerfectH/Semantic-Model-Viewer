@@ -453,6 +453,37 @@
         },
         "when": "isWorkspaceTrusted",
         "userDescription": "Save one portable HTML diagram using a user-controlled Save dialog."
+      },
+      {
+        "name": "smv_compare",
+        "displayName": "Compare semantic model measures",
+        "toolReferenceName": "smvCompare",
+        "canBeReferencedInPrompt": true,
+        "modelDescription": "Compare two measures using native dependency diagrams and inline DAX. Includes shared and side-specific measure, table and column references. Static written definitions only; does not evaluate DAX or prove numeric equivalence. No CLI installation required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "type": "string",
+              "description": "Model ID from smv_discover; optional if only one model exists."
+            },
+            "measure": {
+              "type": "string",
+              "description": "First measure name, optionally qualified."
+            },
+            "with": {
+              "type": "string",
+              "description": "Second measure name, optionally qualified."
+            }
+          },
+          "required": [
+            "measure",
+            "with"
+          ],
+          "additionalProperties": false
+        },
+        "when": "isWorkspaceTrusted",
+        "userDescription": "Open paired dependency diagrams and inline DAX comparison for two measures."
       }
     ]
   },

@@ -30,11 +30,11 @@ function register(context){
     if(matches.length!==1)throw new Error('Choose one model from discover; found '+matches.length+' matching models. Backup models are never chosen automatically.');
     const entry=matches[0];
     if(!input.model&&/backup|archive/i.test(entry.uri.path))throw new Error('A backup or archived model requires an explicit model ID.');
-    const requestKey=JSON.stringify([entry.id,input]),generation=++requestId;if(kind==='show')requests.set(requestKey,generation);
+    const requestKey=JSON.stringify([entry.id,kind,input]),generation=++requestId;if(['show','compare'].includes(kind))requests.set(requestKey,generation);
     const records=await readModelFiles(entry);check(token);
     const recordHash=crypto.createHash('sha256').update(JSON.stringify(records.map(f=>[f.path||f.name,f.text]).sort((a,b)=>a[0].localeCompare(b[0])))).digest('hex');
     const cached=plans.get(requestKey);
-    if(kind==='show'&&cached&&cached.hash===recordHash&&cached.keys.every(key=>panels.has(key)&&panels.get(key).status!=='failed')){
+    if(['show','compare'].includes(kind)&&cached&&cached.hash===recordHash&&cached.keys.every(key=>panels.has(key)&&panels.get(key).status!=='failed')){
       const views=cached.keys.map(key=>{const state=panels.get(key);state.panel.reveal(undefined,true);return {label:state.panel.title,status:state.status,error:state.error,revision:state.revision,reused:true,summary:state.summary,renderer:state.renderer};});
       return {...cached.result,views};
     }
@@ -42,7 +42,7 @@ function register(context){
     const computed=await compute(context.extensionPath,{kind,input,records,name:entry.name,identity:entry.uri.toString()},token);
     if(computed.value)return computed.value;
     const {plan,prepared,sourceIdentity,sourceContentHash}=computed;check(token);
-    if(kind==='show'&&requests.get(requestKey)!==generation)return {cancelled:true,reason:'A newer request superseded this diagram.'};
+    if(['show','compare'].includes(kind)&&requests.get(requestKey)!==generation)return {cancelled:true,reason:'A newer request superseded this diagram.'};
     if(kind==='snapshot'){
       if(prepared.length!==1)throw new Error('Choose related or dependents for one portable HTML snapshot.');
       const target=await vscode.window.showSaveDialog({defaultUri:vscode.Uri.file(path.join(require('node:os').homedir(),'Semantic model diagram.html')),filters:{HTML:['html']}});
@@ -52,7 +52,7 @@ function register(context){
     }
     const views=[],keys=[];
     for(let i=0;i<prepared.length;i++){
-      check(token);const item=prepared[i],key=JSON.stringify([entry.id,plan.table,item.key,input.with||'',input.direction||'both',!!input.direct,!!input.includeInactive]);
+      check(token);const item=prepared[i],key=JSON.stringify([entry.id,plan.identity||plan.table,item.key,input.with||'',input.direction||'both',!!input.direct,!!input.includeInactive]);
       keys.push(key);let state=panels.get(key);
       // Repeated questions reveal the explored panel instead of resetting it.
       if(state&&state.hash===sourceContentHash&&state.status!=='failed'){state.panel.reveal(undefined,true);views.push({label:item.label,status:state.status,error:state.error,revision:state.revision,reused:true,summary:item.prepared.summary,renderer:item.prepared.renderer});continue;}
@@ -69,8 +69,8 @@ function register(context){
     const result={sourceIdentity:sourceIdentity,counts:plan.counts,warnings:plan.warnings,views,note:'Panels are opened in the editor. awaiting-viewer is not a rendered acknowledgement; repeat the same show request to read the latest panel status without resetting exploration.'};
     plans.set(requestKey,{hash:recordHash,keys,result});return result;
   }
-  const messages={discover:'Finding semantic models',inspect:'Reading model metadata',relations:'Tracing table filter paths',dependents:'Tracing calculation dependencies',show:'Opening model diagrams',snapshot:'Saving a portable model diagram'};
-  const disposables=['discover','inspect','relations','dependents','show','snapshot'].map(kind=>vscode.lm.registerTool('smv_'+kind,{
+  const messages={discover:'Finding semantic models',inspect:'Reading model metadata',relations:'Tracing table filter paths',dependents:'Tracing calculation dependencies',show:'Opening model diagrams',compare:'Comparing measure definitions',snapshot:'Saving a portable model diagram'};
+  const disposables=['discover','inspect','relations','dependents','show','compare','snapshot'].map(kind=>vscode.lm.registerTool('smv_'+kind,{
     prepareInvocation(){return {invocationMessage:messages[kind]};},
     async invoke(options,token){const result=await run(kind,options.input,token);return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(JSON.stringify(result))]);}
   }));

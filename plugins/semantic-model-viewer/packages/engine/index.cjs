@@ -21,9 +21,10 @@ function focus(loaded,table){
 function relations(loaded,table,options={}){return query.focused(loaded.source,table,'relations',{...options,loaded:focus(loaded,table)});}
 function dependents(loaded,table,options={}){return query.focused(loaded.source,table,'dependents',{...options,loaded:focus(loaded,table)});}
 function plan(loaded,options){return require(path.join(cli,'questions.cjs')).build(loaded.source,{...options,loaded:focus(loaded,options.table)});}
+function compare(loaded,options){return require(path.join(cli,'compare.cjs')).build(loaded.source,{...options,loaded});}
 function render(loaded,view){return require(path.join(cli,'explain.cjs')).prepare(loaded.source,view,{loaded,sourceContentHash:loaded.sourceContentHash,sourceIdentity:loaded.sourceIdentity});}
 function inspect(loaded,table){
   if(table)return {table:loaded.context.Snapshots.modelData(loaded.model).tables.find(t=>t.name===focus(loaded,table).table.name),relations:relations(loaded,table),dependents:dependents(loaded,table)};
   return {name:loaded.model.name,tables:loaded.model.tables.map(t=>({name:t.name,columns:t.columns.length,measures:t.measures.length})),relationships:loaded.model.relationships.length,sourceIdentity:loaded.sourceIdentity};
 }
-module.exports={loadRecords,focus,relations,dependents,plan,render,inspect};
+module.exports={loadRecords,focus,relations,dependents,plan,compare,render,inspect};

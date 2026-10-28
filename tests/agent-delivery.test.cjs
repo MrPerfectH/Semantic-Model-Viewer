@@ -33,8 +33,11 @@ test('native tools use the packaged worker, require workspace trust, preserve vi
  for(const file of ['agent-tools.js','workspace.js'])delete require.cache[require.resolve(path.join(ext,'src',file))];
  const api=require(path.join(ext,'src/agent-tools')).register({extensionPath:ext});t.after(()=>api.dispose());
  t.mock.method(require('node:crypto'),'randomBytes',()=>Buffer.alloc(18,255));
- assert.equal(tools.size,6);
+ assert.equal(tools.size,7);
  const discover=await api.run('discover');assert.equal(discover.models.length,1);
+ const pairInput={model:discover.models[0].id,measure:'Total Sales',with:'Sales LY'};
+ const comparison=await api.run('compare',pairInput);assert.equal(comparison.views.length,1);assert.equal(comparison.views[0].summary.comparison.roots[1].name,'Sales LY');
+ const comparisonPanel=vscode._panels.pop();comparisonPanel.dispose();
  const input={model:discover.models[0].id,table:'Sales',related:true,dependents:true};
  const first=await api.run('show',input);assert.equal(first.views.length,2);assert.equal(vscode._panels.length,2);
  for(const [index,panel] of vscode._panels.entries()){

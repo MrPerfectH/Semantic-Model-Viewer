@@ -213,3 +213,5 @@ The Measures view's table/relationship counts describe its background table canv
 ## Workspace downloads, opening preferences and receipts
 
 See [fetching a workspace model](cli-workspace-fetch.md). `smv fetch --workspace <name|UUID> --model <name|UUID>` downloads a definition for offline use. `show --workspace … --model … --table …` combines the fetch and diagram. Use `--open none|system`, `--opener <executable>`, or `SMV_OPENER` to control presentation. Exported diagrams have a sibling provenance receipt with source, renderer and artifact hashes.
+
+Compare two calculations with `smv compare <model> --measure "<A>" --with "<B>"`. This opens one native paired Measures view, with inline DAX and source references; use `--out comparison.html` for a portable file. See [measure comparison](measure-comparison.md) for colors, scope limits and saved state.

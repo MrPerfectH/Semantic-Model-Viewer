@@ -17,6 +17,12 @@ async function run(){
  assert.ok(result.views.every(view=>view.reused),'Reading acknowledgement must preserve existing exploration');
  const locations=result.views.map(view=>vscode.window.tabGroups.all.find(group=>group.tabs.some(tab=>tab.label===view.label)));
  assert.ok(locations.every(Boolean),'Both diagrams must be visible editor tabs');assert.notEqual(locations[0].viewColumn,locations[1].viewColumn,'Diagrams must occupy adjacent groups');
+ const compareInput={model:discovered.models[0].id,measure:'Total Sales',with:'Sales LY'};
+ const comparison=await agentTools.run('compare',compareInput);assert.equal(comparison.views.length,1);
+ const compareDeadline=Date.now()+25000;let compareStatuses=agentTools.status();
+ while(compareStatuses.some(view=>view.status==='awaiting-viewer')&&Date.now()<compareDeadline){await new Promise(resolve=>setTimeout(resolve,250));compareStatuses=agentTools.status();}
+ assert.ok(compareStatuses.every(view=>view.status==='applied'),JSON.stringify(compareStatuses));
+ const compareAgain=await agentTools.run('compare',compareInput);assert.ok(compareAgain.views.every(view=>view.reused&&view.status==='applied'));
  const source=vscode.Uri.joinPath(vscode.Uri.parse(discovered.models[0].source),'definition','model.tmdl');
  const original=await vscode.workspace.fs.readFile(source);await vscode.workspace.fs.writeFile(source,Buffer.concat([Buffer.from(original),Buffer.from('\n// host acceptance refresh\n')]));
  const refreshed=await agentTools.run('show',input);assert.ok(refreshed.views.every(view=>!view.reused));

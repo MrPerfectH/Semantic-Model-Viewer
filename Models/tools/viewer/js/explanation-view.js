@@ -5,6 +5,7 @@
   function object(value) { return value && typeof value === 'object' && !Array.isArray(value); }
   function resolve(model, ref) {
     if (!object(ref) || typeof ref.kind !== 'string' || typeof ref.name !== 'string') fail('object needs kind and name');
+    if(ref.comparisonRow!==undefined&&(![0,1].includes(ref.comparisonRow)||ref.kind!=='measure'))fail('invalid comparison row selection');
     var matches = [];
     if (ref.kind === 'table') matches = model.tables.filter(function (t) { return t.name === ref.name; });
     else if (ref.kind === 'relationship') matches = model.relationships.filter(function (r) { return r.name === ref.name; });
@@ -21,7 +22,7 @@
   function validate(model, input) {
     if (!object(input) || ![1,2].includes(input.version)) fail('version must be 1 or 2');
     var v = JSON.parse(JSON.stringify(input));
-    var allowed = ['version','mode','tables','focus','highlights','callouts','width','height','scale','chrome','crop','proposals','context','state','annotationsVisible','banner','arrange','paths','caption'];
+    var allowed = ['version','mode','tables','focus','highlights','callouts','width','height','scale','chrome','crop','proposals','context','state','annotationsVisible','banner','arrange','paths','caption','comparison'];
     Object.keys(v).forEach(function (k) { if (!allowed.includes(k)) fail('unknown field ' + k); });
     v.mode = v.mode || 'graph';
     if (!['graph','measures','matrix','clusters','power-query'].includes(v.mode)) fail('unsupported mode ' + v.mode);
@@ -65,6 +66,17 @@
       if(!['up','down','both'].includes(v.context.direction))fail('context direction must be up, down or both');
       if(!Number.isInteger(v.context.limit)||v.context.limit<1||v.context.limit>500)fail('context limit must be 1 to 500');
     }
+    function comparison(spec) {
+      if(!object(spec)||spec.version!==1||Object.keys(spec).some(function(k){return !['version','left','right','maxMeasures','active','layout','rows','folds'].includes(k);}))fail('invalid comparison state');
+      ['left','right'].forEach(function(k){if(!object(spec[k])||spec[k].kind!=='measure')fail('comparison requires two measures');resolve(model,spec[k]);});
+      if(key(spec.left)===key(spec.right))fail('comparison requires two different measures');
+      if(spec.maxMeasures!==undefined&&(!Number.isInteger(spec.maxMeasures)||spec.maxMeasures<1||spec.maxMeasures>200))fail('comparison maxMeasures must be 1 to 200');
+      if(spec.active!==undefined&&![0,1].includes(spec.active))fail('invalid comparison active row');
+      if(spec.layout!==undefined&&!['rows','tabs'].includes(spec.layout))fail('invalid comparison layout');
+      if(spec.rows!==undefined&&(!Array.isArray(spec.rows)||spec.rows.length!==2||spec.rows.some(function(r){return !object(r)||r.version!==1||r.comparison;})))fail('invalid comparison rows');
+      if(spec.folds!==undefined&&(!Array.isArray(spec.folds)||spec.folds.length!==2||spec.folds.some(function(r){return !object(r)||Object.values(r).some(function(v){return !object(v)||Object.values(v).some(function(b){return b!==true;});});})))fail('invalid comparison folds');
+    }
+    if(v.comparison!==undefined){if(v.version!==2||v.mode!=='measures')fail('comparison requires version 2 measures mode');comparison(v.comparison);v.focus=v.comparison.left;}
     if(v.state!==undefined){
       if(!object(v.state)||Object.keys(v.state).some(function(k){return !['tableView','measures','selection'].includes(k);}))fail('invalid explored state');
       if(v.state.selection)resolve(model,v.state.selection);
@@ -76,6 +88,7 @@
       }
       if(v.state.measures){
         var ms=v.state.measures;
+        if(ms.comparison){if(v.mode!=='measures'||!v.comparison)fail('explored comparison requires authored pair');comparison(ms.comparison);if(key(ms.comparison.left)!==key(v.comparison.left)||key(ms.comparison.right)!==key(v.comparison.right))fail('explored comparison pair differs from authored pair');}
         if(ms.source){if(!object(ms.source)||typeof ms.source.table!=='string')fail('invalid dependency source');resolve(model,{kind:'table',name:ms.source.table});if(ms.source.column!=null)resolve(model,{kind:'column',table:ms.source.table,name:ms.source.column});}
         [ms.selectedMeasure,ms.comparisonMeasure].filter(Boolean).concat(ms.extraMeasures||[]).forEach(function(n){var matches=model.tables.filter(function(t){return t.measures.some(function(m){return m.name===n;});});if(matches.length!==1)fail('unknown or ambiguous explored measure '+n);});
       }
@@ -118,7 +131,11 @@
     app.setState({showStandalone:true,search:'',activeFilter:null});
     app.setViewMode(view.mode);
     await frame();
-    if(view.mode==='measures'){
+    if(app.measures.comparison)app.measures.clearComparison();
+    if(view.mode==='measures'&&view.comparison){
+      app.measures.setComparison(view.comparison);
+      await frame();
+    } else if(view.mode==='measures'){
       app.measures._explanationContext=view.context||null;app.measures._gC=null;app.measures._wrapDax=true;
       if(!view.focus||view.focus.kind==='measure')app.setState({selMeasure:view.focus?view.focus.name:null,dependencySource:null,mvSourceMode:'measures',gPin:null,gExtra:{},gHover:null});
       else app.measures.analyzeSource(view.focus.kind==='table'?view.focus.name:view.focus.table,view.focus.kind==='column'?view.focus.name:null);
@@ -169,7 +186,7 @@
     Object.keys(app.measures._nodeEls || {}).forEach(function(n){var table=app.model.tables.find(function(t){return t.measures.some(function(m){return m.name===n;});});if(table)mark(app.measures._nodeEls[n].btn,{kind:'measure',table:table.name,name:n});});
     document.querySelectorAll('.pqc-node').forEach(function(n){var entry=app.powerQueryWorkspace.context.byNodeId.get(n.dataset.nodeId);if(entry&&entry.metadataRow)mark(n,{kind:'query',name:entry.metadataRow.id});});
     function target(ref,includeOffscreen){
-      var candidates=Array.from(document.querySelectorAll('[data-smv-kind]')).filter(function(el){return el.dataset.smvKind===ref.kind && el.dataset.smvName===ref.name && (!ref.table || el.dataset.smvTable===ref.table);});
+      var candidates=Array.from(document.querySelectorAll('[data-smv-kind]')).filter(function(el){return el.dataset.smvKind===ref.kind && el.dataset.smvName===ref.name && (!ref.table || el.dataset.smvTable===ref.table) && (ref.comparisonRow===undefined || !!el.closest('[data-comparison-row="'+ref.comparisonRow+'"]'));});
       if(ref.kind==='measure')candidates.sort(function(a,b){return Number(b.classList.contains('mv-dax-card'))-Number(a.classList.contains('mv-dax-card'));});
       return candidates.find(function(el){var b=el.getBoundingClientRect();return (b.width>0&&(b.height>0||ref.kind==='relationship'))&&(includeOffscreen||b.right>0&&b.bottom>0&&b.left<innerWidth&&b.top<innerHeight);});
     }
