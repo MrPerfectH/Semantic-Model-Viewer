@@ -232,3 +232,16 @@ The extension bundles the shared semantic-model engine and contributes native Co
 Claude Code and Codex receive separate complete CLI packages with their own runtimes; the extension is not required for those apps. See [bundled agent delivery and release boundaries](../docs/bundled-agent-delivery.md).
 
 Metadata returned to Copilot becomes part of the configured agent conversation; local parsing does not execute DAX, M or SQL.
+## Power BI Desktop External Tools (Windows)
+
+Install the VSIX in local VS Code, then run **Semantic Model Viewer: Add to Power BI External Tools**. The confirmation explains the file being written. Approve Windows PowerShell if Windows requests permission to write to Power BI's machine-wide External Tools folder, then restart Power BI Desktop.
+
+Select **Semantic Model Viewer (VS Code)** in Desktop's External Tools ribbon. It opens the model from that Desktop window, including unsaved metadata changes. **Semantic Model Viewer: Refresh Model** reads Desktop again. A launch without a server/database opens an empty viewer. **Connect to Power BI Desktop** lets you choose an already open Desktop model.
+
+The registration starts the installed `Code.exe` (or Code Insiders) directly. There is no separate Viewer EXE installer, and normal launches and model reads run as the current user. Only adding/removing the registration may require administrator approval. The connector reads metadata; it does not save changes to Desktop models.
+
+To uninstall the ribbon button, run **Semantic Model Viewer: Remove from Power BI External Tools**, approve the file removal if prompted, and restart Desktop. This removes only `Semantic Model Viewer VS Code.pbitool.json` and preserves other tools.
+
+Extension updates retain the registration because it does not point into a versioned extension directory. Install a VS Code version satisfying this extension's `engines.vscode` requirement. Remote extension hosts and non-Windows systems cannot register or connect to a local Desktop model.
+
+For source builds, packaging restores the pinned Microsoft Analysis Services client and dependencies using the .NET SDK. The VSIX includes these libraries and notices; end users need no SDK or additional installer. See `tools/powerbi/THIRD-PARTY-NOTICES.md` for component terms and provenance.

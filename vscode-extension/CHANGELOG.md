@@ -183,3 +183,8 @@ Known limitations: dependency analysis is static and does not execute DAX or Pow
 - Live refresh when TMDL files change on disk.
 - Optional report-usage badges from a Semantic Model Cleaner analysis (run it from the
   viewer or load an existing `smc --format json` export).
+
+## Unreleased
+
+- Add a Windows Power BI Desktop ribbon registration that launches installed VS Code directly, reads the exact Desktop model (including unsaved metadata), and rereads it on Refresh Model.
+- Explain registration changes before Windows approval, support Common Files folder lookup without inherited environment variables, and bundle the official model client for Store installations.
