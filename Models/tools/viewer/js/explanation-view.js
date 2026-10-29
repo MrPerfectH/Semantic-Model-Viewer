@@ -143,7 +143,7 @@
       if(!view.focus||view.focus.kind==='measure')app.setState({selMeasure:view.focus?view.focus.name:null,dependencySource:null,mvSourceMode:'measures',gPin:null,gExtra:{},gHover:null});
       else app.measures.analyzeSource(view.focus.kind==='table'?view.focus.name:view.focus.table,view.focus.kind==='column'?view.focus.name:null);
       await frame();
-      var measureState=app.measures.captureSnapshot();measureState.preferences=Object.assign({},measureState.preferences,{mode:innerWidth<900?'graph':'split',orientation:'lr',wrap:true});measureState.library.collapsed=!!view.focus;measureState.graph={autoFit:true};app.measures.restoreSnapshot(measureState);
+      var measureState=app.measures.captureSnapshot();measureState.preferences=Object.assign({},measureState.preferences,{mode:innerWidth<900?'graph':'split',orientation:'auto',wrap:true});measureState.library.collapsed=!!view.focus;measureState.graph={autoFit:true};app.measures.restoreSnapshot(measureState);
     }
     var refs=view.highlights.concat(view.callouts.map(function(c){return c.object;}));
     if(view.focus)refs.push(view.focus);

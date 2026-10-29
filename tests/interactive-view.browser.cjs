@@ -192,7 +192,7 @@ check(app.explorer.direction==='connected'&&app.explorer.includeInactive,'inacti
 
 test('focused dependency library is discoverable without a footer and persists with explicit layout',{skip:!browser},async t=>verify(t,{version:2,mode:'measures',focus:{kind:'table',name:'Inventory'},banner:false,width:640,height:900},`
 const v=app.measures,control=()=>v.libraryToggle;
-check(v._graphOrientation==='lr','focused graphs default left to right');
+check(v._graphOrientation==='auto','focused graphs follow the pane by default');
 check(control().getBoundingClientRect().width>0,'library toggle visible with hidden footer');
 check(control().getAttribute('aria-expanded')==='false'&&v.pane.inert,'focused library collapsed and untabbable');
 control().click();await frame();check(control().getAttribute('aria-expanded')==='true'&&!v.pane.inert,'library opens');check(document.activeElement===v.qInput,'focus moves to search');
@@ -200,7 +200,7 @@ v.pane.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));a
 control().click();v.setGraphOrientation('bt');await frame();const saved=smv.inspect().currentView;check(saved.state.measures.library.collapsed===false,'open library captured');
 await smv.apply(saved);await frame();check(!v._libraryCollapsed&&v._graphOrientation==='bt','snapshot restores library and explicit vertical option');
 const snap=Snapshots.capture(app);v.setLibraryCollapsed(true);app.loadSnapshot(snap);await frame();await frame();check(!v._libraryCollapsed,'native snapshot restores visibility');
-v.setLibraryCollapsed(true);await smv.reset();check(v._libraryCollapsed&&v._graphOrientation==='lr','reset returns to focused defaults');
+v.setLibraryCollapsed(true);await smv.reset();check(v._libraryCollapsed&&v._graphOrientation==='auto','reset returns to focused defaults');
 `));
 
 test('show PNG export confirms static output without polluting JSON',{skip:!browser},t=>{

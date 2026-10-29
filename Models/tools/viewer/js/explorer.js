@@ -54,7 +54,7 @@
     /* A press anywhere outside an open toolbar popover closes it. Presses on the menu or on
        its own button are left alone (the button toggles by itself). */
     window.addEventListener('pointerdown', function(e){
-      if(!(self.optionsOpen||app.state.showPresets))return;
+      if(!(self.optionsOpen||app.state.showPresets||self.viewOpen))return;
       if(e.target&&e.target.closest&&e.target.closest('.ex-menu-anchor'))return;
       self.closeMenus(true);
     },true);
@@ -74,12 +74,14 @@
     closeMenus:function(outside){
       var app=this.app,self=this;
       if(outside){
-        var any=this.optionsOpen||app.state.showPresets;
+        var any=!!(this.optionsOpen||app.state.showPresets||this.viewOpen);
+        if(this.viewOpen){this.viewOpen=false;this._navKey=null;}
         this.optionsOpen=false;this._clusterKey=null;this._key=null;
         if(app.state.showPresets)app.setState({showPresets:false});else if(any)this.update();
         return any;
       }
-      if(this.legendOpen){this.legendOpen=false;this.saveChrome();this._clusterKey=null;this.update();if(this.legendBtn&&this.legendBtn.focus)this.legendBtn.focus();return true;}
+      if(this.viewOpen){this.viewOpen=false;this._navKey=null;this.update();var v=this.nav.querySelector('.ex-view-anchor>button');if(v)v.focus();return true;}
+      if(this.legendShown()){this.legendOpen=false;this.legendForced=false;this.saveChrome();this._clusterKey=null;this.update();if(this.legendBtn&&this.legendBtn.focus)this.legendBtn.focus();return true;}
       if(this.optionsOpen){this.optionsOpen=false;this._key=null;this.update();if(this.displayBtn&&this.displayBtn.focus)this.displayBtn.focus();return true;}
       if(app.state.showPresets){app.setState({showPresets:false},function(){if(self.presetsBtn&&self.presetsBtn.focus)self.presetsBtn.focus();});return true;}
       return false;
@@ -108,6 +110,14 @@
       this._key=null;this._navKey=null;this.update();
     },
     toggleTools:function(){this.toolsOpen=!this.toolsOpen;if(!this.toolsOpen){this.optionsOpen=false;if(this.app.state.showPresets)this.app.state.showPresets=false;}this._key=null;this._navKey=null;this.update();this.app.setState({});},
+    /* Short of room — a short window, or a canvas squeezed between the rails — the legend
+       dock and the overview map stand down so the diagram keeps the space, and the status
+       line goes. Their switches show what is on screen; switching one on keeps it on. */
+    tight:function(){var lib=this.libraryHidden?0:window.innerWidth<1050?234:268,drawer=this.app.state.selected&&!this.inspectorHidden?330:0;return window.innerHeight<820||window.innerWidth-lib-drawer<760;},
+    legendShown:function(){return this.legendOpen&&(!this.tight()||!!this.legendForced);},
+    mapShown:function(){return !this.mapHidden&&(!this.tight()||!!this.mapForced);},
+    toggleLegend:function(){var on=!this.legendShown();this.legendOpen=on;this.legendForced=on&&this.tight();this.saveChrome();this.update();},
+    toggleMap:function(){var on=!this.mapShown();this.mapHidden=!on;this.mapForced=on&&this.tight();this.saveChrome();this.update();},
     saveChrome:function(){if(this.compact)return;store.setJSON('smv_panes_v1',{libraryHidden:this.libraryHidden,inspectorHidden:this.inspectorHidden,legendOpen:this.legendOpen,mapHidden:this.mapHidden});},
     toggleLibrary:function(){this.setPanes({libraryHidden:!this.libraryHidden});},
     toggleInspector:function(){this.setPanes({inspectorHidden:!this.inspectorHidden});},
@@ -270,11 +280,11 @@
          canvases speak one visual language instead of the old floating chip plus legend. */
       var clusters=st.loaded&&st.viewMode==='clusters';
       var width=this.libraryHidden?0:window.innerWidth<1050?234:268,drawer=graph&&st.selected&&!this.inspectorHidden?330:0;
-      this.library.hidden=!graph||this.libraryHidden;this.empty.hidden=!graph;this.nav.hidden=!graph&&!clusters;this.legendDock.hidden=(!graph&&!clusters)||!this.legendOpen;
-      var tools=!this.compact||this.toolsOpen,top=tools?62:0,foot=this.compact?0:30;
-      this.toolbar.hidden=(!graph&&!clusters)||!tools;this.status.hidden=(!graph&&!clusters)||this.compact;
+      this.library.hidden=!graph||this.libraryHidden;this.empty.hidden=!graph;this.nav.hidden=!graph&&!clusters;this.legendDock.hidden=(!graph&&!clusters)||!this.legendShown();
+      var tools=!this.compact||this.toolsOpen,top=tools?62:0,quiet=this.compact||window.innerHeight<820,foot=quiet?0:30;
+      this.toolbar.hidden=(!graph&&!clusters)||!tools;this.status.hidden=(!graph&&!clusters)||quiet;
       main.classList.toggle('ex-compact',this.compact);
-      this.mapHost.hidden=!graph||!this.names.size||this.mapHidden;
+      this.mapHost.hidden=!graph||!this.names.size||!this.mapShown();
       var start=!!graph&&!app.modelKey&&!app.model.tables.length;
       main.classList.toggle('ex-start',start);
       main.classList.toggle('ex-graph',!!graph);
@@ -289,7 +299,7 @@
       if(graph||clusters){this.renderNavigation();this.renderLegend();this.layoutFooter();}
       if(clusters){
         this.status.textContent='click a group to expand or collapse · drag to arrange · scroll to zoom';
-        var ckey=[app.modelKey,app.colorBy,cv.expandedGroups?cv.expandedGroups.size:0,cv.groupOrder?cv.groupOrder.length:0,this.legendOpen,st.activeFilter].join('|');
+        var ckey=[app.modelKey,app.colorBy,cv.expandedGroups?cv.expandedGroups.size:0,cv.groupOrder?cv.groupOrder.length:0,this.legendShown(),st.activeFilter].join('|');
         if(ckey!==this._clusterKey){this._clusterKey=ckey;this.renderClusterToolbar();}
         return;
       }
@@ -298,7 +308,7 @@
       if(start){this.library.hidden=true;this.toolbar.hidden=true;this.nav.hidden=true;this.legendDock.hidden=true;this.status.hidden=true;this.empty.hidden=false;this.renderEmpty();return;}
       this.empty.hidden=!!this.names.size;
       this.status.textContent=this.message || 'Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several';
-      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.compact,this.toolsOpen,this.history.length,st.showPresets,this.optionsOpen,this.legendOpen,st.showStandalone,st.activeFilter,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
+      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.compact,this.toolsOpen,this.tight(),this.history.length,st.showPresets,this.optionsOpen,this.legendOpen,st.showStandalone,st.activeFilter,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
       if(key!==this._key){this._key=key;this.renderLibrary();this.renderToolbar();this.renderEmpty();}
       this.renderNavigation();this.drawMap();
     },
@@ -393,15 +403,15 @@
     },
     layoutFooter:function(){
       if(!this.nav||this.nav.hidden)return;
-      var f=this.compact?0:30,h=this.nav.offsetHeight||52,d=this.legendOpen?(this.legendDock.offsetHeight||160):0;
+      var f=this.status.hidden?0:30,h=this.nav.offsetHeight||52,d=this.legendShown()?(this.legendDock.offsetHeight||160):0;
       this.legendDock.style.bottom=(f+h)+'px';
       this.app.canvas.host.style.bottom=(f+h+d)+'px';
       this.mapHost.style.bottom=(f+12+h+d)+'px';
     },
     renderLegend:function(){
       var self=this,app=this.app,cv=app.canvas;U.clear(this.legendDock);
-      this.legendDock.hidden=!this.legendOpen;
-      if(!this.legendOpen)return;
+      this.legendDock.hidden=!this.legendShown();
+      if(this.legendDock.hidden)return;
       var grid=el('div',{cls:'ex-legend-grid'});
       (app.legend&&app.legend.build?app.legend.build():[]).forEach(function(L){
         var active=app.state.activeFilter===L.key;
@@ -435,12 +445,12 @@
       var samples=el('div',{cls:'ex-starters'});starters.forEach(function(t){samples.appendChild(button(t.name,function(){self.add([t.name]);app.focusTable(t.name);},false,t.name+' · '+t.relCount+' relationships'));});this.empty.firstChild.appendChild(samples);
     },
     renderNavigation:function(){
-      var app=this.app,cv=app.canvas,self=this,key=[app.state.selected,app.state.isolate,app.colorBy,cv.showSA,this.mapHidden,this.legendOpen,app.state.viewMode,this.compact,this.toolsOpen].join('|');
+      var app=this.app,cv=app.canvas,self=this,brief=this.compact||this.tight(),key=[app.state.selected,app.state.isolate,app.colorBy,cv.showSA,this.mapShown(),this.legendShown(),app.state.viewMode,this.compact,this.toolsOpen,brief,this.viewOpen].join('|');
       if(this._navKey===key&&this.nav.firstChild){this.nav.querySelector('.ex-zoom-value').textContent=app.state.zoomPct;return;}
       this._navKey=key;U.clear(this.nav);
       var zoom=el('div',{cls:'ex-footer-group'});this.nav.appendChild(zoom);
       zoom.appendChild(button('−',function(){cv.zoomOut();},false,'Zoom out'));zoom.appendChild(el('span',{cls:'ex-zoom-value',text:app.state.zoomPct}));zoom.appendChild(button('+',function(){cv.zoomIn();},false,'Zoom in'));zoom.appendChild(button('Fit',function(){cv.fitView();}));
-      if(app.state.selected)zoom.appendChild(button(this.compact?'Center':'Center selected',function(){cv.focusGraph(app.state.selected);},false,'Center '+app.state.selected));
+      if(app.state.selected)zoom.appendChild(button(brief?'Center':'Center selected',function(){cv.focusGraph(app.state.selected);},false,'Center '+app.state.selected));
       if(app.state.selected&&app.state.viewMode==='graph'){
         var focus=button('Focus',function(){self.toggleFocus();},false,app.state.isolate?'Show the whole layout again':'Show only '+app.state.selected+' and its direct neighbours, arranged to read');
         focus.classList.add('ex-mode');focus.setAttribute('aria-pressed',String(!!app.state.isolate));zoom.appendChild(focus);
@@ -451,14 +461,24 @@
         if(!this.toolsOpen){zoom.classList.add('ex-footer-last');this.nav.appendChild(tools);return;}
       }
       function toggle(label,on,action){var input=el('input',{type:'checkbox',role:'switch',checked:on,'aria-label':label,onChange:action});return el('label',{cls:'ex-footer-toggle'},[el('span',{text:label}),input]);}
-      if(app.state.viewMode==='graph'){
-        this.nav.appendChild(toggle(this.compact?'Disconnected':'Disconnected tables',cv.showSA,function(){cv.toggleStandalone();self.update();}));
-        this.nav.appendChild(toggle(this.compact?'Map':'Overview map',!this.mapHidden,function(){self.mapHidden=!self.mapHidden;self.saveChrome();self.update();}));
+      /* Short of room, the display switches fold behind one View button instead of wrapping
+         the bar onto a second line over the diagram. */
+      var host=this.nav;
+      if(brief&&!this.compact){
+        var view=button('View',function(){self.viewOpen=!self.viewOpen;self._navKey=null;self.update();},false,'Display switches: disconnected tables, overview map, colours and legend');
+        view.classList.add('ex-tools-toggle');view.setAttribute('aria-expanded',String(!!this.viewOpen));
+        var anchor=el('div',{cls:'ex-menu-anchor ex-view-anchor'},[view]);this.nav.appendChild(anchor);zoom.classList.add('ex-footer-last');
+        if(!this.viewOpen)return;
+        host=el('div',{cls:'ex-view-menu',role:'group','aria-label':'Display switches'});anchor.appendChild(host);
       }
-      var mode=el('div',{cls:'ex-footer-group',role:'group','aria-label':'Colour by'},[el('span',{text:this.compact?'Colour':'Colour by'})]);
-      [['source','Source'],['domain',this.compact?'Folder':'Table folder']].forEach(function(pair){var b=button(pair[1],function(){cv.setColorMode(pair[0]);self.update();});b.setAttribute('aria-pressed',String(app.colorBy===pair[0]));b.classList.add('ex-mode');mode.appendChild(b);});this.nav.appendChild(mode);
-      var legend=toggle('Legend',this.legendOpen,function(){self.legendOpen=!self.legendOpen;self.saveChrome();self.update();});this.legendBtn=legend.lastChild;this.nav.appendChild(legend);
-      if(this.legendOpen)this.nav.appendChild(button('Edit colours',function(){app.editGroupColours();}));
+      if(app.state.viewMode==='graph'){
+        host.appendChild(toggle(brief?'Disconnected':'Disconnected tables',cv.showSA,function(){cv.toggleStandalone();self.update();}));
+        host.appendChild(toggle(brief?'Map':'Overview map',this.mapShown(),function(){self.toggleMap();}));
+      }
+      var mode=el('div',{cls:'ex-footer-group',role:'group','aria-label':'Colour by'},[el('span',{text:brief?'Colour':'Colour by'})]);
+      [['source','Source'],['domain',brief?'Folder':'Table folder']].forEach(function(pair){var b=button(pair[1],function(){cv.setColorMode(pair[0]);self.update();});b.setAttribute('aria-pressed',String(app.colorBy===pair[0]));b.classList.add('ex-mode');mode.appendChild(b);});host.appendChild(mode);
+      var legend=toggle('Legend',this.legendShown(),function(){self.toggleLegend();});this.legendBtn=legend.lastChild;host.appendChild(legend);
+      if(this.legendShown())host.appendChild(button(brief?'Colours':'Edit colours',function(){app.editGroupColours();},false,'Edit colours'));
       if(tools)this.nav.appendChild(tools);
     },
     drawMap:function(){

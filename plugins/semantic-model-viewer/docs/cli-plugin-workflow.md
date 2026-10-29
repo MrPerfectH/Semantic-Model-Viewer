@@ -43,7 +43,8 @@ and individual view URLs. Tables and Measures run side by side in ONE server.
 The workspace offers a Tabs mode for more space; a pane selector appears only when
 there are more views than panes. Each view opens on the diagram alone, with no answer
 banner, legend, overview map or table library. Relay each view's `answer` in the reply.
-The canvas bar's Tools button restores the editing chrome.
+The canvas bar's Tools button restores the editing chrome. A narrow Measures pane
+reads top to bottom.
 Each view retains its own selection, camera, revision and browser receipts.
 Repeat the same request to reuse the session and views. A different table adds
 named views without replacing the previous ones. With neither `--related` nor

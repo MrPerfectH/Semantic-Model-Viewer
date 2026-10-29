@@ -5,7 +5,7 @@
   var el = U.el, sv = U.sv, store = U.store;
   var CAP = 500, NH = 34;
   // Measure names render at NODE_PX; an answer view keeps them at READABLE_PX or larger on screen.
-  var NODE_PX = 12, READABLE_PX = 11, GRAPH_MARGIN = 28;
+  var NODE_PX = 12, READABLE_PX = 11, GRAPH_MARGIN = 28, ORIENTATIONS = ['auto', 'lr', 'tb', 'bt'];
   /* Grouping: graphs of GROUP_MIN nodes or fewer read fine as plain columns; a home
      table + display folder bundle of GROUP_INLINE or fewer stays inline; anything larger
      becomes a group node showing GROUP_PAGE members behind a "+ N more" expander. */
@@ -32,9 +32,21 @@
     this._edgeEls = {};
     this._gC = null;
     var prefs = this.options.comparison ? {} : store.getJSON(PREF_KEY, {}) || {};
+    if (!this.options.comparison) {
+      var view = this;
+      // Crossing the compact-header threshold rebuilds the header for the new room.
+      window.addEventListener('resize', function () {
+        if (view._built && view._headerCompact != null && view._headerCompact !== view.compactHeader()) { view._mainKey = null; view.update(); }
+      });
+    }
     this._workspaceMode = choice(prefs.mode, ['split', 'dax', 'graph'], 'split');
     this._splitLayout = choice(prefs.split, ['beside', 'below'], 'beside');
-    this._graphOrientation = choice(prefs.orientation, ['lr', 'tb', 'bt'], 'lr');
+    /* Auto follows the pane: left to right, or top to bottom once the pane is narrow. A
+       direction counts as the reader's choice only once picked from the menu; one that was
+       merely saved as the old default gives way to Auto. */
+    // A comparison row shares its pair's layout, which is computed left to right or as chosen.
+    this._graphOrientation = this.options.comparison ? 'lr' : prefs.orientationChosen ? choice(prefs.orientation, ORIENTATIONS, 'auto') : 'auto';
+    this._orientationChosen = !!prefs.orientationChosen && this._graphOrientation !== 'auto';
     this._splitShares = { beside: share(prefs.besideShare, .55), below: share(prefs.belowShare, .52) };
     this._wrapDax = prefs.wrap !== false;
     this._showSources = prefs.sources === true;
@@ -92,7 +104,7 @@
           mode: choice(prefs.mode, ['split', 'dax', 'graph'], 'split'),
           split: choice(prefs.split, ['beside', 'below'], 'beside'),
           besideShare: share(prefs.besideShare, .55), belowShare: share(prefs.belowShare, .52),
-          orientation: choice(prefs.orientation, ['lr', 'tb', 'bt'], 'lr'), wrap: prefs.wrap !== false, sources: !!source || prefs.sources === true,
+          orientation: choice(prefs.orientation, ORIENTATIONS, 'auto'), wrap: prefs.wrap !== false, sources: !!source || prefs.sources === true,
           fmt: choice(prefs.fmt, ['original', 'long', 'short'], 'long'), inline: prefs.inline === true, plain: prefs.plain === true
         },
         graph: { zoom: bounded(graph.zoom, .02, 1.8, 1), scrollLeft: bounded(graph.scrollLeft, 0, 10000000, 0),
@@ -311,9 +323,9 @@
         scrollLeft: Math.max(0, Math.min(Math.max(0, frameW - w), cx - w / 2)),
         scrollTop: Math.max(0, Math.min(Math.max(0, frameH - h), cy - h / 2)) };
     },
-    gLayout: function (root, extra, cap, orientation, scope) {
+    gLayout: function (root, extra, cap, orientation, scope, budget) {
       var self = this;
-      orientation = choice(orientation || this._graphOrientation, ['lr', 'tb', 'bt'], 'lr');
+      orientation = choice(orientation || this._graphOrientation, ['lr', 'tb', 'bt'], 'lr');   // 'auto' is resolved by buildGraph
       var vertical = orientation !== 'lr', direction = orientation === 'bt' ? -1 : 1;
       var dist = {}; dist[root] = 0;
       var bfs = function (dir) {
@@ -396,7 +408,7 @@
       var colW = grouping.slots.map(function (ss) {
         return Math.min(390, Math.max(190, ss.reduce(function (a, s) { return Math.max(a, slotText(s)); }, 0) * 7 + 26));
       });
-      var xy = {}, boxes = [], w, h;
+      var xy = {}, boxes = [], w, h, wrap = null;
       /* One slot is either a single measure or a labelled group of them; placing it writes
          the member coordinates and, for a group, the frame the reader sees around them. */
       var place = function (s, x, y, cw) {
@@ -407,7 +419,10 @@
           shown: s.shown.length, hidden: s.hidden, expanded: s.expanded,
           x: x - GPAD, y: y, w: cw + GPAD * 2, h: s.h });
       };
-      if (vertical) {
+      if (vertical && direction === 1 && budget > 0) {
+        wrap = this.gWrapRows(grouping.slots, colW, budget, place);
+        w = wrap.w; h = wrap.h;
+      } else if (vertical) {
         // Keep labels horizontal: each dependency layer becomes a row of slots.
         var rowW = grouping.slots.map(function (ss, li) { return ss.length * colW[li] + Math.max(0, ss.length - 1) * GAP; });
         var rowH = grouping.slots.map(function (ss) { return ss.reduce(function (a, s) { return Math.max(a, s.h); }, NH); });
@@ -449,7 +464,9 @@
         var a = e[0], b = e[1];
         var A = xy[a], B = xy[b], back = layer[a] >= layer[b];
         var d;
-        if (vertical && !back) {
+        if (wrap && !back) {
+          d = wrap.edge(a, b, xy);
+        } else if (vertical && !back) {
           var vx1 = A.x + A.w / 2 + prt[i][0], vy1 = A.y + (direction === 1 ? NH : 0);
           var vx2 = B.x + B.w / 2 + prt[i][1], vy2 = B.y + (direction === 1 ? 0 : NH);
           var vk = Math.min(90, Math.abs(vy2 - vy1) / 2);
@@ -470,7 +487,92 @@
       var relM = {}; Array.from(new Set([].concat(Array.from(upSet), Array.from(dnSet), names))).forEach(function (nm) { relM[nm] = nm === root ? 'root' : (upSet.has(nm) ? 'up' : (dnSet.has(nm) ? 'dn' : 'x')); });
       return { root: root, orientation: orientation, names: visible, inc: inc, deps: deps, cons: cons, hidU: hidU, hidD: hidD,
         upSet: upSet, dnSet: dnSet, xy: xy, w: w, h: h, geo: geo, nE: eList.length, relM: relM, capped: capped,
-        boxes: boxes, groupOf: grouping.groupOf, hiddenByGroup: hidden, grouped: grouping.grouped };
+        boxes: boxes, groupOf: grouping.groupOf, hiddenByGroup: hidden, grouped: grouping.grouped, wrap: wrap };
+    },
+    /* Top to bottom for a narrow pane: each dependency layer is a band whose slots wrap into
+       rows no wider than `budget`. Rows are left-aligned on a grid so the gaps between
+       columns line up into gutters, and every link is drawn with right angles through the
+       open space — out of a node's bottom (or its side, when a node sits below it), along
+       the channel between bands, down a gutter, and into the target's top (or its side,
+       when it is not in the band's first row). No link crosses a measure. */
+    gWrapRows: function (slots, colW, budget, place) {
+      var GX = 32, ROWGAP = 16, BAND = 76, PX = 100, PY = 84, RADIUS = 9;
+      var bands = slots.map(function (ss, li) {
+        var cw = colW[li], per = Math.max(1, Math.min(ss.length, Math.floor((budget + GX) / (cw + GX)))), rows = [];
+        for (var i = 0; i < ss.length; i += per) rows.push(ss.slice(i, i + per));
+        var heights = rows.map(function (r) { return r.reduce(function (a, s) { return Math.max(a, s.h); }, NH); });
+        return { cw: cw, per: per, rows: rows, heights: heights, width: per * cw + (per - 1) * GX,
+          h: heights.reduce(function (a, x) { return a + x; }, 0) + Math.max(0, rows.length - 1) * ROWGAP };
+      });
+      var widest = bands.reduce(function (a, b) { return Math.max(a, b.width); }, 0), slot = {}, y = PY;
+      bands.forEach(function (band, li) {
+        band.x0 = PX + (widest - band.width) / 2; band.top = y;
+        var ry = y;
+        band.rows.forEach(function (row, r) {
+          row.forEach(function (sl, c) {
+            place(sl, band.x0 + c * (band.cw + GX), ry, band.cw);
+            var members = sl.kind === 'group' ? sl.shown : [sl.name];
+            members.forEach(function (n, m) { slot[n] = { li: li, r: r, c: c, group: sl.kind === 'group', first: m === 0, last: m === members.length - 1 }; });
+          });
+          ry += band.heights[r] + ROWGAP;
+        });
+        band.bottom = y + band.h; y = band.bottom + BAND;
+      });
+      var wrap = { w: PX * 2 + widest, h: y - BAND + PY, bands: bands, slot: slot, ox: 0, oy: 0 };
+      var gutter = function (band, c) { return wrap.ox + band.x0 + c * (band.cw + GX) - GX / 2; };
+      var above = function (li) { return wrap.oy + bands[li].top - BAND / 2; };
+      var below = function (li) { return wrap.oy + bands[li].bottom + BAND / 2; };
+      // Nothing under this node in its band, so a link can leave straight down.
+      var clearBelow = function (n) {
+        var t = slot[n], band = bands[t.li], last = band.rows.length - 1;
+        if (t.group && !t.last) return false;
+        return t.r === last || (t.r === last - 1 && t.c >= band.rows[last].length);
+      };
+      var path = function (pts) {
+        var clean = [];
+        pts.forEach(function (p) {
+          var q = clean[clean.length - 1];
+          if (q && Math.abs(q[0] - p[0]) < 0.5 && Math.abs(q[1] - p[1]) < 0.5) return;
+          var o = clean[clean.length - 2];
+          if (o && q && ((Math.abs(o[0] - q[0]) < 0.5 && Math.abs(q[0] - p[0]) < 0.5) || (Math.abs(o[1] - q[1]) < 0.5 && Math.abs(q[1] - p[1]) < 0.5))) clean.pop();
+          clean.push(p);
+        });
+        var f = function (p) { return Math.round(p[0] * 10) / 10 + ',' + Math.round(p[1] * 10) / 10; };
+        var d = 'M' + f(clean[0]);
+        for (var i = 1; i < clean.length - 1; i++) {
+          var a = clean[i - 1], p = clean[i], b = clean[i + 1];
+          var la = Math.hypot(p[0] - a[0], p[1] - a[1]), lb = Math.hypot(b[0] - p[0], b[1] - p[1]), r = Math.min(RADIUS, la / 2, lb / 2);
+          d += ' L' + f([p[0] - (p[0] - a[0]) / la * r, p[1] - (p[1] - a[1]) / la * r]) + ' Q' + f(p) + ' ' + f([p[0] + (b[0] - p[0]) / lb * r, p[1] + (b[1] - p[1]) / lb * r]);
+        }
+        return d + ' L' + f(clean[clean.length - 1]);
+      };
+      /* From (x, y) in the channel above band `from + 1` to node b. Bands in between are
+         crossed down the gutter closest to where the link is heading. */
+      wrap.route = function (pts, from, b, xy, port, lane) {
+        var t = slot[b], B = xy[b], x = pts[pts.length - 1][0], li;
+        var into = t.r === 0 && !t.group ? B.x + B.w / 2 + (port || 0) : gutter(bands[t.li], t.c);
+        for (li = from + 1; li < t.li; li++) {
+          var band = bands[li], best = gutter(band, 0);
+          for (var c = 1; c <= band.per; c++) { var g = gutter(band, c); if (Math.abs(g - into) < Math.abs(best - into)) best = g; }
+          pts.push([x, above(li) + lane]); pts.push([best, above(li) + lane]); pts.push([best, below(li) + lane]); x = best;
+        }
+        pts.push([x, above(t.li) + lane]); pts.push([into, above(t.li) + lane]);
+        if (t.r === 0 && !t.group) pts.push([into, B.y]);
+        else {
+          // Down the gutter, across the gap just above the node, and into its top-left.
+          var hop = B.y - (t.group ? MGAP / 2 : ROWGAP / 2);
+          pts.push([into, hop]); pts.push([B.x + 16, hop]); pts.push([B.x + 16, B.y]);
+        }
+        return path(pts);
+      };
+      // A node's links leave from one point and split in the channel: a bundle, not a comb.
+      wrap.edge = function (a, b, xy) {
+        var A = xy[a], t = slot[a], lane = ((t.c + t.r) % 5 - 2) * 5, pts;
+        if (clearBelow(a)) pts = [[A.x + A.w / 2, A.y + NH], [A.x + A.w / 2, below(t.li) + lane]];
+        else { var g = gutter(bands[t.li], t.c + 1); pts = [[A.x + A.w, A.y + NH / 2], [g, A.y + NH / 2], [g, below(t.li) + lane]]; }
+        return wrap.route(pts, t.li, b, xy, 0, lane);
+      };
+      return wrap;
     },
     /* Source cards are one table header plus only the columns used by visible links.
        Whole-table links attach to the header; column links attach to their own row. */
@@ -532,6 +634,7 @@
       };
       Object.keys(G.xy).forEach(function (n) { G.xy[n].x += dx; G.xy[n].y += dy; });
       G.boxes.forEach(function (b) { b.x += dx; b.y += dy; });
+      if (G.wrap) { G.wrap.ox += dx; G.wrap.oy += dy; }
       G.geo = G.geo.filter(function (e) { return !selected || (e.a !== G.root && e.b !== G.root); });
       G.geo.forEach(function (e) { e.d = translate(e.d); });
       G.w = Math.max(G.w + dx, width + 120); G.h = Math.max(G.h + dy, height + 120);
@@ -560,7 +663,12 @@
         var a = self.sourceKey(link.table, link.column), A = G.xy[a], B = G.xy[link.to];
         if (!A || !B) return;
         var x1, y1, x2, y2, d;
-        if (vertical) {
+        if (G.wrap && !bottom) {
+          // A column leaves from its own row, down a gutter beside the card, then joins the flow.
+          var card = sources.find(function (s) { return s.table === link.table; }), gx = card.x + card.w + 14, root = G.wrap.slot[G.root];
+          x1 = A.x + A.w; y1 = A.y + NH / 2;
+          d = G.wrap.route([[x1, y1], [gx, y1]], root ? root.li : -1, link.to, G.xy, 0, 0);
+        } else if (vertical) {
           x1 = A.x + A.w / 2; y1 = A.y + (bottom ? 0 : NH);
           x2 = B.x + B.w / 2; y2 = B.y + (bottom ? NH : 0);
           var middle = (y1 + y2) / 2;
@@ -606,14 +714,43 @@
       G.w = Math.ceil(x1 - x0 + margin * 2); G.h = Math.ceil(y1 - y0 + margin * 2);
       return G;
     },
+    /* The pane facts a layout depends on: whether Auto turns top to bottom here, and the row
+       width a wrapped top-to-bottom layout may use (in 40px steps, so a resize only re-lays
+       out when it matters). */
+    layoutSizeKey: function () {
+      var pane = this.gScroll, w = pane ? pane.clientWidth : 0, h = pane ? pane.clientHeight : 0;
+      var zoom = this._compact && !this.options.comparison ? READABLE_PX / NODE_PX : 1;
+      this._layoutBudget = w ? Math.max(200, Math.floor((w - 2 * GRAPH_MARGIN - 24) / zoom / 40) * 40) : 0;
+      this._layoutNarrow = !!w && (w < 760 || w < h * 1.1);
+      var used = this._graphOrientation === 'tb' || (this._graphOrientation === 'auto' && this._layoutNarrow);
+      return used ? this._layoutBudget + (this._layoutNarrow ? 'n' : '') : this._layoutNarrow ? 'n' : '';
+    },
     buildGraph: function () {
       var self = this, app = this.app;
       var root = this.graphRoot(), extra = app.state.gExtra || {};
-      var key = (app.modelKey || '') + '|' + JSON.stringify(this._explanationContext) + '|' + root + '|' + this._showSources + '|' + !!app.state.dependencyDirectOnly + '|' + this._graphOrientation + '|' + Object.keys(extra).sort().join('\u0001')
+      var size = this.options.layout ? '' : this.layoutSizeKey();
+      var key = (app.modelKey || '') + '|' + JSON.stringify(this._explanationContext) + '|' + root + '|' + this._showSources + '|' + !!app.state.dependencyDirectOnly + '|' + this._graphOrientation + '|' + size + '|' + Object.keys(extra).sort().join('\u0001')
         + '|' + Object.keys(this.options.comparisonGroups ? this.options.comparisonGroups() : this.graphGroupState(root)).sort().join('\u0001') + '|' + app.colorBy + '|' + app.paletteName;
       if (!this._gC || this._gC.k !== key) {
-        var layout = this.options.layout ? this.options.layout(this) : this.gLayout(root, extra, CAP);
-        this._gC = { k: key, g: this.options.layout ? layout : this.trimGraph(this._showSources ? this.addSourceLayout(layout) : layout, GRAPH_MARGIN) };
+        var make = function (orientation) {
+          var layout = self.gLayout(root, extra, CAP, orientation, null, orientation === 'tb' ? self._layoutBudget : 0);
+          return self.trimGraph(self._showSources ? self.addSourceLayout(layout) : layout, GRAPH_MARGIN);
+        };
+        var G0;
+        if (this.options.layout) G0 = this.options.layout(this);
+        else if (this._graphOrientation !== 'auto') G0 = make(this._graphOrientation);
+        else {
+          /* Auto, in a narrow pane: top to bottom, whose rows are cut to the pane's width so
+             reading it only ever scrolls down — unless left to right already fits whole at a
+             readable size, in which case the larger of the two wins (left to right on a tie). */
+          G0 = make('lr');
+          if (this._layoutNarrow) {
+            var pane = this.gScroll, fit = function (G) { return Math.min(1, (pane.clientWidth - 32) / G.w, (pane.clientHeight - 32) / G.h); };
+            var down = make('tb'), readable = this._compact ? READABLE_PX / NODE_PX : 1;
+            if (fit(G0) < readable - 1e-6 || fit(down) > fit(G0) * 1.05) G0 = down;
+          }
+        }
+        this._gC = { k: key, g: G0, size: size };
       }
       var G = this._gC.g;
       var pinN = app.state.gPin && app.state.gPin !== root ? app.state.gPin : null;
@@ -654,13 +791,16 @@
           + (pin ? 'outline:2px solid ' + P[0] + ';outline-offset:1px;' : '');
         return {
           name: n,
-          wrapS: 'position:absolute;z-index:2;left:' + (p.x - 34) + 'px;top:' + p.y + 'px;width:' + (p.w + 68) + 'px;display:flex;align-items:center;gap:4px;transition:left .28s ease,top .28s ease,opacity .18s ease;' + (dim ? 'opacity:.72;' : ''),
+          /* Top to bottom keeps its sides free for the link gutters: the expanders sit on the
+             node's corners instead, upstream above and downstream below. */
+          wrapS: G.wrap ? 'position:absolute;z-index:2;left:' + p.x + 'px;top:' + p.y + 'px;width:' + p.w + 'px;height:' + NH + 'px;display:block;transition:left .28s ease,top .28s ease,opacity .18s ease;' + (dim ? 'opacity:.72;' : '')
+            : 'position:absolute;z-index:2;left:' + (p.x - 34) + 'px;top:' + p.y + 'px;width:' + (p.w + 68) + 'px;display:flex;align-items:center;gap:4px;transition:left .28s ease,top .28s ease,opacity .18s ease;' + (dim ? 'opacity:.72;' : ''),
           s: 'flex:none;box-sizing:border-box;width:' + p.w + 'px;height:' + NH + 'px;' + base + 'border-radius:6px;padding:0 9px;cursor:pointer;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;',
           tip: n + app.tipFlags(n) + ((m && m.dax) ? '\n\n' + m.dax.trim().slice(0, 900) : ''),
           upMore: upLbl, upTip: upN ? ('Show ' + upN + ' additional upstream measures') : (exU.length ? ('Hide ' + exU.length + ' additional upstream measures') : ''),
-          upBadgeS: self.gBadge(upLbl, !upN),
+          upBadgeS: self.gBadge(upLbl, !upN) + (G.wrap ? 'position:absolute;z-index:1;top:-10px;right:10px;' : ''),
           dnMore: dnLbl, dnTip: dnN ? ('Show ' + dnN + ' additional downstream measures') : (exD.length ? ('Hide ' + exD.length + ' additional downstream measures') : ''),
-          dnBadgeS: self.gBadge(dnLbl, !dnN),
+          dnBadgeS: self.gBadge(dnLbl, !dnN) + (G.wrap ? 'position:absolute;z-index:1;bottom:-10px;right:10px;' : ''),
           addUp: function () { var o = Object.assign({}, app.state.gExtra || {}); if (upN) revealU.forEach(function (k) { if (!G.inc.has(k)) o[k] = 1; }); else exU.forEach(function (k) { delete o[k]; }); self.setGraphExtras(o, upN ? revealU : []); },
           addDn: function () { var o = Object.assign({}, app.state.gExtra || {}); if (dnN) revealD.forEach(function (k) { if (!G.inc.has(k)) o[k] = 1; }); else exD.forEach(function (k) { delete o[k]; }); self.setGraphExtras(o, dnN ? revealD : []); },
           over: function () { app.setState({ gHover: n }); }, out: function () { app.setState({ gHover: null }); },
@@ -1388,6 +1528,7 @@
       ]));
     },
 
+    compactHeader: function () { return !this.options.comparison && (!!this._compact || window.innerWidth < 1280 || window.innerHeight < 800); },
     buildSelectedMain: function (sn, m) {
       var self = this, app = this.app, M = app.model, source = app.state.dependencySource, home = source ? source.table : M.msrHome[sn];
       this._graphModel = M; this._graphMeasure = this.graphRoot();
@@ -1403,9 +1544,9 @@
       var usage = app.msrUse(sn);
       if (usage) metadata.appendChild(el('span', { cls: 'mv-chip mv-chip-blue', text: usage.length + (usage.length === 1 ? ' report page' : ' report pages'), title: app.useTip(usage) }));
       else if (!usage && app._usage) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'No direct report usage', title: 'Not directly referenced in ' + ((app._usageMeta && app._usageMeta.report) || 'the scanned report') + '. It may feed other measures that are used.' }));
-      /* Compact is the CLI answer view: one header row, one graph toolbar, no eyebrows or
-         helper text, so the diagram gets the height. */
-      var compact = !!this._compact && !this.options.comparison;
+      /* Compact — every answer view, and any window short of room — is one header row, one
+         graph toolbar, no eyebrows or helper text, so the diagram gets the height. */
+      var compact = this._headerCompact = this.compactHeader();
       var header = el('header', { cls: 'mv-analysis-header' + (compact ? ' mv-compact' : '') });
       var heading = el('div', { cls: 'mv-heading-block' }, [compact ? null : el('div', { cls: 'mv-eyebrow', text: this.options.comparison ? 'COMPARISON FOCUS ' + (this.options.comparisonSide===1?'B':'A') : 'ANALYZING MEASURE' }), el('h1', { text: sn }), metadata]);
       if (source) {
@@ -1442,7 +1583,7 @@
       this.directionLabel = el('p');
       this.orientationSelect = el('select', { cls: 'mv-layout-select mv-orientation-select', 'aria-label': 'Dependency graph direction',
         onChange: function (e) { self.setGraphOrientation(e.target.value); }
-      }, [el('option', { value: 'lr', text: 'Left → right' }), el('option', { value: 'tb', text: 'Top → bottom' }), el('option', { value: 'bt', text: 'Bottom → top' })]);
+      }, [el('option', { value: 'auto', text: 'Auto direction' }), el('option', { value: 'lr', text: 'Left → right' }), el('option', { value: 'tb', text: 'Top → bottom' }), el('option', { value: 'bt', text: 'Bottom → top' })]);
       var graphHeading = el('div', { cls: 'mv-panel-heading' }, [el('div', {}, [
         el('h2', { text: 'Dependency flow' }), this.directionLabel
       ]), this.orientationSelect]);
@@ -1524,6 +1665,7 @@
                it gets a real size, so it is where the first placement belongs — no retry loop,
                and nothing left spinning when the pane never opens at all. */
             self.applyInitialViewport();
+            if (self._gC && !self.options.layout && self._gC.size !== self.layoutSizeKey()) self.renderFlow();
             if (self._gAutoFit) self.fitGraph(self._gAutoFit === 'readable');
           });
         });
@@ -1533,7 +1675,7 @@
     },
     savePreferences: function () {
       if (this.options.comparison) return;
-      store.setJSON(PREF_KEY, { libraryCollapsed: this._libraryCollapsed, mode: this._workspaceMode, split: this._splitLayout, orientation: this._graphOrientation,
+      store.setJSON(PREF_KEY, { libraryCollapsed: this._libraryCollapsed, mode: this._workspaceMode, split: this._splitLayout, orientation: this._graphOrientation, orientationChosen: !!this._orientationChosen,
         besideShare: this._splitShares.beside, belowShare: this._splitShares.below, wrap: this._wrapDax, sources: this._showSources, fmt: this._fmt });
     },
     setWorkspaceMode: function (mode, persist) {
@@ -1609,11 +1751,13 @@
     },
     updateDirectionLabel: function () {
       if (this.orientationSelect) this.orientationSelect.value = this._graphOrientation;
-      if (this.directionLabel) this.directionLabel.textContent = this._graphOrientation === 'tb' ? 'Upstream above · downstream below'
+      if (this.directionLabel) this.directionLabel.textContent = this._graphOrientation === 'auto' ? 'Left to right; top to bottom when the pane is narrow'
+        : this._graphOrientation === 'tb' ? 'Upstream above · downstream below'
         : this._graphOrientation === 'bt' ? 'Downstream above · upstream below' : 'Upstream → analyzed measure → downstream';
     },
     setGraphOrientation: function (orientation) {
-      this._graphOrientation = choice(orientation, ['lr', 'tb', 'bt'], 'lr');
+      this._graphOrientation = choice(orientation, ORIENTATIONS, 'auto');
+      this._orientationChosen = this._graphOrientation !== 'auto';
       this.savePreferences(); this.updateDirectionLabel();
       this._gC = null;
       if (this.gCanvasEl) { this.renderFlow(); if (this._gAutoFit) this.fitGraph(this._gAutoFit === 'readable'); else this.gCenter(); }

@@ -27,6 +27,15 @@ async function openBrowser(){
   return {send,evaluate,async close(){socket.close();child.kill('SIGTERM');await new Promise(r=>child.once('exit',r));fs.rmSync(profile,{recursive:true,force:true});}};
 }
 
+/* A link crossing a measure box it does not connect: every segment of its path (corner
+   control points included) against every other node's box, shrunk by 2px. */
+const CROSSINGS=`m=>{
+    const L=m._gC&&m._gC.g;if(!L)return [];const boxes=L.names.map(n=>Object.assign({n},L.xy[n])).filter(b=>b.w);const found=[];
+    L.geo.forEach(e=>{if(e.back)return;const p=[...String(e.d).matchAll(/(-?[0-9.]+),(-?[0-9.]+)/g)].map(q=>[+q[1],+q[2]]);
+      for(let i=1;i<p.length;i++){const [x1,y1]=p[i-1],[x2,y2]=p[i];for(const b of boxes){if(b.n===e.a||b.n===e.b)continue;const l=b.x+2,r=b.x+b.w-2,t=b.y+2,u=b.y+32;
+        if(Math.max(x1,x2)<l||Math.min(x1,x2)>r||Math.max(y1,y2)<t||Math.min(y1,y2)>u)continue;
+        const steps=20;for(let k=0;k<=steps;k++){const x=x1+(x2-x1)*k/steps,y=y1+(y2-y1)*k/steps;if(x>l&&x<r&&y>t&&y<u){found.push(e.a+' → '+e.b+' crosses '+b.n);k=steps+1;}}}}});
+    return [...new Set(found)].slice(0,5);}`;
 /* Reads every viewer on the page (the workspace's iframes, or the page itself) once each
    has applied its view. Text size is the computed font of the element carrying the name,
    times the zoom it is drawn at. */
@@ -35,6 +44,7 @@ const READ=`(async()=>{
   const wins=frames.length?frames.map(f=>({w:f.contentWindow,r:f.getBoundingClientRect()})):[{w:window,r:{width:innerWidth,height:innerHeight}}];
   for(const {w} of wins)for(let i=0;i<300&&!(w.document.body&&w.document.body.dataset.smvReady==='1');i++)await new Promise(r=>setTimeout(r,50));
   await new Promise(r=>setTimeout(r,700));
+  for(const {w} of wins)w.SMV_LINK_CROSSINGS=${CROSSINGS};
   const shown=(w,sel)=>{const n=w.document.querySelector(sel);return !!n&&!n.hidden&&n.getClientRects().length>0;};
   return {workspace:frames.length?{pickers:[...document.querySelectorAll('section select')].filter(s=>s.getClientRects().length).length,panes:frames.length}:null,panes:wins.map(({w,r})=>{
     const app=w.app,out={pane:[Math.round(r.width),Math.round(r.height)],mode:app.state.viewMode,caption:!!w.document.getElementById('smv-question-caption')};
@@ -44,7 +54,8 @@ const READ=`(async()=>{
       const inside=el=>{const b=el.getBoundingClientRect();return b.left>=s.left-1&&b.right<=s.right+1&&b.top>=s.top-1&&b.bottom<=s.bottom+1;};
       const source=w.document.querySelector('.mv-source-card,.mv-graph-canvas [data-source-key]');
       const rootEl=m._nodeEls[G.root]?m._nodeEls[G.root].btn:source;
-      Object.assign(out,{zoom:+z.toFixed(3),graph:[Math.round(s.width),Math.round(s.height)],nodes:names.length,minPx:Math.min(...px),rootVisible:!!rootEl&&inside(rootEl),header:Math.round(w.document.querySelector('.mv-analysis-header').getBoundingClientRect().height)});
+      Object.assign(out,{zoom:+z.toFixed(3),graph:[Math.round(s.width),Math.round(s.height)],nodes:names.length,minPx:Math.min(...px),rootVisible:!!rootEl&&inside(rootEl),header:Math.round(w.document.querySelector('.mv-analysis-header').getBoundingClientRect().height),
+        orientation:m._gC.g.orientation,sideways:m.gScroll.scrollWidth>m.gScroll.clientWidth+1,crossings:w.SMV_LINK_CROSSINGS(m)});
     }else{
       const cv=app.canvas,k=cv.view.k,hb=cv.host.getBoundingClientRect(),vp=cv.viewportRect();
       const names=Object.keys(cv.cards).filter(n=>cv.cards[n].el.style.display!=='none');
@@ -64,6 +75,11 @@ function checkPane(p,where){
     assert.ok(p.rootVisible,where+': the analyzed node is on screen');
     assert.ok(p.graph[1]>=p.pane[1]*0.6,where+': the graph gets '+p.graph[1]+' of '+p.pane[1]+'px');
     assert.ok(p.header<=96,where+': the header takes '+p.header+'px');
+    // Top to bottom routes every link through open space. Left to right still lets a link
+    // that skips a layer curve over the boxes in between; that is reported, not judged here.
+    if(p.orientation==='tb')assert.deepEqual(p.crossings,[],where+': links cross measures they do not connect');
+    // A narrow pane reads top to bottom and only ever scrolls down.
+    if(p.pane[0]<760){assert.equal(p.orientation,'tb',where+': narrow pane direction');assert.equal(p.sideways,false,where+': the flow scrolls sideways');}
   }else{
     assert.deepEqual(p.outside,[],where+': tables outside the visible canvas');
     assert.deepEqual(p.chrome,{library:false,toolbar:false,legend:false,map:false,status:false,inspector:false},where+': only the diagram and its zoom bar are open');
@@ -86,15 +102,47 @@ test('answer views from smv show meet the readability bar',{skip:!chrome&&'Insta
     for(const [w,h] of [[1100,800],[1280,720],[1920,1080]]){
       const r=await open(shown.workspaceUrl,w,h);
       assert.equal(r.workspace.pickers,0,'two views fill two panes without view pickers');
-      r.panes.forEach((p,i)=>{checkPane(p,`${table} side by side ${w}x${h} pane ${i}`);t.diagnostic(`${table} side by side ${w}x${h} ${p.mode}: zoom ${(p.zoom*100).toFixed(0)}%, names ${p.minPx.toFixed(1)}px`);});
+      r.panes.forEach((p,i)=>{checkPane(p,`${table} side by side ${w}x${h} pane ${i}`);t.diagnostic(`${table} side by side ${w}x${h} ${p.mode}: zoom ${(p.zoom*100).toFixed(0)}%, names ${p.minPx.toFixed(1)}px${p.orientation?', '+p.orientation+(p.crossings.length?', '+p.crossings.length+'+ crossings':''):''}`);});
     }
     for(const [w,h] of [[1280,720],[1920,1080]])for(const i of [0,1]){
       const [p]=(await open(shown.views[i].url,w,h)).panes;
-      checkPane(p,`${table} view ${i} ${w}x${h}`);t.diagnostic(`${table} ${p.mode} ${w}x${h}: zoom ${(p.zoom*100).toFixed(0)}%, names ${p.minPx.toFixed(1)}px`);
+      checkPane(p,`${table} view ${i} ${w}x${h}`);t.diagnostic(`${table} ${p.mode} ${w}x${h}: zoom ${(p.zoom*100).toFixed(0)}%, names ${p.minPx.toFixed(1)}px${p.orientation?', '+p.orientation+(p.crossings.length?', '+p.crossings.length+'+ crossings':''):''}`);
     }
   }
   await t.test('Tools brings the editing chrome back on demand',async()=>{
     const r=await browser.evaluate(`(async()=>{app.setViewMode('graph');await new Promise(r=>setTimeout(r,200));const t=[...document.querySelectorAll('#canvas-navigation button')].find(b=>b.textContent==='Tools');if(!t)throw new Error('no Tools button');t.click();await new Promise(r=>setTimeout(r,200));return {toolbar:!document.getElementById('workspace-toolbar').hidden,expanded:[...document.querySelectorAll('#canvas-navigation button')].find(b=>b.textContent==='Tools').getAttribute('aria-expanded'),legend:[...document.querySelectorAll('#canvas-navigation label')].some(l=>l.textContent.includes('Legend'))};})()`);
     assert.deepEqual(r,{toolbar:true,expanded:'true',legend:true});
   });
+});
+
+const viewer=path.join(root,'Models/tools/viewer'),TYPES={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json'};
+/* The size rules are the app's, not the CLI's: at 1280x720 the legend dock, overview map and
+   status line stand down, the canvas bar keeps to one row with the display switches behind
+   View, the Measures header is one row, and a narrow dependency pane reads top to bottom
+   with no link through a measure. */
+test('the main app gives a small screen to the diagram',{skip:!chrome&&'Install Chrome or set CHROME_PATH',timeout:180000},async t=>{
+  const server=require('node:http').createServer((req,res)=>{const name=decodeURIComponent(req.url.split('?')[0]),file=path.join(viewer,name==='/'?'index.html':name);if(!file.startsWith(viewer)||!fs.existsSync(file)||fs.statSync(file).isDirectory()){res.writeHead(404);res.end();return;}res.writeHead(200,{'Content-Type':TYPES[path.extname(file)]||'application/octet-stream'});res.end(fs.readFileSync(file));});
+  await new Promise(r=>server.listen(0,'127.0.0.1',r));
+  const browser=await openBrowser();t.after(async()=>{await browser.close();await new Promise(r=>server.close(r));});
+  const wait=async(expr,what)=>{for(let n=0;!(await browser.evaluate(expr));n++){if(n>300)throw new Error(what);await new Promise(r=>setTimeout(r,25));}};
+  const settle=()=>browser.evaluate('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(r,250))))');
+  await browser.send('Page.enable');await browser.send('Emulation.setDeviceMetricsOverride',{width:1280,height:720,deviceScaleFactor:1,mobile:false});
+  await browser.send('Page.navigate',{url:'http://127.0.0.1:'+server.address().port+'/index.html'});
+  await wait('!!(window.app&&app.state.loaded&&app.explorer)','viewer never initialized');
+  await browser.evaluate("[...document.querySelectorAll('button')].find(b=>b.textContent==='Try the demo').click()");
+  await wait('app.modelKey==="builtin"&&app.model.tables.length===43','demo never loaded');
+  await browser.evaluate("localStorage.removeItem('smv_panes_v1');app.explorer.legendOpen=true;app.explorer.mapHidden=false;app.explorer.showAll();app.canvas.selectTable('Sales');");await settle();
+  const tables=await browser.evaluate(`(()=>{const shown=s=>{const n=document.querySelector(s);return !!n&&!n.hidden&&n.getClientRects().length>0;};const nav=document.getElementById('canvas-navigation');
+    return {legend:shown('#canvas-legend'),map:shown('#model-minimap'),status:shown('#workspace-status'),navHeight:Math.round(nav.getBoundingClientRect().height),view:[...nav.querySelectorAll('button')].some(b=>b.textContent==='View'),focus:[...nav.querySelectorAll('button')].some(b=>b.textContent==='Focus')};})()`);
+  assert.deepEqual({legend:tables.legend,map:tables.map,status:tables.status,view:tables.view,focus:tables.focus},{legend:false,map:false,status:false,view:true,focus:true},'small-screen Tables chrome');
+  assert.ok(tables.navHeight<=56,'the canvas bar is one row ('+tables.navHeight+'px)');
+  // Switching the legend on is honoured even while the window is small.
+  await browser.evaluate("app.explorer.toggleLegend();");await settle();
+  assert.equal(await browser.evaluate("!document.getElementById('canvas-legend').hidden"),true,'an explicit Legend switch wins');
+  await browser.evaluate("app.explorer.toggleLegend();app.setViewMode('measures');app.measures.pickMeasure('Total Sales');");await settle();await settle();
+  const measures=await browser.evaluate(`(()=>{const m=app.measures;return {compact:!!document.querySelector('.mv-analysis-header.mv-compact'),pane:m.gScroll.clientWidth,orientation:m._gC.g.orientation,sideways:m.gScroll.scrollWidth>m.gScroll.clientWidth+1,crossings:(${CROSSINGS})(m)};})()`);
+  t.diagnostic('1280x720 measures pane '+measures.pane+'px, '+measures.orientation);
+  assert.equal(measures.compact,true,'one-row Measures header');
+  if(measures.pane<760){assert.equal(measures.orientation,'tb');assert.equal(measures.sideways,false,'the flow scrolls sideways');}
+  if(measures.orientation==='tb')assert.deepEqual(measures.crossings,[],'links cross measures they do not connect');
 });
