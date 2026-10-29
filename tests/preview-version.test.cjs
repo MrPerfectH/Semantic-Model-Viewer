@@ -39,6 +39,7 @@ for (const [stable, run, expected] of [
     assert.equal(result.status, 0, result.stderr);
     const readVersion = file => JSON.parse(fs.readFileSync(path.join(directory, file)));
     assert.equal(readVersion('package.json').version, expected);
+    assert.equal(readVersion('package.json').smvPreRelease, true);
     assert.equal(readVersion('package-lock.json').version, expected);
     assert.equal(readVersion('package-lock.json').packages[''].version, expected);
     assert.equal(readVersion('package-lock.json').packages.dependency.version, '2.0.0');

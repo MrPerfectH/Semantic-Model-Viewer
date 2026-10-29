@@ -86,3 +86,39 @@ test('Windows registration adds/removes only its own file', { skip: process.plat
     execFileSync('powershell.exe', [...args, '-Remove'], { env });
   } finally { fs.rmSync(fixture, { recursive: true, force: true }); }
 });
+test('Power BI Desktop is hidden in stable builds until switched on', async () => {
+  const { STABLE, featureEnabled } = require('../vscode-extension/src/features');
+  assert.equal(featureEnabled('powerBIDesktop', {}, 1), STABLE.powerBIDesktop);
+  assert.equal(featureEnabled('powerBIDesktop', { smvPreRelease: true }, 1), true);
+  assert.equal(featureEnabled('powerBIDesktop', {}, 2), true);
+  assert.throws(() => featureEnabled('unknown', {}, 1));
+  const manifest = require('../vscode-extension/package.json');
+  assert.equal(manifest.smvPreRelease, undefined, 'only CI marks pre-release builds');
+  const menus = manifest.contributes.menus;
+  for (const command of ['semanticModelViewer.connectPowerBI', 'semanticModelViewer.registerPowerBI']) {
+    assert.match(menus.commandPalette.find(m => m.command === command).when, /semanticModelViewer\.powerBIDesktop/);
+  }
+  assert.match(menus['view/title'].find(m => m.command === 'semanticModelViewer.connectPowerBI').when, /semanticModelViewer\.powerBIDesktop/);
+  for (const welcome of manifest.contributes.viewsWelcome) {
+    if (/PowerBI\)/.test(welcome.contents)) assert.equal(welcome.when, 'semanticModelViewer.powerBIDesktop');
+  }
+
+  const { makeVscode, install } = require('./vscode-mock');
+  const vscode = makeVscode({ folders: [], extensionRoot: EXT });
+  const messages = [];
+  vscode.window.showInformationMessage = async message => { messages.push(message); };
+  const restore = install(vscode);
+  const extensionPath = require.resolve('../vscode-extension/src/extension');
+  delete require.cache[extensionPath];
+  const extension = require(extensionPath);
+  try {
+    extension.activate({ ...vscode.context, extensionMode: 1 });
+    assert.equal(vscode._contexts['semanticModelViewer.powerBIDesktop'], STABLE.powerBIDesktop);
+    if (!STABLE.powerBIDesktop) {
+      await vscode.commands.executeCommand('semanticModelViewer.connectPowerBI');
+      await vscode._uriHandler.handleUri(uri('server=localhost:1234&database=trial'));
+      assert.equal(messages.length, 2);
+      assert.match(messages[0], /pre-release/);
+    }
+  } finally { extension.deactivate(); delete require.cache[extensionPath]; restore(); }
+});

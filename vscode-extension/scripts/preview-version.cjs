@@ -21,6 +21,8 @@ const [major, minor] = manifest.version.split('.').map(Number);
 const previewMinor = minor + (minor % 2 === 0 ? 1 : 2);
 const version = `${major}.${previewMinor}.${run}`;
 manifest.version = version;
+// Unlocks features that ship only in pre-release builds (src/features.js).
+manifest.smvPreRelease = true;
 lock.version = version;
 lock.packages[''].version = version;
 fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
