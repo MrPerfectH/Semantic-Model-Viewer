@@ -144,3 +144,12 @@ button:disabled{opacity:.45;cursor:default!important}
   #topbar{gap:6px!important;padding:6px 12px!important;min-height:48px!important}
   .ex-snapshot-status{top:8px;max-height:72px;overflow:auto;padding:7px 10px}
 }
+/* Compact answer view (CLI): one slim bar under a full-height canvas. */
+.ex-compact #canvas-navigation{min-height:40px;padding:4px 8px;gap:4px 10px;font-size:12px}
+.ex-compact #canvas-navigation button{font-size:12px;min-height:28px;padding:3px 7px}
+.ex-compact #canvas-navigation .ex-zoom-value{font-size:12px;min-width:38px}
+.ex-compact .ex-footer-group{padding-right:8px}
+.ex-compact .ex-footer-group.ex-footer-last{border-right:0}
+.ex-compact .ex-footer-toggle{gap:6px;min-height:28px}
+#canvas-navigation .ex-tools-toggle{margin-left:auto;border:1px solid var(--smv-line,#d5dce8)}
+#canvas-navigation .ex-tools-toggle[aria-expanded=true]{background:var(--smv-soft,#eef2f8)}

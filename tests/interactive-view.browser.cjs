@@ -191,7 +191,7 @@ check(app.explorer.direction==='connected'&&app.explorer.includeInactive,'inacti
 `));
 
 test('focused dependency library is discoverable without a footer and persists with explicit layout',{skip:!browser},async t=>verify(t,{version:2,mode:'measures',focus:{kind:'table',name:'Inventory'},banner:false,width:640,height:900},`
-const v=app.measures,control=()=>document.querySelector('.mv-library-control button');
+const v=app.measures,control=()=>v.libraryToggle;
 check(v._graphOrientation==='lr','focused graphs default left to right');
 check(control().getBoundingClientRect().width>0,'library toggle visible with hidden footer');
 check(control().getAttribute('aria-expanded')==='false'&&v.pane.inert,'focused library collapsed and untabbable');

@@ -23,6 +23,9 @@
     var panes = store.getJSON('smv_panes_v1', {}) || {};
     this.legendOpen = panes.legendOpen !== false; this.mapHidden = !!panes.mapHidden;
     this.libraryHidden = !!panes.libraryHidden; this.inspectorHidden = !!panes.inspectorHidden;
+    /* Compact is the CLI's answer view: canvas, zoom and one Tools button. The editing
+       toolbar, rails, legend and map stay one click away and are never saved from here. */
+    this.compact = false; this.toolsOpen = false;
     this.library = document.getElementById('table-library'); this.toolbar = document.getElementById('workspace-toolbar');
     this.empty = document.getElementById('canvas-empty'); this.nav = document.getElementById('canvas-navigation');
     this.status = document.getElementById('workspace-status'); this.mapHost = document.getElementById('model-minimap');
@@ -98,7 +101,14 @@
       this.saveChrome();
       this._key=null;this.app.sidebar._key=null;this.update();this.app.setState({});
     },
-    saveChrome:function(){store.setJSON('smv_panes_v1',{libraryHidden:this.libraryHidden,inspectorHidden:this.inspectorHidden,legendOpen:this.legendOpen,mapHidden:this.mapHidden});},
+    setCompact:function(on){
+      this.compact=!!on;this.toolsOpen=false;
+      if(this.compact){this.libraryHidden=true;this.inspectorHidden=true;this.legendOpen=false;this.mapHidden=true;}
+      this.app.canvas.CHIP_BELOW=this.compact?0.82:0.7;this.app.canvas._chip=null;
+      this._key=null;this._navKey=null;this.update();
+    },
+    toggleTools:function(){this.toolsOpen=!this.toolsOpen;if(!this.toolsOpen){this.optionsOpen=false;if(this.app.state.showPresets)this.app.state.showPresets=false;}this._key=null;this._navKey=null;this.update();this.app.setState({});},
+    saveChrome:function(){if(this.compact)return;store.setJSON('smv_panes_v1',{libraryHidden:this.libraryHidden,inspectorHidden:this.inspectorHidden,legendOpen:this.legendOpen,mapHidden:this.mapHidden});},
     toggleLibrary:function(){this.setPanes({libraryHidden:!this.libraryHidden});},
     toggleInspector:function(){this.setPanes({inspectorHidden:!this.inspectorHidden});},
     snapshot:function(){this.history.push({names:Array.from(this.names),pos:JSON.parse(JSON.stringify(this.app.canvas.pos)),view:Object.assign({},this.app.canvas.view),focus:this.app.canvas.captureFocus(),display:this.app.canvas.captureDisplay()});if(this.history.length>25)this.history.shift();},
@@ -187,6 +197,20 @@
       if(save)this.commit('Visible tables arranged.',true);
       else{cv.renderLines();cv.fitView();}
     },
+    /* One step from an unreadable overview to a readable neighbourhood: hide everything
+       but the selected table and its direct neighbours, and arrange those for this canvas.
+       Pressing it again undoes exactly that, unless the layout has been changed since. */
+    toggleFocus:function(){
+      var app=this.app,cv=app.canvas,f=this._focusUndo;this._focusUndo=null;
+      if(app.state.isolate){
+        if(f&&this.history.length===f.after&&app.state.selected===f.selected){for(var i=0;i<f.steps;i++)this.undo();cv.fitView();}
+        else{this.setFocus(false,app.state.focusDepth||1);cv.fitView();}
+        return;
+      }
+      if(!app.state.selected)return;
+      var before=this.history.length;this.setFocus(true,1);this.arrangeSubset(true);
+      this._focusUndo={steps:this.history.length-before,after:this.history.length,selected:app.state.selected};
+    },
     setNames:function(names){var M=this.app.model;this.names=new Set(names.filter(function(n){return !!M.byName[n];}));this.commit('Saved layout restored.',false);},
     related:function(){var n=this.app.state.selected;if(!n)return null;return g.RelationshipGraph.traverse(this.app.model,[n],{direction:this.direction,maxDepth:this.depth==='direct'?1:this.depth==='two'?2:Infinity,includeInactive:this.includeInactive});},
     setFocus:function(hidden,depth){
@@ -240,24 +264,26 @@
       bar.appendChild(button('Clear',function(){cv.setMarked([]);},false,'Clear the selection (Esc)'));
     },
     update:function(){
-      var self=this,app=this.app,st=app.state,cv=app.canvas,graph=!!app.model&&(st.loaded||!app.snapshotMode)&&st.viewMode==='graph';
+      var self=this,app=this.app,st=app.state,cv=app.canvas,graph=!!app.model&&(st.loaded||!app.snapshotMode)&&st.viewMode==='graph',main=document.getElementById('main');
       this.renderSelection();
       /* Domains borrows the Tables chrome — the same toolbar row and status line — so the two
          canvases speak one visual language instead of the old floating chip plus legend. */
       var clusters=st.loaded&&st.viewMode==='clusters';
       var width=this.libraryHidden?0:window.innerWidth<1050?234:268,drawer=graph&&st.selected&&!this.inspectorHidden?330:0;
       this.library.hidden=!graph||this.libraryHidden;this.empty.hidden=!graph;this.nav.hidden=!graph&&!clusters;this.legendDock.hidden=(!graph&&!clusters)||!this.legendOpen;
-      this.toolbar.hidden=!graph&&!clusters;this.status.hidden=!graph&&!clusters;
+      var tools=!this.compact||this.toolsOpen,top=tools?62:0,foot=this.compact?0:30;
+      this.toolbar.hidden=(!graph&&!clusters)||!tools;this.status.hidden=(!graph&&!clusters)||this.compact;
+      main.classList.toggle('ex-compact',this.compact);
       this.mapHost.hidden=!graph||!this.names.size||this.mapHidden;
-      var main=document.getElementById('main');
       var start=!!graph&&!app.modelKey&&!app.model.tables.length;
       main.classList.toggle('ex-start',start);
       main.classList.toggle('ex-graph',!!graph);
       main.classList.toggle('ex-clusters',!!clusters);
       main.style.setProperty('--library-width',(graph?width:0)+'px');
       main.style.setProperty('--inspector-width',drawer+'px');
-      if(graph){cv.host.style.left=width+'px';cv.host.style.right=drawer+'px';cv.host.style.top='62px';cv.host.style.bottom='30px';}
-      else if(clusters){cv.host.style.left='0';cv.host.style.right='0';cv.host.style.top='62px';cv.host.style.bottom='30px';}
+      this.nav.style.bottom=foot+'px';
+      if(graph){cv.host.style.left=width+'px';cv.host.style.right=drawer+'px';cv.host.style.top=top+'px';cv.host.style.bottom=foot+'px';}
+      else if(clusters){cv.host.style.left='0';cv.host.style.right='0';cv.host.style.top=top+'px';cv.host.style.bottom=foot+'px';}
       else{cv.host.style.left='0';cv.host.style.right='0';cv.host.style.top='0';cv.host.style.bottom='0';}
       cv.host.hidden = st.viewMode !== 'graph' && st.viewMode !== 'clusters';
       if(graph||clusters){this.renderNavigation();this.renderLegend();this.layoutFooter();}
@@ -272,7 +298,7 @@
       if(start){this.library.hidden=true;this.toolbar.hidden=true;this.nav.hidden=true;this.legendDock.hidden=true;this.status.hidden=true;this.empty.hidden=false;this.renderEmpty();return;}
       this.empty.hidden=!!this.names.size;
       this.status.textContent=this.message || 'Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several';
-      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.history.length,st.showPresets,this.optionsOpen,this.legendOpen,st.showStandalone,st.activeFilter,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
+      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.compact,this.toolsOpen,this.history.length,st.showPresets,this.optionsOpen,this.legendOpen,st.showStandalone,st.activeFilter,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
       if(key!==this._key){this._key=key;this.renderLibrary();this.renderToolbar();this.renderEmpty();}
       this.renderNavigation();this.drawMap();
     },
@@ -367,10 +393,10 @@
     },
     layoutFooter:function(){
       if(!this.nav||this.nav.hidden)return;
-      var h=this.nav.offsetHeight||52,d=this.legendOpen?(this.legendDock.offsetHeight||160):0;
-      this.legendDock.style.bottom=(30+h)+'px';
-      this.app.canvas.host.style.bottom=(30+h+d)+'px';
-      this.mapHost.style.bottom=(42+h+d)+'px';
+      var f=this.compact?0:30,h=this.nav.offsetHeight||52,d=this.legendOpen?(this.legendDock.offsetHeight||160):0;
+      this.legendDock.style.bottom=(f+h)+'px';
+      this.app.canvas.host.style.bottom=(f+h+d)+'px';
+      this.mapHost.style.bottom=(f+12+h+d)+'px';
     },
     renderLegend:function(){
       var self=this,app=this.app,cv=app.canvas;U.clear(this.legendDock);
@@ -409,21 +435,31 @@
       var samples=el('div',{cls:'ex-starters'});starters.forEach(function(t){samples.appendChild(button(t.name,function(){self.add([t.name]);app.focusTable(t.name);},false,t.name+' · '+t.relCount+' relationships'));});this.empty.firstChild.appendChild(samples);
     },
     renderNavigation:function(){
-      var app=this.app,cv=app.canvas,self=this,key=[app.state.selected,app.colorBy,cv.showSA,this.mapHidden,this.legendOpen,app.state.viewMode].join('|');
+      var app=this.app,cv=app.canvas,self=this,key=[app.state.selected,app.state.isolate,app.colorBy,cv.showSA,this.mapHidden,this.legendOpen,app.state.viewMode,this.compact,this.toolsOpen].join('|');
       if(this._navKey===key&&this.nav.firstChild){this.nav.querySelector('.ex-zoom-value').textContent=app.state.zoomPct;return;}
       this._navKey=key;U.clear(this.nav);
       var zoom=el('div',{cls:'ex-footer-group'});this.nav.appendChild(zoom);
       zoom.appendChild(button('−',function(){cv.zoomOut();},false,'Zoom out'));zoom.appendChild(el('span',{cls:'ex-zoom-value',text:app.state.zoomPct}));zoom.appendChild(button('+',function(){cv.zoomIn();},false,'Zoom in'));zoom.appendChild(button('Fit',function(){cv.fitView();}));
-      if(app.state.selected)zoom.appendChild(button('Center selected',function(){cv.focusGraph(app.state.selected);}));
+      if(app.state.selected)zoom.appendChild(button(this.compact?'Center':'Center selected',function(){cv.focusGraph(app.state.selected);},false,'Center '+app.state.selected));
+      if(app.state.selected&&app.state.viewMode==='graph'){
+        var focus=button('Focus',function(){self.toggleFocus();},false,app.state.isolate?'Show the whole layout again':'Show only '+app.state.selected+' and its direct neighbours, arranged to read');
+        focus.classList.add('ex-mode');focus.setAttribute('aria-pressed',String(!!app.state.isolate));zoom.appendChild(focus);
+      }
+      if(this.compact){
+        var tools=button('Tools',function(){self.toggleTools();},false,this.toolsOpen?'Hide layout tools and display options':'Show layout tools, table library and display options');
+        tools.classList.add('ex-tools-toggle');tools.setAttribute('aria-expanded',String(this.toolsOpen));
+        if(!this.toolsOpen){zoom.classList.add('ex-footer-last');this.nav.appendChild(tools);return;}
+      }
       function toggle(label,on,action){var input=el('input',{type:'checkbox',role:'switch',checked:on,'aria-label':label,onChange:action});return el('label',{cls:'ex-footer-toggle'},[el('span',{text:label}),input]);}
       if(app.state.viewMode==='graph'){
-        this.nav.appendChild(toggle('Disconnected tables',cv.showSA,function(){cv.toggleStandalone();self.update();}));
-        this.nav.appendChild(toggle('Overview map',!this.mapHidden,function(){self.mapHidden=!self.mapHidden;self.saveChrome();self.update();}));
+        this.nav.appendChild(toggle(this.compact?'Disconnected':'Disconnected tables',cv.showSA,function(){cv.toggleStandalone();self.update();}));
+        this.nav.appendChild(toggle(this.compact?'Map':'Overview map',!this.mapHidden,function(){self.mapHidden=!self.mapHidden;self.saveChrome();self.update();}));
       }
-      var mode=el('div',{cls:'ex-footer-group',role:'group','aria-label':'Colour by'},[el('span',{text:'Colour by'})]);
-      [['source','Source'],['domain','Table folder']].forEach(function(pair){var b=button(pair[1],function(){cv.setColorMode(pair[0]);self.update();});b.setAttribute('aria-pressed',String(app.colorBy===pair[0]));b.classList.add('ex-mode');mode.appendChild(b);});this.nav.appendChild(mode);
+      var mode=el('div',{cls:'ex-footer-group',role:'group','aria-label':'Colour by'},[el('span',{text:this.compact?'Colour':'Colour by'})]);
+      [['source','Source'],['domain',this.compact?'Folder':'Table folder']].forEach(function(pair){var b=button(pair[1],function(){cv.setColorMode(pair[0]);self.update();});b.setAttribute('aria-pressed',String(app.colorBy===pair[0]));b.classList.add('ex-mode');mode.appendChild(b);});this.nav.appendChild(mode);
       var legend=toggle('Legend',this.legendOpen,function(){self.legendOpen=!self.legendOpen;self.saveChrome();self.update();});this.legendBtn=legend.lastChild;this.nav.appendChild(legend);
       if(this.legendOpen)this.nav.appendChild(button('Edit colours',function(){app.editGroupColours();}));
+      if(tools)this.nav.appendChild(tools);
     },
     drawMap:function(){
       if(this._mapFrame)return;var self=this;this._mapFrame=requestAnimationFrame(function(){self._mapFrame=null;self.paintMap();});

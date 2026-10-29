@@ -40,7 +40,10 @@ smv show 'Sales.SemanticModel' --table 'Cost Center' --related --dependents
 
 The JSON response contains compact counts, `sessionFile`, a combined `workspaceUrl`
 and individual view URLs. Tables and Measures run side by side in ONE server.
-The workspace offers a Tabs mode for more space, and selectors for each pane.
+The workspace offers a Tabs mode for more space; a pane selector appears only when
+there are more views than panes. Each view opens on the diagram alone, with no answer
+banner, legend, overview map or table library. Relay each view's `answer` in the reply.
+The canvas bar's Tools button restores the editing chrome.
 Each view retains its own selection, camera, revision and browser receipts.
 Repeat the same request to reuse the session and views. A different table adds
 named views without replacing the previous ones. With neither `--related` nor

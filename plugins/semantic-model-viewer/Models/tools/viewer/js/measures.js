@@ -4,6 +4,8 @@
   'use strict';
   var el = U.el, sv = U.sv, store = U.store;
   var CAP = 500, NH = 34;
+  // Measure names render at NODE_PX; an answer view keeps them at READABLE_PX or larger on screen.
+  var NODE_PX = 12, READABLE_PX = 11, GRAPH_MARGIN = 28;
   /* Grouping: graphs of GROUP_MIN nodes or fewer read fine as plain columns; a home
      table + display folder bundle of GROUP_INLINE or fewer stays inline; anything larger
      becomes a group node showing GROUP_PAGE members behind a "+ N more" expander. */
@@ -166,7 +168,7 @@
           if (self._snapshotViewport !== pending) return;
           if (pending.model !== app.model || pending.selected !== self.graphRoot()) { self.cancelSnapshotViewport(); return; }
           if (!self._built || app.state.viewMode !== 'measures' || !self.gScroll || !self.gScroll.clientWidth) return;
-          if (pending.graph.autoFit) self.fitGraph();
+          if (pending.graph.autoFit) self.fitGraph(!!self._compact);
           else {
             self.setGraphZoom(pending.graph.zoom);
             self.gScroll.scrollTo({ left: pending.graph.scrollLeft, top: pending.graph.scrollTop, behavior: 'auto' });
@@ -535,6 +537,15 @@
       G.w = Math.max(G.w + dx, width + 120); G.h = Math.max(G.h + dy, height + 120);
       var cursor = 60, originY = bottom ? G.h + 60 : 60;
       if (bottom) G.h += height + 120;
+      /* Left to right, the source stack sits level with the measures it feeds rather than
+         at the top of a tall flow, so a source and its direct dependents share one screen. */
+      if (!vertical) {
+        var fed = links.map(function (l) { return G.xy[l.to]; }).filter(Boolean);
+        if (fed.length) {
+          var mid = fed.reduce(function (a, p) { return a + p.y + NH / 2; }, 0) / fed.length;
+          cursor = Math.max(60, Math.min(mid - height / 2, G.h - 60 - height));
+        }
+      }
       sources.forEach(function (s) {
         s.x = vertical ? cursor : 60; s.y = vertical ? originY : cursor;
         cursor += vertical ? s.w + 40 : s.h + 32;
@@ -572,6 +583,29 @@
       G.sources = sources; G.nE = G.geo.length;
       return G;
     },
+    /* The layout reserves generous fixed margins; at Fit they cost a fifth of the zoom.
+       Shift everything — nodes, groups, sources and edge geometry — so the drawing sits
+       `margin` from each side. Bezier curves stay inside their control points, so the
+       control points bound the edges. */
+    trimGraph: function (G, margin) {
+      var x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity, seen = new Set(), NUM = /(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/g;
+      var grow = function (x, y, w, h) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x + (w || 0)); y1 = Math.max(y1, y + (h || 0)); };
+      Object.keys(G.xy).forEach(function (n) { var p = G.xy[n]; if (p) grow(p.x, p.y, p.w, NH); });
+      (G.boxes || []).forEach(function (b) { grow(b.x, b.y, b.w, b.h); });
+      (G.sources || []).forEach(function (s) { grow(s.x, s.y, s.w, s.h); });
+      G.geo.forEach(function (e) { String(e.d).replace(NUM, function (_, x, y) { grow(+x, +y, 0, 0); return _; }); if (e.labelX != null) grow(e.labelX, e.labelY - 12, 80, 12); });
+      if (!isFinite(x0)) return G;
+      var dx = margin - x0, dy = margin - y0;
+      Object.keys(G.xy).forEach(function (n) { var p = G.xy[n]; if (!p || seen.has(p)) return; seen.add(p); p.x += dx; p.y += dy; });
+      (G.boxes || []).forEach(function (b) { b.x += dx; b.y += dy; });
+      (G.sources || []).forEach(function (s) { s.x += dx; s.y += dy; });
+      G.geo.forEach(function (e) {
+        e.d = String(e.d).replace(NUM, function (_, x, y) { return (+x + dx) + ',' + (+y + dy); });
+        if (e.labelX != null) { e.labelX += dx; e.labelY += dy; }
+      });
+      G.w = Math.ceil(x1 - x0 + margin * 2); G.h = Math.ceil(y1 - y0 + margin * 2);
+      return G;
+    },
     buildGraph: function () {
       var self = this, app = this.app;
       var root = this.graphRoot(), extra = app.state.gExtra || {};
@@ -579,7 +613,7 @@
         + '|' + Object.keys(this.options.comparisonGroups ? this.options.comparisonGroups() : this.graphGroupState(root)).sort().join('\u0001') + '|' + app.colorBy + '|' + app.paletteName;
       if (!this._gC || this._gC.k !== key) {
         var layout = this.options.layout ? this.options.layout(this) : this.gLayout(root, extra, CAP);
-        this._gC = { k: key, g: this.options.layout ? layout : this._showSources ? this.addSourceLayout(layout) : layout };
+        this._gC = { k: key, g: this.options.layout ? layout : this.trimGraph(this._showSources ? this.addSourceLayout(layout) : layout, GRAPH_MARGIN) };
       }
       var G = this._gC.g;
       var pinN = app.state.gPin && app.state.gPin !== root ? app.state.gPin : null;
@@ -745,7 +779,7 @@
       var cx = (pane.scrollLeft + pane.clientWidth / 2 - before.x) / old;
       var cy = (pane.scrollTop + pane.clientHeight / 2 - before.y) / old;
       this._gZoom = Math.max(.02, Math.min(1.8, zoom));
-      this._gAutoFit = !!fit;
+      this._gAutoFit = fit === 'readable' ? fit : !!fit;
       this.gCanvasEl.style.transform = 'scale(' + this._gZoom + ')';
       this.gFrame.style.width = Math.ceil(G.w * this._gZoom) + 'px';
       this.gFrame.style.height = Math.ceil(G.h * this._gZoom) + 'px';
@@ -754,10 +788,39 @@
       pane.scrollLeft = Math.max(0, after.x + cx * this._gZoom - pane.clientWidth / 2);
       pane.scrollTop = Math.max(0, after.y + cy * this._gZoom - pane.clientHeight / 2);
     },
-    fitGraph: function () {
+    /* Fit all shows the whole graph however small. An answer view (readable) never fits
+       below the zoom at which measure names render at READABLE_PX; a graph that is larger
+       than the pane then opens around the analyzed node and the rest is a scroll away. */
+    fitGraph: function (readable) {
       if (!this._g || !this.gScroll || !this.gScroll.clientWidth) return;
-      this.setGraphZoom(Math.min(1, (this.gScroll.clientWidth - 32) / this._g.w, (this.gScroll.clientHeight - 32) / this._g.h), true);
-      this.gScroll.scrollLeft = 0; this.gScroll.scrollTop = 0;
+      var pane = this.gScroll, G = this._g, fit = Math.min(1, (pane.clientWidth - 32) / G.w, (pane.clientHeight - 32) / G.h);
+      var zoom = readable ? Math.max(fit, READABLE_PX / NODE_PX) : fit;
+      this.setGraphZoom(zoom, readable ? 'readable' : true);
+      pane.scrollLeft = 0; pane.scrollTop = 0;
+      if (zoom > fit + 1e-6) {
+        /* Frame the analyzed node with its direct neighbours: centred when they fit the
+           pane. When they do not, centre the analyzed node itself (a source's whole card),
+           keeping its top-left corner on screen. */
+        var near = new Set([G.root]), own = new Set([G.root]), at = this.graphStageOffset();
+        (((this._gC && this._gC.g) || G).geo || []).forEach(function (e) {
+          if (e.source) { near.add(e.a); near.add(e.b); own.add(e.a); }
+          else if (e.a === G.root) near.add(e.b); else if (e.b === G.root) near.add(e.a);
+        });
+        var box = function (keys) {
+          var b = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
+          keys.forEach(function (k) { var p = G.xy[k]; if (!p) return; b.x0 = Math.min(b.x0, p.x); b.y0 = Math.min(b.y0, p.y); b.x1 = Math.max(b.x1, p.x + (p.w || 0)); b.y1 = Math.max(b.y1, p.y + NH); });
+          return isFinite(b.x0) ? b : null;
+        };
+        var all = box(near), mine = box(own);
+        if (all && mine) {
+          var frame = function (a0, a1, s0, s1, size) {
+            if ((a1 - a0) * zoom + 16 <= size) return (a0 + a1) / 2 * zoom - size / 2;
+            return Math.min(s0 * zoom - 8, (s0 + s1) / 2 * zoom - size / 2);
+          };
+          pane.scrollLeft = Math.max(0, at.x + frame(all.x0, all.x1, mine.x0, mine.x1, pane.clientWidth));
+          pane.scrollTop = Math.max(0, at.y + frame(all.y0, all.y1, mine.y0, mine.y1, pane.clientHeight));
+        }
+      }
     },
 
     /* ---------- DAX tokenizer / cards ---------- */
@@ -1081,8 +1144,13 @@
       wrap.appendChild(pane); wrap.appendChild(resizer);
       var column = el('div', {cls:'mv-main-column'});
       if (!this.options.comparison) {
-        this.libraryToggle = el('button', { cls:'mv-button', text:'Measure library', 'aria-controls':this.libraryId, 'aria-expanded':String(!this._libraryCollapsed), onClick:function(){self.setLibraryCollapsed(!self._libraryCollapsed,true);} });
-        column.appendChild(el('div',{cls:'mv-library-control'},[this.libraryToggle]));
+        /* Answer views hide the docked library; there the same button opens it as an overlay. */
+        this.libraryToggle = el('button', { cls:'mv-button', text:'Measure library', 'aria-controls':this.libraryId, 'aria-expanded':String(!this._libraryCollapsed), 'data-smv-browse':'library', onClick:function(){
+          if (window.SMVInteractive && window.SMVInteractive.browse && document.body.dataset.smvInteractive) window.SMVInteractive.browse(app);
+          else self.setLibraryCollapsed(!self._libraryCollapsed,true);
+        } });
+        this.libraryControl = el('div',{cls:'mv-library-control'},[this.libraryToggle]);
+        column.appendChild(this.libraryControl);
       }
       column.appendChild(this.mainEl); wrap.appendChild(column);
       this.host.appendChild(wrap);
@@ -1184,10 +1252,14 @@
       if (key !== this._mainKey) {
         this.closeMatchingResults();
         this._mainKey = key;
+        // The library toggle moves between its own row and a compact header; moving a node blurs it.
+        var toggleFocused = !!this.libraryToggle && document.activeElement === this.libraryToggle;
+        if (this.libraryControl && this.libraryToggle.parentNode !== this.libraryControl) { this.libraryToggle.textContent = 'Measure library'; this.libraryControl.appendChild(this.libraryToggle); }
         this._flowKey = null; this._daxKey = null; this._nodeEls = {}; this._edgeEls = {}; this._edgeLabels = {}; this._groupEls = {}; this._sourceLayer = null;
         if (this._graphObserver) { this._graphObserver.disconnect(); this._graphObserver = null; }
         U.clear(this.mainEl);
         if (m || source) this.buildSelectedMain(sn, m || { _deps: [], _cols: [] }); else if (this.sourceMode() === 'sources') this.buildSourceEmptyMain(); else this.buildEmptyMain();
+        if (toggleFocused && document.activeElement !== this.libraryToggle) this.libraryToggle.focus({ preventScroll: true });
       }
       if (m || source) {
         this.renderFlow();
@@ -1331,18 +1403,21 @@
       var usage = app.msrUse(sn);
       if (usage) metadata.appendChild(el('span', { cls: 'mv-chip mv-chip-blue', text: usage.length + (usage.length === 1 ? ' report page' : ' report pages'), title: app.useTip(usage) }));
       else if (!usage && app._usage) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'No direct report usage', title: 'Not directly referenced in ' + ((app._usageMeta && app._usageMeta.report) || 'the scanned report') + '. It may feed other measures that are used.' }));
-      var header = el('header', { cls: 'mv-analysis-header' });
-      var heading = el('div', { cls: 'mv-heading-block' }, [el('div', { cls: 'mv-eyebrow', text: this.options.comparison ? 'COMPARISON FOCUS ' + (this.options.comparisonSide===1?'B':'A') : 'ANALYZING MEASURE' }), el('h1', { text: sn }), metadata]);
+      /* Compact is the CLI answer view: one header row, one graph toolbar, no eyebrows or
+         helper text, so the diagram gets the height. */
+      var compact = !!this._compact && !this.options.comparison;
+      var header = el('header', { cls: 'mv-analysis-header' + (compact ? ' mv-compact' : '') });
+      var heading = el('div', { cls: 'mv-heading-block' }, [compact ? null : el('div', { cls: 'mv-eyebrow', text: this.options.comparison ? 'COMPARISON FOCUS ' + (this.options.comparisonSide===1?'B':'A') : 'ANALYZING MEASURE' }), el('h1', { text: sn }), metadata]);
       if (source) {
         U.clear(heading);
-        heading.appendChild(el('div', { cls: 'mv-eyebrow', text: source.column == null ? 'ANALYZING TABLE' : 'ANALYZING COLUMN' }));
+        if (!compact) heading.appendChild(el('div', { cls: 'mv-eyebrow', text: source.column == null ? 'ANALYZING TABLE' : 'ANALYZING COLUMN' }));
         heading.appendChild(el('h1', { text: this.sourceLabel(source) }));
         var impact = this.currentImpact();
-        heading.appendChild(el('p', { cls: 'mv-source-summary', text: impact.direct.length + ' direct · ' + (impact.all.length - impact.direct.length) + ' indirect dependent measures' }));
+        heading.appendChild(el('p', { cls: 'mv-source-summary', text: impact.direct.length + ' direct · ' + (impact.all.length - impact.direct.length) + (compact ? ' indirect' : ' indirect dependent measures'), title: impact.direct.length + ' direct and ' + (impact.all.length - impact.direct.length) + ' indirect dependent measures' }));
         heading.appendChild(el('button', { cls: 'mv-text-button', text: 'Back to ' + source.table, onClick: function () { app.focusTable(source.table); } }));
       }
       header.appendChild(heading);
-      if (!this.options.comparison && Object.keys(M.msrHome).length>1) header.appendChild(el('button', {cls:'mv-button',text:'Compare measures',onClick:function(){self.openComparisonPicker();}}));
+      if (!this.options.comparison && Object.keys(M.msrHome).length>1) header.appendChild(el('button', {cls:'mv-button',text:compact?'Compare':'Compare measures',title:'Compare two measures',onClick:function(){self.openComparisonPicker();}}));
       var modes = el('div', { cls: 'mv-mode-switch', role: 'group', 'aria-label': 'Analysis view' });
       this._modeButtons = {};
       [['split', 'Split view'], ['dax', 'DAX'], ['graph', 'Dependencies']].forEach(function (item) {
@@ -1352,7 +1427,15 @@
       this.splitSelect = el('select', { cls: 'mv-layout-select', 'aria-label': 'DAX position in split view',
         onChange: function (e) { self.setSplitLayout(e.target.value); }
       }, [el('option', { value: 'beside', text: 'DAX beside graph' }), el('option', { value: 'below', text: 'DAX below graph' })]);
-      if (!this.options.comparison) header.appendChild(el('div', { cls: 'mv-view-controls' }, [modes, this.splitSelect])); body.appendChild(header);
+      if (!this.options.comparison) header.appendChild(el('div', { cls: 'mv-view-controls' }, [modes, this.splitSelect]));
+      if (compact && this.libraryToggle) {
+        // One row of actions that wraps as a unit beside the heading.
+        var actions = el('div', { cls: 'mv-header-actions' });
+        Array.prototype.slice.call(header.children, 1).forEach(function (n) { actions.appendChild(n); });
+        this.libraryToggle.textContent = 'Library'; actions.appendChild(this.libraryToggle);
+        header.appendChild(actions);
+      }
+      body.appendChild(header);
       this.analysisBody = el('div', { cls: 'mv-analysis-body' });
 
       var graphPane = el('section', { cls: 'mv-graph-panel', 'aria-label': 'Measure dependency graph' });
@@ -1365,22 +1448,23 @@
       ]), this.orientationSelect]);
       if(this.options.comparison)this.orientationSelect.hidden=true;
       this.updateDirectionLabel();
-      graphPane.appendChild(graphHeading);
+      if (!compact) graphPane.appendChild(graphHeading);
       this.sourceToggle = el('input', { type: 'checkbox', checked: this._showSources, onChange: function (e) { self.setShowSources(e.target.checked); } });
-      var sourceControls = el('div', { cls: 'mv-source-controls' }, el('label', {}, [this.sourceToggle, el('span', { text: 'Show table and column references' })]));
-      if (!this.options.comparison) graphPane.appendChild(sourceControls);
+      var sourceControls = el('div', { cls: 'mv-source-controls' }, el('label', { title: 'Show table and column references' }, [this.sourceToggle, el('span', { text: compact ? 'Columns' : 'Show table and column references' })]));
+      if (!this.options.comparison && !compact) graphPane.appendChild(sourceControls);
       var graphToolbar = el('div', { cls: 'mv-graph-toolbar', role: 'group', 'aria-label': 'Graph navigation' });
       var graphButton = function (label, title, click) { return el('button', { cls: 'mv-button', text: label, title: title, 'aria-label': title, onClick: click }); };
       this.zoomLabel = graphButton('100%', 'Reset dependency graph zoom to 100%', function () { self.setGraphZoom(1); self.gCenter(); });
       graphToolbar.appendChild(graphButton('−', 'Zoom out dependency graph', function () { self.setGraphZoom((self._gZoom || 1) / 1.2); }));
       graphToolbar.appendChild(this.zoomLabel);
       graphToolbar.appendChild(graphButton('+', 'Zoom in dependency graph', function () { self.setGraphZoom((self._gZoom || 1) * 1.2); }));
-      graphToolbar.appendChild(graphButton('Fit all', 'Fit entire dependency graph', function () { self.fitGraph(); }));
+      graphToolbar.appendChild(graphButton('Fit all', 'Fit entire dependency graph', function () { self.fitGraph(false); }));
       graphToolbar.appendChild(graphButton('Center', 'Center the analysis source', function () { self.gCenter(); }));
       graphToolbar.appendChild(el('span', { cls: 'mv-toolbar-spacer' }));
       this.expandBtn = graphButton('Expand all', 'Expand all upstream and downstream branches and groups, up to 500 measures', function () { self.expandGraphAll(); });
       this.resetBtn = graphButton('Reset', 'Reset dependency expansion and comparison', function () { app.setState({ gExtra: {}, gPin: null, gHover: null }); });
       graphToolbar.appendChild(this.expandBtn); graphToolbar.appendChild(this.resetBtn);
+      if (compact) { graphToolbar.appendChild(sourceControls); graphToolbar.appendChild(this.orientationSelect); }
       graphPane.appendChild(graphToolbar);
       this.cappedEl = el('div', { cls: 'mv-cap-notice', text: '500-measure display limit reached. Additional upstream or downstream measures are omitted. Analyze another measure to explore them.' });
       graphPane.appendChild(this.cappedEl);
@@ -1393,7 +1477,7 @@
       this._gEl = this.gScroll; this._gScrolledFor = null; this._gZoom = 1; this._gAutoFit = false;
       graphPane.appendChild(this.gScroll);
       this.statEl = el('span', { cls: 'mv-graph-stat' });
-      graphPane.appendChild(el('div', { cls: 'mv-graph-footer' }, [
+      if (!compact) graphPane.appendChild(el('div', { cls: 'mv-graph-footer' }, [
         el('span', { cls: 'mv-legend-up', text: '● Upstream' }), el('span', { cls: 'mv-legend-down', text: '● Downstream' }), this.statEl,
         this._showSources ? el('span', { cls: 'mv-graph-help', text: 'Whole table: dashed link to header · Column: solid link to row' }) : null,
         el('span', { cls: 'mv-graph-help', text: this.options.comparison ? 'Click to inspect · Enter to replace this focus' : 'Click to compare · Enter to analyze' })
@@ -1440,7 +1524,7 @@
                it gets a real size, so it is where the first placement belongs — no retry loop,
                and nothing left spinning when the pane never opens at all. */
             self.applyInitialViewport();
-            if (self._gAutoFit) self.fitGraph();
+            if (self._gAutoFit) self.fitGraph(self._gAutoFit === 'readable');
           });
         });
         this._graphObserver.observe(this.gScroll);
@@ -1460,13 +1544,13 @@
       if (this.daxGrid) this.daxGrid.scrollTop = 0;
       var self = this;
       Object.keys(this._modeButtons).forEach(function (key) { self._modeButtons[key].setAttribute('aria-pressed', String(key === self.analysisBody.getAttribute('data-mode'))); });
-      if (this._workspaceMode !== 'dax') requestAnimationFrame(function () { if (self._gAutoFit) self.fitGraph(); else if (persist !== false || !self._showSources) self.gCenter(); self.restorePendingViewport(); });
+      if (this._workspaceMode !== 'dax') requestAnimationFrame(function () { if (self._gAutoFit) self.fitGraph(self._gAutoFit === 'readable'); else if (persist !== false || !self._showSources) self.gCenter(); self.restorePendingViewport(); });
     },
     setSplitLayout: function (layout) {
       this._splitLayout = choice(layout, ['beside', 'below'], 'beside');
       this.savePreferences(); this.applyWorkspaceLayout();
       var self = this;
-      requestAnimationFrame(function () { if (self._gAutoFit) self.fitGraph(); else self.gCenter(); });
+      requestAnimationFrame(function () { if (self._gAutoFit) self.fitGraph(self._gAutoFit === 'readable'); else self.gCenter(); });
     },
     splitMetrics: function () {
       var rect = this.analysisBody.getBoundingClientRect(), css = getComputedStyle(this.analysisBody);
@@ -1532,7 +1616,7 @@
       this._graphOrientation = choice(orientation, ['lr', 'tb', 'bt'], 'lr');
       this.savePreferences(); this.updateDirectionLabel();
       this._gC = null;
-      if (this.gCanvasEl) { this.renderFlow(); if (this._gAutoFit) this.fitGraph(); else this.gCenter(); }
+      if (this.gCanvasEl) { this.renderFlow(); if (this._gAutoFit) this.fitGraph(this._gAutoFit === 'readable'); else this.gCenter(); }
     },
 
     renderSourceCards: function (G) {
@@ -1688,7 +1772,7 @@
         this._gScrolledFor = this.graphRoot();
         this._initViewportFor = null;
         this.applyInitialViewport();
-      } else if (this._gAutoFit && structureChanged) this.fitGraph();
+      } else if (this._gAutoFit && structureChanged) this.fitGraph(this._gAutoFit === 'readable');
       else {
         this.gFrame.style.width = Math.ceil(G.w * (this._gZoom || 1)) + 'px';
         this.gFrame.style.height = Math.ceil(G.h * (this._gZoom || 1)) + 'px';
@@ -2031,6 +2115,8 @@
         if (this._graphObserver) { this._graphObserver.disconnect(); this._graphObserver = null; }
         this._built = false; this._gScrolledFor = null; this._initViewportFor = null;
       }
+      // A rebuilt shell replaces the library toggle; keep keyboard focus on it.
+      var toggleFocused = !this._built && !!this.libraryToggle && document.activeElement === this.libraryToggle;
       if (!this._built) {
         var last = this._lastGraphViewport;
         if (!this._snapshotViewport && last && this.graphRoot() && last.model === app.model && last.selected === this.graphRoot() && last.context === this.graphViewportContext()) {
@@ -2042,6 +2128,7 @@
       this.renderRail();
       this.renderMain();
       this.updateLibrary();
+      if (toggleFocused && this.libraryToggle && document.contains(this.libraryToggle)) this.libraryToggle.focus({ preventScroll: true });
       this.restorePendingViewport();
     }
   };

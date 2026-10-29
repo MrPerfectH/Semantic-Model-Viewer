@@ -540,6 +540,9 @@
     ZOOM_FLOOR: ZOOM_FLOOR,
     CHIP_BAND_MIN: ZOOM_FLOOR,
     CHIP_BAND_MAX: 0.7,
+    /* Auto detail draws cards from this zoom up. Answer views raise it to where a card
+       title (13.5px) is still 11px on screen, so a fit never lands on unreadable cards. */
+    CHIP_BELOW: 0.7,
     ARRANGE_K0: 0.5,         /* the zoom the first arrange pass sizes its lanes for */
     /* Longest unbreakable run of characters anywhere in the model. A model of short names
        keeps tight lanes; only a model of long ones pays for them. */
@@ -596,7 +599,7 @@
     /* Auto follows the zoom; Names is always a chip, Cards never one. */
     chipOn: function (k) {
       var mode = this.detailMode || 'auto';
-      return mode === 'names' ? true : (mode === 'cards' ? false : k < 0.7);
+      return mode === 'names' ? true : (mode === 'cards' ? false : k < this.CHIP_BELOW);
     },
     cardWidthAt: function (c, k) {
       return this.chipOn(k) ? this.chipMetrics(k, c && c.longWord).width : this.CARD_W;
@@ -630,13 +633,16 @@
           c.caret.style.display = 'none';
           c.meta.style.display = 'none';
           c.body.style.display = 'none';
-          /* Compact identifiers stay on one line: arbitrary wrapping left orphaned
-             letters below names such as ZLEC_NAGLOWEK. The full name remains in title. */
+          /* Names break only between words, inside the lines the lane reserves: arbitrary
+             wrapping left orphaned letters below names such as ZLEC_NAGLOWEK, and a single
+             line cut "Product Category" to "Product Ca…". One-word identifiers stay on one
+             line. The full name remains in title. */
+          var words = /\s/.test(c.table.name);
           c.nm.style.font = '600 ' + m.font.toFixed(2) + 'px/' + m.lead + ' "IBM Plex Sans",sans-serif';
-          c.nm.style.display = 'block';
-          c.nm.style.webkitLineClamp = '';
-          c.nm.style.webkitBoxOrient = '';
-          c.nm.style.whiteSpace = 'nowrap';
+          c.nm.style.display = words ? '-webkit-box' : 'block';
+          c.nm.style.webkitLineClamp = words ? String(self.CHIP_LINES) : '';
+          c.nm.style.webkitBoxOrient = words ? 'vertical' : '';
+          c.nm.style.whiteSpace = words ? 'normal' : 'nowrap';
           c.nm.style.overflow = 'hidden';
           c.nm.style.textOverflow = 'ellipsis';
           c.nm.style.overflowWrap = 'normal';
@@ -1776,27 +1782,39 @@
          candidate size has to be the size at that candidate zoom, never the stale measured
          one, or the second pass floors on the first and Fit never converges. */
       var k = startK || this.view.k, minX = 0, minY = 0, maxX = 0, maxY = 0, pass;
-      for (pass = 0; pass < (floor < ZOOM_FLOOR ? 8 : 2); pass++) {
-        var previousK = k;
+      /* The zoom the boxes drawn at zoom `at` would fit at, leaving their bounds behind. */
+      var solve = function (at) {
         minX = 1e9; minY = 1e9; maxX = -1e9; maxY = -1e9;
         cards.forEach(function (c) {
           var p = self.gp(c.table.name); if (!p) return;
-          var w = self.cardWidthAt(c, k);
+          var w = self.cardWidthAt(c, at);
           var x = p.x - (w - self.CARD_W) / 2;
           minX = Math.min(minX, x); minY = Math.min(minY, p.y);
-          maxX = Math.max(maxX, x + w); maxY = Math.max(maxY, p.y + self.cardHeightAt(c, k));
+          maxX = Math.max(maxX, x + w); maxY = Math.max(maxY, p.y + self.cardHeightAt(c, at));
         });
         extra.forEach(function (r) {
           minX = Math.min(minX, r.x); minY = Math.min(minY, r.y);
           maxX = Math.max(maxX, r.x + r.w); maxY = Math.max(maxY, r.y + r.h);
         });
-        if (minX > maxX) return { x: 0, y: 0, k: 1 };
+        if (minX > maxX) return null;
         var bw = Math.max(1, maxX - minX), bh = Math.max(1, maxY - minY);
         /* Arrangement solves keep their lane zoom floor. The visible camera passes an
            explicit lower floor so it can fit saved positions on a smaller recipient. */
-        k = Math.max(floor, Math.min(1.25, Math.min(availW / bw, availH / bh)));
+        return Math.max(floor, Math.min(1.25, Math.min(availW / bw, availH / bh)));
+      };
+      for (pass = 0; pass < (floor < ZOOM_FLOOR ? 8 : 2); pass++) {
+        var previousK = k;
+        k = solve(k);
+        if (k == null) return { x: 0, y: 0, k: 1 };
         if (Math.abs(k - previousK) < 0.00001) break;
       }
+      /* Auto detail switches from chips to the larger cards at CHIP_BELOW, so the refinement
+         can settle on a card zoom that only chips fit at. Then the answer is the largest
+         chip zoom instead: the picture shown is always the one the bounds were taken for. */
+      if ((this.detailMode || 'auto') === 'auto' && !this.chipOn(k) && solve(k) < k - 0.00001) {
+        var below = this.CHIP_BELOW - 0.001;
+        k = Math.min(below, solve(below)); solve(k);
+      } else solve(k);
       var cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
       return { k: k, x: rect.x + availW / 2 - cx * k, y: rect.y + availH / 2 - cy * k };
     },

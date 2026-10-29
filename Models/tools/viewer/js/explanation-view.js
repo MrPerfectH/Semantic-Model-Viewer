@@ -127,8 +127,9 @@
     if(view.chrome===false)style.textContent+='#topbar{display:none!important}';
     // The side-by-side workspace header already names the model and owns the appearance choice.
     else if(g.SMV_WORKSPACE_EMBEDDED)style.textContent+='#topbar .ex-brand,#topbar .ex-theme-select{display:none!important}#topbar{min-height:0!important;padding:6px 12px!important;flex-wrap:nowrap!important;justify-content:space-between}#topbar .ex-main-nav{order:0!important;width:auto!important;flex:0 1 auto;justify-content:flex-start!important;min-width:0;margin:0!important;overflow-x:auto;scrollbar-width:none}#topbar .ex-main-nav button{padding:8px 10px}#topbar .ex-header-actions{flex:0 0 auto!important;width:auto!important;min-width:0!important;margin-left:auto}';
-    if(app.explorer){var compact=g.SMV_WORKSPACE_EMBEDDED&&innerWidth<1000;app.explorer.libraryHidden=view.chrome===false||compact;app.explorer.inspectorHidden=view.chrome===false||compact;app.explorer.mapHidden=view.chrome===false;app.explorer.update();}
-    if(view.chrome===false && app.explorer){app.explorer.libraryHidden=true;app.explorer.inspectorHidden=true;app.explorer.mapHidden=true;app.explorer.update();}
+    // An answer view opens on the diagram alone; Tools restores the editing chrome on demand.
+    if(app.explorer)app.explorer.setCompact(true);
+    if(app.measures)app.measures._compact=true;
     if(view.tables && app.explorer){app.explorer.blank();app.explorer.add(view.tables);}
     app.setState({showStandalone:true,search:'',activeFilter:null});
     app.setViewMode(view.mode);
@@ -154,7 +155,7 @@
         names.filter(Boolean).forEach(function(n){if(app.explorer)app.explorer.ensureTable(n);});
         if(r.kind==='column' || r.kind==='measure'){var c=cv.cards[r.table];if(c&&!c.expanded)cv.toggleCard(r.table);}
       });
-      if(!view.state||!view.state.tableView){var endpoints=[];if(view.focus&&view.focus.kind==='relationship'){var relationship=resolve(app.model,view.focus);endpoints=[relationship.from,relationship.to];}cv.restoreDisplay({detail:'cards',expanded:Array.from(new Set(endpoints.concat(refs.filter(function(r){return r.kind==='column';}).map(function(r){return r.table;}))))});}
+      if(!view.state||!view.state.tableView){var endpoints=[];if(view.focus&&view.focus.kind==='relationship'){var relationship=resolve(app.model,view.focus);endpoints=[relationship.from,relationship.to];}var expanded=Array.from(new Set(endpoints.concat(refs.filter(function(r){return r.kind==='column';}).map(function(r){return r.table;}))));cv.restoreDisplay({detail:expanded.length?'cards':'auto',expanded:expanded});}
       await frame();
       if(view.mode==='clusters'&&cv.groups){Object.keys(cv.groups).forEach(function(k){cv.expandedGroups.add(k);});cv.reflowClusters();cv.refreshVisibility();}
       cv.fitView();

@@ -31,21 +31,25 @@
   function closeLibrary(restore) {
     var app=g.app, wasOpen=document.body.classList.contains('smv-browse-open');
     document.body.classList.remove('smv-browse-open');
-    var control=document.querySelector('[data-smv-browse]');
-    if(control){control.textContent='Browse measures';control.setAttribute('aria-expanded','false');}
+    var control=browseControls(false);
     if(wasOpen&&restore!==false&&browseSnapshot){
       var saved=browseSnapshot; saved.library=app.measures.captureSnapshot().library;
       browseSnapshot=null;app.measures.restoreSnapshot(saved);
     }else browseSnapshot=null;
     if(wasOpen&&restore!==false&&control)control.focus();
   }
+  // The banner and the compact measure header each carry a browse control; keep both in step.
+  function browseControls(open){
+    var all=Array.from(document.querySelectorAll('[data-smv-browse]'));
+    all.forEach(function(b){if(b.closest('.smv-explanation-controls'))b.textContent=open?'Close measures':'Browse measures';b.setAttribute('aria-expanded',String(open));});
+    return all.find(function(b){return b.getClientRects().length;})||all[0]||null;
+  }
   function browseMeasures(app) {
     if(document.body.classList.contains('smv-browse-open')){closeLibrary(true);return;}
     browseSnapshot=app.measures.captureSnapshot();app.measures.setLibraryCollapsed(false);dirty=true;
     app.measures.cancelSnapshotViewport();if(!app.measures.comparison)app.setState({selMeasure:null,gPin:null,gHover:null});
     document.body.classList.add('smv-browse-open');
-    var control=document.querySelector('[data-smv-browse]');
-    if(control){control.textContent='Close measures';control.setAttribute('aria-expanded','true');}
+    browseControls(true);
     var search=document.querySelector('.mv-search');if(search)search.focus();
   }
   function style(){
@@ -182,5 +186,5 @@ body[data-smv-interactive] .mv-library{display:none!important}body[data-smv-inte
     var darkStyle=document.getElementById('smv-host-appearance');if(!darkStyle){darkStyle=node('style');darkStyle.id='smv-host-appearance';document.head.appendChild(darkStyle);}
     darkStyle.textContent='[data-smv-color-scheme=dark] body,[data-smv-color-scheme=dark] #root,[data-smv-color-scheme=dark] #topbar,[data-smv-color-scheme=dark] .mv-library,[data-smv-color-scheme=dark] .mv-dax-card,[data-smv-color-scheme=dark] .mv-analysis-header,[data-smv-color-scheme=dark] .mv-graph-panel{background:var(--smv-surface)!important;color:var(--smv-ink)!important}';
   }
-  g.SMVInteractive={closeLibrary:closeLibrary,annotations:annotations,connect:connect,appearance:appearance};
+  g.SMVInteractive={closeLibrary:closeLibrary,browse:browseMeasures,annotations:annotations,connect:connect,appearance:appearance};
 })(window);

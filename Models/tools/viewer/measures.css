@@ -289,3 +289,21 @@ body[data-smv-interactive] .mv-dax-card{min-height:0;grid-template-rows:auto aut
 body[data-smv-interactive] .mv-workspace[data-library-collapsed=false]>.mv-library{display:flex!important;position:absolute;inset:0 auto 0 0;z-index:150;width:280px!important;min-width:0;max-width:85%;}
 
 .mv-main-column{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;}
+/* Compact answer view (CLI): header, view switch and library in one row; graph controls in one toolbar. */
+.mv-analysis-header.mv-compact{flex-direction:row;align-items:center;flex-wrap:wrap;gap:6px 10px;padding:8px 12px}
+.mv-analysis-header.mv-compact .mv-heading-block{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;flex:1 1 auto}
+.mv-analysis-header.mv-compact h1{font-size:16px;margin:0;letter-spacing:-.2px}
+.mv-analysis-header.mv-compact .mv-source-summary{margin:0;font-size:12px}
+.mv-analysis-header.mv-compact .mv-text-button{font-size:12px}
+.mv-analysis-header.mv-compact .mv-view-controls{flex-direction:row;align-items:center;gap:6px}
+.mv-analysis-header.mv-compact .mv-mode-switch{margin:0}
+.mv-analysis-header.mv-compact .mv-mode-switch button{padding:4px 8px}
+.mv-analysis-header.mv-compact .mv-button{padding:5px 9px}
+.mv-library-control:empty{display:none}
+.mv-analysis-header.mv-compact .mv-header-actions{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-left:auto}
+.mv-analysis:has(.mv-compact) .mv-analysis-body{padding:8px}
+.mv-analysis:has(.mv-compact) .mv-graph-toolbar{padding:6px 8px;gap:4px}
+.mv-analysis:has(.mv-compact) .mv-graph-toolbar .mv-source-controls{padding:0;border:0;background:none;font-size:12px}
+.mv-analysis:has(.mv-compact) .mv-graph-toolbar .mv-orientation-select{width:auto;height:28px}
+.mv-analysis:has(.mv-compact) .mv-panel-heading{padding:8px 12px}
+.mv-analysis:has(.mv-compact) .mv-panel-heading p{display:none}
