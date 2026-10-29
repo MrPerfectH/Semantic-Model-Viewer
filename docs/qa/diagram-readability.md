@@ -85,8 +85,9 @@ with right angles through open space only:
 
 A node's links leave from one point and split in the channel. The +N expanders sit on
 the node's corners, upstream above and downstream below, so the gutters stay clear.
-Auto chooses left to right only when that already fits the pane whole at a readable
-size. **Fit all** and the direction menu still override it.
+Bottom to top uses the same layout, mirrored: the analyzed table or measure is at the
+bottom and the flow runs upward. Auto chooses left to right only when that already fits
+the pane whole at a readable size. **Fit all** and the direction menu still override it.
 
 ## How it is achieved
 

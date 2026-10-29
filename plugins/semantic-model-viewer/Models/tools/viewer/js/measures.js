@@ -424,8 +424,8 @@
           shown: s.shown.length, hidden: s.hidden, expanded: s.expanded,
           x: x - GPAD, y: y, w: cw + GPAD * 2, h: s.h });
       };
-      if (vertical && direction === 1 && budget > 0) {
-        wrap = this.gWrapRows(grouping.slots, colW, budget, place);
+      if (vertical && budget > 0) {
+        wrap = this.gWrapRows(grouping.slots, colW, budget, place, direction);
         w = wrap.w; h = wrap.h;
       } else if (vertical) {
         // Keep labels horizontal: each dependency layer becomes a row of slots.
@@ -494,14 +494,16 @@
         upSet: upSet, dnSet: dnSet, xy: xy, w: w, h: h, geo: geo, nE: eList.length, relM: relM, capped: capped,
         boxes: boxes, groupOf: grouping.groupOf, hiddenByGroup: hidden, grouped: grouping.grouped, wrap: wrap };
     },
-    /* Top to bottom for a narrow pane: each dependency layer is a band whose slots wrap into
-       rows no wider than `budget`. Rows are left-aligned on a grid so the gaps between
-       columns line up into gutters, and every link is drawn with right angles through the
-       open space — out of a node's bottom (or its side, when a node sits below it), along
-       the channel between bands, down a gutter, and into the target's top (or its side,
-       when it is not in the band's first row). No link crosses a measure. */
-    gWrapRows: function (slots, colW, budget, place) {
-      var GX = 32, ROWGAP = 16, BAND = 76, PX = 100, PY = 84, RADIUS = 9;
+    /* Top to bottom (dir 1) or bottom to top (dir -1) for a narrow pane: each dependency
+       layer is a band whose slots wrap into rows no wider than `budget`. Rows are left-aligned
+       on a grid so the gaps between columns line up into gutters, and every link is drawn with
+       right angles through the open space — out of a node's downstream face (or its side, when
+       a node sits beyond it), along the channel between bands, along a gutter, and into the
+       target's upstream face (or across the gap beside it, when it is not in the band's first
+       row). No link crosses a measure. Bottom to top is the same picture read upward: bands
+       stack from the bottom and each band's first row is its lowest. */
+    gWrapRows: function (slots, colW, budget, place, dir) {
+      var GX = 32, ROWGAP = 16, BAND = 76, PX = 100, PY = 84, RADIUS = 9, up = dir === -1;
       var bands = slots.map(function (ss, li) {
         var cw = colW[li], fit = Math.max(1, Math.min(ss.length, Math.floor((budget + GX) / (cw + GX)))), rows = [];
         // As many rows as the width forces, filled evenly: four measures that need two rows go 2 + 2, not 3 + 1.
@@ -512,11 +514,14 @@
           h: heights.reduce(function (a, x) { return a + x; }, 0) + Math.max(0, rows.length - 1) * ROWGAP };
       });
       var widest = bands.reduce(function (a, b) { return Math.max(a, b.width); }, 0), slot = {}, y = PY;
-      bands.forEach(function (band, li) {
+      var order = bands.map(function (b, li) { return li; }); if (up) order.reverse();
+      order.forEach(function (li) {
+        var band = bands[li], rows = band.rows.map(function (row, r) { return r; });
+        if (up) rows.reverse();
         band.x0 = PX + (widest - band.width) / 2; band.top = y;
         var ry = y;
-        band.rows.forEach(function (row, r) {
-          row.forEach(function (sl, c) {
+        rows.forEach(function (r) {
+          band.rows[r].forEach(function (sl, c) {
             place(sl, band.x0 + c * (band.cw + GX), ry, band.cw);
             var members = sl.kind === 'group' ? sl.shown : [sl.name];
             members.forEach(function (n, m) { slot[n] = { li: li, r: r, c: c, group: sl.kind === 'group', first: m === 0, last: m === members.length - 1 }; });
@@ -525,14 +530,16 @@
         });
         band.bottom = y + band.h; y = band.bottom + BAND;
       });
-      var wrap = { w: PX * 2 + widest, h: y - BAND + PY, bands: bands, slot: slot, ox: 0, oy: 0 };
+      var wrap = { w: PX * 2 + widest, h: y - BAND + PY, bands: bands, slot: slot, ox: 0, oy: 0, dir: up ? -1 : 1 };
       var gutter = function (band, c) { return wrap.ox + band.x0 + c * (band.cw + GX) - GX / 2; };
-      var above = function (li) { return wrap.oy + bands[li].top - BAND / 2; };
-      var below = function (li) { return wrap.oy + bands[li].bottom + BAND / 2; };
-      // Nothing under this node in its band, so a link can leave straight down.
-      var clearBelow = function (n) {
+      // The channel a band receives its links from, and the one its links leave by.
+      var upstream = function (li) { return wrap.oy + (up ? bands[li].bottom + BAND / 2 : bands[li].top - BAND / 2); };
+      var downstream = function (li) { return wrap.oy + (up ? bands[li].top - BAND / 2 : bands[li].bottom + BAND / 2); };
+      var lead = function (B) { return up ? B.y + NH : B.y; }, trail = function (A) { return up ? A.y : A.y + NH; };
+      // Nothing beyond this node in its band, so a link can leave straight out of its downstream face.
+      var clear = function (n) {
         var t = slot[n], band = bands[t.li], last = band.rows.length - 1;
-        if (t.group && !t.last) return false;
+        if (t.group && (up || !t.last)) return false;
         return t.r === last || (t.r === last - 1 && t.c >= band.rows[last].length);
       };
       var path = function (pts) {
@@ -553,30 +560,30 @@
         }
         return d + ' L' + f(clean[clean.length - 1]);
       };
-      /* From (x, y) in the channel above band `from + 1` to node b. Bands in between are
-         crossed down the gutter closest to where the link is heading. */
+      /* From a point that can move straight to the upstream channel of band `from + 1`, to
+         node b. Bands in between are crossed along the gutter closest to where the link is heading. */
       wrap.route = function (pts, from, b, xy, port, lane) {
         var t = slot[b], B = xy[b], x = pts[pts.length - 1][0], li;
         var into = t.r === 0 && !t.group ? B.x + B.w / 2 + (port || 0) : gutter(bands[t.li], t.c);
         for (li = from + 1; li < t.li; li++) {
           var band = bands[li], best = gutter(band, 0);
           for (var c = 1; c <= band.per; c++) { var g = gutter(band, c); if (Math.abs(g - into) < Math.abs(best - into)) best = g; }
-          pts.push([x, above(li) + lane]); pts.push([best, above(li) + lane]); pts.push([best, below(li) + lane]); x = best;
+          pts.push([x, upstream(li) + lane]); pts.push([best, upstream(li) + lane]); pts.push([best, downstream(li) + lane]); x = best;
         }
-        pts.push([x, above(t.li) + lane]); pts.push([into, above(t.li) + lane]);
-        if (t.r === 0 && !t.group) pts.push([into, B.y]);
+        pts.push([x, upstream(t.li) + lane]); pts.push([into, upstream(t.li) + lane]);
+        if (t.r === 0 && !t.group) pts.push([into, lead(B)]);
         else {
-          // Down the gutter, across the gap just above the node, and into its top-left.
-          var hop = B.y - (t.group ? MGAP / 2 : ROWGAP / 2);
-          pts.push([into, hop]); pts.push([B.x + 16, hop]); pts.push([B.x + 16, B.y]);
+          // Along the gutter, across the gap on the node's upstream side, and into that face.
+          var gap = t.group ? MGAP / 2 : ROWGAP / 2, hop = up ? B.y + NH + gap : B.y - gap;
+          pts.push([into, hop]); pts.push([B.x + 16, hop]); pts.push([B.x + 16, lead(B)]);
         }
         return path(pts);
       };
       // A node's links leave from one point and split in the channel: a bundle, not a comb.
       wrap.edge = function (a, b, xy) {
         var A = xy[a], t = slot[a], lane = ((t.c + t.r) % 5 - 2) * 5, pts;
-        if (clearBelow(a)) pts = [[A.x + A.w / 2, A.y + NH], [A.x + A.w / 2, below(t.li) + lane]];
-        else { var g = gutter(bands[t.li], t.c + 1); pts = [[A.x + A.w, A.y + NH / 2], [g, A.y + NH / 2], [g, below(t.li) + lane]]; }
+        if (clear(a)) pts = [[A.x + A.w / 2, trail(A)], [A.x + A.w / 2, downstream(t.li) + lane]];
+        else { var g = gutter(bands[t.li], t.c + 1); pts = [[A.x + A.w, A.y + NH / 2], [g, A.y + NH / 2], [g, downstream(t.li) + lane]]; }
         return wrap.route(pts, t.li, b, xy, 0, lane);
       };
       return wrap;
@@ -647,6 +654,11 @@
       G.w = Math.max(G.w + dx, width + 120); G.h = Math.max(G.h + dy, height + 120);
       var cursor = 60, originY = bottom ? G.h + 60 : 60;
       if (bottom) G.h += height + 120;
+      // Bottom to top: the source sits just under the measures, not under the virtual root's empty layer.
+      if (bottom && selected && measureNames.length) {
+        originY = 80 + Math.max.apply(null, measureNames.map(function (n) { return G.xy[n].y + NH; }));
+        G.h = Math.max(G.h, originY + height + 60);
+      }
       /* Left to right, the source stack sits level with the measures it feeds rather than
          at the top of a tall flow, so a source and its direct dependents share one screen. */
       if (!vertical) {
@@ -670,7 +682,7 @@
         var a = self.sourceKey(link.table, link.column), A = G.xy[a], B = G.xy[link.to];
         if (!A || !B) return;
         var x1, y1, x2, y2, d;
-        if (G.wrap && !bottom) {
+        if (G.wrap) {
           // A column leaves from its own row, down a gutter beside the card, then joins the flow.
           var card = sources.find(function (s) { return s.table === link.table; }), gx = card.x + card.w + 14, root = G.wrap.slot[G.root];
           x1 = A.x + A.w; y1 = A.y + NH / 2;
@@ -729,7 +741,7 @@
       var zoom = this._compact && !this.options.comparison ? READABLE_PX / NODE_PX : 1;
       this._layoutBudget = w ? Math.max(200, Math.floor((w - 2 * GRAPH_MARGIN - 24) / zoom / 40) * 40) : 0;
       this._layoutNarrow = !!w && (w < 760 || w < h * 1.1);
-      var used = this._graphOrientation === 'tb' || (this._graphOrientation === 'auto' && this._layoutNarrow);
+      var used = this._graphOrientation === 'tb' || this._graphOrientation === 'bt' || (this._graphOrientation === 'auto' && this._layoutNarrow);
       return used ? this._layoutBudget + (this._layoutNarrow ? 'n' : '') : this._layoutNarrow ? 'n' : '';
     },
     buildGraph: function () {
@@ -740,7 +752,7 @@
         + '|' + Object.keys(this.options.comparisonGroups ? this.options.comparisonGroups() : this.graphGroupState(root)).sort().join('\u0001') + '|' + app.colorBy + '|' + app.paletteName;
       if (!this._gC || this._gC.k !== key) {
         var make = function (orientation) {
-          var layout = self.gLayout(root, extra, CAP, orientation, null, orientation === 'tb' ? self._layoutBudget : 0);
+          var layout = self.gLayout(root, extra, CAP, orientation, null, orientation !== 'lr' ? self._layoutBudget : 0);
           return self.trimGraph(self._showSources ? self.addSourceLayout(layout) : layout, GRAPH_MARGIN);
         };
         var G0;
@@ -805,9 +817,9 @@
           s: 'flex:none;box-sizing:border-box;width:' + p.w + 'px;height:' + NH + 'px;' + base + 'border-radius:6px;padding:0 9px;cursor:pointer;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;',
           tip: n + app.tipFlags(n) + ((m && m.dax) ? '\n\n' + m.dax.trim().slice(0, 900) : ''),
           upMore: upLbl, upTip: upN ? ('Show ' + upN + ' additional upstream measures') : (exU.length ? ('Hide ' + exU.length + ' additional upstream measures') : ''),
-          upBadgeS: self.gBadge(upLbl, !upN) + (G.wrap ? 'position:absolute;z-index:1;top:-10px;right:10px;' : ''),
+          upBadgeS: self.gBadge(upLbl, !upN) + (G.wrap ? 'position:absolute;z-index:1;' + (G.wrap.dir === -1 ? 'bottom' : 'top') + ':-10px;right:10px;' : ''),
           dnMore: dnLbl, dnTip: dnN ? ('Show ' + dnN + ' additional downstream measures') : (exD.length ? ('Hide ' + exD.length + ' additional downstream measures') : ''),
-          dnBadgeS: self.gBadge(dnLbl, !dnN) + (G.wrap ? 'position:absolute;z-index:1;bottom:-10px;right:10px;' : ''),
+          dnBadgeS: self.gBadge(dnLbl, !dnN) + (G.wrap ? 'position:absolute;z-index:1;' + (G.wrap.dir === -1 ? 'top' : 'bottom') + ':-10px;right:10px;' : ''),
           addUp: function () { var o = Object.assign({}, app.state.gExtra || {}); if (upN) revealU.forEach(function (k) { if (!G.inc.has(k)) o[k] = 1; }); else exU.forEach(function (k) { delete o[k]; }); self.setGraphExtras(o, upN ? revealU : []); },
           addDn: function () { var o = Object.assign({}, app.state.gExtra || {}); if (dnN) revealD.forEach(function (k) { if (!G.inc.has(k)) o[k] = 1; }); else exD.forEach(function (k) { delete o[k]; }); self.setGraphExtras(o, dnN ? revealD : []); },
           over: function () { app.setState({ gHover: n }); }, out: function () { app.setState({ gHover: null }); },

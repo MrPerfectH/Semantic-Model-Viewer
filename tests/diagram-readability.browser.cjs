@@ -78,7 +78,7 @@ function checkPane(p,where){
     assert.ok(p.header<=96,where+': the header takes '+p.header+'px');
     // Top to bottom routes every link through open space. Left to right still lets a link
     // that skips a layer curve over the boxes in between; that is reported, not judged here.
-    if(p.orientation==='tb')assert.deepEqual(p.crossings,[],where+': links cross measures they do not connect');
+    if(p.orientation!=='lr')assert.deepEqual(p.crossings,[],where+': links cross measures they do not connect');
     // A narrow pane reads top to bottom and only ever scrolls down.
     if(p.pane[0]<760){assert.equal(p.orientation,'tb',where+': narrow pane direction');assert.equal(p.sideways,false,where+': the flow scrolls sideways');}
   }else{
@@ -161,7 +161,7 @@ test('the main app gives a small screen to the diagram',{skip:!chrome&&'Install 
   t.diagnostic('1280x720 measures pane '+measures.pane+'px, '+measures.orientation);
   assert.equal(measures.compact,true,'one-row Measures header');
   if(measures.pane<760){assert.equal(measures.orientation,'tb');assert.equal(measures.sideways,false,'the flow scrolls sideways');}
-  if(measures.orientation==='tb')assert.deepEqual(measures.crossings,[],'links cross measures they do not connect');
+  if(measures.orientation!=='lr')assert.deepEqual(measures.crossings,[],'links cross measures they do not connect');
 });
 
 /* Every control, pressed with real mouse events at its on-screen position, in the workspace
@@ -247,19 +247,20 @@ test('every control keeps the answer views whole',{skip:!chrome&&'Install Chrome
         await click(mi,`(d)=>d.querySelector('.mv-direction-switch button[title="${title}"]')`,'direction '+dir);
         const s=await measures(mi);assert.equal(s.setting,dir,'direction button '+dir);assert.deepEqual(s.pressed,[title],'only the chosen direction is pressed');
         if(dir!=='auto')assert.equal(s.orientation,dir);
-        if(s.orientation==='tb')assert.deepEqual(s.crossings,[],dir+': links through measures');
+        if(dir==='bt')assert.equal(s.sideways,false,'bottom to top wraps to the pane like top to bottom');
+        if(s.orientation!=='lr')assert.deepEqual(s.crossings,[],dir+': links through measures');
       }
       await click(mi,button('Fit all','.mv-graph-toolbar'),'Fit all');assert.equal((await measures(mi)).fitsAll,true,'Fit all shows the whole flow');
       await click(mi,button('Center','.mv-graph-toolbar'),'Center');assert.equal((await measures(mi)).rootVisible,true,'Center shows the analyzed table');
-      await click(mi,`(d)=>[...d.querySelectorAll('.mv-source-controls input')].find(x=>x.getClientRects().length)`,'Columns off');let s=await measures(mi);if(s.orientation==='tb')assert.deepEqual(s.crossings,[],'Columns off');
-      await click(mi,`(d)=>[...d.querySelectorAll('.mv-source-controls input')].find(x=>x.getClientRects().length)`,'Columns on');s=await measures(mi);if(s.orientation==='tb')assert.deepEqual(s.crossings,[],'Columns on');
+      await click(mi,`(d)=>[...d.querySelectorAll('.mv-source-controls input')].find(x=>x.getClientRects().length)`,'Columns off');let s=await measures(mi);if(s.orientation!=='lr')assert.deepEqual(s.crossings,[],'Columns off');
+      await click(mi,`(d)=>[...d.querySelectorAll('.mv-source-controls input')].find(x=>x.getClientRects().length)`,'Columns on');s=await measures(mi);if(s.orientation!=='lr')assert.deepEqual(s.crossings,[],'Columns on');
       // Expand all and Reset appear only when something is collapsed or expanded.
-      if(await browser.evaluate(`!!(${button('Expand all','.mv-graph-toolbar')})(${pane(mi)}.contentWindow.document)`)){await click(mi,button('Expand all','.mv-graph-toolbar'),'Expand all');s=await measures(mi);if(s.orientation==='tb')assert.deepEqual(s.crossings,[],'Expand all');}
+      if(await browser.evaluate(`!!(${button('Expand all','.mv-graph-toolbar')})(${pane(mi)}.contentWindow.document)`)){await click(mi,button('Expand all','.mv-graph-toolbar'),'Expand all');s=await measures(mi);if(s.orientation!=='lr')assert.deepEqual(s.crossings,[],'Expand all');}
       if(await browser.evaluate(`!!(${button('Reset','.mv-graph-toolbar')})(${pane(mi)}.contentWindow.document)`))await click(mi,button('Reset','.mv-graph-toolbar'),'Reset');
       const pick=`(d,w)=>{const n=w.app.measures._nodeEls;return Object.keys(n).map(k=>n[k].btn).find(b=>b&&b.getClientRects().length&&b.getBoundingClientRect().width>0);}`;
       const names=await browser.evaluate(`Object.keys(${pane(mi)}.contentWindow.app.measures._nodeEls)`);assert.ok(names.length>0,'the flow has measures to press');
       assert.deepEqual((await measures(mi)).misaligned,[],'direction buttons line up');
-      await click(mi,pick,'a measure');s=await measures(mi);assert.ok(s.nodes>0,'the flow is still drawn after pressing a measure');if(s.orientation==='tb')assert.deepEqual(s.crossings,[],'after pressing a measure');
+      await click(mi,pick,'a measure');s=await measures(mi);assert.ok(s.nodes>0,'the flow is still drawn after pressing a measure');if(s.orientation!=='lr')assert.deepEqual(s.crossings,[],'after pressing a measure');
       // Inspecting a measure opens DAX beside or below the graph: below in a narrow or tall pane.
       if(s.pin)assert.equal(s.pinVisible,true,'the measure just pressed stays fully on screen');
       if(s.mode==='split'){
