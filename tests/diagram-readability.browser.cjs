@@ -25,7 +25,7 @@ async function openBrowser(){
   socket.addEventListener('message',event=>{const data=JSON.parse(event.data);if(data.method==='Runtime.exceptionThrown'&&api.onException){const x=data.params.exceptionDetails;api.onException((x.exception&&x.exception.description||x.text||'').split('\n')[0]);}const p=data.id&&waiting.get(data.id);if(!p)return;waiting.delete(data.id);data.error?p.reject(new Error(data.error.message)):p.resolve(data.result);});
   const send=(method,params={})=>new Promise((resolve,reject)=>{const seq=++id;waiting.set(seq,{resolve,reject});socket.send(JSON.stringify({id:seq,method,params}));});
   const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});if(r.exceptionDetails)throw new Error(r.exceptionDetails.text+': '+JSON.stringify(r.exceptionDetails.exception&&r.exceptionDetails.exception.description));return r.result.value;};
-  return Object.assign(api,{send,evaluate,async close(){socket.close();child.kill('SIGTERM');await new Promise(r=>child.once('exit',r));fs.rmSync(profile,{recursive:true,force:true});}});
+  return Object.assign(api,{send,evaluate,async close(){socket.close();child.kill('SIGTERM');await new Promise(r=>child.once('exit',r));fs.rmSync(profile,{recursive:true,force:true,maxRetries:10,retryDelay:100});}});
 }
 
 /* A link crossing a measure box it does not connect: every segment of its path (corner
@@ -228,6 +228,17 @@ test('every control keeps the answer views whole',{skip:!chrome&&'Install Chrome
       for(const z of ['+','+','+','−','−','−','−']){await click(ti,button(z),'zoom '+z);apart(await tables(ti),'zoom '+z);}
       await click(ti,button('Fit'),'Fit');s=await tables(ti);whole(s,'Fit');assert.ok(s.px>=READABLE-0.05,'Fit names '+s.px.toFixed(1)+'px');
       await click(ti,button('Tools'),'Tools');assert.equal((await tables(ti)).toolbar,true,'Tools shows the toolbar');whole(await tables(ti),'Tools open');
+      // Drop-downs in a framed pane open the viewer's own list; picking an option applies it.
+      await click(ti,button('Display','#workspace-toolbar'),'Display');
+      await click(ti,`(d)=>[...d.querySelectorAll('.ex-display-menu select')].find(x=>[...x.options].some(o=>o.value==='cards'))`,'Detail drop-down');
+      assert.equal(await browser.evaluate(`!!${pane(ti)}.contentWindow.document.querySelector('.smv-select-list')`),true,'the drop-down opens its list');
+      await click(ti,`(d)=>[...d.querySelectorAll('.smv-select-option')].find(o=>o.textContent==='Cards')`,'Cards');
+      assert.equal(await browser.evaluate(`${pane(ti)}.contentWindow.app.canvas.detailMode`),'cards','picking Cards switches the detail');
+      assert.equal(await browser.evaluate(`!!${pane(ti)}.contentWindow.document.querySelector('.smv-select-list')`),false,'the list closes after a pick');
+      await click(ti,`(d)=>[...d.querySelectorAll('.ex-display-menu select')].find(x=>[...x.options].some(o=>o.value==='cards'))`,'Detail drop-down');
+      await click(ti,`(d)=>[...d.querySelectorAll('.smv-select-option')].find(o=>o.textContent==='Auto')`,'Auto detail');
+      assert.equal(await browser.evaluate(`${pane(ti)}.contentWindow.app.canvas.detailMode`),'auto');
+      await click(ti,`(d)=>[...d.querySelectorAll('.ex-display-menu button')].find(b=>b.textContent==='Close display settings')`,'close Display');
       await click(ti,button('Tools'),'Tools again');assert.equal((await tables(ti)).toolbar,false,'Tools hides the toolbar again');
     });
     if(mi==null)return;
