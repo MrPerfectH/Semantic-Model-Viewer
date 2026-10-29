@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { findModels, readModelFiles } = require('./workspace');
+const { readPowerBiModel } = require('./powerbi');
 
 const STORAGE_PREFIX = 'smv:';
 const VIEW_TYPE = 'semanticModelViewer';
@@ -40,6 +41,9 @@ function buildHtml(webview, mediaUri) {
     return `<script nonce="${nonce}" src="${assetUri(webview, mediaUri, './js/host-vscode.js')}"></script>\n` + script;
   });
   if (!injected) throw new Error('The packaged viewer scripts are missing.');
+  // Host-only CSS must never enter the canonical template used for portable snapshots.
+  html = html.replace(/<html\b/i, '<html data-host="vscode"');
+  html = html.replace(/<\/head>/i, '<link rel="stylesheet" href="' + assetUri(webview, mediaUri, './vscode-theme.css') + '">\n</head>');
   const csp = `default-src 'none'; img-src ${webview.cspSource} data: blob:; style-src ${webview.cspSource} 'unsafe-inline'; font-src ${webview.cspSource}; script-src 'nonce-${nonce}'; connect-src 'none'; worker-src blob:; object-src 'none'; base-uri 'none'; form-action 'none';`;
   return html.replace(/<head>/i, '<head>\n<meta http-equiv="Content-Security-Policy" content="' + escapeAttribute(csp) + '">');
 }
@@ -94,6 +98,12 @@ class ViewerPanel {
   get mediaUri() { return vscode.Uri.joinPath(this.context.extensionUri, 'media'); }
   isCurrent(panel, epoch) { return this.panel === panel && this.epoch === epoch; }
 
+  async showEmpty() {
+    // Recreate the webview so a launch without a model cannot retain the previous one.
+    if (this.panel) this.panel.dispose();
+    await this.show(null);
+  }
+
   async show(entry) {
     if (!this.panel) {
       const panel = vscode.window.createWebviewPanel(VIEW_TYPE, 'Semantic Model Viewer', vscode.ViewColumn.Active, {
@@ -132,6 +142,13 @@ class ViewerPanel {
   }
 
   async modelMessage(entry) {
+    if (entry && entry.kind === 'powerbi') {
+      const connected = await readPowerBiModel(this.context.extensionPath, entry);
+      return { type: 'model', modelId: connected.id, name: connected.name, path: connected.path, files: connected.files };
+    }
+    if (entry && Array.isArray(entry.files)) {
+      return { type: 'model', modelId: entry.id, name: entry.name, path: entry.path || '', files: entry.files };
+    }
     const files = await readModelFiles(entry);
     return { type: 'model', modelId: entry.id, name: entry.name, path: entry.path, files };
   }
@@ -215,6 +232,7 @@ class ViewerPanel {
       }
       case 'openFile': {
         if (!this.current) throw new Error('Open a model first.');
+        if (this.current.kind === 'powerbi') throw new Error('The connected Power BI model has no local source file to open.');
         const epoch = this.epoch, uri = modelFileUri(this.current, msg.path);
         const doc = await vscode.workspace.openTextDocument(uri);
         if (this.isCurrent(panel, epoch)) await vscode.window.showTextDocument(doc, { preview: true, viewColumn: vscode.ViewColumn.Beside });
@@ -251,6 +269,7 @@ class ViewerPanel {
 
   setupWatcher(entry) {
     this.disposeWatcher();
+    if (!entry || entry.kind === 'powerbi') return;
     const panel = this.panel;
     const bump = () => {
       clearTimeout(this.watchTimer);

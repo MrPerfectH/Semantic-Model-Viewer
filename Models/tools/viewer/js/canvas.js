@@ -1020,6 +1020,18 @@
           seats.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t,
             orient: vertical ? 'v' : 'h', toA: toA, bare: bare });
         });
+        // Staggering can clamp all preferred seats against the same card. Search
+        // the remaining run before dropping cardinality, especially for parallel
+        // active/inactive relationships whose labels need different positions.
+        if (len >= need && !bare) {
+          var inset = L.w / 2 + L.m;
+          var count = Math.min(128, Math.max(1, Math.ceil((len - 2 * inset) / (8 * this.labelUnit()))));
+          for (var j = 0; j <= count; j++) {
+            var t = (inset + (len - 2 * inset) * j / count) / len;
+            seats.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t,
+              orient: vertical ? 'v' : 'h', toA: toA, bare: false });
+          }
+        }
       }
       if (!spots.length) spots = short;
       if (!spots.length) {
@@ -1235,10 +1247,10 @@
       var g = sv('g', { transform: 'translate(' + spot.x.toFixed(1) + ',' + spot.y.toFixed(1) + ') scale(' + u.toFixed(4) + ')', opacity: op, style: 'pointer-events:none;' });
       g.appendChild(sv('rect', {
         x: -(vert ? H : W) / 2, y: -(vert ? W : H) / 2, width: vert ? H : W, height: vert ? W : H, rx: H / 2,
-        fill: filled ? col : '#fff', stroke: col, 'stroke-width': heavy ? 1.7 : 1.3,
+        fill: filled ? col : (window.ViewerTheme ? window.ViewerTheme.paint('surface', '#fff') : '#fff'), stroke: col, 'stroke-width': heavy ? 1.7 : 1.3,
         'stroke-dasharray': r.inactive ? '3 2.5' : null
       }));
-      var ink = filled ? '#fff' : col;
+      var ink = filled ? (window.ViewerTheme ? window.ViewerTheme.contrastText(col, '#fff') : '#fff') : col;
       /* `s` is a distance along the line, positive towards table A */
       var along = function (s) { return 'translate(' + (vert ? 0 : s).toFixed(1) + ',' + (vert ? s : 0).toFixed(1) + ')'; };
       var glyph = function (ch, s) {
@@ -1350,7 +1362,7 @@
            the focused ones are drawn heavier so the selection reads at a glance */
         var baseW = self.edgeStrokeWidth(self.view.k, isSel, active, hop, chip);
         if (active || hop || isSel) {
-          self.svg.appendChild(sv('path', { d: d, fill: 'none', stroke: '#fff', 'stroke-width': baseW * 2.1, 'stroke-linecap': 'round', opacity: 0.95 }));
+          self.svg.appendChild(sv('path', { d: d, fill: 'none', stroke: g.ViewerTheme ? g.ViewerTheme.paint('paper', '#fff') : '#fff', 'stroke-width': baseW * 2.1, 'stroke-linecap': 'round', opacity: 0.95 }));
         }
         var path = sv('path', { d: d, fill: 'none', stroke: col, 'stroke-width': baseW, 'stroke-linecap': 'round', style: 'pointer-events:none;' });
         if (r.inactive) path.setAttribute('stroke-dasharray', (baseW * 1.9).toFixed(1) + ' ' + (baseW * 1.6).toFixed(1));
@@ -1362,7 +1374,7 @@
         var op = dim ? 0.12 : 1;
         var dot = Math.max(2.6 / self.view.k, active || isSel ? 3.4 : 2.6);
         self.svg.appendChild(sv('circle', { cx: g0.ax, cy: g0.ay, r: dot, fill: col, opacity: op }));
-        self.svg.appendChild(sv('circle', { cx: g0.bx, cy: g0.by, r: dot * 1.18, fill: '#fff', stroke: col, 'stroke-width': Math.max(1.6 / self.view.k, active || isSel ? 2 : 1.6), opacity: op }));
+        self.svg.appendChild(sv('circle', { cx: g0.bx, cy: g0.by, r: dot * 1.18, fill: g.ViewerTheme ? g.ViewerTheme.paint('surface', '#fff') : '#fff', stroke: col, 'stroke-width': Math.max(1.6 / self.view.k, active || isSel ? 2 : 1.6), opacity: op }));
         /* a wide invisible stroke is the click / hover target — the visible line is thin */
         var hit = sv('path', { d: d, fill: 'none', stroke: 'rgba(0,0,0,0)', 'stroke-width': Math.max(chip ? 22 : 16, 16 / self.view.k), 'stroke-linecap': 'round', style: 'pointer-events:stroke;cursor:pointer;' });
         var hoverOn = function (e) {
@@ -1383,7 +1395,7 @@
         bind(hit);
         item.hit = hit;
         if (!dim) {
-          var ink = kind === 'base' && !isSel ? '#7d8593' : col;
+          var ink = kind === 'base' && !isSel ? (g.ViewerTheme ? g.ViewerTheme.paint('muted', '#7d8593') : '#7d8593') : col;
           var op2 = active || hop || isSel ? 1 : (chip ? 0.95 : 0.85);
           /* One label per edge, through one seat picker and one `placed` ledger, so it can
              never land on a card or on another edge's label. Above PILL_ZOOM it is the
@@ -1444,7 +1456,7 @@
         c.el.style.display = vis ? '' : 'none';
       });
     },
-    showTip: function (html, e) { this.tip.innerHTML = html; this.tip.style.display = 'block'; this.moveTip(e); },
+    showTip: function (html, e) { this.tip.innerHTML = g.ViewerTheme ? g.ViewerTheme.inlineHTML(html) : html; this.tip.style.display = 'block'; this.moveTip(e); },
     moveTip: function (e) { var r = this.host.getBoundingClientRect(); this.tip.style.left = (e.clientX - r.left + 14) + 'px'; this.tip.style.top = (e.clientY - r.top + 14) + 'px'; },
     hideTip: function () { this.tip.style.display = 'none'; },
 
@@ -1456,6 +1468,7 @@
         var c = self.cards[n];
         var t = c.table; var col = app.tableColor(t); var fact = app.isFact(t);
         c.el.setAttribute('data-fact', String(fact));
+        if (g.SMVHost && g.SMVHost.kind === 'vscode') c.el.style.setProperty('--smv-category', col);
         var head = c.head, role = c.roleEl, caretSvg = c.caret.firstChild;
         if (c.rm) c.rm.style.color = fact ? 'rgba(255,255,255,.85)' : '#6b7280';
         head.style.boxShadow = 'none';
@@ -1656,7 +1669,7 @@
       var fact = this.app.isFact(c.table);
       var b = c.lock;
       if (isLock) {
-        b.style.display = 'flex'; b.style.background = EDGE.lock; b.style.color = '#fff';
+        b.style.display = 'flex'; b.style.background = EDGE.lock; b.style.color = g.ViewerTheme ? g.ViewerTheme.contrastText(EDGE.lock, '#fff') : '#fff';
         b.title = 'Unlock — stop keeping this table focused';
       } else {
         b.style.display = 'none'; b.style.background = 'transparent';

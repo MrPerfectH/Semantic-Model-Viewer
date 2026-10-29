@@ -32,7 +32,10 @@ jobs:
           IS_PREVIEW: ${{ github.ref == 'refs/heads/develop' || github.base_ref == 'develop' }}
         run: |
           if [ "$IS_PREVIEW" = "true" ]; then
+            cp README.md /tmp/smv-stable-readme.md
+            cat ../docs/pre-release.md /tmp/smv-stable-readme.md > README.md
             npm run package -- --pre-release
+            mv /tmp/smv-stable-readme.md README.md
           else
             npm run package
           fi

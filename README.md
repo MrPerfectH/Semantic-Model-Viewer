@@ -1,565 +1,169 @@
 # Semantic Model Viewer
 
-**See how a Power BI semantic model fits together: tables, relationships and the DAX behind every measure.**
+**Understand how a Power BI semantic model fits together: tables, relationships, DAX, and Power Query.**
 
 [![CI](https://github.com/MrPerfectH/Semantic-Model-Viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/MrPerfectH/Semantic-Model-Viewer/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/github/license/MrPerfectH/Semantic-Model-Viewer)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/MrPerfectH/Semantic-Model-Viewer)](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/latest)
 
-### 👉 [Try the live demo](https://MrPerfectH.github.io/Semantic-Model-Viewer/)
+For Power BI developers and consultants exploring, maintaining, or handing over models.
+The browser viewer and local app parse your model metadata on your computer without uploading it.
 
-No install needed. The demo opens with a synthetic "Contoso Retail" model already loaded.
+[![Semantic Model Viewer showing the synthetic Contoso Retail model with tables and relationships](docs/img/marketplace/tables.png)](https://MrPerfectH.github.io/Semantic-Model-Viewer/)
 
-[![Semantic Model Viewer showing the Contoso Retail demo model: fact and dimension tables with their relationships on a canvas](docs/img/marketplace/tables.png)](https://MrPerfectH.github.io/Semantic-Model-Viewer/)
+**[Try in browser](https://MrPerfectH.github.io/Semantic-Model-Viewer/)** · **[Windows portable ZIP](docs/installation.md#windows-portable-version)** · **[VS Code extension](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer)**
 
-## Why use it
+The browser demo opens with a synthetic **Contoso Retail** model. No installation or account is needed.
 
-* **Explore tables and relationships.** Build a canvas of just the tables you care about, with a star
-  layout, filter-path highlighting and a table inspector.
-* **Follow a measure through its DAX.** Pick a measure and see everything that feeds it (upstream, purple)
-  and everything built on it (downstream, blue), with side-by-side DAX, hidden-measure flags and
-  per-measure report usage.
-* **See how Power Query feeds your tables.** Pick a query, parameter or table and follow its inputs
-  and consumers, read its M, and jump from reference to reference. Nothing is run and no source data
-  is read.
-* **Share a single-file offline snapshot.** One HTML file holds the whole model. The recipient needs no
-  install and no connection to the model.
-* **Runs locally.** Your models are parsed on your own computer and never leave it.
+**[Learning library: watch recordings, download PDF walkthroughs, and follow the guides](docs/learning-library.md)**
 
-It reads TMDL (`*.SemanticModel` folders and `.pbip` repos) and `model.bim`. It also renders a
-relationship matrix and a domain map of the whole model.
+## Get started
 
-## Start here
+| Where | First steps | Requirements |
+| --- | --- | --- |
+| Windows portable | Extract the ZIP and double-click **Run Semantic Model Viewer.cmd**. | Windows x64 and a browser; no installation or separate Python setup. |
+| Browser | Open the demo, then choose **Open model** to import your own model. | A desktop browser; Chrome/Edge also support connecting a repository folder. |
+| VS Code | Install the extension, open your project folder, then select a model in **Semantic Models**. | VS Code; no Python or Power BI Desktop needed for local model files. |
+| Mac / run from source | Follow the [repository setup](docs/installation.md#run-from-a-repository-checkout). | Python 3 and a browser. |
 
-1. **[Try the demo first](https://MrPerfectH.github.io/Semantic-Model-Viewer/)** — no installation. Contoso Retail is synthetic. In Tables, add Sales with **+**, select it, and explore its filter paths; or open Measures and select a measure to see its dependencies.
-2. **Choose where to open your own model:**
-   - **VS Code:** install [Semantic Model Viewer from the Marketplace](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer), open your project folder, then select a model in **Semantic Models**. No Python or Power BI Desktop required. [Setup and VSIX alternative](vscode-extension/README.md#install-and-start).
-   - **Local desktop:** use the [Mac/Windows setup below](#install-2-minutes). Python 3 and a browser are required. Linux users can [run from source](#run-it-from-source).
-   - **Browser:** use the demo site, choose **Open model**, then import your folder or BIM file. Chrome/Edge also support a connected repository folder; browser folder permissions may be requested again in a later session.
-3. **Supported input:** a `*.SemanticModel` folder containing TMDL definitions, a PBIP project **folder** containing those models, or `model.bim`. A `.pbip` file alone is not the model; `.pbix` files cannot be opened directly. In Power BI Desktop, save as a PBIP project with TMDL definitions, or export BIM with your model tooling.
+See the [portable download instructions](docs/installation.md#windows-portable-version) for package availability.
 
-If no model appears, check that the selected folder contains `definition/*.tmdl` or `model.bim`. In VS Code use **Refresh Model List**; in the browser/local app retry **Open model** with the model folder itself. The VS Code package does not bundle the demo; its demo link opens the browser.
+In **Tables**, add **Sales** with **+**, select it, and explore its filter paths.
+In **Measures**, select a measure to follow its dependencies and inspect the DAX.
 
-After opening a model, the optional welcome offers contextual tips for Tables, Measures, and sharing. **Skip tour**, **Close**, or **Skip remaining tips** keep you in control; **Help** restarts guidance. Tips never rearrange your canvas or change your model. Preferences stay in this browser/app profile or VS Code profile; snapshots do not launch onboarding.
+**Supported files:** TMDL (`*.SemanticModel` folders and PBIP project folders) and `model.bim`.
+A `.pbip` file alone is not the model; `.pbix` files cannot be opened directly.
+See [supported input and troubleshooting](docs/installation.md#supported-input).
 
-## Install (2 minutes)
+## What you can do
 
-The viewer runs on your own computer from a copy of this repo. A small local app
-(`Models/tools/viewer/scripts/serve.py`, Python, no extra packages) serves the page and
-reads your model folders for it, so **the browser never asks for permission to view a
-folder**: you pick folders in the viewer itself, and **Refresh** re-reads them silently.
-Your models never leave your machine.
+### Explore tables and relationships
 
-Needs **Python 3** and **Chrome or Edge** (other browsers work, in a normal tab).
-
-1. Get the repo: `git clone https://github.com/MrPerfectH/Semantic-Model-Viewer.git`
-   (or **Code → Download ZIP** on GitHub and unzip it).
-2. Install Python 3 if you do not have it: [python.org](https://www.python.org/downloads/)
-   (Windows: tick **Add python.exe to PATH**; Mac: python.org, or `xcode-select --install`).
-3. Double-click the installer in the repo folder:
-   - **Mac:** `Install on Mac.command`. It adds **Semantic Model Viewer** to
-     `~/Applications`; drag it to the Dock.
-   - **Windows:** `Install on Windows.cmd`. It adds a Desktop icon and a Start menu entry,
-     and a **Semantic Model Viewer** button in the **External Tools** ribbon of Power BI
-     Desktop (restart Power BI Desktop to see it). Windows asks for administrator approval
-     once for that button. The button opens the app; it does not load the open model yet.
-4. The app opens in its own window. Use **Open model → Import model → Browse folder…**
-   or **Connect repo folder…** and pick a `*.SemanticModel` folder, a `.pbip` repo folder
-   (every model inside is found) or a folder holding `model.bim`. Dragging a folder onto the
-   window still works too.
-
-If you downloaded the ZIP, macOS or Windows may warn about the installer the first time
-because it came from the internet. On Mac, right-click `Install on Mac.command` → **Open**;
-on Windows, choose **More info → Run anyway**. Cloning with git avoids the warning.
-
-**What the local app does:** it listens on `http://localhost:8931` on this computer only,
-only ever reads files (`.tmdl`, `.bim`, `.json`), refuses requests from other websites
-open in your browser, and stops itself a few minutes after you close the window.
-Nothing runs at login.
-
-**Updating:** run `git pull` in the repo folder (or download the ZIP again into the same
-place) and reopen the app. Your saved models and layouts are kept.
-
-**Uninstalling:** `Models/tools/viewer/scripts/mac/uninstall-app.sh` or
-`Models\tools\viewer\scripts\windows\uninstall-shortcuts.ps1`. On Mac,
-`Models/tools/viewer/scripts/mac/reset-app-data.sh` clears just the saved models and layouts.
-
-The app window uses its **own, separate browser profile**, never your regular one, so it
-keeps its saved models apart from your everyday browsing. On Mac, opening the app again
-opens a viewer window using that same profile; if a viewer window is already open, this
-can create another one. Close extra windows normally; your saved models and layouts are kept.
-
-### VS Code
-
-Install from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer), or download `semantic-model-viewer-<version>.vsix` from the
-[Releases page](https://github.com/MrPerfectH/Semantic-Model-Viewer/releases), then in VS Code run
-**Extensions: Install from VSIX…** from the Command Palette (or
-`code --install-extension <file>.vsix`). Details: [vscode-extension/README.md](vscode-extension/README.md).
-To update, install the newer `.vsix`.
-
-### Online demo
-
-<https://MrPerfectH.github.io/Semantic-Model-Viewer/> opens the same viewer with the
-built-in synthetic "Contoso Retail" model already loaded, so you can look around before
-installing. You can import your own model there as well; it is parsed in your browser and
-not uploaded, but because the page itself reads the folder, the browser shows a "allow this site to view files" prompt that the installed app never does.
-
-## About the app
-
-The app is a static, dependency-light vanilla JS/HTML/CSS app. No build step, no bundler,
-no npm install. The live app uses Google Fonts for IBM Plex Sans/Mono (cached after the
-first visit; the system font is used if they cannot be loaded) and loads the PNG export
-library on demand. Interactive snapshots bundle their own scripts/styles, use system fonts,
-and run entirely offline.
-
-Use the **Appearance** selector in the top bar to switch between **Classic** and
-**Spellbook**, a parchment theme with burgundy controls and book-inspired headings.
-Spellbook uses a coordinated olive, muted-plum and antique-gold palette across all five
-views, including table badges, measure dependencies and Power Query. The Classic
-Muted/Vivid palette preference is retained when switching back.
-The choice is remembered in your browser or VS Code workspace. Interactive snapshots
-include the chosen theme and its artwork; changing it in a snapshot stays in that tab.
-
-```
-Models/tools/viewer/
-├── index.html            entry point
-├── js/                   app code (see below)
-├── sw.js, manifest.webmanifest, icons/   installable-app (PWA) support
-├── model-data.json       built-in sample dataset — the synthetic "Contoso Retail" demo
-├── report-usage.json     built-in sample dataset — synthetic report scan
-└── scripts/              the two data-pipeline build scripts (Python)
-Models/demo/              TMDL source of the demo model
-```
-
-## Run it from source
-
-```bash
-python3 Models/tools/viewer/scripts/serve.py --open
-# Semantic Model Viewer: http://localhost:8931
-```
-
-That is all the installers do (plus opening it as an app window). `--idle-exit 180` makes
-it stop after the window has been closed for three minutes; `--port` picks another port.
-
-Without the local app, `Models/tools/viewer/index.html` also opens straight from disk or
-from any static host (`python3 -m http.server` in that folder works). Folders are then read
-by the browser itself, which asks for folder permission (which may need renewal), and the built-in demo
-model needs a web server to load.
-
-A fresh browser profile starts with **No model selected** (the hosted demo opens the sample
-instead). Import your model or connect a repository; once chosen, the model is restored on
-reload.
-
-## VS Code extension
-
-The viewer also runs inside VS Code. Open a workspace containing a `.SemanticModel`
-folder or `model.bim`, then use the **Semantic Models** Activity Bar or **Semantic
-Model Viewer: Open Model…**. It uses the same table workspace, measures, and offline
-snapshot format as the web app. Model files refresh when edited; layouts are saved
-per model in the VS Code workspace.
-
-See [extension installation and development](vscode-extension/README.md). The package
-is built from `Models/tools/viewer`, so there is one maintained viewer. The web app and Python data pipeline
-continue to work as before.
-
-## Share an interactive snapshot
-
-Open your model, choose the starting view, and click **Save snapshot**. Share the
-single downloaded HTML file. The recipient opens it in a desktop browser and can
-explore **Tables, Measures, Domains, and Matrix** without installing anything or
-connecting to the semantic model. Saved table views, formulas, comparisons, focus,
-layout preferences, appearance, and graph positions travel with the file.
-
-### Generate a snapshot from TMDL
-
-With Node.js 22+, export an offline, interactive HTML snapshot from a TMDL folder:
-
-```bash
-node bin/smv.cjs snapshot "Models/demo/Contoso Retail.SemanticModel" --out snapshot.html
-```
-
-Open the file in a browser to explore the model. Optionally use `--tables` or
-`--measure` to choose the starting view; the full model remains available.
-No extra packages or browser are needed to export. See [CLI usage](docs/cli.md).
-
-Agents can also capture annotated views and build walkthroughs with imported numbers, transparent calculations, and proposed changes. See [visual explanations](docs/visual-explanations.md). Image capture uses an installed Chrome/Chromium; snapshot export still needs no browser.
-
-A snapshot contains the **full model metadata and DAX**, even if the starting canvas
-is empty or focused on a few tables. It is frozen at the displayed creation time.
-Recipients can use **Save snapshot** again to keep their presentation changes in a
-new file. See [snapshot sharing and offline behavior](docs/snapshots.md).
-
-## Screens
-
-Four ways to explore the synthetic **Contoso Retail** demo. Select an image to open it at full size.
-
-### Measures
-
-Follow the logic behind a measure. Trace what feeds it and what depends on it, then compare the DAX without losing your place.
-
-- Search by name, folder, home table, or DAX; spot hidden measures and report usage.
-- Switch between dependencies, DAX, and split view. Select a related measure to compare formulas.
-
-| Dependency flow | DAX comparison |
-| --- | --- |
-| [![Gross Margin % dependency flow at 100% zoom, with upstream measures in purple and a downstream measure in blue](docs/img/marketplace/measure-flow.png)](docs/img/marketplace/measure-flow.png) | [![Gross Margin % and Gross Profit formulas beside their dependency graph](docs/img/marketplace/measure-dax.png)](docs/img/marketplace/measure-dax.png) |
-
-### Tables
-
-Build a canvas around the tables you care about. Read cardinality and filter direction on the relationship lines, and inspect the selected table beside the diagram.
-
-- Add tables from the library or follow direct and indirect filter paths to related tables.
-- Arrange, focus, and pin tables; save named views and navigate with the minimap.
+Build a canvas around the tables you care about. Read cardinality and filter direction,
+follow active and inactive relationships, and inspect table and column details.
+Add related tables, highlight filter paths, hide unrelated objects, and choose among
+automatic layouts. Pan, zoom, use the minimap, pin tables, save named views, and undo layout edits.
 
 | Relationship canvas | Table inspector |
 | --- | --- |
-| [![Sales and seven dimensions with cardinality pills, filter arrows, and a dashed inactive Date relationship](docs/img/marketplace/tables.png)](docs/img/marketplace/tables.png) | [![A closer Sales neighborhood with the table source and relationship details in the inspector](docs/img/marketplace/table-inspector.png)](docs/img/marketplace/table-inspector.png) |
+| [![Sales and its dimensions on the relationship canvas](docs/img/marketplace/tables.png)](docs/img/marketplace/tables.png) | [![Sales table source, columns, and relationship details](docs/img/marketplace/table-inspector.png)](docs/img/marketplace/table-inspector.png) |
 
-### Power Query
+[Tables and layout guide](docs/viewer-guide.md#tables)
 
-See how queries, parameters, functions, and table partitions feed each other. Follow a flow from input to consumer and read the M behind it.
+### Trace measure dependencies and understand DAX
 
-- Select a query for **Inputs** or a parameter for **Used by**. Inspect references and use **Back** to return.
-- Read line-numbered M beside the flow, jump through highlighted references, or use **Open full query** and **Copy M**.
+See what feeds a measure and what depends on it. Start from a table or column to find
+direct and indirect dependent measures, then inspect their formulas without losing
+the selected source. Search by name, folder, home table, or DAX; identify hidden
+measures and report usage when report metadata is loaded.
 
-| Input flow | M and query details |
+Read DAX beside the graph, compare formulas, format expressions, and inline referenced
+measures to inspect the expanded calculation. Optional table and column references
+show which model objects the visible measures use.
+
+| Dependency flow | DAX comparison |
 | --- | --- |
-| [![Environment, StartYear, and RawSales feed StageSales, with ServerName upstream of RawSales](docs/img/marketplace/power-query-flow.png)](docs/img/marketplace/power-query-flow.png) | [![StageSales input flow beside its inputs, consumer, and complete read-only M expression](docs/img/marketplace/power-query-inspector.png)](docs/img/marketplace/power-query-inspector.png) |
+| [![Gross Margin % with upstream and downstream measure dependencies](docs/img/marketplace/measure-flow.png)](docs/img/marketplace/measure-flow.png) | [![Gross Margin % and Gross Profit formulas beside their dependency graph](docs/img/marketplace/measure-dax.png)](docs/img/marketplace/measure-dax.png) |
 
-Links come from static analysis of M. No query runs and no source data is read. Unconfirmed links remain explicit; raw M is excluded from shared snapshots.
+[Measures guide](docs/viewer-guide.md#measures) · [Table and column dependencies](docs/viewer-guide.md#table-and-column-references) · [Watch a 35-second workflow](https://MrPerfectH.github.io/Semantic-Model-Viewer/media/vscode-guide/vscode-to-dax-v4.mp4)
 
-### Additional (Domains and Matrix)
+### Follow Power Query flows and read M
 
-Step back to see the model as a whole. **Domains** groups related tables into a map you can expand; **Matrix** compares fact tables with their related tables across the model.
+Explore queries, parameters, functions, and table partitions as inputs and consumers.
+Trace upstream or downstream, filter the inventory, and inspect a query without losing
+the flow target. Read line-numbered M beside the graph or in the full query reader,
+copy the exact definition, jump through resolved references, and use Back to retrace your steps.
+Missing definitions, unresolved references, and analysis limitations remain visible.
 
-| Domains | Fact relationship matrix |
+| Query input flow | M and query details |
 | --- | --- |
-| [![All eleven Contoso Retail domains with table counts and connections between domains](docs/img/marketplace/domains.png)](docs/img/marketplace/domains.png) | [![Fact tables across the matrix with related tables down the rows and active, bidirectional, and multiple relationship indicators](docs/img/marketplace/matrix.png)](docs/img/marketplace/matrix.png) |
+| [![Parameters and source queries feeding StageSales](docs/img/marketplace/power-query-flow.png)](docs/img/marketplace/power-query-flow.png) | [![StageSales flow beside its inputs, consumer, and M expression](docs/img/marketplace/power-query-inspector.png)](docs/img/marketplace/power-query-inspector.png) |
 
-### Layouts
+[Power Query guide](docs/viewer-guide.md#power-query)
 
-Display → Auto layout picks the arrangement, and the Arrange button applies it to the tables
-currently on the canvas (Undo restores the previous one).
+### See the whole model with Domains and Matrix
 
-* **Star** (default) puts the conformed dimensions in one block in the middle and rides the
-  facts on an ellipse around it, each fact's own dimensions just outside its seat, so every
-  relationship is a short spoke instead of a line across the canvas. A subset with a single
-  fact keeps the simpler picture: one centre with its dimensions on a ring.
-* **Constellation** is a small force simulation over the whole model — hubs push each other
-  apart, a conformed dimension is pulled to the middle of the facts it serves. Good for a
-  model with no clear fact/dimension split.
-* **Layered** is the Kimball picture people draw by hand: dimensions in a row on top, facts
-  underneath, each fact under the middle of the dimensions it uses.
+Use **Domains** to explore groups of related tables and their connections, expanding
+groups when you need more detail. Use **Matrix** to compare fact tables against their
+related tables and spot shared dimensions, multiple relationships, and filter behavior.
 
-Galaxy rows, star columns, waterfall and grid remain for models these three do not suit.
-Lanes are cut for the *chip* the reader sees, not for the collapsed card: a chip title is
-held between 11 and 13 CSS pixels at every zoom, so the box grows as the zoom drops, and the
-arrangement reserves room for the largest it reaches between 20% zoom and the point cards
-come back. That is why a whole model fits at around 20-25% rather than 40% — the same
-picture, drawn without two names landing on top of each other.
-
-Two badges appear everywhere a measure is listed:
-
-* grey **eye-off** icon — the measure is `isHidden` in the model (`h: 1` in `model-data.json`),
-* blue **`N pg`** pill — the measure is used in the scanned report; the tooltip breaks it
-  down per page (`• <page> — 2 visuals, 1 filter`).
-
-Models can also be imported ad hoc: drag a `.pbip` repo folder, a `*.SemanticModel` folder
-or a `model.bim` onto the window (parsed in-browser by `js/tmdl-parser.js`, kept in
-`localStorage`). Chrome/Edge additionally offer “Connect repo folder…”, which scans a
-folder for `*.SemanticModel` and re-parses on every open.
-
-## Data pipeline
-
-```
-TMDL sources                      Reports (PBIR)
-Models/<Model>.SemanticModel/     Reports/<Report>.Report/
-  definition/*.tmdl                 definition/pages/*/visuals/*/visual.json
-        │                                 │
-        ▼ (build step 1)                  ▼ (build step 2)
-  model-data.json                  report-usage.json
-        └────────────┬────────────────────┘
-                     ▼
-              Viewer (static app)
-```
-
-Both scripts live in `Models/tools/viewer/scripts/` and run standalone with `python3`
-(stdlib only, no dependencies):
-
-```bash
-# build step 1 — TMDL -> model-data.json
-python3 Models/tools/viewer/scripts/tmdl_to_model_data.py \
-    "Models/demo/Contoso Retail.SemanticModel" \
-    -o Models/tools/viewer/model-data.json
-
-# build step 2 — PBIR reports -> report-usage.json (+ report-health.json)
-python3 Models/tools/viewer/scripts/scan_report_usage.py Reports \
-    --model-data Models/tools/viewer/model-data.json \
-    -o Models/tools/viewer/report-usage.json
-```
-
-`tmdl_to_model_data.py` is a line-by-line port of the browser parser
-(`js/tmdl-parser.js`) — same regexes, same role/domain heuristics, same output — so
-in-repo snapshots and drag-and-drop imports agree. Keep the two in sync when either
-changes.
-
-### Wiring into your own repo
-
-Both JSON files are derived artefacts; the point of the scripts is that nobody hand-edits
-them. Two options, in order of preference:
-
-* **Pre-commit hook** — regenerate whenever model or report definitions change, so the
-  committed JSON always matches the TMDL in the same commit:
-
-  ```yaml
-  # .pre-commit-config.yaml
-  - repo: local
-    hooks:
-      - id: viewer-model-data
-        name: viewer — rebuild model-data.json
-        entry: python3 Models/tools/viewer/scripts/tmdl_to_model_data.py "Models/demo/Contoso Retail.SemanticModel" -o Models/tools/viewer/model-data.json
-        language: system
-        pass_filenames: false
-        files: '^Models/.*\.SemanticModel/definition/.*\.tmdl$'
-      - id: viewer-report-usage
-        name: viewer — rebuild report-usage.json
-        entry: python3 Models/tools/viewer/scripts/scan_report_usage.py Reports --model-data Models/tools/viewer/model-data.json -o Models/tools/viewer/report-usage.json
-        language: system
-        pass_filenames: false
-        files: '^Reports/.*\.Report/definition/.*\.json$'
-  ```
-
-* **CI job** — run both scripts and fail the build if `git diff --exit-code` shows the
-  committed JSON is stale. Same commands; this catches commits made without the hook
-  installed and is the safer belt-and-braces option if the repo already runs CI on PRs.
-
-If the repo prefers not to commit derived JSON at all, publish the viewer folder plus the
-two generated files as a CI artefact (or to the docs site) instead — nothing in the app
-depends on them being in git.
-
-### Report health
-
-`scan_report_usage.py` also writes `report-health.json` next to its output, listing measure
-names referenced by visuals or filters that no longer exist in the model (broken report
-references). It prints them to stderr too, which makes it
-easy to turn into a CI warning.
-
-### Where a table's data comes from
-
-Partitions rarely name their connector — a partition says `Source = VerticaPath` and the
-real `Vertica.Database(...)` call sits in a shared expression. The parser therefore follows
-the first `Source =` reference (through shared expressions *and* other tables' partitions)
-until it finds a connector call, then reports the connector, the object, the host and the
-shared query it came through. Recognised: Databricks, Vertica, SQL Server, Oracle,
-PostgreSQL, MySQL, Snowflake, Synapse, Fabric/Lakehouse, Analysis Services, SAP, ODBC,
-Dataflows, SharePoint, Azure Storage, Salesforce, Folder, Excel, CSV, Web and OData, plus
-`manual` (inline rows), `calculated` (DAX) and `parameter` (query parameters). Anything
-else stays `Other`. Both parsers implement this — keep `js/tmdl-parser.js` and
-`scripts/tmdl_to_model_data.py` in step.
-
-### How a table gets its role (fact / dim)
-
-Every table gets a `role`; the graph, matrix and sidebar all read it. Calc groups, field
-parameters and measure-only tables are fixed (`calcgroup`, `fieldparam`, `measures`). For
-everything else an ordered **rule list** decides — the first rule whose conditions all hold
-wins, and a rule with no conditions catches the rest. The built-in rules:
-
-| # | Role | When |
-|---|---|---|
-| 1 | fact | source table name matches `(^|[._])(fact|fct)_` |
-| 2 | dim | source table name matches `(^|[._])dim_` |
-| 3 | helper | manual table, no relationships |
-| 4 | helper | calculated table, no relationships |
-| 5 | standalone | no relationships |
-| 6 | fact | only on the many side of its relationships |
-| 7 | dim | only on the one side |
-| 8 | fact | more many-side than one-side relationships |
-| 9 | dim | more one-side than many-side relationships |
-| 10 | dim | everything else (ties) |
-
-Each rule can test the name (regex against source table + table name), the relationship
-sides, whether the table has measures, and its source kind (source / manual / calculated).
-**Roles › Rules** in the top bar opens the editor: reorder, edit, add or remove rules, see how
-many tables each one decides, reset to the defaults. Edits apply at once and live in
-`localStorage`. **Copy JSON** exports the set so the build script can use the same rules:
-
-```bash
-python3 Models/tools/viewer/scripts/tmdl_to_model_data.py "<model>.SemanticModel" --rules my-rules.json -o model-data.json
-```
-
-Two things sit above the rules:
-
-* **`annotation SMV_Role = fact | dim | helper | standalone`** on a table in TMDL pins the role
-  in the model itself. It beats every rule, in the viewer and in the build script. Power BI
-  Desktop's TMDL view, Tabular Editor 2/3 or a text editor all work, and the annotation
-  survives deploy and round-trip. In `.bim` it is `"annotations": [{"name": "SMV_Role", "value": "fact"}]`.
-
-  ```tmdl
-  table Sales
-  	lineageTag: 9a48bea0-e5fb-40fa-9e81-f61288e31a02
-
-  	annotation SMV_Role = fact
-  ```
-
-* **A per-table pick** in the table panel (Fact / Dimension / Helper) saves `SMV_Role`
-  directly into the table's `.tmdl` file when opened through **Connect repo folder** in
-  Chrome/Edge (including the Mac launcher). The browser requests write access on the first
-  change. **Auto** removes the annotation. The panel shows the saved file or an error;
-  failed writes do not change the role. Commit and push the TMDL change to share it through Git.
-  Repo models ignore old browser-only role overrides, so the shared annotation wins.
-  Disconnected repo caches must be reconnected before editing. Other imports and the VS Code
-  viewer still use explicitly labelled browser-local picks. Automatic write-back currently
-  requires TMDL, not BIM/JSON.
-
-The engine lives in `js/roles.js` and is mirrored in `scripts/tmdl_to_model_data.py` — keep
-`DEFAULT_RULES` identical in both.
-
-## Source layout
-
-| File | Role |
+| Domain map | Relationship matrix |
 | --- | --- |
-| `js/util.js` | DOM/SVG helpers, localStorage wrapper, inline SVG icon set |
-| `js/tmdl-parser.js` | TMDL/BIM → model JSON, used for in-browser import (including `isHidden` on measures and connector detection) |
-| `js/canvas.js` | Table cards, pan/zoom, level-of-detail, relationship edges, selection/highlighting, fit, presets |
-| `js/layouts.js` | Arrange algorithms (star / constellation / layered / grid / galaxy / star columns / waterfall) and cluster mode |
-| `js/matrix.js` | Relationship matrix |
-| `js/dax-format.js` | Local DAX formatter (SQLBI short/long layout) and measure inliner |
-| `js/measures.js` | Measures rail, dependency DAG layout, DAX tokenizer, DAX cards |
-| `js/sidebar.js` | Table detail drawer |
-| `js/topbar.js` | Top bar, model menu, legend, hint chip, import modal |
-| `js/app.js` | State, model loading, usage data, import, repo connection |
+| [![Eleven Contoso Retail domains and the connections between them](docs/img/marketplace/domains.png)](docs/img/marketplace/domains.png) | [![Fact tables and related tables in the relationship matrix](docs/img/marketplace/matrix.png)](docs/img/marketplace/matrix.png) |
 
-State that persists in `localStorage`: `lsa_model_layout_v1` (built-in model card
-positions), `smv_layout_<id>` / `smv_presets_<id>` (imported models), `smv_models_v1`,
-`smv_current_v1`, `smv-detail`, `smv-layout`, `smv-lines`, `smv-mvw`, `smv_repo_name`,
-`smv_repo_cache`, `smv-measures-workspace-v1`.
+[Domains and Matrix guide](docs/viewer-guide.md#additional-domains-and-matrix)
 
-### Table and column references in measure dependencies
+### Search the model reference
 
-The Measures graph defaults to measures only. Enable **Show table and column references**
-to add source tables, using the same colors as the Tables canvas. Cards contain only the
-columns connected to measures visible in the graph. A dashed **Whole table** link attaches
-to the table header (for example, `COUNTROWS(Sales)`); a solid column link attaches to its
-row (for example, `SUM(Sales[Amount])`). A measure's home table does not imply a dependency.
+Browse a searchable library of tables, columns, measures, calculation groups,
+hierarchies, and Power Query objects. Open linked detail pages for descriptions,
+definitions, properties, and detected references, then jump into the visual views
+to explore relationships or dependencies.
 
-In the left library, choose **Table or column**. Expand a table and choose **Use whole
-table** or any column; the picker includes columns with no detected consumers. The library
-then lists direct references first, followed by indirect dependents. Change the source to
-return to the picker. You can also select a source table header in the graph to find
-measures referencing that table or any of its columns.
-Select a column row to narrow the source. The table details drawer also provides
-**Find dependent measures**, and each column has **Find measures**. Source analysis includes
-indirect dependents through measures, a **Direct only** filter, and searchable results.
-Selecting a dependent measure inspects its DAX without changing the source; **Analyze this
-measure** returns to measure analysis. Source selection, graph settings, and inspected DAX
-are preserved in interactive snapshots.
+[Model reference guide](docs/model-reference.md)
 
-Each formula card owns its reference summary. Original DAX shows direct references only;
-**Inline measures** shows references resolved from the expanded expression, including
-columns introduced by inlined measures. Comparison cards retain their own reference scope.
-The DAX pane opens when a dependent measure is inspected; before that, the graph uses
-the available width. Inline, formatting and source library settings also survive snapshots.
+### Share an interactive model, without installing the Viewer
 
-This is static DAX reference detection, not complete engine lineage. Calculated columns
-and calculated tables can be sources, but their defining expressions are not expanded.
-Relationship filter propagation and calculation-item expressions are not traced. Qualified
-column references and explicit table references are resolved against the model; unqualified
-bracket names resolve to measures first, then columns in the measure's home table. Ambiguous
-row-context references outside that table and virtual columns are not fully resolved.
-Graphs are limited to 500 measures and 200 source table/column rows, with visible notices;
-dependent-measure lists show up to 120 matches at once and can be narrowed by search.
+Choose **Save snapshot** to export one HTML file that your colleague opens in a
+desktop browser. They can explore the model, compare formulas, change the layout,
+and save another snapshot without a model connection, installation, or internet access.
+Your saved views, presentation, DAX, and available Power Query definitions travel with the file.
 
-## Regression checks
+A focused canvas still exports the **full model metadata**, including DAX and available M.
+Endpoint strings and parameter values written in M are included. Share the file with
+people who should see those definitions.
 
-No installation is needed. With Node.js available:
+[Snapshot sharing guide](docs/snapshots.md)
 
-```bash
-node vscode-extension/scripts/sync-viewer.js
-node --test tests/*.test.cjs Models/tools/viewer/tests/*.test.js tests/extension.test.js
-```
+### Fit the Viewer into your workflow
 
-The tests cover relationship traversal, canvas membership/persistence, dependency parsing, model isolation, storage failures, measure controls, matrix behavior and escaped tooltip content. These fixtures do not establish full parser or browser compatibility.
+Use the browser, portable Windows app, repository launchers, or VS Code extension.
+Switch between Classic and Spellbook appearances in the browser app and preserve
+your chosen presentation in snapshots. The optional CLI and Claude Code plugin can
+open focused model views and export snapshots; agent visual explanations can add
+annotated views and walkthroughs.
 
-Working-canvas membership lives in `smv_workspace_v1_<modelKey>`; named views include membership, positions, viewport, selection, pinned/locked roots, hide-unrelated focus, and card display settings. Older presets without membership restore the tables present in their positions. Undo history lasts for the current model session.
+[CLI guide](docs/cli.md) · [Claude Code plugin](docs/claude-code-plugin.md) · [Visual explanations](docs/visual-explanations.md)
 
-Real Chrome layout checks (Node.js 22+, installed Chrome; optionally set `CHROME_PATH`):
+Dependency analysis is static. The Viewer does not execute DAX or M or fetch source data;
+links it cannot resolve remain explicit. See the [viewer guide](docs/viewer-guide.md) for workflows and limitations.
 
-```bash
-node --test tests/star-layout.browser.cjs tests/measures-layout.browser.cjs tests/snapshot.browser.cjs
-```
+## Documentation
 
-These use a disposable browser profile and the shipped CSS/JS. The measures checks cover wide-screen formula sizing, split placement, resizing, orientation and preferences; `star-layout.browser.cjs` opens the bundled model at 1440x900, runs Show all and Fit, and asserts against real DOM rects that no two cards are drawn on top of each other and that every table name stays between 11 and 13 CSS pixels.
+| I want to… | Guide |
+| --- | --- |
+| Browse recordings, PDF walkthroughs, and learning materials | [Learning library](docs/learning-library.md) |
+| Install, update, or open my own model | [Installation and troubleshooting](docs/installation.md) |
+| Explore the views and see more screenshots | [Viewer guide](docs/viewer-guide.md) |
+| Share a portable model | [Interactive snapshots](docs/snapshots.md) |
+| Search model objects and definitions | [Model reference](docs/model-reference.md) |
+| Use the CLI or Claude Code integration | [CLI](docs/cli.md) · [Claude Code plugin](docs/claude-code-plugin.md) |
+| Use optional agent visual explanations or MCP | [Visual explanations](docs/visual-explanations.md) · [MCP usage](docs/mcp-usage.md) |
+| Understand data handling | [Security and privacy](SECURITY.md) |
+| Develop or contribute | [Developer guide](docs/development.md) · [Contributing](CONTRIBUTING.md) |
+
+Optional agent and MCP integrations provide requested metadata to the connected host.
+See [integration data handling](SECURITY.md#agent-cli-sessions-and-mcp-integration) before using them with private models.
+
+## Related tools
+
+[**Semantic Model Cleaner**](https://github.com/MrPerfectH/Semantic-Model-Cleaner)
+helps review apparently unused model items across selected PBIR reports and apply
+local cleanup actions. Use the Viewer to understand a model and the Cleaner to review cleanup opportunities.
+See the Cleaner repository for its beta status, setup, and analysis limitations.
+
+[**Model Alchemist**](https://github.com/goreckir/model_alchemist)
+compares two Power BI semantic models in TMDL format, shows object-level differences,
+and lets you deploy selected changes to a local model or Microsoft Fabric.
+Use it to review differences between model versions and promote chosen changes.
 
 ## Feedback and contributing
 
-Bug reports, ideas and questions are welcome through
-[GitHub Issues](https://github.com/MrPerfectH/Semantic-Model-Viewer/issues). To contribute code, read
-[CONTRIBUTING.md](CONTRIBUTING.md) first. To report a security problem privately, follow
-[SECURITY.md](SECURITY.md). The project is released under the [MIT License](LICENSE).
+[Report a bug or suggest a feature](https://github.com/MrPerfectH/Semantic-Model-Viewer/issues/new/choose).
+Use the synthetic demo or a small made-up model in public reports.
+For code contributions, read [CONTRIBUTING](CONTRIBUTING.md); report security issues
+[privately](SECURITY.md#report-a-vulnerability).
 
-## About the author
-
-Semantic Model Viewer is built and maintained by Przemek Harazny
-([@MrPerfectH](https://github.com/MrPerfectH)) as a personal open-source project. The demo
-model and its screenshots use only synthetic data.
-
-### Power Query
-
-![Walkthrough: pick a query, follow its inputs and consumers, read its M and jump to a referenced query](docs/img/power-query.gif)
-
-The built-in sample model carries synthetic Power Query metadata, so you can try this tab on the
-[live demo](https://MrPerfectH.github.io/Semantic-Model-Viewer/). For your own models, open a TMDL
-folder or `model.bim`. A `.pbix` file cannot be read.
-
-Open the **Power Query** workspace next to Tables and Measures. It shows the complete
-available metadata inventory as an input → consumer query graph, including disconnected
-objects, parameters, functions, explicit table partitions and missing-partition status.
-Select an object for read-only, line-numbered M; exact resolved reference occurrences
-navigate to their input. Back restores selection, filters, viewport and inspector scroll.
-No M runs and no source data is fetched. TMDL partition sources/shared expressions and
-corresponding `model.bim` metadata are supported, with explicit missing/non-M states.
-
-**All / Connected / Disconnected** filters use resolved incident Power Query references
-in the complete model, never semantic relationships or source co-location. Disconnected
-means zero resolved edges, with an uncertainty caveat; it does not prove independence.
-Category filters hide canvas/library rows; search narrows the library and dims canvas
-nonmatches. Counts retain total inventory. A filtered selection retains its inspector
-and offers Show all. Reset filters preserves selection/layout; model changes clear them.
-
-Use **Open full query** beneath the selected query name for a nearly full-window M
-reader with 14px code, line wrapping, exact Copy M and clickable references. Escape
-returns focus to the opener. Source text and original line endings are never reformatted.
-Query connectors use thin straight segments and small open chevrons pointing from input
-to consumer; click a connector for reference details.
-
-Pan, zoom, Fit and the visible-canvas minimap explore all components without upstream
-expansion caps. Analysis builds atomically in a cancellable background worker; cancellation
-and worker failure do not imply absent dependencies. Static findings remain partial:
-dynamic/missing/ambiguous references, unsupported syntax, cycles and analysis notices
-remain explicit and do not establish execution order or complete lineage.
-
-**Save snapshot** includes available Power Query definitions with exact M and the
-current Flow/Canvas presentation. Offline files support static dependency inspection,
-clickable references and the full M reader without executing queries or connecting
-to sources. Older snapshots and pre-generated JSON may omit M.
-See [metadata limitations](docs/power-query-contract.md), the
-[presentation contract](docs/power-query-redesign/interface-contract-v2.md), and
-[filter policy](docs/power-query-redesign/filter-addendum.md). Original verification
-remains historical; redesigned UI acceptance is recorded separately.
-
-### Following a Power Query flow
-
-Choose a query, parameter or table to set a flow target. Inspecting an M reference,
-canvas card, or an **Inputs / Consumers** button keeps that target fixed. The purple
-outline marks the target; stronger blue links trace the inspected branch using only
-resolved M references. These are separate from semantic model relationships.
-
-Use **Hide unrelated** to see the flow, **Trace this query** to choose the inspected
-query as the new target, or **Inspect target** to return to its M. Direction and
-distance apply to the target. **Back** restores navigation, filters and reader state;
-**Undo** restores layout edits. **Clear flow** returns to selection focus; **Show all**
-also restores the complete layout membership. Arrange remains input → consumer and
-preserves positions until explicitly invoked. Static analysis is partial; cycles and
-uncertainty remain visible. No M is executed or included in default shared snapshots.
-
-The [interactive agent workflow](docs/interactive-viewer.md) opens focused Tables and Measures views through CLI or MCP, keeps annotations attached during exploration, and exports the acknowledged viewer state. Inline MCP Apps are host-dependent.
+Built and maintained by **Przemek Harazny** ([@MrPerfectH](https://github.com/MrPerfectH))
+as a personal open-source project. Released under the [MIT License](LICENSE).
+Demo models and screenshots use synthetic data.

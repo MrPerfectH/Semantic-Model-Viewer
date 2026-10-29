@@ -11,7 +11,7 @@
       if (v == null || v === false) return;
       if (k === 'style') node.style.cssText = g.ViewerTheme ? g.ViewerTheme.inlineStyle(v) : v;
       else if (k === 'text') node.textContent = v;
-      else if (k === 'html') node.innerHTML = v;
+      else if (k === 'html') node.innerHTML = g.ViewerTheme ? g.ViewerTheme.inlineHTML(v) : v;
       else if (k === 'cls') node.className = v;
       else if (k === 'ref') v(node);
       else if (k === 'data') Object.keys(v).forEach(function (d) { node.dataset[d] = v[d]; });

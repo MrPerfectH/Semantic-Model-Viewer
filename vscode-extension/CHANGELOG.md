@@ -1,5 +1,27 @@
 # Changelog
 
+## Unreleased
+
+- Add optional Power BI Desktop External Tools registration from VS Code. The ribbon button opens the current Desktop model in the extension, or an empty viewer when no model is supplied. Registration can request administrator approval; daily launches do not.
+- Reread connected Desktop metadata on **Refresh Model**, and provide a command to remove the ribbon registration.
+- Follow the active VS Code light, dark, and high-contrast theme, including live changes. Browser and snapshot Classic/Spellbook appearances stay unchanged.
+- On Windows, connect to an open Power BI Desktop model from the VS Code Command Palette or Semantic Models view. Choose a model when several are open; the connection reads metadata without administrator approval or executing DAX.
+- Keep at least 240 pixels of dependency graph canvas in stacked split view. When the window is too short for both panels, scroll the workspace to reach DAX instead of compressing the graph.
+- Show “DAX below graph (narrow view)” when the layout automatically stacks. Restore the saved beside layout and its label when the window is wide enough.
+
+## 0.5.173 — pre-release
+
+This development preview includes the following changes since the last documented release:
+
+- Analyze a table or column to find its direct and indirect dependent measures. Use **Direct only** to narrow the list, then inspect a formula while keeping the source selected.
+- Navigate from colored table and column references in formula cards into dependency analysis. Inlined DAX shows the references in the expanded formula.
+- Browse and search measures with a formula overview and clearer source navigation.
+- Use optional first-run and contextual guidance; skip the tips when you do not need them.
+- Preserve analysis state in interactive HTML snapshots, including the selected source, inspected formula, filters and layout preferences.
+- Add interactive viewer sessions and visual explanations for model exploration.
+
+Known limitations: dependency analysis is static and does not execute DAX or Power Query. The Power BI connection reads model metadata; it does not run DAX queries. This preview can compress the graph excessively in narrow split views; the fix is listed under Unreleased above.
+
 ## 0.3.9
 
 - Add an optional Spellbook theme with parchment surfaces and burgundy accents. Use the Classic dropdown in the top toolbar to select Spellbook.

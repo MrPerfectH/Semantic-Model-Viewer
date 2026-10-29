@@ -48,7 +48,7 @@ npm test
 ```
 
 Optional real-Chrome layout checks are described under "Regression checks" in the
-[README](README.md#regression-checks).
+[developer guide](docs/development.md#regression-checks).
 
 ## Build the VS Code extension
 
@@ -111,6 +111,8 @@ That testing checkout is pinned to a commit. To update it, run `git fetch origin
 local server port as the stable app; stop the other server or choose a different `--port`.
 
 ### Test a develop build
+
+See the [pre-release overview](docs/pre-release.md) for what the preview adds compared with the stable release.
 
 Open [Actions → CI](https://github.com/MrPerfectH/Semantic-Model-Viewer/actions/workflows/ci.yml),
 select a successful **push** run for `develop`, and download its

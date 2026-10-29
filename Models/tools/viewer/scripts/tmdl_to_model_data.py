@@ -124,6 +124,7 @@ def parse_table_text(text: str):
     is_cg = is_fp = False
     col_buf = calc_buf = cur_item = item_buf = item_fmt = None
     item_phase, in_source = "", False
+    measure_property = False
 
     def flush_col():
         nonlocal col_buf
@@ -149,6 +150,8 @@ def parse_table_text(text: str):
     for raw in lines:
         t = raw.strip()
         ind = len(re.match(r"^\t*", raw).group(0))
+        if t.startswith("///") and ind <= 2:
+            continue
         if not t:
             if mode == "measure" and cur_meas and cur_meas["dax"]:
                 cur_meas["dax"] += "\n"
@@ -175,6 +178,7 @@ def parse_table_text(text: str):
             in_source = False
             cur_col = cur_meas = None
             mode = None
+            measure_property = False
             m = re.match(r"^column\s+('(?:[^']|'')+'|\"[^\"]+\"|[^\s=]+)(\s*=.*)?$", t)
             if m:
                 cur_col = {"name": unq(m.group(1).replace('"', "")), "dataType": "", "hidden": False,
@@ -247,7 +251,9 @@ def parse_table_text(text: str):
             elif re.match(r"^isKey\s*$", t):
                 cur_col["isKey"] = True
         elif mode == "measure" and cur_meas is not None:
-            if ind >= 3:
+            if ind == 2:
+                measure_property = True
+            if ind >= 3 and not measure_property:
                 cur_meas["dax"] += ("\n" if cur_meas["dax"] else "") + re.sub(r"^\t{3}", "", raw)
             else:
                 m = re.match(r"^formatString:\s*(.*)$", t)
@@ -623,6 +629,13 @@ def finalize(name: str, tables: list, rels: list, ctx: dict = None, rules: list 
     return {"name": name, "tables": tables, "relationships": rels}
 
 
+# Resolve the sibling module even when this script is imported by file path.
+import importlib.util as _reference_import
+_reference_spec = _reference_import.spec_from_file_location("smv_reference_metadata", os.path.join(os.path.dirname(__file__), "reference_metadata.py"))
+_reference_metadata = _reference_import.module_from_spec(_reference_spec)
+_reference_spec.loader.exec_module(_reference_metadata)
+
+
 def parse_tmdl(files: list, rules: list = None) -> dict:
     tables, rels, name = [], [], ""
     ctx = {"exprs": {}, "names": [], "params": {}}
@@ -643,6 +656,7 @@ def parse_tmdl(files: list, rules: list = None) -> dict:
         if re.search(r"^table\s", txt, re.M):
             t = parse_table_text(txt)
             if t:
+                _reference_metadata.from_tmdl(t, txt)
                 tables.append(t)
     # tables are queries too — `Source = MdGeoEntities` points at another table's partition
     for t in tables:
@@ -703,6 +717,7 @@ def parse_bim(j: dict, rules: list = None) -> dict:
                 f = ci.get("formatStringDefinition")
                 fmt = txt(f.get("expression") if isinstance(f, dict) else f).strip() if f else ""
                 row["calcItems"].append({"name": ci.get("name"), "dax": txt(ci.get("expression")).strip(), "fmt": fmt})
+        _reference_metadata.from_bim(row, t)
         tables.append(row)
     rels = []
     for r in mdl.get("relationships", []):

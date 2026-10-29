@@ -4,7 +4,11 @@
 
 Open local TMDL / PBIP files or `model.bim` in VS Code. Trace a measure through its DAX,
 build a focused table canvas, and see how queries feed your tables. No Power BI Desktop,
-Fabric connection, or Python is required.
+Fabric connection, or Python is required for local model files. On Windows, use
+**Connect to Power BI Desktop** in the Semantic Models view title bar or Command Palette
+to connect to an open Desktop model and open its metadata in the viewer. If several models
+are open, choose one from the list. This action runs from VS Code and requires no
+administrator approval; it reads model metadata and does not execute DAX.
 
 [Try the live demo](https://MrPerfectH.github.io/Semantic-Model-Viewer/) before installing.
 The screenshots below use only the synthetic **Contoso Retail** demo. Select an image to
@@ -17,6 +21,30 @@ Install [Semantic Model Viewer](https://marketplace.visualstudio.com/items?itemN
 Open your PBIP project **folder**, then select a model under **Semantic Models** in the Activity Bar. Supported models are `*.SemanticModel` folders with TMDL definitions and `model.bim`; a `.pbix` or `.pbip` file alone is not supported. If none appear, check the folder and exclusion settings, then run **Semantic Model Viewer: Refresh Model List**. Hidden directories are skipped.
 
 Use **+** in Tables to add a table, or select a measure in Measures. Optional first-use tips can be skipped and restarted through **Help**; the preference is saved in your VS Code profile without modifying model files. The browser demo is separate from the extension and needs no workspace.
+
+## Power BI Desktop External Tools button (Windows)
+
+1. In the VS Code Command Palette, run **Semantic Model Viewer: Add to Power BI External Tools**.
+2. Choose **Add button** and approve Windows administrator access if requested. No installer is needed.
+3. Restart Power BI Desktop. Click **Semantic Model Viewer (VS Code)** in its **External Tools** ribbon.
+
+The button opens this extension in VS Code with the model from the Desktop window you
+clicked. It reads the running model, including unsaved model changes; it does not need a
+PBIP export. When Desktop supplies no model, the viewer opens empty. **Refresh Model**
+rereads the connected model. Desktop must remain open; there is no continuous live sync.
+The connection reads metadata without executing DAX or M or changing the Desktop model.
+Report definitions and report usage are not included, and automatic date tables are omitted.
+
+Registration is optional and normally needs administrator approval once because Power BI
+stores ribbon entries in a machine-wide folder. Daily use runs as your normal user.
+Company policies can restrict External Tools or PowerShell. VS Code may ask you to allow
+the extension launch link on first use. Use the same VS Code profile where the extension
+is installed; standard VS Code and VS Code Insiders are supported.
+
+Run **Semantic Model Viewer: Remove from Power BI External Tools** before uninstalling
+the extension to remove its button, then restart Desktop. Extension updates preserve the
+registration. If VS Code moves, run **Add to Power BI External Tools** again. This button
+is separate from any older standalone Viewer button.
 
 ## Measures
 
@@ -143,3 +171,7 @@ Version 0.2.0 integrates the VS Code extension work recovered from
 the earlier 0.1.0 package, which targeted the former `viewer/` source directory.
 
 </details>
+
+### Connected repository Reports
+
+The Semantic Models sidebar automatically discovers local `*.Report/definition.pbir` files in the open workspace. Expand a model to see Reports whose `datasetReference.byPath` points to that model; click a Report to open its definition. Model clicks still open the viewer. Use **Refresh Model List** after adding, removing, or changing Report bindings. Model discovery exclusions also apply to Reports. Published service connections are not shown as confirmed local connections.

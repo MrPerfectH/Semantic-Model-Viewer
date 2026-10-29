@@ -204,6 +204,7 @@
     this.hint = new g.Hint(this, document.getElementById('hint'));
     this.matrix = new g.MatrixView(this, document.getElementById('matrix'));
     this.measures = new g.MeasuresView(this, document.getElementById('measures'));
+    if(g.ReferenceView) this.reference = new g.ReferenceView(this, document.getElementById('reference'));
     this.sidebar = new g.Sidebar(this, document.getElementById('drawer'));
     if (g.PowerQueryWorkspace && g.PowerQueryCanvas && g.PowerQueryInspector) this.powerQueryWorkspace = new g.PowerQueryWorkspace(this, document.getElementById('power-query-workspace'));
     if (g.TableExplorer) this.explorer = new g.TableExplorer(this);
@@ -252,6 +253,7 @@
       if (this.explorer) this.explorer.update();
       this.sidebar.update();
       if (this.powerQueryWorkspace) this.powerQueryWorkspace.update();
+      if(this.reference)this.reference.update();
       this.importModal.update();
       this.rulesModal.update();
       if (this.onboarding) this.onboarding.update();
@@ -517,6 +519,7 @@
       this.canvas.clusterOn = false; this.canvas.groups = null; this.canvas.expandedGroups = new Set();
       this.canvas.computeLayout();
       this.measures._gC = null; this.measures._railKey = null; this.measures._mainKey = null; this.measures._daxKey = null;
+      if(this.reference)this.reference.restoreSnapshot();
       this.matrix._key = null; this.sidebar._key = null;
       var state = {
         loaded: true, allExpanded: false, modelName: name, selected: null, activeFilter: null, search: '',
@@ -603,6 +606,7 @@
       cv.pos = {}; cv.cpos = {}; cv._preExpandPos = null; cv.pinned = new Set(); cv.locked = null; cv.selRel = null;
       cv._activeSel = null; cv._isoSet = null; cv.clusterOn = false; cv.groups = null; cv.expandedGroups = new Set();
       cv.computeLayout(); this.measures._gC = null; this.measures._railKey = null; this.measures._mainKey = null; this.measures._daxKey = null;
+      if(this.reference)this.reference.restoreSnapshot();
       this.matrix._key = null; this.sidebar._key = null;
       this.setState({ loaded: true, modelName: record.name || model.name || 'Semantic model', viewMode: 'graph',
         allExpanded: false, selected: null, activeFilter: null, search: '', isolate: false, showModelMenu: false,
@@ -1352,7 +1356,8 @@
       this._domainWorkspace = workspace.domains || null;
       this._matrixWorkspace = workspace.matrix || null;
       if (this.powerQueryWorkspace) this.powerQueryWorkspace.restoreSnapshot(workspace.powerQuery);
-      this.state.viewMode = ['graph', 'measures', 'clusters', 'matrix', 'power-query'].includes(workspace.viewMode) ? workspace.viewMode : 'graph';
+      this.state.viewMode = ['graph', 'measures', 'clusters', 'matrix', 'power-query', 'reference'].includes(workspace.viewMode) ? workspace.viewMode : 'graph';
+      if(this.reference)this.reference.restoreSnapshot(workspace.reference);
       this.matrix._key = null; this.sidebar._key = null;
       this.render(true);
       if (this.state.viewMode === 'clusters') this.restoreDomains(this._domainWorkspace);

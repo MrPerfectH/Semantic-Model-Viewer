@@ -1,0 +1,109 @@
+/* Loaded only by panel.buildHtml, after the canonical styles. VS Code owns these
+   colors; browser preferences and the portable snapshot asset list stay unchanged. */
+:root[data-host=vscode] body{
+  --smv-paper:var(--vscode-editor-background,#fff);
+  --smv-surface:var(--vscode-editorWidget-background,var(--vscode-editor-background,#fff));
+  --smv-soft:var(--vscode-editor-inactiveSelectionBackground,#eef1f4);
+  --smv-ink:var(--vscode-editor-foreground,var(--vscode-foreground,#202b40));
+  --smv-muted:var(--vscode-descriptionForeground,var(--smv-ink));
+  --smv-line:var(--vscode-contrastBorder,var(--vscode-widget-border,var(--vscode-editorGroup-border,#a0a0a0)));
+  --smv-focus:var(--vscode-focusBorder,#007acc);
+  --smv-active-border:var(--vscode-contrastActiveBorder,var(--smv-focus));
+  --smv-burgundy:var(--vscode-textLink-foreground,#005fb8);
+  --smv-primary:var(--vscode-button-background,#005fb8);
+  --smv-on-accent:var(--vscode-button-foreground,#fff);
+  --smv-primary-hover:var(--vscode-button-hoverBackground,var(--smv-primary));
+  --smv-selection:var(--vscode-list-activeSelectionBackground,#005fb8);
+  --smv-on-selection:var(--vscode-list-activeSelectionForeground,#fff);
+  --smv-hover:var(--vscode-list-hoverBackground,var(--smv-soft));
+  --smv-error:var(--vscode-errorForeground,#a1260d);
+  --smv-gold-ink:#795e00;
+  --smv-olive:#17654b;--smv-plum:#673ab7;--smv-up:var(--smv-plum);--smv-down:#005fb8;
+  --smv-gold:var(--smv-gold-ink);
+  --smv-up-soft:color-mix(in srgb,var(--smv-up) 12%,var(--smv-surface));
+  --smv-down-soft:color-mix(in srgb,var(--smv-down) 12%,var(--smv-surface));
+  --smv-accent-soft:color-mix(in srgb,var(--smv-burgundy) 12%,var(--smv-surface));
+  --smv-up-border:var(--smv-up);--smv-down-border:var(--smv-down);
+  --smv-up-line:var(--smv-up);--smv-down-line:var(--smv-down);
+  --smv-accent-halo:color-mix(in srgb,var(--smv-burgundy) 30%,transparent);
+  --ink:var(--smv-ink);--muted:var(--smv-muted);--line:var(--smv-line);--blue:var(--smv-burgundy);
+  --accent:var(--smv-burgundy);--border:var(--smv-line);
+  color-scheme:light;background:var(--smv-paper);color:var(--smv-ink);
+}
+:root[data-host=vscode] body:is(.vscode-dark,.vscode-high-contrast),
+:root[data-host=vscode][data-vscode-theme=dark] body,
+:root[data-host=vscode][data-vscode-theme=high-contrast] body{
+  color-scheme:dark;--smv-olive:#79d8b0;--smv-plum:#c4a7ff;--smv-down:#79b8ff;--smv-gold-ink:#f4bf75;
+}
+:root[data-host=vscode] :is(#root,#topbar){background:var(--smv-paper)!important;color:var(--smv-ink)!important;border-color:var(--smv-line)!important}
+:root[data-host=vscode] a{color:var(--vscode-textLink-foreground,var(--smv-burgundy))}
+:root[data-host=vscode] a:hover{color:var(--vscode-textLink-activeForeground,var(--smv-burgundy))}
+:root[data-host=vscode] .ex-theme-select{display:none}
+:root[data-host=vscode] :is(#canvas,.pqc-surface,.pqw-canvas,.mv-graph-scroll){background-color:var(--smv-paper)!important;background-image:radial-gradient(var(--smv-line) .7px,transparent .7px)!important}
+:root[data-host=vscode] :is(.mv-workspace,.mv-main,.pqc,.pqw,#matrix>section){background:var(--smv-paper)!important;color:var(--smv-ink)}
+:root[data-host=vscode] :is(#table-library,.ex-library,.mv-library,.pqw .pqw-library,#workspace-toolbar,#canvas-navigation,#model-minimap,#workspace-status,#canvas-selection,
+  .ex-display-menu,.ex-saved-menu,.ex-related,.smv-guide,.mv-overview-stat,.mv-starter,.mv-graph-panel,.mv-dax-panel,.mv-dax-card,.mv-graph-footer,.mv-home-table,
+  .mv-flow-group-more,.mv-source-card,.mv-source-column,.mv-impact-row,.pqw-toolbar,.pqw-inspector,.pqw-navigation,.pqw-message,.pqw-edge-details,.pqw-view-notice,
+  .pqi,.pqi-code-card,.pqi-code-scroll,.pqi-line-number,.pqi-reader,.pqi-reader-launcher,.pqc-minimap,.pq-dialog){
+  background:var(--smv-surface);color:var(--smv-ink);border-color:var(--smv-line);
+}
+:root[data-host=vscode] :is(.mv-analysis-header,.mv-dax-card-header,.mv-graph-toolbar,.pqi-header,.pqi-code-bar,.ex-inspector-head){background:var(--smv-soft)!important;border-color:var(--smv-line)!important}
+:root[data-host=vscode] :is(.ex-logo,.mv-source-header){background:var(--smv-primary);color:var(--smv-on-accent)}
+:root[data-host=vscode] :is(.ex-button,.mv-button,.pqi .ex-button,.pqi-button,.pq-dialog button,.smv-guide button){background:var(--smv-surface);color:var(--smv-ink);border-color:var(--smv-line)}
+:root[data-host=vscode] :is(.ex-button,.mv-button,.pqi .ex-button,.pqi-button,.pq-dialog button):hover:not(:disabled){background:var(--smv-hover);color:var(--smv-ink);border-color:var(--smv-focus)}
+:root[data-host=vscode] :is(.ex-primary,.mv-button-primary,#canvas-selection .ex-button.ex-primary){background:var(--smv-primary);color:var(--smv-on-accent);border-color:var(--smv-primary)}
+:root[data-host=vscode] :is(.ex-primary,.mv-button-primary,#canvas-selection .ex-button.ex-primary):hover:not(:disabled){background:var(--smv-primary-hover);color:var(--smv-on-accent)}
+:root[data-host=vscode] :is(input:not([type=checkbox]):not([type=radio]),select,textarea){background:var(--vscode-input-background,var(--smv-surface))!important;color:var(--vscode-input-foreground,var(--smv-ink))!important;border-color:var(--vscode-input-border,var(--smv-line))!important}
+:root[data-host=vscode] input::placeholder{color:var(--vscode-input-placeholderForeground,var(--smv-muted))}
+:root[data-host=vscode] :is(input[type=checkbox],input[type=radio]){accent-color:var(--smv-primary)}
+:root[data-host=vscode] :is(button,input,select,textarea,summary,a,[tabindex]):focus-visible{outline:2px solid var(--smv-focus)!important;outline-offset:2px}
+:root[data-host=vscode] :is(.ex-main-nav,.ex-segments,.mv-filter-tabs,.mv-mode-switch,.ex-count,.mv-chip,.wui-card-chip){background:var(--smv-soft);color:var(--smv-muted);border-color:var(--smv-line)}
+:root[data-host=vscode] :is(.ex-main-nav button,.ex-segments button,.mv-filter-tabs button,.mv-mode-switch button){color:var(--smv-ink)}
+:root[data-host=vscode] :is(.ex-main-nav button[aria-current=page],.ex-segments button[aria-pressed=true],.mv-filter-tabs button[aria-pressed=true],.mv-mode-switch button[aria-pressed=true],
+  .ex-pane-toggle[aria-pressed=true],.ex-focus-options .ex-button[aria-pressed=true],.mv-button[aria-pressed=true],.ex-table-row.selected,.mv-library-row.is-selected,.mv-impact-row[aria-pressed=true]){
+  background:var(--smv-selection)!important;color:var(--smv-on-selection)!important;outline:1px solid var(--smv-active-border);outline-offset:-1px;
+}
+:root[data-host=vscode] :is(.ex-table-row.selected,.mv-library-row.is-selected,.mv-impact-row[aria-pressed=true]) *{color:var(--smv-on-selection)!important}
+:root[data-host=vscode] :is(.ex-table-row:hover,.ex-saved-row:hover,.mv-library-row:hover,.mv-impact-row:hover,.mv-source-column:hover){background:var(--smv-hover);color:var(--smv-ink)}
+:root[data-host=vscode] :is(.mv-impact-heading,.mv-impact-row strong,#matrix h1){color:var(--smv-ink)!important}
+:root[data-host=vscode] :is(.mv-source-controls,.mv-source-omitted,.mv-source-summary,.mv-impact-note,.mv-impact-row span,.pqi-comment,.pqi-line-number){color:var(--smv-muted);border-color:var(--smv-line)}
+:root[data-host=vscode] :is(.pqi-counts span,.pqw-flow,.pqc-cycle-group){background:var(--smv-soft);border-color:var(--smv-line)}
+:root[data-host=vscode] :is(.mv-cap-notice,.pqi-review,.pqc-route-status,.pqw-review){color:var(--smv-gold-ink);border-color:var(--smv-gold-ink)}
+:root[data-host=vscode] .ex-snapshot-status{color:var(--smv-olive);background:var(--smv-surface);border-color:currentColor}
+:root[data-host=vscode] .ex-snapshot-status.is-error{color:var(--smv-error)}
+:root[data-host=vscode] :is(.mv-source-column.is-selected,.mv-source-column:hover){background:var(--smv-soft);color:var(--smv-ink)}
+:root[data-host=vscode] .mv-source-edge-label{fill:var(--smv-muted);stroke:var(--smv-paper)}
+/* Card headers also receive direct style assignments during recoloring. Keep the
+   category stripe, but put their names and source metadata on a readable surface. */
+:root[data-host=vscode] :is(#canvas [data-name],#canvas [data-body],.wui-card){background:var(--smv-surface)!important}
+:root[data-host=vscode] :is(#canvas [data-head],.wui-card-head){background:color-mix(in srgb,var(--smv-category,var(--smv-line)) 12%,var(--smv-surface))!important;border-left-color:var(--smv-category,var(--smv-line))!important}
+:root[data-host=vscode] :is(#canvas [data-title],.wui-card-title){color:var(--smv-ink)!important}
+:root[data-host=vscode] :is(#canvas [data-src],.wui-card-subtitle,.pqc-node-subtitle,.pqc-fact .pqc-node-subtitle,.pqc-source,.pqi-source-provider,.wui-card-chip *){color:var(--smv-muted)!important}
+:root[data-host=vscode] #canvas [data-head] button{background:var(--smv-surface)!important;color:var(--smv-ink)!important}
+:root[data-host=vscode] .pqi-fact :is(.pqi-heading,.pqi-subtitle){color:var(--smv-ink)!important}
+:root[data-host=vscode] .wui-card-chip{background:var(--smv-soft)!important}
+:root[data-host=vscode] :is(.wui-card-badge,#canvas [data-head]>span:first-child){background:var(--smv-surface)!important;color:var(--smv-ink)!important;border:1px solid var(--smv-line)}
+:root[data-host=vscode] #canvas [data-head] svg{stroke:var(--smv-muted)}
+:root[data-host=vscode] :is(svg,[stroke]):is([stroke="#5b6472"],[stroke="#6b7280"],[stroke="#8b93a2"],[stroke="#9aa1ad"],[stroke="#a8aeb9"]){stroke:var(--smv-muted)}
+:root[data-host=vscode] [fill]:is([fill="#5b6472"],[fill="#6b7280"],[fill="#8b93a2"],[fill="#9aa1ad"]){fill:var(--smv-muted)}
+:root[data-host=vscode] .pqc-edge-underlay{stroke:var(--smv-paper)}
+:root[data-host=vscode] .pqc-edge{color:var(--smv-muted)}
+:root[data-host=vscode] .pqc-parameter-edge{color:var(--smv-up)}
+:root[data-host=vscode] .pqc-branch-edge{color:var(--smv-down)}
+:root[data-host=vscode] :is(.pqc-related,.pqc-edge-hover){color:var(--smv-burgundy)}
+:root[data-host=vscode] .pqc-map-node{fill:var(--smv-olive)}
+:root[data-host=vscode] .pqc-map-selected{fill:var(--smv-burgundy)}
+:root[data-host=vscode] .pqc-map-viewport{fill:var(--smv-accent-halo);stroke:var(--smv-burgundy)}
+/* Raw HTML from legacy panels bypasses U.el's inline neutral token conversion. */
+:root[data-host=vscode] :is(#drawer,#modal,#rolesetup,#legend,#hint) :is(pre,code){background:var(--smv-surface)!important;color:var(--smv-ink)!important;border-color:var(--smv-line)!important}
+:root[data-host=vscode] :is(.hv-f1f3f6,.hv-f5f7f9,.hv-eef4ff,.hv-eef2f7,.hv-f0f2f5,.hv-trace,.hv-card):hover{background:var(--smv-hover)!important;color:var(--smv-ink)}
+:root[data-host=vscode] .hv-del:hover{background:var(--smv-soft);color:var(--smv-error)}
+:root[data-host=vscode] ::-webkit-scrollbar-thumb{background:var(--vscode-scrollbarSlider-background,var(--smv-line))}
+:root[data-host=vscode] ::-webkit-scrollbar-thumb:hover{background:var(--vscode-scrollbarSlider-hoverBackground,var(--smv-muted))}
+/* Both high-contrast polarities get solid outlines; dashed inactive paths and
+   directional pigments remain distinct from the selection/focus treatment. */
+:root[data-host=vscode] body:is(.vscode-high-contrast,.vscode-high-contrast-light){--smv-line:var(--vscode-contrastBorder,var(--smv-ink));--smv-muted:var(--smv-ink)}
+:root[data-host=vscode] body:is(.vscode-high-contrast,.vscode-high-contrast-light) :is(#canvas,.pqc-surface,.pqw-canvas,.mv-graph-scroll){background-image:none!important}
+:root[data-host=vscode] body:is(.vscode-high-contrast,.vscode-high-contrast-light) :is(button,select,input,textarea,.wui-card,#canvas [data-name],.smv-guide,.pqi-reader){border-color:var(--smv-line)!important}
+:root[data-host=vscode] body:is(.vscode-high-contrast,.vscode-high-contrast-light) :is(.pqc-selected,.ex-table-row.selected,.mv-library-row.is-selected){outline:2px solid var(--smv-active-border)!important;outline-offset:2px}
+:root[data-host=vscode] body:is(.vscode-high-contrast,.vscode-high-contrast-light) .pqc-edge-dim{opacity:.85}

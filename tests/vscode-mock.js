@@ -57,6 +57,7 @@ function makeVscode(opts) {
   const contains = (base, target) => { const rel = path.relative(base, target); return rel === '' || (rel !== '..' && !rel.startsWith('..' + path.sep) && !path.isAbsolute(rel)); };
 
   const vscode = {
+    env: opts.env || {},
     Uri, FileType, ViewColumn, ProgressLocation, RelativePattern, Disposable, EventEmitter, TreeItem, TreeItemCollapsibleState, ThemeIcon,
     workspace: {
       workspaceFolders: folders,
@@ -105,6 +106,7 @@ function makeVscode(opts) {
       showSaveDialog: async (options) => { vscode._saveDialogs.push(options); return opts.saveDialog ? opts.saveDialog(options) : undefined; },
       showTextDocument: async (doc, options) => { vscode._shown.push({ doc, options }); },
       registerTreeDataProvider: (id, provider) => { vscode._trees[id] = provider; return new Disposable(); },
+      registerUriHandler: (handler) => { vscode._uriHandler = handler; return new Disposable(); },
       withProgress: (o, task) => task({ report: () => { } }),
       createOutputChannel: () => ({ lines: [], appendLine(l) { this.lines.push(l); log(l); }, show() { }, dispose() { this.disposed = true; } }),
       createWebviewPanel: (viewType, title, column, options) => {
@@ -130,6 +132,7 @@ function makeVscode(opts) {
     },
     _writes: [], _saveDialogs: [], _opened: [], _shown: [], _watchers: [], _panels: panels, _state: state, _trees: {}, _folderListeners: [], _contexts: {},
     context: {
+      extensionPath: opts.extensionRoot,
       extensionUri: Uri.file(opts.extensionRoot),
       subscriptions: [],
       globalState: {

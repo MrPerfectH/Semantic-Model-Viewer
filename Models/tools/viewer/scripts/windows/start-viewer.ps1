@@ -49,8 +49,13 @@ if (-not (Test-ViewerReady)) {
         Show-Problem "Port $Port is used by another program. Stop it, or run start-viewer.ps1 -Port with a free port."
         exit 1
     }
+    # Portable releases include the official Python embeddable runtime here.
+    # Fall back to an installed Python for existing source/ZIP installations.
+    $portablePython = Join-Path $Here "runtime\python.exe"
     $py = Get-Command py -ErrorAction SilentlyContinue
-    if ($py) {
+    if (Test-Path $portablePython) {
+        $exe = $portablePython; $args = @("`"$ServePy`"", "--port", "$Port", "--idle-exit", "180")
+    } elseif ($py) {
         $exe = "py"; $args = @("-3", "`"$ServePy`"", "--port", "$Port", "--idle-exit", "180")
     } else {
         $exe = "python"; $args = @("`"$ServePy`"", "--port", "$Port", "--idle-exit", "180")

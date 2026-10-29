@@ -44,6 +44,35 @@ async function findModels() {
   return Array.from(byId.values()).sort((a, b) => a.name.localeCompare(b.name) || a.path.length - b.path.length || a.path.localeCompare(b.path));
 }
 
+/* Bind repository Reports by their explicit local reference, never by folder name. */
+async function findReports() {
+  const definitions = await vscode.workspace.findFiles('**/*.Report/definition.pbir', excludeGlob());
+  const reports = [];
+  const decoder = new TextDecoder('utf-8');
+  for (const uri of definitions) {
+    if (inHiddenFolder(uri)) continue;
+    try {
+      const definition = JSON.parse(decoder.decode(await vscode.workspace.fs.readFile(uri)));
+      const reference = definition && definition.datasetReference;
+      const target = reference && !reference.byConnection && reference.byPath && reference.byPath.path;
+      if (typeof target !== 'string' || !target.trim()) continue;
+      const folder = path.dirname(uri.fsPath);
+      reports.push({
+        id: 'report:' + idFor(uri), name: path.basename(folder).replace(/\.Report$/i, ''),
+        path: relPath(vscode.Uri.file(folder)), uri, kind: 'report',
+        modelPath: path.resolve(folder, target.replace(/[\\/]/g, path.sep))
+      });
+    } catch (error) { /* A broken or unreadable Report must not hide other repository artifacts. */ }
+  }
+  return reports.sort((a, b) => a.name.localeCompare(b.name) || a.path.localeCompare(b.path));
+}
+
+function reportsForModel(model, reports) {
+  const normalize = (value) => process.platform === 'win32' ? value.toLowerCase() : value;
+  const folder = path.resolve(model.kind === 'file' ? path.dirname(model.uri.fsPath) : model.uri.fsPath);
+  return reports.filter((report) => normalize(report.modelPath) === normalize(folder));
+}
+
 /* A model entry for an explorer selection (folder or model.bim), or null. */
 async function modelFromUri(uri) {
   let st;
@@ -98,4 +127,4 @@ async function readModelFiles(entry) {
   return out;
 }
 
-module.exports = { findModels, modelFromUri, resolveDefaultModel, readModelFiles, idFor };
+module.exports = { findModels, modelFromUri, resolveDefaultModel, readModelFiles, idFor, findReports, reportsForModel };

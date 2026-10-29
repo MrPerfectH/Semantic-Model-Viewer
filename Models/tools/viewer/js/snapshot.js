@@ -3,7 +3,7 @@
 (function (g) {
   'use strict';
   var FORMAT = 'semantic-model-viewer', VERSION = 1;
-  var FILES = ['js/util.js', 'js/snapshot.js', 'js/theme.js', 'spellbook.css', 'js/roles.js', 'js/tmdl-parser.js', 'js/workspace-ui.js', 'js/canvas.js', 'js/layouts.js',
+  var FILES = ['js/reference.js', 'reference.css', 'js/util.js', 'js/snapshot.js', 'js/theme.js', 'spellbook.css', 'js/roles.js', 'js/tmdl-parser.js', 'js/workspace-ui.js', 'js/canvas.js', 'js/layouts.js',
     'js/matrix.js', 'js/dax-format.js', 'js/measures.js', 'js/power-query-dependencies.js', 'js/power-query-graph-model.js', 'js/power-query-canvas.js', 'js/power-query-inspector.js', 'js/power-query-workspace.js', 'js/power-query-lineage.js', 'js/power-query.js', 'js/sidebar.js', 'js/topbar.js', 'js/rules.js', 'js/relationships.js', 'js/explorer.js', 'js/onboarding.js', 'js/app.js', 'explorer.css', 'measures.css', 'power-query.css', 'power-query-canvas.css', 'power-query-inspector.css', 'power-query-workspace.css', 'power-query-lineage.css'];
   var CSP = "default-src 'none'; script-src 'unsafe-inline'; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
   function clone(value) { return value == null ? null : JSON.parse(JSON.stringify(value)); }
@@ -17,11 +17,14 @@
   function assetPath(url) { return String(url).replace(/^\.\//, '').split(/[?#]/)[0]; }
   function modelData(model) {
     var result = { name: String(model.name || ''), tables: model.tables.map(function(t){
-      var row = pick(t, ['name','domain','role','baseRole','autoRole','roleVia','ann','description','hidden']);
-      row.columns = (t.columns || []).map(function(c){return pick(c,['name','dataType','hidden','isCalc','isKey','rel','description','dax']);});
-      row.measures = (t.measures || []).map(function(m){var measure=pick(m,['name','dax','fmt','folder','h','description']);measure.dax=String(measure.dax||'');return measure;});
+      var row = pick(t, ['name','domain','role','baseRole','autoRole','roleVia','ann','description','hidden','referenceVersion','lineageTag']);
+      row.columns = (t.columns || []).map(function(c){return pick(c,['name','dataType','hidden','isCalc','isKey','rel','description','dax','formatString','displayFolder','sortByColumn','summarizeBy','dataCategory','sourceColumn','lineageTag']);});
+      row.measures = (t.measures || []).map(function(m){var measure=pick(m,['name','dax','fmt','folder','h','description','formatExpression','lineageTag']);measure.dax=String(measure.dax||'');return measure;});
       if (typeof t.dax === 'string' && t.dax) row.dax = t.dax;
-      if (Array.isArray(t.calcItems)) row.calcItems = t.calcItems.map(function(ci){return pick(ci,['name','dax','fmt']);});
+      if (Array.isArray(t.calcItems)) row.calcItems = t.calcItems.map(function(ci){return pick(ci,['name','dax','fmt','description','ordinal','lineageTag','formatExpression']);});
+      if(t.calculationGroup)row.calculationGroup=pick(t.calculationGroup,['precedence','description']);
+      if(Array.isArray(t.hierarchies))row.hierarchies=t.hierarchies.map(function(h){var v=pick(h,['name','description','hidden','displayFolder','lineageTag']);v.levels=(h.levels||[]).map(function(l){return pick(l,['name','column','ordinal','description']);});return v;});
+      if(Array.isArray(t.partitions))row.partitions=t.partitions.map(function(p){return pick(p,['name','type','mode','description']);});
       row.colCount = row.columns.length; row.measureCount = row.measures.length;
       // Separate connection settings are omitted; endpoints written in M remain in the query definitions.
       row.source = pick(t.source, ['kind','schema','table','via']);
@@ -38,6 +41,7 @@
         return row;
       }), warnings: (model.powerQuery.warnings || []).filter(function(w){return typeof w === 'string';})};
     }
+    if(typeof model.referenceLoadedAt==='string')result.referenceLoadedAt=model.referenceLoadedAt;
     return result;
   }
   function usageData(app) {
@@ -51,12 +55,13 @@
   function capture(app) {
     if (!app.model || !Array.isArray(app.model.tables)) throw new Error('Open a model before saving a snapshot.');
     var cv=app.canvas,ex=app.explorer,model=modelData(app.model);
+    if(app.reference&&app.reference.loadedAt)model.referenceLoadedAt=app.reference.loadedAt;
     model.name=String(app.state.modelName || model.name || 'Semantic model');
     var tableView=app.captureTableView?clone(app.captureTableView()):{version:2,name:'Snapshot starting view',tables:cv.workspaceNames?Array.from(cv.workspaceNames):model.tables.map(function(t){return t.name;}),
       pos:clone(cv.pos),view:clone(app.state.viewMode==='graph'?cv.view:(app._tableViewport||cv.view)),focus:cv.captureFocus(),display:cv.captureDisplay()};
     return {format:FORMAT,version:VERSION,name:model.name,createdAt:new Date().toISOString(),model:model,usage:usageData(app),
       settings:{theme:g.ViewerTheme?g.ViewerTheme.get():'classic',roleRules:app.getRules?app.getRules().map(function(r){return pick(r,['role','name','sides','measures','kind']);}):[]},
-      workspace:{viewMode:app.state.viewMode,powerQuery:app.powerQueryWorkspace&&app.powerQueryWorkspace.captureSnapshot?app.powerQueryWorkspace.captureSnapshot():null,tableView:tableView,presets:clone(cv.getPresets()),matrix:app.captureMatrix?clone(app.captureMatrix()):null,
+      workspace:{viewMode:app.state.viewMode,reference:app.reference?app.reference.captureSnapshot():null,powerQuery:app.powerQueryWorkspace&&app.powerQueryWorkspace.captureSnapshot?app.powerQueryWorkspace.captureSnapshot():null,tableView:tableView,presets:clone(cv.getPresets()),matrix:app.captureMatrix?clone(app.captureMatrix()):null,
         explorer:ex?{query:ex.query,filter:ex.filter,direction:ex.direction,depth:ex.depth,includeInactive:!!ex.includeInactive,mapHidden:!!ex.mapHidden,libraryHidden:!!ex.libraryHidden,inspectorHidden:!!ex.inspectorHidden}:{},
         domains:app.captureDomains?clone(app.captureDomains()):{expandedGroups:Array.from(cv.expandedGroups || []),positions:Object.keys(cv.groups || {}).map(function(key){var group=cv.groups[key];return {key:key,x:group.x,y:group.y};}),tablePositions:clone(cv.cpos || {}),view:clone(cv.view)}},
       measures:app.measures.captureSnapshot?app.measures.captureSnapshot():null};

@@ -1,4 +1,5 @@
 node_modules/
 /dist/claude-plugin/
+/dist/semantic-model-viewer-windows-portable.zip
 .DS_Store
 *.log

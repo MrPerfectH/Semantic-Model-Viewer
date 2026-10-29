@@ -5,6 +5,7 @@
 !CHANGELOG.md
 !LICENSE
 !images/**
+!resources/**
 !src/**
 !media/index.html
 !media/*.css

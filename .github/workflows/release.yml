@@ -8,8 +8,64 @@ permissions:
   contents: write
 
 jobs:
+  portable-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare portable package
+        shell: pwsh
+        run: |
+          $version = $env:GITHUB_REF_NAME.Substring(1)
+          $root = Join-Path $PWD "dist\Semantic-Model-Viewer-Windows"
+          $viewer = Join-Path $root "Models\tools\viewer"
+          New-Item -ItemType Directory -Force $viewer | Out-Null
+          New-Item -ItemType Directory -Force (Join-Path $viewer "scripts") | Out-Null
+          Copy-Item Models/tools/viewer/index.html, Models/tools/viewer/*.css, Models/tools/viewer/js, Models/tools/viewer/icons, Models/tools/viewer/sw.js, Models/tools/viewer/manifest.webmanifest, Models/tools/viewer/model-data.json, Models/tools/viewer/report-usage.json -Destination $viewer -Recurse
+          Copy-Item Models/tools/viewer/scripts/serve.py -Destination (Join-Path $viewer "scripts\serve.py")
+          Copy-Item Models/tools/viewer/scripts/windows -Destination (Join-Path $viewer "scripts\windows") -Recurse
+          Copy-Item "Run Semantic Model Viewer.cmd" -Destination $root
+          Set-Content -Path (Join-Path $root "README.txt") -Value @(
+            "Semantic Model Viewer for Windows",
+            "",
+            "Extract this ZIP to a folder you can write to, then double-click 'Run Semantic Model Viewer.cmd'.",
+            "The app runs locally and does not require Python to be installed. Chrome or Edge is recommended.",
+            "To remove it, close the app and delete the extracted folder. Saved models and layouts remain in your Windows user profile."
+          )
+          $pythonZip = "$env:TEMP\python-embed.zip"
+          Invoke-WebRequest "https://www.python.org/ftp/python/3.13.17/python-3.13.17-embed-amd64.zip" -OutFile $pythonZip
+          $pythonHash = (Get-FileHash $pythonZip -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($pythonHash -ne "9e35319bffedab8b36ad44d8f377cb4f1733bcec257a0b6d04d94f01486ddb38") {
+            throw "Python embeddable package checksum did not match python.org's published checksum."
+          }
+          Expand-Archive "$env:TEMP\python-embed.zip" -DestinationPath (Join-Path $viewer "runtime")
+          $runtime = Join-Path $viewer "runtime\python.exe"
+          & $runtime -c "import http.server, pathlib, urllib.request; print('Bundled Python runtime OK')"
+          if ($LASTEXITCODE -ne 0) { throw "Bundled Python failed its standard-library smoke check." }
+          $serve = Join-Path $viewer "scripts\serve.py"
+          $server = Start-Process -FilePath $runtime -ArgumentList @($serve, "--port", "18931") -PassThru -WindowStyle Hidden
+          try {
+            $ready = $false
+            for ($i = 0; $i -lt 30; $i++) {
+              try {
+                $ping = Invoke-WebRequest "http://127.0.0.1:18931/api/ping" -UseBasicParsing -TimeoutSec 1
+                if ($ping.StatusCode -eq 200 -and $ping.Content -match '"ok":\s*true') { $ready = $true; break }
+              } catch { Start-Sleep -Milliseconds 250 }
+            }
+            if (-not $ready) { throw "Bundled Python did not start the viewer server." }
+            $page = Invoke-WebRequest "http://127.0.0.1:18931/" -UseBasicParsing -TimeoutSec 3
+            if ($page.StatusCode -ne 200) { throw "Viewer page did not load from the portable package." }
+          } finally {
+            Stop-Process -Id $server.Id -Force -ErrorAction SilentlyContinue
+          }
+          Compress-Archive -Path "$root\*" -DestinationPath "dist\Semantic-Model-Viewer-Windows-$version.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portable-windows
+          path: dist/Semantic-Model-Viewer-Windows-*.zip
+
   release:
     runs-on: ubuntu-latest
+    needs: portable-windows
     steps:
       - uses: actions/checkout@v4
         with:
@@ -49,12 +105,17 @@ jobs:
             model-data.json report-usage.json ../../../dist/semantic-model-viewer-web/
           cd ../../../dist
           zip -r "semantic-model-viewer-web-${GITHUB_REF_NAME#v}.zip" semantic-model-viewer-web
+      - uses: actions/download-artifact@v4
+        with:
+          name: portable-windows
+          path: dist
       - name: Publish the release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
             --title "Semantic Model Viewer $GITHUB_REF_NAME" \
+            --notes-file .github/release-introduction.md \
             --generate-notes \
             vscode-extension/*.vsix \
             dist/*.zip
