@@ -17,7 +17,7 @@ The browser demo opens with a synthetic **Contoso Retail** model. No installatio
 
 **[Learning library: watch recordings, download PDF walkthroughs, and follow the guides](docs/learning-library.md)**
 
-## What's new in 0.5
+## What's new in 0.6
 
 - **Readable diagrams without zooming.** Names stay at 11px or larger. **Focus** shows a table's neighbourhood, arranged, in one press. On small screens the canvas keeps the space, and narrow dependency flows run top to bottom with tidy links.
 - **Ask your agent, see the answer.** `smv show` opens the relevant Tables and Measures views side by side, or as tabs on a narrow window, and the agent gives the answer in the conversation. Live sessions follow the agent's next view.
