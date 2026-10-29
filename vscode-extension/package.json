@@ -150,6 +150,14 @@
         {
           "command": "semanticModelViewer.openFabricTreeModel",
           "when": "false"
+        },
+        {
+          "command": "semanticModelViewer.connectPowerBI",
+          "when": "semanticModelViewer.powerBIDesktop"
+        },
+        {
+          "command": "semanticModelViewer.registerPowerBI",
+          "when": "semanticModelViewer.powerBIDesktop"
         }
       ],
       "view/title": [
@@ -170,7 +178,7 @@
         },
         {
           "command": "semanticModelViewer.connectPowerBI",
-          "when": "view == semanticModelViewer.models",
+          "when": "view == semanticModelViewer.models && semanticModelViewer.powerBIDesktop",
           "group": "navigation@4"
         }
       ],
@@ -227,7 +235,12 @@
     "viewsWelcome": [
       {
         "view": "semanticModelViewer.models",
-        "contents": "Start here: open a project folder containing a *.SemanticModel folder with TMDL definitions or model.bim. A .pbix or .pbip file alone is not supported.\n[Open folder](command:vscode.openFolder)\n[Refresh model list](command:semanticModelViewer.refreshModels)\n[Try the demo in your browser](https://MrPerfectH.github.io/Semantic-Model-Viewer/)\n[Connect to Fabric](command:semanticModelViewer.connectFabric)\n[Connect to Power BI Desktop](command:semanticModelViewer.connectPowerBI)\n[Add to Power BI External Tools](command:semanticModelViewer.registerPowerBI)"
+        "contents": "Start here: open a project folder containing a *.SemanticModel folder with TMDL definitions or model.bim. A .pbix or .pbip file alone is not supported.\n[Open folder](command:vscode.openFolder)\n[Refresh model list](command:semanticModelViewer.refreshModels)\n[Try the demo in your browser](https://MrPerfectH.github.io/Semantic-Model-Viewer/)\n[Connect to Fabric](command:semanticModelViewer.connectFabric)"
+      },
+      {
+        "view": "semanticModelViewer.models",
+        "contents": "[Connect to Power BI Desktop](command:semanticModelViewer.connectPowerBI)\n[Add to Power BI External Tools](command:semanticModelViewer.registerPowerBI)",
+        "when": "semanticModelViewer.powerBIDesktop"
       }
     ],
     "languageModelTools": [

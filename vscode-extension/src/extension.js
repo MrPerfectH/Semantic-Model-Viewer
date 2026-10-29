@@ -10,15 +10,23 @@ const { FabricTree } = require('./fabric-tree');
 const { FabricConnection } = require('./fabric');
 const { listPowerBiModels } = require('./powerbi');
 const { parseLaunchUri, createRegistration, updateRegistration } = require('./external-tool');
+const { featureEnabled } = require('./features');
 
 let panel = null;
 let tree = null;
+let powerBiDesktop = false;
+
+function powerBiUnavailable() {
+  vscode.window.showInformationMessage('Power BI Desktop connection is still in testing. Install the pre-release version of Semantic Model Viewer to try it.');
+}
 
 function isLocalWindows() {
   return process.platform === 'win32' && !(vscode.env && vscode.env.remoteName);
 }
 
 async function registrationCommand(context, remove = false) {
+  // Removal stays available so a button added from a pre-release can be cleaned up.
+  if (!remove && !powerBiDesktop) return powerBiUnavailable();
   if (!isLocalWindows()) {
     await vscode.window.showInformationMessage('Power BI ribbon registration is available from local VS Code on Windows.');
     return;
@@ -40,6 +48,7 @@ async function registrationCommand(context, remove = false) {
 }
 
 async function handlePowerBiUri(uri) {
+  if (!powerBiDesktop) return powerBiUnavailable();
   if (!isLocalWindows()) {
     await vscode.window.showInformationMessage('Power BI Desktop launch links require local VS Code on Windows.');
     return;
@@ -78,6 +87,7 @@ async function openUriCommand(uri) {
 }
 
 async function connectPowerBiCommand(context) {
+  if (!powerBiDesktop) return powerBiUnavailable();
   if (!isLocalWindows()) {
     vscode.window.showInformationMessage('Power BI Desktop connection is available from local VS Code on Windows.');
     return;
@@ -100,6 +110,8 @@ async function connectPowerBiCommand(context) {
 }
 
 function activate(context) {
+  powerBiDesktop = featureEnabled('powerBIDesktop', require('../package.json'), context.extensionMode);
+  vscode.commands.executeCommand('setContext', 'semanticModelViewer.powerBIDesktop', powerBiDesktop);
   const fabric = new FabricConnection(context);
   panel = new ViewerPanel(context, fabric);
   const fabricTree = new FabricTree(fabric);

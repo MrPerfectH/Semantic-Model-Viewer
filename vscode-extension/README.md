@@ -242,6 +242,8 @@ Claude Code and Codex receive separate complete CLI packages with their own runt
 Metadata returned to Copilot becomes part of the configured agent conversation; local parsing does not execute DAX, M or SQL.
 ## Power BI Desktop External Tools (Windows)
 
+Pre-release only for now: stable builds hide these commands until the Desktop connection passes testing. **Remove from Power BI External Tools** stays available in every build.
+
 Install the VSIX in local VS Code, then run **Semantic Model Viewer: Add to Power BI External Tools**. The confirmation explains the file being written. Approve Windows PowerShell if Windows requests permission to write to Power BI's machine-wide External Tools folder, then restart Power BI Desktop.
 
 Select **Semantic Model Viewer (VS Code)** in Desktop's External Tools ribbon. It opens the model from that Desktop window, including unsaved metadata changes. **Semantic Model Viewer: Refresh Model** reads Desktop again. A launch without a server/database opens an empty viewer. **Connect to Power BI Desktop** lets you choose an already open Desktop model.

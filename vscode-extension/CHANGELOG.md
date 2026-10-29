@@ -2,6 +2,7 @@
 
 ## Next pre-release
 
+- Keep the Power BI Desktop connection and External Tools button in pre-release builds only until they pass Windows testing; stable builds hide them behind a switch in `src/features.js`.
 - Fix Windows external CLI launchers in Unicode installation paths under legacy console code pages; restore the original code page and CLI exit status after execution.
 - Lead CLI help and agent guidance with the live interactive viewer; confirm static PNG and offline HTML exports on stderr while preserving JSON stdout (#179).
 - Add an accessible Measure library toggle, collapse it in focused explanations, preserve its snapshot state, and start new focused dependency graphs Left → right while retaining explicit vertical layouts (#180).
