@@ -211,6 +211,10 @@ test('every control keeps the answer views whole',{skip:!chrome&&'Install Chrome
     await t.test(label+': tables',async()=>{
       const start=await tables(ti);whole(start,'opening');assert.ok(start.px>=READABLE-0.05,'opening names '+start.px.toFixed(1)+'px');
       for(const name of start.visible){await click(ti,card(name),'card '+name);const s=await tables(ti);assert.equal(s.selected,name,'clicking '+name+' selects it');whole(s,'after selecting '+name);}
+      // Selecting a table dims the tables outside its filter paths, as in the main app.
+      await click(ti,card('Date'),'Date');
+      assert.equal(await browser.evaluate(`+getComputedStyle(${pane(ti)}.contentWindow.app.canvas.cards['Product Category'].el).opacity<0.5`),true,'Product Category is dimmed while Date is selected');
+      assert.equal(await browser.evaluate(`+getComputedStyle(${pane(ti)}.contentWindow.app.canvas.cards['Inventory'].el).opacity`),1,'Inventory, filtered by Date, stays bright');
       await click(ti,card('Product Category'),'Product Category');
       await click(ti,button('Center'),'Center');apart(await tables(ti),'Center');
       await click(ti,button('Focus'),'Focus');let s=await tables(ti);
