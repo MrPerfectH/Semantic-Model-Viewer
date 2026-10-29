@@ -45,7 +45,7 @@ follows from opening on an answer.
 | Measures header in one row, graph controls in one toolbar | yes | yes | window under 1280px wide or 800px tall (always in the CLI) |
 | Measures direction **Auto**: top to bottom with rows wrapped to the pane | yes | yes | graph pane under 760px wide, or portrait |
 | **Focus** button for a selected table | yes | yes | always |
-| No answer sentence above the diagram | — | yes | answer views |
+| No answer or selection description above the diagram (an authored `caption` is accepted but not drawn) | yes | yes | always |
 | Table library, inspector and editing toolbar closed on open (**Tools** brings them back) | — | yes | answer views |
 | Measures fit floor at 11px names, framed on the analyzed node | — | yes | answer views (the app opens at 100%) |
 | No per-pane view pickers when each view has its own pane | — | yes | side-by-side workspace |

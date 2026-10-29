@@ -118,7 +118,7 @@
     var view=validate(app.model,input), cv=app.canvas;
     document.body.dataset.smvInteractive='1';
     var previousCaption=document.getElementById('smv-question-caption');if(previousCaption)previousCaption.remove();
-    if(view.caption){var caption=document.createElement('section');caption.id='smv-question-caption';caption.setAttribute('aria-label','Diagram explanation');caption.style.cssText='flex:none;padding:12px 20px;border-bottom:1px solid var(--smv-line,#dbe2ec);background:var(--smv-paper,#fff);color:var(--smv-ink,#24324a);font:600 15px/1.5 system-ui;overflow-wrap:anywhere';caption.textContent=view.caption;var root=document.getElementById('root');if(root){var topbar=document.getElementById('topbar');root.insertBefore(caption,topbar?topbar.nextSibling:root.firstChild);}}
+    // An authored caption is accepted for compatibility but never drawn: the viewer shows the diagram, and the agent says the answer in the conversation.
     document.body.dataset.smvReady='0';delete document.body.dataset.smvError;
     var style=document.getElementById('smv-explanation-style');
     if(!style){style=document.createElement('style');style.id='smv-explanation-style';document.head.appendChild(style);}
