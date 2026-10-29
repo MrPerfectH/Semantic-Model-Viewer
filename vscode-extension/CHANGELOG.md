@@ -2,10 +2,19 @@
 
 ## Next pre-release
 
+- Make diagrams readable without zooming (#187, #190):
+  - Table and measure names render at 11px or larger when a view opens.
+  - The new **Focus** button shows a table's direct neighbourhood, arranged, and pressing it again restores the layout. Focus stays on its table while you click around inside it.
+  - On a short window or a squeezed canvas, the legend and overview map step aside and the bar stays on one line, with display switches behind **View**.
+  - In the Measures view, the header fits one row. In a narrow pane the dependency flow runs top to bottom with tidy right-angle links (**Auto** direction), and inspecting a measure puts its DAX below the graph.
+- Agent answer views (`smv show`) open on the diagram alone; the agent gives the answer in the conversation. **Tools** brings back the table library, toolbar, legend and map. Unrelated tables fade once you start exploring.
+- The side-by-side agent workspace shows one view per pane without pickers, and switches to named tabs below 1100px window width.
+- Direction and DAX-position choices are buttons, and drop-down lists open inside embedded panes.
+
 - Keep the Power BI Desktop connection and External Tools button in pre-release builds only until they pass Windows testing; stable builds hide them behind a switch in `src/features.js`.
 - Fix Windows external CLI launchers in Unicode installation paths under legacy console code pages; restore the original code page and CLI exit status after execution.
 - Lead CLI help and agent guidance with the live interactive viewer; confirm static PNG and offline HTML exports on stderr while preserving JSON stdout (#179).
-- Add an accessible Measure library toggle, collapse it in focused explanations, preserve its snapshot state, and start new focused dependency graphs Left → right while retaining explicit vertical layouts (#180).
+- Add an accessible Measure library toggle, collapse it in focused explanations, and preserve its snapshot state (#180).
 - Include real renderer workspace, viewport and node counts in native editor acceptance evidence.
 
 - Keep matrix columns within usable widths on supported Windows VS Code hosts; retain horizontal scrolling for dense models.

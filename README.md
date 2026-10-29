@@ -17,6 +17,14 @@ The browser demo opens with a synthetic **Contoso Retail** model. No installatio
 
 **[Learning library: watch recordings, download PDF walkthroughs, and follow the guides](docs/learning-library.md)**
 
+## What's new in 0.5
+
+- **Readable diagrams without zooming.** Names stay at 11px or larger. **Focus** shows a table's neighbourhood, arranged, in one press. On small screens the canvas keeps the space, and narrow dependency flows run top to bottom with tidy links.
+- **Ask your agent, see the answer.** `smv show` opens the relevant Tables and Measures views side by side, or as tabs on a narrow window, and the agent gives the answer in the conversation. Live sessions follow the agent's next view.
+- **Fabric connection.** Sign in with a work account, browse workspaces and models, open read-only metadata, reopen it offline and refresh it.
+- **Colours by source or table folder**, with a compact legend, and VS Code light, dark and high-contrast themes.
+- **Bundled CLI and Copilot tools.** Extension packages include the `smv` command and native Copilot tools.
+
 ## Get started
 
 | Where | First steps | Requirements |
@@ -51,13 +59,12 @@ See [plugin setup and commands](docs/claude-code-plugin.md).
 
 The [CLI workspace workflow](docs/cli-workspace-fetch.md) downloads Fabric definitions using an existing Azure CLI login, generates offline diagrams, and records source and renderer hashes. Local models require no cloud login. Choose opening behavior with `--open none|system`.
 
-## Fabric connection (development preview)
+## Fabric connection
 
-The `develop` preview adds work-account sign-in, workspace/model browsing, read-only metadata
-inspection, cached reopening, and manual refresh in the standalone app and desktop VS Code.
-Standard sign-in and live model opening have been tested on macOS, Linux x64 and Windows x64;
-final permission and metadata-fidelity acceptance remains open before promotion to `main`.
-See [Fabric connection status and setup](docs/fabric-connection.md). Read + Build access may
+Work-account sign-in, workspace/model browsing, read-only metadata inspection, cached
+reopening and manual refresh, in the standalone app and desktop VS Code. Standard sign-in
+and live model opening have been tested on macOS, Linux x64 and Windows x64.
+See [Fabric connection setup](docs/fabric-connection.md). Read + Build access may
 expose limited internal metadata.
 
 ## What you can do
