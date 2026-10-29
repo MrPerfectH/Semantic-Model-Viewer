@@ -44,6 +44,7 @@ follows from opening on an answer.
 | Canvas bar: short labels, display switches behind **View** (app) or **Tools** (CLI) | yes | yes | as above |
 | Measures header in one row, graph controls in one toolbar | yes | yes | window under 1280px wide or 800px tall (always in the CLI) |
 | Measures direction **Auto**: top to bottom with rows wrapped to the pane | yes | yes | graph pane under 760px wide, or portrait |
+| Split view **Auto**: graph on top and DAX below in a narrow or tall pane, side by side otherwise (Beside and Below stay available as buttons) | yes | yes | analysis pane under 720px wide, or taller than wide |
 | **Focus** button for a selected table | yes | yes | always |
 | No answer or selection description above the diagram (an authored `caption` is accepted but not drawn) | yes | yes | always |
 | Table library, inspector and editing toolbar closed on open (**Tools** brings them back) | — | yes | answer views |

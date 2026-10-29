@@ -198,7 +198,9 @@ test('every control keeps the answer views whole',{skip:!chrome&&'Install Chrome
     const pressed=[...w.document.querySelectorAll('.mv-direction-switch button')].filter(b=>b.getAttribute('aria-pressed')==='true').map(b=>b.title);
     return {setting:m._graphOrientation,orientation:L.orientation,pressed,crossings:(${CROSSINGS})(m),rootVisible:!!r&&r.left>=s.left-1&&r.right<=s.right+1&&r.top>=s.top-1&&r.bottom<=s.bottom+1,
       sideways:m.gScroll.scrollWidth>m.gScroll.clientWidth+1,fitsAll:m.gScroll.scrollWidth<=m.gScroll.clientWidth+1&&m.gScroll.scrollHeight<=m.gScroll.clientHeight+1,zoom:m._gZoom,nodes:Object.keys(m._nodeEls).length,
-      mode:m._workspaceMode,library:w.document.body.classList.contains('smv-browse-open')};})()`);
+      mode:m._workspaceMode,library:w.document.body.classList.contains('smv-browse-open'),split:m._effectiveSplit,splitSetting:m._splitLayout,pin:w.app.state.gPin,pinVisible:(()=>{const p=w.app.state.gPin,e=p&&m._nodeEls[p]&&m._nodeEls[p].btn;if(!e)return null;const b=e.getBoundingClientRect();return b.left>=s.left-1&&b.right<=s.right+1&&b.top>=s.top-1&&b.bottom<=s.bottom+1;})(),body:(()=>{const b=m.analysisBody.getBoundingClientRect();return [b.width,b.height];})(),
+      // Buttons in one switch share a top and a height, or a label and an arrow sit on different lines.
+      misaligned:[...w.document.querySelectorAll('.mv-direction-switch,.mv-split-switch')].filter(g=>g.getClientRects().length).filter(g=>{const r=[...g.querySelectorAll('button')].map(b=>b.getBoundingClientRect());return r.some(x=>Math.abs(x.top-r[0].top)>0.5||Math.abs(x.height-r[0].height)>0.5);}).map(g=>g.getAttribute('aria-label'))};})()`);
   // Center and the zoom buttons move the camera on purpose; only Fit and Focus promise the whole picture.
   const apart=(s,where)=>assert.deepEqual(s.hits,[],where+': tables on top of each other');
   const whole=(s,where)=>{assert.deepEqual(s.hits,[],where+': tables on top of each other');assert.deepEqual(s.off,[],where+': tables off the canvas');};
@@ -241,7 +243,17 @@ test('every control keeps the answer views whole',{skip:!chrome&&'Install Chrome
       if(await browser.evaluate(`!!(${button('Reset','.mv-graph-toolbar')})(${pane(mi)}.contentWindow.document)`))await click(mi,button('Reset','.mv-graph-toolbar'),'Reset');
       const pick=`(d,w)=>{const n=w.app.measures._nodeEls;return Object.keys(n).map(k=>n[k].btn).find(b=>b&&b.getClientRects().length&&b.getBoundingClientRect().width>0);}`;
       const names=await browser.evaluate(`Object.keys(${pane(mi)}.contentWindow.app.measures._nodeEls)`);assert.ok(names.length>0,'the flow has measures to press');
+      assert.deepEqual((await measures(mi)).misaligned,[],'direction buttons line up');
       await click(mi,pick,'a measure');s=await measures(mi);assert.ok(s.nodes>0,'the flow is still drawn after pressing a measure');if(s.orientation==='tb')assert.deepEqual(s.crossings,[],'after pressing a measure');
+      // Inspecting a measure opens DAX beside or below the graph: below in a narrow or tall pane.
+      if(s.pin)assert.equal(s.pinVisible,true,'the measure just pressed stays fully on screen');
+      if(s.mode==='split'){
+        assert.equal(s.split,s.body[0]<720||s.body[0]<s.body[1]*1.1?'below':'beside','Auto split follows the pane '+s.body.map(Math.round).join('x'));
+        assert.deepEqual(s.misaligned,[],'split and direction buttons line up');
+        await click(mi,`(d)=>d.querySelector('.mv-split-switch button[title="DAX beside the graph"]')`,'Beside');s=await measures(mi);assert.equal(s.splitSetting,'beside');if(s.pin)assert.equal(s.pinVisible,true,'Beside keeps the inspected measure on screen');
+        await click(mi,`(d)=>[...d.querySelectorAll('.mv-split-switch button')].find(b=>b.textContent==='Below')`,'Below');s=await measures(mi);assert.equal(s.split,'below');
+        await click(mi,`(d)=>[...d.querySelectorAll('.mv-split-switch button')].find(b=>b.textContent==='Auto')`,'Auto split');s=await measures(mi);assert.equal(s.splitSetting,'auto');
+      }
       for(const mode of ['DAX','Split view','Dependencies'])await click(mi,button(mode,'.mv-mode-switch'),mode);
       assert.equal((await measures(mi)).mode,'graph');
       await click(mi,button('Library','.mv-header-actions'),'Library');assert.equal((await measures(mi)).library,true,'Library opens');

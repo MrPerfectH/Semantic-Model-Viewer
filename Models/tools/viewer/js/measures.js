@@ -5,7 +5,7 @@
   var el = U.el, sv = U.sv, store = U.store;
   var CAP = 500, NH = 34;
   // Measure names render at NODE_PX; an answer view keeps them at READABLE_PX or larger on screen.
-  var NODE_PX = 12, READABLE_PX = 11, GRAPH_MARGIN = 28, ORIENTATIONS = ['auto', 'lr', 'tb', 'bt'];
+  var NODE_PX = 12, READABLE_PX = 11, GRAPH_MARGIN = 28, ORIENTATIONS = ['auto', 'lr', 'tb', 'bt'], SPLITS = ['auto', 'beside', 'below'];
   /* Grouping: graphs of GROUP_MIN nodes or fewer read fine as plain columns; a home
      table + display folder bundle of GROUP_INLINE or fewer stays inline; anything larger
      becomes a group node showing GROUP_PAGE members behind a "+ N more" expander. */
@@ -40,7 +40,9 @@
       });
     }
     this._workspaceMode = choice(prefs.mode, ['split', 'dax', 'graph'], 'split');
-    this._splitLayout = choice(prefs.split, ['beside', 'below'], 'beside');
+    // Like the direction, the split follows the pane until the reader picks a side.
+    this._splitLayout = this.options.comparison ? choice(prefs.split, ['beside', 'below'], 'beside') : prefs.splitChosen ? choice(prefs.split, SPLITS, 'auto') : 'auto';
+    this._splitChosen = !!prefs.splitChosen && this._splitLayout !== 'auto';
     /* Auto follows the pane: left to right, or top to bottom once the pane is narrow. A
        direction counts as the reader's choice only once picked from the menu; one that was
        merely saved as the old default gives way to Auto. */
@@ -102,7 +104,7 @@
         },
         preferences: {
           mode: choice(prefs.mode, ['split', 'dax', 'graph'], 'split'),
-          split: choice(prefs.split, ['beside', 'below'], 'beside'),
+          split: choice(prefs.split, SPLITS, 'auto'),
           besideShare: share(prefs.besideShare, .55), belowShare: share(prefs.belowShare, .52),
           orientation: choice(prefs.orientation, ORIENTATIONS, 'auto'), wrap: prefs.wrap !== false, sources: !!source || prefs.sources === true,
           fmt: choice(prefs.fmt, ['original', 'long', 'short'], 'long'), inline: prefs.inline === true, plain: prefs.plain === true
@@ -962,6 +964,7 @@
           pane.scrollLeft = Math.max(0, at.x + frame(all.x0, all.x1, mine.x0, mine.x1, pane.clientWidth));
           pane.scrollTop = Math.max(0, at.y + frame(all.y0, all.y1, mine.y0, mine.y1, pane.clientHeight));
         }
+        if (this.app.state.gPin) this.revealGraphNode(this.app.state.gPin);
       }
     },
 
@@ -1075,8 +1078,18 @@
     inspectMeasure: function (name) {
       if (!this.app.msrOf(name)) return;
       if (this._workspaceMode === 'graph') this._workspaceMode = 'split';
-      var self = this;
-      this.app.setState({ gPin: name, gHover: null }, function () { self.centerGraphNode(name); });
+      var self = this, fitting = this._gAutoFit;
+      // A fitted view stays fitted as the split opens; it only scrolls as far as the inspected measure needs.
+      this.app.setState({ gPin: name, gHover: null }, function () { if (fitting) self.revealGraphNode(name); else self.centerGraphNode(name); });
+    },
+    revealGraphNode: function (name) {
+      var pane = this._gEl, R = this._gXY && this._gXY[name], z = this._gZoom || 1;
+      if (!pane || !R || !pane.clientWidth) return;
+      var at = this.graphStageOffset(), x0 = at.x + R.x * z, x1 = x0 + (R.w || 0) * z, y0 = at.y + R.y * z, y1 = y0 + NH * z;
+      if (x1 > pane.scrollLeft + pane.clientWidth - 8) pane.scrollLeft = x1 - pane.clientWidth + 8;
+      if (x0 < pane.scrollLeft + 8) pane.scrollLeft = Math.max(0, x0 - 8);
+      if (y1 > pane.scrollTop + pane.clientHeight - 8) pane.scrollTop = y1 - pane.clientHeight + 8;
+      if (y0 < pane.scrollTop + 8) pane.scrollTop = Math.max(0, y0 - 8);
     },
     buildSourceChoices: function () {
       var state = this.app.state, query = (state.mvSourceQuery || '').trim().toLowerCase(), open = state.mvSourceOpen || {};
@@ -1567,10 +1580,16 @@
         var btn = el('button', { text: item[1], onClick: function () { self.setWorkspaceMode(item[0]); } });
         self._modeButtons[item[0]] = btn; modes.appendChild(btn);
       });
-      this.splitSelect = el('select', { cls: 'mv-layout-select', 'aria-label': 'DAX position in split view',
-        onChange: function (e) { self.setSplitLayout(e.target.value); }
-      }, [el('option', { value: 'beside', text: 'DAX beside graph' }), el('option', { value: 'below', text: 'DAX below graph' })]);
-      if (!this.options.comparison) header.appendChild(el('div', { cls: 'mv-view-controls' }, [modes, this.splitSelect]));
+      /* Where DAX sits in split view, as buttons: native drop-downs do not open inside a
+         frame in some embedded browsers. Auto stacks DAX under the graph in a narrow or
+         tall pane and puts it beside the graph otherwise. */
+      this.splitSwitch = el('div', { cls: 'mv-mode-switch mv-split-switch', role: 'group', 'aria-label': 'DAX position in split view' });
+      this._splitButtons = {};
+      [['auto', 'Auto', 'DAX below the graph in a narrow or tall pane, beside it otherwise'], ['beside', 'Beside', 'DAX beside the graph'], ['below', 'Below', 'DAX below the graph']].forEach(function (item) {
+        var b = el('button', { text: item[1], title: item[2], onClick: function () { self.setSplitLayout(item[0]); } });
+        self._splitButtons[item[0]] = b; self.splitSwitch.appendChild(b);
+      });
+      if (!this.options.comparison) header.appendChild(el('div', { cls: 'mv-view-controls' }, [modes, this.splitSwitch]));
       if (compact && this.libraryToggle) {
         // One row of actions that wraps as a unit beside the heading.
         var actions = el('div', { cls: 'mv-header-actions' });
@@ -1690,7 +1709,7 @@
     },
     savePreferences: function () {
       if (this.options.comparison) return;
-      store.setJSON(PREF_KEY, { libraryCollapsed: this._libraryCollapsed, mode: this._workspaceMode, split: this._splitLayout, orientation: this._graphOrientation, orientationChosen: !!this._orientationChosen,
+      store.setJSON(PREF_KEY, { libraryCollapsed: this._libraryCollapsed, mode: this._workspaceMode, split: this._splitLayout, splitChosen: !!this._splitChosen, orientation: this._graphOrientation, orientationChosen: !!this._orientationChosen,
         besideShare: this._splitShares.beside, belowShare: this._splitShares.below, wrap: this._wrapDax, sources: this._showSources, fmt: this._fmt });
     },
     setWorkspaceMode: function (mode, persist) {
@@ -1704,14 +1723,16 @@
       if (this._workspaceMode !== 'dax') requestAnimationFrame(function () { if (self._gAutoFit) self.fitGraph(self._gAutoFit === 'readable'); else if (persist !== false || !self._showSources) self.gCenter(); self.restorePendingViewport(); });
     },
     setSplitLayout: function (layout) {
-      this._splitLayout = choice(layout, ['beside', 'below'], 'beside');
+      this._splitLayout = choice(layout, this.options.comparison ? ['beside', 'below'] : SPLITS, 'auto');
+      this._splitChosen = this._splitLayout !== 'auto';
       this.savePreferences(); this.applyWorkspaceLayout();
       var self = this;
       requestAnimationFrame(function () { if (self._gAutoFit) self.fitGraph(self._gAutoFit === 'readable'); else self.gCenter(); });
     },
     splitMetrics: function () {
       var rect = this.analysisBody.getBoundingClientRect(), css = getComputedStyle(this.analysisBody);
-      var layout = this._splitLayout === 'beside' && rect.width < 720 ? 'below' : this._splitLayout;
+      var layout = this._splitLayout === 'auto' ? (rect.width < 720 || rect.width < rect.height * 1.1 ? 'below' : 'beside')
+        : this._splitLayout === 'beside' && rect.width < 720 ? 'below' : this._splitLayout;
       var padding = layout === 'below' ? parseFloat(css.paddingTop) + parseFloat(css.paddingBottom) : parseFloat(css.paddingLeft) + parseFloat(css.paddingRight);
       var available = Math.max(1, (layout === 'below' ? rect.height : rect.width) - padding - 12);
       // Clamp the rendered ratio as space changes without discarding the saved preference.
@@ -1729,13 +1750,10 @@
       this.analysisBody.setAttribute('data-split', metrics.layout);
       this.analysisBody.style.setProperty('--mv-graph-share', (metrics.share * 100) + 'fr');
       this.analysisBody.style.setProperty('--mv-dax-share', ((1 - metrics.share) * 100) + 'fr');
-      if (this.splitSelect) {
-        var stacked = this._splitLayout !== metrics.layout;
-        var label = stacked ? 'DAX below graph (narrow view)' : 'DAX beside graph';
-        if (this.splitSelect.options[0].textContent !== label) this.splitSelect.options[0].textContent = label;
-        this.splitSelect.value = this._splitLayout;
-        this.splitSelect.hidden = mode !== 'split';
-        this.splitSelect.title = stacked ? 'DAX is below the graph while the workspace is narrow. Your beside preference returns when there is room.' : 'Choose where DAX appears in split view.';
+      if (this.splitSwitch) {
+        this.splitSwitch.hidden = mode !== 'split';
+        Object.keys(this._splitButtons).forEach(function (k) { self._splitButtons[k].setAttribute('aria-pressed', String(k === self._splitLayout)); });
+        this._splitButtons.beside.title = this._splitLayout === 'beside' && metrics.layout === 'below' ? 'DAX is below the graph while the pane is narrow; beside returns when there is room' : 'DAX beside the graph';
       }
       if (this.splitDivider) {
         this.splitDivider.setAttribute('aria-orientation', metrics.layout === 'below' ? 'horizontal' : 'vertical');

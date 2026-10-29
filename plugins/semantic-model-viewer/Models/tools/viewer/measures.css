@@ -311,3 +311,9 @@ body[data-smv-interactive] .mv-workspace[data-library-collapsed=false]>.mv-libra
 .mv-analysis:has(.mv-compact) .mv-direction-switch button{padding:4px 8px;min-width:30px;font-size:12px}
 .mv-analysis:has(.mv-compact) .mv-direction-switch button{font-weight:600;color:var(--smv-ink,#334155)}
 .mv-analysis:has(.mv-compact) .mv-direction-switch button:not(:first-child){font-size:15px;line-height:1;padding:3px 8px}
+/* Segmented switches: every button the same height with its label centred, so a text label
+   (Auto) and an arrow glyph sit on one line. */
+.mv-direction-switch,.mv-split-switch{display:inline-flex;align-items:center;flex:none}
+.mv-direction-switch[hidden],.mv-split-switch[hidden]{display:none}
+.mv-direction-switch button,.mv-split-switch button{display:inline-flex;align-items:center;justify-content:center;height:26px;line-height:1;box-sizing:border-box;padding:0 9px;font-size:12px}
+.mv-analysis:has(.mv-compact) .mv-direction-switch button:not(:first-child){font-size:14px;padding:0 9px;min-width:30px}

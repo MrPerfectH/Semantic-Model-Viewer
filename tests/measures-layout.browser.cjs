@@ -186,12 +186,13 @@ test('measure workspace occupies wide screens and persists adjustable layouts', 
     assert.ok(bounds.dax.right<=bounds.body.right);
     assert.ok(bounds.graph.height>=240,'Stacked graph retains usable canvas height');
     assert.ok(bounds.dax.height>=320,'DAX remains usable below the graph');
-    assert.equal(await browser.evaluate('view.splitSelect.selectedOptions[0].textContent'),'DAX below graph (narrow view)');
+    assert.equal(await browser.evaluate("view._splitButtons.beside.getAttribute('aria-pressed')"),'true','the saved beside choice stays pressed');
+    assert.match(await browser.evaluate('view._splitButtons.beside.title'),/narrow/,'the button explains why DAX is below for now');
     await browser.evaluate('view.analysisBody.scrollTop=view.analysisBody.scrollHeight');await settle();
     assert.equal(await browser.evaluate("box('.mv-dax-panel').bottom<=box('.mv-analysis-body').bottom"),true,'DAX is reachable by scrolling');
     await browser.send('Emulation.setDeviceMetricsOverride',{width:1920,height:1080,deviceScaleFactor:1,mobile:false});await settle();await settle();
     assert.equal(await browser.evaluate('view._effectiveSplit'),'beside');
-    assert.equal(await browser.evaluate('view.splitSelect.selectedOptions[0].textContent'),'DAX beside graph');
+    assert.equal(await browser.evaluate('view._splitButtons.beside.title'),'DAX beside the graph');
   });
 });
 
@@ -284,18 +285,18 @@ test('table/column dependency flow works in the complete viewer', { skip: !chrom
         await browser.evaluate('app.measures.fitGraph()');await settle();
         const r=await browser.evaluate(`(()=>{
           const v=app.measures,b=v.analysisBody,g=v.gScroll;
-          return {height:g.clientHeight,zoom:v._gZoom,label:v.splitSelect.selectedOptions[0].textContent,overflow:getComputedStyle(b).overflowY,scrolls:b.scrollHeight>b.clientHeight};
+          return {height:g.clientHeight,zoom:v._gZoom,label:v._effectiveSplit,overflow:getComputedStyle(b).overflowY,scrolls:b.scrollHeight>b.clientHeight};
         })()`);
         assert.ok(r.height>=240,JSON.stringify({theme,width,...r}));
         assert.ok(r.zoom>.05,'Fit must not collapse this 26-measure fixture to 2%: '+JSON.stringify(r));
-        assert.equal(r.label,'DAX below graph (narrow view)');
+        assert.equal(r.label,'below','a narrow pane stacks DAX under the graph');
         assert.equal(r.overflow,'auto');assert.equal(r.scrolls,true);
         await browser.evaluate('app.measures.analysisBody.scrollTop=app.measures.analysisBody.scrollHeight');await settle();
         assert.equal(await browser.evaluate(`(()=>{const b=app.measures.analysisBody.getBoundingClientRect(),d=document.querySelector('.mv-dax-panel').getBoundingClientRect();return d.bottom<=b.bottom && d.bottom>b.top})()`),true);
       }
     }
     await browser.evaluate("app.measures.setSplitLayout('below')");await settle();
-    assert.equal(await browser.evaluate('app.measures.splitSelect.selectedOptions[0].textContent'),'DAX below graph');
+    assert.equal(await browser.evaluate("app.measures._effectiveSplit+'|'+app.measures._splitButtons.below.getAttribute('aria-pressed')"),'below|true');
   });
   await t.test('table hover controls do not resize a long-name card',async()=>{
     await browser.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
