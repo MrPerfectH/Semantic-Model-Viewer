@@ -1450,6 +1450,10 @@
         return;
       }
       var roots = this.rootsSet();
+      /* A Focus from the canvas bar stays on the table it was opened on: what is shown does not
+         follow later clicks, which only move the highlight. */
+      var ex = this.app.explorer, anchor = this.app.state.isolate && ex && ex._focusUndo && this.cards[ex._focusUndo.selected] ? ex._focusUndo.selected : null;
+      if (anchor) roots = new Set(Array.from(this.pinned).concat([anchor]));
       var iso = this.app.state.isolate && roots.size > 0;
       var visSet = iso ? this.neighborhood([].concat(Array.from(roots)), this.app.state.focusDepth || 1) : null;
       this._isoSet = visSet;

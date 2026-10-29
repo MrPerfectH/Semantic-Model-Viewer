@@ -88,6 +88,7 @@
     },
     storageKey:function(){return 'smv_workspace_v1_'+this.app.modelKey;},
     loadModel:function(){
+      this._focusUndo=null;
       var data=store.getJSON(this.storageKey(),null), M=this.app.model;
       this.names=new Set(data && Array.isArray(data.tables)?data.tables.filter(function(n){return !!M.byName[n];}):[]);
       this.direction='both';this.depth='all';this.includeInactive=false;this.app.state.focusDepth=1000000;
@@ -163,7 +164,7 @@
       gone.forEach(function(n){self.names.delete(n);cv.pinned.delete(n);cv.marked.delete(n);if(cv.locked===n)cv.locked=null;if(self.app.state.selected===n){self.app.state.selected=null;cv._activeSel=null;}});
       this.commit((gone.length===1?gone[0]+' removed':gone.length+' tables removed')+' from this layout. Undo brings '+(gone.length===1?'it':'them')+' back.',false);
     },
-    blank:function(){this.snapshot();this.names=new Set();this.app.canvas.pinned.clear();this.app.canvas.locked=null;this.app.canvas._activeSel=null;this.app.canvas.selRel=null;this.app.state.selected=null;this.app.state.isolate=false;this.app.canvas.view={x:0,y:0,k:1};this.app.canvas.updateTransform();this.commit('Blank layout ready. Add a table from the library.',false);},
+    blank:function(){this._focusUndo=null;this.snapshot();this.names=new Set();this.app.canvas.pinned.clear();this.app.canvas.locked=null;this.app.canvas._activeSel=null;this.app.canvas.selRel=null;this.app.state.selected=null;this.app.state.isolate=false;this.app.canvas.view={x:0,y:0,k:1};this.app.canvas.updateTransform();this.commit('Blank layout ready. Add a table from the library.',false);},
     /* First screen: a model nobody has arranged yet gets the chosen layout straight away,
        so "Explore all N tables" opens on a readable picture instead of the force-directed
        cloud. A model with saved positions keeps every one of them. */
@@ -211,7 +212,9 @@
        but the selected table and its direct neighbours, and arrange those for this canvas.
        Leaving the focus puts back every table the arrangement moved (unless it has been
        dragged since), so the hidden tables never come back underneath the arranged ones.
-       With another table selected, Focus moves the focus to it. */
+       With another table selected, Focus moves the focus to it. The focus stays anchored on
+       its table: selecting another table inside it, or clicking the background, changes only
+       the highlight, never which tables are shown. */
     focusedOn:function(){return this.app.state.isolate&&this._focusUndo?this._focusUndo.selected:null;},
     toggleFocus:function(){
       var app=this.app,sel=app.state.selected,f=this._focusUndo;
@@ -219,11 +222,11 @@
       if(sel)this.enterFocus(sel);
     },
     enterFocus:function(sel){
-      var cv=this.app.canvas,before={};
+      var app=this.app,cv=app.canvas,before={},depth={focusDepth:app.state.focusDepth,depth:this.depth};
       this.names.forEach(function(n){if(cv.pos[n])before[n]={x:cv.pos[n].x,y:cv.pos[n].y};});
+      this._focusUndo={selected:sel,before:before,after:{},depth:depth};
       this.setFocus(true,1);this.arrangeSubset(true);
-      var after={};Object.keys(before).forEach(function(n){after[n]={x:cv.pos[n].x,y:cv.pos[n].y};});
-      this._focusUndo={selected:sel,before:before,after:after};
+      var after=this._focusUndo.after;Object.keys(before).forEach(function(n){after[n]={x:cv.pos[n].x,y:cv.pos[n].y};});
     },
     leaveFocus:function(){
       var app=this.app,cv=app.canvas,f=this._focusUndo;this._focusUndo=null;
@@ -235,11 +238,15 @@
         });
         cv.persist();
       }
-      this.setFocus(false,app.state.focusDepth||1);cv.renderLines();cv.fitView();
+      // Leaving restores the path depth the reader had before Focus narrowed it to direct neighbours.
+      this.setFocus(false,f?f.depth.focusDepth||1:app.state.focusDepth||1);if(f)this.depth=f.depth.depth;
+      cv.refreshVisibility();cv.applyHighlight();cv.renderLines();cv.fitView();
     },
     setNames:function(names){var M=this.app.model;this.names=new Set(names.filter(function(n){return !!M.byName[n];}));this.commit('Saved layout restored.',false);},
     related:function(){var n=this.app.state.selected;if(!n)return null;return g.RelationshipGraph.traverse(this.app.model,[n],{direction:this.direction,maxDepth:this.depth==='direct'?1:this.depth==='two'?2:Infinity,includeInactive:this.includeInactive});},
     setFocus:function(hidden,depth){
+      // "Dim unrelated" in the inspector ends a Focus the same way the Focus button does.
+      if(!hidden&&this._focusUndo){this.leaveFocus();return;}
       var cv=this.app.canvas;this.snapshot();
       this.app.state.isolate=hidden;
       this.app.state.focusDepth=depth;
@@ -467,8 +474,9 @@
       var zoom=el('div',{cls:'ex-footer-group'});this.nav.appendChild(zoom);
       zoom.appendChild(button('−',function(){cv.zoomOut();},false,'Zoom out'));zoom.appendChild(el('span',{cls:'ex-zoom-value',text:app.state.zoomPct}));zoom.appendChild(button('+',function(){cv.zoomIn();},false,'Zoom in'));zoom.appendChild(button('Fit',function(){cv.fitView();}));
       if(app.state.selected)zoom.appendChild(button(brief?'Center':'Center selected',function(){cv.focusGraph(app.state.selected);},false,'Center '+app.state.selected));
-      if(app.state.selected&&app.state.viewMode==='graph'){
-        var on=!!app.state.isolate&&(!this._focusUndo||this._focusUndo.selected===app.state.selected);
+      var anchored=!!app.state.isolate&&!!this._focusUndo;
+      if((app.state.selected||anchored)&&app.state.viewMode==='graph'){
+        var on=!!app.state.isolate&&(!this._focusUndo||!app.state.selected||this._focusUndo.selected===app.state.selected);
         var focus=button('Focus',function(){self.toggleFocus();},false,on?'Show the whole layout again':'Show only '+app.state.selected+' and its direct neighbours, arranged to read');
         focus.classList.add('ex-mode');focus.setAttribute('aria-pressed',String(on));zoom.appendChild(focus);
       }
