@@ -168,7 +168,10 @@ test('workspace preferences round-trip and invalid stored values receive safe de
   const { view: restored } = harness(saved['smv-measures-workspace-v1']);
   assert.equal(restored._splitShares.beside,.61); assert.equal(restored._splitShares.below,.43); assert.equal(restored._wrapDax,false);
   const { view: safe } = harness({mode:'invalid',split:'invalid',orientation:'invalid',besideShare:-4,belowShare:Infinity});
-  assert.equal(safe._workspaceMode,'split'); assert.equal(safe._splitLayout,'beside'); assert.equal(safe._graphOrientation,'lr');
+  // Invalid or old-default values fall back to Auto, which follows the pane.
+  assert.equal(safe._workspaceMode,'split'); assert.equal(safe._splitLayout,'auto'); assert.equal(safe._graphOrientation,'auto');
+  const { view: legacy } = harness({split:'beside',orientation:'lr'});
+  assert.equal(legacy._splitLayout,'auto','an old saved default gives way to Auto'); assert.equal(legacy._graphOrientation,'auto');
   assert.equal(safe._splitShares.beside,.2); assert.equal(safe._splitShares.below,.52);
 });
 

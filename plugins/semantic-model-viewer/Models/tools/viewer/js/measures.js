@@ -32,7 +32,7 @@
     this._edgeEls = {};
     this._gC = null;
     var prefs = this.options.comparison ? {} : store.getJSON(PREF_KEY, {}) || {};
-    if (!this.options.comparison) {
+    if (!this.options.comparison && typeof window.addEventListener === 'function') {
       var view = this;
       // Crossing the compact-header threshold rebuilds the header for the new room.
       window.addEventListener('resize', function () {
@@ -40,15 +40,18 @@
       });
     }
     this._workspaceMode = choice(prefs.mode, ['split', 'dax', 'graph'], 'split');
-    // Like the direction, the split follows the pane until the reader picks a side.
-    this._splitLayout = this.options.comparison ? choice(prefs.split, ['beside', 'below'], 'beside') : prefs.splitChosen ? choice(prefs.split, SPLITS, 'auto') : 'auto';
-    this._splitChosen = !!prefs.splitChosen && this._splitLayout !== 'auto';
-    /* Auto follows the pane: left to right, or top to bottom once the pane is narrow. A
-       direction counts as the reader's choice only once picked from the menu; one that was
-       merely saved as the old default gives way to Auto. */
-    // A comparison row shares its pair's layout, which is computed left to right or as chosen.
-    this._graphOrientation = this.options.comparison ? 'lr' : prefs.orientationChosen ? choice(prefs.orientation, ORIENTATIONS, 'auto') : 'auto';
-    this._orientationChosen = !!prefs.orientationChosen && this._graphOrientation !== 'auto';
+    // Like the direction, the split follows the pane until the reader picks a side; a saved
+    // 'below' predates Auto and was chosen, a saved 'beside' was the old default.
+    var pickedSplit = prefs.splitChosen || prefs.split === 'below';
+    this._splitLayout = this.options.comparison ? choice(prefs.split, ['beside', 'below'], 'beside') : pickedSplit ? choice(prefs.split, SPLITS, 'auto') : 'auto';
+    this._splitChosen = !!pickedSplit && this._splitLayout !== 'auto';
+    /* Auto follows the pane: left to right, or top to bottom once the pane is narrow. Older
+       versions saved the direction whether or not it was picked, so a saved left to right —
+       the old default — gives way to Auto, while top or bottom first was a deliberate choice
+       and stays. A comparison row shares its pair's layout, computed left to right or as chosen. */
+    var pickedDirection = prefs.orientationChosen || prefs.orientation === 'tb' || prefs.orientation === 'bt';
+    this._graphOrientation = this.options.comparison ? 'lr' : pickedDirection ? choice(prefs.orientation, ORIENTATIONS, 'auto') : 'auto';
+    this._orientationChosen = !!pickedDirection && this._graphOrientation !== 'auto';
     this._splitShares = { beside: share(prefs.besideShare, .55), below: share(prefs.belowShare, .52) };
     this._wrapDax = prefs.wrap !== false;
     this._showSources = prefs.sources === true;
