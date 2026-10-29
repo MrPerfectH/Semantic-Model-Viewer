@@ -25,7 +25,9 @@ async function openBrowser(){
   socket.addEventListener('message',event=>{const data=JSON.parse(event.data);if(data.method==='Runtime.exceptionThrown'&&api.onException){const x=data.params.exceptionDetails;api.onException((x.exception&&x.exception.description||x.text||'').split('\n')[0]);}const p=data.id&&waiting.get(data.id);if(!p)return;waiting.delete(data.id);data.error?p.reject(new Error(data.error.message)):p.resolve(data.result);});
   const send=(method,params={})=>new Promise((resolve,reject)=>{const seq=++id;waiting.set(seq,{resolve,reject});socket.send(JSON.stringify({id:seq,method,params}));});
   const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});if(r.exceptionDetails)throw new Error(r.exceptionDetails.text+': '+JSON.stringify(r.exceptionDetails.exception&&r.exceptionDetails.exception.description));return r.result.value;};
-  return Object.assign(api,{send,evaluate,async close(){socket.close();child.kill('SIGTERM');await new Promise(r=>child.once('exit',r));fs.rmSync(profile,{recursive:true,force:true,maxRetries:10,retryDelay:100});}});
+  return Object.assign(api,{send,evaluate,async close(){socket.close();child.kill('SIGTERM');await new Promise(r=>child.once('exit',r));
+    // Chrome's helper processes can still be writing the profile after the browser exits; a leftover temp folder is not a test failure.
+    try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:10,retryDelay:100});}catch{}}});
 }
 
 /* A link crossing a measure box it does not connect: every segment of its path (corner
@@ -192,7 +194,11 @@ test('every control keeps the answer views whole',{skip:!chrome&&'Install Chrome
     for(let a=0;a<R.length;a++)for(let b=a+1;b<R.length;b++){const p=R[a].r,q=R[b].r;if(p.left<q.right-1&&q.left<p.right-1&&p.top<q.bottom-1&&q.top<p.bottom-1)hits.push(R[a].n+' / '+R[b].n);}
     const off=R.filter(({r})=>r.right<host.left||r.left>host.right||r.bottom<host.top||r.top>host.bottom).map(x=>x.n);
     const px=Math.min(...vis.map(n=>parseFloat(w.getComputedStyle(cv.cards[n].nm).fontSize)*cv.view.k));
-    return {k:cv.view.k,selected:w.app.state.selected,isolate:!!w.app.state.isolate,visible:vis.sort(),hits,off,px,pos:JSON.parse(JSON.stringify(cv.pos)),toolbar:!w.document.getElementById('workspace-toolbar').hidden};})()`);
+    const dimmed=vis.filter(n=>+w.getComputedStyle(cv.cards[n].el).opacity<0.5);
+    // A relationship line drawn strongly to a faded or hidden table is the clutter the fading is meant to remove.
+    const loud=[...cv.svg.querySelectorAll('path[data-smv-kind=relationship]')].map(p=>({r:w.app.model.relationships.find(x=>x.name===p.getAttribute('data-smv-name')),op:+p.getAttribute('opacity')})).filter(x=>x.r&&x.op>0.3&&[x.r.from,x.r.to].some(n=>dimmed.includes(n)||!vis.includes(n))).map(x=>x.r.from+' → '+x.r.to);
+    const focus=[...w.document.querySelectorAll('#canvas-navigation button')].find(b=>b.textContent==='Focus');
+    return {k:cv.view.k,selected:w.app.state.selected,isolate:!!w.app.state.isolate,visible:vis.sort(),hits,off,px,loud,focus:focus?focus.getAttribute('aria-pressed'):null,depth:w.app.explorer.depth,pos:JSON.parse(JSON.stringify(cv.pos)),toolbar:!w.document.getElementById('workspace-toolbar').hidden};})()`);
   const measures=async i=>browser.evaluate(`(()=>{const w=${pane(i)}.contentWindow,m=w.app.measures,L=m._gC&&m._gC.g,s=m.gScroll.getBoundingClientRect();
     const root=w.document.querySelector('.mv-source-card')||(m._nodeEls[L.root]&&m._nodeEls[L.root].btn),r=root&&root.getBoundingClientRect();
     const pressed=[...w.document.querySelectorAll('.mv-direction-switch button')].filter(b=>b.getAttribute('aria-pressed')==='true').map(b=>b.title);
@@ -225,6 +231,18 @@ test('every control keeps the answer views whole',{skip:!chrome&&'Install Chrome
       await click(ti,button('Focus'),'leave Focus');s=await tables(ti);
       assert.equal(s.isolate,false);assert.deepEqual(s.visible,start.visible,'every table is back');whole(s,'after leaving Focus');
       assert.deepEqual(s.pos,start.pos,'tables return to where they were');
+      assert.equal(s.depth,start.depth,'leaving Focus restores the path depth');
+      // Focus stays on its table: a background click or a selection inside it only moves the highlight.
+      await click(ti,card('Product Category'),'Product Category');await click(ti,button('Focus'),'Focus on Product Category');
+      const anchored=(await tables(ti)).visible;
+      const blank=`(d,w)=>{const r=w.app.canvas.host.getBoundingClientRect();return {getBoundingClientRect:()=>({left:r.left+6,top:r.top+6,width:4,height:4}),scrollIntoView(){}};}`;
+      await click(ti,blank,'empty canvas');s=await tables(ti);
+      assert.deepEqual(s.visible,anchored,'a background click keeps the focused tables');assert.equal(s.focus,'true','Focus can still be left with nothing selected');whole(s,'background click in Focus');assert.deepEqual(s.loud,[],'background click in Focus: loud lines');
+      await click(ti,card('Product'),'Product inside the focus');s=await tables(ti);
+      assert.deepEqual(s.visible,anchored,'selecting inside the focus keeps the focused tables');whole(s,'selection inside Focus');assert.deepEqual(s.loud,[],'selection inside Focus: loud lines');
+      await click(ti,button('Focus'),'leave Focus again');await click(ti,blank,'empty canvas');await click(ti,button('Focus'),'no Focus without a table').catch(()=>{});
+      s=await tables(ti);assert.equal(s.isolate,false);assert.deepEqual(s.pos,start.pos,'positions survive a second Focus');whole(s,'after the second Focus');
+      for(const name of start.visible){await click(ti,card(name),'card '+name);assert.deepEqual((await tables(ti)).loud,[],'lines touching faded tables stay faint while '+name+' is selected');}
       for(const z of ['+','+','+','−','−','−','−']){await click(ti,button(z),'zoom '+z);apart(await tables(ti),'zoom '+z);}
       await click(ti,button('Fit'),'Fit');s=await tables(ti);whole(s,'Fit');assert.ok(s.px>=READABLE-0.05,'Fit names '+s.px.toFixed(1)+'px');
       await click(ti,button('Tools'),'Tools');assert.equal((await tables(ti)).toolbar,true,'Tools shows the toolbar');whole(await tables(ti),'Tools open');
