@@ -109,7 +109,13 @@ size. **Fit all** and the direction menu still override it.
   Inventory, a chain-shaped star with a three-layer flow, and Sales, a dense flow.
   It opens both the side-by-side workspace and the single views at the sizes above,
   then asserts every part of the bar. At 1000×800 it checks that the workspace shows
-  tabs only, and that each tab's view is readable once opened.
+  tabs only, and that each tab's view is readable once opened. A third test presses
+  every control with real mouse events in the side-by-side workspace at 1680×1518 and
+  1280×800, and in tabs at 1000×800. It selects each table, then uses Center, Focus,
+  refocus on another table, leaving Focus, zoom, Fit and Tools. In Measures it uses each
+  direction button, Fit all, Center, Columns, Expand all and Reset, clicks a measure,
+  switches views and opens and closes the library. After every step it checks for
+  overlapping tables, tables off the canvas, links through measures and script errors.
   In narrow panes it also checks for top to bottom, no sideways scrolling and no link
   crossing a measure it does not connect. A second test opens the main app at 1280×720
   and checks the size rules above. Left-to-right flows still let a link that skips a

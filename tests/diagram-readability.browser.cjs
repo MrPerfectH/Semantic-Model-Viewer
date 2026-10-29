@@ -21,10 +21,11 @@ async function openBrowser(){
   const socket=new WebSocket(targets.find(t=>t.type==='page').webSocketDebuggerUrl);
   await new Promise((resolve,reject)=>{socket.addEventListener('open',resolve,{once:true});socket.addEventListener('error',reject,{once:true});});
   let id=0;const waiting=new Map();
-  socket.addEventListener('message',event=>{const data=JSON.parse(event.data);const p=data.id&&waiting.get(data.id);if(!p)return;waiting.delete(data.id);data.error?p.reject(new Error(data.error.message)):p.resolve(data.result);});
+  const api={};
+  socket.addEventListener('message',event=>{const data=JSON.parse(event.data);if(data.method==='Runtime.exceptionThrown'&&api.onException){const x=data.params.exceptionDetails;api.onException((x.exception&&x.exception.description||x.text||'').split('\n')[0]);}const p=data.id&&waiting.get(data.id);if(!p)return;waiting.delete(data.id);data.error?p.reject(new Error(data.error.message)):p.resolve(data.result);});
   const send=(method,params={})=>new Promise((resolve,reject)=>{const seq=++id;waiting.set(seq,{resolve,reject});socket.send(JSON.stringify({id:seq,method,params}));});
   const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});if(r.exceptionDetails)throw new Error(r.exceptionDetails.text+': '+JSON.stringify(r.exceptionDetails.exception&&r.exceptionDetails.exception.description));return r.result.value;};
-  return {send,evaluate,async close(){socket.close();child.kill('SIGTERM');await new Promise(r=>child.once('exit',r));fs.rmSync(profile,{recursive:true,force:true});}};
+  return Object.assign(api,{send,evaluate,async close(){socket.close();child.kill('SIGTERM');await new Promise(r=>child.once('exit',r));fs.rmSync(profile,{recursive:true,force:true});}});
 }
 
 /* A link crossing a measure box it does not connect: every segment of its path (corner
@@ -161,4 +162,96 @@ test('the main app gives a small screen to the diagram',{skip:!chrome&&'Install 
   assert.equal(measures.compact,true,'one-row Measures header');
   if(measures.pane<760){assert.equal(measures.orientation,'tb');assert.equal(measures.sideways,false,'the flow scrolls sideways');}
   if(measures.orientation==='tb')assert.deepEqual(measures.crossings,[],'links cross measures they do not connect');
+});
+
+/* Every control, pressed with real mouse events at its on-screen position, in the workspace
+   panes. After each step the picture must still be whole: no two tables on top of each
+   other, the focus on screen, names readable at the opening zoom, no link through a measure
+   in top-to-bottom flows, and no script error in either pane. */
+test('every control keeps the answer views whole',{skip:!chrome&&'Install Chrome or set CHROME_PATH',timeout:300000},async t=>{
+  const state=fs.mkdtempSync(path.join(os.tmpdir(),'smv-interact-state-')),env={...process.env,SMV_STATE_DIR:state,SMV_OPENER:'none'};
+  const smv=args=>{const r=spawnSync(process.execPath,[path.join(root,'bin/smv.cjs'),...args],{cwd:root,env,encoding:'utf8',timeout:60000});if(r.status)throw new Error(r.stderr||r.stdout);return r.stdout;};
+  const browser=await openBrowser();
+  t.after(async()=>{await browser.close();try{smv(['session','stop','--all']);}catch{}fs.rmSync(state,{recursive:true,force:true});});
+  const errors=[];
+  await browser.send('Page.enable');await browser.send('Runtime.enable');
+  const shown=JSON.parse(smv(['show',model,'--table','Inventory','--new-session','--open','none','--json']));
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  const pane=i=>`document.querySelectorAll('iframe')[${i}]`;
+  /* A real click: the element's centre in page coordinates (iframe offset included). */
+  const click=async(i,finder,what)=>{
+    const at=await browser.evaluate(`(()=>{const f=${pane(i)},o=f.getBoundingClientRect(),w=f.contentWindow,d=w.document;const el=(${finder})(d,w);if(!el)return null;el.scrollIntoView({block:'nearest',inline:'nearest'});const r=el.getBoundingClientRect();return {x:o.left+r.left+r.width/2,y:o.top+r.top+r.height/2,w:r.width,h:r.height};})()`);
+    assert.ok(at&&at.w>0&&at.h>0,'nothing visible to press: '+what);
+    for(const type of ['mouseMoved','mousePressed','mouseReleased'])await browser.send('Input.dispatchMouseEvent',{type,x:at.x,y:at.y,button:'left',clickCount:1});
+    await sleep(450);
+  };
+  const button=(text,scope='#canvas-navigation')=>`(d)=>[...d.querySelectorAll('${scope} button')].find(b=>b.textContent===${JSON.stringify(text)}&&b.getClientRects().length)`;
+  const card=name=>`(d,w)=>w.app.canvas.cards[${JSON.stringify(name)}].head`;
+  const tables=async i=>browser.evaluate(`(()=>{const w=${pane(i)}.contentWindow,cv=w.app.canvas,host=cv.host.getBoundingClientRect();
+    const vis=Object.keys(cv.cards).filter(n=>cv.cards[n].el.style.display!=='none'),R=vis.map(n=>({n,r:cv.cards[n].el.getBoundingClientRect()})),hits=[];
+    for(let a=0;a<R.length;a++)for(let b=a+1;b<R.length;b++){const p=R[a].r,q=R[b].r;if(p.left<q.right-1&&q.left<p.right-1&&p.top<q.bottom-1&&q.top<p.bottom-1)hits.push(R[a].n+' / '+R[b].n);}
+    const off=R.filter(({r})=>r.right<host.left||r.left>host.right||r.bottom<host.top||r.top>host.bottom).map(x=>x.n);
+    const px=Math.min(...vis.map(n=>parseFloat(w.getComputedStyle(cv.cards[n].nm).fontSize)*cv.view.k));
+    return {k:cv.view.k,selected:w.app.state.selected,isolate:!!w.app.state.isolate,visible:vis.sort(),hits,off,px,pos:JSON.parse(JSON.stringify(cv.pos)),toolbar:!w.document.getElementById('workspace-toolbar').hidden};})()`);
+  const measures=async i=>browser.evaluate(`(()=>{const w=${pane(i)}.contentWindow,m=w.app.measures,L=m._gC&&m._gC.g,s=m.gScroll.getBoundingClientRect();
+    const root=w.document.querySelector('.mv-source-card')||(m._nodeEls[L.root]&&m._nodeEls[L.root].btn),r=root&&root.getBoundingClientRect();
+    const pressed=[...w.document.querySelectorAll('.mv-direction-switch button')].filter(b=>b.getAttribute('aria-pressed')==='true').map(b=>b.title);
+    return {setting:m._graphOrientation,orientation:L.orientation,pressed,crossings:(${CROSSINGS})(m),rootVisible:!!r&&r.left>=s.left-1&&r.right<=s.right+1&&r.top>=s.top-1&&r.bottom<=s.bottom+1,
+      sideways:m.gScroll.scrollWidth>m.gScroll.clientWidth+1,fitsAll:m.gScroll.scrollWidth<=m.gScroll.clientWidth+1&&m.gScroll.scrollHeight<=m.gScroll.clientHeight+1,zoom:m._gZoom,nodes:Object.keys(m._nodeEls).length,
+      mode:m._workspaceMode,library:w.document.body.classList.contains('smv-browse-open')};})()`);
+  // Center and the zoom buttons move the camera on purpose; only Fit and Focus promise the whole picture.
+  const apart=(s,where)=>assert.deepEqual(s.hits,[],where+': tables on top of each other');
+  const whole=(s,where)=>{assert.deepEqual(s.hits,[],where+': tables on top of each other');assert.deepEqual(s.off,[],where+': tables off the canvas');};
+  const run=async(width,height,ti,mi,label)=>{
+    await browser.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:false});
+    await browser.send('Page.navigate',{url:shown.workspaceUrl});await sleep(800);await browser.evaluate(READ);
+    const errs=errors.length;
+    await t.test(label+': tables',async()=>{
+      const start=await tables(ti);whole(start,'opening');assert.ok(start.px>=READABLE-0.05,'opening names '+start.px.toFixed(1)+'px');
+      for(const name of start.visible){await click(ti,card(name),'card '+name);const s=await tables(ti);assert.equal(s.selected,name,'clicking '+name+' selects it');whole(s,'after selecting '+name);}
+      await click(ti,card('Product Category'),'Product Category');
+      await click(ti,button('Center'),'Center');apart(await tables(ti),'Center');
+      await click(ti,button('Focus'),'Focus');let s=await tables(ti);
+      assert.ok(s.isolate&&s.visible.length<start.visible.length,'Focus hides unrelated tables');whole(s,'Focus');assert.ok(s.px>=READABLE-0.05,'focused names '+s.px.toFixed(1)+'px');
+      await click(ti,card('Product'),'Product inside the focus');
+      await click(ti,button('Focus'),'Focus on Product');s=await tables(ti);
+      assert.equal(s.isolate,true,'Focus with another table selected moves the focus');assert.ok(s.visible.includes('Inventory'),'Product neighbourhood');whole(s,'refocus');
+      await click(ti,button('Focus'),'leave Focus');s=await tables(ti);
+      assert.equal(s.isolate,false);assert.deepEqual(s.visible,start.visible,'every table is back');whole(s,'after leaving Focus');
+      assert.deepEqual(s.pos,start.pos,'tables return to where they were');
+      for(const z of ['+','+','+','−','−','−','−']){await click(ti,button(z),'zoom '+z);apart(await tables(ti),'zoom '+z);}
+      await click(ti,button('Fit'),'Fit');s=await tables(ti);whole(s,'Fit');assert.ok(s.px>=READABLE-0.05,'Fit names '+s.px.toFixed(1)+'px');
+      await click(ti,button('Tools'),'Tools');assert.equal((await tables(ti)).toolbar,true,'Tools shows the toolbar');whole(await tables(ti),'Tools open');
+      await click(ti,button('Tools'),'Tools again');assert.equal((await tables(ti)).toolbar,false,'Tools hides the toolbar again');
+    });
+    if(mi==null)return;
+    await t.test(label+': measures',async()=>{
+      for(const [dir,title] of [['lr','Left to right'],['tb','Top to bottom'],['bt','Bottom to top'],['auto','Left to right; top to bottom when the pane is narrow']]){
+        await click(mi,`(d)=>d.querySelector('.mv-direction-switch button[title="${title}"]')`,'direction '+dir);
+        const s=await measures(mi);assert.equal(s.setting,dir,'direction button '+dir);assert.deepEqual(s.pressed,[title],'only the chosen direction is pressed');
+        if(dir!=='auto')assert.equal(s.orientation,dir);
+        if(s.orientation==='tb')assert.deepEqual(s.crossings,[],dir+': links through measures');
+      }
+      await click(mi,button('Fit all','.mv-graph-toolbar'),'Fit all');assert.equal((await measures(mi)).fitsAll,true,'Fit all shows the whole flow');
+      await click(mi,button('Center','.mv-graph-toolbar'),'Center');assert.equal((await measures(mi)).rootVisible,true,'Center shows the analyzed table');
+      await click(mi,`(d)=>[...d.querySelectorAll('.mv-source-controls input')].find(x=>x.getClientRects().length)`,'Columns off');let s=await measures(mi);if(s.orientation==='tb')assert.deepEqual(s.crossings,[],'Columns off');
+      await click(mi,`(d)=>[...d.querySelectorAll('.mv-source-controls input')].find(x=>x.getClientRects().length)`,'Columns on');s=await measures(mi);if(s.orientation==='tb')assert.deepEqual(s.crossings,[],'Columns on');
+      // Expand all and Reset appear only when something is collapsed or expanded.
+      if(await browser.evaluate(`!!(${button('Expand all','.mv-graph-toolbar')})(${pane(mi)}.contentWindow.document)`)){await click(mi,button('Expand all','.mv-graph-toolbar'),'Expand all');s=await measures(mi);if(s.orientation==='tb')assert.deepEqual(s.crossings,[],'Expand all');}
+      if(await browser.evaluate(`!!(${button('Reset','.mv-graph-toolbar')})(${pane(mi)}.contentWindow.document)`))await click(mi,button('Reset','.mv-graph-toolbar'),'Reset');
+      const pick=`(d,w)=>{const n=w.app.measures._nodeEls;return Object.keys(n).map(k=>n[k].btn).find(b=>b&&b.getClientRects().length&&b.getBoundingClientRect().width>0);}`;
+      const names=await browser.evaluate(`Object.keys(${pane(mi)}.contentWindow.app.measures._nodeEls)`);assert.ok(names.length>0,'the flow has measures to press');
+      await click(mi,pick,'a measure');s=await measures(mi);assert.ok(s.nodes>0,'the flow is still drawn after pressing a measure');if(s.orientation==='tb')assert.deepEqual(s.crossings,[],'after pressing a measure');
+      for(const mode of ['DAX','Split view','Dependencies'])await click(mi,button(mode,'.mv-mode-switch'),mode);
+      assert.equal((await measures(mi)).mode,'graph');
+      await click(mi,button('Library','.mv-header-actions'),'Library');assert.equal((await measures(mi)).library,true,'Library opens');
+      await browser.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});await browser.send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});await sleep(400);
+      assert.equal((await measures(mi)).library,false,'Escape closes the library');
+    });
+    assert.deepEqual(errors.slice(errs),[],label+': script errors');
+  };
+  browser.onException=e=>errors.push(e);
+  await run(1680,1518,0,1,'side by side 1680x1518');
+  await run(1280,800,0,1,'side by side 1280x800');
+  await run(1000,800,0,null,'tabs 1000x800');
 });

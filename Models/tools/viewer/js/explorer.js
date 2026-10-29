@@ -209,17 +209,33 @@
     },
     /* One step from an unreadable overview to a readable neighbourhood: hide everything
        but the selected table and its direct neighbours, and arrange those for this canvas.
-       Pressing it again undoes exactly that, unless the layout has been changed since. */
+       Leaving the focus puts back every table the arrangement moved (unless it has been
+       dragged since), so the hidden tables never come back underneath the arranged ones.
+       With another table selected, Focus moves the focus to it. */
+    focusedOn:function(){return this.app.state.isolate&&this._focusUndo?this._focusUndo.selected:null;},
     toggleFocus:function(){
+      var app=this.app,sel=app.state.selected,f=this._focusUndo;
+      if(app.state.isolate){this.leaveFocus();if(f&&sel&&sel!==f.selected)this.enterFocus(sel);return;}
+      if(sel)this.enterFocus(sel);
+    },
+    enterFocus:function(sel){
+      var cv=this.app.canvas,before={};
+      this.names.forEach(function(n){if(cv.pos[n])before[n]={x:cv.pos[n].x,y:cv.pos[n].y};});
+      this.setFocus(true,1);this.arrangeSubset(true);
+      var after={};Object.keys(before).forEach(function(n){after[n]={x:cv.pos[n].x,y:cv.pos[n].y};});
+      this._focusUndo={selected:sel,before:before,after:after};
+    },
+    leaveFocus:function(){
       var app=this.app,cv=app.canvas,f=this._focusUndo;this._focusUndo=null;
-      if(app.state.isolate){
-        if(f&&this.history.length===f.after&&app.state.selected===f.selected){for(var i=0;i<f.steps;i++)this.undo();cv.fitView();}
-        else{this.setFocus(false,app.state.focusDepth||1);cv.fitView();}
-        return;
+      if(f){
+        Object.keys(f.before).forEach(function(n){
+          var p=cv.pos[n],a=f.after[n],b=f.before[n];
+          if(!p||!a||p.x!==a.x||p.y!==a.y||(b.x===a.x&&b.y===a.y))return;
+          cv.pos[n]={x:b.x,y:b.y};if(cv.cards[n])cv.layoutCard(n);
+        });
+        cv.persist();
       }
-      if(!app.state.selected)return;
-      var before=this.history.length;this.setFocus(true,1);this.arrangeSubset(true);
-      this._focusUndo={steps:this.history.length-before,after:this.history.length,selected:app.state.selected};
+      this.setFocus(false,app.state.focusDepth||1);cv.renderLines();cv.fitView();
     },
     setNames:function(names){var M=this.app.model;this.names=new Set(names.filter(function(n){return !!M.byName[n];}));this.commit('Saved layout restored.',false);},
     related:function(){var n=this.app.state.selected;if(!n)return null;return g.RelationshipGraph.traverse(this.app.model,[n],{direction:this.direction,maxDepth:this.depth==='direct'?1:this.depth==='two'?2:Infinity,includeInactive:this.includeInactive});},
@@ -452,8 +468,9 @@
       zoom.appendChild(button('−',function(){cv.zoomOut();},false,'Zoom out'));zoom.appendChild(el('span',{cls:'ex-zoom-value',text:app.state.zoomPct}));zoom.appendChild(button('+',function(){cv.zoomIn();},false,'Zoom in'));zoom.appendChild(button('Fit',function(){cv.fitView();}));
       if(app.state.selected)zoom.appendChild(button(brief?'Center':'Center selected',function(){cv.focusGraph(app.state.selected);},false,'Center '+app.state.selected));
       if(app.state.selected&&app.state.viewMode==='graph'){
-        var focus=button('Focus',function(){self.toggleFocus();},false,app.state.isolate?'Show the whole layout again':'Show only '+app.state.selected+' and its direct neighbours, arranged to read');
-        focus.classList.add('ex-mode');focus.setAttribute('aria-pressed',String(!!app.state.isolate));zoom.appendChild(focus);
+        var on=!!app.state.isolate&&(!this._focusUndo||this._focusUndo.selected===app.state.selected);
+        var focus=button('Focus',function(){self.toggleFocus();},false,on?'Show the whole layout again':'Show only '+app.state.selected+' and its direct neighbours, arranged to read');
+        focus.classList.add('ex-mode');focus.setAttribute('aria-pressed',String(on));zoom.appendChild(focus);
       }
       if(this.compact){
         var tools=button('Tools',function(){self.toggleTools();},false,this.toolsOpen?'Hide layout tools and display options':'Show layout tools, table library and display options');

@@ -498,7 +498,9 @@
     gWrapRows: function (slots, colW, budget, place) {
       var GX = 32, ROWGAP = 16, BAND = 76, PX = 100, PY = 84, RADIUS = 9;
       var bands = slots.map(function (ss, li) {
-        var cw = colW[li], per = Math.max(1, Math.min(ss.length, Math.floor((budget + GX) / (cw + GX)))), rows = [];
+        var cw = colW[li], fit = Math.max(1, Math.min(ss.length, Math.floor((budget + GX) / (cw + GX)))), rows = [];
+        // As many rows as the width forces, filled evenly: four measures that need two rows go 2 + 2, not 3 + 1.
+        var per = Math.ceil(ss.length / Math.ceil(ss.length / fit));
         for (var i = 0; i < ss.length; i += per) rows.push(ss.slice(i, i + per));
         var heights = rows.map(function (r) { return r.reduce(function (a, s) { return Math.max(a, s.h); }, NH); });
         return { cw: cw, per: per, rows: rows, heights: heights, width: per * cw + (per - 1) * GX,
@@ -1605,7 +1607,18 @@
       this.expandBtn = graphButton('Expand all', 'Expand all upstream and downstream branches and groups, up to 500 measures', function () { self.expandGraphAll(); });
       this.resetBtn = graphButton('Reset', 'Reset dependency expansion and comparison', function () { app.setState({ gExtra: {}, gPin: null, gHover: null }); });
       graphToolbar.appendChild(this.expandBtn); graphToolbar.appendChild(this.resetBtn);
-      if (compact) { graphToolbar.appendChild(sourceControls); graphToolbar.appendChild(this.orientationSelect); }
+      if (compact) {
+        /* Direction as visible buttons, not a drop-down: one press, and it works in embedded
+           browsers that never open a native list inside a frame. */
+        var directions = el('div', { cls: 'mv-mode-switch mv-direction-switch', role: 'group', 'aria-label': 'Dependency graph direction' });
+        this._directionButtons = {};
+        [['auto', 'Auto', 'Left to right; top to bottom when the pane is narrow'], ['lr', '→', 'Left to right'], ['tb', '↓', 'Top to bottom'], ['bt', '↑', 'Bottom to top']].forEach(function (d) {
+          var b = el('button', { text: d[1], title: d[2], 'aria-label': d[2], onClick: function () { self.setGraphOrientation(d[0]); } });
+          self._directionButtons[d[0]] = b; directions.appendChild(b);
+        });
+        graphToolbar.appendChild(sourceControls); graphToolbar.appendChild(directions);
+        this.updateDirectionLabel();
+      } else this._directionButtons = null;
       graphPane.appendChild(graphToolbar);
       this.cappedEl = el('div', { cls: 'mv-cap-notice', text: '500-measure display limit reached. Additional upstream or downstream measures are omitted. Analyze another measure to explore them.' });
       graphPane.appendChild(this.cappedEl);
@@ -1753,6 +1766,8 @@
     },
     updateDirectionLabel: function () {
       if (this.orientationSelect) this.orientationSelect.value = this._graphOrientation;
+      var current = this._graphOrientation;
+      if (this._directionButtons) Object.keys(this._directionButtons).forEach(function (k) { this._directionButtons[k].setAttribute('aria-pressed', String(k === current)); }, this);
       if (this.directionLabel) this.directionLabel.textContent = this._graphOrientation === 'auto' ? 'Left to right; top to bottom when the pane is narrow'
         : this._graphOrientation === 'tb' ? 'Upstream above · downstream below'
         : this._graphOrientation === 'bt' ? 'Downstream above · upstream below' : 'Upstream → analyzed measure → downstream';
