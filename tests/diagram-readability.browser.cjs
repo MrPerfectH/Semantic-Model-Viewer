@@ -25,7 +25,9 @@ async function openBrowser(){
   socket.addEventListener('message',event=>{const data=JSON.parse(event.data);if(data.method==='Runtime.exceptionThrown'&&api.onException){const x=data.params.exceptionDetails;api.onException((x.exception&&x.exception.description||x.text||'').split('\n')[0]);}const p=data.id&&waiting.get(data.id);if(!p)return;waiting.delete(data.id);data.error?p.reject(new Error(data.error.message)):p.resolve(data.result);});
   const send=(method,params={})=>new Promise((resolve,reject)=>{const seq=++id;waiting.set(seq,{resolve,reject});socket.send(JSON.stringify({id:seq,method,params}));});
   const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});if(r.exceptionDetails)throw new Error(r.exceptionDetails.text+': '+JSON.stringify(r.exceptionDetails.exception&&r.exceptionDetails.exception.description));return r.result.value;};
-  return Object.assign(api,{send,evaluate,async close(){socket.close();child.kill('SIGTERM');await new Promise(r=>child.once('exit',r));fs.rmSync(profile,{recursive:true,force:true,maxRetries:10,retryDelay:100});}});
+  return Object.assign(api,{send,evaluate,async close(){socket.close();child.kill('SIGTERM');await new Promise(r=>child.once('exit',r));
+    // Chrome's helper processes can still be writing the profile after the browser exits; a leftover temp folder is not a test failure.
+    try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:10,retryDelay:100});}catch{}}});
 }
 
 /* A link crossing a measure box it does not connect: every segment of its path (corner
