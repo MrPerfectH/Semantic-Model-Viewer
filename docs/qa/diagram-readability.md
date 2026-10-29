@@ -49,6 +49,28 @@ follows from opening on an answer.
 | Table library, inspector and editing toolbar closed on open (**Tools** brings them back) | — | yes | answer views |
 | Measures fit floor at 11px names, framed on the analyzed node | — | yes | answer views (the app opens at 100%) |
 | No per-pane view pickers when each view has its own pane | — | yes | side-by-side workspace |
+| Side by side offered; otherwise one view at a time with named tabs | — | yes | workspace window 1100px or wider |
+
+## Where side by side stops
+
+Measured with `smv show "Contoso Retail"` for Inventory (6 tables, 6 measures) and Sales
+(12 tables, 34 measures), in the side-by-side workspace and in one full-width view:
+
+| Window | Pane | Side by side: Tables | Side by side: Measures | Full width: Sales measures shown |
+|---|---|---|---|---|
+| 800–900 | stacked, 371px tall | Sales names 8.4px | graph 254px tall, 0–50% shown | 53% |
+| 1000 | 491px | 41% zoom, 12px | one measure per row, header in two rows | 53% |
+| 1100 | 541px | 44% zoom, 11.4px | two per row; Inventory flow whole | 68% |
+| 1280 | 631px | 55% zoom, 12px | two per row; Sales 15% shown | 68% |
+| 1440 | 711px | 62% zoom, 11.7px | one-row header | 85% |
+
+Names stay at 11px or larger from 1000px up, so text size does not set the line. The
+Measures pane does. Under about 540px a top-to-bottom flow fits only one measure per row
+and stops reading as a flow, while a full-width view of the same answer shows its whole
+picture with full cards. Below 1100px the workspace therefore shows one view at a time:
+each view gets a named tab, and side by side is not offered. The old fallback, stacking
+both panes vertically under 900px, is gone. The choice made at a wider size is kept and
+comes back when the window widens.
 
 ## Top to bottom in a narrow pane
 
@@ -86,7 +108,8 @@ size. **Fit all** and the direction menu still override it.
 - `tests/diagram-readability.browser.cjs` opens `smv show` for Contoso Retail
   Inventory, a chain-shaped star with a three-layer flow, and Sales, a dense flow.
   It opens both the side-by-side workspace and the single views at the sizes above,
-  then asserts every part of the bar.
+  then asserts every part of the bar. At 1000×800 it checks that the workspace shows
+  tabs only, and that each tab's view is readable once opened.
   In narrow panes it also checks for top to bottom, no sideways scrolling and no link
   crossing a measure it does not connect. A second test opens the main app at 1280×720
   and checks the size rules above. Left-to-right flows still let a link that skips a

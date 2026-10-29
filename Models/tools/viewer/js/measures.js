@@ -1666,6 +1666,8 @@
                and nothing left spinning when the pane never opens at all. */
             self.applyInitialViewport();
             if (self._gC && !self.options.layout && self._gC.size !== self.layoutSizeKey()) self.renderFlow();
+            // A view restored while hidden (a background tab) gets its saved viewport now.
+            self.restorePendingViewport();
             if (self._gAutoFit) self.fitGraph(self._gAutoFit === 'readable');
           });
         });

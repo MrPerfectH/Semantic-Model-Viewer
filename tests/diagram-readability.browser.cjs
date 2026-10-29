@@ -40,13 +40,13 @@ const CROSSINGS=`m=>{
    has applied its view. Text size is the computed font of the element carrying the name,
    times the zoom it is drawn at. */
 const READ=`(async()=>{
-  const frames=[...document.querySelectorAll('iframe')];
+  const frames=[...document.querySelectorAll('iframe')].filter(f=>f.getClientRects().length);
   const wins=frames.length?frames.map(f=>({w:f.contentWindow,r:f.getBoundingClientRect()})):[{w:window,r:{width:innerWidth,height:innerHeight}}];
   for(const {w} of wins)for(let i=0;i<300&&!(w.document.body&&w.document.body.dataset.smvReady==='1');i++)await new Promise(r=>setTimeout(r,50));
   await new Promise(r=>setTimeout(r,700));
   for(const {w} of wins)w.SMV_LINK_CROSSINGS=${CROSSINGS};
   const shown=(w,sel)=>{const n=w.document.querySelector(sel);return !!n&&!n.hidden&&n.getClientRects().length>0;};
-  return {workspace:frames.length?{pickers:[...document.querySelectorAll('section select')].filter(s=>s.getClientRects().length).length,panes:frames.length}:null,panes:wins.map(({w,r})=>{
+  return {workspace:frames.length?{pickers:[...document.querySelectorAll('section select')].filter(s=>s.getClientRects().length).length,panes:frames.length,layout:document.body.dataset.layout,choice:!!document.querySelector('#split')&&document.querySelector('#split').getClientRects().length>0,tabs:[...document.querySelectorAll('#tabs-bar button')].filter(b=>b.getClientRects().length).map(b=>b.textContent)}:null,panes:wins.map(({w,r})=>{
     const app=w.app,out={pane:[Math.round(r.width),Math.round(r.height)],mode:app.state.viewMode,caption:!!w.document.getElementById('smv-question-caption')};
     if(app.state.viewMode==='measures'){
       const m=app.measures,z=m._gZoom||1,s=m.gScroll.getBoundingClientRect(),G=m._g;
@@ -99,8 +99,24 @@ test('answer views from smv show meet the readability bar',{skip:!chrome&&'Insta
     const shown=JSON.parse(smv(['show',model,'--table',table,'--new-session','--open','none','--json']));
     assert.equal(shown.views.length,2);
     assert.ok(shown.views[0].answer&&shown.views[1].answer,'the answer still reaches the agent');
+    /* Below 1100px a side-by-side pane would be under ~540px: the workspace shows one view
+       at a time, full width, with a named tab for each, and offers no side by side. */
+    {
+      const r=await open(shown.workspaceUrl,1000,800);
+      assert.equal(r.workspace.layout,'tabs','a 1000px window shows tabs');
+      assert.equal(r.workspace.choice,false,'side by side is not offered below 1100px');
+      assert.deepEqual(r.workspace.tabs,shown.views.map(v=>v.label),'one named tab per view');
+      assert.equal(r.panes.length,1);assert.ok(r.panes[0].pane[0]>=960,'the view gets the full width');
+      checkPane(r.panes[0],`${table} tabs 1000x800 view 0`);
+      await browser.evaluate("document.querySelectorAll('#tabs-bar button')[1].click()");
+      const second=(await browser.evaluate(READ)).panes;
+      assert.equal(second.length,1);assert.equal(second[0].mode,'measures','the second tab shows the other view');
+      checkPane(second[0],`${table} tabs 1000x800 view 1`);
+      t.diagnostic(`${table} tabs 1000x800: ${r.panes[0].mode} names ${r.panes[0].minPx.toFixed(1)}px, ${second[0].mode} names ${second[0].minPx.toFixed(1)}px`);
+    }
     for(const [w,h] of [[1100,800],[1280,720],[1920,1080]]){
       const r=await open(shown.workspaceUrl,w,h);
+      assert.equal(r.workspace.layout,'split',w+'px offers side by side');
       assert.equal(r.workspace.pickers,0,'two views fill two panes without view pickers');
       r.panes.forEach((p,i)=>{checkPane(p,`${table} side by side ${w}x${h} pane ${i}`);t.diagnostic(`${table} side by side ${w}x${h} ${p.mode}: zoom ${(p.zoom*100).toFixed(0)}%, names ${p.minPx.toFixed(1)}px${p.orientation?', '+p.orientation+(p.crossings.length?', '+p.crossings.length+'+ crossings':''):''}`);});
     }
