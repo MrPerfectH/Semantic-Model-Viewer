@@ -99,6 +99,25 @@ the pane whole at a readable size. **Fit all** and the direction menu still over
   name chips. Fit never settles on a card zoom that only chips would fit.
 - **The star turns to fit.** When another start angle fits a single-hub star into the
   visible canvas at a zoom at least 8% larger, the ring uses that angle.
+- **Cards when they fit, and room for every pill.** After Arrange or Focus, a picture
+  that fits tighter on one axis gives the room it has left on the other axis to the
+  gaps between rows or columns of cards. The narrowest gaps widen first, and none
+  grows past 160px on screen, so the zoom stays the same. A star around one fact puts
+  its neighbours beside it, so in a pane taller than it is wide it either fits only as
+  name chips or packs its cards too close for the cardinality pills between them. When
+  that happens, the top-to-bottom arrangement is tried, and it is shown if it reads
+  better: full cards win over chips, and then more lines carrying their pill win. A
+  layout picked under Display, or a Detail other than Auto, is left alone. Measured on
+  Contoso Retail Inventory in a side-by-side pane:
+
+  | Window | Pane | Before | After |
+  |---|---|---|---|
+  | 1340×830 | 661px | star, chips 58%, 1 of 5 pills | star, chips 58%, 2 of 5: nothing fits cards |
+  | 1480×900 | 731px | star, chips 64%, 1 of 5 pills | top to bottom, cards 87%, 5 of 5 |
+  | 1920×1080 | 951px | star, cards 85%, 2 of 5 pills | top to bottom, cards 99%, 5 of 5 |
+  | 2560×1300 | 1271px | star, cards 97%, 5 of 5 | unchanged |
+
+  Sales (12 tables) keeps the star at every size: top to bottom fits it no better.
 - **Measures fit has a floor.** An answer view never fits a flow below the zoom at
   which measure names are 11px. If the flow is larger than that, the view opens on the
   analyzed node and its direct neighbours, and **Fit all** still shows everything. The
@@ -110,7 +129,8 @@ the pane whole at a readable size. **Fit all** and the direction menu still over
 - `tests/diagram-readability.browser.cjs` opens `smv show` for Contoso Retail
   Inventory, a chain-shaped star with a three-layer flow, and Sales, a dense flow.
   It opens both the side-by-side workspace and the single views at the sizes above,
-  then asserts every part of the bar. At 1000×800 it checks that the workspace shows
+  then asserts every part of the bar. Inventory must open as full cards with all five
+  cardinality pills on screen in a 740×830 pane and in the 1920×1080 workspace. At 1000×800 it checks that the workspace shows
   tabs only, and that each tab's view is readable once opened. A third test presses
   every control with real mouse events in the side-by-side workspace at 1680×1518 and
   1280×800, and in tabs at 1000×800. It selects each table, then uses Center, Focus,

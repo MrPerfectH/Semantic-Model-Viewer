@@ -38,8 +38,8 @@
                    so one Arrange costs one SVG rebuild, one fit and one store.
      Normalised once here, so no algorithm has to repeat `opts = opts || {}`. */
   P.untangle = function (opts) {
-    var algo = ALGOS[this.layoutAlgo] ? this.layoutAlgo : P.DEFAULT_ALGO;
     opts = opts || {};
+    var algo = ALGOS[opts.algo] ? opts.algo : (ALGOS[this.layoutAlgo] ? this.layoutAlgo : P.DEFAULT_ALGO);
     this._quiet = !!opts.quiet;
     try { this[ALGOS[algo]](opts); } finally { this._quiet = false; }
   };

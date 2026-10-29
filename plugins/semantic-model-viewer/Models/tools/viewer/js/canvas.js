@@ -1857,6 +1857,79 @@
       }
       return this.layoutK;
     },
+    /* What the reader gets from the arrangement on the canvas now, drawn at the zoom Fit lands
+       on (cards whenever they fit): full cards or name chips, and how many relationship lines
+       carry their cardinality pill. Renders, so a trial is judged on what would be shown. */
+    readability: function (names) {
+      var self = this, f = this.fitSolve(1.25, 0.05); if (!f) return null;
+      this._applyingFit = true;
+      try { this.view = f; this.updateTransform(); } finally { this._applyingFit = false; }
+      names.forEach(function (n) { self.layoutCard(n); });
+      this.renderLines();
+      var spots = this._relSpots || {}, lines = Object.keys(spots);
+      return { cards: !this.chipOn(f.k), pills: lines.filter(function (i) { return !spots[i].bare; }).length, lines: lines.length };
+    },
+    /* The star around one fact seats its neighbours beside it, so in a pane taller than it is
+       wide it spends the width: the picture fits only as name chips, or as cards packed too
+       close for the pills between them, with the height left empty. When that happens the
+       top-to-bottom arrangement is tried, and shown instead if it reads better: full cards
+       over chips, then more lines with their pill. A layout the reader picked under Display,
+       or a Detail other than Auto, is left alone. `run` arranges the trial; the caller
+       re-renders and fits either way. */
+    preferReadable: function (names, run) {
+      if ((this.detailMode || 'auto') !== 'auto' || store.get('smv-layout', null) != null) return false;
+      var self = this, now = this.readability(names);
+      if (!now || (now.cards && now.pills === now.lines)) return false;
+      var keep = {}, layoutK = this.layoutK, last = this.lastLayout, view = { x: this.view.x, y: this.view.y, k: this.view.k };
+      names.forEach(function (n) { if (self.pos[n]) keep[n] = { x: self.pos[n].x, y: self.pos[n].y }; });
+      this.arrangeAtFitZoom(run); this.spreadToFill(names);
+      var trial = this.readability(names);
+      if (trial && trial.cards && (!now.cards || trial.pills > now.pills)) return true;
+      Object.keys(keep).forEach(function (n) { self.pos[n] = keep[n]; });
+      this.setLayoutK(layoutK); this.lastLayout = last;
+      this._applyingFit = true;
+      try { this.view = view; this.updateTransform(); } finally { this._applyingFit = false; }
+      return false;
+    },
+    SPREAD_MAX: 160,         /* screen px: the widest a gap grows to fill the pane */
+    /* Fit is set by the axis the picture is tight on; the other axis keeps room the reader sees
+       as empty canvas, while two cards stacked on it can sit a gutter apart with no room for the
+       relationship pill on the line between them. Hand that room to the gaps between the rows
+       (and columns) of cards, narrowest first and none past SPREAD_MAX, so the picture fills
+       the pane at the same zoom and every stacked pair gets room for its pill before any gap
+       grows further. Positions only; the caller re-renders and fits. */
+    spreadToFill: function (names) {
+      if (this.clusterOn) return;
+      var self = this, f = this.fitSolve(this.layoutK, 0.05); if (!f) return;
+      var k = f.k, rect = this.viewportRect(), list = [];
+      names.forEach(function (n) {
+        var c = self.cards[n], p = self.pos[n];
+        if (!c || !p || c.el.style.display === 'none') return;
+        var w = self.cardWidthAt(c, k);
+        list.push({ p: p, x: p.x - (w - self.CARD_W) / 2, w: w, y: p.y, h: self.cardHeightAt(c, k) });
+      });
+      if (list.length < 2) return;
+      [['x', 'w', rect.w], ['y', 'h', rect.h]].forEach(function (ax) {
+        var a = ax[0], size = ax[1], bands = [], band = null;
+        list.slice().sort(function (u, v) { return u[a] - v[a]; }).forEach(function (it) {
+          if (band && it[a] < band.end - 1) { band.items.push(it); band.end = Math.max(band.end, it[a] + it[size]); }
+          else bands.push(band = { start: it[a], end: it[a] + it[size], items: [it] });
+        });
+        if (bands.length < 2) return;
+        var slack = 0.98 * ax[2] / k - (bands[bands.length - 1].end - bands[0].start), cap = self.SPREAD_MAX / k, gaps = [], i;
+        if (slack < 1) return;
+        for (i = 1; i < bands.length; i++) gaps.push(bands[i].start - bands[i - 1].end);
+        var need = function (L) { return gaps.reduce(function (t, gp) { return t + Math.max(0, L - gp); }, 0); };
+        var lo = 0, hi = cap;
+        if (need(hi) > slack) for (i = 0; i < 40; i++) { var mid = (lo + hi) / 2; if (need(mid) > slack) hi = mid; else lo = mid; }
+        else lo = hi;
+        var shift = 0;
+        bands.forEach(function (b, j) {
+          if (j) shift += Math.max(0, lo - gaps[j - 1]);
+          if (shift) b.items.forEach(function (it) { it.p[a] += shift; });
+        });
+      });
+    },
     watchSize: function () {
       var self = this;
       if (this._sizeWatch || typeof ResizeObserver !== 'function') return;
