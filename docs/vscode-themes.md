@@ -13,12 +13,15 @@ from the canonical HTML and snapshot asset list: browser viewers and snapshots
 continue to use their saved Classic/Spellbook appearance. The Appearance picker is
 available there; VS Code owns the extension's appearance.
 
-No tests were added or run for this implementation, as requested. Future automated
-verification should cover initial theme detection, live class and token changes,
-observer cleanup, preservation of `smv-theme`, and host-free snapshot assets.
-The existing theme and extension-host suites are relevant starting points.
+Contrast in all four host theme kinds is covered by `tests/ui-audit.browser.cjs`.
+Theme sync itself has no dedicated automated test yet. Future tests should cover
+initial theme detection, live class and token changes, observer cleanup,
+preservation of `smv-theme`, and host-free snapshot assets.
 
-Manual theme-switch review remains to be performed in the extension development host:
+Manual review: pre-release 0.7.341 was checked in native Windows VS Code on
+2026-10-28 through the theme picker in light, dark, High Contrast and High Contrast
+Light, with inspector contrast above 4.5:1 (`docs/qa/windows-ui-final-20261028.md`).
+Repeat this checklist after theme-related changes:
 
 1. Open the synthetic demo model. Switch between two light themes, two dark themes,
    High Contrast and High Contrast Light while keeping the panel open.
