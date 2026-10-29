@@ -27,7 +27,8 @@ function build(source,options={}){
       views.push({key:'dependents',label:`Calculations depending on ${table}`,answer:`${dependents.counts.total} calculations reference ${table}: ${dependents.counts.direct} directly and ${dependents.counts.indirect} through other calculations.`,view:{version:2,mode:'measures',focus:{kind:'table',name:table},banner:false}});
     }
   }
-  for(const item of views){item.view.caption=item.answer+(item.view.mode==='graph'?' Arrows show model filter flow. Dashed relationships are inactive.':' Links show formula references; values are not evaluated.');delete item.view.callouts;if(options.out&&require('node:path').extname(options.out).toLowerCase()==='.png')item.view.chrome=false;}
+  // The answer and legend travel in the JSON result for the agent to relay; the viewer shows only the diagram.
+  for(const item of views){delete item.view.callouts;if(options.out&&require('node:path').extname(options.out).toLowerCase()==='.png')item.view.chrome=false;}
   return {source:canonical,table,views,warnings,counts:{relations:relations.counts,dependents:dependents.counts},legend:'Relationship arrows follow model filter flow; exploring both directions does not change the model. Calculation links show static DAX references, not evaluated results.'};
 }
 module.exports={build};

@@ -27,6 +27,9 @@ when exporting.
 `show` returns one reusable side-by-side Tables/Measures workspace and independent
 view URLs. Focused queries return small counts and names; use `--details` for DAX
 or relationship evidence. Full `inspect` remains available for broad inventories.
+The views open on the diagram alone, sized so that every table and measure name is
+11px or larger on screen; the answer sentence is returned as
+`views[].answer` for the agent to relay, not printed above the diagram.
 
 Inputs are one TMDL model folder, its definition folder, or a BIM file. Relative paths
 resolve from the current project. Commands read local metadata, never execute DAX/M/SQL

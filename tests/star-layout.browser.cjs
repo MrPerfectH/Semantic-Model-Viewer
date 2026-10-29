@@ -175,18 +175,27 @@ for (const screen of SCREENS) {
       await settle();
     });
 
-    await t.test('a focused star opens at half zoom or better', async () => {
-      await browser.evaluate(`app.canvas.setLayoutAlgo('star');
-        app.canvas.selectTable('Sales');
-        app.explorer.setFocus(true, 1);
-        app.explorer.arrangeSubset(true);`);
+    /* The readability bar (docs/qa/diagram-readability.md): the focus is one press of the
+       footer's Focus button away from the whole-model picture, and every name in it is 11px
+       or larger with every card on the visible canvas. Zoom % is reported, not judged: with
+       name chips, zoom no longer predicts text size. */
+    await t.test('Focus turns the overview into a readable neighbourhood and back', async () => {
+      await browser.evaluate(`app.canvas.setLayoutAlgo('star'); app.canvas.selectTable('Sales');`);
+      await settle();
+      const press = `(() => { const b = [...document.querySelectorAll('#canvas-navigation button')].find(b => b.textContent === 'Focus'); if (!b) throw new Error('no Focus button for a selected table'); b.click(); return b.getAttribute('aria-pressed'); })()`;
+      await browser.evaluate(press);
       await settle();
       const view = await browser.evaluate(READ_VIEW);
       assert.ok(view.count > 1 && view.count < 43, 'the focus really did hide the unrelated tables (' + view.count + ' left)');
-      assert.ok(view.zoom >= 0.5 - 1e-9, 'the focused star fitted at ' + view.zoom.toFixed(3));
+      assert.ok(view.minFont >= 11 - 0.05, 'focused names render at ' + view.minFont.toFixed(2) + 'px');
+      assert.deepEqual(view.outside, [], 'focused tables outside the visible canvas');
       assert.equal(view.overlaps, 0, 'the focused star overlaps: ' + view.worst.join(', '));
-      t.diagnostic(`${label} focused star :: ${view.count} tables at ${(view.zoom * 100).toFixed(1)}%`);
-      await browser.evaluate('app.explorer.setFocus(false, 1); app.canvas.clearSelection();');
+      t.diagnostic(`${label} focused star :: ${view.count} tables at ${(view.zoom * 100).toFixed(1)}%, names ${view.minFont.toFixed(1)}px`);
+      await browser.evaluate(press);
+      await settle();
+      const back = await browser.evaluate('({ isolate: !!app.state.isolate, count: app.explorer.names.size })');
+      assert.equal(back.isolate, false, 'a second press leaves the focus');
+      await browser.evaluate('app.canvas.clearSelection();');
     });
 
     await t.test('names stay at 11px or better from the LOD threshold down to the floor', async () => {

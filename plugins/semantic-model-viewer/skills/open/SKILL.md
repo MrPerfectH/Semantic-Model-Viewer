@@ -22,7 +22,7 @@ For a known model and table, the common workflow is ONE command:
 smv show "<model-path>" --table "<table>" --related --dependents
 ```
 
-It resolves the table, reuses a compatible server, creates independent named Tables and Measures views, and returns a combined side-by-side workspace URL plus individual URLs and compact counts. Give the workspace link first. Do not run full inspect or compute neighbors with jq first. A repeated request reuses the same named views; new tables add views without replacing others.
+It resolves the table, reuses a compatible server, creates independent named Tables and Measures views, and returns a combined side-by-side workspace URL plus individual URLs and compact counts. Give the workspace link first, then relay each view's `answer` in your reply: the viewer shows only the diagram. Do not run full inspect or compute neighbors with jq first. A repeated request reuses the same named views; new tables add views without replacing others.
 
 For a metadata-only question use `smv relations "<model>" --table "<table>"` or `smv dependents "<model>" --table "<table>"`. Default output includes filter direction, named inactive/two-way relationships, counts and qualified measure names. Indirect calculations include a `via` chain; use `dependents --measure "<name>" --details` for one formula rather than every formula. Add `--details` only when formulas or path evidence are needed. Names resolve case-insensitively; use the canonical name in the response.
 

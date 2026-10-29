@@ -31,37 +31,76 @@
   function closeLibrary(restore) {
     var app=g.app, wasOpen=document.body.classList.contains('smv-browse-open');
     document.body.classList.remove('smv-browse-open');
-    var control=document.querySelector('[data-smv-browse]');
-    if(control){control.textContent='Browse measures';control.setAttribute('aria-expanded','false');}
+    var control=browseControls(false);
     if(wasOpen&&restore!==false&&browseSnapshot){
       var saved=browseSnapshot; saved.library=app.measures.captureSnapshot().library;
       browseSnapshot=null;app.measures.restoreSnapshot(saved);
     }else browseSnapshot=null;
     if(wasOpen&&restore!==false&&control)control.focus();
   }
+  // The banner and the compact measure header each carry a browse control; keep both in step.
+  function browseControls(open){
+    var all=Array.from(document.querySelectorAll('[data-smv-browse]'));
+    all.forEach(function(b){if(b.closest('.smv-explanation-controls'))b.textContent=open?'Close measures':'Browse measures';b.setAttribute('aria-expanded',String(open));});
+    return all.find(function(b){return b.getClientRects().length;})||all[0]||null;
+  }
   function browseMeasures(app) {
     if(document.body.classList.contains('smv-browse-open')){closeLibrary(true);return;}
     browseSnapshot=app.measures.captureSnapshot();app.measures.setLibraryCollapsed(false);dirty=true;
     app.measures.cancelSnapshotViewport();if(!app.measures.comparison)app.setState({selMeasure:null,gPin:null,gHover:null});
     document.body.classList.add('smv-browse-open');
-    var control=document.querySelector('[data-smv-browse]');
-    if(control){control.textContent='Close measures';control.setAttribute('aria-expanded','true');}
+    browseControls(true);
     var search=document.querySelector('.mv-search');if(search)search.focus();
   }
   function style(){
     if(document.getElementById('smv-interactive-css'))return;
     var s=node('style');s.id='smv-interactive-css';s.textContent=`
-.smv-hl{position:fixed;border:2px solid #6854d9!important;box-shadow:0 0 0 2px #ffffffb3;border-radius:7px;pointer-events:none;z-index:90;box-sizing:border-box}.smv-proposal{border-color:#b37713!important}.smv-annotation-lines{position:fixed;inset:0;width:100%;height:100%;z-index:89;pointer-events:none}.smv-context-dim{opacity:1!important}body[data-smv-interactive] [data-smv-kind=table]{opacity:1!important}body[data-smv-interactive] .smv-attention-target{color:var(--smv-ink,#25334c)!important}
+.smv-hl{position:fixed;border:2px solid #6854d9!important;box-shadow:0 0 0 2px #ffffffb3;border-radius:7px;pointer-events:none;z-index:90;box-sizing:border-box}.smv-proposal{border-color:#b37713!important}.smv-annotation-lines{position:fixed;inset:0;width:100%;height:100%;z-index:89;pointer-events:none}.smv-context-dim{opacity:1!important}body[data-smv-interactive] .smv-attention-target{color:var(--smv-ink,#25334c)!important}
 body[data-smv-interactive] #root{bottom:var(--smv-controls-height,0px)!important}.smv-explanation-controls{box-sizing:border-box;position:fixed;bottom:0;left:0;right:0;z-index:200;max-width:none;max-height:30vh;overflow:auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--smv-line,#cbd2df);border-radius:0;background:var(--smv-surface,#fff);color:var(--smv-ink,#25334c);box-shadow:0 4px 18px #172b4d14;font:13px/1.5 system-ui}
 .smv-explanation-controls button{font:inherit;padding:6px 10px;border:1px solid var(--smv-line,#ccd3e0);border-radius:7px;color:inherit;background:var(--smv-soft,#f5f6fb);cursor:pointer}.smv-explanation-controls button:focus-visible{outline:3px solid #8472ed;outline-offset:2px}.smv-view-provenance{max-width:640px}.smv-view-provenance[open]{flex-basis:100%}.smv-view-provenance summary{cursor:pointer}.smv-view-provenance pre{max-height:220px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}.smv-notes{max-width:480px;flex-basis:100%;white-space:pre-wrap}.smv-notes p{margin:4px 0}.smv-status{font-size:12px}.smv-pending{flex-basis:100%;padding:8px;border-left:3px solid #6854d9}.smv-hidden-targets{flex-basis:100%;color:var(--smv-muted,#59667b)}
 .smv-explanation-controls[data-smv-banner=hidden]{display:none}.smv-explanation-controls[data-smv-banner=hidden][data-smv-pending="1"],.smv-explanation-controls[data-smv-banner=hidden][data-smv-error="1"]{display:flex}.smv-explanation-controls[data-smv-banner=hidden]>:not(.smv-pending):not(.smv-status){display:none}.smv-explanation-controls[data-smv-banner=hidden][data-smv-error="0"]>.smv-status{display:none}.smv-pending[hidden]{display:none!important}
+.smv-select-list{position:fixed;z-index:9500;overflow:auto;padding:4px;background:var(--smv-surface,#fff);color:var(--smv-ink,#25334c);border:1px solid var(--smv-line,#cbd2df);border-radius:8px;box-shadow:0 10px 28px #172b4d2e;font:13px/1.3 system-ui}.smv-select-option{padding:7px 10px;border-radius:5px;cursor:pointer;white-space:nowrap}.smv-select-option:hover{background:var(--smv-soft,#eef2f8)}.smv-select-option[aria-selected=true]{font-weight:600;color:var(--smv-accent,#2855d9)}.smv-select-option[aria-disabled=true]{opacity:.45;cursor:default}
 body[data-smv-interactive] .mv-dax-body pre,body[data-smv-interactive] .mv-dax-code{white-space:pre-wrap!important;overflow-wrap:anywhere!important}
 body[data-smv-interactive] .mv-library{display:none!important}body[data-smv-interactive].smv-browse-open .mv-library{display:flex!important;position:absolute;inset:0 auto 0 0;z-index:150;max-width:85vw;width:280px!important;min-width:0}
 @media(max-width:700px){body[data-smv-interactive] .mv-analysis-body[data-mode=split]{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) 8px minmax(0,1fr)}body[data-smv-interactive] .ex-library{max-width:190px}.smv-explanation-controls{font-size:12px}}
 `;document.head.appendChild(s);
   }
+  /* Inside a frame, some embedded browsers never open a native drop-down list, which left
+     every select in a workspace pane dead. Framed panes open their own list instead: same
+     options, same value, the same change event, so every control keeps its own handler.
+     Keyboard use of the select is unchanged. */
+  var selectList=null;
+  function closeSelectList(){if(selectList){selectList.menu.remove();selectList=null;}}
+  function selectShim(){
+    if(g.top===g||document.documentElement.dataset.smvSelectList)return;
+    document.documentElement.dataset.smvSelectList='1';
+    document.addEventListener('mousedown',function(e){
+      var t=e.target,inList=t.closest&&t.closest('.smv-select-list'),sel=!inList&&t.closest&&t.closest('select');
+      if(selectList&&!inList)closeSelectList();
+      if(!sel||sel.disabled||sel.multiple||sel.size>1)return;
+      e.preventDefault();sel.focus();
+      var r=sel.getBoundingClientRect(),menu=node('div',null,'smv-select-list');menu.setAttribute('role','listbox');menu.setAttribute('aria-label',sel.getAttribute('aria-label')||'Options');
+      Array.from(sel.options).forEach(function(o){
+        if(o.hidden)return;
+        var item=node('div',o.textContent,'smv-select-option');item.setAttribute('role','option');item.setAttribute('aria-selected',String(o.selected));if(o.disabled)item.setAttribute('aria-disabled','true');
+        item.addEventListener('mousedown',function(ev){
+          ev.preventDefault();ev.stopPropagation();if(o.disabled)return;closeSelectList();
+          if(sel.value!==o.value){sel.value=o.value;sel.dispatchEvent(new Event('input',{bubbles:true}));sel.dispatchEvent(new Event('change',{bubbles:true}));}
+          sel.focus();
+        });
+        menu.appendChild(item);
+      });
+      // Inside a popover the list belongs to it, so a press on an option is not a press outside.
+      (sel.closest('.ex-menu-anchor')||document.body).appendChild(menu);
+      var h=menu.offsetHeight,below=innerHeight-r.bottom-8,top=below>=Math.min(h,160)||r.top<below?r.bottom+2:Math.max(8,r.top-2-h);
+      menu.style.cssText='left:'+Math.max(4,Math.min(r.left,innerWidth-menu.offsetWidth-4))+'px;top:'+top+'px;min-width:'+r.width+'px;max-height:'+Math.max(120,top>r.top?below:r.top-10)+'px';
+      selectList={menu:menu,sel:sel};
+    },true);
+    document.addEventListener('keydown',function(e){if(selectList&&(e.key==='Escape'||e.key==='Tab')){if(e.key==='Escape')e.preventDefault();closeSelectList();}},true);
+    g.addEventListener('blur',closeSelectList);g.addEventListener('resize',closeSelectList);document.addEventListener('scroll',function(e){if(selectList&&!selectList.menu.contains(e.target))closeSelectList();},true);
+  }
   function annotations(app,view,refs,target){
-    style();document.body.dataset.smvInteractive='1';if(active)active.stop();
+    style();selectShim();document.body.dataset.smvInteractive='1';if(active)active.stop();
     document.querySelectorAll('.smv-hl,.smv-callout,.smv-proposal,.smv-annotation-lines,.smv-explanation-controls').forEach(function(n){n.remove();});
     var controls=node('aside',null,'smv-explanation-controls');controls.setAttribute('aria-label','Explanation controls');controls.dataset.smvBanner=view.banner===false?'hidden':'shown';controls.dataset.smvPending='0';controls.dataset.smvError='0';
     closeLibrary(false);
@@ -167,7 +206,9 @@ body[data-smv-interactive] .mv-library{display:none!important}body[data-smv-inte
     async function accept(update){await smv.apply(update.view);authored=clone(update.view);revision=update.revision;pending=null;showPending();await report();return {state:'applied',revision:revision};}
     function showStatus(text){if(active){active.status.textContent=text;active.controls.dataset.smvError=/^(Disconnected:|Source changed\.)/.test(text)?'1':'0';}}
     function showPending(){if(!active)return;var box=active.pending;box.replaceChildren();box.hidden=!pending;active.controls.dataset.smvPending=pending?'1':'0';if(pending){box.appendChild(node('span','The agent prepared another view. '));box.appendChild(button('Apply',function(){accept(pending).catch(function(e){showStatus(e.message);});}));box.appendChild(button('Keep exploring',function(){declinedRevision=pending.revision;pending=null;showPending();report();}));}}
-    function interacted(e){if(busy||e.target.closest&&e.target.closest('.smv-explanation-controls'))return;dirty=true;selectedAt=new Date().toISOString();var el=e.target.closest&&e.target.closest('[data-smv-kind]');if(el){selected={kind:el.dataset.smvKind,name:el.dataset.smvName};if(el.dataset.smvTable)selected.table=el.dataset.smvTable;}else selected=null;}
+    // The opening picture keeps every table bright; once the reader starts exploring, the
+    // canvas dims tables outside the selection's filter paths as it does in the main app.
+    function interacted(e){if(busy||e.target.closest&&e.target.closest('.smv-explanation-controls'))return;dirty=true;document.querySelectorAll('.smv-context-dim').forEach(function(n){n.classList.remove('smv-context-dim');});selectedAt=new Date().toISOString();var el=e.target.closest&&e.target.closest('[data-smv-kind]');if(el){selected={kind:el.dataset.smvKind,name:el.dataset.smvName};if(el.dataset.smvTable)selected.table=el.dataset.smvTable;}else selected=null;}
     ['pointerdown','wheel','keydown'].forEach(function(name){document.addEventListener(name,interacted,{capture:true,passive:true});});
     function endpoint(action){var url=new URL(g.SMV_SESSION_URL);url.pathname='/'+action;return url;}
     async function report(){if(!g.app||!g.app.state.loaded)return;if(g.SMV_MCP_SYNC)return g.SMV_MCP_SYNC(receipt());if(!g.SMV_SESSION_URL)return;var response=await fetch(endpoint('client'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(receipt())});if(!response.ok){var data=await response.json();throw new Error(data.error?.message||'Viewer acknowledgement failed');}}
@@ -182,5 +223,5 @@ body[data-smv-interactive] .mv-library{display:none!important}body[data-smv-inte
     var darkStyle=document.getElementById('smv-host-appearance');if(!darkStyle){darkStyle=node('style');darkStyle.id='smv-host-appearance';document.head.appendChild(darkStyle);}
     darkStyle.textContent='[data-smv-color-scheme=dark] body,[data-smv-color-scheme=dark] #root,[data-smv-color-scheme=dark] #topbar,[data-smv-color-scheme=dark] .mv-library,[data-smv-color-scheme=dark] .mv-dax-card,[data-smv-color-scheme=dark] .mv-analysis-header,[data-smv-color-scheme=dark] .mv-graph-panel{background:var(--smv-surface)!important;color:var(--smv-ink)!important}';
   }
-  g.SMVInteractive={closeLibrary:closeLibrary,annotations:annotations,connect:connect,appearance:appearance};
+  g.SMVInteractive={closeLibrary:closeLibrary,browse:browseMeasures,annotations:annotations,connect:connect,appearance:appearance};
 })(window);
