@@ -1,14 +1,27 @@
 {
   "name": "semantic-model-tools",
-  "owner": { "name": "MrPerfectH", "url": "https://github.com/MrPerfectH" },
+  "owner": {
+    "name": "MrPerfectH",
+    "url": "https://github.com/MrPerfectH"
+  },
   "description": "Tools for exploring and working with Power BI semantic models.",
   "plugins": [
     {
       "name": "semantic-model-viewer",
-      "source": "./plugins/semantic-model-viewer",
-      "description": "CLI-powered model exploration: relationships, DAX, Power Query, focused browser views and offline snapshots.",
+      "source": {
+        "source": "archive",
+        "url": "https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/download/v0.6.0/smv-claude-portable.zip",
+        "sha256": "78593f8327ef3316e6d82b119b957928f2f22463eae631e94473dc6bb3648604"
+      },
+      "description": "Semantic model diagrams with the bundled CLI and private runtime.",
       "category": "data",
-      "tags": ["power-bi", "tmdl", "dax", "semantic-model", "viewer"]
+      "tags": [
+        "power-bi",
+        "tmdl",
+        "dax",
+        "semantic-model",
+        "viewer"
+      ]
     }
   ]
 }
