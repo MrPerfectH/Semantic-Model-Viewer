@@ -555,7 +555,7 @@
   },
   "icon": "images/icon.png",
   "dependencies": {
-    "@azure/msal-node": "7.0.1"
+    "@azure/msal-node": "7.1.1"
   },
   "extensionKind": [
     "ui"
