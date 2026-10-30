@@ -121,11 +121,30 @@ test('answer views from smv show meet the readability bar',{skip:!chrome&&'Insta
       const r=await open(shown.workspaceUrl,w,h);
       assert.equal(r.workspace.layout,'split',w+'px offers side by side');
       assert.equal(r.workspace.pickers,0,'two views fill two panes without view pickers');
+      if(table==='Inventory'&&w===1920){
+        // The video's case: a 950px pane holds Inventory as cards with every pill, not cards packed too close for them.
+        const labels=await browser.evaluate("(()=>{const cv=document.querySelector('iframe').contentWindow.app.canvas,s=Object.values(cv._relSpots);return {cards:!cv._chip,pills:s.filter(x=>!x.bare).length,lines:s.length};})()");
+        assert.deepEqual(labels,{cards:true,pills:5,lines:5},'Inventory 1920x1080 left pane');
+      }
       r.panes.forEach((p,i)=>{checkPane(p,`${table} side by side ${w}x${h} pane ${i}`);t.diagnostic(`${table} side by side ${w}x${h} ${p.mode}: zoom ${(p.zoom*100).toFixed(0)}%, names ${p.minPx.toFixed(1)}px${p.orientation?', '+p.orientation+(p.crossings.length?', '+p.crossings.length+'+ crossings':''):''}`);});
     }
     for(const [w,h] of [[1280,720],[1920,1080]])for(const i of [0,1]){
       const [p]=(await open(shown.views[i].url,w,h)).panes;
       checkPane(p,`${table} view ${i} ${w}x${h}`);t.diagnostic(`${table} ${p.mode} ${w}x${h}: zoom ${(p.zoom*100).toFixed(0)}%, names ${p.minPx.toFixed(1)}px${p.orientation?', '+p.orientation+(p.crossings.length?', '+p.crossings.length+'+ crossings':''):''}`);
+    }
+    /* A side-by-side pane is taller than it is wide. The star spends the width there, so
+       Inventory reads as full cards only top to bottom; the height left over goes to the gaps,
+       which gives every relationship room for its cardinality pill, on screen. */
+    if(table==='Inventory'){
+      const [p]=(await open(shown.views[0].url+'&embedded=1',740,830)).panes;
+      checkPane(p,'Inventory half-width pane');
+      const r=await browser.evaluate(`(()=>{const cv=app.canvas,vp=cv.viewportRect(),hb=cv.host.getBoundingClientRect(),rels=app.model.relationships;
+        return Object.keys(cv._relSpots).map(i=>{const s=cv._relSpots[i],x=s.x*cv.view.k+cv.view.x,y=s.y*cv.view.k+cv.view.y;
+          return {rel:rels[i].from+' → '+rels[i].to,pill:!s.bare,onScreen:x>=vp.x&&x<=vp.x+vp.w&&y>=vp.y&&y<=vp.y+vp.h};});})()`);
+      assert.equal(p.chips,false,'full cards at '+(p.zoom*100).toFixed(0)+'%');
+      assert.equal(r.length,5);
+      r.forEach(l=>{assert.ok(l.pill,l.rel+' carries its cardinality pill');assert.ok(l.onScreen,l.rel+' label is on screen');});
+      t.diagnostic(`Inventory half-width pane 740x830: cards at ${(p.zoom*100).toFixed(0)}%, ${r.length} pills`);
     }
   }
   await t.test('Tools brings the editing chrome back on demand',async()=>{
