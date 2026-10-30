@@ -104,7 +104,7 @@ jobs:
       - run: node vscode-extension/scripts/sync-viewer.js
       - run: node scripts/vendor-node.cjs --target linux-x64 --out dist/host-runtimes/linux-x64
       - run: npm run build:vscode-cli -- --target linux-x64 --runtime-root dist/host-runtimes
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 8.0.x
       - name: Package and extract the release VSIX
