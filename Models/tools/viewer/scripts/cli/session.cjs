@@ -135,7 +135,8 @@ async function start(source,options){
     }catch(err){json(err.code==='REVISION_CONFLICT'?409:400,{error:{code:err.code||'SESSION_INVALID',message:err.message,details:err.details||{}}});}
   });
   await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(options.port??0,'127.0.0.1',resolve);});state.url='http://127.0.0.1:'+server.address().port+'/?token='+token;
-  try{fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,JSON.stringify(state,null,2)+'\n',{flag:'wx',mode:0o600});managed.register(state);}catch(err){server.close();throw err;}
+  // The launcher reads the file as soon as it exists, so it appears complete: written aside, then linked in (which, like 'wx', never replaces another session's file).
+  try{fs.mkdirSync(path.dirname(file),{recursive:true});const draft=file+'.'+crypto.randomUUID()+'.tmp';fs.writeFileSync(draft,JSON.stringify(state,null,2)+'\n',{flag:'wx',mode:0o600});try{fs.linkSync(draft,file);}finally{fs.unlinkSync(draft);}managed.register(state);}catch(err){server.close();throw err;}
   if(options.watch)interval=setInterval(rebuild,1000);
   function close(){if(closing)return;closing=true;clearInterval(interval);server.close();server.closeAllConnections();try{if(readJSON(file).sessionId===state.sessionId)fs.unlinkSync(file);}catch{}managed.forget(state.sessionId);process.removeListener('SIGTERM',close);process.removeListener('SIGINT',close);}
   process.on('SIGTERM',close);process.on('SIGINT',close);return {...status(),close};
