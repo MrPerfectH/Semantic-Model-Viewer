@@ -7,6 +7,7 @@
   - The new **Focus** button shows a table's direct neighbourhood, arranged, and pressing it again restores the layout. Focus stays on its table while you click around inside it.
   - On a short window or a squeezed canvas, the legend and overview map step aside and the bar stays on one line, with display switches behind **View**.
   - In the Measures view, the header fits one row. In a narrow pane the dependency flow runs top to bottom with tidy right-angle links (**Auto** direction), and inspecting a measure puts its DAX below the graph.
+- Show full table cards, with every relationship's cardinality badge, when the pane has room (#192). After Arrange or Focus, spare height or width goes to the gaps between tables. When the star layout can't show full cards with every badge, the top-to-bottom layout is used instead. A layout or detail level picked under Display is kept.
 - Agent answer views (`smv show`) open on the diagram alone; the agent gives the answer in the conversation. **Tools** brings back the table library, toolbar, legend and map. Unrelated tables fade once you start exploring.
 - The side-by-side agent workspace shows one view per pane without pickers, and switches to named tabs below 1100px window width.
 - Direction and DAX-position choices are buttons, and drop-down lists open inside embedded panes.

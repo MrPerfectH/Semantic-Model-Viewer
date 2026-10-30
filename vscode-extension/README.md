@@ -12,7 +12,7 @@ open it at full size.
 
 ## What's new in 0.6
 
-- **Readable diagrams without zooming.** Names stay at 11px or larger. **Focus** shows a table's neighbourhood, arranged, in one press. On small screens the canvas keeps the space, and narrow dependency flows run top to bottom with tidy links.
+- **Readable diagrams without zooming.** Names stay at 11px or larger. Tables open as full cards with every relationship's cardinality badge when the pane has room. **Focus** shows a table's neighbourhood, arranged, in one press. On small screens the canvas keeps the space, and narrow dependency flows run top to bottom with tidy links.
 - **Ask your agent, see the answer.** `smv show` opens the relevant Tables and Measures views side by side, or as tabs on a narrow window, and the agent gives the answer in the conversation. Live sessions follow the agent's next view.
 - **Fabric connection.** Sign in with a work account, browse workspaces and models, open read-only metadata, reopen it offline and refresh it.
 - **Colours by source or table folder**, with a compact legend, and VS Code light, dark and high-contrast themes.
