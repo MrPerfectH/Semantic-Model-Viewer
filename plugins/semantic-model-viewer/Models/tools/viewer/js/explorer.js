@@ -201,8 +201,8 @@
       /* quiet: the layout only writes positions. Moving the cards, storing them and
          redrawing happen once here instead of once inside the algorithm and again in
          commit(), which is one SVG rebuild and one fit per Arrange. */
-      var scope=new Set(ns);
-      cv.arrangeAtFitZoom(function(){cv.untangle({names:scope,center:root,quiet:true});});
+      var scope=new Set(ns),run=function(algo){return function(){cv.untangle({names:scope,center:root,quiet:true,algo:algo});};};
+      cv.arrangeAtFitZoom(run());cv.spreadToFill(scope);cv.preferReadable(scope,run('layered'));
       ns.forEach(function(n){cv.layoutCard(n);});
       cv.persist();if(cv.markArranged)cv.markArranged();
       if(save)this.commit('Visible tables arranged.',true);
