@@ -1,0 +1,18 @@
+1
+00:00:00,000 --> 00:00:04,000
+Explore a synthetic model in your browser.
+This view starts with Sales and its neighbours.
+
+2
+00:00:04,000 --> 00:00:08,000
+Select Sales. Inspect one relationship.
+
+3
+00:00:08,000 --> 00:00:15,000
+Customer filters Sales.
+Read the join columns and cardinality.
+
+4
+00:00:15,000 --> 00:00:21,000
+Try the public demo. Link in the post.
+No installation needed.

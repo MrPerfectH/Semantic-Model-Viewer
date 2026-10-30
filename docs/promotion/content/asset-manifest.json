@@ -1,0 +1,498 @@
+{
+  "captured": "2026-10-18",
+  "assets": [
+    {
+      "path": "118-first-model/assets/first-model-captioned.mp4",
+      "bytes": 409095,
+      "sha256": "c9f4b7bcd76c4968273db9829ee5ae16c8b882ace081edb784d5dffd6ce1d9f9",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "20.366667"
+        }
+      }
+    },
+    {
+      "path": "118-first-model/assets/raw.mp4",
+      "bytes": 284127,
+      "sha256": "1aa54310c88ef085248bda6f66074db61abcacc8203847f6d8a50e091c33c152",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 2560,
+            "height": 1600
+          }
+        ],
+        "format": {
+          "duration": "20.363800"
+        }
+      }
+    },
+    {
+      "path": "118-first-model/assets/thumbnail.png",
+      "bytes": 112984,
+      "sha256": "64e4c59f67305107b736632e8fcefc1ef4222016c130a68f8d33b64ef4bc3053",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "118-first-model/captions.srt",
+      "bytes": 388,
+      "sha256": "32f0f3e0099a4a3dabf8d9b2152039aa1d805d04f26264447c7bc6bd039783c9"
+    },
+    {
+      "path": "119-matrix/assets/01-matrix.png",
+      "bytes": 59369,
+      "sha256": "8b1009bb917ef04c33ecb5a89c06c96793d02ae87991a143e2a61e1e97746aa2",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "119-matrix/assets/02-shared-product.png",
+      "bytes": 59411,
+      "sha256": "4bbff44e3cb7c819298bdafaf38941d9985fbf5cfa48d272a4265dc9b3f45ac6",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "119-matrix/assets/03-product-view.png",
+      "bytes": 110066,
+      "sha256": "ad0fee732a643a3a6e56f74a343b5af4d4a44c87073c6437d6b96f5484455927",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "119-matrix/assets/cards/01-matrix.png",
+      "bytes": 188661,
+      "sha256": "f2d5ea68bcd82e83c7711cb05031e408875921c29f489ba9f6e1c98432ecb826",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "119-matrix/assets/cards/02-shared-product.png",
+      "bytes": 150031,
+      "sha256": "d1ba0e53ee763074bf13052cc878cb47a902b909c0c665ab045cb935968d931e",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "119-matrix/assets/cards/03-product-view.png",
+      "bytes": 213300,
+      "sha256": "cc4d246ef48c4072f090756979b2323ead6723fbf68b47097d55a9c1bd37a704",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "56-snapshots/assets/contoso-snapshot.html",
+      "bytes": 934748,
+      "sha256": "b6272bd0db744c99c87c544ff42af2d88bb18630f597eb9d7d81a64d8f2945d5"
+    },
+    {
+      "path": "56-snapshots/assets/export-raw.mp4",
+      "bytes": 241456,
+      "sha256": "00b97d034514d5c03c1cf1dfedecf98e677136b17d12363ca4f07004bf4bb4e7",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 2560,
+            "height": 1600
+          }
+        ],
+        "format": {
+          "duration": "5.631000"
+        }
+      }
+    },
+    {
+      "path": "56-snapshots/assets/recipient-dax.png",
+      "bytes": 107786,
+      "sha256": "04d50ad3e7eee7b9859a1736a545746c97975ccdee2fe1382ff2a1a596a80ecd",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "56-snapshots/assets/recipient-open.png",
+      "bytes": 135276,
+      "sha256": "8d60662d819b27d399dcea303c957d897c14f181489d34bf9f3e4b03d71d9b24",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "56-snapshots/assets/recipient-raw.webm",
+      "bytes": 1796700,
+      "sha256": "4c3e6c0fbf36d8b1bdda83d1678394803c5a8e74766501feff8bb7f231a276ab",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp9",
+            "width": 1280,
+            "height": 800
+          }
+        ],
+        "format": {
+          "duration": "14.400000"
+        }
+      }
+    },
+    {
+      "path": "56-snapshots/assets/snapshot-captioned.mp4",
+      "bytes": 730414,
+      "sha256": "135fdfca2b04653d03fd062b714fccfa7b640f9d16780aaea212868c653acdd7",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "20.033333"
+        }
+      }
+    },
+    {
+      "path": "56-snapshots/assets/thumbnail.png",
+      "bytes": 120524,
+      "sha256": "038ddad664b47f976aeb9d9d84b11712c40922d861a86d1d1a746e8b6f386bae",
+      "dimensions": [
+        1280,
+        900
+      ]
+    },
+    {
+      "path": "56-snapshots/captions.srt",
+      "bytes": 455,
+      "sha256": "1054edc0bdb8cc4ba9c5af2e9197196c56b27478d6089d8b3c4b3384527e2824"
+    },
+    {
+      "path": "57-dax/assets/01-inputs.png",
+      "bytes": 89215,
+      "sha256": "d754a478f3016915ed9979554508fd1f6141f015271298c62d19330ab14e178d",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "57-dax/assets/02-compare.png",
+      "bytes": 91462,
+      "sha256": "22f9b0efc011b85719dc706836ed2c109154063850506e79d98bfa5bb6ea03ef",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "57-dax/assets/dax-captioned.mp4",
+      "bytes": 342305,
+      "sha256": "108967535cb8a4783019234e845fb65605b28964756f2da4339c40e5d550b404",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "21.600000"
+        }
+      }
+    },
+    {
+      "path": "57-dax/assets/raw.mp4",
+      "bytes": 216684,
+      "sha256": "4076b8805db6976d5737692c909d18dbb3c64bc99c0732c3c357974aabea05a3",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 2560,
+            "height": 1600
+          }
+        ],
+        "format": {
+          "duration": "21.602100"
+        }
+      }
+    },
+    {
+      "path": "57-dax/assets/thumbnail.png",
+      "bytes": 105785,
+      "sha256": "e4fc77d668b1d7546f9fdf2f6c74be03e4119b78c84e5471a6736429b4bd4088",
+      "dimensions": [
+        1280,
+        900
+      ]
+    },
+    {
+      "path": "57-dax/captions.srt",
+      "bytes": 354,
+      "sha256": "6f682b614804f55c3db72853b1f58270584e446c46964241582f5f3ad8460b2c"
+    },
+    {
+      "path": "58-focused-relationships/assets/01-broad.png",
+      "bytes": 155385,
+      "sha256": "d20b2edb404c602d5873eadbd916c28d3d55cbfbe23a98d6fb97f5669472e928",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/02-sales.png",
+      "bytes": 140273,
+      "sha256": "f50557f2b00a98b24c6705a2825305afda78494691f7f2b87e169422e988534d",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/03-focused.png",
+      "bytes": 115080,
+      "sha256": "30c42ba07c1d010a56f3968ef389690157012ebf19bf93143d983c271c47cc51",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/04-relationship.png",
+      "bytes": 125148,
+      "sha256": "ca9d98c3e21205e147452787d0e4172f243f5713a49803dde2be154accb6b211",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/cards/01-broad.png",
+      "bytes": 235934,
+      "sha256": "4ea9093611c4d8b5a8a1fd380b391c43f7358196018c4c0c682db4ef3ab906cb",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/cards/02-sales.png",
+      "bytes": 205287,
+      "sha256": "277926950f0656b7e18a5324bbe696a7e2968b54d02b886587cf738dbdb6fbc2",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/cards/03-focused.png",
+      "bytes": 189495,
+      "sha256": "dc72d64e768f871fd2fc6f4f6616b24431c98d4983fcf4abb598dd89f6a516ff",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "58-focused-relationships/assets/cards/04-relationship.png",
+      "bytes": 212310,
+      "sha256": "435873d19bfc6988c3c0dc4c5059cc653b9c51fb0f8e2a17ff2afe097c6f7d90",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "59-power-query/assets/01-table.png",
+      "bytes": 140273,
+      "sha256": "f50557f2b00a98b24c6705a2825305afda78494691f7f2b87e169422e988534d",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "59-power-query/assets/02-inputs.png",
+      "bytes": 91197,
+      "sha256": "4cd1c93d7e74bbc36e648416f733df1f2f19c42bb68797e0d09ec8e5ce5b3e1b",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "59-power-query/assets/03-stage-sales.png",
+      "bytes": 110657,
+      "sha256": "cbd92350ec0427c2bcc84619577dd910105ccc5b1f7527bd554212128bbc475e",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "59-power-query/assets/04-parameter.png",
+      "bytes": 26070,
+      "sha256": "1d32f6131d63b4aa715d8f9060f8df2ab80f75378cbf5dd58f5a956709c0e1e3",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "59-power-query/assets/05-m-reference.png",
+      "bytes": 38780,
+      "sha256": "0e9a93aff3c70213aa71bba546d1213782c30fc2654b7db1a7b21c25139a045f",
+      "dimensions": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "59-power-query/assets/cards/01-table.png",
+      "bytes": 226944,
+      "sha256": "9d896742d283388158867cd5039343b09f474ac6002cd13d3b2a207ba52479f5",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "59-power-query/assets/cards/02-inputs.png",
+      "bytes": 198921,
+      "sha256": "b91166c25d3d6a9c1ac3de4a0023bfe2681b205326c33a98f0a3d1d71d4f107d",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "59-power-query/assets/cards/03-stage-sales.png",
+      "bytes": 186043,
+      "sha256": "d2d39b3192b7a183a5f36f00ec089741b8b5feec4105cc9c63a7bf4a0466f8ca",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "59-power-query/assets/cards/04-parameter.png",
+      "bytes": 109110,
+      "sha256": "1522be117a731b0a059d2e8c99ab1cbf0612f5897ffef618a1eb06f88bf3b11b",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "59-power-query/assets/cards/05-m-reference.png",
+      "bytes": 114287,
+      "sha256": "f3eb4b09b4aca73c2a3a368b9b5ed482c510b6a489d6d1bbfb033118ce4bcfc2",
+      "dimensions": [
+        1080,
+        1350
+      ]
+    },
+    {
+      "path": "60-vscode/assets/raw.mp4",
+      "bytes": 728161,
+      "sha256": "8506feba1805d71a70a600a7a2e0b6c1ab1899e632772af6d2ce97a9a462634d",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1440,
+            "height": 1040
+          }
+        ],
+        "format": {
+          "duration": "24.000000"
+        }
+      }
+    },
+    {
+      "path": "60-vscode/assets/rehearsal-comparison.png",
+      "bytes": 389839,
+      "sha256": "383d6ecd382fc3aa1c7e018d4addd4059c2f0aa8af35bec96413cd767b545d5f",
+      "dimensions": [
+        1440,
+        1040
+      ]
+    },
+    {
+      "path": "60-vscode/assets/thumbnail.png",
+      "bytes": 438693,
+      "sha256": "2b5c62cc6835844b48dd2efcc9873f04a8d4f616f02006ea8533ffe062b9c3b5",
+      "dimensions": [
+        1440,
+        1140
+      ]
+    },
+    {
+      "path": "60-vscode/assets/vscode-captioned.mp4",
+      "bytes": 658132,
+      "sha256": "4c122032cf4e4e6dc6fe6c932b64689d544212e12ad14297fdf0b1690b1897e4",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1440,
+            "height": 1140
+          }
+        ],
+        "format": {
+          "duration": "24.000000"
+        }
+      }
+    },
+    {
+      "path": "60-vscode/captions.srt",
+      "bytes": 437,
+      "sha256": "aed4e6e122f77af498ee0c429552e28e47cdff03140a6ed1b4d7790ddecb334e"
+    }
+  ]
+}

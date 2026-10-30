@@ -1,0 +1,20 @@
+1
+00:00:00,000 --> 00:00:04,500
+Open the discovered Contoso model in VS Code.
+
+2
+00:00:04,500 --> 00:00:08,000
+Find Gross Margin % in Measures.
+
+3
+00:00:08,000 --> 00:00:14,000
+Inspect the measure and its upstream inputs.
+
+4
+00:00:14,000 --> 00:00:20,000
+Select Gross Profit. Compare the original DAX.
+
+5
+00:00:20,000 --> 00:00:24,000
+Synthetic Contoso • Linux VS Code • released v0.3.9 VSIX
+Install the extension: link in the post.
