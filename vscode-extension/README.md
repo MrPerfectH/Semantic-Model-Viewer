@@ -10,6 +10,14 @@ Fabric connection, or Python is required for local files.
 The screenshots below use only the synthetic **Contoso Retail** demo. Select an image to
 open it at full size.
 
+## What's new in 0.6
+
+- **Readable diagrams without zooming.** Names stay at 11px or larger. Tables open as full cards with every relationship's cardinality badge when the pane has room. **Focus** shows a table's neighbourhood, arranged, in one press. On small screens the canvas keeps the space, and narrow dependency flows run top to bottom with tidy links.
+- **Ask your agent, see the answer.** `smv show` opens the relevant Tables and Measures views side by side, or as tabs on a narrow window, and the agent gives the answer in the conversation. Live sessions follow the agent's next view.
+- **Fabric connection.** Sign in with a work account, browse workspaces and models, open read-only metadata, reopen it offline and refresh it.
+- **Colours by source or table folder**, with a compact legend, and VS Code light, dark and high-contrast themes.
+- **Bundled CLI and Copilot tools.** Extension packages include the `smv` command and native Copilot tools.
+
 ## CLI and agent tools
 
 Platform release packages include `smv` and its private runtime. Open a new integrated terminal after installation and run `smv --version`; no separate Node or CLI installation is required. Copilot can use the native Semantic Model Viewer tools directly to inspect models and open diagrams.
@@ -18,7 +26,7 @@ For an external terminal, run **Semantic Model Viewer: Install CLI for External 
 
 Supported bundled CLI targets: macOS x64/arm64, Linux glibc x64/arm64, and Windows x64. Browser-only VS Code and remote terminals are outside this local desktop delivery guarantee. Developer VSIX builds require the explicit CLI assembly step described in [bundled delivery](https://github.com/MrPerfectH/Semantic-Model-Viewer/blob/develop/docs/bundled-agent-delivery.md).
 
-## Fabric connection (development preview)
+## Fabric connection
 
 Requires desktop VS Code 1.101 or later for its Node.js 22 extension host.
 
