@@ -1,0 +1,8 @@
+{
+  "name": "semantic-model-viewer-fabric-helper",
+  "private": true,
+  "version": "0.1.0",
+  "dependencies": {
+    "@azure/msal-node": "7.0.1"
+  }
+}

@@ -15,6 +15,7 @@ to any host name other than localhost.
 import argparse
 import json
 import os
+import secrets
 import string
 import sys
 import threading
@@ -24,6 +25,7 @@ import urllib.request
 import webbrowser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from fabric_bridge import FabricBridge
 
 VERSION = "1"
 VIEWER_DIR = Path(__file__).resolve().parent.parent
@@ -173,6 +175,39 @@ class Handler(SimpleHTTPRequestHandler):
         else:
             super().do_GET()
 
+    def do_POST(self):
+        self.server.touch()
+        if self.path != '/api/fabric':
+            self.send_error(501, 'Unsupported method')
+            return
+        if not self.local_host() or not self.same_origin():
+            self.send_json(403, {'error': 'Only the viewer page may use this server.'})
+            return
+        if self.headers.get('X-SMV-Fabric-Session', '') != self.server.fabric_session:
+            self.send_json(403, {'error': 'Reload the viewer before connecting to Fabric.'})
+            return
+        if self.headers.get('Content-Type', '').split(';')[0].strip().lower() != 'application/json':
+            self.send_json(415, {'error': 'Fabric requests require JSON.'})
+            return
+        try:
+            length = int(self.headers.get('Content-Length', '0'))
+            if length <= 0 or length > 16384:
+                self.send_json(413, {'error': 'Invalid Fabric request size.'})
+                return
+            payload = json.loads(self.rfile.read(length).decode('utf-8'))
+            if not isinstance(payload, dict) or payload.get('action') not in {
+                    'status', 'signIn', 'beginBrowserSignIn', 'beginDeviceSignIn', 'listWorkspaces', 'listModels', 'openModel', 'signOut', 'cancel'}:
+                self.send_json(400, {'error': 'Invalid Fabric request.'})
+                return
+            if payload['action'] == 'beginBrowserSignIn':
+                payload['returnUri'] = 'http://localhost:' + str(self.server.server_address[1]) + '/?fabricSignIn=1'
+            result = self.server.fabric.request(payload)
+            self.send_json(200, result)
+        except (ValueError, UnicodeError):
+            self.send_json(400, {'error': 'Invalid Fabric request.'})
+        except RuntimeError as error:
+            self.send_json(503, {'error': str(error)})
+
     def end_headers(self):
         if self.path.startswith("/api/"):
             self.send_header("Cache-Control", "no-store")
@@ -214,7 +249,7 @@ class Handler(SimpleHTTPRequestHandler):
         q = dict(urllib.parse.parse_qsl(url.query))
         try:
             if url.path == "/api/ping":
-                data = {"ok": True, "version": VERSION, "home": str(Path.home()), "sep": os.sep, "viewer": str(VIEWER_DIR)}
+                data = {"ok": True, "version": VERSION, "home": str(Path.home()), "sep": os.sep, "viewer": str(VIEWER_DIR), "fabricSession": self.server.fabric_session}
             elif url.path == "/api/browse":
                 data = browse(q.get("path", ""))
             elif url.path == "/api/find":
@@ -240,6 +275,12 @@ class Server(ThreadingHTTPServer):
         super().__init__(address, Handler)
         self.idle_exit = idle_exit
         self.last = time.time()
+        self.fabric_session = secrets.token_urlsafe(32)
+        self.fabric = FabricBridge()
+
+    def server_close(self):
+        self.fabric.close()
+        super().server_close()
 
     def touch(self):
         self.last = time.time()

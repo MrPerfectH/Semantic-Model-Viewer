@@ -10,7 +10,7 @@ function runtime() {
   const context = { console, Set, Map, module: { exports: {} }, addEventListener() {} };
   context.window = context;
   vm.createContext(context);
-  for (const file of ['util.js', 'roles.js', 'tmdl-parser.js', 'snapshot.js', 'canvas.js', 'layouts.js', 'relationships.js', 'measures.js', 'app.js']) {
+  for (const file of ['util.js', 'roles.js', 'tmdl-parser.js', 'snapshot.js', 'canvas.js', 'layouts.js', 'relationships.js', 'dax-format.js', 'measure-comparison.js', 'measures.js', 'app.js']) {
     vm.runInContext(fs.readFileSync(path.join(viewerRoot, 'js', file), 'utf8'), context, { filename: file });
   }
   context.U.store.useMemory({});
@@ -21,10 +21,11 @@ function runtime() {
 function readModel(context, source, name) {
   let target = path.resolve(source);
   if (!fs.existsSync(target)) throw new Error('Model does not exist: ' + target);
-  if (!fs.statSync(target).isDirectory()) throw new Error('Select one TMDL .SemanticModel folder or its definition folder.');
+  const bim = fs.statSync(target).isFile() && path.extname(target).toLowerCase() === '.bim';
+  if (!bim && !fs.statSync(target).isDirectory()) throw new Error('Select one TMDL .SemanticModel folder, definition folder, or model.bim.');
   if (fs.existsSync(path.join(target, 'definition'))) target = path.join(target, 'definition');
   // Do not accidentally combine several models from a repository into one.
-  if (!fs.existsSync(path.join(target, 'model.tmdl'))) throw new Error('Select one .SemanticModel folder or its definition folder (model.tmdl is required).');
+  if (!bim && !fs.existsSync(path.join(target, 'model.tmdl'))) throw new Error('Select one .SemanticModel folder or its definition folder (model.tmdl is required).');
   const files = [];
   function walk(directory) {
     for (const entry of fs.readdirSync(directory, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
@@ -33,11 +34,20 @@ function readModel(context, source, name) {
       else if (entry.isFile() && /\.tmdl$/i.test(entry.name)) files.push({ name: entry.name, text: fs.readFileSync(file, 'utf8') });
     }
   }
-  walk(target);
-  const model = context.TMDLParser.parseTMDL(files, { strictRelationships: true });
-  if (!model.tables.length) throw new Error('No tables found in the model.');
+  if (!bim) walk(target);
   const folder = path.basename(target) === 'definition' ? path.dirname(target) : target;
-  model.name = name || model.name || path.basename(folder).replace(/\.SemanticModel$/i, '');
+  return readRecords(context, bim ? [{name:'model.bim',text:fs.readFileSync(target,'utf8')}] : files, name, path.basename(folder).replace(/\.SemanticModel$/i, ''));
+}
+
+function readRecords(context, files, name, fallback) {
+  const definition = files.some(file => file.path === 'definition/model.tmdl');
+  const tmdl = files.filter(file => /\.tmdl$/i.test(file.name) && (!definition || (file.path || '').startsWith('definition/')));
+  // Match filesystem loading: an explicit TMDL definition wins over a sibling
+  // BIM export, which may be a stale cache of the same model.
+  const bim = !tmdl.some(file => file.name.toLowerCase() === 'model.tmdl') && files.find(file => file.name.toLowerCase() === 'model.bim');
+  const model = bim ? context.TMDLParser.parseBIM(JSON.parse(bim.text), { strictRelationships:true }) : context.TMDLParser.parseTMDL(tmdl, { strictRelationships:true });
+  if (!model.tables.length) throw new Error('No tables found in the model.');
+  model.name = name || model.name || fallback || 'Semantic model';
   // The viewer indexes tables and measures by name. Reject ambiguous input rather
   // than exporting the wrong object when the source violates that assumption.
   for (const [kind, names] of [['table', model.tables.map(t => t.name)], ['measure', model.tables.flatMap(t => t.measures.map(m => m.name))]]) {
@@ -81,10 +91,10 @@ function tablePositions(context, app, names) {
   return canvas.pos;
 }
 
-function snapshot(context, app, focus) {
+function snapshot(context, app, focus, options = {}) {
   const payload = {
     format: 'semantic-model-viewer', version: 1, name: app.model.name,
-    createdAt: new Date().toISOString(), model: context.Snapshots.modelData(app.model), usage: null,
+    createdAt: new Date().toISOString(), model: context.Snapshots.modelData(app.model), usage: options.usage || null,
     settings: { roleRules: context.Roles.defaults() },
     workspace: {
       viewMode: focus.measure ? 'measures' : 'graph', presets: [],
@@ -98,4 +108,4 @@ function snapshot(context, app, focus) {
   return context.Snapshots.buildHTML(fs.readFileSync(path.join(viewerRoot, 'index.html'), 'utf8'), sources, payload);
 }
 
-module.exports = { runtime, readModel, selection, snapshot };
+module.exports = { runtime, readModel, readRecords, selection, snapshot };

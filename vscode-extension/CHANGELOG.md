@@ -1,5 +1,64 @@
 # Changelog
 
+## 0.6.0 (30 October 2026)
+
+Stable release. It includes everything since 0.4.3, from this list and from the 0.7 and 0.5 pre-releases below. Release notes: `docs/releases/0.6.0.md` in the repository.
+
+- Fix `smv show --new-session` occasionally failing with a JSON error when it read a session file before the file was fully written (#193).
+
+- Make diagrams readable without zooming (#187, #190):
+  - Table and measure names render at 11px or larger when a view opens.
+  - The new **Focus** button shows a table's direct neighbourhood, arranged, and pressing it again restores the layout. Focus stays on its table while you click around inside it.
+  - On a short window or a squeezed canvas, the legend and overview map step aside and the bar stays on one line, with display switches behind **View**.
+  - In the Measures view, the header fits one row. In a narrow pane the dependency flow runs top to bottom with tidy right-angle links (**Auto** direction), and inspecting a measure puts its DAX below the graph.
+- Show full table cards, with every relationship's cardinality badge, when the pane has room (#192). After Arrange or Focus, spare height or width goes to the gaps between tables. When the star layout can't show full cards with every badge, the top-to-bottom layout is used instead. A layout or detail level picked under Display is kept.
+- Agent answer views (`smv show`) open on the diagram alone; the agent gives the answer in the conversation. **Tools** brings back the table library, toolbar, legend and map. Unrelated tables fade once you start exploring.
+- The side-by-side agent workspace shows one view per pane without pickers, and switches to named tabs below 1100px window width.
+- Direction and DAX-position choices are buttons, and drop-down lists open inside embedded panes.
+
+- Keep the Power BI Desktop connection and External Tools button in pre-release builds only until they pass Windows testing; stable builds hide them behind a switch in `src/features.js`.
+- Fix Windows external CLI launchers in Unicode installation paths under legacy console code pages; restore the original code page and CLI exit status after execution.
+- Lead CLI help and agent guidance with the live interactive viewer; confirm static PNG and offline HTML exports on stderr while preserving JSON stdout (#179).
+- Add an accessible Measure library toggle, collapse it in focused explanations, and preserve its snapshot state (#180).
+- Include real renderer workspace, viewport and node counts in native editor acceptance evidence.
+
+- Keep matrix columns within usable widths on supported Windows VS Code hosts; retain horizontal scrolling for dense models.
+- Preserve Power Query context on same-model refresh and clear stale refresh messages when opening models.
+- Improve inspector theme contrast, matrix and measure readability, and short-window scrolling.
+- Group cached Fabric metadata under On this device and expose workspace discovery exclusions.
+
+- Put Fabric connection controls directly in the Semantic Models sidebar, with the account, tenant ID, Switch account and Sign out above an expandable workspace/model tree.
+- Keep account controls visible when workspace discovery fails; refresh the sidebar after sign-in and sign-out.
+- Replace the Fabric-only pre-release introduction with the complete feature summary and explain the CLI’s separate setup.
+
+## 0.7.295 — pre-release (26 October 2026)
+
+- Connect to Fabric, browse workspace models, and save metadata for offline reopening.
+- Edit colours by source or table folder, with distinct fact and dimension styling and per-model persistence.
+- Add a compact, collapsible legend and always-accessible Source / Table folder switch.
+- Move disconnected-table and overview-map switches beside Fit and Center selected in the bottom canvas bar. Show Edit colours when the legend is open.
+- Preserve zoom and position when selecting tables.
+- Reduce relationship badge size beside compact tables while retaining cardinality, filter direction, and click targets.
+- Follow VS Code light, dark, and high-contrast themes; fix inherited backgrounds in Power Query code.
+- Preserve disconnected-table visibility in saved views and snapshots; remember Fabric colour preferences across workspaces for the same model.
+- Require VS Code 1.101 or later.
+
+The companion CLI and Claude plugin provide model-opening, focused views, snapshots, interactive sessions, and Fabric definition fetching. They have separate installation and authentication requirements and are **not bundled in the VS Code extension**.
+
+## Earlier Fabric development work (included in the 0.7 pre-release)
+
+- Require VS Code 1.101 or later for the Fabric host runtime.
+- Integrate Fabric into develop pre-releases with all six native helpers and component notices. Main promotion still requires final acceptance.
+- An additional enterprise workspace passed login/discovery but denied XMLA opens for all 16 models; effective Build permissions and XMLA configuration remain unconfirmed.
+
+- Add work-account sign-in, workspace/model browsing, and explicit XMLA or Fabric definition API metadata access.
+- Cache metadata for offline reopening and support refresh, account switching, sign-out, removal, and existing HTML snapshots.
+- Keep authentication in the extension host with VS Code SecretStorage.
+- Add native Fabric → workspace → model browsing, workspace-scoped searchable lists, and compact metadata status.
+- Package self-contained XMLA helpers with component notices; use metadata-only consumer fallback when full definitions are unavailable.
+- Reject token renewal into a different tenant and require explicit selection when multiple cached accounts are present.
+- Standard login and live XMLA opening tested on macOS, Linux x64 and Windows x64. Controlled permission/fidelity checks and public standalone distribution acceptance remain open.
+
 ## 0.4.3
 
 - Keep cardinality and filter-direction labels visible on parallel relationships when there is space elsewhere along the line, including inactive relationships. Preserve collision avoidance and the compact arrow view at low zoom.
@@ -23,6 +82,25 @@
 - Unify the Spellbook palette across workspaces and simplify the Tables toolbar.
 
 Dependency analysis reads static DAX references; it does not execute DAX or follow calculated-column/table defining expressions or relationship filter propagation. The existing snapshot CLI remains available. Guided onboarding, agent sessions and visual explanations, MCP/inline apps, and Power BI External Tools installation are not part of this release.
+## Unreleased
+
+- Follow the active VS Code light, dark, and high-contrast theme, including live changes. Browser and snapshot Classic/Spellbook appearances stay unchanged.
+- Keep at least 240 pixels of dependency graph canvas in stacked split view. When the window is too short for both panels, scroll the workspace to reach DAX instead of compressing the graph.
+- Show “DAX below graph (narrow view)” when the layout automatically stacks. Restore the saved beside layout and its label when the window is wide enough.
+
+## 0.5.173 — pre-release
+
+This development preview includes the following changes since the last documented release:
+
+- Analyze a table or column to find its direct and indirect dependent measures. Use **Direct only** to narrow the list, then inspect a formula while keeping the source selected.
+- Navigate from colored table and column references in formula cards into dependency analysis. Inlined DAX shows the references in the expanded formula.
+- Browse and search measures with a formula overview and clearer source navigation.
+- Use optional first-run and contextual guidance; skip the tips when you do not need them.
+- Preserve analysis state in interactive HTML snapshots, including the selected source, inspected formula, filters and layout preferences.
+- Add interactive viewer sessions and visual explanations for model exploration.
+- Verify the new Power BI External Tools registration content before reporting installation success; an older file no longer counts as a successful update.
+
+Known limitations: dependency analysis is static and does not execute DAX or Power Query. The Power BI External Tools button opens the viewer; it does not automatically connect to the active Desktop model. This preview can compress the graph excessively in narrow split views; the fix is listed under Unreleased above.
 
 ## 0.3.9
 
@@ -125,3 +203,8 @@ Dependency analysis reads static DAX references; it does not execute DAX or foll
 - Live refresh when TMDL files change on disk.
 - Optional report-usage badges from a Semantic Model Cleaner analysis (run it from the
   viewer or load an existing `smc --format json` export).
+
+## Unreleased
+
+- Add a Windows Power BI Desktop ribbon registration that launches installed VS Code directly, reads the exact Desktop model (including unsaved metadata), and rereads it on Refresh Model.
+- Explain registration changes before Windows approval, support Common Files folder lookup without inherited environment variables, and bundle the official model client for Store installations.

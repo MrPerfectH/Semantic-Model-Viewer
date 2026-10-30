@@ -1,0 +1,10 @@
+{
+  "name": "semantic-model-viewer-plugin",
+  "version": "0.7.0",
+  "private": true,
+  "description": "Explore and compare Power BI semantic models through the Semantic Model Viewer CLI: focused diagrams, inline DAX comparison and offline snapshots.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  }
+}

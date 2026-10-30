@@ -1,0 +1,18 @@
+table 'Time Intelligence'
+	lineageTag: a60192d2-9a4f-5ed7-bce4-1c547eb05afa
+	calculationGroup
+		precedence: 1
+
+		calculationItem Current = SELECTEDMEASURE()
+
+		calculationItem YTD = CALCULATE(SELECTEDMEASURE(), DATESYTD(Date[Date]))
+
+		calculationItem QTD = CALCULATE(SELECTEDMEASURE(), DATESQTD(Date[Date]))
+
+		calculationItem 'Prior Year' = CALCULATE(SELECTEDMEASURE(), SAMEPERIODLASTYEAR(Date[Date]))
+
+	column Name
+		dataType: string
+		sourceColumn: Name
+
+	partition 'Time Intelligence' = calculationGroup

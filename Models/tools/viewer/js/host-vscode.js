@@ -18,10 +18,22 @@
   var initP = new Promise(function (resolve, reject) { initResolve = resolve; initReject = reject; });
 
   function post(msg) { vscode.postMessage(msg); }
+  function syncTheme() {
+    var body = g.document && g.document.body;
+    var kind = body && body.getAttribute('data-vscode-theme-kind');
+    var classes = body ? String(body.className || '').split(/\s+/) : [];
+    host.theme = ['high-contrast-light', 'high-contrast', 'dark', 'light'].find(function (name) {
+      return kind === 'vscode-' + name || classes.indexOf('vscode-' + name) >= 0;
+    }) || 'light';
+    if (g.ViewerTheme) g.ViewerTheme.syncHost();
+  }
   function request(type, payload) {
     var id = ++seq;
     return new Promise(function (res, rej) {
-      var timer = g.setTimeout(function () { delete pending[id]; rej(new Error('VS Code did not respond. Close and reopen the viewer to retry.')); }, 120000);
+      var timer = g.setTimeout(function () { delete pending[id];
+        if (type === 'fabricRequest') post({ type: 'fabricRequest', id: ++seq, payload: { action: 'cancel' } });
+        rej(new Error('VS Code did not respond. Close and reopen the viewer to retry.'));
+      }, type === 'fabricRequest' ? 330000 : 120000);
       pending[id] = { res: res, rej: rej, timer: timer };
       post(Object.assign({ type: type, id: id }, payload || {}));
     });
@@ -29,6 +41,8 @@
 
   var host = {
     kind: 'vscode',
+    fabricAvailable: true,
+    fabricRequest: function (payload) { return request('fabricRequest', { payload: payload }); },
     caps: { drop: false, pickFiles: false, connectRepo: false, workspace: true, png: false },
     storage: {
       get: function (k) { return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null; },
@@ -63,7 +77,7 @@
       if (!m || !m.files) return null;
       var model = g.TMDLParser.parseAny(m.files);
       var name = m.name || model.name || 'Model';
-      return { id: m.modelId, name: name, path: m.path, model: model };
+      return { id: m.modelId, name: name, path: m.path, source: m.source, model: model };
     }
   };
 
@@ -97,4 +111,13 @@
   });
 
   g.SMVHost = host;
+  // VS Code supplies these classes and CSS variables before the webview scripts run.
+  // Watch token changes as well: switching between two dark themes keeps the same kind.
+  syncTheme();
+  if (g.MutationObserver && g.document && g.document.body) {
+    var themeObserver = new g.MutationObserver(syncTheme);
+    themeObserver.observe(g.document.body, { attributes: true, attributeFilter: ['class', 'style', 'data-vscode-theme-kind', 'data-vscode-theme-id'] });
+    themeObserver.observe(g.document.documentElement, { attributes: true, attributeFilter: ['style'] });
+    g.addEventListener('unload', function () { themeObserver.disconnect(); });
+  }
 })(window);

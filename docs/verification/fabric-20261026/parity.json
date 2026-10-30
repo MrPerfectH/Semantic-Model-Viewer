@@ -1,0 +1,41 @@
+[
+  {
+    "method": "xmla",
+    "coverage": "permission-dependent",
+    "columnKinds": {
+      "rowNumber": 22,
+      "data": 103
+    },
+    "counts": {
+      "tables": 22,
+      "columns": 103,
+      "measures": 64,
+      "measureDefinitions": 64,
+      "columnDefinitions": 103,
+      "relationships": 28
+    }
+  },
+  {
+    "method": "rest",
+    "coverage": "definition",
+    "columnKinds": {},
+    "counts": {
+      "tables": 22,
+      "columns": 103,
+      "measures": 64,
+      "measureDefinitions": 64,
+      "columnDefinitions": 103,
+      "relationships": 28
+    }
+  },
+  {
+    "sameModelRestXmlaIdentityParity": {
+      "tables": true,
+      "columns": true,
+      "measures": true,
+      "measureDefinitions": true,
+      "columnDefinitions": true,
+      "relationships": true
+    }
+  }
+]

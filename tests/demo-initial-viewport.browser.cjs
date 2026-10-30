@@ -36,12 +36,27 @@ async function openBrowser() {
     try { return await Promise.race([closed.then(() => true), new Promise(resolve => { timer = setTimeout(() => resolve(false), timeout); })]); }
     finally { clearTimeout(timer); }
   };
-  const endpoint = await new Promise((resolve, reject) => {
-    let output = ''; const timer = setTimeout(() => reject(new Error('Chrome did not start: ' + output)), 15000);
-    child.stderr.on('data', chunk => { output += chunk; const match = output.match(/DevTools listening on (ws:\/\/\S+)/); if (match) { clearTimeout(timer); resolve(match[1]); } });
-    child.once('error', error => { clearTimeout(timer); reject(error); });
-    child.once('exit', code => { clearTimeout(timer); reject(new Error('Chrome exited during startup: ' + code + ' ' + output)); });
-  });
+  let endpoint;
+  try {
+    endpoint = await new Promise((resolve, reject) => {
+      // Match the other browser suites' cold-start allowance on hosted runners.
+      let output = ''; const timer = setTimeout(() => reject(new Error('Chrome did not start: ' + output)), 30000);
+      child.stderr.on('data', chunk => { output += chunk; const match = output.match(/DevTools listening on (ws:\/\/\S+)/); if (match) { clearTimeout(timer); resolve(match[1]); } });
+      child.once('error', error => { clearTimeout(timer); reject(error); });
+      child.once('exit', code => { clearTimeout(timer); reject(new Error('Chrome exited during startup: ' + code + ' ' + output)); });
+    });
+  } catch (error) {
+    // openBrowser has not returned, so the test's browser teardown cannot run.
+    // Reap the process here instead of keeping the test worker alive until CI times out.
+    child.kill('SIGKILL');
+    try {
+      if (await waitClosed(3000)) fs.rmSync(profile, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
+    } finally {
+      child.stderr.destroy();
+      child.unref();
+    }
+    throw error;
+  }
   const port = new URL(endpoint).port;
   const targets = await (await fetch('http://127.0.0.1:' + port + '/json/list')).json();
   const socket = new WebSocket(targets.find(target => target.type === 'page').webSocketDebuggerUrl);

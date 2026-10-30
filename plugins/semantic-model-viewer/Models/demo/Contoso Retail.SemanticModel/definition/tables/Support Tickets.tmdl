@@ -1,0 +1,60 @@
+table 'Support Tickets'
+	lineageTag: 10fb35c4-c292-5a4d-b734-969e2ba280af
+
+	column 'Customer Key'
+		dataType: int64
+		isHidden
+		lineageTag: 010e73a3-c821-5ae9-b7aa-70715ee19619
+		sourceColumn: customer_key
+
+	column 'Product Key'
+		dataType: int64
+		isHidden
+		lineageTag: 13c97794-21aa-566f-b2d0-b8ad865c1bb7
+		sourceColumn: product_key
+
+	column 'Employee Key'
+		dataType: int64
+		isHidden
+		lineageTag: 7ae030d2-adb2-546e-8836-2c21444a436d
+		sourceColumn: employee_key
+
+	column 'Opened Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: 1f8149af-a5c0-5ed7-a370-106017eb18db
+		sourceColumn: opened_date
+
+	column 'Closed Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: 808d057b-94cc-55ef-a522-0c7bcb9d8c17
+		sourceColumn: closed_date
+
+	column 'Ticket Count'
+		dataType: decimal
+		isHidden
+		lineageTag: 5ec8dbaf-b558-56ad-9a0d-d54ef0125afd
+		sourceColumn: ticket_count
+
+	column 'Resolution Hours'
+		dataType: decimal
+		isHidden
+		lineageTag: 030cabc7-ff1c-5598-9970-853d77b2407e
+		sourceColumn: resolution_hours
+
+	column 'Satisfaction Score'
+		dataType: decimal
+		isHidden
+		lineageTag: e00c1576-4673-5c8b-83da-f45c25b30f42
+		sourceColumn: satisfaction_score
+
+	partition 'Support Tickets' = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="sales",Kind="Schema"]}[Data],
+				    tbl = db{[Name="fact_support_tickets",Kind="Table"]}[Data]
+				in
+				    tbl

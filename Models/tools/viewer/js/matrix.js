@@ -45,12 +45,15 @@
     var mx = this.build();
     var openT = function (n) { return function () { app.focusTable(n); }; };
     var wrap = el('section', { 'aria-label': 'Fact relationship matrix', style: 'position:absolute;inset:0;z-index:20;background:#f6f8fc;overflow:auto;' });
-    var inner = el('div', { style: 'padding:28px 30px 36px;width:max-content;min-width:100%;' });
+    // A percentage-width table inside max-content creates a cyclic intrinsic width
+    // in Chromium versions used by supported VS Code hosts. Let the table's own
+    // minimum width provide horizontal scrolling for dense models instead.
+    var inner = el('div', { style: 'padding:24px 24px 32px;box-sizing:border-box;width:100%;' });
     wrap.appendChild(inner); this.host.appendChild(wrap); this.el = wrap;
 
     inner.appendChild(el('div', { text: 'MODEL STRUCTURE', style: 'font-size:10px;font-weight:700;letter-spacing:1.3px;color:var(--smv-muted,#687991);' }));
     inner.appendChild(el('h1', { text: 'Fact relationship matrix', style: 'margin:7px 0 8px;font-size:25px;font-weight:600;letter-spacing:-.7px;color:#182943;' }));
-    inner.appendChild(el('p', { text: 'Fact tables × related tables across the full model. This view is independent of your diagram layout.', style: 'margin:0 0 20px;font-size:12px;line-height:1.6;color:#65748a;max-width:720px;' }));
+    inner.appendChild(el('p', { text: 'Fact tables × related tables across the full model. This view is independent of your diagram layout.', style: 'margin:0 0 20px;font-size:13px;line-height:1.6;color:#65748a;max-width:720px;' }));
     if (!mx) {
       inner.appendChild(el('div', { style: 'max-width:620px;padding:26px;border:1px solid var(--smv-line,#dfe6f0);border-radius:14px;background:#fff;' }, [
         el('h2', { text: 'No connected fact tables', style: 'margin:0 0 10px;font-size:17px;color:var(--smv-ink,#263951);' }),
@@ -73,15 +76,15 @@
     note += 'Filled = an active relationship · ring = a bidirectional relationship · dashed = all inactive · number = multiple. Select a table or cell to open its table in the diagram.';
     inner.appendChild(el('p', { style: "margin:7px 0 20px;font:400 11.5px/1.7 'IBM Plex Sans',sans-serif;color:#65748a;max-width:760px;", text: note }));
 
-    var table = el('table', { 'aria-label': 'Fact tables and their related tables', style: 'border-collapse:separate;border-spacing:0;table-layout:fixed;background:#fff;border:1px solid #dfe6ef;border-radius:10px;width:' + (240 + mx.facts.length * 52) + 'px;' });
+    var table = el('table', { 'aria-label': 'Fact tables and their related tables', style: 'border-collapse:separate;border-spacing:0;table-layout:fixed;background:#fff;border:1px solid #dfe6ef;border-radius:10px;min-width:' + (240 + mx.facts.length * 60) + 'px;width:100%;' });
     var thead = el('thead', {}), head = el('tr', {});
-    head.appendChild(el('th', { scope: 'col', text: 'Related table', style: 'position:sticky;top:0;left:0;z-index:6;background:#eef2f8;height:158px;width:240px;padding:0 12px 12px;text-align:left;vertical-align:bottom;border-bottom:1px solid #dbe3ee;font-size:11px;font-weight:600;color:#65748a;' }));
+    head.appendChild(el('th', { scope: 'col', text: 'Related table', style: 'position:sticky;top:0;left:0;z-index:6;background:#eef2f8;height:158px;width:240px;padding:0 12px 12px;text-align:left;vertical-align:bottom;border-bottom:1px solid #dbe3ee;font-size:13px;font-weight:600;color:#65748a;' }));
     mx.facts.forEach(function (f) {
-      head.appendChild(el('th', { scope: 'col', style: 'position:sticky;top:0;z-index:5;background:#eef2f8;border-bottom:1px solid #dbe3ee;padding:0;width:52px;' }, el('button', {
-        title: 'Open ' + f.name + ' in the table diagram', 'aria-label': 'Open fact table ' + f.name + ' in the diagram', onClick: openT(f.name),
+      head.appendChild(el('th', { scope: 'col', style: 'position:sticky;top:0;z-index:5;background:#eef2f8;border-bottom:1px solid #dbe3ee;padding:0;min-width:60px;' }, el('button', {
+        data: {smvKind:'table',smvName:f.name}, title: 'Open ' + f.name + ' in the table diagram', 'aria-label': 'Open fact table ' + f.name + ' in the diagram', onClick: openT(f.name),
         style: 'height:158px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:9px;border:none;background:transparent;cursor:pointer;padding:0 0 12px;'
       }, [
-        el('span', { text: f.name, style: "writing-mode:vertical-rl;transform:rotate(180deg);font:600 11px/1.2 'IBM Plex Sans',sans-serif;color:#3a4d67;max-height:120px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;" }),
+        el('span', { text: f.name, style: "writing-mode:vertical-rl;transform:rotate(180deg);font:600 13px/1.2 'IBM Plex Sans',sans-serif;color:#3a4d67;max-height:120px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;" }),
         el('span', { style: 'width:9px;height:9px;border-radius:2.5px;background:' + app.tableColor(f) + ';flex:none;' })
       ])));
     });
@@ -92,11 +95,11 @@
       var rc = mx.cellMap[t.name];
       var row = el('tr', { cls: 'hv-eef2f7' });
       row.appendChild(el('th', { scope: 'row', style: 'position:sticky;left:0;z-index:2;background:#fff;border-bottom:1px solid var(--smv-line,#edf1f6);padding:0;' }, el('button', {
-        title: 'Open ' + t.name + ' in the table diagram', 'aria-label': 'Open related table ' + t.name + ' in the diagram', onClick: openT(t.name),
-        style: 'display:flex;align-items:center;gap:8px;height:40px;width:100%;padding:0 12px;border:none;background:transparent;cursor:pointer;text-align:left;'
+        data: {smvKind:'table',smvName:t.name}, title: 'Open ' + t.name + ' in the table diagram', 'aria-label': 'Open related table ' + t.name + ' in the diagram', onClick: openT(t.name),
+        style: 'display:flex;align-items:center;gap:8px;height:44px;width:100%;padding:0 12px;border:none;background:transparent;cursor:pointer;text-align:left;'
       }, [
         el('span', { style: 'width:9px;height:9px;border-radius:50%;background:' + app.tableColor(t) + ';flex:none;' }),
-        el('span', { text: t.name, style: "flex:1;min-width:0;font:500 11.5px/1 'IBM Plex Sans',sans-serif;color:var(--smv-ink,#2b3140);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" }),
+        el('span', { text: t.name, style: "flex:1;min-width:0;font:500 13px/1 'IBM Plex Sans',sans-serif;color:var(--smv-ink,#2b3140);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" }),
         el('span', { text: String(Object.keys(rc).length), title: 'Connected fact tables', style: "font:500 10px/1 'IBM Plex Mono',monospace;color:var(--smv-muted,#72829a);flex:none;" })
       ])));
       mx.facts.forEach(function (f, i) {
@@ -106,13 +109,13 @@
             el('span', { 'aria-hidden': 'true', text: '·', style: 'color:var(--smv-line,#c9d3e1);' })));
           return;
         }
-        var dot = "width:16px;height:16px;border-radius:50%;background:var(--smv-burgundy,#2563eb);display:flex;align-items:center;justify-content:center;font:700 9px/1 'IBM Plex Mono',monospace;color:#fff;";
-        if (rels.every(function (x) { return x.inactive; })) dot = 'width:16px;height:16px;border-radius:50%;background:transparent;border:2px dashed var(--smv-muted,#94a3b8);display:flex;align-items:center;justify-content:center;color:#52647d;font-size:9px;';
+        var dot = "width:20px;height:20px;border-radius:50%;background:var(--smv-burgundy,#2563eb);display:flex;align-items:center;justify-content:center;font:700 11px/1 'IBM Plex Mono',monospace;color:#fff;";
+        if (rels.every(function (x) { return x.inactive; })) dot = 'width:20px;height:20px;border-radius:50%;background:transparent;border:2px dashed var(--smv-muted,#94a3b8);display:flex;align-items:center;justify-content:center;color:#52647d;font-size:11px;';
         else if (rels.some(function (x) { return x.both; })) dot += 'box-shadow:0 0 0 3px var(--smv-accent-halo,rgba(37,99,235,.22));';
         var title = rels.map(function (x) { return x.from + '[' + x.fromCol + '] = ' + x.to + '[' + x.toCol + '] · ' + (x.inactive ? 'inactive' : 'active') + ' · ' + (x.both ? 'bidirectional filtering' : x.to + ' filters ' + x.from); }).join('\n');
         row.appendChild(el('td', { style: 'border-bottom:1px solid var(--smv-line,#edf1f6);padding:0;' }, el('button', {
           title: title, 'aria-label': t.name + ' and ' + f.name + ': ' + rels.length + ' relationship' + (rels.length === 1 ? '' : 's') + '. ' + title + '. Open ' + t.name + ' in the diagram.', onClick: openT(t.name),
-          style: 'border:none;background:transparent;height:40px;width:100%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;'
+          style: 'border:none;background:transparent;height:44px;width:100%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;'
         }, el('span', { 'aria-hidden': 'true', style: dot, text: rels.length > 1 ? String(rels.length) : '' }))));
       });
       tbody.appendChild(row);

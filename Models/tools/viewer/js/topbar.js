@@ -31,8 +31,9 @@
 
   TopBar.prototype.update = function () {
     var self=this,app=this.app,st=app.state,cv=app.canvas,offline=!!app.snapshotMode,info=app.snapshotInfo||{};
-    var key=[app.modelKey,st.modelName,st.loaded,st.viewMode,st.showModelMenu,st.pngLabel,st.repoScanning,st.repoError,app._repoLive,offline,st.snapshotSaving,st.refreshing,st.snapshotMessage,st.snapshotError,!!app.server].join('|');
+    var key=[app.modelKey,st.modelName,st.loaded,st.viewMode,st.showModelMenu,st.pngLabel,st.repoScanning,st.repoError,app._repoLive,offline,st.snapshotSaving,st.refreshing,st.snapshotMessage,st.snapshotError,!!app.server,app.fabric && app.fabric.busy].join('|');
     if(key===this._key)return;this._key=key;U.clear(this.host);
+    var fabricRecord=app.fabric && app.fabric.current(),fabricSource=fabricRecord && fabricRecord.source;
     var count=(app.model?app.model.tables.length:0)+' tables · '+(app.model?app.model.relationships.length:0)+' relationships';
     var created=Number.isFinite(Date.parse(info.createdAt))?new Date(info.createdAt).toLocaleString():'';
     var identity=el(offline?'div':'button',{cls:'ex-model-button'+(offline?' ex-snapshot-identity':''),title:offline?count:'Switch or import a model',
@@ -42,16 +43,31 @@
     var model=el('div',{cls:'ex-brand'},[el('span',{cls:'ex-logo',html:U.ICON.logo}),identity]);
     if(st.showModelMenu&&!offline)model.appendChild(this.modelMenu());this.host.appendChild(model);
     var nav=el('nav',{cls:'ex-main-nav','aria-label':'Analysis views'});
-    [['graph','Tables'],['measures','Measures'],['power-query','Power Query'],['clusters','Domains'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
+    [['graph','Tables'],['measures','Measures'],['power-query','Power Query'],['clusters','Table groups'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
     this.host.appendChild(nav);
     var actions=el('div',{cls:'ex-header-actions'});
-    if(g.ViewerTheme){
+    if(g.ViewerTheme&&!(g.SMVHost&&g.SMVHost.kind==='vscode')){
       var theme=el('select',{cls:'ex-theme-select','aria-label':'Appearance',title:'Choose the viewer appearance',onChange:function(e){g.ViewerTheme.set(e.target.value);}},[
         el('option',{value:'classic',text:'Classic'}),el('option',{value:'spellbook',text:'Spellbook'})]);
       theme.value=g.ViewerTheme.get();actions.appendChild(theme);
     }
-    actions.appendChild(el('span',{cls:offline?'ex-snapshot-badge':'ex-local-badge',text:offline?'Offline snapshot':app.host?'VS Code workspace':'Local analysis',
-      title:offline?'Includes model metadata, DAX and available Power Query definitions. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'}));
+    if(!offline && app.fabric && app.fabric.available()){
+      /* VS Code signs in from the Fabric tree in the side bar; the toolbar button there is opt-in */
+      if(!(app.host && app.host.caps && app.host.caps.connectButton===false))actions.appendChild(el('button',{cls:'ex-button',text:'Connect to Fabric',onClick:function(){app.fabric.show();}}));
+      if(fabricSource){
+        actions.appendChild(el('button',{cls:'ex-button',text:app.fabric.busy?'Refreshing…':'Refresh Fabric',disabled:app.fabric.busy,onClick:function(){app.fabric.refresh();}}));
+      }
+    }
+    var acquisition=offline?info.source:fabricSource;
+    var metadataText='';
+    if(acquisition){
+      var acquired=Number.isFinite(Date.parse(acquisition.fetchedAt))?new Date(acquisition.fetchedAt).toLocaleString():'unknown';
+      var notices=Array.isArray(acquisition.warnings)?acquisition.warnings:[];
+      metadataText='Fabric metadata fetched '+acquired+(acquisition.method?' · '+acquisition.method.toUpperCase():'')+(acquisition.coverage?' · Coverage: '+acquisition.coverage:'');
+      if(notices.length)metadataText+=' · '+notices.join(' ');
+    }
+    actions.appendChild(el('span',{cls:offline?'ex-snapshot-badge':'ex-local-badge',text:offline?'Offline snapshot':fabricSource?'Fabric · read-only':app.host?'VS Code workspace':'Local analysis',
+      title:metadataText || (offline?'Includes model metadata, DAX and available Power Query definitions. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'),tabindex:metadataText?'0':null,'aria-label':metadataText || null}));
     actions.appendChild(el('button',{cls:'ex-button ex-snapshot-export',text:st.snapshotSaving?'Saving snapshot…':'Save snapshot',disabled:!st.loaded||!!st.snapshotSaving,
       title:'Download an offline copy of the app, including this model, DAX, available Power Query definitions, and your current views',onClick:function(){app.saveSnapshot();}}));
     if(!offline&&app.host){
@@ -61,10 +77,11 @@
       if(app.canRefreshSource())actions.appendChild(el('button',{cls:'ex-button',text:st.refreshing?'Refreshing…':'Refresh',disabled:!!st.refreshing,
         title:'Re-read this model from its source folder. Your layout and saved views are kept.',onClick:function(){app.refreshSource();}}));
       if(st.viewMode!=='power-query')actions.appendChild(el('button',{cls:'ex-button',text:st.pngLabel,title:'Export current view as PNG',onClick:function(){app.exportPNG();}}));
-      if(!app.server)actions.appendChild(el('a',{cls:'ex-button',text:'Get the app',href:'https://github.com/MrPerfectH/Semantic-Model-Viewer#install-2-minutes',target:'_blank',rel:'noopener',
+      if(!app.server)actions.appendChild(el('a',{cls:'ex-button',text:'Get the app',href:'https://github.com/MrPerfectH/Semantic-Model-Viewer#start-here',target:'_blank',rel:'noopener',
         title:'Download the desktop app: it opens your model folders directly, with no browser permission prompt',style:'text-decoration:none;display:inline-flex;align-items:center;'}));
       actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Open model',onClick:function(){app.setState({showImport:true,importError:'',importReady:false});}}));
     }
+    if(!offline&&g.ViewerOnboarding)actions.appendChild(el('button',{cls:'ex-button',text:'Help', 'data-onboarding-help':'',onClick:function(){if(app.onboarding)app.onboarding.restart();}}));
     this.host.appendChild(actions);
     /* Domains keeps Fit in its own toolbar row (see TableExplorer.renderClusterToolbar),
        next to Expand all / Collapse all, so both canvases carry the same controls. */
@@ -91,7 +108,7 @@
     if (!(app.host.models||[]).length) menu.appendChild(el('p',{text:'Open a workspace containing a .SemanticModel folder or model.bim, then refresh this list.',style:'padding:0 8px;font-size:12px;line-height:1.6;color:#64748b;'}));
     if(app.state.repoError)menu.appendChild(el('p',{role:'alert',text:app.state.repoError,style:'padding:8px;color:#b91c1c;font-size:12px;'}));
     menu.appendChild(el('button',{cls:'ex-button',role:'menuitem',text:'Refresh model list',onClick:function(){app.hostSelectModel();}}));
-    if (app.state.loaded) {
+    if (app.state.loaded && !(app.fabric && app.fabric.current() && app.fabric.current().source)) {
       menu.appendChild(el('button',{cls:'ex-button',role:'menuitem',text:'Refresh model',onClick:function(){app.hostRefreshModel();}}));
     }
     return wrap;
@@ -108,7 +125,7 @@
     var store = app.getStore();
     var items = [{ id: 'builtin', name: 'Contoso Retail', meta: 'built-in' }]
       .concat(store.filter(function (m) { return String(m.id).indexOf('repo:') !== 0; })
-        .map(function (m) { return { id: m.id, name: m.name, meta: m.model.tables.length + ' tables · imported' }; }));
+        .map(function (m) { return { id: m.id, name: m.name, meta: m.model.tables.length + ' tables · ' + (m.source && m.source.kind==='fabric'?'Fabric cache':'imported') }; }));
     var row = function (item, canDelete, onPick, onDel) {
       var active = app.modelKey === item.id;
       var r = el('div', { style: 'display:flex;align-items:center;border-radius:7px;' + (active ? 'background:#eef4ff;' : '') });
@@ -220,14 +237,16 @@
     var tot = {}, vis = {}, hid = {};
     app.model.tables.forEach(function (t) {
       var k = keyOf(t); tot[k] = (tot[k] || 0) + 1;
-      if (showSA || t.relCount > 0) vis[k] = (vis[k] || 0) + 1; else hid[k] = (hid[k] || 0) + 1;
+      var card=app.canvas && app.canvas.cards && app.canvas.cards[t.name];
+      var visible=card ? card.el.style.display!=='none' : (showSA || t.relCount>0);
+      if (visible) vis[k] = (vis[k] || 0) + 1; else hid[k] = (hid[k] || 0) + 1;
     });
     var map = app.colorBy === 'source' ? app._srcMap : app._domMap;
     return Object.keys(tot).sort(function (a, b) { return tot[b] - tot[a]; }).map(function (k) {
       return {
-        key: k, label: app.colorBy === 'source' ? (labelMap[k] || k) : k, color: map[k] || app.FALLBACK_COLOR,
+        key: k, label: app.groupLabel ? app.groupLabel(app.colorBy,k) : (app.colorBy === 'source' ? (labelMap[k] || k) : k), color: map[k] || app.FALLBACK_COLOR,
         count: vis[k] || 0, plus: hid[k] ? ('+' + hid[k]) : '',
-        tip: hid[k] ? ((vis[k] || 0) + ' on canvas · ' + hid[k] + ' standalone hidden — use the Standalone toggle to show ' + (hid[k] === 1 ? 'it' : 'them')) : (tot[k] + ' tables')
+        tip: hid[k] ? ((vis[k] || 0) + ' on canvas · ' + hid[k] + ' not currently visible') : (tot[k] + ' tables')
       };
     });
   };
@@ -243,7 +262,7 @@
       onClick: function () { app.setState({ legendOpen: !st.legendOpen }); },
       style: "display:flex;align-items:center;gap:6px;width:100%;border:none;background:transparent;cursor:pointer;padding:2px 2px 6px;font-family:'IBM Plex Sans',sans-serif;"
     }, [
-      el('span', { style: 'flex:1;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:#8b92a0;font-weight:700;', text: app.colorBy === 'source' ? 'Source' : 'Domain' }),
+      el('span', { style: 'flex:1;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:#8b92a0;font-weight:700;', text: app.colorBy === 'source' ? 'Source' : 'Table group' }),
       el('span', { style: 'flex:none;display:flex;transition:transform .15s;transform:rotate(' + (st.legendOpen ? '0deg' : '180deg') + ');', html: U.icon('chevDown', 12, '#a8aeb9') })
     ]));
     if (st.legendOpen) {

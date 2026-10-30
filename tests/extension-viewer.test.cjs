@@ -63,7 +63,7 @@ function harness() {
   };
   context.window = context; vm.createContext(context);
   const load = file => vm.runInContext(fs.readFileSync(path.join(viewerDir, 'js', file), 'utf8'), context, { filename: file });
-  for (const file of ['util.js', 'snapshot.js', 'roles.js', 'tmdl-parser.js', 'canvas.js', 'layouts.js', 'matrix.js', 'dax-format.js', 'measures.js', 'sidebar.js', 'topbar.js', 'rules.js', 'relationships.js', 'explorer.js', 'host-vscode.js']) load(file);
+  for (const file of ['util.js', 'snapshot.js', 'roles.js', 'tmdl-parser.js', 'canvas.js', 'layouts.js', 'matrix.js', 'dax-format.js', 'measures.js', 'sidebar.js', 'topbar.js', 'rules.js', 'relationships.js', 'explorer.js', 'host-vscode.js', 'fabric.js']) load(file);
   const sidebarUpdate = context.Sidebar.prototype.update;
   for (const name of ['Legend', 'Hint', 'MatrixView', 'MeasuresView', 'Sidebar', 'ImportModal', 'RulesModal', 'TableExplorer']) context[name].prototype.update = function () {};
   const cv = context.GraphCanvas.prototype;
@@ -94,8 +94,10 @@ test('VS Code boot seeds shared preferences before constructing and has an actio
   assert.equal(app.state.mvW, 410); assert.equal(app.canvas.detailMode, 'cards');
   assert.equal(app.state.loaded, false); assert.equal(app.model.tables.length, 0);
   const labels = texts(h.document.getElementById('topbar'));
-  assert.ok(labels.includes('Choose model')); assert.ok(labels.includes('Workspace models'));
-  assert.ok(labels.includes('Refresh model list')); assert.equal(labels.includes('Contoso Retail'), false);
+  assert.ok(labels.includes('Choose model')); assert.equal(app.state.showModelMenu, false);
+  assert.equal(labels.includes('Contoso Retail'), false);
+  app.setState({showModelMenu:true}); await flush();
+  assert.ok(texts(h.document.getElementById('topbar')).includes('Refresh model list'));
   assert.equal(labels.includes('PNG'), false); assert.equal(labels.includes('Open model'), false);
   app.host.storage.set('new-key', 'value'); app.host.storage.del('new-key');
   assert.equal(h.next('storage').value, 'value'); assert.equal(h.next('storage').value, null); h.isolated();
@@ -109,8 +111,19 @@ test('host default model retains the shared parser, dependency graph, table canv
   assert.ok(graph.names.includes('Base')); assert.ok(graph.names.includes('Derived'));
   app.explorer.add(['Sales'], { x: 45, y: 70 }); await flush();
   assert.deepEqual([...app.explorer.names], ['Sales']); assert.deepEqual(plain(app.canvas.pos.Sales), { x: 45, y: 70 });
-  for (const label of ['Tables', 'Measures', 'Domains', 'Matrix', 'Save snapshot', 'Choose model']) assert.ok(texts(h.document.getElementById('topbar')).includes(label), label);
+  for (const label of ['Tables', 'Measures', 'Table groups', 'Matrix', 'Save snapshot', 'Choose model']) assert.ok(texts(h.document.getElementById('topbar')).includes(label), label);
   h.isolated();
+});
+
+test('the model VS Code asks to open beats the last cached Fabric model', async () => {
+  const fabricId = 'fabric:tenant:workspace:old-scorecard';
+  const cached = { id: fabricId, name: 'Old scorecard', at: 1, source: { kind: 'fabric', tenantId: 'tenant', workspaceId: 'workspace', modelId: 'old-scorecard', fetchedAt: '2026-10-01T00:00:00Z' }, model: model('Old scorecard') };
+  const storage = { smv_models_v1: JSON.stringify([cached]), smv_current_v1: fabricId };
+  const h = harness(), app = await h.boot({ storage, open: record('workspace:first', 'Distribution') });
+  assert.equal(app.modelKey, 'workspace:first');
+  assert.equal(app.state.modelName, 'Distribution');
+  const h2 = harness(), app2 = await h2.boot({ storage });
+  assert.equal(app2.modelKey, fabricId, 'with nothing requested the cached Fabric model is still restored');
 });
 
 test('choosing models uses host requests and keeps table membership, coordinates and usage isolated', async () => {
@@ -204,4 +217,23 @@ test('host model switching restores each model lane zoom before layout and fit',
   h.receive({ type: 'model', ...record() }); await flush();
   assert.equal(app.canvas.layoutK, 0.42);
   h.isolated();
+});
+
+test('refresh captures Power Query before reset and restores it before activating the view; model changes clear status', async () => {
+  const h = harness(), app = await h.boot({ open: record() });
+  const saved = { version: 1, navigation: { selectedId: 'StageSales', analyzedId: 'StageSales' } };
+  let pending = saved, resets = 0, restores = 0;
+  app.powerQueryWorkspace = {
+    captureSnapshot() { return pending; }, reset() { resets++; pending = null; },
+    restoreSnapshot(data) { restores++; pending = data; },
+    update() { if (app.state.viewMode === 'power-query') assert.deepEqual(pending, saved); }
+  };
+  app.setViewMode('power-query'); await flush();
+  h.receive({ type: 'model', ...record() }); await flush();
+  assert.equal(resets, 1); assert.equal(restores, 1); assert.deepEqual(pending, saved);
+  assert.equal(app.state.viewMode, 'power-query');
+  app.setState({ snapshotMessage: 'Refreshed from Fabric.', snapshotError: 'Old error' });
+  h.receive({ type: 'model', ...record('workspace:second', 'Second model') }); await flush();
+  assert.equal(pending, null); assert.equal(restores, 1);
+  assert.equal(app.state.snapshotMessage, ''); assert.equal(app.state.snapshotError, ''); h.isolated();
 });

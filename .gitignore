@@ -1,3 +1,14 @@
 node_modules/
+/dist/claude-plugin/
 .DS_Store
 *.log
+
+__pycache__/
+*.vsix
+dist/
+.vscode-test/
+
+# Restored Power BI client dependencies are built into the VSIX.
+tools/powerbi/obj/
+tools/powerbi/bin/
+vscode-extension/resources/windows/amo/

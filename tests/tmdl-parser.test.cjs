@@ -149,3 +149,70 @@ test('unfence drops ``` fences that an older import left in a stored measure', (
   assert.equal(unfence('SUM ( x )'), 'SUM ( x )');
   assert.equal(unfence(undefined), '');
 });
+
+test('relationship identities preserve escaped names and distinguish parallel edges', () => {
+  const p=parser();
+  const model=p.parseTMDL([
+    file('model.tmdl','model Model\n'),
+    file('A.tmdl','table A\n\tcolumn ID\n\t\tdataType: int64\n'),
+    file('B.tmdl','table B\n\tcolumn ID\n\t\tdataType: int64\n'),
+    file('relationships.tmdl',"relationship '''Quoted'''\n\tfromColumn: A.ID\n\ttoColumn: B.ID\nrelationship Other\n\tfromColumn: A.ID\n\ttoColumn: B.ID\n")
+  ],{strictRelationships:true});
+  assert.deepEqual(Array.from(model.relationships,r=>r.name),["'Quoted'",'Other']);
+});
+
+test('table-group annotations survive TMDL and BIM without borrowing measure display folders', () => {
+  const p=parser();const m=p.parseTMDL([file('T.tmdl',`table Sales
+\tannotation TabularEditor_TableGroup = "Revenue ""Core"""
+\tcolumn Amount
+\t\tdataType: double
+\tmeasure Total = SUM(Sales[Amount])
+\t\tdisplayFolder: Other Folder
+\tpartition Sales = calculated
+\t\tsource = {1}
+`)]);
+  assert.equal(m.tables[0].tableGroup,'Revenue "Core"');assert.equal(m.tables[0].domain,'Revenue "Core"');
+  const b=p.parseBIM({model:{tables:[{name:'Sales',annotations:[{name:'TabularEditor_TableGroup',value:'Revenue'}],columns:[{name:'Amount'}],partitions:[{source:{type:'calculated',expression:'{1}'}}]}]}});
+  assert.equal(b.tables[0].tableGroup,'Revenue');assert.equal(b.tables[0].domain,'Revenue');
+  const noGroup=p.parseBIM({model:{tables:[{name:'T',columns:[{name:'a'},{name:'b'}],measures:[{name:'M',expression:'1',displayFolder:'Finance'}]}]}});
+  assert.notEqual(noGroup.tables[0].domain,'Finance');
+});
+
+test('source grouping captures SQL database and Fabric navigation identities', () => {
+  const p=parser();const parse=expression=>p.parseBIM({model:{tables:[{name:'T',columns:[{name:'x'}],partitions:[{source:{type:'m',expression}}]}]}}).tables[0].source;
+  assert.equal(parse('let Source = Sql.Database("host", "db1"), T = Source{[Schema="gold",Item="Sales"]}[Data] in T').database,'db1');
+  const s=parse('let Source = PowerPlatform.Dataflows(null), W = Source{[workspaceId="w1"]}[Data], D = W{[dataflowId="d1"]}[Data], T = D{[entity="Sales"]}[Data] in T');
+  assert.equal(s.workspace,'w1');assert.equal(s.dataflow,'d1');
+});
+
+test('Python and browser parsers agree on table folders and connection grouping metadata', () => {
+  const {spawnSync}=require('node:child_process');
+  const input={model:{tables:[{name:'Fact',annotations:[{name:'TabularEditor_TableGroup',value:'Operations'}],columns:[{name:'Amount'}],partitions:[{source:{type:'m',expression:'let S = Sql.Database("server", "db"), T = S{[Schema="gold",Item="Sales"]}[Data] in T'}}]},
+    {name:'Manual',annotations:[{name:'TabularEditor_TableGroup',value:'Operations'}],columns:[{name:'Value'}],partitions:[{source:{type:'m',expression:'#table({"Value"}, {{1}})'}}]}]}};
+  const script=`import importlib.util,json,sys\ns=importlib.util.spec_from_file_location('parser',sys.argv[1]);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\nprint(json.dumps(m.parse_bim(json.load(sys.stdin))))`;
+  const r=spawnSync('python3',['-c',script,path.join(jsDir,'../scripts/tmdl_to_model_data.py')],{input:JSON.stringify(input),encoding:'utf8'});
+  assert.equal(r.status,0,r.stderr);
+  const py=JSON.parse(r.stdout),browser=parser().parseBIM(input);
+  for(let i=0;i<2;i++){
+    assert.equal(py.tables[i].tableGroup,browser.tables[i].tableGroup);
+    assert.equal(py.tables[i].domain,browser.tables[i].domain);
+    assert.deepEqual(py.tables[i].source,JSON.parse(JSON.stringify(browser.tables[i].source)));
+  }
+});
+
+test('Direct Lake entity partitions are a Direct Lake source, not a calculated table', () => {
+  const entity = { name: 'F_Koszty', columns: [{ name: 'Id' }], partitions: [{ mode: 'directLake', source: { type: 'entity', entityName: 'F_Koszty', schemaName: 'dbo', expressionSource: 'DatabaseQuery' } }] };
+  const calc = { name: 'Okres', columns: [{ name: 'Id' }], partitions: [{ source: { type: 'calculated', expression: 'DISTINCT(Date[Year])' } }] };
+  const input = { model: { tables: [entity, calc] } };
+  const bim = parser().parseBIM(input);
+  assert.deepEqual(JSON.parse(JSON.stringify(bim.tables[0].source)), { kind: 'directlake', label: 'Direct Lake', detail: 'dbo.F_Koszty', schema: 'dbo', table: 'F_Koszty' });
+  assert.equal(bim.tables[1].source.kind, 'calculated');
+  const tmdl = parser().parseAny([file('definition/tables/F_Koszty.tmdl', "table F_Koszty\n\tcolumn Id\n\t\tdataType: int64\n\n\tpartition F_Koszty = entity\n\t\tmode: directLake\n\t\tsource\n\t\t\tentityName: F_Koszty\n\t\t\tschemaName: dbo\n\t\t\texpressionSource: DatabaseQuery\n")]);
+  assert.equal(tmdl.tables[0].source.kind, 'directlake');
+  assert.equal(tmdl.tables[0].source.detail, 'dbo.F_Koszty');
+  const { spawnSync } = require('node:child_process');
+  const script = `import importlib.util,json,sys\ns=importlib.util.spec_from_file_location('parser',sys.argv[1]);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\nprint(json.dumps(m.parse_bim(json.load(sys.stdin))))`;
+  const r = spawnSync('python3', ['-c', script, path.join(jsDir, '../scripts/tmdl_to_model_data.py')], { input: JSON.stringify(input), encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  assert.deepEqual(JSON.parse(r.stdout).tables[0].source, JSON.parse(JSON.stringify(bim.tables[0].source)));
+});

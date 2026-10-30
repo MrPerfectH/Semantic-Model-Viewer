@@ -4,7 +4,7 @@
   'use strict';
   var FORMAT = 'semantic-model-viewer', VERSION = 1;
   var FILES = ['js/util.js', 'js/snapshot.js', 'js/theme.js', 'spellbook.css', 'js/roles.js', 'js/tmdl-parser.js', 'js/workspace-ui.js', 'js/canvas.js', 'js/layouts.js',
-    'js/matrix.js', 'js/dax-format.js', 'js/measures.js', 'js/power-query-dependencies.js', 'js/power-query-graph-model.js', 'js/power-query-canvas.js', 'js/power-query-inspector.js', 'js/power-query-workspace.js', 'js/power-query-lineage.js', 'js/power-query.js', 'js/sidebar.js', 'js/topbar.js', 'js/rules.js', 'js/relationships.js', 'js/explorer.js', 'js/app.js', 'explorer.css', 'measures.css', 'power-query.css', 'power-query-canvas.css', 'power-query-inspector.css', 'power-query-workspace.css', 'power-query-lineage.css'];
+    'js/matrix.js', 'js/dax-format.js', 'js/measure-comparison.js', 'js/measures.js', 'js/measure-comparison-view.js', 'js/power-query-dependencies.js', 'js/power-query-graph-model.js', 'js/power-query-canvas.js', 'js/power-query-inspector.js', 'js/power-query-workspace.js', 'js/power-query-lineage.js', 'js/power-query.js', 'js/sidebar.js', 'js/topbar.js', 'js/rules.js', 'js/relationships.js', 'js/explorer.js', 'js/fabric.js', 'js/onboarding.js', 'js/app.js', 'explorer.css', 'measures.css', 'power-query.css', 'power-query-canvas.css', 'power-query-inspector.css', 'power-query-workspace.css', 'power-query-lineage.css'];
   var CSP = "default-src 'none'; script-src 'unsafe-inline'; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
   function clone(value) { return value == null ? null : JSON.parse(JSON.stringify(value)); }
   function pick(value, keys) {
@@ -16,15 +16,15 @@
   function safeJSON(value) { return JSON.stringify(value).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029'); }
   function assetPath(url) { return String(url).replace(/^\.\//, '').split(/[?#]/)[0]; }
   function modelData(model) {
-    var result = { name: String(model.name || ''), tables: model.tables.map(function(t){
-      var row = pick(t, ['name','domain','role','baseRole','autoRole','roleVia','ann','description','hidden']);
+    var result = { groupingVersion:1, name: String(model.name || ''), tables: model.tables.map(function(t){
+      var row = pick(t, ['name','tableGroup','snapshotGroup','snapshotSource','domain','role','baseRole','autoRole','roleVia','ann','description','hidden']);
       row.columns = (t.columns || []).map(function(c){return pick(c,['name','dataType','hidden','isCalc','isKey','rel','description','dax']);});
       row.measures = (t.measures || []).map(function(m){var measure=pick(m,['name','dax','fmt','folder','h','description']);measure.dax=String(measure.dax||'');return measure;});
       if (typeof t.dax === 'string' && t.dax) row.dax = t.dax;
       if (Array.isArray(t.calcItems)) row.calcItems = t.calcItems.map(function(ci){return pick(ci,['name','dax','fmt']);});
       row.colCount = row.columns.length; row.measureCount = row.measures.length;
       // Separate connection settings are omitted; endpoints written in M remain in the query definitions.
-      row.source = pick(t.source, ['kind','schema','table','via']);
+      row.source = pick(t.source, ['kind','schema','table','via','colourIdentity','colourLabel']);
       if (!row.source.kind) row.source.kind = 'other';
       return row;
     }), relationships: (model.relationships || []).map(function(r){return pick(r,['name','from','to','fromCol','toCol','fromCard','toCard','both','inactive','isActive','crossFilteringBehavior']);}) };
@@ -48,14 +48,19 @@
     });
     return { measures: measures, meta: pick(app._usageMeta,['report','model','pageCount','scanned']) };
   }
+  function sourceData(app) {
+    var record=app.fabric && app.fabric.current(), source=record && record.source || app.snapshotInfo && app.snapshotInfo.source;
+    if(!source)return null;
+    return {fetchedAt:typeof source.fetchedAt==='string'?source.fetchedAt:'',method:typeof source.method==='string'?source.method:'',coverage:typeof source.coverage==='string'?source.coverage:'',warnings:Array.isArray(source.warnings)?source.warnings.filter(function(w){return typeof w==='string';}).slice(0,20):[]};
+  }
   function capture(app) {
     if (!app.model || !Array.isArray(app.model.tables)) throw new Error('Open a model before saving a snapshot.');
     var cv=app.canvas,ex=app.explorer,model=modelData(app.model);
     model.name=String(app.state.modelName || model.name || 'Semantic model');
     var tableView=app.captureTableView?clone(app.captureTableView()):{version:2,name:'Snapshot starting view',tables:cv.workspaceNames?Array.from(cv.workspaceNames):model.tables.map(function(t){return t.name;}),
       pos:clone(cv.pos),view:clone(app.state.viewMode==='graph'?cv.view:(app._tableViewport||cv.view)),focus:cv.captureFocus(),display:cv.captureDisplay()};
-    return {format:FORMAT,version:VERSION,name:model.name,createdAt:new Date().toISOString(),model:model,usage:usageData(app),
-      settings:{theme:g.ViewerTheme?g.ViewerTheme.get():'classic',roleRules:app.getRules?app.getRules().map(function(r){return pick(r,['role','name','sides','measures','kind']);}):[]},
+    return {format:FORMAT,version:VERSION,name:model.name,createdAt:new Date().toISOString(),source:sourceData(app),model:model,usage:usageData(app),
+      settings:{groupColours:app.captureGroupColours?app.captureGroupColours():null,theme:g.ViewerTheme?g.ViewerTheme.get():'classic',roleRules:app.getRules?app.getRules().map(function(r){return pick(r,['role','name','sides','measures','kind']);}):[]},
       workspace:{viewMode:app.state.viewMode,powerQuery:app.powerQueryWorkspace&&app.powerQueryWorkspace.captureSnapshot?app.powerQueryWorkspace.captureSnapshot():null,tableView:tableView,presets:clone(cv.getPresets()),matrix:app.captureMatrix?clone(app.captureMatrix()):null,
         explorer:ex?{query:ex.query,filter:ex.filter,direction:ex.direction,depth:ex.depth,includeInactive:!!ex.includeInactive,mapHidden:!!ex.mapHidden,libraryHidden:!!ex.libraryHidden,inspectorHidden:!!ex.inspectorHidden}:{},
         domains:app.captureDomains?clone(app.captureDomains()):{expandedGroups:Array.from(cv.expandedGroups || []),positions:Object.keys(cv.groups || {}).map(function(key){var group=cv.groups[key];return {key:key,x:group.x,y:group.y};}),tablePositions:clone(cv.cpos || {}),view:clone(cv.view)}},
@@ -103,7 +108,7 @@
       used.add(path);
       return '<script data-smv-asset="'+path+'">'+sources[path].replace(/<\/script/gi,'<\\/script')+'</script>';
     });
-    if(!used.has('js/snapshot.js')||!used.has('js/app.js'))throw new Error('This viewer version cannot create interactive snapshots.');
+    if(!used.has('js/snapshot.js')||!used.has('js/fabric.js')||!used.has('js/app.js'))throw new Error('This viewer version cannot create interactive snapshots.');
     // Callback replacements keep dollar sequences in model text and embedded JSON literal.
     html=html.replace(/<title>[\s\S]*?<\/title>/i,function(){return '<title>'+escapeHTML(payload.name)+' — interactive snapshot</title>';});
     html=html.replace('<head>',function(){return '<head>\n<meta http-equiv="Content-Security-Policy" content="'+CSP+'">';});

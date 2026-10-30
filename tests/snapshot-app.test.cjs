@@ -49,7 +49,7 @@ function harness(embedded) {
     Snapshots: { embedded, error: null }
   };
   context.window = context; vm.createContext(context);
-  for (const file of ['util.js', 'canvas.js', 'topbar.js']) vm.runInContext(fs.readFileSync(path.join(jsDir, file), 'utf8'), context);
+  for (const file of ['util.js', 'canvas.js', 'topbar.js', 'fabric.js']) vm.runInContext(fs.readFileSync(path.join(jsDir, file), 'utf8'), context);
   const source = fs.readFileSync(path.join(jsDir, 'app.js'), 'utf8');
   vm.runInContext(source.replace("  window.addEventListener('DOMContentLoaded'", "  g.TestApp = App;\n  window.addEventListener('DOMContentLoaded'"), context);
   const app = Object.create(context.TestApp.prototype);
@@ -163,7 +163,7 @@ test('recipient UI keeps four analysis modes and Save snapshot but has no model 
   const host = node(); new context.TopBar(app, host).update();
   const flatten = n => [n, ...(n.children || []).flatMap(flatten)];
   const all = flatten(host), buttons = all.filter(n => n.tag === 'button').map(n => n.textContent);
-  for (const label of ['Tables', 'Measures', 'Domains', 'Matrix', 'Save snapshot']) assert.ok(buttons.includes(label), label);
+  for (const label of ['Tables', 'Measures', 'Table groups', 'Matrix', 'Save snapshot']) assert.ok(buttons.includes(label), label);
   for (const label of ['Open model', 'PNG']) assert.equal(buttons.includes(label), false);
   assert.ok(all.some(n => n.textContent === 'Offline snapshot'));
   assert.equal(all.some(n => n.attrs?.title === 'Switch or import a model'), false);
@@ -231,4 +231,24 @@ test('direct measure navigation captures the latest table changes before changin
   app.setState({ viewMode: 'measures', selected: null });
   await Promise.resolve();
   assert.deepEqual(plain(app.captureTableView()), latest);
+});
+
+test('native Fabric model messages seed the same cache and source provenance as the shared picker',()=>{
+  const {app,context,cv}=harness(null);app.fabric=new context.FabricConnection(app);cv.fitView=()=>{};app.measures.captureSnapshot=()=>({});
+  const source={kind:'fabric',tenantId:'tenant',workspaceId:'workspace',modelId:'model',accountId:'account',fetchedAt:'2026-10-13T12:00:00Z',method:'xmla',coverage:'permission-dependent',warnings:['Limited partitions'],accessToken:'secret'};
+  app.hostOpenModel({id:'native-id',name:'Native model',source,model:payload().model});
+  assert.equal(app.modelKey,'fabric:tenant:workspace:model');
+  assert.equal(app.fabric.current().source.coverage,'permission-dependent');
+  assert.deepEqual(plain(app.fabric.current().source.warnings),['Limited partitions']);
+  assert.equal(app.fabric.current().source.accessToken,undefined);
+  assert.equal(app.fabric.current().source.accountId,'account');
+  source.fetchedAt='2026-10-13T13:00:00Z';
+  app.hostOpenModel({id:'native-id',name:'Native model',source,model:payload().model});
+  assert.equal(app.fabric.current().source.fetchedAt,'2026-10-13T13:00:00Z');
+  assert.equal(app.getStore().length,1);
+});
+test('native Fabric cache failures leave the currently displayed model unchanged',()=>{
+  const {app}=harness(null);app.modelKey='existing';app.setStore=()=>false;
+  assert.throws(()=>app.hostOpenModel({id:'new',source:{kind:'fabric',tenantId:'t',workspaceId:'w',modelId:'m'},model:payload().model}),/current model is unchanged/);
+  assert.equal(app.modelKey,'existing');
 });

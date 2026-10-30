@@ -281,7 +281,7 @@ test('a genuinely fresh browser boots with no model selected, not the bundled sa
   await app.init();
   assert.equal(app.model.tables.length, 0);
   assert.equal(app.state.modelName, 'Choose a model');
-  assert.equal(app.state.showModelMenu, true);
+  assert.equal(app.state.showModelMenu, false);
   assert.equal(app.modelKey, null, 'nothing should read as "the current model" in the switcher');
 });
 
@@ -300,6 +300,24 @@ test('a returning user (smv_current_v1 already set) still boots straight into th
   assert.deepEqual(loaded, ['previous']);
 });
 
+
+test('VS Code opens the model that was clicked, not the last cached Fabric model', async () => {
+  const { app, storage } = harness();
+  const old = { id: 'fabric:t:w:old', name: 'Scorecard', source: { kind: 'fabric' }, model: model([{ name: 'Old' }]) };
+  storage.set('smv_models_v1', JSON.stringify([old]));
+  storage.set('smv_current_v1', old.id);
+  const activated = [], opened = [], requested = { name: 'Distribution', model: model([{ name: 'New' }]) };
+  app.fabric = { activate: r => activated.push(r.id) };
+  app.hostOpenModel = r => opened.push(r.name);
+  app.host = { attach() {}, loadDefault: async () => requested };
+  await app.init();
+  assert.deepEqual(opened, ['Distribution']);
+  assert.deepEqual(activated, []);
+  opened.length = 0;
+  app.host.loadDefault = async () => null;
+  await app.init();
+  assert.deepEqual(activated, [old.id], 'with nothing requested the last Fabric model is still restored');
+});
 
 test('model switches restore lane zoom with positions and discard the previous model size cache', async () => {
   const { app, storage } = harness();
@@ -723,7 +741,7 @@ test('displayed DAX references use the same resolution rules as dependency index
   }
 });
 
-test('snapshot without saved explorer settings opens with connected tables, so a dimension shows its facts', () => {
+test('snapshot without saved explorer settings explores both active filter directions, so a dimension shows its facts', () => {
   const { app } = harness();
   const explorer = { loadModel() {}, direction: 'incoming', depth: 'all', includeInactive: false };
   Object.assign(app.canvas, { setLayoutKey() {}, applyPreset() {}, setPresets() {}, updateTransform() {}, renderLines() {}, view: { x: 0, y: 0, k: 1 } });
@@ -731,8 +749,46 @@ test('snapshot without saved explorer settings opens with connected tables, so a
   const payload = overrides => ({ model: model([{ name: 'Date' }, { name: 'Sales' }]), workspace: overrides });
   app.loadSnapshot(payload({}));
   assert.deepEqual(plain({ d: explorer.direction, depth: explorer.depth, inactive: explorer.includeInactive, focus: app.state.focusDepth }),
-    { d: 'connected', depth: 'direct', inactive: true, focus: 1 });
+    { d: 'both', depth: 'all', inactive: false, focus: 1000000 });
   app.loadSnapshot(payload({ explorer: { direction: 'outgoing', depth: 'two', includeInactive: false } }));
   assert.deepEqual(plain({ d: explorer.direction, depth: explorer.depth, inactive: explorer.includeInactive, focus: app.state.focusDepth }),
     { d: 'outgoing', depth: 'two', inactive: false, focus: 2 });
+});
+
+test('table folders override special categories and ordinary ungrouped tables remain neutral', () => {
+  const {app}=harness();app.SOURCE_KINDS={};app.FALLBACK_COLOR='#8896aa';app.PALETTE=['#112233','#445566'];
+  const fixture=model([{name:'Explicit',tableGroup:'Manual tables',source:{kind:'manual'}},
+    {name:'Reserved',source:{kind:'manual'}},{name:'Ordinary',source:{kind:'db',schema:'finance'}}]);
+  app.prepareModel(fixture);
+  assert.equal(fixture.tables[0].domain,'group:Manual tables');
+  assert.equal(fixture.tables[1].domain,'@smv:manual');
+  assert.equal(fixture.tables[2].domain,'@smv:ungrouped');
+  assert.equal(app._domMap['@smv:ungrouped'],'#8896aa');
+  assert.equal(app._domMap['group:Manual tables'],'#112233');
+  assert.equal(app.srcKeyOf(fixture.tables[0]),'@smv:manual');
+});
+
+test('automatic group palette ranks once, keeps slots across added groups and isolates models', () => {
+  const {app}=harness();app.PALETTE=['#112233','#445566','#778899'];
+  let fixture=model([{name:'a',tableGroup:'B'},{name:'b',tableGroup:'B'},{name:'c',tableGroup:'A'}]);
+  app.prepareModel(fixture);assert.equal(app._domMap['group:B'],'#112233');assert.equal(app._domMap['group:A'],'#445566');
+  app._groupColours.domain['group:A'].colour='#abcdef';app.saveGroupColours();
+  fixture=model([{name:'a',tableGroup:'B'},...Array.from({length:5},(_,i)=>({name:'new'+i,tableGroup:'C'})),{name:'c',tableGroup:'A'}]);
+  app.prepareModel(fixture);assert.equal(app._domMap['group:B'],'#112233');assert.equal(app._domMap['group:C'],'#778899');assert.equal(app._domMap['group:A'],'#abcdef');
+  app._groupColours=null;app.prepareModel(fixture);assert.equal(app._domMap['group:A'],'#abcdef','survives reload');
+  app.modelKey='another';app.prepareModel(fixture);assert.equal(app._domMap['group:C'],'#112233');assert.notEqual(app._domMap['group:A'],'#abcdef');
+});
+
+test('source identities distinguish connections and schemas but ignore table names', () => {
+  const {app}=harness();const source={kind:'db',server:'server1',database:'warehouse',schema:'dbo'};
+  const key=app.srcKeyOf({source});
+  assert.equal(app.srcKeyOf({source:{...source,table:'Sales'}}),key);
+  for(const field of ['server','database','schema','workspace','lakehouse','dataflow'])assert.notEqual(app.srcKeyOf({source:{...source,[field]:'other'}}),key,field);
+  assert.equal(app.srcKeyOf({role:'calcgroup',source}),'@smv:calcgroup');
+});
+
+test('portable colour preferences validate values and retain independent modes', () => {
+  const {app}=harness();app.restoreGroupColours({source:{x:{slot:2,colour:'#abcdef'},bad:{slot:-3,colour:'red;position:fixed'}},domain:{x:{slot:1,colour:'#123456'}}});
+  const copy=app.captureGroupColours();assert.deepEqual(copy.source.bad,{});assert.equal(copy.source.x.colour,'#abcdef');assert.equal(copy.domain.x.colour,'#123456');
+  copy.source.x.colour='#ffffff';assert.equal(app.captureGroupColours().source.x.colour,'#abcdef');
 });

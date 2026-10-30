@@ -5,7 +5,7 @@ or the local desktop app for a separate window. The browser and local app parse
 model metadata on your computer without uploading it.
 
 - **Browser:** [open the viewer](https://MrPerfectH.github.io/Semantic-Model-Viewer/), then choose **Open model**. No installation is required.
-- **VS Code:** [install from the Marketplace](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer), open your project folder, then select a model in **Semantic Models**. No Python is required.
+- **VS Code:** [install from the Marketplace](https://marketplace.visualstudio.com/items?itemName=MrPerfectH.semantic-model-viewer), open your project folder, then select a model in **Semantic Model Viewer**. No Python is required.
 - **Windows portable:** extract the portable ZIP and run the launcher; no installation or separate Python setup is required. See package availability below.
 - **Mac / source:** use the repository setup below with Python 3.
 
@@ -19,6 +19,11 @@ export BIM with your model tooling.
 If no model appears, check for `definition/*.tmdl` or `model.bim` in the selected
 folder. In VS Code, use **Refresh Model List**. In the browser or local app, retry
 **Open model** with the model folder itself.
+
+After opening a model, the optional welcome offers contextual tips for Tables, Measures,
+and sharing. **Skip tour**, **Close**, or **Skip remaining tips** keep you in control;
+**Help** restarts guidance. Tips never rearrange your canvas or change your model.
+Preferences stay in this browser/app profile or VS Code profile; snapshots do not launch onboarding.
 
 ## Windows portable version
 
@@ -48,7 +53,10 @@ This route needs **Python 3** and **Chrome or Edge** (other browsers work in a n
 3. Double-click the installer in the repo folder:
    - **Mac:** `Install on Mac.command`. It adds **Semantic Model Viewer** to
      `~/Applications`; drag it to the Dock.
-   - **Windows:** `Install on Windows.cmd`. It adds a Desktop icon and a Start menu entry.
+   - **Windows:** `Install on Windows.cmd`. It adds a Desktop icon and a Start menu entry,
+     and a **Semantic Model Viewer** button in the **External Tools** ribbon of Power BI
+     Desktop (restart Power BI Desktop to see it). Windows asks for administrator approval
+     once for that button. The button opens the app; it does not load the open model yet.
 4. The app opens in its own window. Use **Open model → Import model → Browse folder…**
    or **Connect repo folder…** and pick a `*.SemanticModel` folder, a `.pbip` repo folder
    (every model inside is found) or a folder holding `model.bim`. Dragging a folder onto the

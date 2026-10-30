@@ -12,7 +12,9 @@ const fixtureDir = fs.mkdtempSync(path.join(os.tmpdir(), 'smv-renderer-fixture-'
 after(() => fs.rmSync(fixtureDir, { recursive: true, force: true }));
 const viewerRoot = path.join(fixtureDir, 'viewer');
 for (const args of [
-  ['clone', '--shared', '--quiet', root, viewerRoot],
+  // This checkout includes archived verification files with deeply nested paths.
+  // Set only the fixture's Git option; do not depend on global Windows settings.
+  ['clone', '--config', 'core.longpaths=true', '--shared', '--quiet', root, viewerRoot],
   ['-C', viewerRoot, 'update-ref', 'refs/remotes/origin/main', 'HEAD']
 ]) {
   const result = spawnSync('git', args, { encoding: 'utf8' });

@@ -72,6 +72,10 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
     await browser.send('Page.navigate',{url});
     await waitFor(()=>browser.evaluate('document.readyState!=="loading"&&!!window.app&&!!app.state.loaded'),'Viewer did not load');
     await settle();await settle();
+    if (await browser.evaluate('!!app.snapshotMode')) {
+      assert.equal(await browser.evaluate("!!document.querySelector('.smv-guide, [data-onboarding-help]')"),false);
+      assert.equal(await browser.evaluate('!!app.onboarding'),false);
+    }
   };
   const save=async label=>{
     const before=new Set(browser.downloads.keys());
@@ -94,9 +98,10 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
   };
   await load('http://127.0.0.1:'+server.address().port+'/');
   assert.equal(await browser.evaluate('app.model.tables.length'),0,'Fresh profiles start with no selected model');
-  await browser.evaluate("[...document.querySelectorAll('button')].find(button=>button.textContent.includes('Contoso Retail')&&button.textContent.includes('built-in')).click()");
+  await browser.evaluate("[...document.querySelectorAll('button')].find(button=>button.textContent==='Try the demo').click()");
   await waitFor(()=>browser.evaluate('app.modelKey==="builtin"&&app.model.tables.length===43'),'Built-in sample did not load');
   await settle();
+  await browser.evaluate("document.querySelector('.smv-guide')?.querySelectorAll('button')[1].click()");
   await browser.evaluate(`app.explorer.blank();app.explorer.add(['Date','Customer'],{x:160,y:180});app.canvas.selectTable('Date');
     app.canvas.view={x:-210,y:35,k:.9};app.canvas.updateTransform();app.canvas.savePreset('Date briefing');
     app.setViewMode('measures');app.setState({selMeasure:'Sales LY',gPin:'Total Sales'});`);
@@ -185,14 +190,14 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
     assert.ok(await browser.evaluate('app.canvas.workspaceNames.has("Product")'));
     await assertOffline();
   });
-  await t.test('recipient can explore tables, DAX, Domains and Matrix without the source',async()=>{
+  await t.test('recipient can explore tables, DAX, Table groups and Matrix without the source',async()=>{
     await load(pathToFileURL(files.measures).href);
     await browser.evaluate("[...document.querySelectorAll('.mv-comparison-card button')].find(b=>b.textContent==='Analyze this measure').click()");await settle();
     assert.equal(await browser.evaluate('app.state.selMeasure'),'Total Sales');
     await browser.evaluate("document.querySelectorAll('.ex-main-nav button')[0].click();app.explorer.add(['Product'],{x:430,y:380});app.canvas.selectTable('Product')");await settle();
     assert.equal(await browser.evaluate('app.state.selected'),'Product');
     assert.ok(await browser.evaluate('app.canvas.workspaceNames.has("Product")'));
-    await browser.evaluate("[...document.querySelectorAll('.ex-main-nav button')].find(b=>b.textContent==='Domains').click()");await settle();
+    await browser.evaluate("[...document.querySelectorAll('.ex-main-nav button')].find(b=>b.textContent==='Table groups').click()");await settle();
     assert.ok(await browser.evaluate('Object.keys(app.canvas.groups).length>0'));
     assert.deepEqual(await browser.evaluate('app.canvas.view'),payloads.clusters.workspace.domains.view);
     await browser.evaluate("[...document.querySelectorAll('.ex-main-nav button')].find(b=>b.textContent==='Matrix').click()");await settle();
@@ -215,6 +220,27 @@ test('downloaded whole-app snapshot works as a standalone offline file', {skip:!
     assert.equal(await browser.evaluate("app.msrOf('Total Sales').dax"),payloads.measures.model.tables.flatMap(t=>t.measures).find(m=>m.name==='Total Sales').dax);
     await assertOffline();
     if(process.env.SMV_SNAPSHOT_OUTPUT){fs.mkdirSync(process.env.SMV_SNAPSHOT_OUTPUT,{recursive:true});fs.copyFileSync(files.measures,path.join(process.env.SMV_SNAPSHOT_OUTPUT,'Contoso Retail interactive snapshot.html'));}
+  });
+  await t.test('Fabric provenance survives offline export without live identities or credentials', async () => {
+    for (const method of ['xmla', 'rest']) {
+      await load(pathToFileURL(files.measures).href);
+      await browser.evaluate(`app.snapshotInfo.source=${JSON.stringify({
+        fetchedAt:'2026-10-13T12:00:00Z',method,coverage:'consumer-metadata',warnings:['Definitions unavailable under test permissions'],
+        tenantId:'private-test-tenant',workspaceId:'private-test-workspace',modelId:'private-test-model',accountId:'private-test-account',accessToken:'synthetic-secret-token'
+      })}`);
+      const exported = await save('fabric-'+method);
+      const payload = payloadAt(exported);
+      assert.deepEqual(payload.source, {fetchedAt:'2026-10-13T12:00:00Z',method,coverage:'consumer-metadata',warnings:['Definitions unavailable under test permissions']});
+      assert.notEqual(payload.createdAt,payload.source.fetchedAt);
+      assert.doesNotMatch(fs.readFileSync(exported,'utf8'), /private-test-(?:tenant|workspace|model|account)|synthetic-secret-token/);
+      await load(pathToFileURL(exported).href);
+      assert.equal(await browser.evaluate('app.model.tables.length'),43);
+      assert.equal(await browser.evaluate('app.snapshotInfo.source.coverage'),'consumer-metadata');
+      assert.equal(await browser.evaluate("[...document.querySelectorAll('button')].some(b=>/^(Connect to Fabric|Refresh Fabric)$/.test(b.textContent.trim()))"),false);
+      const reexported = await save('fabric-'+method+'-recipient');
+      assert.deepEqual(payloadAt(reexported).source,payload.source);
+      await assertOffline();
+    }
   });
   await t.test('CLI snapshots open focused, fit the viewport and remain fully explorable offline', async () => {
     await load(pathToFileURL(cliFiles.tables).href);

@@ -12,4 +12,7 @@ function Remove-NamedShortcut {
 Remove-NamedShortcut -FolderSpecialName "Desktop"
 Remove-NamedShortcut -FolderSpecialName "Programs"
 Remove-NamedShortcut -FolderSpecialName "Startup"
+. (Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) "power-bi-external-tool.ps1")
+$removedPowerBiTool = Remove-PbiExternalTool
 Write-Host "Removed the Desktop icon and the Start menu entry."
+if ($removedPowerBiTool) { Write-Host "Removed the Power BI Desktop External Tools button." }

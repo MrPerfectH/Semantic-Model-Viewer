@@ -97,15 +97,12 @@
      faintly tinted by the hue, plus a solid stripe, badge and outline carrying the colour. */
   var PALETTES = {
     muted: {
-      domain: {
-        'Finance / Supply': '#4f8ff7', 'Commercial': '#18b9a6', 'Vena': '#9b7bf0',
-        'Profit & Loss': '#e8a33d', 'Core Dims': '#6f7f96', 'Scenario / Helper': '#ee5f80',
-        'Calc Groups': '#27b5da', 'Field Params': '#42c274', 'Measures': '#d363e3', 'Other': '#8896aa'
-      },
-      schema: { finance: '#4f8ff7', commercial: '#18b9a6', supply: '#f27f45', whitespaces: '#9b7bf0', dimensions: '#6f7f96' },
+      domain: {},
+      schema: {},
       source: {
+        calcgroup:'#27b5da', fieldparam:'#42c274', measures:'#d363e3',
         databricks: '#4f8ff7', vertica: '#3b9de0', db: '#4a7ae0', oracle: '#e0605c', postgres: '#3f8fc4',
-        mysql: '#2fa3b8', snowflake: '#27b5da', synapse: '#7479e0', lakehouse: '#22b88f', ssas: '#7d82e8',
+        mysql: '#2fa3b8', snowflake: '#27b5da', synapse: '#7479e0', lakehouse: '#22b88f', directlake: '#1fb5c9', ssas: '#7d82e8',
         sap: '#4468b8', odbc: '#6f7f96', dataflow: '#9b7bf0', sharepoint: '#1fa89a', blob: '#18b9a6',
         salesforce: '#38b2ee', folder: '#c9a042', excel: '#42c274', csv: '#38b060', web: '#e8764a',
         odata: '#d99a3e', parameter: '#908a84', manual: '#e8a33d', calculated: '#d363e3', other: '#8896aa'
@@ -115,15 +112,12 @@
       fallback: '#8896aa'
     },
     vivid: {
-      domain: {
-        'Finance / Supply': '#2563eb', 'Commercial': '#0d9488', 'Vena': '#7c3aed',
-        'Profit & Loss': '#d97706', 'Core Dims': '#475569', 'Scenario / Helper': '#e11d48',
-        'Calc Groups': '#0891b2', 'Field Params': '#16a34a', 'Measures': '#c026d3', 'Other': '#64748b'
-      },
-      schema: { finance: '#2563eb', commercial: '#0d9488', supply: '#ea580c', whitespaces: '#7c3aed', dimensions: '#475569' },
+      domain: {},
+      schema: {},
       source: {
+        calcgroup:'#0891b2', fieldparam:'#16a34a', measures:'#c026d3',
         databricks: '#2563eb', vertica: '#0284c7', db: '#1d4ed8', oracle: '#b91c1c', postgres: '#0369a1',
-        mysql: '#0e7490', snowflake: '#0891b2', synapse: '#4338ca', lakehouse: '#059669', ssas: '#4f46e5',
+        mysql: '#0e7490', snowflake: '#0891b2', synapse: '#4338ca', lakehouse: '#059669', directlake: '#0e8fa3', ssas: '#4f46e5',
         sap: '#1e3a8a', odbc: '#475569', dataflow: '#7c3aed', sharepoint: '#0f766e', blob: '#0d9488',
         salesforce: '#0ea5e9', folder: '#a16207', excel: '#16a34a', csv: '#15803d', web: '#c2410c',
         odata: '#b45309', parameter: '#78716c', manual: '#d97706', calculated: '#c026d3', other: '#64748b'
@@ -140,7 +134,7 @@
     this.state = {
       loaded: false,
       modelName: 'Contoso Retail',
-      search: '', colorBy: 'domain', showStandalone: false, allExpanded: false,
+      search: '', colorBy: 'source', showStandalone: false, allExpanded: false,
       legendOpen: true, hintDismissed: false,
       selected: null, zoomPct: '100%', activeFilter: null,
       isolate: false, focusDepth: 1, viewMode: 'graph',
@@ -157,11 +151,12 @@
     this.snapshotMode = !!(g.Snapshots && (g.Snapshots.embedded || g.Snapshots.error));
     this.snapshotInfo = g.Snapshots && g.Snapshots.embedded || null;
     this.modelKey = 'builtin';
-    this.colorBy = 'domain';
+    this.colorBy = 'source';
     this.model = null;
     this._usage = null; this._usageMeta = null;
     this._importModel = null; this._importHandle = null;
     this.repoHandle = null; this.repoPath = null; this.repoModels = null; this._repoLive = false;
+    this.fabric = g.FabricConnection ? new g.FabricConnection(this) : null;
     this.server = null;   // local app server (scripts/serve.py), detected at boot
     this._cbs = [];
 
@@ -177,6 +172,7 @@
       snowflake: { label: 'Snowflake', icon: '❄' },
       synapse: { label: 'Synapse', icon: '⛃' },
       lakehouse: { label: 'Fabric', icon: '⛃' },
+      directlake: { label: 'Direct Lake', icon: '⛃' },
       ssas: { label: 'Analysis Services', icon: '⛃' },
       sap: { label: 'SAP', icon: '⛃' },
       odbc: { label: 'ODBC', icon: '⛁' },
@@ -254,6 +250,7 @@
       if (this.powerQueryWorkspace) this.powerQueryWorkspace.update();
       this.importModal.update();
       this.rulesModal.update();
+      if (this.onboarding) this.onboarding.update();
     },
 
     /* ---------- color / source helpers ---------- */
@@ -263,7 +260,7 @@
       this.paletteName = PALETTES[name] ? name : 'muted';
       this.DOMAIN_COLORS = P.domain; this.SCHEMA_COLORS = P.schema; this.PALETTE = P.list;
       this.FALLBACK_COLOR = P.fallback;
-      this.SOURCE_COLORS = {};
+      this.SOURCE_COLORS = Object.assign({},P.source);
       Object.keys(this.SOURCE_KINDS).forEach(function (k) {
         var c = P.source[k] || P.source.other;
         self.SOURCE_KINDS[k].color = c; self.SOURCE_COLORS[k] = c;
@@ -291,24 +288,135 @@
       if (this.powerQueryWorkspace) this.powerQueryWorkspace.refreshAppearance();
       this.render(true);
     },
-    rebuildColorMaps: function () {
-      var self = this, domCounts = this._domCounts || {}, srcCounts = this._srcCounts || {};
-      this._domMap = {}; var pi = 0;
-      Object.keys(domCounts).sort(function (a, b) { return domCounts[b] - domCounts[a]; })
-        .forEach(function (d) { self._domMap[d] = self.DOMAIN_COLORS[d] || self.PALETTE[pi++ % self.PALETTE.length]; });
-      this._srcMap = {}; pi = 0;
-      Object.keys(srcCounts).sort(function (a, b) { return srcCounts[b] - srcCounts[a]; })
-        .forEach(function (k) { self._srcMap[k] = self.SCHEMA_COLORS[k] || self.SOURCE_COLORS[k] || self.PALETTE[pi++ % self.PALETTE.length]; });
+    specialColourKind: function (t) {
+      if (['calcgroup','fieldparam','measures'].includes(t.role)) return t.role;
+      return ['manual','calculated','parameter'].includes((t.source || {}).kind) ? t.source.kind : null;
     },
-    srcKeyOf: function (t) { var k = t.source.kind; if (k === 'databricks' || k === 'db') return t.source.schema || k; return k; },
+    groupKeyOf: function (t) {
+      if (t.tableGroup) return 'group:' + t.tableGroup;
+      if (t.snapshotGroup) return t.snapshotGroup;
+      return '@smv:' + (this.specialColourKind(t) || 'ungrouped');
+    },
+    groupLabel: function (mode, key) {
+      if (mode !== 'source' && key.indexOf('group:') === 0) return key.slice(6);
+      var special = {'@smv:calcgroup':'Calculation groups','@smv:fieldparam':'Field parameters','@smv:measures':'Measure tables',
+        '@smv:manual':'Manual tables','@smv:calculated':'Calculated tables','@smv:parameter':'Parameters','@smv:ungrouped':'Ungrouped'};
+      return special[key] || (this._sourceLabels || {})[key] || ((this.SOURCE_KINDS || {})[key] || {}).label || key;
+    },
+    colourStorageKey: function () { return 'smv-group-colours-v1:' + this.modelKey; },
+    captureGroupColours: function () { return JSON.parse(JSON.stringify(this._groupColours || {source:{},domain:{}})); },
+    restoreGroupColours: function (value) {
+      var clean = {source:Object.create(null),domain:Object.create(null)};
+      ['source','domain'].forEach(function(mode) {
+        var entries = value && value[mode];
+        if (!entries || typeof entries !== 'object') return;
+        Object.keys(entries).forEach(function(key) {
+          var item = entries[key]; if (!item || typeof item !== 'object') return;
+          var row = {};
+          if (Number.isInteger(item.slot) && item.slot >= 0 && item.slot < 100000) row.slot = item.slot;
+          if (typeof item.colour === 'string' && /^#[0-9a-f]{6}$/i.test(item.colour)) row.colour = item.colour;
+          clean[mode][key] = row;
+        });
+      });
+      this._groupColours = clean; this._colourModelKey = this.modelKey;
+    },
+    saveGroupColours: function () {
+      // Offline snapshots are self-contained; do not overwrite another snapshot's preferences.
+      if (!this.snapshotMode && !this._editingGroupColours && this._groupColours &&
+          (Object.keys(this._groupColours.source).length || Object.keys(this._groupColours.domain).length) &&
+          JSON.stringify(store.getJSON(this.colourStorageKey(),{})) !== JSON.stringify(this._groupColours))
+        store.setJSON(this.colourStorageKey(), this._groupColours);
+    },
+    rebuildColorMaps: function () {
+      var self = this;
+      if (!this._groupColours || this._colourModelKey !== this.modelKey)
+        this.restoreGroupColours(store.getJSON(this.colourStorageKey(), {}));
+      ['domain','source'].forEach(function(mode) {
+        var counts = (mode === 'source' ? self._srcCounts : self._domCounts) || {}, map = Object.create(null), entries = self._groupColours[mode];
+        var next = Object.keys(entries).reduce(function(n,k){return Math.max(n, Number.isInteger(entries[k].slot) ? entries[k].slot + 1 : 0);},0);
+        Object.keys(counts).sort(function(a,b){return counts[b]-counts[a] || a.localeCompare(b);}).forEach(function(key) {
+          var row = entries[key] || (entries[key] = {}), kind = key.indexOf('@smv:') === 0 ? key.slice(5) : null;
+          if (!kind && !Number.isInteger(row.slot)) row.slot = next++;
+          var defaults = {calcgroup:'#27b5da',fieldparam:'#42c274',measures:'#d363e3'};
+          var reserved = ['calcgroup','fieldparam','measures','manual','calculated','parameter'].map(function(k){return self.SOURCE_COLORS[k] || defaults[k];});
+          var palette = self.PALETTE.filter(function(c){return reserved.indexOf(c)<0;});if(!palette.length)palette=self.PALETTE;
+          var automatic = kind ? (self.SOURCE_COLORS[kind] || defaults[kind] || self.FALLBACK_COLOR) : palette[row.slot % palette.length];
+          map[key] = row.colour || automatic;
+        });
+        if (mode === 'source') self._srcMap = map; else self._domMap = map;
+      });
+      this.saveGroupColours();
+    },
+    srcKeyOf: function (t) {
+      if (t.snapshotSource) return t.snapshotSource;
+      var special = this.specialColourKind(t); if (special) return '@smv:' + special;
+      var s = t.source || {}, k = s.kind || 'other';
+      if (typeof s.colourIdentity === 'string' && /^source:[a-z0-9_-]+:[0-9a-f]{1,8}$/.test(s.colourIdentity)) return s.colourIdentity;
+      // Keep table names out: a source group describes the connection and schema.
+      var parts = [k,s.server||'',s.database||'',s.workspace||'',s.lakehouse||'',s.dataflow||'',s.schema||''];
+      var text = JSON.stringify(parts), hash = 2166136261;
+      for (var i=0;i<text.length;i++) { hash ^= text.charCodeAt(i); hash = Math.imul(hash,16777619); }
+      return 'source:' + k + ':' + (hash>>>0).toString(16);
+    },
     tableColor: function (t) {
       if (this.colorBy === 'source') return this._srcMap[this.srcKeyOf(t)] || this.FALLBACK_COLOR;
       return this._domMap[t.domain] || this.FALLBACK_COLOR;
+    },
+    editGroupColours: function () {
+      if (!this.model) return;
+      var app=this, el=U.el, mode=this.colorBy, original=this.captureGroupColours(), focus=document.activeElement;
+      this._editingGroupColours=true;
+      var dialog=el('dialog',{cls:'smv-colour-dialog','aria-labelledby':'smv-colour-title'});
+      var header=el('div',{cls:'smv-colour-heading'},[el('h2',{id:'smv-colour-title',text:'Group colours'}),el('button',{cls:'ex-button',text:'Cancel',onClick:cancel})]);
+      var select=el('select',{'aria-label':'Colour by',onChange:function(e){mode=e.target.value;draw();}},[
+        el('option',{value:'source',text:'Source'}),el('option',{value:'domain',text:'Table group'})]);select.value=mode;
+      dialog.appendChild(header);dialog.appendChild(el('label',{cls:'smv-colour-mode'},['Colour by',select]));
+      dialog.appendChild(el('p',{text:'Choose one colour per group. Facts keep a dark header; dimensions use a light tint.'}));
+      var content=el('div',{cls:'smv-colour-content'});dialog.appendChild(content);
+      var status=el('p',{cls:'smv-colour-status','aria-live':'polite'});dialog.appendChild(status);
+      var footer=el('div',{cls:'smv-colour-footer'});dialog.appendChild(footer);
+      footer.appendChild(el('button',{cls:'ex-button',text:'Reset this mode',onClick:function(){Object.keys(app._groupColours[mode]).forEach(function(k){delete app._groupColours[mode][k].colour;});app.rebuildColorMaps();draw();}}));
+      footer.appendChild(el('button',{cls:'ex-button ex-primary',text:'Apply colours',onClick:function(){app._editingGroupColours=false;app.saveGroupColours();if(app.colorBy!==mode)app.canvas.setColorMode(mode);app.refreshAppearance();dialog.close();}}));
+      function cancel(){app._editingGroupColours=false;app.restoreGroupColours(original);app.rebuildColorMaps();dialog.close();}
+      dialog.addEventListener('keydown',function(e){e.stopPropagation();});
+      dialog.addEventListener('cancel',function(e){e.preventDefault();cancel();});
+      dialog.addEventListener('close',function(){dialog.remove();if(focus&&focus.isConnected)focus.focus();});
+      function draw(){
+        U.clear(content);var counts=mode==='source'?app._srcCounts:app._domCounts,map=mode==='source'?app._srcMap:app._domMap;
+        var keys=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a]||a.localeCompare(b);});
+        var list=el('div',{cls:'smv-colour-list'}),preview=el('div',{cls:'smv-colour-preview'});content.appendChild(list);content.appendChild(preview);
+        var chosen=keys[0];
+        function show(key){
+          chosen=key;U.clear(preview);var colour=map[key],label=app.groupLabel(mode,key);
+          preview.appendChild(el('h3',{text:label}));preview.appendChild(el('p',{text:'Same group, two table roles'}));
+          [true,false].forEach(function(fact){
+            var examples=app.model.tables.filter(function(t){return (mode==='source'?app.srcKeyOf(t):t.domain)===key&&(fact?app.isFact(t):t.role==='dim');});
+            var t=examples[0],name=t?t.name:(fact?'Example fact':'Example dimension');
+            var chrome=g.WorkspaceUI.createCardChrome(document,{fact:fact,color:colour,label:name,badge:fact?'FACT':'DIM',subtitle:label,chips:[{value:t?t.columns.length:6,label:'cols'},{value:t?t.relCount:3,label:'rel'}]});
+            chrome.card.dataset.fact=String(fact);chrome.card.style.position='relative';chrome.card.style.width='100%';
+            // Apply the production recolouring routine to the production card anatomy.
+            var fake={app:Object.assign(Object.create(app),{tableColor:function(){return colour;},srcMeta:function(){return {color:colour};}}),cards:{preview:{table:{role:fact?'fact':'dim'},el:chrome.card,head:chrome.head,roleEl:chrome.badge,nm:chrome.title,src:chrome.subtitle,caret:document.createElement('span')}}};
+            g.GraphCanvas.prototype.recolor.call(fake);preview.appendChild(chrome.card);
+          });
+          preview.appendChild(el('p',{text:'Selection, locks and dimming keep their existing appearance.'}));
+          list.querySelectorAll('[data-group]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.group===key));});
+        }
+        keys.forEach(function(key){
+          var row=el('div',{cls:'smv-colour-row'}),name=app.groupLabel(mode,key);
+          var b=el('button',{cls:'ex-button',text:name+' · '+counts[key],data:{group:key},onClick:function(){show(key);}});row.appendChild(b);
+          var picker=el('input',{type:'color',value:map[key],'aria-label':'Colour for '+name,onInput:function(e){app._groupColours[mode][key].colour=e.target.value;map[key]=e.target.value;show(key);status.textContent='Preview updated. Apply colours to save.';}});row.appendChild(picker);
+          row.appendChild(el('button',{cls:'ex-button',text:'Auto',title:'Use the automatic group colour',onClick:function(){delete app._groupColours[mode][key].colour;app.rebuildColorMaps();map=mode==='source'?app._srcMap:app._domMap;picker.value=map[key];show(key);}}));list.appendChild(row);
+        });
+        if(chosen)show(chosen);
+        status.textContent=mode==='source'?'Automatic colours start with the largest source groups and keep their assignments.':'Tabular Editor table folders take priority over special categories. Ordinary ungrouped tables stay neutral.';
+      }
+      document.body.appendChild(dialog);draw();dialog.showModal();
     },
     isFact: function (t) { return t.role === 'fact'; },
     /* ---------- fact/dim role setup ---------- */
     roleRepo: function () {
       var key = this.modelKey;
+      if (/^fabric:/.test(key)) return null;
       return this._repoLive && (this.repoModels || []).find(function (r) { return r.handle && 'repo:' + r.path === key; });
     },
     assignRole: async function (name, role) {
@@ -468,10 +576,14 @@
       model.msrHome = msrHome; model.msrUsedBy = usedBy;
       model.tableMeasureUsers = tableUsers; model.columnMeasureUsers = columnUsers;
       // dynamic color maps (curated colors first, palette for the rest)
-      var domCounts = {}, srcCounts = {};
+      var domCounts = Object.create(null), srcCounts = Object.create(null);
+      this._sourceLabels = Object.create(null);
       model.tables.forEach(function (t) {
+        t.domain = self.groupKeyOf(t);
         domCounts[t.domain] = (domCounts[t.domain] || 0) + 1;
         var k = self.srcKeyOf(t); srcCounts[k] = (srcCounts[k] || 0) + 1;
+        var src=t.source||{};self._sourceLabels[k]=src.colourLabel && ![src.server,src.database,src.workspace,src.lakehouse,src.dataflow].some(Boolean) ? src.colourLabel : [src.label || (self.SOURCE_KINDS && self.SOURCE_KINDS[src.kind] || {}).label || src.kind,src.server,src.database,src.workspace,src.lakehouse,src.dataflow,src.schema].filter(function(v){return v && v!=='unknown';}).join(' · ');
+        src.colourIdentity=k;src.colourLabel=[src.label||src.kind,src.schema].filter(function(v){return v && v!=='unknown';}).join(' · ');
       });
       this._domCounts = domCounts; this._srcCounts = srcCounts;
       this.rebuildColorMaps();
@@ -518,7 +630,7 @@
       this.measures._gC = null; this.measures._railKey = null; this.measures._mainKey = null; this.measures._daxKey = null;
       this.matrix._key = null; this.sidebar._key = null;
       var state = {
-        loaded: true, allExpanded: false, modelName: name, selected: null, activeFilter: null, search: '',
+        snapshotMessage: '', snapshotError: '', loaded: true, allExpanded: false, modelName: name, selected: null, activeFilter: null, search: '',
         isolate: false, showModelMenu: !!opts.showModelMenu, msrQuery: '', expandedMeasure: null, calcOpen: {},
         selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvSourceQuery: '', mvSourceOpen: {}, mvImpactQuery: '', mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, viewMode: 'graph',
         showRules: false
@@ -527,16 +639,20 @@
     },
 
     /* An intentionally empty model for "nothing chosen yet" - same wiring as a
-       real load (see _applyModel above), so the picker opens over a properly
+       real load (see _applyModel above), so Start here appears over a properly
        built, if empty, canvas instead of a half-initialized screen. Does not
        touch smv_current_v1: only an actual choice (including the built-in
        sample itself) should make this the remembered default from now on. */
     loadEmptyModel: function () {
-      this._applyModel({ name: '', tables: [], relationships: [] }, 'Choose a model', null, { persist: false, showModelMenu: true });
+      this._applyModel({ name: '', tables: [], relationships: [] }, 'Choose a model', null, { persist: false, showModelMenu: false });
     },
 
     loadModel: function (key) {
       if (this.snapshotMode) return Promise.resolve();
+      if (this.fabric && /^fabric:/.test(key)) {
+        var cachedFabric = this.getStore().find(function (r) { return r.id === key && r.source && r.source.kind === 'fabric'; });
+        if (cachedFabric) { this.fabric.activate(cachedFabric); return Promise.resolve(); }
+      }
       if (this.host) return this.hostChooseModel(key);
       var self = this;
       var request = this._modelLoadRequest = (this._modelLoadRequest || 0) + 1;
@@ -576,6 +692,8 @@
       this.loadModel(id);
     },
     deleteModel: function (id) {
+      var fabricRecord = this.fabric && this.getStore().find(function (r) { return r.id === id && r.source && r.source.kind === 'fabric'; });
+      if (fabricRecord) return this.fabric.remove(fabricRecord);
       if (!this.setStore(this.getStore().filter(function (m) { return m.id !== id; }))) {
         this.setState({ repoError: 'Could not update browser storage. The model was not removed.' }); return;
       }
@@ -586,9 +704,19 @@
     /* The VS Code host supplies files; the core parser, canvas and measures stay shared. */
     hostOpenModel: function (record) {
       if (!record || !record.model || !Array.isArray(record.model.tables)) throw new Error('The selected model could not be read.');
+      if (record.source && record.source.kind === 'fabric') {
+        if (!g.FabricConnection) throw new Error('Fabric metadata support is unavailable. Reload the viewer.');
+        var source = g.FabricConnection.sourceOf(record.source);
+        var cached = { id: g.FabricConnection.key(source), name: record.name || record.model.name || 'Semantic model', at: Date.now(), source: source, model: JSON.parse(JSON.stringify(record.model)) };
+        var records = this.getStore().filter(function (r) { return r.id !== cached.id; }); records.push(cached);
+        if (!this.setStore(records)) throw new Error('Could not cache this Fabric model. Free local storage and try again. Your current model is unchanged.');
+        record = cached;
+        store.set('smv_current_v1', record.id);
+      }
       var self = this, same = this.state.loaded && record.id === this.modelKey;
       var saved = same ? { table: this.captureTableView(), measures: this.measures.captureSnapshot(),
-        viewMode: this.state.viewMode, domains: this.captureDomains(), matrix: this.captureMatrix() } : null;
+        viewMode: this.state.viewMode, domains: this.captureDomains(), matrix: this.captureMatrix(),
+        powerQuery: this.powerQueryWorkspace && this.powerQueryWorkspace.captureSnapshot() } : null;
       this._hostRequest = (this._hostRequest || 0) + 1; this._modelLoadRequest = (this._modelLoadRequest || 0) + 1;
       var model = record.model;
       model.tables.forEach(function (table) { table.source = table.source || {kind:'other'}; table.domain = table.domain || 'Other'; });
@@ -603,13 +731,14 @@
       cv._activeSel = null; cv._isoSet = null; cv.clusterOn = false; cv.groups = null; cv.expandedGroups = new Set();
       cv.computeLayout(); this.measures._gC = null; this.measures._railKey = null; this.measures._mainKey = null; this.measures._daxKey = null;
       this.matrix._key = null; this.sidebar._key = null;
-      this.setState({ loaded: true, modelName: record.name || model.name || 'Semantic model', viewMode: 'graph',
+      this.setState({ snapshotMessage: '', snapshotError: '', loaded: true, modelName: record.name || model.name || 'Semantic model', viewMode: 'graph',
         allExpanded: false, selected: null, activeFilter: null, search: '', isolate: false, showModelMenu: false,
         selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvSourceQuery: '', mvSourceOpen: {}, mvImpactQuery: '', mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, showRules: false, repoError: '' }, function () {
         cv.build(); cv.fitView();
         if (saved) {
           cv.applyPreset(saved.table); self._tableWorkspace = self.captureTableView(); self._tableViewport = Object.assign({}, cv.view);
           self.measures.restoreSnapshot(saved.measures); self._domainWorkspace = saved.domains; self._matrixWorkspace = saved.matrix;
+          if (self.powerQueryWorkspace) self.powerQueryWorkspace.restoreSnapshot(saved.powerQuery);
           self.setViewMode(saved.viewMode);
         }
       });
@@ -824,7 +953,7 @@
         if (!/\.(tmdl|bim|json)$/i.test(f.name)) continue;
         try { files.push({ name: f.name, path: p, text: await f.text() }); } catch (e) { }
       }
-      if (!files.length) { this.setState({ importError: 'No .tmdl / .bim / .json files found in the selection.', importReady: false }); return; }
+      if (!files.length) { this.setState({ importError: 'No .tmdl / .bim / .json files found in the selection. Choose the PBIP project folder or its *.SemanticModel folder, or export model.bim. A .pbix file cannot be opened directly.', importReady: false }); return; }
       // a repo folder was dropped: group files by *.SemanticModel folder
       var byModel = {};
       files.forEach(function (f) {
@@ -1092,7 +1221,7 @@
     },
     /* ---------- refresh the open model from its source folder ---------- */
     canRefreshSource: function () {
-      return !this.host && !this.snapshotMode && !!this.state.loaded && !!this.modelKey && this.modelKey !== 'builtin' && (this.canFS() || !!this.server);
+      return !(this.fabric && this.fabric.current() && this.fabric.current().source) && !this.host && !this.snapshotMode && !!this.state.loaded && !!this.modelKey && this.modelKey !== 'builtin' && (this.canFS() || !!this.server);
     },
     /* Folder imports remember their handle (IndexedDB), so refresh only re-confirms access.
        Models imported as loose files have no folder link: the first refresh asks for it once. */
@@ -1315,8 +1444,17 @@
       this.snapshotMode = true; this.snapshotInfo = payload;
       this.modelKey = 'snapshot'; this.canvas.setLayoutKey('smv_layout_snapshot');
       var model = JSON.parse(JSON.stringify(payload.model)), workspace = payload.workspace || {}, cv = this.canvas, ex = this.explorer;
-      model.tables.forEach(function (table) { table.source = table.source || { kind: 'other' }; table.domain = table.domain || 'Other'; });
+      model.tables.forEach(function (table) {
+        table.source = table.source || {kind:'other'};
+        // Preserve the authored grouping and positions in older portable snapshots.
+        if (!model.groupingVersion) {
+          if (!table.tableGroup && table.domain && !/^(group:|@smv:)/.test(table.domain)) table.snapshotGroup=table.domain;
+          var s=table.source;table.snapshotSource=(s.kind==='databricks'||s.kind==='db')?(s.schema||s.kind):s.kind;
+        }
+        table.domain = table.domain || 'Other';
+      });
       // Exported role decisions are part of the snapshot. Do not apply recipient rules.
+      this.restoreGroupColours(payload.settings && payload.settings.groupColours);
       this.prepareModel(model); if(this.powerQueryWorkspace)this.powerQueryWorkspace.reset(); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
       this._usage = payload.usage && payload.usage.measures || null;
       this._usageMeta = payload.usage && payload.usage.meta || null;
@@ -1340,10 +1478,10 @@
         var library = workspace.explorer || {};
         ex.query = typeof library.query === 'string' ? library.query : '';
         ex.filter = ['all', 'canvas', 'available'].includes(library.filter) ? library.filter : 'all';
-        ex.direction = ['incoming', 'outgoing', 'connected'].includes(library.direction) ? library.direction : 'connected';
-        ex.depth = ['direct', 'two', 'all'].includes(library.depth) ? library.depth : 'direct';
+        ex.direction = ['both', 'incoming', 'outgoing', 'connected'].includes(library.direction) ? library.direction : tableView.focus ? ex.direction : 'both';
+        ex.depth = ['direct','two','all'].includes(library.depth) ? library.depth : tableView.focus ? ex.depth : 'all';
         this.state.focusDepth = ex.depth === 'direct' ? 1 : ex.depth === 'two' ? 2 : 1000000;
-        ex.includeInactive = library.includeInactive !== false; ex.mapHidden = !!library.mapHidden;
+        ex.includeInactive = library.includeInactive === undefined ? (tableView.focus ? ex.includeInactive : false) : !!library.includeInactive; ex.mapHidden = !!library.mapHidden;
         ex.libraryHidden = !!library.libraryHidden; ex.inspectorHidden = !!library.inspectorHidden;
         ex.history = []; ex.message = 'Offline snapshot. Changes stay in this tab; save a snapshot to keep them.'; ex._key = null;
       }
@@ -1384,11 +1522,14 @@
       }
       if (this.host) {
         this.host.attach(this);
+        /* The model the extension just asked for always wins; the last cached Fabric model is only a fallback */
         var initial = await this.host.loadDefault();
+        var cachedFabric = this.getStore().find(function (r) { return r.id === store.get('smv_current_v1') && r.source && r.source.kind === 'fabric'; });
         if (initial) this.hostOpenModel(initial);
+        else if (cachedFabric && this.fabric) this.fabric.activate(cachedFabric);
         else {
           this.model = {name:'',tables:[],relationships:[]}; this.prepareModel(this.model);
-          this.setState({modelName:'Choose a model',showModelMenu:true});
+          this.setState({modelName:'Choose a model',showModelMenu:false});
         }
         return;
       }
@@ -1396,7 +1537,7 @@
       /* No stored choice yet (a genuinely first-ever open, or a fresh browser
          profile) -> don't silently load the bundled sample. Same idea as the
          VS Code host's own "nothing open yet" state above (an empty model,
-         picker already open), via loadEmptyModel() so the canvas/explorer get
+         Start here visible), via loadEmptyModel() so the canvas/explorer get
          the same full initialization a real model load gets - not a smaller,
          easy-to-drift-from copy of it. Once the user picks anything -
          including the bundled sample itself - `smv_current_v1` is set and
@@ -1413,6 +1554,7 @@
       } else {
         this.loadEmptyModel();
       }
+      if(this.server && this.fabric && new URLSearchParams(location.search).get('fabricSignIn')==='1'){history.replaceState(null,'',location.pathname);this.setState({showModelMenu:false});this.fabric.show();}
       var cached = store.getJSON('smv_repo_cache', null);
       if (cached && cached.length) this.repoModels = cached;
       if (this.server) {
@@ -1428,7 +1570,16 @@
   if (typeof module === 'object' && module.exports) module.exports = App;
 
   window.addEventListener('DOMContentLoaded', function () {
-    function start() { if (g.ViewerTheme) g.ViewerTheme.init(); var app = new App(); window.app = app; app.render(); return app.init(); }
+    function start() {
+      if (g.ViewerTheme) g.ViewerTheme.init();
+      var app = new App(); window.app = app; app.render();
+      return app.init().then(function () {
+        // Storage and host initialization must finish before first-use preferences are read.
+        if (g.ViewerOnboarding && !app.snapshotMode) {
+          app.onboarding = new g.ViewerOnboarding(app); app.render(true);
+        }
+      });
+    }
     if (g.SMVHost && g.SMVHost.kind === 'vscode') {
       g.SMVHost.boot().then(function () { U.store.useAdapter(g.SMVHost.storage); return start(); }).catch(function (error) {
         var root = document.getElementById('root'); U.clear(root);

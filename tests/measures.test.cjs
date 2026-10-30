@@ -168,7 +168,10 @@ test('workspace preferences round-trip and invalid stored values receive safe de
   const { view: restored } = harness(saved['smv-measures-workspace-v1']);
   assert.equal(restored._splitShares.beside,.61); assert.equal(restored._splitShares.below,.43); assert.equal(restored._wrapDax,false);
   const { view: safe } = harness({mode:'invalid',split:'invalid',orientation:'invalid',besideShare:-4,belowShare:Infinity});
-  assert.equal(safe._workspaceMode,'split'); assert.equal(safe._splitLayout,'beside'); assert.equal(safe._graphOrientation,'lr');
+  // Invalid or old-default values fall back to Auto, which follows the pane.
+  assert.equal(safe._workspaceMode,'split'); assert.equal(safe._splitLayout,'auto'); assert.equal(safe._graphOrientation,'auto');
+  const { view: legacy } = harness({split:'beside',orientation:'lr'});
+  assert.equal(legacy._splitLayout,'auto','an old saved default gives way to Auto'); assert.equal(legacy._graphOrientation,'auto');
   assert.equal(safe._splitShares.beside,.2); assert.equal(safe._splitShares.below,.52);
 });
 
@@ -195,7 +198,7 @@ test('measure snapshot is JSON-safe and preserves comparison, library state, pre
   const snapshot=JSON.parse(JSON.stringify(view.captureSnapshot()));
   assert.equal(snapshot.version,1);assert.equal(snapshot.selectedMeasure,'Margin');assert.equal(snapshot.comparisonMeasure,'Profit');
   assert.deepEqual(snapshot.extraMeasures,['Revenue']);
-  assert.deepEqual(snapshot.library,{query:'DIVIDE',visibility:'hidden',homeTable:'Sales',openFolders:['Finance','Finance\\Ratios'],width:360,sourceMode:'measures',pickingSource:false,sourceQuery:'',impactQuery:'',openTables:[]});
+  assert.deepEqual(snapshot.library,{collapsed:false,query:'DIVIDE',visibility:'hidden',homeTable:'Sales',openFolders:['Finance','Finance\\Ratios'],width:360,sourceMode:'measures',pickingSource:false,sourceQuery:'',impactQuery:'',openTables:[]});
   assert.deepEqual(snapshot.preferences,{mode:'split',split:'below',besideShare:.63,belowShare:.46,orientation:'bt',wrap:false,sources:false,fmt:'long',inline:false,plain:false});
   assert.deepEqual(snapshot.graph,{zoom:.8,scrollLeft:123,scrollTop:456,autoFit:false});
   view.rememberGraphViewport();view.gScroll.clientWidth=0;
@@ -370,7 +373,7 @@ test('the graph opens on the analyzed measure at a readable zoom, in every orien
     const graph = view.gLayout(ROOT, {}, 500, orientation);
     for (const [w, h] of [[900, 520], [1180, 700], [420, 300]]) {
       const open = view.initialViewport(graph, w, h);
-      assert.ok(open.zoom >= 0.6, orientation + ' opens at ' + open.zoom);
+      assert.equal(open.zoom, 1, orientation + ' opens at readable 100% zoom');
       assert.ok(open.zoom <= 1, orientation + ' never opens zoomed in');
       const root = graph.xy[ROOT];
       const left = open.zoom * root.x + Math.max(0, (w - Math.ceil(graph.w * open.zoom)) / 2) - open.scrollLeft;
@@ -617,4 +620,26 @@ test('snapshot restores source browsing and formula display preferences', () => 
   assert.equal(view._inlineDax,true);assert.equal(view._fmt,'short');assert.equal(view._plainDax,true);
   assert.equal(app.state.mvSourcePicking,true);assert.equal(app.state.mvSourceQuery,'amount');assert.equal(app.state.mvImpactQuery,'profit');
   assert.deepEqual(Object.keys(app.state.mvSourceOpen),['Sales']);
+});
+
+test('paired comparison fits its bounded overview without changing ordinary opening zoom', () => {
+  const { view } = harness();
+  const graph = { w: 1600, h: 800, root: 'Margin', xy: { Margin: { x: 900, y: 200, w: 190 } } };
+  assert.equal(view.initialViewport(graph, 824, 424).zoom, 1);
+  view.options.comparison = true;
+  const opening = view.initialViewport(graph, 824, 424);
+  assert.equal(opening.zoom, .5);
+  assert.equal(opening.scrollLeft, 0);
+  assert.equal(opening.scrollTop, 0);
+});
+
+test('library collapse preferences survive layout changes and snapshot sanitation', () => {
+  const {view,saved}=harness({libraryCollapsed:true});
+  assert.equal(view._libraryCollapsed,true);
+  view.setLibraryCollapsed(false);
+  view.savePreferences();
+  assert.equal(saved['smv-measures-workspace-v1'].libraryCollapsed,false);
+  const snapshot=JSON.parse(JSON.stringify(view.captureSnapshot()));snapshot.library.collapsed=true;
+  assert.equal(view.sanitizeSnapshot(snapshot).library.collapsed,true);
+  snapshot.library.collapsed='yes';assert.equal(view.sanitizeSnapshot(snapshot).library.collapsed,false);
 });

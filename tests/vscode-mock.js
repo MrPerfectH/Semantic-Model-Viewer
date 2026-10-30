@@ -53,6 +53,7 @@ function makeVscode(opts) {
   const state = new Map();
   const commands = new Map();
   const panels = [];
+  const globalState = opts.globalState || new Map();
   const contains = (base, target) => { const rel = path.relative(base, target); return rel === '' || (rel !== '..' && !rel.startsWith('..' + path.sep) && !path.isAbsolute(rel)); };
 
   const vscode = {
@@ -92,6 +93,7 @@ function makeVscode(opts) {
         vscode._watchers.push(w); return w;
       },
       openTextDocument: async (uri) => { vscode._opened.push(uri); return { uri }; },
+      onDidChangeConfiguration: (h) => { vscode._configurationListeners.push(h); return new Disposable(); },
       onDidChangeWorkspaceFolders: (h) => { vscode._folderListeners.push(h); return new Disposable(); }
     },
     window: {
@@ -103,6 +105,7 @@ function makeVscode(opts) {
       showOpenDialog: async () => (opts.openDialog ? opts.openDialog() : undefined),
       showSaveDialog: async (options) => { vscode._saveDialogs.push(options); return opts.saveDialog ? opts.saveDialog(options) : undefined; },
       showTextDocument: async (doc, options) => { vscode._shown.push({ doc, options }); },
+      registerUriHandler: handler => { vscode._uriHandler = handler; return new Disposable(); },
       registerTreeDataProvider: (id, provider) => { vscode._trees[id] = provider; return new Disposable(); },
       withProgress: (o, task) => task({ report: () => { } }),
       createOutputChannel: () => ({ lines: [], appendLine(l) { this.lines.push(l); log(l); }, show() { }, dispose() { this.disposed = true; } }),
@@ -127,10 +130,16 @@ function makeVscode(opts) {
       registerCommand: (id, fn) => { commands.set(id, fn); return new Disposable(() => commands.delete(id)); },
       executeCommand: async (id, ...args) => { if (id === 'setContext') { vscode._contexts[args[0]] = args[1]; return; } const fn = commands.get(id); return fn ? fn(...args) : undefined; }
     },
-    _writes: [], _saveDialogs: [], _opened: [], _shown: [], _watchers: [], _panels: panels, _state: state, _trees: {}, _folderListeners: [], _contexts: {},
+    _writes: [], _saveDialogs: [], _opened: [], _shown: [], _watchers: [], _panels: panels, _state: state, _trees: {}, _folderListeners: [], _configurationListeners: [], _contexts: {},
     context: {
       extensionUri: Uri.file(opts.extensionRoot),
+      extensionPath: opts.extensionRoot,
       subscriptions: [],
+      globalState: {
+        keys: () => Array.from(globalState.keys()),
+        get: (k) => globalState.get(k),
+        update: async (k, v) => { if (v === undefined) globalState.delete(k); else globalState.set(k, v); }
+      },
       workspaceState: {
         keys: () => Array.from(state.keys()),
         get: (k) => state.get(k),

@@ -1,0 +1,34 @@
+table Campaign
+	lineageTag: 13562638-e8e8-511d-b1db-b91c7fe2be65
+
+	column CampaignKey
+		dataType: int64
+		isKey
+		isHidden
+		lineageTag: 16104e6b-0f92-5dc5-ac86-4299c44420a5
+		sourceColumn: campaignkey
+
+	column 'Campaign Name'
+		dataType: string
+		lineageTag: 5caad8f7-16a4-5456-85d6-45bc99d536ed
+		sourceColumn: campaign_name
+
+	column Medium
+		dataType: string
+		lineageTag: adcb530e-d048-5dd1-bd0c-ac701a783a94
+		sourceColumn: medium
+
+	column Objective
+		dataType: string
+		lineageTag: b8fe33cb-4aaa-54f2-a44c-3970766061ea
+		sourceColumn: objective
+
+	partition Campaign = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-contoso.azuredatabricks.net", "/sql/1.0/warehouses/demo", []),
+				    db = Source{[Name="marketing",Kind="Schema"]}[Data],
+				    tbl = db{[Name="dim_campaign",Kind="Table"]}[Data]
+				in
+				    tbl

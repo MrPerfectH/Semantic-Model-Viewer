@@ -1,0 +1,30 @@
+'use strict';
+const { spawn } = require('node:child_process');
+const fs = require('node:fs');
+const path = require('node:path');
+const { FabricError } = require('./client.cjs');
+function createXmlaReader({ executable = process.env.SMV_FABRIC_XMLA_HELPER || path.join(__dirname, 'xmla', 'publish', process.platform + '-' + process.arch, process.platform === 'win32' ? 'Smv.Fabric.Xmla.exe' : 'Smv.Fabric.Xmla') } = {}) {
+  return request => new Promise((resolve, reject) => {
+    request.signal?.throwIfAborted();
+    if (!fs.existsSync(executable)) return reject(new FabricError('XmlaHelperMissing', 'The XMLA helper is not installed. Editors can choose the Fabric REST connection instead.'));
+    const child = spawn(executable, [], { stdio: ['pipe', 'pipe', 'ignore'], windowsHide: true });
+    const chunks = []; let bytes = 0; let settled = false;
+    const finish = (error, result) => { if (settled) return; settled = true; clearTimeout(timer); request.signal?.removeEventListener('abort', abort); if (error) { child.kill(); reject(error); } else resolve(result); };
+    const abort = () => finish(new FabricError('Cancelled', 'XMLA metadata retrieval cancelled.'));
+    const timer = setTimeout(() => finish(new FabricError('XmlaTimeout', 'XMLA metadata retrieval timed out.')), 120000);
+    request.signal?.addEventListener('abort', abort, { once: true });
+    child.on('error', () => finish(new FabricError('XmlaHelperFailed', 'The XMLA helper could not start.')));
+    child.stdin.on('error', () => {});
+    child.stdout.on('data', data => { chunks.push(data); bytes += data.length; if (bytes > 96 * 1024 * 1024) finish(new FabricError('DefinitionTooLarge', 'XMLA model metadata exceeds the supported size.')); });
+    child.on('close', code => {
+      try { const result = JSON.parse(Buffer.concat(chunks).toString('utf8')); if (code || result.error) throw new FabricError(result.error?.code || 'XmlaFailed', result.error?.message || 'XMLA metadata retrieval failed.'); if (result.transport !== 'xmla' || result.parts?.length !== 1 || result.parts[0].path !== 'model.bim' || typeof result.parts[0].content !== 'string') throw new Error();
+        // Validate model structure before any host consumes the helper response.
+        const bim = JSON.parse(result.parts[0].content); if (!bim.model || !Array.isArray(bim.model.tables)) throw new Error();
+        result.coverage = result.coverage === 'consumer-metadata' ? 'consumer-metadata' : 'permission-dependent';
+        result.warnings = result.coverage === 'consumer-metadata' ? ['Limited consumer metadata: internal definitions and Power Query are unavailable.', ...(Array.isArray(result.warnings) ? result.warnings.filter(value => typeof value === 'string').map(value => value.slice(0, 2000)).slice(0, 19) : [])] : ['XMLA metadata depends on account permissions. Read + Build access may hide expressions and partitions; empty fields do not prove those objects are absent.']; finish(null, result); }
+      catch (error) { finish(error instanceof FabricError ? error : new FabricError('XmlaFailed', 'The XMLA helper returned invalid metadata.')); }
+    });
+    child.stdin.end(JSON.stringify({ workspaceId: request.workspaceId, workspaceName: request.workspaceName, modelId: request.modelId, modelName: request.modelName, accessToken: request.accessToken }));
+  });
+}
+module.exports = { createXmlaReader };

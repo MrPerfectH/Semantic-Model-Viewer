@@ -123,11 +123,11 @@
         var r = resolve(n.v);
         if (!r || !String(r.dax || '').trim()) { out.push(n); return; }
         if (stack.indexOf(r.name) >= 0) { state.cycles[r.name] = true; out.push(n); return; }
-        if (state.size > CAP) { state.capped = true; out.push(n); return; }
+        if (state.size + String(r.dax).length > CAP || stack.length >= 40 || ++state.occurrences > 2000) { state.capped = true; out.push(n); return; }
         state.count[r.name] = true;
         var body = String(r.dax).trim();
         state.size += body.length;
-        var inner = inlineTree(parse(tokenize(body)), resolve, state, stack.concat(r.name));
+        var inner = inlineTree(parse(checkedTokens(body, state.opts)), resolve, state, stack.concat(r.name));
         out.push({ k: 'inline', name: r.name, raw: n.v, seq: inner });
       } else if (n.k === 'call') {
         out.push({ k: 'call', name: n.name, args: n.args.map(function (a) { return inlineTree(a, resolve, state, stack); }) });
@@ -356,13 +356,25 @@
   }
 
   /* ---------- public API ---------- */
+  function checkedTokens(dax, opts) {
+    var tokens=tokenize(dax);
+    if(opts && opts.strict){
+      var stack=[];if(dax.length>CAP||tokens.length>50000)throw new Error('Formula inspection budget exceeded');
+      tokens.forEach(function(t){
+        if(t.t==='other')throw new Error('Unsupported DAX syntax');
+        if(t.t==='('||t.t==='{'){stack.push(t.t);if(stack.length>80)throw new Error('Formula nesting limit');}
+        if(t.t===')'||t.t==='}'){if(stack.pop()!==(t.t===')'?'(':'{'))throw new Error('Unbalanced DAX syntax');}
+      });
+      if(stack.length)throw new Error('Unbalanced DAX syntax');
+    }return tokens;
+  }
   function format(dax, opts) {
-    var tree = parse(tokenize(String(dax || '')));
+    var tree = parse(checkedTokens(String(dax || ''), opts));
     return print(tree, opts);
   }
   function formatInlined(dax, name, resolve, opts) {
-    var state = { count: {}, cycles: {}, capped: false, size: String(dax || '').length };
-    var tree = inlineTree(parse(tokenize(String(dax || ''))), resolve, state, [name]);
+    var state = { opts:opts, count: {}, cycles: {}, capped: false, occurrences: 0, size: String(dax || '').length };
+    var tree = inlineTree(parse(checkedTokens(String(dax || ''), opts)), resolve, state, [name]);
     var printed = print(tree, opts);
     printed.count = Object.keys(state.count).length;
     printed.cycles = Object.keys(state.cycles);

@@ -23,7 +23,7 @@ function entryForFolder(uri) {
   return { id: idFor(uri), name: path.basename(uri.fsPath).replace(/\.SemanticModel$/i, ''), path: relPath(uri), uri, kind: 'folder' };
 }
 function entryForBim(uri) {
-  const dir = vscode.Uri.file(path.dirname(uri.fsPath));
+  const dir = vscode.Uri.joinPath(uri, '..');
   if (/\.SemanticModel$/i.test(dir.fsPath)) return entryForFolder(dir);
   return { id: idFor(uri), name: path.basename(dir.fsPath), path: relPath(uri), uri, kind: 'file' };
 }
@@ -35,7 +35,7 @@ async function findModels() {
   const tmdl = await vscode.workspace.findFiles('**/*.SemanticModel/definition/model.tmdl', exclude);
   for (const f of tmdl) {
     if (inHiddenFolder(f)) continue;
-    const e = entryForFolder(vscode.Uri.file(path.dirname(path.dirname(f.fsPath))));
+    const e = entryForFolder(vscode.Uri.joinPath(f, '..', '..'));
     byId.set(e.id, e);
   }
   const bims = await vscode.workspace.findFiles('**/model.bim', exclude);
@@ -52,7 +52,7 @@ async function modelFromUri(uri) {
     if (/\.SemanticModel$/i.test(uri.fsPath)) return entryForFolder(uri);
     // a definition/ folder or the folder above a model.bim
     try {
-      const bim = vscode.Uri.file(path.join(uri.fsPath, 'model.bim'));
+      const bim = vscode.Uri.joinPath(uri, 'model.bim');
       await vscode.workspace.fs.stat(bim);
       return entryForBim(bim);
     } catch (e) { return null; }

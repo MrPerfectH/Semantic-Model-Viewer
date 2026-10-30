@@ -1,21 +1,39 @@
-# TMDL snapshot CLI
+# Semantic Model Viewer CLI
 
-Export a semantic model as one offline, interactive HTML file. Recipients can
-explore it in a browser without installing the Viewer or connecting to Power BI.
-The snapshot represents one version of the model; it is not a change report.
+Requires Node.js 22+. The Claude plugin includes the runtime and needs no extra npm
+packages, MCP server, separate app or VS Code extension.
 
-## Usage
+In Claude, run `/semantic-model-viewer:setup` once for a stable `smv` command on PATH.
+From a checkout, run `node bin/smv.cjs install` or invoke `node bin/smv.cjs` directly.
+There is no published npm release. A checkout install stays bound to that checkout; plugin setup follows Claude plugin upgrades. Use `install --source checkout|plugin` to choose explicitly. `smv --where --json` reports the active executable, version, selection and warnings; `smv --version` prints the version. Existing launchers must be reinstalled once to adopt this policy. Updating a checkout or plugin is a separate action; diagnostics perform no network checks.
 
-Requires **Node.js 22 or newer**, with no extra dependencies or browser needed to export.
-Run from a checkout:
-
-```bash
-node bin/smv.cjs snapshot "Models/demo/Contoso Retail.SemanticModel" --out snapshot.html
-node bin/smv.cjs --help
+```sh
+smv show 'Sales.SemanticModel' --table 'Cost Center' --related --dependents
+smv relations 'Sales.SemanticModel' --table 'Cost Center'
+smv dependents 'Sales.SemanticModel' --table 'Cost Center'
+smv snapshot 'Sales.SemanticModel' --out model.html
+smv session list
+smv session stop --all
+smv --help
 ```
 
-Or install from this repository with `npm install --global .` to use `smv`.
-There is no published npm release.
+`show` launches the live interactive viewer by default. Omit `--out` for exploration.
+`--out diagram.png` exports a **static image** and starts **no server**; reserve it
+for documentation or snapshots. `--out diagram.html` saves a standalone interactive
+HTML snapshot without a live server. Both exports confirm their mode on stderr;
+stdout remains JSON. Choose one diagram with `--related`, `--dependents` or `--with`
+when exporting.
+
+`show` returns one reusable side-by-side Tables/Measures workspace and independent
+view URLs. Focused queries return small counts and names; use `--details` for DAX
+or relationship evidence. Full `inspect` remains available for broad inventories.
+The views open on the diagram alone, sized so that every table and measure name is
+11px or larger on screen; the answer sentence is returned as
+`views[].answer` for the agent to relay, not printed above the diagram.
+
+Inputs are one TMDL model folder, its definition folder, or a BIM file. Relative paths
+resolve from the current project. Commands read local metadata, never execute DAX/M/SQL
+or change model files, and do not read the published Power BI service model.
 
 ## Open a fresh local view
 
@@ -57,16 +75,20 @@ Hover or click a line for exact column pairs, or select a table for its inspecto
 Input must be one TMDL `.SemanticModel` folder or its `definition` folder containing
 `model.tmdl`. Relative paths resolve from the current working directory.
 
-```bash
-smv snapshot "Sales.SemanticModel" --out artifacts/model.html
-smv snapshot "Sales.SemanticModel/definition" --tables Sales,Customer,Date --out artifacts/sales.html
-smv snapshot "Sales.SemanticModel" --measure "Total Sales" --out artifacts/measure.html
+
+New view JSON uses **version 2**, including relative table sets and layout controls:
+
+```json
+{"version":2,"tables":{"relatedTo":"Cost Center"},"arrange":true,"banner":false}
 ```
 
-- `--tables`: comma-separated starting tables, or repeat `--table` for names containing commas.
-- `--measure`: open on the selected measure, instead of selecting starting tables.
-- `--name`: override the displayed model name.
-- `--force`: replace an existing output file. Without it, existing files are preserved.
+Use it with `snapshot --view`, `shot --view`, or named live views. HTML snapshots work
+offline without a server; PNG capture requires Chrome/Chromium. Snapshots retain all
+parsed model metadata and formulas behind the starting view. See [snapshot contents](snapshots.md).
+
+Read [CLI plugin workflow](cli-plugin-workflow.md) for the complete command and view
+contract, managed-session reuse/cleanup, version warnings, stable PATH setup, named
+views, and computed versus browser-applied counts. Every subcommand supports `--help`.
 
 All snapshots retain the full Viewer model metadata, DAX and available Power Query
 definitions, including objects outside the starting view. Exact M includes any endpoint
@@ -76,6 +98,9 @@ adds report usage as described above.
 They are exploration artifacts, not backups of every TMDL property. See
 [snapshot contents](snapshots.md) for details.
 
-Open the generated HTML directly in a browser. You can save it in the repository
-or attach it as a build artifact for reviewers. The CLI does not commit, upload,
-or attach files to a PR. It does not modify the TMDL source or execute M or DAX.
+
+[Visual explanations](visual-explanations.md) covers annotated images, walkthroughs,
+external results and proposals. The walkthrough envelope and imported dataset formats
+remain version 1; their embedded **view specifications use version 2**.
+
+Compare two calculations with `smv compare <model> --measure "<A>" --with "<B>"`. This opens one native paired Measures view, with inline DAX and source references; use `--out comparison.html` for a portable file. See [measure comparison](measure-comparison.md) for colors, scope limits and saved state.

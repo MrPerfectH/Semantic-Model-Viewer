@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "mode": "measures",
+  "focus": {
+    "kind": "measure",
+    "table": "Measures",
+    "name": "Sales LY"
+  },
+  "context": {
+    "direction": "both",
+    "depth": 1,
+    "limit": 25
+  },
+  "state": {
+    "measures": {
+      "version": 1,
+      "selectedMeasure": null,
+      "library": {
+        "query": "Date[Date]",
+        "visibility": "all",
+        "homeTable": "Measures",
+        "width": 240
+      },
+      "preferences": {
+        "mode": "split",
+        "split": "below",
+        "orientation": "tb",
+        "wrap": true
+      },
+      "graph": {
+        "autoFit": true
+      }
+    }
+  },
+  "annotationsVisible": false,
+  "chrome": false,
+  "width": 728,
+  "height": 1200,
+  "scale": 1
+}

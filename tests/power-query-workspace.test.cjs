@@ -214,3 +214,22 @@ test('snapshot metadata starts the real worker; legacy missing metadata reports 
  const {w,workers}=jobHarness();w.app.snapshotMode=true;w.start();await tick();assert.equal(workers.length,1);assert.equal(w.phase,'building');w.cancel();
  delete w.app.model.powerQuery;w.start();assert.equal(w.phase,'ready');assert.equal(w.context,null);assert.match(w.message.textContent,/older snapshot/);
 });
+
+test('refresh snapshot retains valid flow and viewport while safely dropping removed roots, selection and layout entries',async()=>{
+ for(const removed of [false,true]){
+  const {w,g}=stateHarness();w.ensureState();w.viewMode='flow';w.analyzedId='B';w.flowRootId='B';w.direction='inputs';w.depth=Infinity;
+  w.canvas.captureLayout=()=>new Map([['A',{x:12,y:34}],['B',{x:210,y:34}]]);
+  const saved=JSON.parse(JSON.stringify(w.captureSnapshot()));
+  const rows=removed?[row('A')]:[row('A'),row('B','A'),row('New','B')];
+  w.app.model=model(rows);w.generation++;
+  w.capture=g.PowerQueryWorkspaceInternals.capture(w.app.model);
+  w.context=g.PowerQueryWorkspaceInternals.contextFor(g.PowerQueryGraphModel.build(w.app.model,{generation:w.generation}),rows,w.generation);
+  w.sets=g.PowerQueryWorkspaceInternals.categories(w.context);
+  w.library={};w.toggle={setAttribute(){}};w.host={classList:{toggle(){}}};w.displayMenu={querySelector(){return null;}};
+  let layout;w.canvas.restoreLayout=m=>layout=m;
+  w.restoreSnapshot(saved);await w.applySnapshot();
+  assert.equal(w.selectedId,removed?null:'B');assert.equal(w.analyzedId,removed?null:'B');assert.equal(w.flowRootId,removed?null:'B');
+  assert.equal(layout.has('B'),!removed);assert.equal(w.membership.has('B'),!removed);
+  assert.equal(w.depth,Infinity);assert.equal(w.viewMode,'flow');
+ }
+});

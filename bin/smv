@@ -1,0 +1,41 @@
+#!/bin/sh
+# Package-local entry point. Never searches PATH for a different SMV or Node.
+set -eu
+case "$0" in */*) self=$0 ;; *) self=$(command -v "$0") ;; esac
+root=$(CDPATH= cd -P -- "${self%/*}/.." && pwd)
+if [ -n "${SMV_NODE:-}" ]; then
+  node=$SMV_NODE
+  if [ ! -x "$node" ]; then echo 'SMV: SMV_NODE must name an executable Node.js 22+ binary.' >&2; exit 1; fi
+else
+  system=$(/usr/bin/uname -s)
+  machine=$(/usr/bin/uname -m)
+  case "$system" in Darwin) system=darwin ;; Linux) system=linux ;; *) echo "SMV: unsupported platform $system; use a qualified package for your system." >&2; exit 1 ;; esac
+  case "$machine" in x86_64) machine=x64 ;; arm64|aarch64) machine=arm64 ;; *) echo "SMV: unsupported architecture $machine." >&2; exit 1 ;; esac
+  node="$root/runtime/$system-$machine/node"
+  if [ ! -f "$node" ]; then
+    echo 'SMV: this source package does not contain a private runtime for this platform. Install a complete portable plugin package. For development only, set SMV_NODE to an absolute Node.js 22+ executable.' >&2
+    exit 1
+  fi
+  # Some plugin/archive extractors drop Unix executable bits. Restore the
+  # verified runtime in our own cache; never write into the installation.
+  if [ ! -x "$node" ]; then
+    IFS= read -r expected < "$root/runtime/$system-$machine/node.sha256"
+    case "$expected" in ''|*[!0-9a-f]*) echo 'SMV: invalid private runtime checksum.' >&2; exit 1 ;; esac
+    if [ "${#expected}" -ne 64 ]; then echo 'SMV: invalid private runtime checksum.' >&2; exit 1; fi
+    cache=${SMV_RUNTIME_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/semantic-model-viewer/runtime}
+    /bin/mkdir -p "$cache"
+    if [ ! -x "$cache/$expected" ]; then
+      smv_runtime_temp=$(/usr/bin/mktemp "$cache/.node.XXXXXXXX")
+      trap '/bin/rm -f "$smv_runtime_temp"' 0
+      trap 'exit 1' 1 2 15
+      /bin/cp "$node" "$smv_runtime_temp"
+      if [ "$system" = darwin ]; then actual=$(/usr/bin/shasum -a 256 "$smv_runtime_temp"); else actual=$(/usr/bin/sha256sum "$smv_runtime_temp"); fi
+      if [ "${actual%% *}" != "$expected" ]; then echo 'SMV: private runtime checksum mismatch.' >&2; exit 1; fi
+      /bin/chmod 700 "$smv_runtime_temp"
+      /bin/mv -f "$smv_runtime_temp" "$cache/$expected"
+      trap - 0 1 2 15
+    fi
+    node="$cache/$expected"
+  fi
+fi
+exec "$node" "$root/bin/portable.cjs" "$@"

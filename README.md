@@ -17,13 +17,21 @@ The browser demo opens with a synthetic **Contoso Retail** model. No installatio
 
 **[Learning library: watch recordings, download PDF walkthroughs, and follow the guides](docs/learning-library.md)**
 
+## What's new in 0.6
+
+- **Readable diagrams without zooming.** Names stay at 11px or larger. Tables open as full cards with every relationship's cardinality badge when the pane has room. **Focus** shows a table's neighbourhood, arranged, in one press. On small screens the canvas keeps the space, and narrow dependency flows run top to bottom with tidy links.
+- **Ask your agent, see the answer.** `smv show` opens the relevant Tables and Measures views side by side, or as tabs on a narrow window, and the agent gives the answer in the conversation. Live sessions follow the agent's next view.
+- **Fabric connection.** Sign in with a work account, browse workspaces and models, open read-only metadata, reopen it offline and refresh it.
+- **Colours by source or table folder**, with a compact legend, and VS Code light, dark and high-contrast themes.
+- **Bundled CLI and Copilot tools.** Extension packages include the `smv` command and native Copilot tools.
+
 ## Get started
 
 | Where | First steps | Requirements |
 | --- | --- | --- |
 | Windows portable | Extract the ZIP and double-click **Run Semantic Model Viewer.cmd**. | Windows x64 and a browser; no installation or separate Python setup. |
 | Browser | Open the demo, then choose **Open model** to import your own model. | A desktop browser; Chrome/Edge also support connecting a repository folder. |
-| VS Code | Install the extension, open your project folder, then select a model in **Semantic Models**. | VS Code; no Python or Power BI Desktop needed for local model files. |
+| VS Code | Install the extension, open your project folder, then select a model in **Semantic Model Viewer**. | VS Code; no Python or Power BI Desktop needed for local model files. |
 | Mac / run from source | Follow the [repository setup](docs/installation.md#run-from-a-repository-checkout). | Python 3 and a browser. |
 
 See the [portable download instructions](docs/installation.md#windows-portable-version) for package availability.
@@ -34,6 +42,30 @@ In **Measures**, select a measure to follow its dependencies and inspect the DAX
 **Supported files:** TMDL (`*.SemanticModel` folders and PBIP project folders) and `model.bim`.
 A `.pbip` file alone is not the model; `.pbix` files cannot be opened directly.
 See [supported input and troubleshooting](docs/installation.md#supported-input).
+
+## Claude Code
+
+Load the `semantic-model-viewer` plugin to open models, ask for visual explanations, and
+save offline snapshots from Claude Code. It runs the existing CLI through Claude's shell tools.
+Install from inside Claude Code:
+
+```text
+/plugin marketplace add MrPerfectH/Semantic-Model-Viewer#claude-marketplace
+/plugin install semantic-model-viewer@semantic-model-tools
+```
+
+Use `/semantic-model-viewer:open` for diagrams. `/semantic-model-viewer:setup` is optional for a global terminal command. `smv show <model> --table "Cost Center" --related --dependents` opens a reusable side-by-side Tables/Measures workspace; `relations` and `dependents` give short metadata answers. Requires Node.js 22+ and Git. The plugin CLI has no runtime npm dependencies. No separate Viewer app installation is needed.
+See [plugin setup and commands](docs/claude-code-plugin.md).
+
+The [CLI workspace workflow](docs/cli-workspace-fetch.md) downloads Fabric definitions using an existing Azure CLI login, generates offline diagrams, and records source and renderer hashes. Local models require no cloud login. Choose opening behavior with `--open none|system`.
+
+## Fabric connection
+
+Work-account sign-in, workspace/model browsing, read-only metadata inspection, cached
+reopening and manual refresh, in the standalone app and desktop VS Code. Standard sign-in
+and live model opening have been tested on macOS, Linux x64 and Windows x64.
+See [Fabric connection setup](docs/fabric-connection.md). Read + Build access may
+expose limited internal metadata.
 
 ## What you can do
 
@@ -111,7 +143,13 @@ people who should see those definitions.
 Use the browser, repository launchers, or VS Code extension. Switch between
 Classic and Spellbook appearances in the browser app, and preserve the chosen
 presentation in interactive snapshots. The [snapshot CLI](docs/cli.md) can export
-an offline model view from TMDL without opening a browser.
+an offline model view from TMDL without opening a browser. Agents can also capture
+annotated views and build walkthroughs with imported numbers, transparent calculations,
+and proposed changes; see [visual explanations](docs/visual-explanations.md). Image capture
+uses an installed Chrome/Chromium; snapshot export still needs no browser. The
+[interactive agent workflow](docs/interactive-viewer.md) opens focused Tables and Measures
+views in the integrated browser, reuses a live session for follow-up questions, reads
+selections, and exports acknowledged viewer state. MCP is optional.
 
 The searchable Reference workspace, Claude Code plugin, and agent-authored visual
 explanations are in development. They are separate from the stable features shown above.
@@ -130,6 +168,8 @@ links it cannot resolve remain explicit. See the [viewer guide](docs/viewer-guid
 | Explore the views and see more screenshots | [Viewer guide](docs/viewer-guide.md) |
 | Share a portable model | [Interactive snapshots](docs/snapshots.md) |
 | Export a snapshot from the command line | [CLI](docs/cli.md) |
+| Connect to a Fabric workspace (preview) | [Fabric connection](docs/fabric-connection.md) |
+| Drive the Viewer from an agent | [Interactive viewer](docs/interactive-viewer.md) · [Visual explanations](docs/visual-explanations.md) |
 | Understand data handling | [Security and privacy](SECURITY.md) |
 | Develop or contribute | [Developer guide](docs/development.md) · [Contributing](CONTRIBUTING.md) |
 
@@ -155,3 +195,5 @@ For code contributions, read [CONTRIBUTING](CONTRIBUTING.md); report security is
 Built and maintained by **Przemek Harazny** ([@MrPerfectH](https://github.com/MrPerfectH))
 as a personal open-source project. Released under the [MIT License](LICENSE).
 Demo models and screenshots use synthetic data.
+
+The [bundled agent delivery candidate](docs/bundled-agent-delivery.md) adds native VS Code tools and complete Claude Code/Codex packages with private runtimes. Source-only Git payloads retain an explicit Node requirement until complete artifacts are published.

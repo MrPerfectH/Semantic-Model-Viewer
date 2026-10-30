@@ -1,0 +1,139 @@
+name: Build Fabric preview
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      prerelease:
+        type: boolean
+        default: true
+  pull_request:
+    paths:
+      - '.github/workflows/fabric-preview.yml'
+      - 'tools/fabric/**'
+      - 'vscode-extension/**'
+      - 'Models/tools/viewer/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fabric-preview-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  private-runtimes:
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/feature/fabric-connect' || github.head_ref == 'feature/fabric-connect' || startsWith(github.ref, 'refs/tags/v')
+    uses: ./.github/workflows/bundled-agent-delivery.yml
+  helpers:
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/feature/fabric-connect' || github.head_ref == 'feature/fabric-connect' || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: bash tools/fabric/xmla/publish.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fabric-helpers-unsigned
+          path: tools/fabric/xmla/publish
+
+  sign-mac-helpers:
+    needs: helpers
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          name: fabric-helpers-unsigned
+          path: tools/fabric/xmla/publish
+      - run: |
+          chmod +x tools/fabric/xmla/publish/darwin-*/Smv.Fabric.Xmla
+          bash tools/fabric/xmla/sign-macos.sh
+      - name: Test the signed standalone archive on macOS
+        run: |
+          npm ci --omit=dev --prefix tools/fabric
+          python3 tools/fabric/build-preview.py --out dist/mac-smoke.zip
+          python3 tools/fabric/verify-preview.py dist/mac-smoke.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fabric-helpers-preview
+          path: tools/fabric/xmla/publish
+
+  package:
+    needs: [sign-mac-helpers, private-runtimes]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/download-artifact@v4
+        with:
+          name: fabric-helpers-preview
+          path: tools/fabric/xmla/publish
+      - name: Restore executable permissions after artifact transfer
+        run: chmod +x tools/fabric/xmla/publish/{linux,darwin}-*/Smv.Fabric.Xmla
+      - run: npm ci
+      - run: npm ci --prefix vscode-extension
+      - run: npm ci --omit=dev --prefix tools/fabric
+      - run: npm test --prefix vscode-extension
+      - name: Verify downloaded offline snapshots in Chrome
+        run: |
+          command -v google-chrome || command -v chromium
+          node --test tests/snapshot.browser.cjs
+      - name: Assign the develop pre-release version
+        if: github.ref == 'refs/heads/develop'
+        working-directory: vscode-extension
+        run: node scripts/preview-version.cjs
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: smv-private-node-*
+          path: dist/runtime-downloads
+      - name: Restore verified runtime inputs
+        run: |
+          mkdir -p dist/runtimes
+          for target in linux-x64 linux-arm64 darwin-x64 darwin-arm64 win-x64; do
+            mv "dist/runtime-downloads/smv-private-node-$target" "dist/runtimes/$target"
+            if [ "$target" != win-x64 ]; then chmod +x "dist/runtimes/$target/node"; fi
+          done
+      - name: Package platform extensions with the complete CLI
+        env:
+          PRERELEASE: ${{ github.event_name != 'push' || inputs.prerelease }}
+        run: |
+          if [ "$PRERELEASE" = "true" ]; then
+            cat vscode-extension/PRE-RELEASE.md vscode-extension/README.md > /tmp/smv-preview-readme.md
+            cp /tmp/smv-preview-readme.md vscode-extension/README.md
+          fi
+          for target in linux-x64 linux-arm64 darwin-x64 darwin-arm64 win-x64; do
+            rm -rf vscode-extension/cli
+            npm run build:vscode-cli -- --target "$target" --runtime-root dist/runtimes
+            node vscode-extension/scripts/check-bundled-cli.cjs "$target"
+            # Private Node/.NET runtimes use win-x64; VS Code uses win32-x64.
+            vsix_target="$target"
+            if [ "$target" = win-x64 ]; then vsix_target=win32-x64; fi
+            if [ "$PRERELEASE" = "true" ]; then
+              npm run package:preview --prefix vscode-extension -- --target "$vsix_target" --out "semantic-model-viewer-$vsix_target.vsix"
+            else
+              node vscode-extension/scripts/check-fabric-preview.js
+              npm run package --prefix vscode-extension -- --target "$vsix_target" --out "semantic-model-viewer-$vsix_target.vsix"
+            fi
+          done
+      - run: python3 tools/fabric/build-preview.py --out dist/semantic-model-viewer-fabric-preview.zip
+      - run: python3 tools/fabric/verify-preview.py dist/semantic-model-viewer-fabric-preview.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: semantic-model-viewer-fabric-preview
+          path: |
+            vscode-extension/semantic-model-viewer-*.vsix
+            dist/semantic-model-viewer-fabric-preview.zip

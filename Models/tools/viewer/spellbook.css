@@ -156,3 +156,9 @@ html[data-theme=spellbook],html[data-theme=spellbook] body{background:var(--smv-
 @media(max-width:1000px){[data-theme=spellbook] .ex-graph #workspace-toolbar .ex-workspace-title{display:none}}
 
 @media(max-width:780px){[data-theme=spellbook] .ex-graph :is(#canvas,#canvas-empty,#drawer>div){top:72px!important}}
+
+/* Group-colour previews share the table canvas role treatment. */
+[data-theme=spellbook] .smv-colour-preview .wui-card[data-fact=true] .wui-card-head{background:var(--smv-burgundy)!important}
+[data-theme=spellbook] .smv-colour-preview .wui-card[data-fact=true] .wui-card-title{color:#fff7e8!important}
+[data-theme=spellbook] .smv-colour-preview .wui-card[data-fact=false] .wui-card-head{background:var(--smv-surface)!important}
+[data-theme=spellbook] .smv-colour-preview .wui-card[data-fact=false] .wui-card-subtitle{color:var(--smv-muted)!important}

@@ -38,8 +38,8 @@
                    so one Arrange costs one SVG rebuild, one fit and one store.
      Normalised once here, so no algorithm has to repeat `opts = opts || {}`. */
   P.untangle = function (opts) {
-    var algo = ALGOS[this.layoutAlgo] ? this.layoutAlgo : P.DEFAULT_ALGO;
     opts = opts || {};
+    var algo = ALGOS[opts.algo] ? opts.algo : (ALGOS[this.layoutAlgo] ? this.layoutAlgo : P.DEFAULT_ALGO);
     this._quiet = !!opts.quiet;
     try { this[ALGOS[algo]](opts); } finally { this._quiet = false; }
   };
@@ -432,65 +432,88 @@
       if (b === center) return 1;
       return members[b].length - members[a].length || adj[b].size - adj[a].size || byName(a, b);
     });
-    var radius = {}, outer = 0, seatsOf = {};
-    order.forEach(function (h) {
-      var n = members[h].length, k;
-      seatsOf[h] = [];
-      for (k = 0; k < n; k++) seatsOf[h].push(-Math.PI / 2 + 2 * Math.PI * k / n);   // first seat on top
-      radius[h] = self._ringRadii(seatsOf[h]);
-      outer = Math.max(outer, radius[h].rx + (C.orphan.length ? chord : 0));
-    });
-    var slots = this._latticeSlots(order.length, 2 * outer + CW);
-    var placed = {}, rings = [];
-    order.forEach(function (h, i) { placed[h] = { x: slots[i].x, y: slots[i].y }; });
-
-    order.forEach(function (h) {
-      var list = members[h], n = list.length, R = radius[h];
-      if (!n) { rings.push({ hub: h, rx: R.rx, ry: R.ry, members: [] }); return; }
-      var seats = seatsOf[h];                            // seat angles, first one at the top
-      // a conformed dim wants the seat pointing at the other hubs it serves
-      var want = [], shared = {};
-      list.forEach(function (d) {
-        var others = (factsOf[d] || []).filter(function (f) { return f !== h && placed[f]; });
-        if (!others.length) return;
-        var mx = 0, my = 0;
-        others.forEach(function (f) { mx += placed[f].x; my += placed[f].y; });
-        shared[d] = true;
-        want.push({ name: d, a: Math.atan2(my / others.length - placed[h].y, mx / others.length - placed[h].x) });
-      });
-      want.sort(function (a, b) { return a.a - b.a || byName(a.name, b.name); });
-      var taken = {};
-      want.forEach(function (w) {
-        var best = -1, bd = 9;
-        seats.forEach(function (a, ix) {
-          if (taken[ix]) return;
-          var d = Math.abs(((w.a - a + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI);
-          if (d < bd) { bd = d; best = ix; }
-        });
-        if (best >= 0) taken[best] = w.name;
-      });
-      var rest = list.filter(function (d) { return !shared[d]; });   // private dims fill the gaps
-      seats.forEach(function (a, ix) { if (!taken[ix] && rest.length) taken[ix] = rest.shift(); });
-      var seated = [];
-      seats.forEach(function (a, ix) {
-        var d = taken[ix]; if (!d) return;
-        placed[d] = { x: placed[h].x + Math.cos(a) * R.rx, y: placed[h].y + Math.sin(a) * R.ry };
-        seated.push(d);
-      });
-      rings.push({ hub: h, rx: R.rx, ry: R.ry, members: seated });
-    });
-
-    // dictionaries hang off their dimension, one chord further out than the ring
-    this._seatOrphans(placed, adj, C.orphan, function (p) {
-      var near = placed[order[0]], nd = Infinity;
+    /* Seats start at the top. A star that comes out much taller than the canvas it is shown
+       on (or much wider) turns its ring instead: each candidate start angle is laid out and
+       the one whose picture fits the visible canvas at the largest zoom wins. The default
+       keeps its seat unless another one is at least 8% bigger, so a star that already fits
+       looks the way it always has. */
+    var build = function (rot) {
+      var radius = {}, outer = 0, seatsOf = {};
       order.forEach(function (h) {
-        var d = len(placed[h].x - p.x, placed[h].y - p.y);
-        if (d < nd) { nd = d; near = placed[h]; }
+        var n = members[h].length, k;
+        seatsOf[h] = [];
+        for (k = 0; k < n; k++) seatsOf[h].push(rot + 2 * Math.PI * k / n);   // first seat at rot (top by default)
+        radius[h] = self._ringRadii(seatsOf[h]);
+        outer = Math.max(outer, radius[h].rx + (C.orphan.length ? chord : 0));
       });
-      var dx = p.x - near.x, dy = p.y - near.y, L = len(dx, dy);
-      return { x: p.x + dx / L * chord, y: p.y + dy / L * chord };
-    });
-    this._separatePlaced(placed, C.conn.map(function (t) { return t.name; }), CW, CH, 80);
+      var slots = self._latticeSlots(order.length, 2 * outer + CW);
+      var placed = {}, rings = [];
+      order.forEach(function (h, i) { placed[h] = { x: slots[i].x, y: slots[i].y }; });
+
+      order.forEach(function (h) {
+        var list = members[h], n = list.length, R = radius[h];
+        if (!n) { rings.push({ hub: h, rx: R.rx, ry: R.ry, members: [] }); return; }
+        var seats = seatsOf[h];                            // seat angles, first one at the top
+        // a conformed dim wants the seat pointing at the other hubs it serves
+        var want = [], shared = {};
+        list.forEach(function (d) {
+          var others = (factsOf[d] || []).filter(function (f) { return f !== h && placed[f]; });
+          if (!others.length) return;
+          var mx = 0, my = 0;
+          others.forEach(function (f) { mx += placed[f].x; my += placed[f].y; });
+          shared[d] = true;
+          want.push({ name: d, a: Math.atan2(my / others.length - placed[h].y, mx / others.length - placed[h].x) });
+        });
+        want.sort(function (a, b) { return a.a - b.a || byName(a.name, b.name); });
+        var taken = {};
+        want.forEach(function (w) {
+          var best = -1, bd = 9;
+          seats.forEach(function (a, ix) {
+            if (taken[ix]) return;
+            var d = Math.abs(((w.a - a + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI);
+            if (d < bd) { bd = d; best = ix; }
+          });
+          if (best >= 0) taken[best] = w.name;
+        });
+        var rest = list.filter(function (d) { return !shared[d]; });   // private dims fill the gaps
+        seats.forEach(function (a, ix) { if (!taken[ix] && rest.length) taken[ix] = rest.shift(); });
+        var seated = [];
+        seats.forEach(function (a, ix) {
+          var d = taken[ix]; if (!d) return;
+          placed[d] = { x: placed[h].x + Math.cos(a) * R.rx, y: placed[h].y + Math.sin(a) * R.ry };
+          seated.push(d);
+        });
+        rings.push({ hub: h, rx: R.rx, ry: R.ry, members: seated });
+      });
+
+      // dictionaries hang off their dimension, one chord further out than the ring
+      self._seatOrphans(placed, adj, C.orphan, function (p) {
+        var near = placed[order[0]], nd = Infinity;
+        order.forEach(function (h) {
+          var d = len(placed[h].x - p.x, placed[h].y - p.y);
+          if (d < nd) { nd = d; near = placed[h]; }
+        });
+        var dx = p.x - near.x, dy = p.y - near.y, L = len(dx, dy);
+        return { x: p.x + dx / L * chord, y: p.y + dy / L * chord };
+      });
+      self._separatePlaced(placed, C.conn.map(function (t) { return t.name; }), CW, CH, 80);
+      return { placed: placed, rings: rings };
+    };
+    var top = -Math.PI / 2, best = build(top), view = this.host && this.viewportRect ? this.viewportRect() : null;
+    var seatsN = order.length ? members[order[0]].length : 0;
+    if (view && view.w > 0 && view.h > 0 && seatsN > 1 && hubNames.length === 1) {
+      var fitOf = function (placed) {
+        var x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+        Object.keys(placed).forEach(function (n) { var p = placed[n]; x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x); y1 = Math.max(y1, p.y); });
+        return Math.min(view.w / (x1 - x0 + CW), view.h / (y1 - y0 + CH));
+      };
+      var bestFit = fitOf(best.placed) * 1.08, step = 2 * Math.PI / seatsN;
+      for (var j = 1; j < 6; j++) {
+        var trial = build(top + step * j / 6), f = fitOf(trial.placed);
+        if (f > bestFit) { best = trial; bestFit = f; }
+      }
+    }
+    var placed = best.placed, rings = best.rings;
     this.lastLayout = { algo: 'star', mode: 'rings', center: center, rings: rings };
     this._applyPlaced(C, placed, CW, CH);
   };
@@ -985,6 +1008,7 @@
   /* ---------- cluster mode ---------- */
   P.groupKeyOf = function (t) { return this.app.colorBy === 'source' ? this.app.srcKeyOf(t) : t.domain; };
   P.groupLabelOf = function (k) {
+    if (this.app.groupLabel) return this.app.groupLabel(this.app.colorBy,k);
     if (this.app.colorBy !== 'source') return k;
     var map = { manual: 'Manual', calculated: 'Calculated', other: 'Other' };
     return map[k] || k;
@@ -1041,7 +1065,7 @@
           '<div style="flex:1;min-width:0;font:600 14px/1.25 \'IBM Plex Sans\',sans-serif;color:var(--smv-ink,#1f2430);overflow-wrap:anywhere;">' + U.esc(label) + '</div>' +
           '<div style="font:700 21px/1 \'IBM Plex Mono\',monospace;color:' + col + ';">' + tables.length + '</div>' +
           '</div>' +
-          '<div style="margin-top:7px;font:500 10.5px/1.6 \'IBM Plex Mono\',monospace;color:var(--smv-muted,#8b92a0);">' + facts + ' fact · ' + dims + ' dim' + (other ? (' · ' + other + ' other') : '') + '<br>' + (internal[k] || 0) + ' internal · ' + (external[k] || 0) + ' external rels</div>' +
+          '<div style="margin-top:7px;font:500 12px/1.6 \'IBM Plex Mono\',monospace;color:var(--smv-ink,#526070);">' + facts + ' fact · ' + dims + ' dim' + (other ? (' · ' + other + ' other') : '') + '<br>' + (internal[k] || 0) + ' internal · ' + (external[k] || 0) + ' external rels</div>' +
           '<div style="margin-top:8px;font:600 10px/1 \'IBM Plex Sans\',sans-serif;color:' + col + ';">Click to expand ▾</div>' +
           '</div>'
       });

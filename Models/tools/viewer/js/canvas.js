@@ -264,7 +264,7 @@
       var fact = app.isFact(t);
       var chrome = g.WorkspaceUI ? g.WorkspaceUI.cardStyles({fact:fact,color:app.tableColor(t),headerTint:U.tint(app.tableColor(t),.1)}) : {};
       var card = el('div', {
-        data: { name: t.name, fact: String(fact) },
+        data: { name: t.name, fact: String(fact), smvKind: 'table', smvName: t.name },
         style: 'position:absolute;width:' + this.CARD_W + 'px;background:#fff;border:1px solid #e4e7ec;border-radius:' + (fact ? '7px' : '13px') +
           ';box-shadow:0 1px 2px rgba(20,30,50,.05),0 4px 12px rgba(20,30,50,.07);font-family:\'IBM Plex Sans\',sans-serif;overflow:hidden;transition:box-shadow .15s,opacity .15s,border-color .15s;'
       });
@@ -323,7 +323,7 @@
       var colRows = {};
       t.columns.forEach(function (c) {
         var row = el('div', {
-          data: { col: c.name },
+          data: { col: c.name, smvKind: 'column', smvName: c.name, smvTable: t.name },
           style: 'display:flex;align-items:center;gap:8px;height:25px;padding:0 11px 0 14px;' + (c.rel ? ('background:' + tint('#f59e0b', 0.08) + ';') : '')
         });
         var ic = el('span', {
@@ -347,7 +347,7 @@
         t.measures.forEach(function (m) {
           var u = app.msrUse(m.name);
           var row = el('button', {
-            cls: 'hv-f5f7f9', title: (m.dax || '').trim(),
+            cls: 'hv-f5f7f9', data: {smvKind:'measure',smvName:m.name,smvTable:t.name}, title: (m.dax || '').trim(),
             style: 'display:flex;align-items:center;gap:7px;width:100%;text-align:left;height:24px;padding:0 11px 0 14px;border:none;background:transparent;cursor:pointer;'
           });
           row.appendChild(el('span', {
@@ -510,8 +510,8 @@
          never smaller, so the 11px floor survives the string conversion */
       return Math.ceil(this.CHIP_FONT * Math.pow(this.CHIP_STEP, n) * 100) / 100;
     },
-    CHIP_LINES: 3,           /* a name wraps over at most this many lines, then it ellipsises */
-    CHIP_LEAD: 1.12,         /* line box / font size for the wrapped title */
+    CHIP_LINES: 3,           /* retain lane height for existing layouts; the title stays on one line */
+    CHIP_LEAD: 1.12,         /* title line box / font size */
     CHIP_PAD_Y: 8,           /* head padding above and below the title, at scale 1 */
     CHIP_PAD_X: 11,
     CHIP_MAX_W: 1.3,         /* a chip may be this much wider than a card, never more */
@@ -533,13 +533,16 @@
         lines: this.CHIP_LINES, lead: this.CHIP_LEAD,
         width: Math.max(this.CARD_W, Math.min(Math.round(this.CARD_W * this.CHIP_MAX_W), need)),
         /* the box the renderer actually produces: head padding above and below (at scale)
-           plus the fully wrapped title. This is the single card-metric the arrange lanes are
+           plus the reserved title area. This is the single card-metric the arrange lanes are
            measured against, so a lane can never be shorter than the chip it has to hold. */
         height: Math.ceil(this.CHIP_PAD_Y * 2 * scale + this.CHIP_LINES * font * this.CHIP_LEAD) };
     },
     ZOOM_FLOOR: ZOOM_FLOOR,
     CHIP_BAND_MIN: ZOOM_FLOOR,
     CHIP_BAND_MAX: 0.7,
+    /* Auto detail draws cards from this zoom up. Answer views raise it to where a card
+       title (13.5px) is still 11px on screen, so a fit never lands on unreadable cards. */
+    CHIP_BELOW: 0.7,
     ARRANGE_K0: 0.5,         /* the zoom the first arrange pass sizes its lanes for */
     /* Longest unbreakable run of characters anywhere in the model. A model of short names
        keeps tight lanes; only a model of long ones pays for them. */
@@ -596,7 +599,7 @@
     /* Auto follows the zoom; Names is always a chip, Cards never one. */
     chipOn: function (k) {
       var mode = this.detailMode || 'auto';
-      return mode === 'names' ? true : (mode === 'cards' ? false : k < 0.7);
+      return mode === 'names' ? true : (mode === 'cards' ? false : k < this.CHIP_BELOW);
     },
     cardWidthAt: function (c, k) {
       return this.chipOn(k) ? this.chipMetrics(k, c && c.longWord).width : this.CARD_W;
@@ -630,16 +633,19 @@
           c.caret.style.display = 'none';
           c.meta.style.display = 'none';
           c.body.style.display = 'none';
-          /* -webkit-box + line-clamp is the one wrap that ellipsises the LAST line instead of
-             cutting it: the name breaks over up to three lines and only what still does not
-             fit is replaced by the ellipsis, so a reader always keeps the opening words. */
+          /* Names break only between words, inside the lines the lane reserves: arbitrary
+             wrapping left orphaned letters below names such as ZLEC_NAGLOWEK, and a single
+             line cut "Product Category" to "Product Ca…". One-word identifiers stay on one
+             line. The full name remains in title. */
+          var words = /\s/.test(c.table.name);
           c.nm.style.font = '600 ' + m.font.toFixed(2) + 'px/' + m.lead + ' "IBM Plex Sans",sans-serif';
-          c.nm.style.display = '-webkit-box';
-          c.nm.style.webkitLineClamp = String(m.lines);
-          c.nm.style.webkitBoxOrient = 'vertical';
+          c.nm.style.display = words ? '-webkit-box' : 'block';
+          c.nm.style.webkitLineClamp = words ? String(self.CHIP_LINES) : '';
+          c.nm.style.webkitBoxOrient = words ? 'vertical' : '';
+          c.nm.style.whiteSpace = words ? 'normal' : 'nowrap';
           c.nm.style.overflow = 'hidden';
           c.nm.style.textOverflow = 'ellipsis';
-          c.nm.style.overflowWrap = 'anywhere';
+          c.nm.style.overflowWrap = 'normal';
           /* Past 1.25x the badge's own letters are under 9px on screen — unreadable, and the
              room they cost is the room the name needs for its first two words. The role is
              still on the card: a fact carries the colour as a filled head, a dim as a bar. */
@@ -657,6 +663,7 @@
           c.body.style.display = c.expanded ? 'block' : 'none';
           c.nm.style.font = '600 13.5px/1.2 "IBM Plex Sans",sans-serif';
           c.nm.style.display = '';
+          c.nm.style.whiteSpace = '';
           c.nm.style.webkitLineClamp = '';
           c.nm.style.overflow = '';
           c.nm.style.textOverflow = '';
@@ -745,9 +752,6 @@
           else if (self.clusterOn) { self.selectTable(name); }
           else if (ev.altKey) { self.toggleMark(name); }
           else if (ev.shiftKey || ev.metaKey || ev.ctrlKey) { self.togglePin(name); }
-          /* focusGraph selects on its own, with the viewport it just aimed left alone —
-             selecting first would queue a deferred fit that lands on top of that aim */
-          else if (self._chip) { self.focusGraph(name); }
           else { self.selectTable(name); }
         };
         var cancel = function () {
@@ -1166,21 +1170,18 @@
       });
       return out;
     },
-    /* World units per screen pixel of label. Labels are sized for the reader, not the model:
-       like the bare arrow they are drawn in screen pixels and scaled by 1/zoom, so the pill is
-       the same size on screen whether the picture is at 50% or 200%. The chip view thickens
-       its lines and the label follows a little — not the full 1.6x the chip strokes take,
-       because the label already holds its on-screen size and a 30px pill beside an 11px
-       table name would be the loudest thing on the canvas. */
-    labelUnit: function () { return (this._chip ? 1.12 : 1) / Math.max(0.05, this.view.k); },
+    /* Compact cards use a smaller 39 × 15.6px relationship badge. Keep a readable
+       screen-size floor rather than shrinking indefinitely with zoom. Full cards retain
+       the 50 × 20px badge; the invisible line hit target remains unchanged. */
+    labelUnit: function () { return (this._chip ? 0.78 : 1) / Math.max(0.05, this.view.k); },
     /* The label an edge carries, horizontal, in world units: the combined cardinality pill,
        or (`bare`) the arrowhead on its own — below PILL_ZOOM always, above it when no run of
        the line has room for the pill. `m` is the margin a seat has to leave on each side.
        Seat eligibility, the stagger along a shared channel and the collision ledger all read
        through here, so the box that is reserved is always the box that is drawn. */
     labelDims: function (bare) {
-      var u = this.labelUnit();
       if (bare == null) bare = this.view.k < this.PILL_ZOOM;
+      var u = bare ? 1 / Math.max(0.05, this.view.k) : this.labelUnit();
       if (!bare) return { w: this.PILL_W * u, h: this.PILL_H * u, m: 10 * u };
       return { w: 16 * u, h: 12 * u, m: 6 * u };
     },
@@ -1249,10 +1250,10 @@
       var g = sv('g', { transform: 'translate(' + spot.x.toFixed(1) + ',' + spot.y.toFixed(1) + ') scale(' + u.toFixed(4) + ')', opacity: op, style: 'pointer-events:none;' });
       g.appendChild(sv('rect', {
         x: -(vert ? H : W) / 2, y: -(vert ? W : H) / 2, width: vert ? H : W, height: vert ? W : H, rx: H / 2,
-        fill: filled ? col : '#fff', stroke: col, 'stroke-width': heavy ? 1.7 : 1.3,
+        fill: filled ? col : (window.ViewerTheme ? window.ViewerTheme.paint('surface', '#fff') : '#fff'), stroke: col, 'stroke-width': heavy ? 1.7 : 1.3,
         'stroke-dasharray': r.inactive ? '3 2.5' : null
       }));
-      var ink = filled ? '#fff' : col;
+      var ink = filled ? (window.ViewerTheme ? window.ViewerTheme.contrastText(col, '#fff') : '#fff') : col;
       /* `s` is a distance along the line, positive towards table A */
       var along = function (s) { return 'translate(' + (vert ? 0 : s).toFixed(1) + ',' + (vert ? s : 0).toFixed(1) + ')'; };
       var glyph = function (ch, s) {
@@ -1302,7 +1303,9 @@
     },
     /* Drawing-only width policy shared with the Power Query canvas. */
     edgeStrokeWidth: function (zoom, isSel, active, hop, chip) {
-      var thin = Math.max(1.15, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : 1.15))) / zoom;
+      var hosted = g.SMVHost && g.SMVHost.kind === 'vscode';
+      var floor = hosted && ['dark', 'high-contrast'].includes(g.SMVHost.theme) ? 1.5 : 1.15;
+      var thin = Math.max(floor, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : floor))) / zoom;
       return Math.max(thin, isSel ? (chip ? 4.4 : 3.4) : (active ? (chip ? 3.4 : 2.6) : (hop ? (chip ? 2.8 : 2) : (chip ? 2.2 : 1.4))));
     },
     renderLines: function () {
@@ -1364,17 +1367,20 @@
            the focused ones are drawn heavier so the selection reads at a glance */
         var baseW = self.edgeStrokeWidth(self.view.k, isSel, active, hop, chip);
         if (active || hop || isSel) {
-          self.svg.appendChild(sv('path', { d: d, fill: 'none', stroke: '#fff', 'stroke-width': baseW * 2.1, 'stroke-linecap': 'round', opacity: 0.95 }));
+          self.svg.appendChild(sv('path', { d: d, fill: 'none', stroke: g.ViewerTheme ? g.ViewerTheme.paint('paper', '#fff') : '#fff', 'stroke-width': baseW * 2.1, 'stroke-linecap': 'round', opacity: 0.95 }));
         }
         var path = sv('path', { d: d, fill: 'none', stroke: col, 'stroke-width': baseW, 'stroke-linecap': 'round', style: 'pointer-events:none;' });
         if (r.inactive) path.setAttribute('stroke-dasharray', (baseW * 1.9).toFixed(1) + ' ' + (baseW * 1.6).toFixed(1));
-        var baseOp = dim ? 0.12 : ((active || isSel) ? 1 : (hop ? 0.9 : (r.inactive ? (chip ? 0.68 : 0.6) : (chip ? 0.82 : 0.72))));
+        var hostedDark = g.SMVHost && g.SMVHost.kind === 'vscode' && ['dark', 'high-contrast'].includes(g.SMVHost.theme);
+        var baseOp = dim ? 0.12 : ((active || isSel) ? 1 : (hop ? 0.9 : (r.inactive ? (hostedDark ? 0.84 : (chip ? 0.68 : 0.6)) : (hostedDark ? 0.96 : (chip ? 0.82 : 0.72)))));
         path.setAttribute('opacity', baseOp);
+        path.setAttribute('data-smv-kind', 'relationship');
+        path.setAttribute('data-smv-name', r.name || '');
         self.svg.appendChild(path);
         var op = dim ? 0.12 : 1;
         var dot = Math.max(2.6 / self.view.k, active || isSel ? 3.4 : 2.6);
         self.svg.appendChild(sv('circle', { cx: g0.ax, cy: g0.ay, r: dot, fill: col, opacity: op }));
-        self.svg.appendChild(sv('circle', { cx: g0.bx, cy: g0.by, r: dot * 1.18, fill: '#fff', stroke: col, 'stroke-width': Math.max(1.6 / self.view.k, active || isSel ? 2 : 1.6), opacity: op }));
+        self.svg.appendChild(sv('circle', { cx: g0.bx, cy: g0.by, r: dot * 1.18, fill: g.ViewerTheme ? g.ViewerTheme.paint('surface', '#fff') : '#fff', stroke: col, 'stroke-width': Math.max(1.6 / self.view.k, active || isSel ? 2 : 1.6), opacity: op }));
         /* a wide invisible stroke is the click / hover target — the visible line is thin */
         var hit = sv('path', { d: d, fill: 'none', stroke: 'rgba(0,0,0,0)', 'stroke-width': Math.max(chip ? 22 : 16, 16 / self.view.k), 'stroke-linecap': 'round', style: 'pointer-events:stroke;cursor:pointer;' });
         var hoverOn = function (e) {
@@ -1395,8 +1401,8 @@
         bind(hit);
         item.hit = hit;
         if (!dim) {
-          var ink = kind === 'base' && !isSel ? '#7d8593' : col;
-          var op2 = active || hop || isSel ? 1 : (chip ? 0.95 : 0.85);
+          var ink = kind === 'base' && !isSel ? (hostedDark ? EDGE.base : (g.ViewerTheme ? g.ViewerTheme.paint('muted', '#7d8593') : '#7d8593')) : col;
+          var op2 = hostedDark || active || hop || isSel ? 1 : (chip ? 0.95 : 0.85);
           /* One label per edge, through one seat picker and one `placed` ledger, so it can
              never land on a card or on another edge's label. Above PILL_ZOOM it is the
              combined cardinality pill — where the line has a run long enough to carry it;
@@ -1444,6 +1450,10 @@
         return;
       }
       var roots = this.rootsSet();
+      /* A Focus from the canvas bar stays on the table it was opened on: what is shown does not
+         follow later clicks, which only move the highlight. */
+      var ex = this.app.explorer, anchor = this.app.state.isolate && ex && ex._focusUndo && this.cards[ex._focusUndo.selected] ? ex._focusUndo.selected : null;
+      if (anchor) roots = new Set(Array.from(this.pinned).concat([anchor]));
       var iso = this.app.state.isolate && roots.size > 0;
       var visSet = iso ? this.neighborhood([].concat(Array.from(roots)), this.app.state.focusDepth || 1) : null;
       this._isoSet = visSet;
@@ -1451,12 +1461,12 @@
         var c = self.cards[n];
         var vis = true;
         if (iso) vis = visSet.has(c.table.name);
-        else if (c.table.relCount === 0) vis = self.showSA;
+        if (c.table.relCount === 0 && !self.showSA) vis = false;
         if (self.workspaceNames && !self.workspaceNames.has(n)) vis = false;
         c.el.style.display = vis ? '' : 'none';
       });
     },
-    showTip: function (html, e) { this.tip.innerHTML = html; this.tip.style.display = 'block'; this.moveTip(e); },
+    showTip: function (html, e) { this.tip.innerHTML = g.ViewerTheme ? g.ViewerTheme.inlineHTML(html) : html; this.tip.style.display = 'block'; this.moveTip(e); },
     moveTip: function (e) { var r = this.host.getBoundingClientRect(); this.tip.style.left = (e.clientX - r.left + 14) + 'px'; this.tip.style.top = (e.clientY - r.top + 14) + 'px'; },
     hideTip: function () { this.tip.style.display = 'none'; },
 
@@ -1467,23 +1477,25 @@
       Object.keys(this.cards).forEach(function (n) {
         var c = self.cards[n];
         var t = c.table; var col = app.tableColor(t); var fact = app.isFact(t);
+        var ink = g.WorkspaceUI && g.WorkspaceUI.textOn ? g.WorkspaceUI.textOn(col) : '#ffffff';
         c.el.setAttribute('data-fact', String(fact));
+        if (g.SMVHost && g.SMVHost.kind === 'vscode') c.el.style.setProperty('--smv-category', col);
         var head = c.head, role = c.roleEl, caretSvg = c.caret.firstChild;
-        if (c.rm) c.rm.style.color = fact ? 'rgba(255,255,255,.85)' : '#6b7280';
+        if (c.rm) c.rm.style.color = fact && vivid ? ink : fact ? 'rgba(255,255,255,.85)' : '#6b7280';
         head.style.boxShadow = 'none';
         if (fact && vivid) {
           head.style.borderLeftColor = 'transparent';
           head.style.background = col;
-          c.nm.style.color = '#fff';
-          role.style.background = 'rgba(255,255,255,.94)'; role.style.color = col;
+          c.nm.style.color = ink;
+          role.style.background = 'rgba(255,255,255,.94)'; role.style.color = ink === '#111111' ? ink : col;
           c.el.style.borderColor = tint(col, 0.55);
-          if (caretSvg) caretSvg.setAttribute('stroke', 'rgba(255,255,255,.78)');
-          if (c.src) c.src.style.color = 'rgba(255,255,255,.85)';
+          if (caretSvg) caretSvg.setAttribute('stroke', ink);
+          if (c.src) c.src.style.color = ink;
         } else if (fact) {
           head.style.borderLeftColor = col;
           head.style.background = mixHex('#1d2330', col, 0.26);
           c.nm.style.color = '#fff';
-          role.style.background = col; role.style.color = '#fff';
+          role.style.background = col; role.style.color = ink;
           c.el.style.borderColor = tint(col, 0.6);
           if (caretSvg) caretSvg.setAttribute('stroke', 'rgba(255,255,255,.78)');
           if (c.src) c.src.style.color = 'rgba(255,255,255,.85)';
@@ -1491,7 +1503,7 @@
           head.style.borderLeftColor = col;
           head.style.background = tint(col, vivid ? 0.07 : 0.1);
           c.nm.style.color = '#1f2430';
-          role.style.background = col; role.style.color = '#fff';
+          role.style.background = col; role.style.color = ink;
           c.el.style.borderColor = vivid ? '#e4e7ec' : tint(col, 0.35);
           if (caretSvg) caretSvg.setAttribute('stroke', '#b0b6c0');
           if (c.src) c.src.style.color = app.srcMeta(t).color;
@@ -1569,18 +1581,13 @@
       left = Math.max(190, Math.min(W - pw - 10, left)); top = Math.max(10, Math.min(H - ph - 10, top));
       pop.style.left = left + 'px'; pop.style.top = top + 'px';
     },
-    /* opts.keepView — the caller has already aimed the viewport (Center selected, a chip
-       click) and that aim wins. Without it the deferred fit would run after the caller's
-       synchronous centring and throw it away. */
-    selectTable: function (name, opts) {
-      var self = this, t = this.app.model.byName[name];
-      if (!t) return;
-      var keepView = !!(opts && opts.keepView);
+    /* Selection changes focus, never the viewport. Explicit navigation uses focusGraph. */
+    selectTable: function (name) {
+      if (!this.app.model.byName[name]) return;
+      // Opening the inspector resizes the host; cancel sticky Fit before that resize.
+      this._autoFit = false; this._pendingFit = false;
       if (this.selRel) { this.selRel = null; this.hideRelPopover(); }
-      /* Fit only once the inspector has actually opened: fitting first measures a canvas
-         that is about to lose ~330px on the right and leaves cards under the drawer. */
-      this.app.setState({ selected: name, activeFilter: null, msrQuery: '', expandedMeasure: null },
-        function () { if (!keepView && self.app.state.isolate) self.fitView(); });
+      this.app.setState({ selected: name, activeFilter: null, msrQuery: '', expandedMeasure: null });
       this.applyHighlight(name, null);
     },
     /* Background click: drops selection, filter and pins — a locked table stays focused. */
@@ -1677,7 +1684,7 @@
       }
     },
     setFilter: function (key) { this.pinned.clear(); this.app.setState({ activeFilter: key, selected: null }); this.applyHighlight(null, key); },
-    toggleStandalone: function () { var v = !this.app.state.showStandalone; this.app.setState({ showStandalone: v }); this.applyVisibility(v); this.renderLines(); },
+    toggleStandalone: function () { var v = !this.app.state.showStandalone; this.app.setState({ showStandalone: v }); this.applyVisibility(v); this.renderLines(); if(this.app.explorer){this.app.explorer.persist();this.app.explorer._key=null;this.app.explorer.update();} },
     toggleExpandAll: function () { var v = !this.app.state.allExpanded; this.app.setState({ allExpanded: v }); this.setAllExpanded(v); },
     toggleIsolate: function () {
       var self = this, v = !this.app.state.isolate;
@@ -1779,27 +1786,39 @@
          candidate size has to be the size at that candidate zoom, never the stale measured
          one, or the second pass floors on the first and Fit never converges. */
       var k = startK || this.view.k, minX = 0, minY = 0, maxX = 0, maxY = 0, pass;
-      for (pass = 0; pass < (floor < ZOOM_FLOOR ? 8 : 2); pass++) {
-        var previousK = k;
+      /* The zoom the boxes drawn at zoom `at` would fit at, leaving their bounds behind. */
+      var solve = function (at) {
         minX = 1e9; minY = 1e9; maxX = -1e9; maxY = -1e9;
         cards.forEach(function (c) {
           var p = self.gp(c.table.name); if (!p) return;
-          var w = self.cardWidthAt(c, k);
+          var w = self.cardWidthAt(c, at);
           var x = p.x - (w - self.CARD_W) / 2;
           minX = Math.min(minX, x); minY = Math.min(minY, p.y);
-          maxX = Math.max(maxX, x + w); maxY = Math.max(maxY, p.y + self.cardHeightAt(c, k));
+          maxX = Math.max(maxX, x + w); maxY = Math.max(maxY, p.y + self.cardHeightAt(c, at));
         });
         extra.forEach(function (r) {
           minX = Math.min(minX, r.x); minY = Math.min(minY, r.y);
           maxX = Math.max(maxX, r.x + r.w); maxY = Math.max(maxY, r.y + r.h);
         });
-        if (minX > maxX) return { x: 0, y: 0, k: 1 };
+        if (minX > maxX) return null;
         var bw = Math.max(1, maxX - minX), bh = Math.max(1, maxY - minY);
         /* Arrangement solves keep their lane zoom floor. The visible camera passes an
            explicit lower floor so it can fit saved positions on a smaller recipient. */
-        k = Math.max(floor, Math.min(1.25, Math.min(availW / bw, availH / bh)));
+        return Math.max(floor, Math.min(1.25, Math.min(availW / bw, availH / bh)));
+      };
+      for (pass = 0; pass < (floor < ZOOM_FLOOR ? 8 : 2); pass++) {
+        var previousK = k;
+        k = solve(k);
+        if (k == null) return { x: 0, y: 0, k: 1 };
         if (Math.abs(k - previousK) < 0.00001) break;
       }
+      /* Auto detail switches from chips to the larger cards at CHIP_BELOW, so the refinement
+         can settle on a card zoom that only chips fit at. Then the answer is the largest
+         chip zoom instead: the picture shown is always the one the bounds were taken for. */
+      if ((this.detailMode || 'auto') === 'auto' && !this.chipOn(k) && solve(k) < k - 0.00001) {
+        var below = this.CHIP_BELOW - 0.001;
+        k = Math.min(below, solve(below)); solve(k);
+      } else solve(k);
       var cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
       return { k: k, x: rect.x + availW / 2 - cx * k, y: rect.y + availH / 2 - cy * k };
     },
@@ -1837,6 +1856,79 @@
         break;
       }
       return this.layoutK;
+    },
+    /* What the reader gets from the arrangement on the canvas now, drawn at the zoom Fit lands
+       on (cards whenever they fit): full cards or name chips, and how many relationship lines
+       carry their cardinality pill. Renders, so a trial is judged on what would be shown. */
+    readability: function (names) {
+      var self = this, f = this.fitSolve(1.25, 0.05); if (!f) return null;
+      this._applyingFit = true;
+      try { this.view = f; this.updateTransform(); } finally { this._applyingFit = false; }
+      names.forEach(function (n) { self.layoutCard(n); });
+      this.renderLines();
+      var spots = this._relSpots || {}, lines = Object.keys(spots);
+      return { cards: !this.chipOn(f.k), pills: lines.filter(function (i) { return !spots[i].bare; }).length, lines: lines.length };
+    },
+    /* The star around one fact seats its neighbours beside it, so in a pane taller than it is
+       wide it spends the width: the picture fits only as name chips, or as cards packed too
+       close for the pills between them, with the height left empty. When that happens the
+       top-to-bottom arrangement is tried, and shown instead if it reads better: full cards
+       over chips, then more lines with their pill. A layout the reader picked under Display,
+       or a Detail other than Auto, is left alone. `run` arranges the trial; the caller
+       re-renders and fits either way. */
+    preferReadable: function (names, run) {
+      if ((this.detailMode || 'auto') !== 'auto' || store.get('smv-layout', null) != null) return false;
+      var self = this, now = this.readability(names);
+      if (!now || (now.cards && now.pills === now.lines)) return false;
+      var keep = {}, layoutK = this.layoutK, last = this.lastLayout, view = { x: this.view.x, y: this.view.y, k: this.view.k };
+      names.forEach(function (n) { if (self.pos[n]) keep[n] = { x: self.pos[n].x, y: self.pos[n].y }; });
+      this.arrangeAtFitZoom(run); this.spreadToFill(names);
+      var trial = this.readability(names);
+      if (trial && trial.cards && (!now.cards || trial.pills > now.pills)) return true;
+      Object.keys(keep).forEach(function (n) { self.pos[n] = keep[n]; });
+      this.setLayoutK(layoutK); this.lastLayout = last;
+      this._applyingFit = true;
+      try { this.view = view; this.updateTransform(); } finally { this._applyingFit = false; }
+      return false;
+    },
+    SPREAD_MAX: 160,         /* screen px: the widest a gap grows to fill the pane */
+    /* Fit is set by the axis the picture is tight on; the other axis keeps room the reader sees
+       as empty canvas, while two cards stacked on it can sit a gutter apart with no room for the
+       relationship pill on the line between them. Hand that room to the gaps between the rows
+       (and columns) of cards, narrowest first and none past SPREAD_MAX, so the picture fills
+       the pane at the same zoom and every stacked pair gets room for its pill before any gap
+       grows further. Positions only; the caller re-renders and fits. */
+    spreadToFill: function (names) {
+      if (this.clusterOn) return;
+      var self = this, f = this.fitSolve(this.layoutK, 0.05); if (!f) return;
+      var k = f.k, rect = this.viewportRect(), list = [];
+      names.forEach(function (n) {
+        var c = self.cards[n], p = self.pos[n];
+        if (!c || !p || c.el.style.display === 'none') return;
+        var w = self.cardWidthAt(c, k);
+        list.push({ p: p, x: p.x - (w - self.CARD_W) / 2, w: w, y: p.y, h: self.cardHeightAt(c, k) });
+      });
+      if (list.length < 2) return;
+      [['x', 'w', rect.w], ['y', 'h', rect.h]].forEach(function (ax) {
+        var a = ax[0], size = ax[1], bands = [], band = null;
+        list.slice().sort(function (u, v) { return u[a] - v[a]; }).forEach(function (it) {
+          if (band && it[a] < band.end - 1) { band.items.push(it); band.end = Math.max(band.end, it[a] + it[size]); }
+          else bands.push(band = { start: it[a], end: it[a] + it[size], items: [it] });
+        });
+        if (bands.length < 2) return;
+        var slack = 0.98 * ax[2] / k - (bands[bands.length - 1].end - bands[0].start), cap = self.SPREAD_MAX / k, gaps = [], i;
+        if (slack < 1) return;
+        for (i = 1; i < bands.length; i++) gaps.push(bands[i].start - bands[i - 1].end);
+        var need = function (L) { return gaps.reduce(function (t, gp) { return t + Math.max(0, L - gp); }, 0); };
+        var lo = 0, hi = cap;
+        if (need(hi) > slack) for (i = 0; i < 40; i++) { var mid = (lo + hi) / 2; if (need(mid) > slack) hi = mid; else lo = mid; }
+        else lo = hi;
+        var shift = 0;
+        bands.forEach(function (b, j) {
+          if (j) shift += Math.max(0, lo - gaps[j - 1]);
+          if (shift) b.items.forEach(function (it) { it.p[a] += shift; });
+        });
+      });
     },
     watchSize: function () {
       var self = this;
@@ -1896,11 +1988,14 @@
       return saved;
     },
     captureDisplay: function () {
-      return { detail: this.detailMode, lines: this.lineStyle, color: this.app.colorBy,
+      return { showDisconnected:this.showSA, groupColours: this.app.captureGroupColours ? this.app.captureGroupColours() : null, detail: this.detailMode, lines: this.lineStyle, color: this.app.colorBy,
         expanded: Object.keys(this.cards).filter(function (n) { return this.cards[n].expanded; }, this) };
     },
     restoreDisplay: function (display) {
       var self = this, d = display || {};
+      this.showSA=d.showDisconnected!==false;this.app.state.showStandalone=this.showSA;
+      if (d.groupColours && this.app.restoreGroupColours) { this.app.restoreGroupColours(d.groupColours); this.app.rebuildColorMaps();
+        ['sidebar','matrix','explorer'].forEach(function(k){if(self.app[k])self.app[k]._key=null;}); }
       if (['auto', 'names', 'cards'].includes(d.detail)) this.detailMode = d.detail;
       if (['ortho', 'curve'].includes(d.lines)) this.lineStyle = d.lines;
       if (['domain', 'source'].includes(d.color)) { this.app.colorBy = d.color; this.app.state.colorBy = d.color; this.recolor(); }
@@ -1931,8 +2026,8 @@
       this.app.state.focusDepth = Number.isFinite(f.depth) && f.depth > 0 ? Math.floor(f.depth) : 1;
       var ex = this.app.explorer;
       if (ex) {
-        ex.direction = f.paths && ['incoming','outgoing','connected'].includes(f.paths.direction) ? f.paths.direction : 'connected';
-        ex.includeInactive = !f.paths || f.paths.includeInactive !== false;
+        ex.direction = f.paths && ['both','incoming','outgoing','connected'].includes(f.paths.direction) ? f.paths.direction : focus ? 'connected' : 'both';
+        ex.includeInactive = f.paths ? f.paths.includeInactive !== false : !!focus;
         ex.depth = this.app.state.focusDepth === 1 ? 'direct' : this.app.state.focusDepth === 2 ? 'two' : 'all';
       }
       this.app.state.isolate = !!f.isolate && !!(this._activeSel || this.locked || this.pinned.size);

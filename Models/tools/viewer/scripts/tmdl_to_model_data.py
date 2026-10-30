@@ -81,7 +81,7 @@ def parse_rel_text(text: str):
         if not t:
             continue
         if re.match(r"^relationship\s", t) and not raw.startswith("\t"):
-            cur = {"fromCard": "many", "toCard": "one", "inactive": False, "both": False}
+            cur = {"name": unq(re.sub(r"^relationship\s+", "", t)), "fromCard": "many", "toCard": "one", "inactive": False, "both": False}
             out.append(cur)
             continue
         if cur is None:
@@ -200,6 +200,11 @@ def parse_table_text(text: str):
             if m:
                 part_kind = m.group(1)
                 mode = "partition"
+                continue
+            m = re.match(r'^annotation\s+TabularEditor_TableGroup\s*=\s*(.*)$', t, re.I)
+            if m:
+                value = m.group(1).strip()
+                table["tableGroup"] = value[1:-1].replace('""', '"') if value.startswith('"') and value.endswith('"') else value
                 continue
             # `annotation SMV_Role = fact|dim|helper|standalone` — explicit role, beats every heuristic
             m = re.match(r"^annotation\s+SMV_Role\s*=\s*(\w+)", t, re.I)
@@ -391,6 +396,15 @@ def source_of(fl: dict, ctx: dict = None) -> dict:
     part = fl.get("partSrc") or ""
     if fl.get("partKind") == "calculated":
         return {"kind": "calculated"}
+    # Direct Lake: an entity partition reads a lake table straight from OneLake, no M or DAX behind it
+    if fl.get("partKind") == "entity" or re.search(r"(?:^|\n)\s*mode:\s*directLake\b", part, re.I):
+        entity = first_of(part, r"(?:^|\n)\s*entityName:\s*(.+?)\s*(?:\n|$)")
+        dl_schema = first_of(part, r"(?:^|\n)\s*schemaName:\s*(.+?)\s*(?:\n|$)")
+        out = {"kind": "directlake", "label": "Direct Lake",
+               "detail": (dl_schema + "." if dl_schema else "") + (entity or "?")}
+        if dl_schema: out["schema"] = dl_schema
+        if entity: out["table"] = entity
+        return out
     if not part:
         return {"kind": "calculated"}
     # a query parameter is not a data source, it is a knob feeding one
@@ -408,6 +422,18 @@ def source_of(fl: dict, ctx: dict = None) -> dict:
     out = {"kind": c["kind"], "label": c["label"]}
     if r["via"]:
         out["via"] = r["via"]
+    for key, pattern in [
+        ("workspace", r'workspaceId\s*=\s*"([^"]+)"'),
+        ("lakehouse", r'lakehouseId\s*=\s*"([^"]+)"'),
+        ("dataflow", r'dataflowId\s*=\s*"([^"]+)"'),
+        ("database", r'\{\[Name\s*=\s*"([^"]+)"\s*,\s*Kind\s*=\s*"(?:Database|Catalog)"\]\}')]:
+        match = re.search(pattern, all_txt, re.I)
+        if match:
+            out[key] = match.group(1)
+    database = lit_or_param(first_of(all_txt, r'\b(?:Sql|PostgreSQL|MySQL)\.Database\s*\(\s*(?:"[^"]+"|[A-Za-z_]\w*)\s*,\s*("[^"]+"|[A-Za-z_]\w*)'), ctx)
+    if database:
+        out["database"] = database
+
 
     tab = (first_of(part, r'\{\[Name\s*=\s*"([^"]+)"\s*,\s*Kind\s*=\s*"(?:Table|View)"\]\}')
            or first_of(part, r'\bItem\s*=\s*"([^"]+)"')
@@ -421,7 +447,7 @@ def source_of(fl: dict, ctx: dict = None) -> dict:
         out["schema"] = sch or "unknown"
         out["table"] = tab or "?"
         out["detail"] = (sch + "." if sch else "") + (tab or "?")
-        srv = lit_or_param(first_of(all_txt, r'\b(?:Vertica|Sql|Oracle|PostgreSQL|MySQL|Snowflake|Odbc)\.\w+\s*\(\s*("[^"]+"|[A-Za-z_]\w*)'), ctx)
+        srv = lit_or_param(first_of(all_txt, r'\b(?:Vertica|Sql|Oracle|PostgreSQL|MySQL|Snowflake|Odbc|Databricks)\.\w+\s*\(\s*("[^"]+"|[A-Za-z_]\w*)'), ctx)
         if srv:
             out["server"] = srv
         return out
@@ -609,18 +635,14 @@ def finalize(name: str, tables: list, rels: list, ctx: dict = None, rules: list 
         if ann:
             t["ann"] = ann
         t["role"] = t.get("role") or role
-        if not t.get("domain"):
-            sch = t["source"].get("schema")
-            t["domain"] = (dom_map.get(t["role"])
-                           or (cap(sch) if sch and sch != "unknown"
-                               else ("Manual" if t["source"]["kind"] == "manual"
-                                     else ("Calculated" if t["source"]["kind"] == "calculated"
-                                           else (t["source"].get("label") or "Other")))))
+        t["domain"] = (t.get("tableGroup") or dom_map.get(t["role"])
+                       or ("Manual" if t["source"]["kind"] == "manual" else
+                           "Calculated" if t["source"]["kind"] == "calculated" else "Ungrouped"))
         t["colCount"] = len(t["columns"])
         t["measureCount"] = len(t["measures"])
         t["relCount"] = rc.get(t["name"], 0)
 
-    return {"name": name, "tables": tables, "relationships": rels}
+    return {"name": name, "groupingVersion": 1, "tables": tables, "relationships": rels}
 
 
 def parse_tmdl(files: list, rules: list = None) -> dict:
@@ -688,8 +710,15 @@ def parse_bim(j: dict, rules: list = None) -> dict:
             src = parts[0]["source"]
             part_kind = "calculated" if src.get("type") == "calculated" else (src.get("type") or "m")
             part_src = txt(src.get("expression"))
+            if part_kind == "entity":
+                part_src = "\n".join(x for x in (
+                    "mode: " + str(parts[0].get("mode") or "directLake"),
+                    "entityName: " + str(src.get("entityName") or ""),
+                    ("schemaName: " + str(src["schemaName"])) if src.get("schemaName") else "") if x)
         role_ann = next((a for a in (t.get("annotations") or []) if a.get("name") == "SMV_Role"), None)
-        row = {"name": t.get("name"), "columns": columns, "measures": measures,
+        group_ann = next((a for a in (t.get("annotations") or []) if a.get("name") == "TabularEditor_TableGroup"), None)
+        row = {"tableGroup": str(group_ann.get("value") or "").strip() if group_ann else "",
+               "name": t.get("name"), "columns": columns, "measures": measures,
                "roleAnnotation": str(role_ann.get("value")) if role_ann else None,
                "_flags": {"isCG": bool(t.get("calculationGroup")), "isFP": is_fp,
                           "partKind": part_kind, "partSrc": part_src,
@@ -708,7 +737,7 @@ def parse_bim(j: dict, rules: list = None) -> dict:
     for r in mdl.get("relationships", []):
         if skip.match(r.get("fromTable", "")) or skip.match(r.get("toTable", "")):
             continue
-        rels.append({"from": r.get("fromTable"), "fromCol": r.get("fromColumn"),
+        rels.append({"name": r.get("name") or "", "from": r.get("fromTable"), "fromCol": r.get("fromColumn"),
                      "to": r.get("toTable"), "toCol": r.get("toColumn"),
                      "fromCard": str(r.get("fromCardinality", "many")).lower(),
                      "toCard": str(r.get("toCardinality", "one")).lower(),

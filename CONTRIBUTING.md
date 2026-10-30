@@ -25,13 +25,16 @@ Use `--port` to pick another port. Edit files in `Models/tools/viewer/` and relo
 
 The app is plain vanilla JS, HTML and CSS. There is no bundler, no transpiler and no
 runtime dependency. Please keep it that way: do not add a framework, a build tool or an
-npm package to `Models/tools/viewer/`.
+npm package to the core browser viewer. The optional MCP integration lives in
+`integrations/mcp/`; its official SDK bridge is bundled with `npm run build:mcp-app`.
+The core app and CLI snapshot/HTML export remain usable without that build or loading MCP dependencies.
 
 ## Run the tests
 
 You need Node.js 22. From the repo root:
 
 ```bash
+npm ci
 node vscode-extension/scripts/sync-viewer.js
 node --test tests/*.test.cjs Models/tools/viewer/tests/*.test.js tests/extension.test.js
 ```
@@ -124,6 +127,19 @@ directories (replace the `.vsix` path):
 code --user-data-dir ../smv-preview-data --extensions-dir ../smv-preview-extensions --install-extension /path/to/preview.vsix --force
 code --user-data-dir ../smv-preview-data --extensions-dir ../smv-preview-extensions .
 ```
+
+A simpler option is a VS Code Profile, which keeps its own installed extensions. Keep
+the stable extension in your Default profile and install the preview only in a `Beta`
+profile:
+
+1. Gear icon (bottom left) → **Profiles** → **Create Profile…**.
+2. Name it `Beta`, choose **Create (Empty)**, then **Create**.
+3. In the `Beta` profile, run **Extensions: Install from VSIX…** and select the
+   `.vsix` file.
+4. Switch between `Default` and `Beta` from the same **Profiles** menu. Install a newer
+   preview the same way; it replaces the old one in `Beta` only.
+
+The `Beta` profile starts empty, so install any other extensions you need there as well.
 
 Use those same directory arguments whenever launching the test instance. If you installed
 the preview normally, uninstall it and install the stable Marketplace version or release
