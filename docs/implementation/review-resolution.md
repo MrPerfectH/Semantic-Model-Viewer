@@ -52,3 +52,26 @@ Research-only ideas and the real-user study remain in the linked research backlo
 and issue #116; this change implements the confirmed corrective scope, not every
 speculative feature from the audits. Very short windows retain scrollable minimum
 panes rather than shrinking every control until it is unusable.
+
+## CI follow-up: narrow library snapshots
+
+The Visual explanations workflow on macOS exposed an additional real regression in
+`interactive-view.browser.cjs`: an open narrow library was captured as closed because
+snapshot capture read the separate desktop preference. Capture now records effective
+visibility; restore sets the matching narrow pane state before rendering. Ordinary
+narrow toggles still preserve the stored desktop preference. The browser regression
+asserts effective visibility and focus instead of the private desktop-preference
+field. A unit regression also checks that narrow toggles and snapshot restoration do
+not rewrite persisted preferences.
+
+This workflow's interactive-view/MCP bridge suite was outside the initial51-test
+browser gate; its failure is retained in `ci-followup/macos-failure.log`. Follow-up
+validation includes the previously failing journey, the full interactive suite and
+the complete Visual explanations workflow's local test commands. CI on the updated
+commit remains the platform-specific authority; a Linux rerun is not a macOS pass.
+
+Local follow-up results:51 targeted unit/contract tests,120 delivery tests, and18
+interactive browser tests passed without skips or failures. These overlap earlier
+gates and must not be added together as unique test coverage.
+The complete visual-explanation browser command also passed27 tests with no skips
+or failures, including diagram readability and control/viewport journeys.

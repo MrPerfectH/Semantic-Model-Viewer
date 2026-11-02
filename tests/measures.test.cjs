@@ -29,7 +29,7 @@ function harness(preferences = {}) {
     setState(patch, callback) { Object.assign(this.state, patch); if (callback) callback(); },
     msrOf(name) { return tables.flatMap(t => t.measures).find(m => m.name === name); },
   };
-  return { view: new context.MeasuresView(app, {}), app, saved, flushFrame() { const pending = [...frames.values()]; frames.clear(); pending.forEach(callback => callback()); } };
+  return { context, view: new context.MeasuresView(app, {}), app, saved, flushFrame() { const pending = [...frames.values()]; frames.clear(); pending.forEach(callback => callback()); } };
 }
 
 const rowNames = rows => Array.from(rows.filter(row => !row.isFolder && !row.isHeader), row => row.name);
@@ -642,4 +642,21 @@ test('library collapse preferences survive layout changes and snapshot sanitatio
   const snapshot=JSON.parse(JSON.stringify(view.captureSnapshot()));snapshot.library.collapsed=true;
   assert.equal(view.sanitizeSnapshot(snapshot).library.collapsed,true);
   snapshot.library.collapsed='yes';assert.equal(view.sanitizeSnapshot(snapshot).library.collapsed,false);
+});
+
+
+test('narrow snapshots capture and restore visible library without changing desktop toggles', () => {
+  const {context,view,app,saved}=harness({libraryCollapsed:true});
+  context.innerWidth=640;
+  view.setLibraryCollapsed(false);
+  assert.equal(view.libraryCollapsed(),false);
+  assert.equal(view._libraryCollapsed,true,'opening narrow library preserves desktop preference');
+  const snapshot=JSON.parse(JSON.stringify(view.captureSnapshot()));
+  assert.equal(snapshot.library.collapsed,false,'capture the actual open pane');
+  view.setLibraryCollapsed(true);
+  assert.equal(view.libraryCollapsed(),true);
+  assert.equal(view.restoreSnapshot(snapshot),true);
+  assert.equal(view.libraryCollapsed(),false,'explicit restore opens the captured pane');
+  assert.equal(view._narrowRoot,app.state.selMeasure);
+  assert.deepEqual(saved,{},'transient narrow toggles and snapshot restoration do not rewrite stored preferences');
 });

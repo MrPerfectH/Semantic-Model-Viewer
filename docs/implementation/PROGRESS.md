@@ -63,3 +63,9 @@ low findings are addressed in [review resolution](review-resolution.md). Final b
 gates:967passed/3skipped/0failed canonical,51passed/0failed browser. The final ARIA
 minimum refinement has separate targeted unit and UI browser reruns. Research and
 platform-specific acceptance remain explicit; no merge or release is authorized.
+
+CI follow-up: Visual explanations found a narrow-library snapshot regression outside
+the initial browser selection. Effective library visibility now round-trips independently
+of ordinary desktop preference toggles. See the follow-up in review-resolution.md.
+Cross-platform runtime, marketplace-install, universal-package and VS Code host CI
+jobs passed on23a4740; visual-explanation CI must be green on the corrected commit.

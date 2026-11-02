@@ -139,7 +139,7 @@
       return this.sanitizeSnapshot({
         selectedMeasure: state.selMeasure, comparisonMeasure: state.gPin, source: state.dependencySource, directOnly: state.dependencyDirectOnly,
         extraMeasures: Object.keys(state.gExtra || {}).filter(function (name) { return !!state.gExtra[name]; }),
-        library: { collapsed: this._libraryCollapsed, query: state.mvQuery, calculatedQuery: state.mvCalculationQuery, visibility: state.mvFilter, homeTable: state.mvTable,
+        library: { collapsed: this.libraryCollapsed(), query: state.mvQuery, calculatedQuery: state.mvCalculationQuery, visibility: state.mvFilter, homeTable: state.mvTable,
           openFolders: Object.keys(state.mvOpen || {}).filter(function (name) { return !!state.mvOpen[name]; }), width: state.mvW,
           sourceMode: this.sourceMode(), pickingSource: !!state.mvSourcePicking, sourceQuery: state.mvSourceQuery, impactQuery: state.mvImpactQuery,
           openTables: Object.keys(state.mvSourceOpen || {}).filter(function (name) { return !!state.mvSourceOpen[name]; }) },
@@ -163,6 +163,9 @@
       this._splitShares = { beside: prefs.besideShare, below: prefs.belowShare }; this._wrapDax = prefs.wrap; this._showSources = prefs.sources; this._showCalculated = prefs.calculated; this._fmt = prefs.fmt; this._inlineDax = prefs.inline; this._plainDax = prefs.plain;
       this._mainKey = null; this._railKey = null; this._daxKey = null; this._gC = null; this._shellModel = null;
       var root = data.source ? this.sourceKey(data.source.table, data.source.column) : data.selectedMeasure;
+      // Capture/restore the visible pane, not only the separate desktop preference.
+      this._narrowRoot = root;
+      this._narrowLibraryOpen = !data.library.collapsed;
       this._snapshotViewport = root ? { model: this.app.model, selected: root, graph: data.graph } : null;
       this._lastGraphViewport = { model: this.app.model, selected: root, graph: data.graph };
       var extras = Object.create(null), open = Object.create(null);
