@@ -70,6 +70,33 @@ Build a canvas around the tables you care about. Read cardinality and filter dir
 | --- | --- |
 | [![Sales and seven dimensions with cardinality pills, filter arrows, and a dashed inactive Date relationship](img/marketplace/tables.png)](img/marketplace/tables.png) | [![A closer Sales neighborhood with the table source and relationship details in the inspector](img/marketplace/table-inspector.png)](img/marketplace/table-inspector.png) |
 
+#### Calculated objects and DAX
+
+Field parameters and calculation groups remain tables in **Tables**. Relationship
+lines come only from the model's relationships. For calculated tables, field
+parameters, and calculation groups, the inspector offers **Show DAX calculation**
+in place of **Open Power Query**. A calculated column has its own **Show DAX
+calculation** action; its imported table retains **Open Power Query**.
+
+These actions select the object in the standard **Measures** workspace. Graph and
+DAX panels keep the current split position, orientation, sizing, and formatting.
+Calculation groups have a **Calculation item** selector. **Expression** and
+**Format expression** have separate reference scopes when a dynamic format is
+captured. `SELECTEDMEASURE()` is runtime context and creates no fixed measure links.
+
+In a normal measure flow, enable **Show table and column references**, then
+**Show calculated objects** to see calculated consumers of the visible fields.
+Arrows point from referenced field to consumer: for example, `[Order Count]` →
+`Metric Selector`, labelled **Selectable field**. A parameter's `NAMEOF` reference
+does not evaluate that measure's value. Select a calculated consumer to read its
+DAX and its referenced measures in the same dependency graph. Calculated objects
+use a single named box without automatic column rows. Their formulas use the same
+DAX cards and direct-reference chips as measures, including comparison, formatting,
+copying, wrapping, and upstream measure expansion. Selection and reading preferences travel in snapshots.
+
+Calculated-consumer diagrams display at most 80 objects and 160 links. The shared Measures graph displays up to 500 measures, with a notice when the
+limit is reached. All analysis is static.
+
 ### Power Query
 
 See how queries, parameters, functions, and table partitions feed each other. Follow a flow from input to consumer and read the M behind it.

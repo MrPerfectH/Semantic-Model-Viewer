@@ -198,8 +198,8 @@ test('measure snapshot is JSON-safe and preserves comparison, library state, pre
   const snapshot=JSON.parse(JSON.stringify(view.captureSnapshot()));
   assert.equal(snapshot.version,1);assert.equal(snapshot.selectedMeasure,'Margin');assert.equal(snapshot.comparisonMeasure,'Profit');
   assert.deepEqual(snapshot.extraMeasures,['Revenue']);
-  assert.deepEqual(snapshot.library,{collapsed:false,query:'DIVIDE',visibility:'hidden',homeTable:'Sales',openFolders:['Finance','Finance\\Ratios'],width:360,sourceMode:'measures',pickingSource:false,sourceQuery:'',impactQuery:'',openTables:[]});
-  assert.deepEqual(snapshot.preferences,{mode:'split',split:'below',besideShare:.63,belowShare:.46,orientation:'bt',wrap:false,sources:false,fmt:'long',inline:false,plain:false});
+  assert.deepEqual(snapshot.library,{collapsed:false,query:'DIVIDE',calculatedQuery:'',visibility:'hidden',homeTable:'Sales',openFolders:['Finance','Finance\\Ratios'],width:360,sourceMode:'measures',pickingSource:false,sourceQuery:'',impactQuery:'',openTables:[]});
+  assert.deepEqual(snapshot.preferences,{mode:'split',split:'below',besideShare:.63,belowShare:.46,orientation:'bt',wrap:false,sources:false,calculated:false,fmt:'long',inline:false,plain:false});
   assert.deepEqual(snapshot.graph,{zoom:.8,scrollLeft:123,scrollTop:456,autoFit:false});
   view.rememberGraphViewport();view.gScroll.clientWidth=0;
   assert.deepEqual(JSON.parse(JSON.stringify(view.captureSnapshot().graph)),snapshot.graph,'A hidden graph retains its viewport');

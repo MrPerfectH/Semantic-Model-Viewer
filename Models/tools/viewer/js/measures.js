@@ -54,7 +54,7 @@
     this._orientationChosen = !!pickedDirection && this._graphOrientation !== 'auto';
     this._splitShares = { beside: share(prefs.besideShare, .55), below: share(prefs.belowShare, .52) };
     this._wrapDax = prefs.wrap !== false;
-    this._showSources = prefs.sources === true;
+    this._showSources = prefs.sources === true; this._showCalculated = prefs.calculated === true;
     this._fmt = choice(prefs.fmt, ['original', 'long', 'short'], 'long');
     this._folds = {};
     this._libraryCollapsed = prefs.libraryCollapsed === true;
@@ -95,11 +95,12 @@
         library: {
           collapsed: library.collapsed === true,
           query: typeof library.query === 'string' ? library.query.slice(0, 10000) : '',
+          calculatedQuery: typeof library.calculatedQuery === 'string' ? library.calculatedQuery.slice(0,10000) : '',
           visibility: choice(library.visibility, ['all', 'visible', 'hidden'], 'all'),
           homeTable: typeof library.homeTable === 'string' && tables.has(library.homeTable) ? library.homeTable : '',
           openFolders: validNames(library.openFolders, folders, folders.size),
           width: bounded(library.width, 240, 480, 296),
-          sourceMode: source ? 'sources' : choice(library.sourceMode, ['measures', 'sources'], 'measures'),
+          sourceMode: source ? 'sources' : choice(library.sourceMode, ['measures', 'sources', 'calculations'], 'measures'),
           pickingSource: library.pickingSource === true,
           sourceQuery: typeof library.sourceQuery === 'string' ? library.sourceQuery.slice(0, 10000) : '',
           impactQuery: typeof library.impactQuery === 'string' ? library.impactQuery.slice(0, 10000) : '',
@@ -109,7 +110,7 @@
           mode: choice(prefs.mode, ['split', 'dax', 'graph'], 'split'),
           split: choice(prefs.split, SPLITS, 'auto'),
           besideShare: share(prefs.besideShare, .55), belowShare: share(prefs.belowShare, .52),
-          orientation: choice(prefs.orientation, ORIENTATIONS, 'auto'), wrap: prefs.wrap !== false, sources: !!source || prefs.sources === true,
+          orientation: choice(prefs.orientation, ORIENTATIONS, 'auto'), wrap: prefs.wrap !== false, sources: !!source || prefs.sources === true, calculated: prefs.calculated === true,
           fmt: choice(prefs.fmt, ['original', 'long', 'short'], 'long'), inline: prefs.inline === true, plain: prefs.plain === true
         },
         graph: { zoom: bounded(graph.zoom, .02, 1.8, 1), scrollLeft: bounded(graph.scrollLeft, 0, 10000000, 0),
@@ -117,7 +118,7 @@
       };
     },
     graphViewportContext: function () {
-      return JSON.stringify([this._graphOrientation, this._showSources, !!this.app.state.dependencyDirectOnly, Object.keys(this.app.state.gExtra || {}).sort()]);
+      return JSON.stringify([this._graphOrientation, this._showSources, this._showCalculated, !!this.app.state.dependencyDirectOnly, Object.keys(this.app.state.gExtra || {}).sort()]);
     },
     captureGraphViewport: function () {
       var app = this.app, pending = this._snapshotViewport, last = this._lastGraphViewport;
@@ -137,12 +138,12 @@
       return this.sanitizeSnapshot({
         selectedMeasure: state.selMeasure, comparisonMeasure: state.gPin, source: state.dependencySource, directOnly: state.dependencyDirectOnly,
         extraMeasures: Object.keys(state.gExtra || {}).filter(function (name) { return !!state.gExtra[name]; }),
-        library: { collapsed: this._libraryCollapsed, query: state.mvQuery, visibility: state.mvFilter, homeTable: state.mvTable,
+        library: { collapsed: this._libraryCollapsed, query: state.mvQuery, calculatedQuery: state.mvCalculationQuery, visibility: state.mvFilter, homeTable: state.mvTable,
           openFolders: Object.keys(state.mvOpen || {}).filter(function (name) { return !!state.mvOpen[name]; }), width: state.mvW,
           sourceMode: this.sourceMode(), pickingSource: !!state.mvSourcePicking, sourceQuery: state.mvSourceQuery, impactQuery: state.mvImpactQuery,
           openTables: Object.keys(state.mvSourceOpen || {}).filter(function (name) { return !!state.mvSourceOpen[name]; }) },
         preferences: { mode: this._workspaceMode, split: this._splitLayout, besideShare: this._splitShares.beside,
-          belowShare: this._splitShares.below, orientation: this._graphOrientation, wrap: this._wrapDax, sources: this._showSources, fmt: this._fmt, inline: !!this._inlineDax, plain: !!this._plainDax },
+          belowShare: this._splitShares.below, orientation: this._graphOrientation, wrap: this._wrapDax, sources: this._showSources, calculated: this._showCalculated, fmt: this._fmt, inline: !!this._inlineDax, plain: !!this._plainDax },
         graph: this.captureGraphViewport()
       });
     },
@@ -158,7 +159,7 @@
       this.cancelSnapshotViewport();
       this._libraryCollapsed = data.library.collapsed;
       this._workspaceMode = prefs.mode; this._splitLayout = prefs.split; this._graphOrientation = prefs.orientation;
-      this._splitShares = { beside: prefs.besideShare, below: prefs.belowShare }; this._wrapDax = prefs.wrap; this._showSources = prefs.sources; this._fmt = prefs.fmt; this._inlineDax = prefs.inline; this._plainDax = prefs.plain;
+      this._splitShares = { beside: prefs.besideShare, below: prefs.belowShare }; this._wrapDax = prefs.wrap; this._showSources = prefs.sources; this._showCalculated = prefs.calculated; this._fmt = prefs.fmt; this._inlineDax = prefs.inline; this._plainDax = prefs.plain;
       this._mainKey = null; this._railKey = null; this._daxKey = null; this._gC = null; this._shellModel = null;
       var root = data.source ? this.sourceKey(data.source.table, data.source.column) : data.selectedMeasure;
       this._snapshotViewport = root ? { model: this.app.model, selected: root, graph: data.graph } : null;
@@ -169,7 +170,7 @@
       var sourceOpen = Object.create(null); data.library.openTables.forEach(function (name) { sourceOpen[name] = true; });
       this.app.setState({ mvSourceMode: data.library.sourceMode, mvSourcePicking: data.library.pickingSource, mvSourceQuery: data.library.sourceQuery,
         mvSourceOpen: sourceOpen, mvImpactQuery: data.library.impactQuery, selMeasure: data.selectedMeasure, dependencySource: data.source, dependencyDirectOnly: data.directOnly, gPin: data.comparisonMeasure, gExtra: extras, gHover: null,
-        mvQuery: data.library.query, mvFilter: data.library.visibility, mvTable: data.library.homeTable, mvOpen: open, mvW: data.library.width
+        mvQuery: data.library.query, mvCalculationQuery: data.library.calculatedQuery, mvFilter: data.library.visibility, mvTable: data.library.homeTable, mvOpen: open, mvW: data.library.width
       }, function () { self.restorePendingViewport(); });
       return true;
     },
@@ -199,7 +200,9 @@
 
     /* ---------- graph helpers ---------- */
     sourceKey: function (table, column) { return '\u0000source:' + JSON.stringify([table, column == null ? null : column]); },
+    selectedCalculation: function () { return this.app.tableDax && this.app.tableDax.isActive() ? this.app.tableDax.analysis : null; },
     graphRoot: function () {
+      if (this.selectedCalculation()) return this.app.tableDax.rootKey();
       var source = this.app.state.dependencySource;
       return source ? this.sourceKey(source.table, source.column) : this.app.state.selMeasure;
     },
@@ -214,6 +217,7 @@
     analyzeSource: function (table, column) {
       var t = this.app.model.byName[table];
       if (!t || (column != null && !t.columns.some(function (c) { return c.name === column; }))) return;
+      if (this.app.tableDax) this.app.tableDax.close();
       this._showSources = true; this.savePreferences(); this.cancelSnapshotViewport();
       this._gC = null; this._initViewportFor = null;
       this.app.setState({ dependencySource: { table: table, column: column == null ? null : column },
@@ -229,6 +233,8 @@
       this.app.setState(patch);
     },
     flowKids: function (name, dir) {
+      var calculation = this.selectedCalculation(), calculationRoot = calculation && this.graphRoot();
+      if (name === calculationRoot) return dir === 'up' ? calculation.refs.measures.slice() : [];
       var source = this.app.state.dependencySource, root = source && this.graphRoot();
       var direct = source ? this.currentImpact().direct : [];
       if (name === root) return dir === 'up' ? [] : direct;
@@ -239,7 +245,9 @@
         return deps.sort(function (a, b) { return a.localeCompare(b); });
       }
       if (source && this.app.state.dependencyDirectOnly) return [];
-      return (((this.app.model || {}).msrUsedBy || {})[name] || []).slice().sort(function (a, b) { return a.localeCompare(b); });
+      var consumers = (((this.app.model || {}).msrUsedBy || {})[name] || []).slice();
+      if (calculation && calculation.refs.measures.includes(name)) consumers.push(calculationRoot);
+      return consumers.sort(function (a, b) { return a.localeCompare(b); });
     },
     gReach: function (start, map) {
       var s = new Set(); var q = [start], __g = 0;
@@ -400,7 +408,7 @@
          them and ellipsises happily, so letting it drive the width would push every layer to
          the 390px cap and drop Fit all to a fifth of a screen. */
       var slotText = function (s) {
-        if (s.kind !== 'group') return s.name.length;
+        if (s.kind !== 'group') return s.name === root && self.selectedCalculation() ? self.selectedCalculation().name.length : s.name.length;
         return s.shown.reduce(function (a, n) { return Math.max(a, n.length); }, 0);
       };
       var slotH = function (s) {
@@ -598,8 +606,9 @@
         if (!byTable.has(tn)) byTable.set(tn, { table: tn, columns: new Set() });
         return byTable.get(tn);
       };
-      measureNames.forEach(function (name) {
-        var m = app.msrOf(name);
+      var calculation = this.selectedCalculation();
+      measureNames.concat(calculation ? [G.root] : []).forEach(function (name) {
+        var m = app.msrOf(name) || { _tables: calculation.refs.tables, _cols: calculation.refs.columns };
         (m._tables || []).forEach(function (tn) {
           if (selected && (selected.table !== tn || selected.column != null)) return;
           ensure(tn); links.push({ table: tn, column: null, to: name });
@@ -710,6 +719,115 @@
       G.sources = sources; G.nE = G.geo.length;
       return G;
     },
+    /* Calculated objects are consumers. Keep their identities separate from source
+       table/column cards: NAMEOF references must never become measure inputs. */
+    addCalculatedLayout: function (G) {
+      var self = this, app = this.app, catalog = app.tableDax ? app.tableDax.objects() : g.TableDax ? g.TableDax.objects(app) : [];
+      var cards = [], links = [], limit = 80, edgeLimit = 160, capped = false;
+      catalog.forEach(function (object) {
+        if ('calculated:' + object.id === G.root) return;
+        var matches = [];
+        function collect(analysis, scope) {
+          g.TableDax.targets(analysis.refs, app.model).forEach(function (target) {
+            var key = target.kind === 'measure' ? target.name : self.sourceKey(target.table, target.kind === 'column' ? target.name : null);
+            if (!G.xy[key] && target.kind === 'column') key = self.sourceKey(target.table, null);
+            if (!G.xy[key] || target.kind === 'measure' && !G.names.includes(key)) return;
+            var choice = scope === 'expression' && analysis.fields.some(function (f) { return f.target && f.target.id === target.id; });
+            if (!matches.some(function (m) { return m.from === key && m.scope === scope; })) matches.push({ from: key, scope: scope, label: choice ? 'Selectable field' : scope === 'format' ? 'Format reference' : target.kind === 'column' ? target.table + '[' + target.name + ']' : 'DAX reference' });
+          });
+        }
+        collect(object.analysis, 'expression');
+        if (object.analysis.formatExpression) collect(g.TableDax.analyze(app, app.model.byName[object.table], object.item, 'format', object.column), 'format');
+        if (!matches.length) return;
+        if (cards.length >= limit || links.length + matches.length > edgeLimit) { capped = true; return; }
+        var table = app.model.byName[object.table];
+        var rows = []; // Calculated objects are named dependency endpoints, not column lists.
+        var card = { id: 'calculated:' + object.id, object: object, rows: rows, color: app.tableColor(table),
+          w: Math.min(320, Math.max(220, [object.name].concat(rows).reduce(function (max, name) { return Math.max(max, name.length); }, 0) * 7 + 32)), h: NH * (1 + rows.length) };
+        cards.push(card); matches.forEach(function (m) { links.push(Object.assign({ to: card.id }, m)); });
+      });
+      var combined=[];links.forEach(function(link){var old=combined.find(function(c){return c.from===link.from&&c.to===link.to;});if(old){old.label='DAX + format reference';old.scope='both';}else combined.push(link);});links=combined;
+      var vertical = G.orientation !== 'lr', bottom = G.orientation === 'bt', cursor = 60;
+      if (bottom && cards.length) {
+        var dy = Math.max.apply(null, cards.map(function (c) { return c.h; })) + 98;
+        Object.keys(G.xy).forEach(function (k) { G.xy[k].y += dy; });
+        (G.boxes || []).forEach(function (b) { b.y += dy; });
+        (G.sources || []).forEach(function (s) { s.y += dy; });
+        G.geo.forEach(function (e) { e.d = e.d.replace(/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/g, function (_, x, y) { return x + ',' + (+y + dy); }); if(e.labelY!=null)e.labelY+=dy; });
+        G.h += dy;
+      }
+      var edge = vertical ? bottom ? 50 : G.h + 30 : G.w + 30;
+      cards.forEach(function (c) {
+        if (vertical) { c.x=cursor; c.y=edge; cursor+=c.w+36; }
+        else {
+          var inputs=links.filter(function (link) { return link.to===c.id; }).map(function (link) { return G.xy[link.from]; });
+          // Use the next dependency layer and the same gap as source-table links.
+          c.x=Math.max.apply(null,inputs.map(function (p) { return p.x+p.w; }))+96;
+          c.y=Math.max(60,inputs.reduce(function (sum,p) { return sum+p.y; },0)/inputs.length);
+          var occupied=Object.keys(G.xy).map(function (key) { return G.xy[key]; });
+          var conflict;
+          do {
+            conflict=occupied.find(function (p) { return c.x<p.x+p.w+16 && c.x+c.w+16>p.x && c.y<p.y+(p.h||NH)+24 && c.y+c.h+24>p.y; });
+            if(conflict)c.y=conflict.y+(conflict.h||NH)+32;
+          } while(conflict);
+        }
+        G.xy[c.id]={x:c.x,y:c.y,w:c.w,h:c.h}; G.deps[c.id]=[]; G.cons[c.id]=[];
+      });
+      links.forEach(function (link, index) {
+        var A=G.xy[link.from],B=G.xy[link.to],x1,y1,x2,y2,d;
+        if(vertical){x1=A.x+A.w/2;y1=A.y+(bottom?0:NH);x2=B.x+B.w/2;y2=B.y+(bottom?cards.find(function(c){return c.id===link.to;}).h:0);var middle=(y1+y2)/2;d='M'+x1+','+y1+' C'+x1+','+middle+' '+x2+','+middle+' '+x2+','+y2;}
+        else {
+          x1=A.x+A.w; y1=A.y+NH/2; x2=B.x; y2=B.y+NH/2;
+          var bend=Math.min(90,Math.max(24,(x2-x1)/2));
+          if (G.names.includes(link.from) && B.y >= A.y+NH) {
+            // Leave a measure below its other outgoing links when the consumer is lower.
+            x1=A.x+A.w/2; y1=A.y+NH;
+            var drop=Math.min(60,Math.max(16,(y2-y1)/2));
+            d='M'+x1+','+y1+' C'+x1+','+(y1+drop)+' '+(x2-bend)+','+y2+' '+x2+','+y2;
+          } else {
+            d='M'+x1+','+y1+' C'+(x1+bend)+','+y1+' '+(x2-bend)+','+y2+' '+x2+','+y2;
+          }
+        }
+        G.deps[link.to].push(link.from);(G.cons[link.from]||(G.cons[link.from]=[])).push(link.to);
+        G.geo.push({a:link.from,b:link.to,d:d,base:cards.find(function(c){return c.id===link.to;}).color,calculated:true,label:link.label,labelX:vertical?(x1+x2)/2+8:x2+12,labelY:vertical?(y1+y2)/2:B.y-8,scope:link.scope});
+      });
+      if(cards.length){G.w=Math.max(G.w,Math.max.apply(null,cards.map(function(c){return c.x+c.w;}))+60);G.h=Math.max(G.h,Math.max.apply(null,cards.map(function(c){return c.y+c.h;}))+60);}
+      G.calculations=cards;G.calculationsCapped=capped;G.nE=G.geo.length;
+      return G;
+    },
+    renderCalculatedCards: function (G) {
+      var self=this,app=this.app,key=G.structKey;
+      if(this._calculatedLayer&&this._calculatedLayer.parentNode===this.gCanvasEl&&this._calculatedRenderKey===key)return;
+      if(this._calculatedLayer)this._calculatedLayer.remove();
+      this._calculatedRenderKey=key;this._calculatedLayer=el('div',{cls:'mv-calculated-layer'});
+      (G.calculations || []).forEach(function (c) {
+        var o = c.object;
+        var open = function () { app.tableDax.open(o.table, o.item, o.column); };
+        var card = el('section', { cls: 'mv-source-card mv-calculated-card', 'aria-label': 'Calculated table ' + o.table,
+          style: 'left:' + c.x + 'px;top:' + c.y + 'px;width:' + c.w + 'px;--mv-source-color:' + c.color + ';--mv-source-tint:' + U.tint(c.color, .08) + ';' });
+        card.appendChild(el('button', { cls: 'mv-source-header', text: o.name,
+          title: 'Show DAX calculation for ' + o.name, 'aria-label': 'Show DAX calculation for ' + o.name, onClick: open }));
+        c.rows.forEach(function (name) {
+          card.appendChild(el('button', { cls: 'mv-source-column', text: name,
+            title: 'Show DAX calculation for ' + o.name, onClick: open }));
+        });
+        self._calculatedLayer.appendChild(card);
+      });
+      this.gCanvasEl.appendChild(this._calculatedLayer);
+    },
+    renderCalculationRail: function () {
+      var self=this,app=this.app;
+      Object.keys(this.sourceModeButtons).forEach(function(k){self.sourceModeButtons[k].setAttribute('aria-pressed',String(k==='calculations'));});
+      this.visibilityFilters.hidden=this.tableSelect.hidden=this.directFilter.hidden=this.sourceSummaryEl.hidden=true;
+      this.qInput.placeholder='Find calculated tables, items, or columns…';this.qInput.setAttribute('aria-label','Search calculated objects');this.qInput.value=app.state.mvCalculationQuery||'';
+      var query=(app.state.mvCalculationQuery||'').trim().toLowerCase(),objects=app.tableDax?app.tableDax.objects():[];
+      var matches=objects.filter(function(o){return !query||[o.name,o.label,o.analysis.expression,o.analysis.formatExpression].join(' ').toLowerCase().includes(query);});
+      this.totalEl.textContent=matches.length+' calculated objects';this.libraryFoot.textContent='Calculated consumers and their definitions · no inferred runtime applicability';U.clear(this.rowsEl);
+      matches.forEach(function(o){var active=app.tableDax.isActive()&&app.tableDax.objectTable===o.table&&(app.tableDax.column||null)===(o.column||null)&&(!o.item||app.tableDax.items[o.table]===o.item);
+        self.rowsEl.appendChild(el('button',{cls:'mv-library-row'+(active?' is-selected':''),'aria-current':active?'true':null,title:o.name,onClick:function(){app.tableDax.open(o.table,o.item,o.column);}},el('span',{cls:'mv-row-label'},[el('span',{cls:'mv-row-name',text:o.name}),el('span',{cls:'mv-row-table',text:o.label})])));
+      });
+      if(!matches.length)this.rowsEl.appendChild(el('p',{cls:'mv-no-results',text:'No matching calculated objects in the captured model.'}));
+    },
     /* The layout reserves generous fixed margins; at Fit they cost a fifth of the zoom.
        Shift everything — nodes, groups, sources and edge geometry — so the drawing sits
        `margin` from each side. Bezier curves stay inside their control points, so the
@@ -719,13 +837,13 @@
       var grow = function (x, y, w, h) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x + (w || 0)); y1 = Math.max(y1, y + (h || 0)); };
       Object.keys(G.xy).forEach(function (n) { var p = G.xy[n]; if (p) grow(p.x, p.y, p.w, NH); });
       (G.boxes || []).forEach(function (b) { grow(b.x, b.y, b.w, b.h); });
-      (G.sources || []).forEach(function (s) { grow(s.x, s.y, s.w, s.h); });
+      (G.sources || []).concat(G.calculations || []).forEach(function (s) { grow(s.x, s.y, s.w, s.h); });
       G.geo.forEach(function (e) { String(e.d).replace(NUM, function (_, x, y) { grow(+x, +y, 0, 0); return _; }); if (e.labelX != null) grow(e.labelX, e.labelY - 12, 80, 12); });
       if (!isFinite(x0)) return G;
       var dx = margin - x0, dy = margin - y0;
       Object.keys(G.xy).forEach(function (n) { var p = G.xy[n]; if (!p || seen.has(p)) return; seen.add(p); p.x += dx; p.y += dy; });
       (G.boxes || []).forEach(function (b) { b.x += dx; b.y += dy; });
-      (G.sources || []).forEach(function (s) { s.x += dx; s.y += dy; });
+      (G.sources || []).concat(G.calculations || []).forEach(function (s) { s.x += dx; s.y += dy; });
       G.geo.forEach(function (e) {
         e.d = String(e.d).replace(NUM, function (_, x, y) { return (+x + dx) + ',' + (+y + dy); });
         if (e.labelX != null) { e.labelX += dx; e.labelY += dy; }
@@ -746,14 +864,16 @@
     },
     buildGraph: function () {
       var self = this, app = this.app;
-      var root = this.graphRoot(), extra = app.state.gExtra || {};
+      var root = this.graphRoot(), extra = app.state.gExtra || {}, calculation = this.selectedCalculation();
       var size = this.options.layout ? '' : this.layoutSizeKey();
-      var key = (app.modelKey || '') + '|' + JSON.stringify(this._explanationContext) + '|' + root + '|' + this._showSources + '|' + !!app.state.dependencyDirectOnly + '|' + this._graphOrientation + '|' + size + '|' + Object.keys(extra).sort().join('\u0001')
+      var key = (app.modelKey || '') + '|' + JSON.stringify(this._explanationContext) + '|' + root + '|' + (calculation ? calculation.scope : '') + '|' + this._showCalculated + '|' + this._showSources + '|' + !!app.state.dependencyDirectOnly + '|' + this._graphOrientation + '|' + size + '|' + Object.keys(extra).sort().join('\u0001')
         + '|' + Object.keys(this.options.comparisonGroups ? this.options.comparisonGroups() : this.graphGroupState(root)).sort().join('\u0001') + '|' + app.colorBy + '|' + app.paletteName;
       if (!this._gC || this._gC.k !== key) {
         var make = function (orientation) {
           var layout = self.gLayout(root, extra, CAP, orientation, null, orientation !== 'lr' ? self._layoutBudget : 0);
-          return self.trimGraph(self._showSources ? self.addSourceLayout(layout) : layout, GRAPH_MARGIN);
+          if (self._showSources) layout = self.addSourceLayout(layout);
+          if (self._showSources && self._showCalculated) layout = self.addCalculatedLayout(layout);
+          return self.trimGraph(layout, GRAPH_MARGIN);
         };
         var G0;
         if (this.options.layout) G0 = this.options.layout(this);
@@ -784,14 +904,15 @@
         var wd = rel ? (e.a === hov || e.b === hov ? 2 : 1.6) : 1.2, o = hov ? (rel ? 1 : .45) : .85;
         return {
           key: e.a + '\u0001' + e.b, d: e.d, da: e.back || e.whole ? '5 4' : 'none',
-          label: e.whole ? 'Whole table' : '', labelX: e.labelX, labelY: e.labelY, color: c,
+          label: e.calculated ? e.label : e.whole ? 'Whole table' : '', labelX: e.labelX, labelY: e.labelY, color: c,
           st: "d:path('" + e.d + "');stroke:" + c + ";stroke-width:" + wd + "px;opacity:" + o + ";transition:d .28s ease,stroke .18s ease,opacity .18s ease,stroke-width .18s ease;"
         };
       });
       this._gRootXY = G.xy[root]; this._gInc = G.inc; this._gXY = G.xy; this._gRel = G.relM;
       this._gGroupOf = G.groupOf; this._gHiddenByGroup = G.hiddenByGroup;
       var nodes = G.names.map(function (n) {
-        var p = G.xy[n], m = app.msrOf(n);
+        var p = G.xy[n], m = app.msrOf(n), isCalculation = n === root && calculation;
+        var rootColor = isCalculation ? app.tableColor(app.model.byName[calculation.table]) : 'var(--smv-primary,var(--smv-burgundy,#1f2430))';
         var P = G.upSet.has(n) && n !== root ? ['var(--smv-up,#6d28d9)', 'var(--smv-up-soft,#f7f5ff)', 'var(--smv-up-border,#d9cffa)']
           : (G.dnSet.has(n) && n !== root ? ['var(--smv-down,#2563eb)', 'var(--smv-down-soft,#f2f7ff)', 'var(--smv-down-border,#c7dbfa)'] : ['var(--smv-muted,#5b6472)', '#fff', 'var(--smv-line,#dfe3e9)']);
         var dim = !!(hov && n !== hov && n !== root && !(upR && upR.has(n)) && !(dnR && dnR.has(n)));
@@ -805,17 +926,17 @@
         var upLbl = upN ? '+' + upN : (exU.length ? '−' + exU.length : ''), dnLbl = dnN ? '+' + dnN : (exD.length ? '−' + exD.length : '');
         var pin = pinN === n;
         var base = (n === root
-          ? 'border:1.5px solid var(--smv-burgundy,#1f2430);background:var(--smv-primary,var(--smv-burgundy,#1f2430));color:var(--smv-on-accent,#fff);font:600 12px/31px "IBM Plex Sans",sans-serif;box-shadow:0 4px 14px rgba(20,30,50,.30);'
+          ? 'border:1.5px solid var(--smv-burgundy,#1f2430);background:' + rootColor + ';color:var(--smv-on-accent,#fff);font:600 12px/31px "IBM Plex Sans",sans-serif;box-shadow:0 4px 14px rgba(20,30,50,.30);'
           : 'border:1px solid ' + P[2] + ';background:' + P[1] + ';color:' + P[0] + ';font:500 12px/32px "IBM Plex Mono",monospace;')
           + (pin ? 'outline:2px solid ' + P[0] + ';outline-offset:1px;' : '');
         return {
-          name: n,
+          name: n, label: isCalculation ? calculation.name : n,
           /* Top to bottom keeps its sides free for the link gutters: the expanders sit on the
              node's corners instead, upstream above and downstream below. */
           wrapS: G.wrap ? 'position:absolute;z-index:2;left:' + p.x + 'px;top:' + p.y + 'px;width:' + p.w + 'px;height:' + NH + 'px;display:block;transition:left .28s ease,top .28s ease,opacity .18s ease;' + (dim ? 'opacity:.72;' : '')
             : 'position:absolute;z-index:2;left:' + (p.x - 34) + 'px;top:' + p.y + 'px;width:' + (p.w + 68) + 'px;display:flex;align-items:center;gap:4px;transition:left .28s ease,top .28s ease,opacity .18s ease;' + (dim ? 'opacity:.72;' : ''),
           s: 'flex:none;box-sizing:border-box;width:' + p.w + 'px;height:' + NH + 'px;' + base + 'border-radius:6px;padding:0 9px;cursor:pointer;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;',
-          tip: n + app.tipFlags(n) + ((m && m.dax) ? '\n\n' + m.dax.trim().slice(0, 900) : ''),
+          tip: (isCalculation ? calculation.name : n) + app.tipFlags(n) + ((m && m.dax) ? '\n\n' + m.dax.trim().slice(0, 900) : ''),
           upMore: upLbl, upTip: upN ? ('Show ' + upN + ' additional upstream measures') : (exU.length ? ('Hide ' + exU.length + ' additional upstream measures') : ''),
           upBadgeS: self.gBadge(upLbl, !upN) + (G.wrap ? 'position:absolute;z-index:1;' + (G.wrap.dir === -1 ? 'bottom' : 'top') + ':-10px;right:10px;' : ''),
           dnMore: dnLbl, dnTip: dnN ? ('Show ' + dnN + ' additional downstream measures') : (exD.length ? ('Hide ' + exD.length + ' additional downstream measures') : ''),
@@ -831,7 +952,7 @@
               app.setState({ gPin: was ? null : n });
             }, 230);
           },
-          reroot: function () { clearTimeout(self._clkT); self.pickMeasure(n); }
+          reroot: function () { clearTimeout(self._clkT); if (!isCalculation) self.pickMeasure(n); }
         };
       });
       var anyHid = Array.from(G.inc).some(function (n) { return G.hidU[n].length || G.hidD[n].length; });
@@ -845,7 +966,7 @@
         };
       });
       return {
-        nodes: nodes, edges: edges, groups: groups, sources: G.sources || [], sourcesCapped: G.sourcesCapped, root: G.root, xy: G.xy, w: G.w, h: G.h,
+        nodes: nodes, edges: edges, groups: groups, calculations: G.calculations || [], calculationsCapped: G.calculationsCapped, sources: G.sources || [], sourcesCapped: G.sourcesCapped, root: G.root, xy: G.xy, w: G.w, h: G.h,
         pan: function (e) {
           if (e.button !== 0 || e.target.closest('button')) return;
           var elx = e.currentTarget;
@@ -859,7 +980,7 @@
           window.addEventListener('mousemove', mv); window.addEventListener('mouseup', up);
         },
         canvas: 'position:relative;width:' + G.w + 'px;height:' + G.h + 'px;',
-        stat: G.inc.size + ' measures · ' + G.names.length + ' shown · ' + G.hiddenByGroup.size + ' collapsed · ' + G.nE + ' visible links',
+        stat: (G.inc.size - (calculation ? 1 : 0)) + ' measures' + (calculation ? ' · 1 calculated object' : '') + ' · ' + G.names.length + ' shown · ' + G.hiddenByGroup.size + ' collapsed · ' + G.nE + ' visible links',
         capped: G.capped || (G.inc.size >= CAP && anyHid), canExpand: G.hiddenByGroup.size > 0 || (anyHid && G.inc.size < CAP), hasExtra: Object.keys(extra).length > 0 || !!pinN,
         allExtra: function () {
           var o = {}; Object.keys(extra).forEach(function (n) { if (!G.upSet.has(n) && !G.dnSet.has(n)) o[n] = extra[n]; });
@@ -909,6 +1030,7 @@
     },
     pickMeasure: function (n) {
       if(this.options.onPickMeasure){this.options.onPickMeasure(n);return;}
+      if(this.app.tableDax)this.app.tableDax.close();
       var self = this, app = this.app;
       if (window.SMVInteractive) window.SMVInteractive.closeLibrary(false);
       this.cancelSnapshotViewport();
@@ -1059,6 +1181,18 @@
         return Object.assign({ name: name, table: app.model.msrHome[name] || '', printed: printed, text: DaxFormat.toText(printed),
           inlined: inline ? { count: printed.count, cycles: printed.cycles, capped: printed.capped } : null }, flags);
       }
+      return Object.assign(this.expressionCard(name, app.model.msrHome[name] || '', dax, 'original'), flags);
+    },
+    /* Shared by Measures and the Tables DAX workspace: identical formatting,
+       highlighting and folding, without requiring a measure as the root object. */
+    expressionCard: function (name, table, dax, style) {
+      var self = this;
+      style = style || this._fmt || 'long';
+      dax = String(dax || '').trim();
+      if (style !== 'original' && g.DaxFormat) {
+        var printed = this.formatDax(name, dax, false, style);
+        return { name: name, table: table, printed: printed, text: DaxFormat.toText(printed) };
+      }
       var toks = this.daxToks(dax).map(function (t) {
         if (t.msr) {
           return {
@@ -1075,12 +1209,15 @@
         else if (t.kw != null) { s = 'color:var(--smv-ink,#334155);font-weight:700;'; txt = t.kw; }
         return { isM: false, isT: true, txt: txt, s: s };
       });
-      return Object.assign({ name: name, table: app.model.msrHome[name] || '', toks: toks }, flags);
+      return { name: name, table: table, toks: toks, text: dax };
     },
 
     /* ---------- rail rows ---------- */
-    sourceMode: function () { return this.app.state.dependencySource || this.app.state.mvSourceMode === 'sources' ? 'sources' : 'measures'; },
+    sourceMode: function () { if(this.app.tableDax&&this.app.tableDax.isActive()||this.app.state.mvSourceMode==='calculations')return 'calculations'; return this.app.state.dependencySource || this.app.state.mvSourceMode === 'sources' ? 'sources' : 'measures'; },
     setLibraryMode: function (mode) {
+      if(this.app.tableDax)this.app.tableDax.close();
+      this._mainKey=null;
+      if(mode==='calculations'){this.app.setState({mvSourceMode:'calculations',dependencySource:null});return;}
       if (mode === 'sources') {
         var patch = { mvSourceMode: 'sources', mvSourcePicking: true };
         if (!this.app.state.dependencySource) Object.assign(patch, { selMeasure: null, gPin: null, gHover: null, gExtra: {} });
@@ -1242,7 +1379,7 @@
       var top = el('div', { cls: 'mv-library-top' });
       top.appendChild(el('div', { cls: 'mv-library-heading' }, [
         el('span', { cls: 'mv-eyebrow', text: 'MEASURE LIBRARY' }),
-        el('button', { cls: 'mv-text-button', text: 'Overview', onClick: function () { app.setState({ selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, gPin: null, gHover: null }); } })
+        el('button', { cls: 'mv-text-button', text: 'Overview', onClick: function () { if(app.tableDax)app.tableDax.close(); app.setState({ selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, gPin: null, gHover: null }); } })
       ]));
       top.querySelector('.mv-library-heading').appendChild(el('button', {
         cls:'mv-text-button',text:'Close','aria-label':'Close measure library',
@@ -1250,7 +1387,7 @@
       }));
       var sourceModes = el('div', { cls: 'mv-filter-tabs mv-start-tabs', role: 'group', 'aria-label': 'Start analysis from' });
       this.sourceModeButtons = {};
-      [['measures', 'Measure'], ['sources', 'Table or column']].forEach(function (item) {
+      [['measures', 'Measure'], ['sources', 'Table or column'], ['calculations', 'Calculated objects']].forEach(function (item) {
         var button = el('button', { text: item[1], onClick: function () { self.setLibraryMode(item[0]); } });
         self.sourceModeButtons[item[0]] = button; sourceModes.appendChild(button);
       });
@@ -1341,20 +1478,22 @@
       if (this.libraryToggle) this.libraryToggle.setAttribute('aria-expanded', String(!this._libraryCollapsed));
     },
     paneStyle: function () { return 'width:' + Math.max(240, Math.min(480, this.app.state.mvW || 296)) + 'px;'; },
-    libraryQueryField: function () { return this.sourceMode() === 'measures' ? 'mvQuery' : this.app.state.mvSourcePicking || !this.app.state.dependencySource ? 'mvSourceQuery' : 'mvImpactQuery'; },
+    libraryQueryField: function () { if(this.sourceMode()==='calculations')return 'mvCalculationQuery'; return this.sourceMode() === 'measures' ? 'mvQuery' : this.app.state.mvSourcePicking || !this.app.state.dependencySource ? 'mvSourceQuery' : 'mvImpactQuery'; },
     clearFilters: function () { this.app.setState({ mvQuery: '', mvFilter: 'all', mvTable: '' }); },
 
     renderRail: function () {
       var self = this, app = this.app;
-      var key = [app.modelKey, app.state.mvQuery, app.state.mvFilter, app.state.mvTable, app.state.selMeasure, JSON.stringify(app.state.mvOpen || {}), app._usage ? 1 : 0, this.sourceMode(), app.state.mvSourcePicking, JSON.stringify(app.state.dependencySource), app.state.mvSourceQuery, JSON.stringify(app.state.mvSourceOpen || {}), app.state.mvImpactQuery, app.state.gPin, app.state.dependencyDirectOnly, this._impactLimit].join('|');
+      var key = [app.modelKey, app.state.mvQuery, app.state.mvFilter, app.state.mvTable, app.state.selMeasure, JSON.stringify(app.state.mvOpen || {}), app._usage ? 1 : 0, this.sourceMode(), app.state.mvSourcePicking, JSON.stringify(app.state.dependencySource), app.state.mvSourceQuery, JSON.stringify(app.state.mvSourceOpen || {}), app.state.mvImpactQuery, app.state.gPin, app.state.dependencyDirectOnly, this._impactLimit,app.state.mvCalculationQuery,app.tableDax&&app.tableDax.objectTable,app.tableDax&&app.tableDax.column,app.tableDax&&JSON.stringify(app.tableDax.items)].join('|');
       if (key === this._railKey) return;
       this._railKey = key;
+      if(this.sourceMode()==='calculations'){this.renderCalculationRail();return;}
       var mode = this.sourceMode(), source = app.state.dependencySource, picking = mode === 'sources' && (app.state.mvSourcePicking || !source);
       Object.keys(this.sourceModeButtons).forEach(function (key) { self.sourceModeButtons[key].setAttribute('aria-pressed', String(key === mode)); });
       this.visibilityFilters.hidden = this.tableSelect.hidden = mode !== 'measures';
       this.directFilter.hidden = mode !== 'sources' || picking;
       this.directInput.checked = !!app.state.dependencyDirectOnly;
       this.sourceSummaryEl.hidden = !source || mode !== 'sources';
+      this.qInput.setAttribute('aria-label',mode==='sources'?'Search tables and columns':'Search measures by name, folder, table, or DAX');
       U.clear(this.sourceSummaryEl);
       if (source && mode === 'sources') {
         this.sourceSummaryEl.appendChild(el('div', {}, [el('span', { cls: 'mv-eyebrow', text: 'SOURCE' }), el('strong', { text: this.sourceLabel(source) }),
@@ -1417,8 +1556,11 @@
     renderMain: function () {
       var self = this, app = this.app, M = app.model;
       var sn = app.state.selMeasure;
-      var m = app.msrOf(sn), source = app.state.dependencySource;
-      var key = [app.modelKey, sn || '', JSON.stringify(source), this._showSources, this.sourceMode(), app._usage ? 1 : 0, m || source ? '' : [app.state.mvQuery, app.state.mvFilter, app.state.mvTable].join('|')].join('|');
+      var calculation = this.selectedCalculation();
+      this.mainEl.hidden=false;
+      if(this.sourceMode()==='calculations' && !calculation){if(this._mainKey!=='calculations'){this._mainKey='calculations';U.clear(this.mainEl);this.mainEl.appendChild(el('div',{cls:'mv-overview'},[el('h1',{text:'Choose a calculated object.'}),el('p',{text:'Inspect a calculated table, field parameter, calculation item, or calculated column.'})]));}return;}
+      var m = calculation ? { _deps: calculation.refs.measures, _cols: calculation.refs.columns } : app.msrOf(sn), source = app.state.dependencySource;
+      var key = [app.modelKey, calculation ? this.graphRoot() + calculation.scope : sn || '', JSON.stringify(source), this._showSources, this._showCalculated, this.sourceMode(), app._usage ? 1 : 0, m || source ? '' : [app.state.mvQuery, app.state.mvFilter, app.state.mvTable].join('|')].join('|');
       if (key !== this._mainKey) {
         this.closeMatchingResults();
         this._mainKey = key;
@@ -1560,20 +1702,21 @@
 
     compactHeader: function () { return !this.options.comparison && (!!this._compact || window.innerWidth < 1280 || window.innerHeight < 800); },
     buildSelectedMain: function (sn, m) {
-      var self = this, app = this.app, M = app.model, source = app.state.dependencySource, home = source ? source.table : M.msrHome[sn];
+      var self = this, app = this.app, M = app.model, source = app.state.dependencySource, home = source ? source.table : M.msrHome[sn], calculation = this.selectedCalculation();
+      if (calculation) home = calculation.table;
       this._graphModel = M; this._graphMeasure = this.graphRoot();
       var colGs = m._cols || [], nCols = colGs.reduce(function (a, c) { return a + c.cs.length; }, 0);
       var body = el('div', { cls: 'mv-analysis' });
       var metadata = el('div', { cls: 'mv-metadata' }, [
         el('button', { cls: 'mv-chip mv-home-table', title: 'Show home table in the table diagram', text: home, onClick: function () { app.focusTable(home); } }),
         el('span', { cls: 'mv-chip', text: (m._deps || []).length + ' direct upstream' }),
-        el('span', { cls: 'mv-chip', text: (M.msrUsedBy[sn] || []).length + ' direct downstream' })
+        el('span', { cls: 'mv-chip', text: (calculation ? 0 : (M.msrUsedBy[sn] || []).length) + ' direct downstream' })
       ]);
       if (nCols) metadata.appendChild(el('span', { cls: 'mv-chip', text: nCols + (nCols === 1 ? ' column reference' : ' column references'), title: colGs.map(function (cg) { return cg.t + ': ' + cg.cs.join(', '); }).join('\n') }));
       if (m.h) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'Hidden in model' }));
-      var usage = app.msrUse(sn);
+      var usage = calculation ? null : app.msrUse(sn);
       if (usage) metadata.appendChild(el('span', { cls: 'mv-chip mv-chip-blue', text: usage.length + (usage.length === 1 ? ' report page' : ' report pages'), title: app.useTip(usage) }));
-      else if (!usage && app._usage) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'No direct report usage', title: 'Not directly referenced in ' + ((app._usageMeta && app._usageMeta.report) || 'the scanned report') + '. It may feed other measures that are used.' }));
+      else if (!calculation && !usage && app._usage) metadata.appendChild(el('span', { cls: 'mv-chip', text: 'No direct report usage', title: 'Not directly referenced in ' + ((app._usageMeta && app._usageMeta.report) || 'the scanned report') + '. It may feed other measures that are used.' }));
       /* Compact — every answer view, and any window short of room — is one header row, one
          graph toolbar, no eyebrows or helper text, so the diagram gets the height. */
       var compact = this._headerCompact = this.compactHeader();
@@ -1586,6 +1729,20 @@
         var impact = this.currentImpact();
         heading.appendChild(el('p', { cls: 'mv-source-summary', text: impact.direct.length + ' direct · ' + (impact.all.length - impact.direct.length) + (compact ? ' indirect' : ' indirect dependent measures'), title: impact.direct.length + ' direct and ' + (impact.all.length - impact.direct.length) + ' indirect dependent measures' }));
         heading.appendChild(el('button', { cls: 'mv-text-button', text: 'Back to ' + source.table, onClick: function () { app.focusTable(source.table); } }));
+      }
+      if (calculation) {
+        if (heading.querySelector('.mv-eyebrow')) heading.querySelector('.mv-eyebrow').textContent = 'ANALYZING ' + (calculation.column ? 'CALCULATED COLUMN' : g.TableDax.label(app.model.byName[calculation.table]).toUpperCase());
+        heading.querySelector('h1').textContent = calculation.column ? calculation.table + '[' + calculation.column + ']' : calculation.item ? calculation.table + ' / ' + calculation.item : calculation.table;
+        if (calculation.kind === 'calculationGroup') {
+          var itemSelect = el('select', { cls: 'mv-layout-select', 'aria-label': 'Calculation item', onChange: function () { app.tableDax.open(calculation.table, this.value, null, calculation.scope); } },
+            (app.model.byName[calculation.table].calcItems || []).map(function (item) { return el('option', { value: item.name, text: item.name }); }));
+          itemSelect.value = calculation.item || ''; metadata.appendChild(itemSelect);
+        }
+        if (calculation.formatExpression) {
+          var scopeSelect = el('select', { cls: 'mv-layout-select', 'aria-label': 'Expression scope', onChange: function () { app.tableDax.scope = this.value; app.tableDax.refresh(); } },
+            [el('option', { value: 'expression', text: 'Expression' }), el('option', { value: 'format', text: 'Format expression' })]);
+          scopeSelect.value = calculation.scope; metadata.appendChild(scopeSelect);
+        }
       }
       header.appendChild(heading);
       if (!this.options.comparison && Object.keys(M.msrHome).length>1) header.appendChild(el('button', {cls:'mv-button',text:compact?'Compare':'Compare measures',title:'Compare two measures',onClick:function(){self.openComparisonPicker();}}));
@@ -1628,7 +1785,11 @@
       if (!compact) graphPane.appendChild(graphHeading);
       this.sourceToggle = el('input', { type: 'checkbox', checked: this._showSources, onChange: function (e) { self.setShowSources(e.target.checked); } });
       var sourceControls = el('div', { cls: 'mv-source-controls' }, el('label', { title: 'Show table and column references' }, [this.sourceToggle, el('span', { text: compact ? 'Columns' : 'Show table and column references' })]));
-      if (!this.options.comparison && !compact) graphPane.appendChild(sourceControls);
+      this.calculatedToggle=el('input',{type:'checkbox',checked:this._showSources&&this._showCalculated,disabled:!this._showSources,onChange:function(e){self._showCalculated=e.target.checked;self.savePreferences();self._gC=null;self._mainKey=null;app.setState({});}});
+      sourceControls.appendChild(el('label',{title:'Show calculated consumers of visible measures and source fields. Enable table and column references first.'},[this.calculatedToggle,el('span',{text:'Show calculated objects'})]));
+      if (!this.options.comparison) graphPane.appendChild(sourceControls);
+      if (calculation && calculation.contextual.length) graphPane.appendChild(el('p', { cls: 'mv-cap-notice mv-runtime-context', text: calculation.contextual.join(', ') + ' uses the measure in report/query context; it does not identify a fixed measure.' }));
+      if (calculation) calculation.notes.forEach(function (note) { graphPane.appendChild(el('p', { cls: 'mv-cap-notice', text: note })); });
       var graphToolbar = el('div', { cls: 'mv-graph-toolbar', role: 'group', 'aria-label': 'Graph navigation' });
       var graphButton = function (label, title, click) { return el('button', { cls: 'mv-button', text: label, title: title, 'aria-label': title, onClick: click }); };
       this.zoomLabel = graphButton('100%', 'Reset dependency graph zoom to 100%', function () { self.setGraphZoom(1); self.gCenter(); });
@@ -1725,7 +1886,7 @@
     savePreferences: function () {
       if (this.options.comparison) return;
       store.setJSON(PREF_KEY, { libraryCollapsed: this._libraryCollapsed, mode: this._workspaceMode, split: this._splitLayout, splitChosen: !!this._splitChosen, orientation: this._graphOrientation, orientationChosen: !!this._orientationChosen,
-        besideShare: this._splitShares.beside, belowShare: this._splitShares.below, wrap: this._wrapDax, sources: this._showSources, fmt: this._fmt });
+        besideShare: this._splitShares.beside, belowShare: this._splitShares.below, wrap: this._wrapDax, sources: this._showSources, calculated: this._showCalculated, fmt: this._fmt });
     },
     setWorkspaceMode: function (mode, persist) {
       if (mode === 'dax' && this._workspaceMode !== 'dax') this.rememberGraphViewport();
@@ -1851,14 +2012,15 @@
       this._g = G;
       this.gScroll.onmousedown = G.pan;
       this.statEl.textContent = G.stat;
-      this.cappedEl.style.display = G.capped || G.sourcesCapped ? '' : 'none';
-      this.cappedEl.textContent = G.sourcesCapped ? 'Source display limit reached (200 table/column rows). Select a table or column to narrow the analysis.' : '500-measure display limit reached. Select another source or measure to explore omitted branches.';
+      this.cappedEl.style.display = G.capped || G.sourcesCapped || G.calculationsCapped ? '' : 'none';
+      this.cappedEl.textContent = G.calculationsCapped ? 'Calculated-object display limit reached (80 objects / 160 links). Narrow the analysis to explore omitted references.' : G.sourcesCapped ? 'Source display limit reached (200 table/column rows). Select a table or column to narrow the analysis.' : '500-measure display limit reached. Select another source or measure to explore omitted branches.';
       this.expandBtn.style.display = G.canExpand ? '' : 'none';
       this.resetBtn.style.display = G.hasExtra ? '' : 'none';
       this.gCanvasEl.style.cssText = G.canvas + 'transform-origin:0 0;transform:scale(' + (this._gZoom || 1) + ');';
       this.gSvg.setAttribute('width', G.w); this.gSvg.setAttribute('height', G.h);
 
       this.renderSourceCards(G);
+      this.renderCalculatedCards(G);
 
       /* edges — reuse path elements so the CSS d-transition animates on expansion */
       var seenE = {};
@@ -1946,13 +2108,13 @@
         rec.h = N;
         rec.wrap.style.cssText = N.wrapS;
         rec.btn.style.cssText = N.s;
-        rec.btn.textContent = N.name;
+        rec.btn.textContent = N.label || N.name;
         rec.btn.title = N.tip;
         if (self.options.decorateObject) self.options.decorateObject(rec.btn, 'measure', app.model.msrHome[N.name], N.name);
         rec.btn.dataset.smvKind='measure'; rec.btn.dataset.smvTable=app.model.msrHome[N.name]; rec.btn.dataset.smvName=N.name;
-        rec.btn.setAttribute('aria-label', N.name + (rec.btn.dataset.comparisonFocus ? '. Comparison focus ' + rec.btn.dataset.comparisonFocus + '.' : '') + (self.options.comparison ? ' Click to inspect. Enter to replace this focus.' : '. Click or Space to compare. Enter to analyze.'));
+        rec.btn.setAttribute('aria-label', (N.label || N.name) + (rec.btn.dataset.comparisonFocus ? '. Comparison focus ' + rec.btn.dataset.comparisonFocus + '.' : '') + (self.options.comparison ? ' Click to inspect. Enter to replace this focus.' : '. Click or Space to compare. Enter to analyze.'));
         rec.btn.setAttribute('aria-pressed', String(app.state.gPin === N.name));
-        rec.btn.setAttribute('aria-current', String(app.state.selMeasure === N.name));
+        rec.btn.setAttribute('aria-current', String(self.graphRoot() === N.name));
         rec.upBtn.style.cssText = N.upBadgeS; rec.upBtn.textContent = N.upMore; rec.upBtn.title = N.upTip;
         rec.dnBtn.style.cssText = N.dnBadgeS; rec.dnBtn.textContent = N.dnMore; rec.dnBtn.title = N.dnTip;
         rec.upBtn.setAttribute('aria-label', N.upTip + ' for ' + N.name);
@@ -2005,7 +2167,7 @@
         fn: 'color:var(--smv-olive,#0e7490);font-weight:600;', kw: 'color:var(--smv-ink,#334155);font-weight:700;', str: 'color:var(--smv-gold-ink,#b45309);',
         cmt: 'color:var(--smv-muted,#94a0b0);font-style:italic;', num: 'color:var(--smv-ink,#3a414d);', op: 'color:var(--smv-ink,#3a414d);', txt: 'color:var(--smv-ink,#3a414d);' };
       var plain = !!(card.inlined && this._plainDax);
-      var foldKey = [card.name, this._fmt, card.inlined ? 'i' : 'n'].join('|');
+      var foldKey = [card.foldKey || card.name, this._fmt, card.inlined ? 'i' : 'n'].join('|');
       var set = this._folds[foldKey] || (this._folds[foldKey] = {});
       var seen = {}, byFrom = {};
       P.regions.forEach(function (r) {
@@ -2148,13 +2310,13 @@
           title: 'Replace every measure reference with that measure\'s DAX. A reference used in a row context loses its implicit context transition.',
           onClick: function () { self._inlineDax = !self._inlineDax; self._daxKey = null; self.renderDax(); } });
         actions.insertBefore(layout, actions.firstChild);
-        if (this._inlineDax) {
+        if (this._inlineDax && !card.noInline) {
           var plainBtn = el('button', { cls: 'mv-button', text: this.options.comparison ? 'Compact' : 'Plain text', 'aria-pressed': String(!!this._plainDax),
             title: 'Show the full inlined DAX as plain text: no labels, no folding. This is what Copy inlined DAX copies.',
             onClick: function () { self._plainDax = !self._plainDax; self._daxKey = null; self.renderDax(); } });
           actions.insertBefore(plainBtn, layout);
         }
-        actions.insertBefore(inlineBtn, actions.firstChild);
+        if (!card.noInline) actions.insertBefore(inlineBtn, actions.firstChild);
       }
       if (onClose) {
         actions.appendChild(el('button', { cls: 'mv-button mv-button-primary', text: 'Analyze this measure', onClick: function () { self.pickMeasure(card.name); } }));
@@ -2175,6 +2337,7 @@
     },
     referenceData: function (card) {
       var m = this.app.msrOf(card.name), refs;
+      if (card.refs) { refs = Object.assign({}, card.refs); refs.scope = 'Direct references · original formula'; refs.partial = false; return refs; }
       if (card.inlined && this.app.referencesInDax) refs = this.app.referencesInDax(card.text, card.table);
       else refs = { measures: (m._deps || []).slice(), tables: (m._tables || []).slice(),
         columns: (m._cols || []).map(function (g) { return { t: g.t, cs: g.cs.slice() }; }), unresolved: m._unresolved || [] };
@@ -2214,7 +2377,7 @@
       // Build the body before the header: formatting supplies the folding controls.
       var body = this.daxBody(card);
       return el('article', { cls: 'mv-dax-card' + (comparing ? ' mv-comparison-card' : ''),
-        data: { smvKind: 'measure', smvName: card.name, smvTable: card.table } }, [
+        data: { smvKind: card.kind || 'measure', smvName: card.name, smvTable: card.table } }, [
         this.daxHeader(card, label, 'width:8px;height:8px;border-radius:2px;flex:none;background:' + color + ';', close, canInline),
         body, card.warning ? el('p',{cls:'mv-reference-note',role:'status',text:card.warning}) : null, this.referenceSection(card)
       ]);
@@ -2234,13 +2397,14 @@
     renderDax: function () {
       var self = this, app = this.app;
       if (app.state.dependencySource) { this.renderSourceDax(); return; }
-      var sn = app.state.selMeasure;
+      var calculation = this.selectedCalculation(), sn = calculation ? this.graphRoot() : app.state.selMeasure;
       var pinName = app.state.gPin && app.state.gPin !== sn ? app.state.gPin : null;
-      var key = [app.modelKey, sn, pinName || '', this._inlineDax ? 1 : 0, this._plainDax ? 1 : 0, this._fmt, app._usage ? 1 : 0, JSON.stringify(app.state.gExtra || {})].join('|');
+      var key = [app.modelKey, sn, calculation && calculation.scope, pinName || '', this._inlineDax ? 1 : 0, this._plainDax ? 1 : 0, this._fmt, app._usage ? 1 : 0, JSON.stringify(app.state.gExtra || {})].join('|');
       if (key === this._daxKey) return;
       this._daxKey = key;
       U.clear(this.daxGrid);
-      var left = this.daxCard(sn, this._inlineDax);
+      var left = calculation ? this.expressionCard(calculation.name, calculation.table, calculation.text) : this.daxCard(sn, this._inlineDax);
+      if (calculation) Object.assign(left, { refs: calculation.refs, kind: calculation.kind, noInline: true, foldKey: sn + '|' + calculation.scope });
       if (!left) return;
       if (this.options.comparison) {
         this.daxGrid.dataset.inlineComparison = String(!!this._inlineDax);
@@ -2248,7 +2412,7 @@
         this.daxGrid.appendChild(this.formulaCard(inspection, pinName ? 'Inspecting · comparison root remains ' + sn : 'Comparison root', 'var(--smv-burgundy,#1f2430)', pinName ? function(){app.setState({gPin:null});} : null, true, false));
         return;
       }
-      this.daxGrid.appendChild(this.formulaCard(left, 'Analyzed measure', 'var(--smv-burgundy,#1f2430)', null, true, false));
+      this.daxGrid.appendChild(this.formulaCard(left, calculation ? (calculation.scope === 'format' ? 'Dynamic format expression' : calculation.column ? 'Calculated column' : g.TableDax.label(app.model.byName[calculation.table])) : 'Analyzed measure', calculation ? app.tableColor(app.model.byName[calculation.table]) : 'var(--smv-burgundy,#1f2430)', null, true, false));
       var pinCard = pinName ? this.daxCard(pinName) : null;
       this.daxGrid.setAttribute('data-comparing', String(!!pinCard));
       if (pinCard) {

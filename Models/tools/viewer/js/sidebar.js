@@ -178,11 +178,8 @@
     };
 
     var daxBox = function (text, margin) {
-      return el('div', {
-        'data-dax-box': true,
-        style: 'margin:' + margin + ";padding:9px 11px;background:#232836;color:#d8dee9;border-radius:8px;font:400 10.5px/1.55 'IBM Plex Mono',monospace;white-space:pre-wrap;overflow-wrap:anywhere;max-height:260px;overflow:auto;",
-        text: text
-      });
+      var card=app.measures.expressionCard(sel.name,sel.name,text,'original');
+      return el('div', {'data-dax-box':true,cls:'mv-dax-card',style:'margin:'+margin+';max-height:260px;min-height:0;display:block;overflow:auto;'},app.measures.daxBody(card));
     };
     var fxBadge = function (title) {
       return el('span', { title: title, text: 'fx', style: "flex:none;font:700 9px/1 'IBM Plex Mono',monospace;color:var(--smv-plum,#7c2d92);background:#f8f5ff;border:1px solid #e2d8f5;border-radius:4px;padding:2px 4px;" });
@@ -204,6 +201,7 @@
           el('span', { style: "flex:1;min-width:0;font:500 11.5px/1.3 'IBM Plex Mono',monospace;color:var(--smv-plum,#7c2d92);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;", text: ci.name })
         ]));
         if (ci.open) {
+          if(app.tableDax)wrap.appendChild(el('button',{text:'Show DAX calculation',cls:'ex-button',style:'margin:4px 16px 8px 34px;',onClick:function(){app.tableDax.open(sel.name,ci.name);}}));
           wrap.appendChild(daxBox(ci.dax, '2px 16px 8px 34px'));
           if (ci.fmt) {
             wrap.appendChild(el('div', { style: 'margin:0 16px 4px 34px;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:#9aa1ad;font-weight:700;', text: 'Format string' }));
@@ -217,7 +215,8 @@
     if (app.explorer && app.state.viewMode === 'graph') body.appendChild(app.explorer.relationControls());
 
     if (roleSettings) body.appendChild(el('details', {open:true,style:'padding:12px 16px;border-bottom:1px solid #e6ebf2;font-size:11px;color:#66758a;'}, [el('summary',{text:'Table role settings',style:'cursor:pointer;'}),roleSettings]));
-    if (g.PowerQuery) body.appendChild(el('button',{text:'Open Power Query',cls:'ex-button',style:'margin:12px 16px;',onClick:function(){if(app.powerQueryWorkspace)app.powerQueryWorkspace.openTable(sel.name);else app.setViewMode('power-query');}}));
+    if (app.tableDax && app.tableDax.supports(app.model.byName[sel.name])) body.appendChild(el('button',{text:'Show DAX calculation',cls:'ex-button',style:'margin:12px 16px;',onClick:function(){app.tableDax.open(sel.name);}}));
+    else if (g.PowerQuery) body.appendChild(el('button',{text:'Open Power Query',cls:'ex-button',style:'margin:12px 16px;',onClick:function(){if(app.powerQueryWorkspace)app.powerQueryWorkspace.openTable(sel.name);else app.setViewMode('power-query');}}));
     if (sel.hasRels) {
       body.appendChild(sectionTitle('Relationships'));
       sel.rels.forEach(function (rel) {
@@ -297,6 +296,7 @@
         style: c.rowStyle + 'flex:1;min-width:0;text-align:left;border:none;cursor:pointer;box-sizing:border-box;'
       }, rowKids) : el('div', { cls: 'hv-f0f2f5', style: c.rowStyle + 'flex:1;min-width:0;' }, rowKids);
       var wrap = el('div', {}, el('div', { style: 'display:flex;align-items:center;padding-right:8px;' }, [label, trace]));
+      if(c.dax&&app.tableDax)wrap.appendChild(el('button',{text:'Show DAX calculation',cls:'ex-button',style:'margin:4px 16px 6px 34px;',title:'Show DAX calculation for '+sel.name+'['+c.name+']',onClick:function(){app.tableDax.open(sel.name,null,c.name);}}));
       if (c.open && c.dax) wrap.appendChild(daxBox(c.dax, '2px 16px 8px 34px'));
       body.appendChild(wrap);
     });
