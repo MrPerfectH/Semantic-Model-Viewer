@@ -113,7 +113,17 @@
     if(open){var r=this.displayButton.getBoundingClientRect(),win=this.host.ownerDocument.defaultView;this.displayMenu.style.position='fixed';this.displayMenu.style.top=(r.bottom+6)+'px';this.displayMenu.style.right=Math.max(8,win.innerWidth-r.right)+'px';this.displayMenu.style.maxHeight=Math.max(80,win.innerHeight-r.bottom-18)+'px';}
     if(focus){var target=open?this.displayMenu.querySelector('button,select'):this.displayButton;if(target)target.focus({preventScroll:true});}
   };
-  Workspace.prototype.dock=function(){if(!this.alive)return;var rail=this.libraryOpen?this.library.getBoundingClientRect().width:0;this.host.style.setProperty('--pqw-library',rail+'px');var available=this.host.clientWidth-rail;this.below=this.inspectorOpen&&(this.dockPreference==='bottom'||available-this.width<360);this.body.classList.toggle('pqw-below',this.below);this.host.style.setProperty('--pqw-toolbar',Math.max(62,this.toolbar.getBoundingClientRect().height)+'px');this.host.style.setProperty('--pqw-inspector',this.width+'px');this.host.style.setProperty('--pqw-inspector-height',(this.height||400)+'px');this.resizer.setAttribute('aria-orientation',this.below?'horizontal':'vertical');this.resizer.setAttribute('aria-valuenow',String(this.below?(this.height||400):this.width));this.resizer.setAttribute('aria-valuetext',(this.below?'Height ':'Width ')+(this.below?this.height:this.width)+' pixels');if(this.dockSelect)this.dockSelect.value=this.dockPreference||'right';this.inspectorHost.hidden=!this.inspectorOpen;this.resizer.hidden=!this.inspectorOpen;this.syncViewportChrome();};
+  Workspace.prototype.dock=function(){if(!this.alive)return;var rail=this.libraryOpen?this.library.getBoundingClientRect().width:0;this.host.style.setProperty('--pqw-library',rail+'px');var available=this.host.clientWidth-rail;this.below=this.inspectorOpen&&(this.dockPreference==='bottom'||available-this.width<360);this.body.classList.toggle('pqw-below',this.below);this.host.style.setProperty('--pqw-toolbar',Math.max(62,this.toolbar.getBoundingClientRect().height)+'px');this.host.style.setProperty('--pqw-inspector',this.width+'px');this.resizer.setAttribute('aria-orientation',this.below?'horizontal':'vertical');this.resizer.setAttribute('aria-valuemin',this.below?'240':'300');this.resizer.setAttribute('aria-valuenow',String(this.below?this.height:this.width));this.resizer.setAttribute('aria-valuetext',(this.below?'Height ':'Width ')+(this.below?this.height:this.width)+' pixels');if(this.dockSelect)this.dockSelect.value=this.dockPreference||'right';this.inspectorHost.hidden=!this.inspectorOpen;this.resizer.hidden=!this.inspectorOpen;this.syncViewportChrome();};
+  // Constrain the displayed panel, preserving the preferred size for larger windows.
+  Workspace.prototype.sizeBottomInspector=function(){
+    if(!this.below)return;
+    var toolbarHeight=Math.max(62,this.toolbar.getBoundingClientRect().height);
+    var flowHeight=this.viewNotice&&!this.viewNotice.hidden?this.viewNotice.getBoundingClientRect().height:0;
+    var height=Math.max(240,Math.min(this.height||400,(this.body.clientHeight||this.host.clientHeight)-toolbarHeight-flowHeight-320-7));
+    this.host.style.setProperty('--pqw-inspector-height',height+'px');
+    this.resizer.setAttribute('aria-valuenow',String(height));
+    this.resizer.setAttribute('aria-valuetext','Height '+height+' pixels');
+  };
   Workspace.prototype.resizeInspector=function(delta){if(this.below)this.height=Math.max(300,Math.min(650,(this.height||400)+delta));else this.width=Math.max(300,Math.min(650,this.width+delta));this.dock();this.saveInspectorPreference();};
   // Persist only panel geometry; no model identity, query names or M source.
   Workspace.prototype.saveInspectorPreference=function(){try{g.U.store&&g.U.store.setJSON('smv.pq.inspector.v1',{dock:this.dockPreference||'right',width:this.width,height:this.height});}catch(_){}};
@@ -179,6 +189,7 @@
     if(this.zoom)this.zoom.textContent=Math.round(v.k*100)+'%';
     if(this.compactButton)this.compactButton.hidden=!this.visible||this.visible.size>8||this.visible.size<2;
     if(this.viewNotice){var count=this.visible?this.visible.size:0;this.viewNotice.hidden=!this.context;this.viewNotice.textContent=this.viewMode==='flow'?(this.analyzedId?'Flow: '+this.context.byNodeId.get(this.analyzedId).node.label+(this.direction==='consumers'?' · Query → all resolved consumers.':' · All resolved inputs → query.')+' Click to inspect · Double-click or Enter to analyze.':'Choose a query or parameter to analyze its full flow.'):'Canvas · Add or remove queries and arrange your diagram.';if(this.host)this.host.style.setProperty('--pqw-flow-height',(this.viewNotice.hidden?0:this.viewNotice.getBoundingClientRect().height)+'px');}
+    this.sizeBottomInspector();
   };
   Workspace.prototype.restoreViewport=function(viewport){var restored=this.canvas.setViewport(viewport);this.syncViewportChrome();return restored;};
   // Framing is part of the initiating action, never a queued page jump. The

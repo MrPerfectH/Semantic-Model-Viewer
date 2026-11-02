@@ -1091,6 +1091,9 @@
       var self = this, app = this.app;
       if (window.SMVInteractive) window.SMVInteractive.closeLibrary(false);
       this.cancelSnapshotViewport();
+      // An explicit library choice opens on its subject, including reselecting
+      // the same measure after panning. Passive resize keeps the reader's camera.
+      this._gScrolledFor = null;
       app.setState({ selMeasure: n, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvOpen: app.mvOpenFor(n), gExtra: {}, gHover: null, gPin: null });
     },
     gCenter: function () {

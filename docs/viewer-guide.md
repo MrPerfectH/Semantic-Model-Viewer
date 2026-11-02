@@ -245,3 +245,28 @@ bracket names resolve to measures first, then columns in the measure's home tabl
 row-context references outside that table and virtual columns are not fully resolved.
 Graphs are limited to 500 measures and 200 source table/column rows, with visible notices;
 dependent-measure lists show up to 120 matches at once and can be narrowed by search.
+
+
+### Keyboard navigation and sharing
+
+Use **Skip to table library** to reach the library without tabbing through every
+canvas card. Relationship glyphs form one Tab stop: use arrow keys to move
+between them, Enter or Space to inspect, and Escape to close details. Pointer
+selection chooses the nearest visible relationship; repeated clicks at an exact
+overlap cycle through the tied relationships. Separate parallel relationships
+retain their own details.
+
+The import dialog keeps keyboard focus inside it and Escape closes it, returning
+focus to its opener. Help is available from the toolbar. On narrow screens,
+Measures switches between **Library** and the reader; choosing a measure opens
+its analysis. Desktop library preferences are retained when the window narrows.
+
+A dense Tables overview may show a routing-limit notice: all relationships remain
+present, but some routes may cross other cards. Focus on a table for a clearer
+local view. Power Query opens its inventory before expensive overview routing;
+choose a query to inspect its focused flow when a full overview is deferred.
+
+PNG exports omit transient tooltips, relationship popovers and routing notices.
+Interactive snapshots include the captured model metadata, expressions and
+source endpoints described in **Snapshot contents**. The selected view is not
+a redaction filter; review that disclosure before sharing.

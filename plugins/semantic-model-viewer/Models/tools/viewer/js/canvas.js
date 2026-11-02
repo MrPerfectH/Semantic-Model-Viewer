@@ -1161,7 +1161,7 @@
         // Deterministic operation bounds across the complete render, not a timer
         // that makes geometry depend on machine load. Keep the simple route when
         // a dense overview exhausts this optional obstacle-avoidance refinement.
-        if (++visits > 4096 || this._routeSearchRemaining <= 0) { this._routingLimited = true; return null; }
+        if (++visits > 16384 || this._routeSearchRemaining <= 0) { this._routingLimited = true; return null; }
         if (Number.isFinite(this._routeSearchRemaining)) this._routeSearchRemaining--;
         var current = pop(), id = current.id;
         if (current.cost !== dist.get(id)) continue;
@@ -1381,7 +1381,7 @@
         if (item && item.highlight) item.highlight();
       }
       if (item) {
-        this.showTip(this.relTip(item.r) + '<br><span style="color:#8b93a2">Click for details · repeated clicks cycle overlapping lines</span>', event);
+        this.showTip(this.relTip(item.r) + '<br><span style="color:#8b93a2">Click for relationship details</span>', event);
       }
     },
     renderLines: function () {
@@ -1431,6 +1431,11 @@
         });
       }
       var rects = this.cardRects();
+      // Each search expansion scans the obstacles. Give smaller models more
+      // refinement within a bounded obstacle-work allowance, rather than spending
+      // the same tiny expansion count on both the demo and a dense stress model.
+      this._routeSearchLimit = Math.min(192000, Math.max(24000, Math.floor(7680000 / Math.max(1, rects.length))));
+      this._routeSearchRemaining = this._routeSearchLimit;
       var placed = [];
       vis.forEach(function (item) {
         var r = item.r, kind = item.k;

@@ -933,7 +933,7 @@
         var vm = self.state.viewMode;
         var host = vm === 'matrix' ? (self.matrix.el ? (self.matrix.el.firstElementChild || self.matrix.el) : null)
           : (vm === 'measures' ? document.querySelector('#measures .mv-workspace') : self.canvas.host);
-        return h2i.toPng(host, { pixelRatio: 2, style: { position: 'relative', left: '0', top: '0', right: 'auto', bottom: 'auto', margin: '0' }, backgroundColor: g.ViewerTheme && g.ViewerTheme.get() === 'spellbook' ? '#f7efdf' : '#f4f5f7', filter: function (n) { return n !== self.canvas.tip && !(n.nodeType === 1 && window.getComputedStyle(n).display === 'none'); } });
+        return h2i.toPng(host, { pixelRatio: 2, style: { position: 'relative', left: '0', top: '0', right: 'auto', bottom: 'auto', margin: '0' }, backgroundColor: g.ViewerTheme && g.ViewerTheme.get() === 'spellbook' ? '#f7efdf' : '#f4f5f7', filter: function (n) { return n !== self.canvas.tip && n !== self.canvas._routeNotice && n !== self.canvas.relPop && !(n.nodeType === 1 && ((n.hasAttribute && n.hasAttribute('data-canvas-overlay')) || window.getComputedStyle(n).display === 'none')); } });
       }).then(function (url) {
         var a = document.createElement('a');
         a.href = url; a.download = (self.state.modelName || 'model') + ' diagram.png';

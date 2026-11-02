@@ -2,7 +2,7 @@
 
 Implementation tracker: [#203](https://github.com/MrPerfectH/Semantic-Model-Viewer/issues/203). Branch: `fix/audit-improvements-20261102`, based on fetched develop `dc3505145a49d06eeede34f4a7a4a1413a4aa10d`. Integration commit `408ed39` preserves the existing Reference and calculated-object work. The original dirty `wip/model-reference` checkout is retained; its patch, untracked source copies and hashes are under `/home/harry/Reports/smv-implementation-2026-11-02/baseline/`.
 
-This branch is for user review, not merged or released. Targeted implementation evidence below is distinct from the final gate and independent review, which are still in progress.
+This branch is for user review, not merged or released. Implementation and independent Fable acceptance review are complete. The post-review corrections and final verification are recorded in [review resolution](review-resolution.md). User acceptance and host-specific checks remain separate.
 
 | Task | Implemented scope | Verification / remaining scope |
 |---|---|---|
@@ -55,3 +55,11 @@ Query snapshots. Actual standalone `file://` snapshot navigation/re-export runs 
 network access blocked; this is stronger than an HTTP-only reopen. Evidence:
 `browser-gate-release-candidate.log`. Live UI verification matrices, exported PNGs
 and manual keyboard actions remain separately documented in the evidence reports.
+
+## Final review disposition
+
+Independent Fable acceptance review reported no blockers. Its three medium and four
+low findings are addressed in [review resolution](review-resolution.md). Final broad
+gates:967passed/3skipped/0failed canonical,51passed/0failed browser. The final ARIA
+minimum refinement has separate targeted unit and UI browser reruns. Research and
+platform-specific acceptance remain explicit; no merge or release is authorized.

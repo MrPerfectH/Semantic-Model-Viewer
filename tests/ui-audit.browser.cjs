@@ -75,6 +75,29 @@ test('UI audit: refresh context, host contrast, matrix and short-height scrollin
   await waitFor(()=>browser.evaluate('app.powerQueryWorkspace.phase==="ready"&&!app.powerQueryWorkspace.pendingSnapshot&&!!app.powerQueryWorkspace.selectedId'),'inactive refresh restore');
   assert.equal(await browser.evaluate('app.powerQueryWorkspace.selectedId'),before.id);
  });
+ await t.test('bottom query inspector fits a desktop viewport and retains preferred height',async()=>{
+  for(const width of [1440,1024]){
+   await browser.send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
+   await browser.evaluate("(()=>{app.setViewMode('power-query');const w=app.powerQueryWorkspace;w.navigate(w.analyzedId);w.setDockPreference('bottom');})()");
+   await browser.evaluate('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+   const box=await browser.evaluate(`(()=>{const w=app.powerQueryWorkspace;return {client:w.body.clientHeight,scroll:w.body.scrollHeight,bottom:w.inspectorHost.getBoundingClientRect().bottom,preferred:w.height,min:Number(w.resizer.getAttribute('aria-valuemin')),now:Number(w.resizer.getAttribute('aria-valuenow'))};})()`);
+   assert.ok(box.scroll<=box.client+1,JSON.stringify(box));assert.ok(box.bottom<=900,JSON.stringify(box));assert.equal(box.preferred,400);assert.ok(box.now>=box.min,JSON.stringify(box));
+  }
+ });
+ await t.test('explicit narrow measure re-selection restores the subject after panning',async()=>{
+  await browser.send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:false});
+  await browser.evaluate("app.setViewMode('measures');app.measures.pickMeasure('Total Sales')");
+  await browser.evaluate('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+  await browser.evaluate("app.measures.gScroll.scrollTop=310;app.measures.setLibraryCollapsed(false,true);app.measures.pickMeasure('Total Sales')");
+  await browser.evaluate('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+  const rect=await browser.evaluate(`(()=>{const m=app.measures,p=m.gScroll.getBoundingClientRect(),n=m._nodeEls['Total Sales'].btn.getBoundingClientRect();return {top:n.top,bottom:n.bottom,pTop:p.top,pBottom:p.bottom};})()`);
+  assert.ok(rect.top>=rect.pTop&&rect.bottom<=rect.pBottom,JSON.stringify(rect));
+  await browser.send('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});
+ });
+ await t.test('demo Show all routes remain finite without exhausting refinement',async()=>{
+  const r=await browser.evaluate(`(()=>{app.setViewMode('graph');app.explorer.showAll();app.canvas.fitView();const c=app.canvas;return {limited:c._routingLimited,remaining:c._routeSearchRemaining,paths:[...c.svg.querySelectorAll('path')].map(p=>p.getAttribute('d'))};})()`);
+  assert.equal(r.limited,false);assert.ok(r.remaining>0);assert.ok(r.paths.length>=68);assert.ok(r.paths.every(d=>d&&!/NaN|Infinity/.test(d)));
+ });
  await t.test('colours, legend, map and saved view survive navigation and model reopen',async()=>{
   const before=await browser.evaluate(`(()=>{app.setViewMode('graph');app.canvas.selectTable('Sales');app.canvas.setColorMode('domain');app.editGroupColours();const dialog=document.querySelector('.smv-colour-dialog'),picker=dialog.querySelector('input[type=color]');picker.value='#ffff99';picker.dispatchEvent(new Event('input',{bubbles:true}));[...dialog.querySelectorAll('button')].find(b=>b.textContent==='Apply colours').click();
    document.querySelector('input[aria-label="Legend"]').click();document.querySelector('input[aria-label="Overview map"]').click();
