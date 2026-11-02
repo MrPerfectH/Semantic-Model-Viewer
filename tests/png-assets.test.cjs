@@ -1,0 +1,19 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto');
+const root=path.resolve(__dirname,'..'),dir=path.join(root,'Models/tools/viewer');
+function fixture(){const scripts=[];const c={Promise,console,U:{},document:{createElement:()=>({remove(){}}),head:{appendChild:s=>scripts.push(s)}},addEventListener(){}};c.window=c;vm.createContext(c);const source=fs.readFileSync(path.join(dir,'js/app.js'),'utf8').replace("  window.addEventListener('DOMContentLoaded'", "  g.TestApp = App;\n  window.addEventListener('DOMContentLoaded'");vm.runInContext(source,c);return {c,scripts,app:Object.create(c.TestApp.prototype)};}
+test('PNG library loads from local pinned asset once and failed load can retry',async()=>{const {c,scripts,app}=fixture();const p=app.loadHtmlToImage();assert.equal(app.loadHtmlToImage(),p);assert.equal(scripts.length,1);assert.equal(scripts[0].src,'js/vendor/html-to-image-1.11.11/html-to-image.js');scripts[0].onerror();await assert.rejects(p,/Bundled/);const retry=app.loadHtmlToImage();assert.equal(scripts.length,2);c.htmlToImage={toPng(){}};scripts[1].onload();assert.equal(await retry,c.htmlToImage);});
+test('vendored JS hash, MIT license and offline shell entry stay in sync',()=>{const vendor=path.join(dir,'js/vendor/html-to-image-1.11.11'),manifest=JSON.parse(fs.readFileSync(path.join(vendor,'provenance.json')));for(const [name,hash]of Object.entries(manifest.sha256))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(vendor,name))).digest('hex'),hash);assert.match(fs.readFileSync(path.join(vendor,'LICENSE'),'utf8'),/MIT License/);assert.match(fs.readFileSync(path.join(dir,'sw.js'),'utf8'),/js\/vendor\/html-to-image-1\.11\.11\/html-to-image\.js/);assert.ok(require('../package.json').files.includes('Models/tools/viewer/js/'));});
+test('PNG filter excludes hidden subtrees and tooltip while retaining SVG and text',async()=>{const {c,app}=fixture();let filter;const element={nodeType:1},svg={nodeType:1},hidden={nodeType:1},text={nodeType:3},tip={nodeType:1};c.getComputedStyle=n=>({display:n===hidden?'none':'block'});app.canvas={host:element,tip};app.state={viewMode:'graph'};app.setState=()=>{};app.loadHtmlToImage=()=>Promise.resolve({toPng(_host,options){filter=options.filter;assert.equal(options.style.position,'relative');assert.equal(options.style.left,'0');assert.equal(options.style.top,'0');return new Promise(()=>{});}});app.exportPNG();await Promise.resolve();assert.equal(filter(hidden),false);assert.equal(filter(tip),false);assert.equal(filter(element),true);assert.equal(filter(svg),true);assert.equal(filter(text),true);});
+test('measure export captures sized workspace rather than zero-height wrapper',async()=>{const {c,app}=fixture();const workspace={};c.document.querySelector=selector=>{assert.equal(selector,'#measures .mv-workspace');return workspace;};app.state={viewMode:'measures'};app.canvas={};app.setState=()=>{};let captured;app.loadHtmlToImage=()=>Promise.resolve({toPng(host){captured=host;return new Promise(()=>{});}});app.exportPNG();await Promise.resolve();assert.equal(captured,workspace);});
+
+test('packaged CLI engine includes the lazy PNG runtime and its license',()=>{
+ const os=require('node:os');const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'smv-png-engine-'));
+ try{
+  const files=require('../scripts/sync-engine.cjs').sync(tmp);
+  for(const name of ['html-to-image.js','LICENSE']){
+   const relative='Models/tools/viewer/js/vendor/html-to-image-1.11.11/'+name;
+   assert.ok(files.includes(relative),relative);
+   assert.ok(fs.readFileSync(path.join(tmp,relative)).equals(fs.readFileSync(path.join(root,relative))));
+  }
+ }finally{fs.rmSync(tmp,{recursive:true,force:true});}
+});

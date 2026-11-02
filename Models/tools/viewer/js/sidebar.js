@@ -22,7 +22,7 @@
       var fromCard = r.fromCard === 'one' ? '1' : '*', toCard = r.toCard === 'many' ? '*' : '1';
       var card = out ? fromCard + ' : ' + toCard : toCard + ' : ' + fromCard;
       rels.push({
-        other: other, dir: r.both ? '⇄' : (out ? '←' : '→'), join: join, card: card,
+        key: sel + '|' + model.relationships.indexOf(r), other: other, dir: r.both ? '⇄' : (out ? '←' : '→'), join: join, card: card,
         rowStyle: 'display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:8px 16px;border:none;background:transparent;cursor:pointer;' + (r.inactive ? 'opacity:.55;' : ''),
         dirStyle: 'width:24px;height:24px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;background:' + (out ? 'var(--smv-down,#2563eb)' : 'var(--smv-up,#0d9488)') + ';',
         go: function () { app.focusTable(other); },
@@ -92,6 +92,8 @@
         app.model.byName[app.state.selected] ? app.model.byName[app.state.selected].role : '', JSON.stringify(app.state.roleSave), !!app.roleRepo(), JSON.stringify(app.state.calcOpen || {})].join('|')
       : null;
     if (key === this._key && (key || !this.host.firstChild)) return;
+    var active = document.activeElement;
+    var restoreAction = active && this.host.contains(active) && active.getAttribute('data-sidebar-action');
     this._key = key;
     U.clear(this.host);
     if (!key) return;
@@ -220,15 +222,16 @@
     if (sel.hasRels) {
       body.appendChild(sectionTitle('Relationships'));
       sel.rels.forEach(function (rel) {
-        body.appendChild(el('button', { cls: 'hv-f5f7f9', title: 'Show this relationship on the graph', style: rel.rowStyle + (rel.isSel ? 'background:#eef0f3;' : ''), onClick: rel.pick }, [
+        body.appendChild(el('div', { cls: 'smv-relationship-row', style: rel.rowStyle + (rel.isSel ? 'background:#eef0f3;' : '') }, [
+          el('button', { cls: 'hv-f5f7f9 smv-relationship-select', 'data-sidebar-action': rel.key + '|select', title: 'Show this relationship on the graph', onClick: rel.pick, style: 'display:flex;align-items:center;gap:8px;flex:1;min-width:0;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;' }, [
           el('span', { style: rel.dirStyle, text: rel.dir }),
           el('span', { style: 'flex:1;min-width:0;' }, [
             el('span', { style: 'display:block;font-size:12.5px;font-weight:600;color:#1f2430;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', text: rel.other }),
             el('span', { style: "display:block;font-size:10px;font-family:'IBM Plex Mono',monospace;color:#8b92a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;", text: rel.join })
           ]),
-          el('span', { style: "font:600 9.5px/1 'IBM Plex Mono',monospace;color:#6b7280;background:#eef1f4;border-radius:5px;padding:4px 6px;flex:none;", text: rel.card }),
-          el('span', {
-            cls: 'hv-blue-bc', title: 'Go to ' + rel.other, html: U.icon('chevRight', 12, 'currentColor'),
+          el('span', { style: "font:600 9.5px/1 'IBM Plex Mono',monospace;color:#6b7280;background:#eef1f4;border-radius:5px;padding:4px 6px;flex:none;", text: rel.card })]),
+          el('button', {
+            cls: 'hv-blue-bc', 'data-sidebar-action': rel.key + '|navigate', 'aria-label': 'Go to ' + rel.other, title: 'Go to ' + rel.other, html: U.icon('chevRight', 12, 'currentColor'),
             onClick: function (e) { e.stopPropagation(); rel.go(); },
             style: 'flex:none;width:22px;height:22px;border:1px solid #dce0e6;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#7a828f;'
           })
@@ -305,6 +308,10 @@
       'data-canvas-overlay': true,
       style: 'position:absolute;top:0;right:0;bottom:0;width:330px;z-index:50;background:#fff;border-left:1px solid #e3e6ea;box-shadow:-8px 0 24px rgba(20,30,50,.08);display:flex;flex-direction:column;'
     }, [head, body]));
+    if (restoreAction) {
+      var replacement = Array.from(this.host.querySelectorAll('[data-sidebar-action]')).find(function (node) { return node.getAttribute('data-sidebar-action') === restoreAction; });
+      if (replacement) replacement.focus({ preventScroll: true });
+    }
     this._focusMsr = false;
   };
 

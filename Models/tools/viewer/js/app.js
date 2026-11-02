@@ -71,6 +71,7 @@
       if (ref.name === null) {
         var whole = names.tables.get(ref.table.toLowerCase());
         if (whole) tables.add(whole);
+        else if (ref.quoted) unresolved.push(ref);
         return;
       }
       var measure, table;
@@ -496,10 +497,11 @@
       var overrides = store.getJSON('smv_role_overrides_v1', {})[key] || {};
       model.tables.forEach(function (t) {
         if (t.baseRole == null) t.baseRole = t.role;
-        if (R.STRUCTURAL[t.baseRole]) { t.role = t.autoRole = t.baseRole; t.roleVia = 'structural'; return; }
+        if (Object.prototype.hasOwnProperty.call(R.STRUCTURAL,t.baseRole)) { t.role = t.autoRole = t.baseRole; t.roleVia = 'structural'; return; }
         var c = R.classify(R.sigOf(t, sides), rules, t.ann);
         t.autoRole = c.role; t.roleVia = c.via;
-        t.role = key.indexOf('repo:') === 0 ? c.role : (overrides[t.name] || c.role);
+        var override=Object.prototype.hasOwnProperty.call(overrides,t.name) && R.ROLES.indexOf(overrides[t.name])>=0 ? overrides[t.name] : null;
+        t.role = key.indexOf('repo:') === 0 ? c.role : (override || c.role);
       });
     },
     shortType: function (dt) {
@@ -530,17 +532,57 @@
       return saved;
     },
 
+    // Check selection storage before replacing records. If record persistence fails,
+    // restore the previous selection; the usable in-memory model is still untouched.
+    saveAdoption: function (records, key) {
+      var previous = store.get('smv_current_v1', null);
+      if (store.set('smv_current_v1', key) === false) return false;
+      if (this.setStore(records)) return true;
+      if (previous === null) store.del('smv_current_v1');
+      else store.set('smv_current_v1', previous);
+      return false;
+    },
+
+    /* Validate a private candidate before changing stored records or active UI state.
+       Preparation normally also updates colour caches; the probe deliberately does not. */
+    validateCandidate: function (model) {
+      var candidate = JSON.parse(JSON.stringify(model));
+      var probe = Object.create(this);
+      probe.rebuildColorMaps = function () {};
+      probe.prepareModel(candidate);
+      return candidate;
+    },
     prepareModel: function (model) {
       var self = this;
-      model.byName = {};
+      if (!model || !Array.isArray(model.tables)) throw new Error('A model must contain a tables array.');
+      var names = new Set();
+      model.tables.forEach(function (t) {
+        if (!t || typeof t.name !== 'string' || !t.name.trim()) throw new Error('Every table must have a name.');
+        if (names.has(t.name.toLowerCase())) throw new Error('Duplicate table name: ' + t.name);
+        names.add(t.name.toLowerCase());
+        ['columns', 'measures'].forEach(function (kind) {
+          if (t[kind] != null && !Array.isArray(t[kind])) throw new Error(t.name + ': ' + kind + ' must be an array.');
+          (t[kind] || []).forEach(function (item) { if (!item || typeof item.name !== 'string') throw new Error(t.name + ': invalid ' + kind + ' entry.'); });
+        });
+      });
+      if (model.relationships != null && !Array.isArray(model.relationships)) throw new Error('Relationships must be an array.');
+      model.byName = Object.create(null);
       model.tables.forEach(function (t) {
         model.byName[t.name] = t;
         t.columns = t.columns || []; t.measures = t.measures || [];
         if (t.colCount == null) t.colCount = t.columns.length;
         if (t.measureCount == null) t.measureCount = t.measures.length;
       });
-      model.relationships = (model.relationships || []).filter(function (r) { return model.byName[r.from] && model.byName[r.to]; });
-      var rc = {};
+      var relationshipValidation = g.TMDLParser.validateRelationships(model.tables, model.relationships || [], {checkColumns:false});
+      var priorDiagnostics = model.relationshipDiagnostics;
+      model.relationships = relationshipValidation.relationships;
+      model.relationshipDiagnostics = relationshipValidation.diagnostics;
+      if (priorDiagnostics && Array.isArray(priorDiagnostics.issues) && priorDiagnostics.rejected > 0) {
+        model.relationshipDiagnostics.issues = priorDiagnostics.issues.filter(function (issue) { return issue && typeof issue.name === 'string' && typeof issue.reason === 'string'; }).map(function (issue) { return {name:issue.name,reason:issue.reason}; }).concat(model.relationshipDiagnostics.issues);
+        model.relationshipDiagnostics.rejected = model.relationshipDiagnostics.issues.length;
+        model.relationshipDiagnostics.total = model.relationshipDiagnostics.accepted + model.relationshipDiagnostics.rejected;
+      }
+      var rc = Object.create(null);
       model.relationships.forEach(function (r) {
         rc[r.from] = (rc[r.from] || 0) + 1; rc[r.to] = (rc[r.to] || 0) + 1;
         var fc = model.byName[r.from].columns.find(function (c) { return c.name === r.fromCol; }); if (fc) fc.rel = true;
@@ -548,7 +590,7 @@
       });
       model.tables.forEach(function (t) { t.relCount = rc[t.name] || 0; });
       // DAX identifiers are case-insensitive; resolve qualified measures before columns.
-      var msrHome = {}, measureNames = new Map(), tableNames = new Map(), tableMeasures = new Map();
+      var msrHome = Object.create(null), measureNames = new Map(), tableNames = new Map(), tableMeasures = new Map();
       model.tables.forEach(function (t) {
         tableNames.set(t.name.toLowerCase(), t.name);
         var names = new Map(); tableMeasures.set(t.name, names);
@@ -562,7 +604,7 @@
         });
       });
       model._referenceNames = { measures: measureNames, tables: tableNames, tableMeasures: tableMeasures };
-      var usedBy = {}, tableUsers = new Map(), columnUsers = new Map();
+      var usedBy = Object.create(null), tableUsers = new Map(), columnUsers = new Map();
       var addUser = function (index, key, name) { if (!index.has(key)) index.set(key, new Set()); index.get(key).add(name); };
       model.tables.forEach(function (t) {
         t.measures.forEach(function (m) {
@@ -617,10 +659,12 @@
     _applyModel: function (model, name, key, opts) {
       opts = opts || {};
       var self = this;
+      this.validateCandidate(model);
+      if (opts.persist !== false && store.set('smv_current_v1', key) === false) throw new Error('Could not remember the selected model. Free browser storage and retry.');
       this.modelKey = key;
       this.canvas.setLayoutKey(key === 'builtin' ? 'lsa_model_layout_v1' : 'smv_layout_' + (key || 'none'));
       this._usage = null; this._usageMeta = null;
-      if (opts.persist !== false) store.set('smv_current_v1', key);
+      this._snapshotRequest = (this._snapshotRequest || 0) + 1;
       this.prepareModel(model);
       this.applyRoles(model, key);
       if(this.powerQueryWorkspace)this.powerQueryWorkspace.reset(); if(g.PowerQuery)g.PowerQuery.close(this);
@@ -635,7 +679,7 @@
       if(this.reference)this.reference.restoreSnapshot();
       this.matrix._key = null; this.sidebar._key = null;
       var state = {
-        snapshotMessage: '', snapshotError: '', loaded: true, allExpanded: false, modelName: name, selected: null, activeFilter: null, search: '',
+        snapshotMessage: '', snapshotError: '', snapshotSaving: false, loaded: true, allExpanded: false, modelName: name, selected: null, activeFilter: null, search: '',
         isolate: false, showModelMenu: !!opts.showModelMenu, msrQuery: '', expandedMeasure: null, calcOpen: {},
         selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvSourceQuery: '', mvSourceOpen: {}, mvImpactQuery: '', mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, viewMode: 'graph',
         showRules: false
@@ -652,7 +696,7 @@
       this._applyModel({ name: '', tables: [], relationships: [] }, 'Choose a model', null, { persist: false, showModelMenu: false });
     },
 
-    loadModel: function (key) {
+    loadModel: function (key, options) {
       if (this.snapshotMode) return Promise.resolve();
       if (this.fabric && /^fabric:/.test(key)) {
         var cachedFabric = this.getStore().find(function (r) { return r.id === key && r.source && r.source.kind === 'fabric'; });
@@ -676,7 +720,11 @@
             self.render();
           }).catch(function () { });
         }
-        self._applyModel(model, name, key, {});
+        try { self._applyModel(model, name, key, options || {}); }
+        catch (error) {
+          if (!self.state.loaded) self.loadEmptyModel();
+          self.setState({ repoError: 'The model could not be opened: ' + (error.message || error) + '. Choose another model or import a corrected copy.' });
+        }
       };
 
       if (key !== 'builtin') {
@@ -709,14 +757,14 @@
     /* The VS Code host supplies files; the core parser, canvas and measures stay shared. */
     hostOpenModel: function (record) {
       if (!record || !record.model || !Array.isArray(record.model.tables)) throw new Error('The selected model could not be read.');
+      this.validateCandidate(record.model);
       if (record.source && record.source.kind === 'fabric') {
         if (!g.FabricConnection) throw new Error('Fabric metadata support is unavailable. Reload the viewer.');
         var source = g.FabricConnection.sourceOf(record.source);
         var cached = { id: g.FabricConnection.key(source), name: record.name || record.model.name || 'Semantic model', at: Date.now(), source: source, model: JSON.parse(JSON.stringify(record.model)) };
         var records = this.getStore().filter(function (r) { return r.id !== cached.id; }); records.push(cached);
-        if (!this.setStore(records)) throw new Error('Could not cache this Fabric model. Free local storage and try again. Your current model is unchanged.');
+        if (!this.saveAdoption(records, cached.id)) throw new Error('Could not cache this Fabric model. Free local storage and try again. Your current model is unchanged.');
         record = cached;
-        store.set('smv_current_v1', record.id);
       }
       var self = this, same = this.state.loaded && record.id === this.modelKey;
       var saved = same ? { table: this.captureTableView(), measures: this.measures.captureSnapshot(),
@@ -728,6 +776,7 @@
       this.state.viewMode = 'graph';
       this.modelKey = record.id; this.canvas.setLayoutKey('smv_layout_' + record.id);
       this._usage = null; this._usageMeta = null;
+      this._snapshotRequest = (this._snapshotRequest || 0) + 1;
       this.prepareModel(model); this.applyRoles(model, record.id); if(this.powerQueryWorkspace)this.powerQueryWorkspace.reset(); if(g.PowerQuery)g.PowerQuery.close(this); this.model = model;
       this._tableWorkspace = null; this._tableViewport = null; this._domainWorkspace = null; this._matrixWorkspace = null;
       if (this.explorer) this.explorer.loadModel();
@@ -737,7 +786,7 @@
       cv.computeLayout(); this.measures._gC = null; this.measures._railKey = null; this.measures._mainKey = null; this.measures._daxKey = null;
       if(this.reference)this.reference.restoreSnapshot();
       this.matrix._key = null; this.sidebar._key = null;
-      this.setState({ snapshotMessage: '', snapshotError: '', loaded: true, modelName: record.name || model.name || 'Semantic model', viewMode: 'graph',
+      this.setState({ snapshotMessage: '', snapshotError: '', snapshotSaving: false, loaded: true, modelName: record.name || model.name || 'Semantic model', viewMode: 'graph',
         allExpanded: false, selected: null, activeFilter: null, search: '', isolate: false, showModelMenu: false,
         selMeasure: null, dependencySource: null, mvSourceMode: 'measures', mvSourcePicking: false, mvSourceQuery: '', mvSourceOpen: {}, mvImpactQuery: '', mvQuery: '', mvOpen: {}, gExtra: {}, gPin: null, gHover: null, showRules: false, repoError: '' }, function () {
         cv.build(); cv.fitView();
@@ -841,7 +890,8 @@
       if (was === 'matrix') this._matrixWorkspace = this.captureMatrix();
       if (was === 'clusters' && this.canvas.clusterOn) this._domainWorkspace = this.captureDomains();
       if (m === was) return;
-      this.setState({ viewMode: m }, function () {
+      if (this.canvas.hideTip) this.canvas.hideTip();
+      this.setState({ viewMode: m, snapshotMessage: '' }, function () {
         if (self.canvas.clusterOn && m !== 'clusters') { self._domainWorkspace = self.captureDomains(); self.canvas.exitClusters(); self.restoreTableView(); }
         if (m === 'clusters') {
           if (self.snapshotMode && self._domainWorkspace) self.restoreDomains(self._domainWorkspace);
@@ -860,13 +910,17 @@
     loadHtmlToImage: function () {
       if (window.htmlToImage) return Promise.resolve(window.htmlToImage);
       if (this._h2iP) return this._h2iP;
+      var self = this;
       this._h2iP = new Promise(function (res, rej) {
         var s = document.createElement('script');
-        s.src = 'https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.js';
-        s.onload = function () { res(window.htmlToImage); };
-        s.onerror = function () { rej(new Error('load failed')); };
+        s.src = 'js/vendor/html-to-image-1.11.11/html-to-image.js';
+        s.onload = function () {
+          if (window.htmlToImage && typeof window.htmlToImage.toPng === 'function') res(window.htmlToImage);
+          else rej(new Error('Bundled PNG library is unavailable'));
+        };
+        s.onerror = function () { s.remove(); rej(new Error('Bundled PNG library failed to load')); };
         document.head.appendChild(s);
-      });
+      }).catch(function (error) { self._h2iP = null; throw error; });
       return this._h2iP;
     },
     exportPNG: function () {
@@ -878,8 +932,8 @@
       this.loadHtmlToImage().then(function (h2i) {
         var vm = self.state.viewMode;
         var host = vm === 'matrix' ? (self.matrix.el ? (self.matrix.el.firstElementChild || self.matrix.el) : null)
-          : (vm === 'measures' ? document.getElementById('measures') : self.canvas.host);
-        return h2i.toPng(host, { pixelRatio: 2, backgroundColor: g.ViewerTheme && g.ViewerTheme.get() === 'spellbook' ? '#f7efdf' : '#f4f5f7', filter: function (n) { return n !== self.canvas.tip; } });
+          : (vm === 'measures' ? document.querySelector('#measures .mv-workspace') : self.canvas.host);
+        return h2i.toPng(host, { pixelRatio: 2, style: { position: 'relative', left: '0', top: '0', right: 'auto', bottom: 'auto', margin: '0' }, backgroundColor: g.ViewerTheme && g.ViewerTheme.get() === 'spellbook' ? '#f7efdf' : '#f4f5f7', filter: function (n) { return n !== self.canvas.tip && !(n.nodeType === 1 && window.getComputedStyle(n).display === 'none'); } });
       }).then(function (url) {
         var a = document.createElement('a');
         a.href = url; a.download = (self.state.modelName || 'model') + ' diagram.png';
@@ -887,7 +941,7 @@
         done();
       }).catch(function (e) {
         console.error(e);
-        alert('The image library failed to load — check your connection and reload.');
+        alert('PNG export failed. Reload the viewer and try again; if it persists, reinstall or rebuild the viewer assets.');
         done();
       });
     },
@@ -961,31 +1015,37 @@
       }
       if (!files.length) { this.setState({ importError: 'No .tmdl / .bim / .json files found in the selection. Choose the PBIP project folder or its *.SemanticModel folder, or export model.bim. A .pbix file cannot be opened directly.', importReady: false }); return; }
       // a repo folder was dropped: group files by *.SemanticModel folder
-      var byModel = {};
+      var byModel = Object.create(null);
       files.forEach(function (f) {
         var m = String(f.path || '').match(/(^|.*?\/)([^\/]+)\.SemanticModel(\/|$)/i);
         if (m) { var k = (m[1] || '') + m[2]; (byModel[k] = byModel[k] || []).push(f); }
       });
       var keys = Object.keys(byModel);
       if (keys.length > 1) {
-        var st = this.getStore(); var opened = null, ok = 0; var bad = [];
+        var st = this.getStore(); var opened = null, ok = 0; var bad = [], importedIds = [];
         keys.forEach(function (k) {
           var nm = k.split('/').pop();
           try {
             var mod = window.TMDLParser.parseAny(byModel[k]);
+            self.validateCandidate(mod);
             var id = 'repo:' + k + '.SemanticModel';
             var idx = st.findIndex(function (m) { return m.id === id; }); if (idx >= 0) st.splice(idx, 1);
             st.push({ id: id, name: nm, at: Date.now(), repo: true, model: mod });
-            if (srcHandle) self._idbSet('src:' + id, srcHandle).catch(function () { });
-            if (srcPath) store.set('smv_src_' + id, srcPath);
+            importedIds.push(id);
             ok++; if (!opened) opened = id;
           } catch (err) { bad.push(nm); }
         });
-        if (ok && !this.setStore(st)) {
+        if (ok && !this.saveAdoption(st, opened)) {
           this.setState({ importError: 'Could not save the imported models in this browser. Free browser storage and try again. Your current model is unchanged.', importReady: false });
           return;
         }
-        if (ok) { this.setState({ showImport: false, importReady: false, importError: '' }); this.loadModel(opened); }
+        if (ok) {
+          importedIds.forEach(function (id) {
+            if (srcHandle) self._idbSet('src:' + id, srcHandle).catch(function () {});
+            if (srcPath) store.set('smv_src_' + id, srcPath);
+          });
+          this.setState({ showImport: false, importReady: false, importError: '' }); this.loadModel(opened, { persist: false });
+        }
         else this.setState({ importError: 'Found ' + keys.length + ' models but none parsed' + (bad.length ? (' (' + bad.join(', ') + ')') : '') + '.', importReady: false });
         return;
       }
@@ -1003,7 +1063,7 @@
         this._importModel = model;
         this.setState({
           importReady: true, importError: '', importName: nm2,
-          importSummary: model.tables.length + ' tables · ' + model.relationships.length + ' relationships parsed'
+          importSummary: model.tables.length + ' tables · ' + model.relationships.length + ' relationships accepted' + (model.relationshipDiagnostics && model.relationshipDiagnostics.rejected ? ' · ' + model.relationshipDiagnostics.rejected + ' rejected' : '')
         });
       } catch (err) {
         this.setState({ importError: 'Could not parse: ' + (err.message || err), importReady: false });
@@ -1018,12 +1078,14 @@
     },
     confirmImport: function () {
       if (!this._importModel) return;
+      try { this.validateCandidate(this._importModel); }
+      catch (error) { this.setState({ importError: 'Could not prepare this model: ' + (error.message || error) + '. Your previous model is unchanged.', importReady: true }); return; }
       var name = (this.state.importName || 'Imported model').trim() || 'Imported model';
       var target = this.importTarget(name);
       var id = target ? target.id : 'm' + Date.now().toString(36);
       var st = this.getStore().filter(function (m) { return m.id !== id; });
       st.push({ id: id, name: name, at: Date.now(), model: this._importModel });
-      if (!this.setStore(st)) {
+      if (!this.saveAdoption(st, id)) {
         this.setState({ importError: 'Could not save this model in the browser. Free browser storage and try again. Your imported model is still ready to add.', importReady: true });
         return;
       }
@@ -1031,7 +1093,7 @@
       if (this._importPath) store.set('smv_src_' + id, this._importPath);
       this._importModel = null; this._importHandle = null; this._importPath = null;
       this.setState({ showImport: false, importReady: false });
-      this.loadModel(id);
+      this.loadModel(id, { persist: false });
     },
 
     /* ---------- repo connection (File System Access API) ---------- */
@@ -1280,6 +1342,7 @@
         catch (e) { if (!rm) { store.del('smv_src_' + key); this._idbDel('src:' + key); } throw e; }
         if (key !== this.modelKey) { done({}); return; }
         var model = window.TMDLParser.parseAny(files);
+        this.validateCandidate(model);
         var st = this.getStore(), i = st.findIndex(function (m) { return m.id === key; });
         var old = i >= 0 ? st[i].model : null;
         if (old && JSON.stringify(old) === JSON.stringify(model)) { done({ snapshotMessage: 'Already up to date with the source folder.' }); return; }
@@ -1287,12 +1350,12 @@
         if (isRepo) record.repo = true;
         if (i >= 0) st[i] = record; else st.push(record);
         if (!this.setStore(st)) { done({ snapshotError: 'Could not save the refreshed model in this browser. Free browser storage and try again.' }); return; }
-        var had = {}; ((old && old.tables) || []).forEach(function (t) { had[t.name] = 1; });
-        var has = {}; model.tables.forEach(function (t) { has[t.name] = 1; });
+        var had = Object.create(null); ((old && old.tables) || []).forEach(function (t) { had[t.name] = 1; });
+        var has = Object.create(null); model.tables.forEach(function (t) { has[t.name] = 1; });
         var added = model.tables.filter(function (t) { return !had[t.name]; }).map(function (t) { return t.name; });
         var removed = Object.keys(had).filter(function (n) { return !has[n]; });
         var view = this.state.viewMode;
-        await this.loadModel(key);
+        await this.loadModel(key, { persist: false });
         if (view && view !== 'graph') this.setViewMode(view);
         var list = function (a) { return a.slice(0, 3).join(', ') + (a.length > 3 ? ' +' + (a.length - 3) + ' more' : ''); };
         done({ snapshotMessage: 'Refreshed from source · ' + model.tables.length + ' tables' +
@@ -1310,13 +1373,14 @@
           var files = await this.readModelDir(rm.handle || rm);
           if (request !== this._modelLoadRequest) return;
           var model = window.TMDLParser.parseAny(files);
+          this.validateCandidate(model);
           var st = this.getStore().filter(function (m) { return m.id !== id; });
           st.push({ id: id, name: rm.name, at: Date.now(), repo: true, model: model });
-          if (!this.setStore(st)) {
+          if (!this.saveAdoption(st, id)) {
             this.setState({ repoError: 'Could not save the refreshed model in this browser. Free browser storage and try again. Your current model is unchanged.' });
             return;
           }
-          this.loadModel(id);
+          this.loadModel(id, { persist: false });
           return;
         } catch (e) {
           if (request !== this._modelLoadRequest) return;
@@ -1337,6 +1401,7 @@
         var files = await this.readModelDir(rm.handle || rm);
         if (key !== this.modelKey || request !== this._modelLoadRequest) return;
         var model = window.TMDLParser.parseAny(files);
+        this.validateCandidate(model);
         var st = this.getStore();
         var old = st.find(function (m) { return m.id === key; });
         if (old && JSON.stringify(old.model) === JSON.stringify(model)) return;
@@ -1346,8 +1411,10 @@
           this.setState({ repoError: 'Could not save the refreshed model in this browser. Your cached model is unchanged.' });
           return;
         }
-        this.loadModel(key);
-      } catch (e) { }
+        this.loadModel(key, { persist: false });
+      } catch (e) {
+        if (key === this.modelKey && request === this._modelLoadRequest) this.setState({ repoError: 'Could not refresh this model: ' + (e.message || e) + '. Your previous model is unchanged.' });
+      }
     },
     repoRows: function () {
       var self = this;
@@ -1371,13 +1438,16 @@
     /* ---------- portable offline snapshot ---------- */
     saveSnapshot: async function () {
       if (this.state.snapshotSaving || !this.state.loaded) return null;
+      var request = this._snapshotRequest = (this._snapshotRequest || 0) + 1;
       this.setState({ snapshotSaving: true, snapshotMessage: '', snapshotError: '' });
       try {
         if (!g.Snapshots || typeof g.Snapshots.exportHTML !== 'function') throw new Error('Snapshot export is unavailable. Reload the app and try again.');
         var filename = await g.Snapshots.exportHTML(this);
+        if (request !== this._snapshotRequest) return filename;
         this.setState({ snapshotSaving: false, snapshotMessage: filename ? 'Saved ' + filename : '', snapshotError: '' });
         return filename;
       } catch (error) {
+        if (request !== this._snapshotRequest) return null;
         this.setState({ snapshotSaving: false, snapshotError: error && error.message || 'Could not save the snapshot. Please try again.' });
         return null;
       }

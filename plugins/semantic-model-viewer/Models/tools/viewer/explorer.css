@@ -156,3 +156,33 @@ button:disabled{opacity:.45;cursor:default!important}
 #canvas-navigation .ex-view-anchor{position:relative;margin-left:auto}
 .ex-view-menu{position:absolute;bottom:calc(100% + 10px);right:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:10px 12px;background:var(--smv-surface,#fff);color:var(--smv-ink,#24324b);border:1px solid var(--smv-line,#d5dce8);border-radius:9px;box-shadow:0 8px 24px #1c2b4a22;z-index:40;white-space:nowrap}
 .ex-view-menu .ex-footer-group{border-right:0;padding-right:0}
+
+/* Secondary text remains readable on light panels in both shipped appearances. */
+:root{--smv-readable-muted:var(--smv-muted,#536278)}
+body .pqc-legend,body .pqc-map-label{color:var(--smv-readable-muted,var(--smv-muted,#536278))}
+.smv-relationship-row>button:focus-visible{outline:2px solid var(--smv-burgundy,#2563eb);outline-offset:2px}
+@media(max-width:799px){
+.ex-main-nav{min-width:0;max-width:100%;overflow-x:auto;justify-content:flex-start;flex-shrink:1}
+.ex-main-nav button{flex-shrink:0}
+#topbar{min-width:0}
+.ex-header-actions{flex-wrap:wrap}
+}
+
+/* A keyboard-accessible disclosure next to export; never covers the diagram. */
+.ex-snapshot-contents { font-size: 11px; max-width: 340px; }
+.ex-snapshot-contents summary { cursor: pointer; padding: 6px; }
+.ex-snapshot-contents p { margin: 4px 6px 8px; line-height: 1.5; }
+
+/* Wrap the narrow canvas toolbar across the viewport, and reserve its measured height. */
+@media(max-width:799px){
+html[data-theme] #main #workspace-toolbar{left:0;right:0;height:auto;min-height:62px;flex-wrap:wrap;align-content:center;gap:4px;padding:8px}
+#workspace-toolbar>.ex-spacer{display:none}
+#workspace-toolbar>.ex-toolbar-group{flex:none}
+#main.ex-graph #table-library{top:var(--workspace-toolbar-height,62px)}
+#main.ex-graph #drawer>div{top:var(--workspace-toolbar-height,62px)!important}
+#main #canvas-empty{top:var(--workspace-toolbar-height,62px)}
+}
+
+@media(max-width:799px){
+#workspace-toolbar :is(.ex-saved-menu,.ex-display-menu){position:fixed!important;left:8px!important;right:auto!important;top:var(--workspace-menu-top,260px)!important;max-width:calc(100vw - 16px);max-height:calc(100vh - var(--workspace-menu-top,260px) - 12px);overflow:auto}
+}

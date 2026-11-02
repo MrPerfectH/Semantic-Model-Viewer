@@ -2,8 +2,8 @@
    up a new release; the cache is only the fallback when the network is unavailable.
    The asset list is read from index.html at install time, so there is no list to maintain. */
 'use strict';
-const CACHE = 'smv-shell-group-colours-v6';
-const EXTRA = ['./', 'index.html', 'manifest.webmanifest', 'model-data.json', 'report-usage.json',
+const CACHE = 'smv-shell-local-png-v7';
+const EXTRA = ['js/vendor/html-to-image-1.11.11/html-to-image.js', './', 'index.html', 'manifest.webmanifest', 'model-data.json', 'report-usage.json',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png'];
 const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 

@@ -116,7 +116,7 @@ test('aggregated domain relationship tooltip escapes model-supplied names on hov
 /* ---------- the inspector belongs to the Tables canvas ---------- */
 
 function sidebarRuntime() {
-  const context = { console, Set, Map, addEventListener() {} }; context.window = context;
+  const context = { console, Set, Map, document: {activeElement:null}, addEventListener() {} }; context.window = context;
   vm.createContext(context);
   vm.runInContext(fs.readFileSync(path.join(jsDir, 'util.js'), 'utf8'), context);
   context.U.el = context.U.sv = node;
@@ -190,7 +190,12 @@ test('expanded cards preserve column anchors while horizontal approaches avoid o
   assert.equal(route.ay, 24);
   const geom = canvas.edgeGeom(route, 0, 0, routingRects(boxes));
   assert.ok(canvas.routeClear(geom.points, routingRects({ Block: boxes.Block })));
-  assert.ok(geom.points.length > 4, 'blocked horizontal leg requires a detour');
+  // A clear channel can now detour with four vertices; validate anchors and
+  // obstacle clearance rather than requiring the old search's extra bends.
+  assert.deepEqual(JSON.parse(JSON.stringify(geom.points[0])), {x:route.ax,y:route.ay});
+  assert.deepEqual(JSON.parse(JSON.stringify(geom.points.at(-1))), {x:route.bx,y:route.by});
+  assert.equal(geom.points[1].y,route.ay,'expanded column leaves horizontally');
+  assert.ok(geom.points[1].x > route.ax,'source stub points out of the card');
 });
 
 test('vertical obstacle detours retain endpoints and labels follow the routed segments', () => {

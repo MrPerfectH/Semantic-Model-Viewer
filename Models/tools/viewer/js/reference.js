@@ -94,6 +94,12 @@
     },
     renderPage:function(){
       var self=this,el=g.U.el,o=this.data.byId.get(this.state.selected);g.U.clear(this.page);
+      var diagnostics=this.app.model && this.app.model.relationshipDiagnostics;
+      if(diagnostics && diagnostics.rejected){
+        var omitted=el('details',{cls:'ref-section'},[el('summary',{text:'Relationship import: '+diagnostics.accepted+' accepted, '+diagnostics.rejected+' omitted'})]);
+        diagnostics.issues.forEach(function(issue){omitted.appendChild(el('p',{text:issue.name+': '+issue.reason}));});
+        this.page.appendChild(omitted);
+      }
       if(!o){this.page.append(el('div',{cls:'ref-welcome'},[el('p',{cls:'ref-eyebrow',text:'MODEL REFERENCE'}),el('h1',{text:this.app.state.modelName||(this.model&&this.model.name)||'Your model'}),el('p',{text:'Find an object. Understand its definition. Follow its connections.'}),el('p',{cls:'ref-muted',text:'Search tables, columns, measures, calculation groups, hierarchies, and Power Query. Select an object in the library to begin.'})]));return;}
       var top=el('div',{cls:'ref-breadcrumb'},[this.button('Back',function(){self.back();}),el('span',{text:'Model'}),o.table?this.link(this.tableKey(o.table),o.table):el('span',{text:labels[o.kind]}),el('span',{text:o.name})]);top.firstChild.disabled=!this.history.length;
       this.page.appendChild(top);
@@ -161,7 +167,7 @@
       refs.columns.forEach(function(group){group.cs.forEach(function(c){rows.push([self.link(id('column',group.t,c),group.t+'['+c+']'),'Column reference']);});});
       var users=o.kind==='measure'?this.model.msrUsedBy[o.name]||[]:o.kind==='column'?this.app.measureImpact({table:o.table,column:o.name}).all:[];
       var c=[this.grid(['Uses','Type'],rows,'No fixed references detected.'),el('p',{cls:'ref-muted',text:'Static expression analysis; dynamic behavior and implicit filter paths are not fully resolved.'})];
-      if(refs.unresolved&&refs.unresolved.length)c.push(el('p',{cls:'ref-muted',text:'Some references could not be resolved.'}));
+      if(refs.unresolved&&refs.unresolved.length)c.push(el('p',{cls:'ref-muted',text:'Unresolved references: '+refs.unresolved.map(function(r){return (r.table?"'"+r.table.replace(/'/g,"''")+"'":'')+(r.name!==null?'['+r.name+']':'');}).join(', ')+'.'}));
       if(o.kind==='calculationItem')c.push(el('p',{text:'SELECTEDMEASURE() is context-dependent. Applicability to measures is not inferred.'}));
       else c.push(el('h3',{text:'Referenced by measures'}),this.grid(['Measure'],users.map(function(n){return [self.link(id('measure',self.model.msrHome[n],n),n)];}),'No measure consumers detected.'));
       return this.section('Dependencies',c);

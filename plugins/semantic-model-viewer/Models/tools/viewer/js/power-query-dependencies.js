@@ -20,7 +20,11 @@
   // take precedence. This small catalog does not classify arbitrary dotted names.
   // https://learn.microsoft.com/en-us/powerquery-m/table-transformcolumntypes
   // https://learn.microsoft.com/en-us/powerquery-m/type-conversion
-  var standardNames=new Set(['Table.TransformColumnTypes','Int64.Type','Byte.Type','Int8.Type','Int16.Type','Int32.Type','Single.Type','Double.Type','Decimal.Type','Currency.Type','Percentage.Type','Guid.Type']);
+  // Curated exact built-ins, checked against Microsoft Power Query M reference (2026-11-02).
+  // https://learn.microsoft.com/powerquery-m/table-selectrows
+  // https://learn.microsoft.com/powerquery-m/date-year
+  // Model and local bindings resolve first; unknown dotted names remain uncertain.
+  var standardNames=new Set(['Table.SelectRows','Date.Year','Table.TransformColumnTypes','Int64.Type','Byte.Type','Int8.Type','Int16.Type','Int32.Type','Single.Type','Double.Type','Decimal.Type','Currency.Type','Percentage.Type','Guid.Type']);
   // Bounded syntactic evidence: exact direct calls only, after lexical/model
   // resolution. Arguments are never retained, fetched or evaluated. This is not
   // execution lineage: calls in dead branches/functions can still appear here.

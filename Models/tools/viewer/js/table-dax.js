@@ -134,7 +134,7 @@
       this._model = this.app.model; this.objectTable = table; this.column = column || null; this.mode = 'calculation'; this.scope = scope === 'format' ? 'format' : 'expression';
       this.items[table] = item || this.items[table]; this.selectExpression();
       var view = this.app.measures;
-      if (view) { view.cancelSnapshotViewport(); view._mainKey = null; view._gC = null; }
+      if (view) { view._narrowLibraryOpen = false; view.cancelSnapshotViewport(); view._mainKey = null; view._gC = null; }
       this.app.setState({ viewMode: 'measures', dependencySource: null, mvSourceMode: 'calculations', gPin: null, gHover: null, gExtra: {} });
     },
     close: function () { this.mode = 'measure'; },

@@ -106,3 +106,16 @@ test('source evidence uses exact direct calls with lexical and model precedence 
  for(const peers of [[node('Sql.Database')],[node('Sql.Database'),node('Sql.Database')],[{...node('Other'),id:'collision'}, {...node('Sql.Database'),id:'collision'}]])assert.deepEqual(plain(api0.analyze(root,{nodes:[root,...peers]})).sourceEvidence,[]);
  const result=analyze('"😀" & Sql.Database("secret-host", "secret-path")',[]);assert.equal(result.sourceEvidence[0].at,7);assert.equal(result.sourceEvidence[0].end,19);assert(!JSON.stringify(result.sourceEvidence).includes('secret'));
 });
+
+ test('curated M functions retain local and model precedence and unknown diagnostics',()=>{
+ const code='Table.SelectRows(Upstream, each Date.Year([Date]) > 2020)';
+ const r=analyze(code);
+ assert.deepEqual(r.dependencies.map(d=>d.name),['Upstream']);
+ assert.deepEqual(r.standardLibrary.sort(),['Date.Year','Table.SelectRows']);
+ assert.doesNotMatch(r.uncertainty.join(' '),/Unresolved name/);
+ assert.deepEqual(deps('Table.SelectRows(Upstream)', ['Table.SelectRows','Upstream']),['Table.SelectRows','Upstream']);
+ const local=analyze('let Table.SelectRows = (x) => x in Table.SelectRows(Upstream)');
+ assert.deepEqual(local.dependencies.map(d=>d.name),['Upstream']);
+ assert.deepEqual(local.standardLibrary,[]);
+ assert.match(analyze('Table.FutureFunction(Upstream)').uncertainty.join(' '),/Table.FutureFunction/);
+ });

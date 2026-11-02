@@ -25,3 +25,21 @@ Verify the rendered model name/counts, both cardinalities and filter direction,
 and click a relationship to check its exact `Table[Column]` endpoints. Snapshot
 generation alone is not browser acceptance. Column pairs currently appear on
 hover/click and in the table inspector; they are not permanent line labels.
+
+# Repository guidance
+
+Preserve existing user changes. Keep fixes scoped and verify the actual user workflow in addition to meaningful deterministic tests. Do not remove tests merely because they are generated.
+
+## Agent skills
+
+### Issue tracker
+GitHub Issues in MrPerfectH/Semantic-Model-Viewer. See docs/agents/issue-tracker.md.
+
+### Triage labels
+Use the configured five triage roles; see docs/agents/triage-labels.md.
+
+### Domain docs
+Single application context: README.md and docs/viewer-guide.md explain the product; no CONTEXT.md or ADR directory currently exists. See docs/agents/domain.md.
+
+## Audit implementation
+The integration branch fix/audit-improvements-20261102 is for user review. Do not merge it into develop/main or publish a release without user approval. Follow docs/implementation/audit-20261102-plan.md and the GitHub tracking issue. Multiple agents may share this checkout: respect assigned file ownership and do not stage or revert another agent’s changes.

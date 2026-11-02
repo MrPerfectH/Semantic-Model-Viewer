@@ -49,3 +49,12 @@ test('denied/corrupt storage, absent targets and snapshots remain safe',()=>{
     assert.equal(h.guide.card,null);assert.equal(JSON.stringify([...h.storage]),before);
   }
 });
+
+test('automatic narrow tips leave the upper library usable and do not repeat completed add-table work',()=>{
+ const h=harness();h.app.explorer={names:new Set(['Sales'])};
+ h.guide.progress={welcomed:true,enabled:true};h.guide.update();assert.equal(h.guide.card,null);
+ h.app.explorer.names.clear();h.guide.update();assert.equal(h.guide.id,'tables');
+ assert.equal(h.guide.card.style.top,'228px');
+ h.guide.close(false);h.guide.help();assert.equal(h.guide.id,'help');
+ assert.equal(h.document.activeElement.textContent,'Read and explore the model');
+});

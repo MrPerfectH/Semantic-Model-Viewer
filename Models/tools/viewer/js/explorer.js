@@ -191,7 +191,7 @@
       }
       this.commit('All model tables are on the canvas.',true);
     },
-    undo:function(){var s=this.history.pop();if(!s)return;this.names=new Set(s.names);var cv=this.app.canvas;cv.pos=s.pos;cv.view=s.view;cv.persist();cv.workspaceNames=this.names;cv.restoreFocus(s.focus);cv.restoreDisplay(s.display);Object.keys(cv.cards).forEach(function(n){cv.layoutCard(n);});this.commit('Layout change undone.',false);cv.updateTransform();},
+    undo:function(){var s=this.history.pop();if(!s)return;this.names=new Set(s.names);var cv=this.app.canvas;cv.pos=Object.assign(Object.create(null),s.pos);cv.view=s.view;cv.persist();cv.workspaceNames=this.names;cv.restoreFocus(s.focus);cv.restoreDisplay(s.display);Object.keys(cv.cards).forEach(function(n){cv.layoutCard(n);});this.commit('Layout change undone.',false);cv.updateTransform();},
     /* Arrange applies the layout chosen under Display to the tables on this canvas only.
        Tables outside the layout — or hidden by focus — keep the positions they had. */
     arrangeSubset:function(save){
@@ -222,9 +222,9 @@
       if(sel)this.enterFocus(sel);
     },
     enterFocus:function(sel){
-      var app=this.app,cv=app.canvas,before={},depth={focusDepth:app.state.focusDepth,depth:this.depth};
+      var app=this.app,cv=app.canvas,before=Object.create(null),depth={focusDepth:app.state.focusDepth,depth:this.depth};
       this.names.forEach(function(n){if(cv.pos[n])before[n]={x:cv.pos[n].x,y:cv.pos[n].y};});
-      this._focusUndo={selected:sel,before:before,after:{},depth:depth};
+      this._focusUndo={selected:sel,before:before,after:Object.create(null),depth:depth};
       this.setFocus(true,1);this.arrangeSubset(true);
       var after=this._focusUndo.after;Object.keys(before).forEach(function(n){after[n]={x:cv.pos[n].x,y:cv.pos[n].y};});
     },
@@ -324,7 +324,7 @@
         this.status.textContent='click a group to expand or collapse · drag to arrange · scroll to zoom';
         var ckey=[app.modelKey,app.colorBy,cv.expandedGroups?cv.expandedGroups.size:0,cv.groupOrder?cv.groupOrder.length:0,this.legendShown(),st.activeFilter].join('|');
         if(ckey!==this._clusterKey){this._clusterKey=ckey;this.renderClusterToolbar();}
-        return;
+        this.layoutToolbar();return;
       }
       this._clusterKey=null;
       if(!graph)return;
@@ -333,7 +333,7 @@
       this.status.textContent=this.message || 'Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several';
       var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.compact,this.toolsOpen,this.tight(),this.history.length,st.showPresets,this.optionsOpen,this.legendOpen,st.showStandalone,st.activeFilter,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
       if(key!==this._key){this._key=key;this.renderLibrary();this.renderToolbar();this.renderEmpty();}
-      this.renderNavigation();this.drawMap();
+      this.layoutToolbar();this.renderNavigation();this.drawMap();
     },
     /* Domain / Source facets for the library. Source uses the same key as the colour legend
        (connector kind, or the schema for Databricks / SQL), so the two always agree. */
@@ -346,7 +346,7 @@
       return kinds[key]?kinds[key].label:key;
     },
     facetOptions:function(kind){
-      var self=this,counts={};
+      var self=this,counts=Object.create(null);
       this.app.model.tables.forEach(function(t){var k=self.facetKey(kind,t);counts[k]=(counts[k]||0)+1;});
       return Object.keys(counts).sort(function(a,b){return counts[b]-counts[a]||a.localeCompare(b);}).map(function(k){return {key:k,label:self.facetLabel(kind,k),count:counts[k]};});
     },
@@ -423,6 +423,13 @@
       var collapse=button('Collapse all',function(){cv.setAllGroups(false);self._clusterKey=null;self._key=null;self.update();});
       collapse.disabled=!open;this.toolbar.appendChild(collapse);
       this.toolbar.appendChild(el('div',{cls:'ex-spacer'}));
+    },
+    layoutToolbar:function(){
+      var main=document.getElementById('main'), narrow=window.innerWidth<800;
+      var height=this.toolbar.hidden?0:(narrow?Math.ceil(this.toolbar.getBoundingClientRect().height):62);
+      main.style.setProperty('--workspace-toolbar-height',height+'px');
+      main.style.setProperty('--workspace-menu-top',(this.toolbar.getBoundingClientRect().bottom+4)+'px');
+      if(this.app.state.viewMode==='graph'||this.app.state.viewMode==='clusters')this.app.canvas.host.style.top=height+'px';
     },
     layoutFooter:function(){
       if(!this.nav||this.nav.hidden)return;
@@ -516,7 +523,7 @@
          clipped; the box map doubles as the "is this table on the canvas" test the lines
          need, and the bounds come out of the same pass that builds it */
       var v=cv.view,view={x:-v.x/v.k,y:-v.y/v.k,w:cv.host.clientWidth/v.k,h:cv.host.clientHeight/v.k};
-      var boxes={},x0=view.x,y0=view.y,x1=view.x+view.w,y1=view.y+view.h;
+      var boxes=Object.create(null),x0=view.x,y0=view.y,x1=view.x+view.w,y1=view.y+view.h;
       ns.forEach(function(n){
         var b=cv.cardBox?cv.cardBox(n):{x:cv.pos[n].x,y:cv.pos[n].y,w:cv.CARD_W,h:cv.cards[n].h||90};
         b={x:b.x,y:b.y,w:b.w||cv.CARD_W,h:b.h||90};boxes[n]=b;

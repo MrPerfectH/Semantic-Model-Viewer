@@ -120,3 +120,22 @@ test('selected calculation items retain contextual functions without invented me
  assert.equal(view._gC.g.geo.filter(e=>e.b===selected.rootKey()).length,1);
  assert.ok(selected.analysis.contextual.includes('SELECTEDMEASURE()'));
 });
+
+test('calculated routes detour around unrelated nodes and keep endpoint directions',()=>{
+ const {view}=measureGraphFixture();
+ const xy={a:{x:0,y:0,w:100,h:34},b:{x:0,y:200,w:100,h:34},obstacle:{x:0,y:90,w:100,h:34}};
+ const route=view.avoidCalculatedObstacles('M50,34 C50,100 50,150 50,200',{xy},'a','b');
+ assert.ok(route);const nums=route.d.match(/-?\d+(?:\.\d+)?/g).map(Number),points=[];for(let i=0;i<nums.length;i+=2)points.push([nums[i],nums[i+1]]);
+ assert.deepEqual(points[0],[50,34]);assert.deepEqual(points.at(-1),[50,200]);
+ assert.equal(points[1][0],50);assert.ok(points[1][1]>34);assert.equal(points.at(-2)[0],50);assert.ok(points.at(-2)[1]<200);
+ for(let i=1;i<points.length;i++){let a=points[i-1],b=points[i];for(let n=0;n<=100;n++){let x=a[0]+(b[0]-a[0])*n/100,y=a[1]+(b[1]-a[1])*n/100;assert.ok(!(x>0&&x<100&&y>90&&y<124),'route crosses obstacle');}}
+ assert.equal(view.avoidCalculatedObstacles('M50,34 C50,100 50,150 50,200',{xy:{a:xy.a,b:xy.b}},'a','b'),null,'clear curves retain their shape');
+});
+
+test('measure graph traversal accepts prototype-key identifiers as actual measures',()=>{
+ const {view,app,model}=measureGraphFixture();
+ model.tables[0].measures.push({name:'__proto__',dax:'[constructor]'},{name:'constructor',dax:'[toString]'},{name:'toString',dax:'1'});
+ app.prepareModel(model);app.state.selMeasure='__proto__';view._showSources=false;view._showCalculated=false;
+ const graph=view.buildGraph();assert.ok(graph.nodes.some(n=>n.name==='__proto__'));assert.ok(graph.nodes.some(n=>n.name==='constructor'));assert.ok(graph.nodes.some(n=>n.name==='toString'));
+ assert.ok(view._gC.g.geo.some(e=>e.a==='constructor'&&e.b==='__proto__'));
+});

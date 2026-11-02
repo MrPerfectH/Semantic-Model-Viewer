@@ -792,3 +792,145 @@ test('portable colour preferences validate values and retain independent modes',
   const copy=app.captureGroupColours();assert.deepEqual(copy.source.bad,{});assert.equal(copy.source.x.colour,'#abcdef');assert.equal(copy.domain.x.colour,'#123456');
   copy.source.x.colour='#ffffff';assert.equal(app.captureGroupColours().source.x.colour,'#abcdef');
 });
+
+test('arbitrary table and measure identifiers are safe dictionary keys', () => {
+  const { app } = harness();
+  for (const name of ['constructor', 'toString', '__proto__']) {
+    const m = model([{ name, columns: [{name:'Key'}], measures: [{name,dax:'1'},{name:'Consumer',dax:'['+name+']'}] }]);
+    m.relationships=[{from:name,to:name,fromCol:'Key',toCol:'Key'}];
+    app.prepareModel(m);
+    assert.equal(m.byName[name].name,name);
+    assert.equal(m.byName[name].relCount,2);
+    assert.deepEqual(plain(m.msrUsedBy[name]),['Consumer']);
+    assert.equal(m.msrHome[name],name);
+  }
+});
+
+test('failed same-name preparation preserves stored record, selection and import preview', () => {
+  const { app, storage } = harness();
+  const old=model([{name:'Old'}]);
+  app.setStore([{id:'same',name:'Existing',model:old}]);
+  storage.set('smv_current_v1','same');app.modelKey='same';app.model=old;
+  app.state={importName:'Existing',showImport:true,importReady:true};
+  app._importModel={tables:[{name:'Bad',columns:'invalid',measures:[]}],relationships:[]};
+  assert.doesNotThrow(()=>app.confirmImport());
+  assert.equal(app.getStore()[0].model.tables[0].name,'Old');
+  assert.equal(app.model,old);assert.equal(app.modelKey,'same');
+  assert.equal(storage.get('smv_current_v1'),'same');assert.ok(app._importModel);
+  assert.equal(app.state.showImport,true);assert.match(app.state.importError,/Could not prepare/);
+});
+
+test('failed stored-model preparation keeps the previous usable model and selection', async () => {
+  const { app, storage }=harness();
+  app.setStore([{id:'good',name:'Good',model:model([{name:'Good'}])},{id:'bad',name:'Bad',model:{tables:[null],relationships:[]}}]);
+  await app.loadModel('good');const previous=app.model;
+  await assert.doesNotReject(()=>app.loadModel('bad'));
+  assert.equal(app.model,previous);assert.equal(app.modelKey,'good');
+  assert.equal(storage.get('smv_current_v1'),'good');assert.match(app.state.repoError,/could not be opened/i);
+});
+
+test('selection-key storage refusal cannot replace a same-name stored import', () => {
+  const {app,context,storage}=harness();
+  const old=model([{name:'Old'}]);
+  app.setStore([{id:'existing',name:'Same',model:old}]);
+  storage.set('smv_current_v1','existing');
+  app.model=old;app.modelKey='existing';app.state={loaded:true,showImport:true,importName:'Same'};
+  app._importModel=model([{name:'New'}]);
+  const set=context.localStorage.setItem;
+  context.localStorage.setItem=(key,value)=>{if(key==='smv_current_v1')throw Error('selection denied');set(key,value);};
+  app.confirmImport();
+  assert.equal(app.getStore()[0].model.tables[0].name,'Old');
+  assert.equal(app.model,old);assert.equal(app.state.showImport,true);assert.ok(app._importModel);
+  assert.match(app.state.importError,/save/i);
+});
+
+test('record storage refusal restores selection and permits retry without losing candidate', () => {
+  const {app,context,storage}=harness();
+  storage.set('smv_current_v1','builtin');
+  app.modelKey='builtin';app.state={loaded:true,showImport:true,importName:'New'};
+  app._importModel=model([{name:'New'}]);
+  const set=context.localStorage.setItem;
+  context.localStorage.setItem=(key,value)=>{if(key==='smv_models_v1')throw Error('records denied');set(key,value);};
+  app.confirmImport();
+  assert.equal(storage.get('smv_current_v1'),'builtin');assert.equal(app.getStore().length,0);
+  assert.equal(app.modelKey,'builtin');assert.ok(app._importModel);assert.equal(app.state.showImport,true);
+  context.localStorage.setItem=set;
+  app.confirmImport();
+  assert.equal(app.model.tables[0].name,'New');assert.equal(app.state.showImport,false);
+});
+
+test('quoted missing whole tables remain unresolved evidence without treating DAX syntax as tables',()=>{
+ const {app}=harness(); const m=model([{name:'Sales',columns:[{name:'Amount'}],measures:[{name:'Broken',dax:"COUNTROWS('Gone')"}]}]);
+ app.prepareModel(m);app.model=m;
+ assert.deepEqual(plain(m.tables[0].measures[0]._unresolved),[{table:'Gone',name:null,quoted:true}]);
+ assert.deepEqual(plain(app.referencesInDax("COUNTROWS('Gone')",'Sales').unresolved),plain(m.tables[0].measures[0]._unresolved));
+ const controls=app.referencesInDax('VAR LocalRows = FILTER(Sales, Sales[Amount] > 0) RETURN COUNTROWS(LocalRows) + SUM(Sales[Amount]) + 1','Sales');
+ assert.deepEqual(plain(controls.unresolved),[]);assert.deepEqual(plain(controls.tables),['Sales']);
+ assert.deepEqual(plain(app.referencesInDax('"Gone" /* \'Gone\' */','Sales').unresolved),[]);
+});
+
+test('relationship omissions stay counted through repeated preparation without losing parallel edges',()=>{
+ const {app}=harness(), m=model([{name:'A'},{name:'B'}]);
+ m.relationships=[{name:'a',from:'A',to:'B'},{name:'b',from:'A',to:'B',inactive:true},{name:'bad',from:'Gone',to:'B'}];
+ app.prepareModel(m);app.prepareModel(m);
+ assert.equal(m.relationships.length,2);assert.equal(m.relationshipDiagnostics.total,3);assert.equal(m.relationshipDiagnostics.rejected,1);
+ assert.match(m.relationshipDiagnostics.issues[0].reason,/Gone/);
+});
+
+test('late snapshot completion cannot post the previous model success message', async()=>{
+ const {app,context}=harness(), pending=deferred();
+ app.state.loaded=true; context.Snapshots={exportHTML:()=>pending.promise};
+ const saving=app.saveSnapshot();
+ app._applyModel(model([{name:'Next'}]),'Next','next');
+ pending.resolve('Previous.html'); await saving;
+ assert.equal(app.state.snapshotMessage,'');assert.equal(app.state.snapshotSaving,false);
+ assert.equal(app.state.modelName,'Next');
+});
+
+test('full adoption assigns real roles to prototype-named tables and preserves their side counts',()=>{
+ const {app}=harness();const m=model(['constructor','toString','__proto__'].map(name=>({name,columns:[{name:'Key'}]})));
+ m.relationships=[{from:'constructor',to:'toString',fromCol:'Key',toCol:'Key',fromCard:'many',toCard:'one'}];
+ app._applyModel(m,'Reserved','reserved');
+ assert.equal(m.byName.constructor.role,'fact');assert.equal(m.byName.toString.role,'dim');assert.equal(m.byName.__proto__.role,'standalone');
+ for(const t of m.tables)assert.equal(typeof t.role,'string');
+});
+
+test('Fabric same-key invalid refresh never writes cached records before adoption validation',async()=>{
+ const {app,context,storage}=harness();vm.runInContext(fs.readFileSync(path.join(jsDir,'fabric.js'),'utf8'),context);
+ const source={kind:'fabric',tenantId:'tenant',workspaceId:'workspace',modelId:'model'},key=context.FabricConnection.key(source),old=model([{name:'Old'}]);
+ app.setStore([{id:key,name:'Good',source,model:old}]);app.model=old;app.modelKey=key;app.state.loaded=true;storage.set('smv_current_v1',key);
+ const connection=new context.FabricConnection(app);connection.workspace={id:'workspace'};connection.account={tenantId:'tenant'};
+ connection.request=async()=>({tenantId:'tenant',model:{tables:[{name:'Bad',columns:'invalid'}],relationships:[]}});
+ await assert.rejects(connection.open({id:'model',name:'New'},0),/columns must be an array/);
+ assert.equal(app.getStore()[0].model.tables[0].name,'Old');assert.equal(app.model,old);assert.equal(storage.get('smv_current_v1'),key);
+});
+
+test('multi-import preparation failure keeps the old same-key record while adopting valid siblings',async()=>{
+ const {app}=harness();const old=model([{name:'Old'}]);app.setStore([{id:'repo:Bad.SemanticModel',name:'Bad',model:old}]);
+ const record=(name,data)=>({name:'model.json',p:name+'.SemanticModel/model.json',text:JSON.stringify(data)});
+ await app.handleFiles([record('Bad',{tables:[{name:'Bad',domain:'Other',columns:'invalid',measures:[]}],relationships:[]}),record('Good',model([{name:'Good'}]))]);
+ assert.equal(app.getStore().find(r=>r.id==='repo:Bad.SemanticModel').model.tables[0].name,'Old');
+ assert.equal(app.model.tables[0].name,'Good');
+});
+
+test('failed multi-import cannot replace the previous refresh source', async()=>{
+ const {app,context,storage}=harness(); const handles=[];
+ storage.set('smv_src_repo:First.SemanticModel','/old/source');
+ app._idbSet=(...args)=>{handles.push(args);return Promise.resolve();};
+ const set=context.localStorage.setItem;
+ context.localStorage.setItem=(key,value)=>{if(key==='smv_models_v1')throw Error('quota');set(key,value);};
+ await app.handleFiles(['First','Second'].map(name=>({p:name+'.SemanticModel/model.bim',f:{name:'model.bim',text:async()=>JSON.stringify({model:{tables:[{name}]}})}})),{name:'New source'},'/new/source');
+ assert.equal(storage.get('smv_src_repo:First.SemanticModel'),'/old/source');
+ assert.deepEqual(handles,[]);assert.match(app.state.importError,/Could not save/);
+});
+
+test('background repo refresh reports invalid candidate and retains stored record',async()=>{
+ const {app}=harness(),old=model([{name:'Old'}]);const key='repo:Example.SemanticModel';
+ app.modelKey=key;app.model=old;app.state.loaded=true;app._modelLoadRequest=2;
+ app.repoModels=[{name:'Example',path:'Example.SemanticModel',handle:{}}];
+ app.setStore([{id:key,name:'Example',model:old}]);
+ app.readModelDir=async()=>[{name:'model.bim',text:JSON.stringify({model:{tables:[{name:'Bad',columns:'invalid'}]}})}];
+ await app.refreshCurrentRepoModel();
+ assert.equal(app.model,old);assert.equal(app.getStore()[0].model.tables[0].name,'Old');
+ assert.match(app.state.repoError,/Could not refresh/);
+});

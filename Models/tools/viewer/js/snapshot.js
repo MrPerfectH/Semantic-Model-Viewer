@@ -31,6 +31,10 @@
       if (!row.source.kind) row.source.kind = 'other';
       return row;
     }), relationships: (model.relationships || []).map(function(r){return pick(r,['name','from','to','fromCol','toCol','fromCard','toCard','both','inactive','isActive','crossFilteringBehavior']);}) };
+    if (model.relationshipDiagnostics) {
+      result.relationshipDiagnostics = pick(model.relationshipDiagnostics,['total','accepted','rejected']);
+      result.relationshipDiagnostics.issues = (model.relationshipDiagnostics.issues || []).map(function(issue){return pick(issue,['name','reason']);});
+    }
     if (model.powerQuery && Array.isArray(model.powerQuery.nodes)) {
       result.powerQuery = {version: model.powerQuery.version || 1, nodes: model.powerQuery.nodes.map(function(n) {
         var row = pick(n, ['id','kind','table','name','type','code','classification','basis','state','queryGroup','groupPath']);

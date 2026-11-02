@@ -1,0 +1,11 @@
+{
+  "name": "html-to-image",
+  "version": "1.11.11",
+  "license": "MIT",
+  "source": "https://registry.npmjs.org/html-to-image/-/html-to-image-1.11.11.tgz",
+  "npmIntegrity": "sha512-9gux8QhvjRO/erSnDPv28noDZcPZmYE7e1vFsBLKLlRlKDSqNJYebj6Qz1TGd5lsRV+X+xYyjCKjuZdABinWjA==",
+  "sha256": {
+    "html-to-image.js": "0181b9a4ea3351540751b2e72b6baecb5c2297093fcb0bd2af94fc531cb0fbda",
+    "LICENSE": "4a9c5927734ced922395fb6df8f39ca1a6e026389b6af7e58d8d1f80bc98e2cd"
+  }
+}

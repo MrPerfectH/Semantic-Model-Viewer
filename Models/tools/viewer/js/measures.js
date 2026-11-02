@@ -27,15 +27,16 @@
     this._railKey = null;
     this._mainKey = null;
     this._flowKey = null;
-    this._nodeEls = {};
-    this._groupEls = {};
-    this._edgeEls = {};
+    this._nodeEls = Object.create(null);
+    this._groupEls = Object.create(null);
+    this._edgeEls = Object.create(null);
     this._gC = null;
     var prefs = this.options.comparison ? {} : store.getJSON(PREF_KEY, {}) || {};
     if (!this.options.comparison && typeof window.addEventListener === 'function') {
       var view = this;
       // Crossing the compact-header threshold rebuilds the header for the new room.
       window.addEventListener('resize', function () {
+        if (view._built) view.updateLibrary();
         if (view._built && view._headerCompact != null && view._headerCompact !== view.compactHeader()) { view._mainKey = null; view.update(); }
       });
     }
@@ -56,7 +57,7 @@
     this._wrapDax = prefs.wrap !== false;
     this._showSources = prefs.sources === true; this._showCalculated = prefs.calculated === true;
     this._fmt = choice(prefs.fmt, ['original', 'long', 'short'], 'long');
-    this._folds = {};
+    this._folds = Object.create(null);
     this._libraryCollapsed = prefs.libraryCollapsed === true;
   }
 
@@ -218,6 +219,7 @@
       var t = this.app.model.byName[table];
       if (!t || (column != null && !t.columns.some(function (c) { return c.name === column; }))) return;
       if (this.app.tableDax) this.app.tableDax.close();
+      this._narrowLibraryOpen = false;
       this._showSources = true; this.savePreferences(); this.cancelSnapshotViewport();
       this._gC = null; this._initViewportFor = null;
       this.app.setState({ dependencySource: { table: table, column: column == null ? null : column },
@@ -270,18 +272,18 @@
        opens the one they care about. Deterministic: groups appear in the barycentre order of
        their first member and members keep the order the layer gave them. */
     gGroupColumns: function (cols, root, total, expanded) {
-      var self = this, slots = [], hidden = new Set(), groupOf = {}, on = total > GROUP_MIN;
+      var self = this, slots = [], hidden = new Set(), groupOf = Object.create(null), on = total > GROUP_MIN;
       var protectedNames = new Set([root].concat(this.options.comparisonRoots || []));
       /* home table + folder is parsed out of the measure metadata, so resolve it once per
          name rather than three times per name per column */
-      var meta = {};
+      var meta = Object.create(null);
       cols.forEach(function (col) { col.forEach(function (n) { if (!meta[n]) meta[n] = self.gGroupKey(n); }); });
       cols.forEach(function (col, li) {
         var out = [];
         if (!on) { col.forEach(function (n) { out.push({ kind: 'node', name: n }); }); slots.push(out); return; }
-        var byKey = {};
+        var byKey = Object.create(null);
         col.forEach(function (n) { if (!protectedNames.has(n)) { var k = meta[n].key; (byKey[k] = byKey[k] || []).push(n); } });
-        var done = {};
+        var done = Object.create(null);
         col.forEach(function (n) {
           if (protectedNames.has(n)) { out.push({ kind: 'node', name: n }); return; }
           var k = meta[n].key;
@@ -306,8 +308,8 @@
        same measure later in the session keeps the groups open; a reload starts collapsed. */
     graphGroupState: function (root) {
       var key = root || this.graphRoot() || '';
-      if (!this._gGroupOpen) this._gGroupOpen = {};
-      if (!this._gGroupOpen[key]) this._gGroupOpen[key] = {};
+      if (!this._gGroupOpen) this._gGroupOpen = Object.create(null);
+      if (!this._gGroupOpen[key]) this._gGroupOpen[key] = Object.create(null);
       return this._gGroupOpen[key];
     },
     toggleGraphGroup: function (id) {
@@ -340,7 +342,7 @@
       var self = this;
       orientation = choice(orientation || this._graphOrientation, ['lr', 'tb', 'bt'], 'lr');   // 'auto' is resolved by buildGraph
       var vertical = orientation !== 'lr', direction = orientation === 'bt' ? -1 : 1;
-      var dist = {}; dist[root] = 0;
+      var dist = Object.create(null); dist[root] = 0;
       var bfs = function (dir) {
         var seen = new Set([root]); var q = [root], __g = 0, context=self._explanationContext;
         if(context&&context.direction!=='both'&&context.direction!==dir)return seen;
@@ -368,13 +370,13 @@
         if (names.indexOf(root) < 0) names.push(root);
       }
       var inc = new Set(names);
-      var deps = {}, cons = {}, hidU = {}, hidD = {};
+      var deps = Object.create(null), cons = Object.create(null), hidU = Object.create(null), hidD = Object.create(null);
       names.forEach(function (n) {
         var ds = self.flowKids(n, 'up'), us = self.flowKids(n, 'down');
         deps[n] = ds.filter(function (d) { return inc.has(d); }); hidU[n] = ds.filter(function (d) { return !inc.has(d); });
         cons[n] = us.filter(function (u) { return inc.has(u); }); hidD[n] = us.filter(function (u) { return !inc.has(u); });
       });
-      var layer = {}, stk = {};
+      var layer = Object.create(null), stk = Object.create(null);
       var L = function (n) {
         if (layer[n] != null) return layer[n];
         if (stk[n]) return -1;
@@ -387,7 +389,7 @@
       var cols = []; for (var i = 0; i < nL; i++) cols.push([]);
       names.forEach(function (n) { cols[layer[n]].push(n); });
       cols.forEach(function (c) { c.sort(function (a, b) { return a.localeCompare(b); }); });
-      var pos = {}; cols.forEach(function (c) { c.forEach(function (n, i) { pos[n] = i; }); });
+      var pos = Object.create(null); cols.forEach(function (c) { c.forEach(function (n, i) { pos[n] = i; }); });
       for (var s = 0; s < 3; s++) {
         var down = s % 2 === 0;
         (down ? cols : cols.slice().reverse()).forEach(function (c) {
@@ -421,7 +423,7 @@
       var colW = grouping.slots.map(function (ss) {
         return Math.min(390, Math.max(190, ss.reduce(function (a, s) { return Math.max(a, slotText(s)); }, 0) * 7 + 26));
       });
-      var xy = {}, boxes = [], w, h, wrap = null;
+      var xy = Object.create(null), boxes = [], w, h, wrap = null;
       /* One slot is either a single measure or a labelled group of them; placing it writes
          the member coordinates and, for a group, the frame the reader sees around them. */
       var place = function (s, x, y, cw) {
@@ -440,7 +442,7 @@
         var rowW = grouping.slots.map(function (ss, li) { return ss.length * colW[li] + Math.max(0, ss.length - 1) * GAP; });
         var rowH = grouping.slots.map(function (ss) { return ss.reduce(function (a, s) { return Math.max(a, s.h); }, NH); });
         var widest = rowW.reduce(function (a, width) { return Math.max(a, width); }, 0);
-        var rowY = {}, ay = PY, oi;
+        var rowY = Object.create(null), ay = PY, oi;
         for (oi = 0; oi < nL; oi++) { var li0 = direction === 1 ? oi : nL - 1 - oi; rowY[li0] = ay; ay += rowH[li0] + GAP; }
         w = PX * 2 + widest; h = ay - GAP + PY;
         grouping.slots.forEach(function (ss, li) {
@@ -463,7 +465,7 @@
       }
       var rUp = this.gReach(root, deps), rDn = this.gReach(root, cons);
       var eList = []; visible.forEach(function (n) { deps[n].forEach(function (d) { if (!hidden.has(d)) eList.push([d, n]); }); });
-      var inE = {}, outE = {}, prt = {};
+      var inE = Object.create(null), outE = Object.create(null), prt = Object.create(null);
       eList.forEach(function (e, i) { (inE[e[1]] = inE[e[1]] || []).push(i); (outE[e[0]] = outE[e[0]] || []).push(i); prt[i] = [0, 0]; });
       Object.keys(outE).forEach(function (a) {
         var l = outE[a].slice().sort(function (i, j) { return vertical ? xy[eList[i][1]].x - xy[eList[j][1]].x : xy[eList[i][1]].y - xy[eList[j][1]].y; });
@@ -497,7 +499,7 @@
         var base = b === root || rUp.has(b) ? 'var(--smv-up-line,#c3b1ee)' : (a === root || rDn.has(a) ? 'var(--smv-down-line,#a8c5ef)' : 'var(--smv-line,#d4d9e2)');
         return { a: a, b: b, d: d, back: back, base: base };
       });
-      var relM = {}; Array.from(new Set([].concat(Array.from(upSet), Array.from(dnSet), names))).forEach(function (nm) { relM[nm] = nm === root ? 'root' : (upSet.has(nm) ? 'up' : (dnSet.has(nm) ? 'dn' : 'x')); });
+      var relM = Object.create(null); Array.from(new Set([].concat(Array.from(upSet), Array.from(dnSet), names))).forEach(function (nm) { relM[nm] = nm === root ? 'root' : (upSet.has(nm) ? 'up' : (dnSet.has(nm) ? 'dn' : 'x')); });
       return { root: root, orientation: orientation, names: visible, inc: inc, deps: deps, cons: cons, hidU: hidU, hidD: hidD,
         upSet: upSet, dnSet: dnSet, xy: xy, w: w, h: h, geo: geo, nE: eList.length, relM: relM, capped: capped,
         boxes: boxes, groupOf: grouping.groupOf, hiddenByGroup: hidden, grouped: grouping.grouped, wrap: wrap };
@@ -521,7 +523,7 @@
         return { cw: cw, per: per, rows: rows, heights: heights, width: per * cw + (per - 1) * GX,
           h: heights.reduce(function (a, x) { return a + x; }, 0) + Math.max(0, rows.length - 1) * ROWGAP };
       });
-      var widest = bands.reduce(function (a, b) { return Math.max(a, b.width); }, 0), slot = {}, y = PY;
+      var widest = bands.reduce(function (a, b) { return Math.max(a, b.width); }, 0), slot = Object.create(null), y = PY;
       var order = bands.map(function (b, li) { return li; }); if (up) order.reverse();
       order.forEach(function (li) {
         var band = bands[li], rows = band.rows.map(function (row, r) { return r; });
@@ -721,6 +723,53 @@
     },
     /* Calculated objects are consumers. Keep their identities separate from source
        table/column cards: NAMEOF references must never become measure inputs. */
+    /* Only calculated-consumer curves need this fallback: preserve the layered
+       renderer's normal routes. A bounded orthogonal search uses node-side rails
+       when a cubic would cut through another visible endpoint. */
+    avoidCalculatedObstacles: function (d, G, from, to) {
+      var values=d.match(/-?\d+(?:\.\d+)?/g).map(Number);
+      if(values.length!==8 || d.indexOf('C')<0)return null;
+      var boxes=Object.keys(G.xy).map(function(n){var p=G.xy[n];return {n:n,x:p.x,y:p.y,w:p.w,h:p.h||NH};});
+      var unrelated=boxes.filter(function(b){return b.n!==from&&b.n!==to;});
+      var blocked=false,samples=Math.min(8192,Math.max(100,Math.ceil((Math.hypot(values[2]-values[0],values[3]-values[1])+Math.hypot(values[4]-values[2],values[5]-values[3])+Math.hypot(values[6]-values[4],values[7]-values[5]))/2)));
+      for(var sample=1;sample<samples&&!blocked;sample++){
+        var t=sample/samples,u=1-t,x=u*u*u*values[0]+3*u*u*t*values[2]+3*u*t*t*values[4]+t*t*t*values[6],y=u*u*u*values[1]+3*u*u*t*values[3]+3*u*t*t*values[5]+t*t*t*values[7];
+        blocked=unrelated.some(function(b){return x>b.x-4&&x<b.x+b.w+4&&y>b.y-4&&y<b.y+b.h+4;});
+      }
+      if(!blocked)return null;
+      // Keep the original departure and arrival direction, including bottom-up arrows.
+      var origin=[values[0],values[1]],finish=[values[6],values[7]];
+      var start=[origin[0]+Math.sign(values[2]-origin[0])*8,origin[1]+Math.sign(values[3]-origin[1])*8];
+      var end=[finish[0]+Math.sign(values[4]-finish[0])*8,finish[1]+Math.sign(values[5]-finish[1])*8];
+      var xs=[start[0],end[0]],ys=[start[1],end[1]];
+      boxes.forEach(function(b){xs.push(b.x-8,b.x+b.w+8);ys.push(b.y-8,b.y+b.h+8);});
+      xs=Array.from(new Set(xs)).sort(function(a,b){return a-b;});ys=Array.from(new Set(ys)).sort(function(a,b){return a-b;});
+      var nx=xs.length,source=ys.indexOf(start[1])*nx+xs.indexOf(start[0]),target=ys.indexOf(end[1])*nx+xs.indexOf(end[0]);
+      var distance=new Map([[source,0]]),previous=new Map(),open=[source],closed=new Set(),visits=0;
+      function point(id){return [xs[id%nx],ys[Math.floor(id/nx)]];}
+      function clear(a,b){return !boxes.some(function(r){return a[0]===b[0]
+        ? a[0]>r.x+.01&&a[0]<r.x+r.w-.01&&Math.max(a[1],b[1])>r.y+.01&&Math.min(a[1],b[1])<r.y+r.h-.01
+        : a[1]>r.y+.01&&a[1]<r.y+r.h-.01&&Math.max(a[0],b[0])>r.x+.01&&Math.min(a[0],b[0])<r.x+r.w-.01;});}
+      // Most consumer detours need just one free horizontal or vertical channel.
+      // Try those before the general search, including outer rails for dense graphs.
+      var simple=null,simpleCost=Infinity;
+      function consider(points){var cost=0;for(var i=1;i<points.length;i++){if(!clear(points[i-1],points[i]))return;cost+=Math.abs(points[i][0]-points[i-1][0])+Math.abs(points[i][1]-points[i-1][1]);}if(cost<simpleCost){simple=points;simpleCost=cost;}}
+      xs.forEach(function(x){consider([start,[x,start[1]],[x,end[1]],end]);});
+      ys.forEach(function(y){consider([start,[start[0],y],[end[0],y],end]);});
+      while(!simple&&open.length&&visits++<12000){
+        var best=0,score=Infinity;
+        open.forEach(function(id,i){var p=point(id),v=distance.get(id)+Math.abs(p[0]-end[0])+Math.abs(p[1]-end[1]);if(v<score){score=v;best=i;}});
+        var id=open.splice(best,1)[0];if(id===target)break;closed.add(id);
+        var a=point(id),ix=id%nx,iy=Math.floor(id/nx),neighbors=[];
+        if(ix)neighbors.push(id-1);if(ix<nx-1)neighbors.push(id+1);if(iy)neighbors.push(id-nx);if(iy<ys.length-1)neighbors.push(id+nx);
+        neighbors.forEach(function(next){if(closed.has(next))return;var b=point(next);if(!clear(a,b))return;var cost=distance.get(id)+Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1]);if(cost<(distance.get(next)===undefined?Infinity:distance.get(next))){distance.set(next,cost);previous.set(next,id);if(open.indexOf(next)<0)open.push(next);}});
+      }
+      if(!simple&&!previous.has(target))return null; // bounded fallback; never invent an endpoint
+      var points=simple||[end],at=target;if(!simple){while(at!==source){at=previous.get(at);points.push(point(at));}points.reverse();}points.unshift(origin);points.push(finish);
+      points=points.filter(function(p,i,a){return !i||i===a.length-1||!((a[i-1][0]===p[0]&&p[0]===a[i+1][0])||(a[i-1][1]===p[1]&&p[1]===a[i+1][1]));});
+      var label=start,longest=0;points.forEach(function(p,i){if(!i)return;var a=points[i-1],length=Math.abs(p[0]-a[0])+Math.abs(p[1]-a[1]);if(length>longest){longest=length;label=[(p[0]+a[0])/2,(p[1]+a[1])/2];}});
+      return {d:points.map(function(p,i){return (i?' L':'M')+p[0]+','+p[1];}).join(''),labelX:label[0]+8,labelY:label[1]-8};
+    },
     addCalculatedLayout: function (G) {
       var self = this, app = this.app, catalog = app.tableDax ? app.tableDax.objects() : g.TableDax ? g.TableDax.objects(app) : [];
       var cards = [], links = [], limit = 80, edgeLimit = 160, capped = false;
@@ -775,7 +824,13 @@
       });
       links.forEach(function (link, index) {
         var A=G.xy[link.from],B=G.xy[link.to],x1,y1,x2,y2,d;
-        if(vertical){x1=A.x+A.w/2;y1=A.y+(bottom?0:NH);x2=B.x+B.w/2;y2=B.y+(bottom?cards.find(function(c){return c.id===link.to;}).h:0);var middle=(y1+y2)/2;d='M'+x1+','+y1+' C'+x1+','+middle+' '+x2+','+middle+' '+x2+','+y2;}
+        if(vertical){
+          x1=A.x+A.w/2;y1=A.y+(bottom?0:NH);x2=B.x+B.w/2;y2=B.y+(bottom?cards.find(function(c){return c.id===link.to;}).h:0);
+          var middle=(y1+y2)/2;
+          // Source rows share one table card: depart its side, never through adjacent rows.
+          if(!G.names.includes(link.from)){x1=A.x+A.w;y1=A.y+NH/2;d='M'+x1+','+y1+' C'+(x1+32)+','+y1+' '+x2+','+middle+' '+x2+','+y2;}
+          else d='M'+x1+','+y1+' C'+x1+','+middle+' '+x2+','+middle+' '+x2+','+y2;
+        }
         else {
           x1=A.x+A.w; y1=A.y+NH/2; x2=B.x; y2=B.y+NH/2;
           var bend=Math.min(90,Math.max(24,(x2-x1)/2));
@@ -788,8 +843,9 @@
             d='M'+x1+','+y1+' C'+(x1+bend)+','+y1+' '+(x2-bend)+','+y2+' '+x2+','+y2;
           }
         }
+        var routed=self.avoidCalculatedObstacles(d,G,link.from,link.to);if(routed)d=routed.d;
         G.deps[link.to].push(link.from);(G.cons[link.from]||(G.cons[link.from]=[])).push(link.to);
-        G.geo.push({a:link.from,b:link.to,d:d,base:cards.find(function(c){return c.id===link.to;}).color,calculated:true,label:link.label,labelX:vertical?(x1+x2)/2+8:x2+12,labelY:vertical?(y1+y2)/2:B.y-8,scope:link.scope});
+        G.geo.push({a:link.from,b:link.to,d:d,base:cards.find(function(c){return c.id===link.to;}).color,calculated:true,label:link.label,labelX:routed?routed.labelX:vertical?(x1+x2)/2+8:x2+12,labelY:routed?routed.labelY:vertical?(y1+y2)/2:B.y-8,scope:link.scope});
       });
       if(cards.length){G.w=Math.max(G.w,Math.max.apply(null,cards.map(function(c){return c.x+c.w;}))+60);G.h=Math.max(G.h,Math.max.apply(null,cards.map(function(c){return c.y+c.h;}))+60);}
       G.calculations=cards;G.calculationsCapped=capped;G.nE=G.geo.length;
@@ -803,7 +859,7 @@
       (G.calculations || []).forEach(function (c) {
         var o = c.object;
         var open = function () { app.tableDax.open(o.table, o.item, o.column); };
-        var card = el('section', { cls: 'mv-source-card mv-calculated-card', 'aria-label': 'Calculated table ' + o.table,
+        var card = el('section', { cls: 'mv-source-card mv-calculated-card', 'aria-label': o.label + ' ' + o.name,
           style: 'left:' + c.x + 'px;top:' + c.y + 'px;width:' + c.w + 'px;--mv-source-color:' + c.color + ';--mv-source-tint:' + U.tint(c.color, .08) + ';' });
         card.appendChild(el('button', { cls: 'mv-source-header', text: o.name,
           title: 'Show DAX calculation for ' + o.name, 'aria-label': 'Show DAX calculation for ' + o.name, onClick: open }));
@@ -1029,6 +1085,7 @@
       });
     },
     pickMeasure: function (n) {
+      this._narrowLibraryOpen = false;
       if(this.options.onPickMeasure){this.options.onPickMeasure(n);return;}
       if(this.app.tableDax)this.app.tableDax.close();
       var self = this, app = this.app;
@@ -1107,7 +1164,7 @@
 
     /* ---------- DAX tokenizer / cards ---------- */
     daxToks: function (dax) {
-      var H = (this.app.model || {}).msrHome || {}, out = [], names = {};
+      var H = (this.app.model || {}).msrHome || {}, out = [], names = Object.create(null);
       Object.keys(H).forEach(function (name) { names[name.toLowerCase()] = name; });
       var re = /(\/\/[^\n]*|--[^\n]*|\/\*[\s\S]*?\*\/)|("(?:[^"]|"")*")|((?:(?:'(?:[^']|'')+'|[A-Za-z_\u0080-\uffff][A-Za-z0-9_.\u0080-\uffff]*)\s*)?\[(?:[^\]\r\n]|\]\])+\])/g;
       var pushTxt = function (s) {
@@ -1454,7 +1511,7 @@
         /* Answer views hide the docked library; there the same button opens it as an overlay. */
         this.libraryToggle = el('button', { cls:'mv-button', text:'Measure library', 'aria-controls':this.libraryId, 'aria-expanded':String(!this._libraryCollapsed), 'data-smv-browse':'library', onClick:function(){
           if (window.SMVInteractive && window.SMVInteractive.browse && document.body.dataset.smvInteractive) window.SMVInteractive.browse(app);
-          else self.setLibraryCollapsed(!self._libraryCollapsed,true);
+          else self.setLibraryCollapsed(!self.libraryCollapsed(),true);
         } });
         this.libraryControl = el('div',{cls:'mv-library-control'},[this.libraryToggle]);
         column.appendChild(this.libraryControl);
@@ -1465,17 +1522,32 @@
     },
     setLibraryCollapsed: function (collapsed, focus) {
       if (collapsed && window.SMVInteractive && document.body.classList.contains('smv-browse-open')) window.SMVInteractive.closeLibrary(true);
-      this._libraryCollapsed = !!collapsed;
-      var prefs = store.getJSON(PREF_KEY, {}) || {}; prefs.libraryCollapsed = this._libraryCollapsed; store.setJSON(PREF_KEY, prefs);
+      if (window.innerWidth < 800) this._narrowLibraryOpen = !collapsed;
+      else {
+        this._libraryCollapsed = !!collapsed;
+        var prefs = store.getJSON(PREF_KEY, {}) || {}; prefs.libraryCollapsed = this._libraryCollapsed; store.setJSON(PREF_KEY, prefs);
+      }
       this.updateLibrary();
       if (focus) { var target = collapsed ? this.libraryToggle : this.qInput; if (target) target.focus(); }
     },
+    libraryCollapsed: function () {
+      if (window.innerWidth < 800 && !this.options.comparison) {
+        if (typeof this._narrowLibraryOpen === 'boolean') return !this._narrowLibraryOpen;
+        return !!this.graphRoot() || this._libraryCollapsed;
+      }
+      return this._libraryCollapsed;
+    },
     updateLibrary: function () {
       if (!this.workspace) return;
-      this.workspace.dataset.libraryCollapsed = String(this._libraryCollapsed);
-      this.pane.inert = this._libraryCollapsed;
-      this.libraryResizer.hidden = this._libraryCollapsed;
-      if (this.libraryToggle) this.libraryToggle.setAttribute('aria-expanded', String(!this._libraryCollapsed));
+      var root = this.graphRoot();
+      if (root !== this._narrowRoot) { this._narrowRoot = root; this._narrowLibraryOpen = undefined; }
+      var collapsed = this.libraryCollapsed();
+      var focusFromLibrary = collapsed && this.pane.contains && this.pane.contains(document.activeElement);
+      this.workspace.dataset.libraryCollapsed = String(collapsed);
+      this.pane.inert = collapsed;
+      this.libraryResizer.hidden = collapsed;
+      if (this.libraryToggle) this.libraryToggle.setAttribute('aria-expanded', String(!collapsed));
+      if (focusFromLibrary && this.libraryToggle) this.libraryToggle.focus({ preventScroll: true });
     },
     paneStyle: function () { return 'width:' + Math.max(240, Math.min(480, this.app.state.mvW || 296)) + 'px;'; },
     libraryQueryField: function () { if(this.sourceMode()==='calculations')return 'mvCalculationQuery'; return this.sourceMode() === 'measures' ? 'mvQuery' : this.app.state.mvSourcePicking || !this.app.state.dependencySource ? 'mvSourceQuery' : 'mvImpactQuery'; },
@@ -1567,7 +1639,7 @@
         // The library toggle moves between its own row and a compact header; moving a node blurs it.
         var toggleFocused = !!this.libraryToggle && document.activeElement === this.libraryToggle;
         if (this.libraryControl && this.libraryToggle.parentNode !== this.libraryControl) { this.libraryToggle.textContent = 'Measure library'; this.libraryControl.appendChild(this.libraryToggle); }
-        this._flowKey = null; this._daxKey = null; this._nodeEls = {}; this._edgeEls = {}; this._edgeLabels = {}; this._groupEls = {}; this._sourceLayer = null;
+        this._flowKey = null; this._daxKey = null; this._nodeEls = Object.create(null); this._edgeEls = Object.create(null); this._edgeLabels = Object.create(null); this._groupEls = Object.create(null); this._sourceLayer = null;
         if (this._graphObserver) { this._graphObserver.disconnect(); this._graphObserver = null; }
         U.clear(this.mainEl);
         if (m || source) this.buildSelectedMain(sn, m || { _deps: [], _cols: [] }); else if (this.sourceMode() === 'sources') this.buildSourceEmptyMain(); else this.buildEmptyMain();
@@ -1601,7 +1673,11 @@
       dialog.addEventListener('close', function () {
         dialog.remove();
         if (self._matchingDialog === dialog) self._matchingDialog = null;
-        if (previous && previous.isConnected) previous.focus({ preventScroll: true });
+        var target = previous && previous.isConnected ? previous : self.mainEl.querySelector('.mv-search-summary button');
+        if (target) {
+          if (window.innerWidth < 800 && self.mainEl.contains(target)) self.setLibraryCollapsed(true, false);
+          target.focus({ preventScroll: true });
+        }
       });
       var heading = el('header', { cls: 'mv-results-heading' }, [
         el('div', {}, [el('h2', { text: matches.length + (matches.length === 1 ? ' matching measure' : ' matching measures') }),
@@ -1907,7 +1983,7 @@
     },
     splitMetrics: function () {
       var rect = this.analysisBody.getBoundingClientRect(), css = getComputedStyle(this.analysisBody);
-      var layout = this._splitLayout === 'auto' ? (rect.width < 720 || rect.width < rect.height * 1.1 ? 'below' : 'beside')
+      var layout = window.innerWidth < 800 && !this.options.comparison ? 'below' : this._splitLayout === 'auto' ? (rect.width < 720 || rect.width < rect.height * 1.1 ? 'below' : 'beside')
         : this._splitLayout === 'beside' && rect.width < 720 ? 'below' : this._splitLayout;
       var padding = layout === 'below' ? parseFloat(css.paddingTop) + parseFloat(css.paddingBottom) : parseFloat(css.paddingLeft) + parseFloat(css.paddingRight);
       var available = Math.max(1, (layout === 'below' ? rect.height : rect.width) - padding - 12);
@@ -2023,7 +2099,7 @@
       this.renderCalculatedCards(G);
 
       /* edges — reuse path elements so the CSS d-transition animates on expansion */
-      var seenE = {};
+      var seenE = Object.create(null);
       G.edges.forEach(function (E) {
         seenE[E.key] = 1;
         var p = self._edgeEls[E.key];
@@ -2051,7 +2127,7 @@
 
       /* group frames — one per home table + display folder bundle, keyed so a frame that
          survives a re-layout keeps its element (and its expanded state reads instantly) */
-      var seenG = {};
+      var seenG = Object.create(null);
       (G.groups || []).forEach(function (grp) {
         seenG[grp.key] = 1;
         var rec = self._groupEls[grp.key];
@@ -2079,7 +2155,7 @@
       });
 
       /* nodes — keyed by measure name so left/top transitions survive re-layout */
-      var seenN = {};
+      var seenN = Object.create(null);
       G.nodes.forEach(function (N) {
         seenN[N.name] = 1;
         var rec = self._nodeEls[N.name];
@@ -2168,14 +2244,14 @@
         cmt: 'color:var(--smv-muted,#94a0b0);font-style:italic;', num: 'color:var(--smv-ink,#3a414d);', op: 'color:var(--smv-ink,#3a414d);', txt: 'color:var(--smv-ink,#3a414d);' };
       var plain = !!(card.inlined && this._plainDax);
       var foldKey = [card.foldKey || card.name, this._fmt, card.inlined ? 'i' : 'n'].join('|');
-      var set = this._folds[foldKey] || (this._folds[foldKey] = {});
-      var seen = {}, byFrom = {};
+      var set = this._folds[foldKey] || (this._folds[foldKey] = Object.create(null));
+      var seen = Object.create(null), byFrom = Object.create(null);
       P.regions.forEach(function (r) {
         var base = r.kind + ':' + r.label; seen[base] = (seen[base] || 0) + 1; r.key = base + '#' + seen[base];
         (byFrom[r.from] = byFrom[r.from] || []).push(r);
       });
       var body = el('pre', { cls: 'mv-dax-body mv-dax-fold' + (plain ? ' mv-dax-plain' : ''), tabindex: '0', 'aria-label': 'DAX formula for ' + card.name });
-      var refCache = {};
+      var refCache = Object.create(null);
       var rawSegment = function (p) {
         if (p.k === 'inl') {
           return el('button', { cls: 'mv-dax-ref mv-dax-chip', style: self.depthChipStyle(p.depth || 0), text: p.v,
@@ -2456,7 +2532,7 @@
     },
     clearComparison: function () {
       if (!this.comparison) return;
-      this.comparison.destroy(); this.comparison = null; this._built = false; this._gC = null; this._mainKey = null; this._railKey = null; this._daxKey = null; this._flowKey=null;this._nodeEls={};this._edgeEls={};this._edgeLabels={};this._groupEls={};this._sourceLayer=null;this._gScrolledFor=null;this._initViewportFor=null;U.clear(this.host);
+      this.comparison.destroy(); this.comparison = null; this._built = false; this._gC = null; this._mainKey = null; this._railKey = null; this._daxKey = null; this._flowKey=null;this._nodeEls=Object.create(null);this._edgeEls=Object.create(null);this._edgeLabels=Object.create(null);this._groupEls=Object.create(null);this._sourceLayer=null;this._gScrolledFor=null;this._initViewportFor=null;U.clear(this.host);
     },
     update: function () {
       if (this.comparison) { this.comparison.update(); return; }
@@ -2466,7 +2542,7 @@
       if (this._matchingDialog && (!on || this._matchingModel !== app.model)) this.closeMatchingResults();
       if (!on) {
         if (this._built) this.rememberGraphViewport();
-        if (this._built) { if (this._graphObserver) { this._graphObserver.disconnect(); this._graphObserver = null; } U.clear(this.host); this._built = false; this._railKey = null; this._mainKey = null; this._daxKey = null; this._nodeEls = {}; this._edgeEls = {}; this._edgeLabels = {}; this._groupEls = {}; this._sourceLayer = null; this._gScrolledFor = null; this._initViewportFor = null; }
+        if (this._built) { if (this._graphObserver) { this._graphObserver.disconnect(); this._graphObserver = null; } U.clear(this.host); this._built = false; this._railKey = null; this._mainKey = null; this._daxKey = null; this._nodeEls = Object.create(null); this._edgeEls = Object.create(null); this._edgeLabels = Object.create(null); this._groupEls = Object.create(null); this._sourceLayer = null; this._gScrolledFor = null; this._initViewportFor = null; }
         return;
       }
       if (this._built && this._shellModel !== app.modelKey) {

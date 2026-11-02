@@ -31,10 +31,22 @@
         cur.crossFilteringBehavior=m[1];cur.both=m[1]==='bothDirections';
       }
     });
-    if(options && options.strictRelationships) out.forEach(function(r){
-      if(!r.from||!r.fromCol||!r.to||!r.toCol) throw new Error('Relationship is missing a table or column endpoint.');
+    return out;
+  }
+
+  function validateRelationships(tables, relationships, options){
+    options=options||{};
+    var names=new Set(tables.map(function(t){return t.name;})), accepted=[], issues=[];
+    relationships.forEach(function(r,index){
+      var reason='';
+      if(!r || !r.from || !r.to || (options.checkColumns!==false && (!r.fromCol || !r.toCol))) reason='missing a table or column endpoint';
+      else if(!names.has(r.from)||!names.has(r.to)) reason='missing table: '+r.from+' → '+r.to;
+      if(reason) issues.push({name:r&&r.name||'Relationship '+(index+1),reason:reason});
+      else accepted.push(r);
     });
-    return out.filter(function(r){ return r.from&&r.fromCol&&r.to&&r.toCol; });
+    var diagnostics={total:relationships.length,accepted:accepted.length,rejected:issues.length,issues:issues};
+    if(options.strictRelationships && issues.length) throw new Error('Relationship validation: '+accepted.length+' accepted, '+issues.length+' rejected of '+relationships.length+'. '+issues.map(function(i){return i.name+': '+i.reason;}).join('; ')+'. Model was not loaded.');
+    return {relationships:accepted,diagnostics:diagnostics};
   }
 
   /* TMDL wraps a multi-line expression in ``` fences. They are not DAX, so drop them. */
@@ -270,15 +282,9 @@
   }
 
   function finalize(name, tables, rels, ctx, options){
-    var byName={}; tables.forEach(function(t){ byName[t.name]=t; (t.measures||[]).forEach(function(mm){ mm.dax=unfence(mm.dax); }); });
-    var seen={};
-    if(options && options.strictRelationships){
-      // A snapshot must not silently drop dangling or parallel relationships.
-      rels.forEach(function(r){if(!byName[r.from]||!byName[r.to])throw new Error('Relationship refers to a missing table: '+r.from+' → '+r.to);});
-    } else {
-      rels=rels.filter(function(r){ return byName[r.from]&&byName[r.to]; })
-        .filter(function(r){ var k=r.from+'|'+r.fromCol+'|'+r.to+'|'+r.toCol; if(seen[k])return false; seen[k]=1; return true; });
-    }
+    var byName=Object.create(null); tables.forEach(function(t){ byName[t.name]=t; (t.measures||[]).forEach(function(mm){ mm.dax=unfence(mm.dax); }); });
+    // Parallel relationships can have different activity/direction; retain each identity.
+    var validation=validateRelationships(tables,rels,options); rels=validation.relationships;
     var oneSide={}, manySide={}, rc={};
     rels.forEach(function(r){
       rc[r.from]=(rc[r.from]||0)+1; rc[r.to]=(rc[r.to]||0)+1;
@@ -304,7 +310,7 @@
       t.domain = t.tableGroup || domMap[t.role] || (t.source.kind==='manual'?'Manual':t.source.kind==='calculated'?'Calculated':'Ungrouped');
       t.colCount=t.columns.length; t.measureCount=t.measures.length; t.relCount=rc[t.name]||0;
     });
-    return {name:name, groupingVersion:1, tables:tables, relationships:rels};
+    return {name:name, groupingVersion:1, tables:tables, relationships:rels,relationshipDiagnostics:validation.diagnostics};
   }
 
   /* Shared queries (expressions.tmdl) hold the real connector calls and the
@@ -464,7 +470,7 @@
          `database` line, so it would greedily swallow the next line's own
          property (e.g. `compatibilityLevel: 1606`) and misread it as the name */
       var m=txt.match(/^database[ \t]+(.+)$/m); if(m) name=unq(m[1]);
-      if(/^relationship\s/m.test(txt) && ((options && options.strictRelationships) || /fromColumn:/.test(txt))) rels=rels.concat(parseRelText(txt, options));
+      if(/^relationship\s/m.test(txt)) rels=rels.concat(parseRelText(txt, options));
       if(/^table\s/m.test(txt)){ var t=parseTableText(txt); if(t){ referenceTMDL(t,txt); tables.push(t); } }
     });
     /* tables are queries too — `Source = MdGeoEntities` points at another table's partition */
@@ -518,8 +524,12 @@
       if(/\.(bim|json)$/i.test(f.name)){
         try{
           var j=JSON.parse(f.text);
-          if(j && Array.isArray(j.tables) && Array.isArray(j.relationships) && j.tables.length && j.tables[0].columns && j.tables[0].domain!==undefined)
-            return {name:j.name||'', tables:j.tables, relationships:j.relationships, powerQuery:j.powerQuery, referenceLoadedAt:j.referenceLoadedAt};
+          if(j && Array.isArray(j.tables) && Array.isArray(j.relationships) && j.tables.length && j.tables[0].columns && j.tables[0].domain!==undefined){
+            var checked=validateRelationships(j.tables,j.relationships,{checkColumns:false}), previous=j.relationshipDiagnostics;
+            if(previous && Array.isArray(previous.issues)) checked.diagnostics.issues=previous.issues.filter(function(issue){return issue&&typeof issue.name==='string'&&typeof issue.reason==='string';}).map(function(issue){return {name:issue.name,reason:issue.reason};}).concat(checked.diagnostics.issues);
+            checked.diagnostics.rejected=checked.diagnostics.issues.length;checked.diagnostics.total=checked.diagnostics.accepted+checked.diagnostics.rejected;
+            return {name:j.name||'', tables:j.tables, relationships:checked.relationships, relationshipDiagnostics:checked.diagnostics, powerQuery:j.powerQuery, referenceLoadedAt:j.referenceLoadedAt};
+          }
           if(j && j.model && Array.isArray(j.model.tables)) return parseBIM(j);
           if(j && Array.isArray(j.tables) && j.compatibilityLevel!==undefined) return parseBIM(j);
         }catch(e){}
@@ -530,5 +540,5 @@
     return m;
   }
 
-  g.TMDLParser={unfence:unfence, parseAny:parseAny, parseTMDL:parseTMDL, parseBIM:parseBIM, CONNECTORS:CONNECTORS};
+  g.TMDLParser={unfence:unfence, parseAny:parseAny, parseTMDL:parseTMDL, parseBIM:parseBIM, validateRelationships:validateRelationships, CONNECTORS:CONNECTORS};
 })(typeof window!=='undefined'?window:globalThis);

@@ -20,7 +20,9 @@
     "build:plugin": "node scripts/build-claude-plugin.cjs",
     "build:portable": "node scripts/build-portable.cjs",
     "build:codex-plugin": "node scripts/build-codex-plugin.cjs",
-    "build:vscode-cli": "node scripts/build-vscode-cli.cjs"
+    "build:vscode-cli": "node scripts/build-vscode-cli.cjs",
+    "check:viewer-assets": "node scripts/refresh-viewer-assets.cjs --check",
+    "benchmark:audit": "node scripts/benchmark-audit.cjs"
   },
   "files": [
     ".claude-plugin/",
