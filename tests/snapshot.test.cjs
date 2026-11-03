@@ -273,3 +273,9 @@ test('Fabric snapshots keep acquisition coverage and exclude connection identity
   const reexport=appFixture();reexport.snapshotInfo={source:payload.source};
   assert.deepEqual(Snapshots.capture(reexport).source,payload.source);
 });
+
+test('snapshot retains relationship omission evidence using only documented diagnostic fields',()=>{
+ const original=model();original.relationshipDiagnostics={total:3,accepted:1,rejected:2,secret:'exclude',issues:[{name:'broken',reason:'missing table: Gone',secret:'exclude'}]};
+ const output=Snapshots.modelData(original);
+ assert.deepEqual(output.relationshipDiagnostics,{total:3,accepted:1,rejected:2,issues:[{name:'broken',reason:'missing table: Gone'}]});
+});

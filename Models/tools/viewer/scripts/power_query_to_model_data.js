@@ -2,8 +2,9 @@
 /* Adds Power Query metadata to a model-data.json made by tmdl_to_model_data.py.
    Usage: node power_query_to_model_data.js "<Model>.SemanticModel" ../model-data.json
    It runs the viewer's own parser (js/tmdl-parser.js) over the TMDL files, so the
-   metadata cannot drift from what the browser would read. Only for the synthetic
-   built-in demo: user models and shared snapshots never carry raw M. */
+   metadata uses the same extraction contract as browser imports. Available raw M
+   definitions are included in model data and interactive snapshots; this is not
+   a sanitization step. Review definitions, parameters and endpoints before sharing. */
 'use strict';
 const fs = require('node:fs');
 const path = require('node:path');

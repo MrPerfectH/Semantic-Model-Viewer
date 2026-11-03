@@ -87,7 +87,7 @@ function fixture(storage = new Map(), modelKey = 'first') {
   app.explorer = explorer;
   explorer.update = function () {};
   explorer.loadModel();
-  return { app, cv, explorer, storage, main, canvasMethods: window.GraphCanvas.prototype };
+  return { window, app, cv, explorer, storage, main, canvasMethods: window.GraphCanvas.prototype };
 }
 
 test('blank canvas and table membership persist separately for each model', () => {
@@ -701,4 +701,12 @@ test('disconnected visibility persists without removing canvas membership and ro
  explorer.loadModel();cv.refreshVisibility();assert.equal(cv.showSA,false);
  cv.restoreDisplay(display);cv.refreshVisibility();assert.equal(cv.cards.C.el.style.display,'');
  cv.toggleStandalone();explorer.showAll();assert.equal(cv.showSA,true);
+});
+
+test('narrow toolbar reserves its measured height and desktop restores standard geometry',()=>{
+ const {window,explorer,cv,main}=fixture();const values={};main.style.setProperty=(key,value)=>values[key]=value;
+ explorer.toolbar.getBoundingClientRect=()=>({height:85,bottom:269});window.innerWidth=390;explorer.toolbar.hidden=false;
+ explorer.layoutToolbar();assert.equal(cv.host.style.top,'85px');assert.equal(values['--workspace-toolbar-height'],'85px');assert.equal(values['--workspace-menu-top'],'273px');
+ window.innerWidth=1920;explorer.layoutToolbar();assert.equal(cv.host.style.top,'62px');
+ explorer.toolbar.hidden=true;explorer.layoutToolbar();assert.equal(cv.host.style.top,'0px');
 });

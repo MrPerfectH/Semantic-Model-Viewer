@@ -1,0 +1,3018 @@
+{
+  "purpose": "Coverage inventory, not a deduplication or deletion list. Generated historical probes may have unique assertions. Browser files require explicit execution.",
+  "files": [
+    {
+      "file": "tests/agent-delivery.test.cjs",
+      "bytes": 10893,
+      "gate": "canonical-unit",
+      "assertionSites": 53,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:child_process",
+        "../packages/engine/index.cjs",
+        "../Models/tools/viewer/scripts/cli/query.cjs",
+        "../scripts/sync-engine.cjs",
+        "./vscode-mock",
+        "node:crypto",
+        "node:vm",
+        "../scripts/vendor-node.cjs",
+        "../runtime/node-lock.json",
+        "../scripts/build-portable.cjs",
+        "./vscode-mock",
+        "../vscode-extension/src/agent-tools",
+        "node:vm"
+      ],
+      "testTitles": [
+        "shared record engine preserves CLI relationship answers and renders both diagram modes",
+        "native tools use the packaged worker, require workspace trust, preserve views and acknowledge revisions",
+        "source launcher fails clearly without a private runtime and never invokes a PATH CLI",
+        "runtime assembly rejects corrupt downloads and inputs before producing a package",
+        "permission recovery refuses a corrupt private runtime without executing it",
+        "editor readiness is bounded and a late completion cannot overwrite timeout evidence"
+      ]
+    },
+    {
+      "file": "tests/app.test.cjs",
+      "bytes": 53989,
+      "gate": "canonical-unit",
+      "assertionSites": 250,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm"
+      ],
+      "testTitles": [
+        "dependency index resolves qualified measures and preserves real column references",
+        "strings, comments, escaped identifiers and case-insensitive names do not lose or invent edges",
+        "late built-in report usage cannot leak into a subsequently selected imported model",
+        "report usage still loads for the active built-in model",
+        "a late model fetch cannot replace a newer model selection",
+        "storage failure preserves the import preview and current model, then allows retry",
+        "multi-model import failure does not close the dialog or open a fallback model",
+        "repo cache storage failure does not silently reopen the stale cached model",
+        "repo refresh cannot reopen an old selection after the user switches model",
+        "a drop handled by the import modal stops bubbling to the root import listener",
+        "root import listener ignores internal table drags and text-only drops",
+        "switching models after expanding cards cannot restore the previous model positions",
+        "forced render refreshes an already-open layout list after saving and deleting a preset",
+        "a genuinely fresh browser boots with no model selected, not the bundled sample",
+        "a fresh boot never persists a current-model choice the user did not make",
+        "a returning user (smv_current_v1 already set) still boots straight into their model",
+        "VS Code opens the model that was clicked, not the last cached Fabric model",
+        "model switches restore lane zoom with positions and discard the previous model size cache",
+        "invalid saved lane zoom falls back to a finite supported value",
+        "role annotation patch preserves DAX, child annotations, and CRLF; Auto removes only table annotation",
+        "repo role writes TMDL and is visible in a fresh parser without browser overrides",
+        "denied or failed repo writes leave classification and file unchanged",
+        "cached disconnected repo does not silently save a browser-only override",
+        "importing a model with an existing name updates it in place and keeps its id",
+        "refresh re-reads the open model, reports new tables, and remembers the folder",
+        "a folder import remembers its folder, so refresh never shows the picker",
+        "refresh with an unchanged source makes no change",
+        "refresh cancelled at the folder picker or failing to read changes nothing",
+        "refresh is unavailable for the built-in model, hosts, and browsers without folder access",
+        "repo import discovers first, reads only models, and keeps nested paths and multiple model names",
+        "direct model readers skip discovery and flat TMDL/BIM folders fall back after discovery",
+        "successful unreadable JSON and invalid model responses report actionable transport errors",
+        "local app: the folder chooser resolves to the chosen folder and remembers it",
+        "local app: connecting a repo scans through the server and opens its single model, no browser picker",
+        "local app: Refresh re-reads a repo model and an imported model without any prompt",
+        "local app: the hosted page is the demo and opens the sample; the local app does not",
+        "source impact distinguishes whole tables, columns, home tables and indirect measures",
+        "table reference scanning skips strings, comments, functions and variable names",
+        "source impact terminates on measure cycles and is rebuilt for a new model",
+        "Tables to Power Query and back preserves viewport; other normal return routes still fit",
+        "displayed DAX references use the same resolution rules as dependency indexing",
+        "snapshot without saved explorer settings explores both active filter directions, so a dimension shows its facts",
+        "table folders override special categories and ordinary ungrouped tables remain neutral",
+        "automatic group palette ranks once, keeps slots across added groups and isolates models",
+        "source identities distinguish connections and schemas but ignore table names",
+        "portable colour preferences validate values and retain independent modes",
+        "arbitrary table and measure identifiers are safe dictionary keys",
+        "failed same-name preparation preserves stored record, selection and import preview",
+        "failed stored-model preparation keeps the previous usable model and selection",
+        "selection-key storage refusal cannot replace a same-name stored import",
+        "record storage refusal restores selection and permits retry without losing candidate",
+        "quoted missing whole tables remain unresolved evidence without treating DAX syntax as tables",
+        "relationship omissions stay counted through repeated preparation without losing parallel edges",
+        "late snapshot completion cannot post the previous model success message",
+        "full adoption assigns real roles to prototype-named tables and preserves their side counts",
+        "Fabric same-key invalid refresh never writes cached records before adoption validation",
+        "multi-import preparation failure keeps the old same-key record while adopting valid siblings",
+        "failed multi-import cannot replace the previous refresh source",
+        "background repo refresh reports invalid candidate and retains stored record"
+      ]
+    },
+    {
+      "file": "tests/browser-defaults.test.cjs",
+      "bytes": 1944,
+      "gate": "canonical-unit",
+      "assertionSites": 11,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:path",
+        "node:child_process",
+        "../Models/tools/viewer/js/relationships.js"
+      ],
+      "testTitles": [
+        "both filter directions are a union of directed paths, not an undirected walk",
+        "every CLI subcommand provides help before attempting I/O",
+        "argument errors identify the missing model and how to obtain help"
+      ]
+    },
+    {
+      "file": "tests/browser-startup.test.cjs",
+      "bytes": 1553,
+      "gate": "canonical-unit",
+      "assertionSites": 4,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "demo browser startup timeout reaps Chrome and removes its temporary profile"
+      ]
+    },
+    {
+      "file": "tests/canvas-interactions.test.cjs",
+      "bytes": 17902,
+      "gate": "canonical-unit",
+      "assertionSites": 95,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm"
+      ],
+      "testTitles": [
+        ",",
+        "card and compact-label clicks preserve viewport in Dim and Hide modes",
+        "panning preserves selected table, pins, lock, relationship and isolate visibility",
+        "an out-and-back pan remains a drag when released at its starting point",
+        "a background click clears selection and pins only after release while retaining its lock",
+        "pointer jitter stays a click and never moves the viewport",
+        "pan threshold uses screen pixels at every zoom",
+        "right and middle gestures cannot pan or clear selection",
+        "moving another card preserves existing selection, pins and locked roots",
+        "a card click selects that card without becoming a background click",
+        "right and middle gestures cannot move or select a card",
+        "canvas controls and their descendants cannot initiate a pan",
+        "blur cancels a pending background click without clearing selection",
+        "blur ends a pan until a fresh gesture starts",
+        "blur ends a card drag, persists its position once and ignores later pointer movement",
+        "shift+drag on the background marks the tables the box touches without panning or clearing focus",
+        "alt+click toggles a table in the marked set and a background click clears it",
+        "overlapping hit corridors resolve to nearest visible route at each zoom, independent of paint order",
+        "exactly coincident paths cycle in model order while hover retains selected identity",
+        "tooltip cleanup is safe before build and restores hovered stroke",
+        "a selected route cannot override a different route even within a fraction of a pixel",
+        "table names matching Object prototype keys retain independent finite canvas positions",
+        "relationship keyboard navigation keeps one tab stop and wraps without selecting"
+      ]
+    },
+    {
+      "file": "tests/canvas-label-placement.test.cjs",
+      "bytes": 3756,
+      "gate": "canonical-unit",
+      "assertionSites": 18,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:vm",
+        "node:path"
+      ],
+      "testTitles": [
+        "crowded runs still reject overlapping full labels",
+        "low zoom keeps the existing arrow-only representation",
+        "obstacle refinement honors shared budget without dropping relationship endpoints",
+        "simple clear channels avoid an obstacle without spending search budget"
+      ]
+    },
+    {
+      "file": "tests/claude-plugin.test.cjs",
+      "bytes": 9623,
+      "gate": "canonical-unit",
+      "assertionSites": 60,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "Git marketplace plugin ships current focused-view controls and live/export guidance",
+        "Viewer plugin declares CLI commands and no MCP registration or runtime dependencies",
+        "plugin runs discover, inspect, live sessions and HTML exports with no node_modules",
+        "CLI workspace helper ignores artifacts and refuses symlink destinations"
+      ]
+    },
+    {
+      "file": "tests/cli-delivery.test.cjs",
+      "bytes": 5209,
+      "gate": "canonical-unit",
+      "assertionSites": 13,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:crypto",
+        "node:child_process",
+        "../vscode-extension/src/cli",
+        "../scripts/build-codex-marketplace.cjs",
+        "../scripts/prepare-agent-release.cjs",
+        "../scripts/update-agent-catalog.cjs"
+      ],
+      "testTitles": [
+        "external launcher survives extension replacement, updates and needs no Node on PATH",
+        "external installation preserves unrelated commands and rejects a corrupt payload",
+        "Codex marketplace package uses the complete bundled payload and rejects source-only packages",
+        "release catalogs pin actual checksums and preserve other plugins"
+      ]
+    },
+    {
+      "file": "tests/cli-workspace.test.cjs",
+      "bytes": 11266,
+      "gate": "canonical-unit",
+      "assertionSites": 62,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:child_process",
+        "node:events"
+      ],
+      "testTitles": [
+        "Fabric transport resolves paginated names, polls LROs and keeps credentials out of the downloaded model",
+        "Fabric retries are bounded and never forward credentials to redirects or foreign pagination hosts",
+        "downloads reject traversal, duplicate and malformed parts and preserve existing output",
+        "authentication reuses Azure login without logging its output or interpolating tenant commands",
+        "opening policy respects explicit none and passes exactly one argument without a shell",
+        "exit",
+        "one-command workspace diagram downloads through the adapter and writes verifiable offline receipts",
+        "source changes during export cannot replace the last successful artifact or receipt"
+      ]
+    },
+    {
+      "file": "tests/cli.test.cjs",
+      "bytes": 10589,
+      "gate": "canonical-unit",
+      "assertionSites": 52,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "snapshot command works outside the repo and keeps the whole model behind a focused canvas",
+        "measure snapshots preserve DAX, select the measure and fit its graph",
+        "TMDL special characters remain data and exact M is included",
+        "invalid input and removed commands fail without writing or overwriting files",
+        "TMDL relationship validation preserves parallel edges and rejects incomplete endpoints",
+        "focused inspection and filter paths use metadata direction and DAX dependencies",
+        "--where resolves the current executable without cache version assumptions",
+        "TMDL filter paths retain unresolved directions and parallel edge evidence"
+      ]
+    },
+    {
+      "file": "tests/dax-format.test.cjs",
+      "bytes": 5979,
+      "gate": "canonical-unit",
+      "assertionSites": 31,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:path"
+      ],
+      "testTitles": [
+        "long style keeps short calls on one line and splits long ones",
+        "short style puts every argument of a multi-argument call on its own line",
+        "operators, unary signs, comments and strings survive formatting",
+        "formatting never changes the tokens of the formula",
+        "inlining splices measure bodies in parentheses, with fold regions and ghost labels",
+        "a measure that loops back stays a reference, and empty measures are not inlined",
+        "a diamond of measures hits the size cap instead of exploding",
+        "malformed DAX does not throw",
+        "an inlined measure puts its label on one line and the ",
+        "a block comment that spans lines is printed one line per source line",
+        "deep nesting does not push short calls onto many lines",
+        "\\n"
+      ]
+    },
+    {
+      "file": "tests/demo-initial-viewport.browser.cjs",
+      "bytes": 11838,
+      "gate": "explicit-browser",
+      "assertionSites": 9,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:http",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "?",
+        "demo fits the mounted iframe, delayed sizing and reload; user cameras survive later resize",
+        "reload fits the recipient dimensions again",
+        "zero-sized canvas defers fitting until the container is shown",
+        "automatically restored workspace keeps its 13 tables and positions, fits a new camera",
+        "explicit saved view keeps its camera through resize",
+        "wheel interaction stops initial auto fitting"
+      ]
+    },
+    {
+      "file": "tests/demo-power-query.test.cjs",
+      "bytes": 3104,
+      "gate": "canonical-unit",
+      "assertionSites": 12,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "built-in sample carries the demo Power Query graph",
+        "only the four tables that read a shared query gain a `via`; the model shape is unchanged",
+        "model-data.json is exactly what the committed scripts produce from the demo TMDL"
+      ]
+    },
+    {
+      "file": "tests/diagram-readability.browser.cjs",
+      "bytes": 35873,
+      "gate": "explicit-browser",
+      "assertionSites": 91,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "node:child_process",
+        "../Models/tools/viewer/scripts/cli/capture.cjs",
+        "node:http"
+      ],
+      "testTitles": [
+        "\\n",
+        "answer views from smv show meet the readability bar",
+        "Tools brings the editing chrome back on demand",
+        "the main app gives a small screen to the diagram",
+        "?",
+        "!!(window.app&&app.state.loaded&&app.explorer)",
+        "app.modelKey===",
+        "every control keeps the answer views whole"
+      ]
+    },
+    {
+      "file": "tests/explanation-session.test.cjs",
+      "bytes": 6244,
+      "gate": "canonical-unit",
+      "assertionSites": 34,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "../Models/tools/viewer/scripts/cli/session.cjs",
+        "../Models/tools/viewer/scripts/cli/discover.cjs",
+        "../Models/tools/viewer/scripts/cli/explain.cjs",
+        "../Models/tools/viewer/scripts/cli/workspace.cjs",
+        "node:http"
+      ],
+      "testTitles": [
+        "discovery returns stable IDs and detects ambiguous names",
+        "discovery ranks working models first and hides fixture, backup and packaged copies",
+        "discovery shows fixtures when no working model exists",
+        "side-by-side workspace names the model once and owns the appearance choice",
+        "BIM concept models use the same offline rendering path",
+        "local session protects access, reuses matching inputs, refreshes and stops",
+        "?",
+        "background session can be started and stopped through its state file"
+      ]
+    },
+    {
+      "file": "tests/explanations.browser.cjs",
+      "bytes": 5925,
+      "gate": "explicit-browser",
+      "assertionSites": 14,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:crypto",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "../Models/tools/viewer/scripts/cli/explain.cjs",
+        "../Models/tools/viewer/scripts/cli/capture.cjs",
+        "../Models/tools/viewer/scripts/cli/capture.cjs"
+      ],
+      "testTitles": [
+        "real viewer captures are repeatable and all explanation surfaces render",
+        "ready releases the gesture layer before capture",
+        "offscreen matrix focus and general concept annotations",
+        "Power Query",
+        "walkthrough with imported numbers and calculations",
+        "failed build does not publish partial output"
+      ]
+    },
+    {
+      "file": "tests/explanations.test.cjs",
+      "bytes": 11693,
+      "gate": "canonical-unit",
+      "assertionSites": 54,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "../Models/tools/viewer/js/explanation-view.js",
+        "../Models/tools/viewer/scripts/cli/explain.cjs",
+        "../Models/tools/viewer/scripts/cli/results.cjs",
+        "node:child_process",
+        "node:events",
+        "node:stream",
+        "../Models/tools/viewer/scripts/cli/capture.cjs",
+        "node:events",
+        "node:stream",
+        "../Models/tools/viewer/scripts/cli/capture.cjs",
+        "node:child_process",
+        "../Models/tools/viewer/scripts/cli/capture.cjs",
+        "node:fs",
+        "node:fs",
+        "node:child_process",
+        "../Models/tools/viewer/scripts/cli/capture.cjs",
+        "node:events",
+        "../Models/tools/viewer/scripts/cli/capture.cjs",
+        "node:events",
+        "node:events",
+        "node:stream",
+        "../Models/tools/viewer/scripts/cli/capture.cjs"
+      ],
+      "testTitles": [
+        "qualified references disambiguate columns and parallel relationships",
+        "view contract rejects typos, invalid dimensions and unresolved highlights",
+        "explanation rejects duplicate or unsafe step IDs",
+        "explanation uses the real offline viewer and protects script boundaries",
+        "dataset imports preserve decimals, nulls and unknown provenance",
+        "CSV handles quoted separators, multiline fields, booleans and null numbers",
+        "calculation is exact decimal arithmetic with visible inputs",
+        "calculations reject cycles, incompatible units, unlabelled constants and zero divisors",
+        "null propagates and chained calculations retain unrounded precision",
+        "calculation metadata preserves the exact source cell reference",
+        "CLI validation errors expose structured object context",
+        "browser startup accepts an endpoint file without a stderr banner",
+        "browser startup supports stderr and retains failure diagnostics",
+        "exit",
+        "capture cleanup terminates descendants even after the launcher exits",
+        "capture cleanup tolerates an inaccessible exited process group",
+        "capture cleanup falls back to its live launcher when group signaling is denied",
+        "exit",
+        "browser startup retries a locked endpoint file and reports a persistent lock"
+      ]
+    },
+    {
+      "file": "tests/extension-host.test.cjs",
+      "bytes": 13777,
+      "gate": "canonical-unit",
+      "assertionSites": 56,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "./vscode-mock"
+      ],
+      "testTitles": [
+        "webview packages canonical CSS and hashed scripts with a fresh nonce and adapter first",
+        "/media/",
+        "?",
+        "snapshotAssets returns complete portable assets and pristine template without the host adapter",
+        "saveSnapshot uses the user-selected destination, preserves UTF-8, and strips paths from the suggested name",
+        "snapshot cancellation writes nothing and failures return a request error",
+        "malformed messages, unsupported requests and storage keys cannot call privileged APIs",
+        "openFile accepts model source paths and blocks traversal, absolute paths, and outside symlinks",
+        "a standalone BIM only permits opening the selected model file",
+        "untrusted workspaces may browse models",
+        "ready initialization follows the latest requested model while an older read is pending",
+        "a slower openModel request cannot replace the newer model or watcher",
+        "a refresh cannot push stale data after switching models and refreshModel acknowledges its push",
+        "disposing the panel clears pending watcher refresh and prevents old reads reaching a new panel",
+        "onboarding persists across workspaces in the VS Code profile, separate from model settings"
+      ]
+    },
+    {
+      "file": "tests/extension-viewer.test.cjs",
+      "bytes": 17263,
+      "gate": "canonical-unit",
+      "assertionSites": 80,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm"
+      ],
+      "testTitles": [
+        "VS Code boot seeds shared preferences before constructing and has an actionable empty model picker",
+        "host default model retains the shared parser, dependency graph, table canvas and all four views",
+        "the model VS Code asks to open beats the last cached Fabric model",
+        "choosing models uses host requests and keeps table membership, coordinates and usage isolated",
+        "late open responses cannot replace a more recently selected model",
+        "same-model refresh preserves selected measures and the existing table workspace and viewport",
+        "host request errors remain actionable and file drops do not enter browser import",
+        "VS Code snapshot save uses host assets and save bridge, yields ordinary offline HTML, and supports cancellation",
+        "host initialization errors produce an accessible failure instead of a blank or sample viewer",
+        "host model switching restores each model lane zoom before layout and fit",
+        "refresh captures Power Query before reset and restores it before activating the view; model changes clear status"
+      ]
+    },
+    {
+      "file": "tests/extension.test.js",
+      "bytes": 12975,
+      "gate": "canonical-unit",
+      "assertionSites": 70,
+      "imports": [
+        "assert",
+        "fs",
+        "path",
+        "./vscode-mock",
+        "child_process"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/fabric-bridge.test.cjs",
+      "bytes": 4817,
+      "gate": "canonical-unit",
+      "assertionSites": 18,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "../tools/fabric/bridge.cjs",
+        "node:path"
+      ],
+      "testTitles": [
+        "default public-client build reports readiness without starting login",
+        "opening and refreshing resolves names from discovery and returns only metadata identity",
+        "wrong tenant or same-tenant account cannot refresh cached metadata",
+        "sign-out prevents late discovery from populating the new session",
+        "cancel aborts live retrieval and prevents late success",
+        "XMLA metadata paths are checked independently of the transport",
+        "late refresh discovery cannot populate a switched session"
+      ]
+    },
+    {
+      "file": "tests/fabric-colour-storage.test.cjs",
+      "bytes": 1555,
+      "gate": "canonical-unit",
+      "assertionSites": 6,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "./vscode-mock",
+        "node:path",
+        "../vscode-extension/src/panel"
+      ],
+      "testTitles": [
+        "Fabric colours migrate across workspaces while repository colours remain workspace-local"
+      ]
+    },
+    {
+      "file": "tests/fabric-extension.test.cjs",
+      "bytes": 5374,
+      "gate": "canonical-unit",
+      "assertionSites": 21,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "./vscode-mock",
+        "../vscode-extension/src/fabric"
+      ],
+      "testTitles": [
+        "cache contains allowlisted metadata, stable tenant identity, and refresh replaces it",
+        "refresh rejects another tenant without fetching metadata or replacing cache",
+        "invalid definitions cannot replace an existing cached model",
+        "sign-out retains explicitly saved offline metadata",
+        "refresh rejects another work account in the same tenant",
+        "removal clears matching viewer metadata and layouts without touching other models",
+        "refresh preserves the explicitly selected REST metadata method",
+        "native metadata cache preserves permission coverage using allowlisted warnings"
+      ]
+    },
+    {
+      "file": "tests/fabric-tree.test.cjs",
+      "bytes": 9647,
+      "gate": "canonical-unit",
+      "assertionSites": 46,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:path",
+        "./vscode-mock",
+        "../vscode-extension/src/fabric-tree",
+        "../vscode-extension/src/extension",
+        "../vscode-extension/package.json"
+      ],
+      "testTitles": [
+        "signed-out Fabric tree offers sign-in without starting authentication automatically",
+        "tree discovers all workspace pages and lazily loads distinct models per workspace",
+        "changing tenants cannot reuse the former account workspace node",
+        "refresh discards an old in-flight discovery result",
+        "failed workspace expansion can be retried without reauthenticating",
+        "clicking a native tree model opens the correct model without quick-pick dialogs",
+        "signed-in sidebar shows account, tenant and sign-out even when discovery fails",
+        "unified sidebar routes sign-in and sign-out and refreshes identity without a separate view",
+        "offline Fabric metadata is grouped separately from workspace files and exclusions open workspace settings"
+      ]
+    },
+    {
+      "file": "tests/fabric-viewer.test.cjs",
+      "bytes": 6380,
+      "gate": "canonical-unit",
+      "assertionSites": 32,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "../Models/tools/viewer/js/fabric.js"
+      ],
+      "testTitles": [
+        "connection identity cannot persist credentials or collide across tenants",
+        "open caches parsed metadata, never the host response credentials",
+        "cancelled and superseded requests cannot cache or replace a model",
+        "switching models during a fetch keeps the newly chosen model",
+        "failed refresh preserves the cached model and exposes an error",
+        "snapshot mode does not permit connection requests",
+        "refresh refuses a response from a different account",
+        "native cache removal must succeed before deleting local metadata",
+        "reopening a connection restores its pending device code and continues to workspace discovery",
+        "workspace discovery remains available while browsing models and appending model pages",
+        "refresh completed after switching models cannot post a success notification on the new model"
+      ]
+    },
+    {
+      "file": "tests/fabric-xmla.test.cjs",
+      "bytes": 3988,
+      "gate": "canonical-unit",
+      "assertionSites": 14,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:child_process",
+        "node:fs",
+        "node:path",
+        "../Models/tools/viewer/js/roles.js",
+        "../Models/tools/viewer/js/tmdl-parser.js",
+        "node:os",
+        "../tools/fabric/xmla.cjs",
+        "../Models/tools/viewer/js/roles.js",
+        "../Models/tools/viewer/js/tmdl-parser.js"
+      ],
+      "testTitles": [
+        "TOM system row ordinals do not become semantic columns",
+        "published XMLA helper rejects invalid requests without leaking credentials or paths",
+        "XMLA child receives the discovered model name as well as REST identifiers",
+        "consumer metadata mapping preserves visible schema and marks unavailable definitions",
+        "\\n"
+      ]
+    },
+    {
+      "file": "tests/full-workflow.test.cjs",
+      "bytes": 20845,
+      "gate": "canonical-unit",
+      "assertionSites": 120,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "node:child_process",
+        "../Models/tools/viewer/scripts/cli/session.cjs",
+        "../Models/tools/viewer/scripts/cli/managed.cjs",
+        "../Models/tools/viewer/scripts/cli/explain.cjs",
+        "../Models/tools/viewer/scripts/cli/install.cjs",
+        "../Models/tools/viewer/scripts/cli/install.cjs",
+        "node:util",
+        "node:child_process",
+        "node:util",
+        "node:child_process",
+        "../Models/tools/viewer/scripts/cli/install.cjs",
+        "../Models/tools/viewer/scripts/cli/runtime.cjs",
+        "../Models/tools/viewer/scripts/cli/show.cjs",
+        "../Models/tools/viewer/scripts/cli/show.cjs"
+      ],
+      "testTitles": [
+        "relative table sets resolve consistently and focused queries omit formulas by default",
+        "show reuses one model session, creates independent named views and reports real applied counts",
+        "managed sessions warn about old runtime versions and bulk cleanup leaves foreign files alone",
+        "stable launcher follows plugin registry updates and refuses to replace unrelated commands",
+        "concurrent serve calls share a managed server instead of racing duplicate starts",
+        "watched relative views recompute membership when a new relationship appears",
+        "show reuses a compatible model server with a custom default view",
+        "compact answers explain filter direction, inactive names and shortest measure chains",
+        "two-table diagrams include intermediate connections without inventing filter flow",
+        "question diagrams support direction, calculations and named live views",
+        "question diagrams preserve older servers and reuse the current runtime on later calls",
+        "checkout installation cannot be redirected by an older registered plugin; diagnostics identify selection",
+        "plugin install defaults to upgrade tracking and survives removal of its original cache directory",
+        "question diagrams replace incompatible engine identities even when the plugin version is unchanged",
+        "show export announces offline mode on stderr and keeps stdout as JSON"
+      ]
+    },
+    {
+      "file": "tests/import-dialog.test.cjs",
+      "bytes": 5168,
+      "gate": "canonical-unit",
+      "assertionSites": 27,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm",
+        "./power-query-ui-harness.cjs"
+      ],
+      "testTitles": [
+        "import dialog names, focus entry, wrap, Escape and opener restoration",
+        "async error/ready rerenders retain focus and caret; errors are announced",
+        "nested folder chooser traps focus, announces loading/errors, and dismisses only top layer",
+        "return focus survives replacement of toolbar opener",
+        "folder path drafts survive unrelated redraws but navigation updates the path",
+        "closing restores preexisting inert state and removes keyboard capture"
+      ]
+    },
+    {
+      "file": "tests/interactive-view.browser.cjs",
+      "bytes": 28477,
+      "gate": "explicit-browser",
+      "assertionSites": 8,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "../Models/tools/viewer/scripts/cli/explain.cjs",
+        "../Models/tools/viewer/scripts/cli/capture.cjs",
+        "../examples/explanations/interactive-tables.json",
+        "../examples/explanations/interactive-measure.json",
+        "../integrations/mcp/server.cjs",
+        "@modelcontextprotocol/client",
+        "node:http",
+        "esbuild",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "native focus, semantic annotations and explored state survive pan/expand/reset",
+        "measure context is bounded and full DAX remains available",
+        "Browse measures opens all filtered formulas and every result can be analyzed",
+        "hidden annotations omit descriptions and hidden-target reminders",
+        "agent updates wait for Apply while user is exploring",
+        "offline walkthrough uses one real viewer and navigates steps",
+        "focused measures remain navigable in a narrow light/dark viewport",
+        "MCP App runs the real viewer through the official host bridge",
+        "plain prepared views have a closable library and controls never cover formulas",
+        "relationship view expands both endpoints and fits after the controls are laid out",
+        "host controls show progress, success and rejection without losing feedback to live status",
+        "table and column Measures focus round-trip without a disconnected receipt",
+        "quiet views expose pending Apply and explicit apply bypasses exploration",
+        "authored table sets start compact and clicking tables shows both filter directions",
+        "version 2 relative selectors and explicit arrange preserve later explored positions",
+        "authored question paths set the inspector direction and inactive state",
+        "focused dependency library is discoverable without a footer and persists with explicit layout",
+        "show PNG export confirms static output without polluting JSON"
+      ]
+    },
+    {
+      "file": "tests/interactive-view.test.cjs",
+      "bytes": 8850,
+      "gate": "canonical-unit",
+      "assertionSites": 53,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "../Models/tools/viewer/js/explanation-view.js",
+        "../Models/tools/viewer/scripts/cli/explain.cjs",
+        "../Models/tools/viewer/scripts/cli/session.cjs",
+        "../examples/explanations/interactive-tables.json",
+        "../examples/explanations/interactive-measure.json",
+        "../Models/tools/viewer/scripts/cli/capture.cjs",
+        "../Models/tools/viewer/scripts/cli/session.cjs"
+      ],
+      "testTitles": [
+        "interactive view validates bounded context and explored state",
+        "session updates are revisioned and atomic; exports preserve declared basis",
+        "presentation does not infer remote reachability or inline support",
+        "source mutation during capture rejects the export and preserves the previous file",
+        "Measures accepts table and column sources; banner is an explicit boolean",
+        "session status distinguishes waiting for Apply from acknowledgement and explicit takeover",
+        "waiting confirms browser receipts, not successful HTML fetches, and retains stale evidence"
+      ]
+    },
+    {
+      "file": "tests/layouts.test.cjs",
+      "bytes": 41874,
+      "gate": "canonical-unit",
+      "assertionSites": 131,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm"
+      ],
+      "testTitles": [
+        "star beats the galaxy rows on edge crossings for the bundled model",
+        "the converging arrange lands the whole model at or above the floor with nothing stacked",
+        "chip titles scale with the zoom so a table name is never smaller than 11px on screen",
+        "cellFor(k) always clears the chip drawn at k",
+        "full-card lanes leave room for the relationship pill, chip lanes keep the 12px gutter",
+        "an arrange whose fit lands on full cards lays out again for that zoom",
+        "a focused star at card zoom seats its cards a pill apart",
+        "detail mode decides the chip treatment, zoom only decides it on Auto",
+        "the filter arrow is a fixed size on screen and doubles up for bidirectional edges",
+        " ",
+        ",",
+        " ",
+        ",",
+        "the combined pill puts each cardinality on the side its table lies, arrow in between",
+        "the pill is a fixed size on screen and its seat box follows it",
+        "a label that would land on a card or on another label takes the next free seat",
+        "a subset arrange never moves a table that is not on the canvas",
+        "Arrange applies the layout chosen in Display, not a hard-coded grid",
+        "Arrange leaves the tables that are hidden by focus where they were",
+        "the grid option lays tables out in plain rows, on the same lanes as every other layout",
+        "the grid option seats the selected table ahead of the tables it connects to",
+        "a big model arranges in well under a second instead of grinding on the refinement pass",
+        "a table related only to something off the canvas keeps its place beside the picture",
+        "an arrange over tables with no relationships between them falls back to the grid",
+        "fit aims at the unobstructed canvas: the drawer and the overview map are cut away, with 24px of padding",
+        "an obstruction that misses the canvas costs nothing, and one that swallows it falls back to the padded host",
+        "Escape closes the Display popover first, then Saved views, and returns focus to the button",
+        "a press outside closes toolbar popovers but keeps the docked legend open",
+        "every arrange algorithm accepts table names that match prototype keys"
+      ]
+    },
+    {
+      "file": "tests/mac-launcher.test.cjs",
+      "bytes": 3103,
+      "gate": "canonical-unit",
+      "assertionSites": 8,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:child_process",
+        "node:fs",
+        "node:os",
+        "node:path"
+      ],
+      "testTitles": [
+        "\\0",
+        "Mac launcher cold start uses the same dedicated-profile window launch as reopening",
+        "Mac launcher retains the default-browser fallback without Chrome or Edge"
+      ]
+    },
+    {
+      "file": "tests/mcp-viewer.test.cjs",
+      "bytes": 13454,
+      "gate": "canonical-unit",
+      "assertionSites": 72,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:path",
+        "@modelcontextprotocol/client",
+        "../integrations/mcp/server.cjs",
+        "../examples/explanations/interactive-tables.json",
+        "node:fs",
+        "node:os",
+        "node:crypto",
+        "node:child_process",
+        "node:fs",
+        "node:os",
+        "@modelcontextprotocol/client/stdio",
+        "../examples/explanations/sales-yoy-calculation.json"
+      ],
+      "testTitles": [
+        "MCP controls the shared session path and refuses out-of-root models",
+        "open defaults are discoverable and sessions identify exact local sources",
+        "advertised inline support is separate from app acknowledgement and browser reachability",
+        "default exports are gitignored, inspectable by receipt, and tied to a local snapshot",
+        "default export refuses a symlink before writing an ignore file outside the project",
+        "MCP Apps resource contains the actual viewer and bridge, without localhost dependency",
+        "installed-style stdio command negotiates UI capability and serves actual viewer resources",
+        "offline downloads cross the app bridge in bounded chunks and remain readable without a session"
+      ]
+    },
+    {
+      "file": "tests/measure-comparison.browser.cjs",
+      "bytes": 10635,
+      "gate": "explicit-browser",
+      "assertionSites": 0,
+      "imports": [
+        "node:test",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "../Models/tools/viewer/scripts/cli/explain.cjs",
+        "../Models/tools/viewer/scripts/cli/capture.cjs",
+        "../Models/tools/viewer/scripts/cli/compare.cjs"
+      ],
+      "testTitles": [
+        "native rows show shared objects, extra edges and inline definition provenance, with independent inspection",
+        "narrow comparison uses accessible tabs, retains hidden row cameras and wraps complex DAX",
+        "desktop displays both roots and exiting returns to the active measure",
+        "shared settings apply to both rows, persist and keep both roots visually focused",
+        "manual comparison starts from the Measures overview with an explicit pair picker"
+      ]
+    },
+    {
+      "file": "tests/measure-comparison.test.cjs",
+      "bytes": 7694,
+      "gate": "canonical-unit",
+      "assertionSites": 47,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:child_process",
+        "../Models/tools/viewer/js/measure-comparison.js",
+        "../Models/tools/viewer/js/dax-format.js",
+        "../Models/tools/viewer/scripts/cli/model.cjs",
+        "../Models/tools/viewer/scripts/cli/compare.cjs",
+        "../Models/tools/viewer/js/explanation-view.js",
+        "../Models/tools/viewer/scripts/cli/explain.cjs",
+        "../packages/engine/index.cjs"
+      ],
+      "testTitles": [
+        "comparison distinguishes shared objects from side-specific reference edges and written definitions",
+        "qualified names, strings/comments and equal text under different identities are handled factually",
+        "inline colors track definition ancestry, preserve compact annotations and leave original formulas untouched",
+        "bounds and cycles constrain work and unknown absence is not labeled unique",
+        "v2 authored and explored comparison schema validates identity and bounds",
+        "compare CLI exports portable provenance and gives specific errors without starting a session",
+        "union grouping never hides either comparison root among many sibling calculations"
+      ]
+    },
+    {
+      "file": "tests/measures-layout.browser.cjs",
+      "bytes": 37641,
+      "gate": "explicit-browser",
+      "assertionSites": 126,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:http",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "measure workspace occupies wide screens and persists adjustable layouts",
+        "DAX comparison uses both full columns at ",
+        " ",
+        " ",
+        "both split positions fit at ",
+        "Fit centers a small vertical graph and zoom still centers the selected node",
+        "divider supports pointer drag, keyboard resize and persistence",
+        "snapshot round-trip restores formulas, library, layout and viewport after a fresh document",
+        "top-level view switching preserves the measure viewport for a Matrix export",
+        "narrow workspace stacks gracefully without discarding the saved beside preference",
+        "table/column dependency flow works in the complete viewer",
+        "dense source analysis keeps a usable stacked canvas in both themes",
+        "table hover controls do not resize a long-name card",
+        "search preserves the overview and opens optional colored DAX results",
+        " "
+      ]
+    },
+    {
+      "file": "tests/measures.test.cjs",
+      "bytes": 36363,
+      "gate": "canonical-unit",
+      "assertionSites": 216,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm"
+      ],
+      "testTitles": [
+        "library search finds names, folders, home tables and DAX, expanding matching folders",
+        "visibility and home-table filters combine and stale table filters recover after model switching",
+        "folder paths do not inflate the matching-measure count",
+        "DAX highlighting preserves source spelling and resolves qualified references and escaped identifiers",
+        "DAX render cache is invalidated whenever the selected main panel is rebuilt",
+        "Fit contains a large graph and Center uses scaled node coordinates",
+        "graph orientation preserves dependencies and reflects vertical layers without rotating labels",
+        "branching and cyclic graphs stay inside bounds in every orientation",
+        "workspace preferences round-trip and invalid stored values receive safe defaults",
+        "zoom preserves the viewport center when moving between a fitted stage and scrolling",
+        "measure snapshot is JSON-safe and preserves comparison, library state, preferences and viewport",
+        "snapshot restore sanitizes model references and numeric values without changing the app view or saved preferences",
+        "viewport restoration waits for visible layout and ignores superseded model state",
+        "invalid selections clear comparison and expansions, and auto-fit restores responsively",
+        "a hidden graph viewport is not reused for a different expansion context",
+        "dependents are grouped by home table then display folder, and the grouping is deterministic",
+        "the group expander reveals every member and collapsing puts them back",
+        "group expansion is remembered per analyzed measure and never leaks between them",
+        "the graph opens on the analyzed measure at a readable zoom, in every orientation",
+        "a small dependency graph is not grouped",
+        "collapsed measures retain semantic roles and Expand all draws every included path",
+        "plus six reveals six downstream neighbours and minus removes exactly those six",
+        "legacy extras cannot offer to remove mandatory upstream or downstream measures",
+        "Expand all reports the display limit and does not hide additional groups at the cap",
+        "source cards include only connected columns, with table edges anchored to headers",
+        "table and column roots use one graph and do not expand unrelated measure inputs",
+        "a source with no detected consumers remains visible without invented columns",
+        "source selection, direct-only filter, inspected DAX and viewport survive snapshots",
+        "source graphs start at readable scale and source display limits are disclosed",
+        "library search lists name matches before measures that only mention the text in DAX",
+        "DAX code block resets the host <code> styling so tokens stay readable in VS Code themes",
+        "source picker includes tables without measures and columns without references",
+        "impact navigation puts direct references first and inspecting keeps the source pinned",
+        "formula references are owned by a card and expansion resolves the displayed expression",
+        "snapshot restores source browsing and formula display preferences",
+        "paired comparison fits its bounded overview without changing ordinary opening zoom",
+        "library collapse preferences survive layout changes and snapshot sanitation"
+      ]
+    },
+    {
+      "file": "tests/onboarding.browser.cjs",
+      "bytes": 10613,
+      "gate": "explicit-browser",
+      "assertionSites": 26,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:http",
+        "node:url",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "onboarding journeys in a browser and the real VS Code adapter"
+      ]
+    },
+    {
+      "file": "tests/onboarding.test.cjs",
+      "bytes": 4473,
+      "gate": "canonical-unit",
+      "assertionSites": 24,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:vm",
+        "node:path"
+      ],
+      "testTitles": [
+        "welcome is optional, host-backed dismissal survives construction, restart restores focus",
+        "tips follow user context once and never mutate model/layout state",
+        "denied/corrupt storage, absent targets and snapshots remain safe",
+        "automatic narrow tips leave the upper library usable and do not repeat completed add-table work"
+      ]
+    },
+    {
+      "file": "tests/open-model.test.cjs",
+      "bytes": 8670,
+      "gate": "canonical-unit",
+      "assertionSites": 32,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "fresh launches reread relationship columns and reject broken metadata without opening stale output",
+        "known outdated renderer fails before generation",
+        "init",
+        "add",
+        "-c",
+        "rev-parse",
+        "add",
+        "-c",
+        "update-ref",
+        "checkout",
+        "--report embeds fresh measure usage and keeps the report-health sidecar",
+        "--report bound to another model fails without a receipt or opened output",
+        "--report text containing a closing script tag stays JSON data"
+      ]
+    },
+    {
+      "file": "tests/png-assets.test.cjs",
+      "bytes": 3801,
+      "gate": "canonical-unit",
+      "assertionSites": 22,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm",
+        "node:crypto",
+        "../package.json",
+        "node:os",
+        "../scripts/sync-engine.cjs"
+      ],
+      "testTitles": [
+        "PNG library loads from local pinned asset once and failed load can retry",
+        "vendored JS hash, MIT license and offline shell entry stay in sync",
+        "PNG filter excludes hidden subtrees and tooltip while retaining SVG and text",
+        "measure export captures sized workspace rather than zero-height wrapper",
+        "packaged CLI engine includes the lazy PNG runtime and its license"
+      ]
+    },
+    {
+      "file": "tests/power-query-canvas.test.cjs",
+      "bytes": 38419,
+      "gate": "canonical-unit",
+      "assertionSites": 225,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "./power-query-ui-harness.cjs"
+      ],
+      "testTitles": [
+        "entire registry is initially laid out including disconnected/status/duplicate display IDs",
+        "zero-edge model is complete and supplied cycle components are grouped",
+        "visibility is silent induced-edge projection; matches only dim; hidden selection/minimap remain explicit",
+        "empty projection does not discard complete model or auto-fit",
+        "pan threshold distinguishes blank click from drag; node drag is layout only",
+        "wheel/pinch keep gesture anchor fixed and have finite positive scale",
+        "provided-host keyboard fallback pans; node arrows rove/Space selects; input shortcuts ignored",
+        "queued resize after explicit Back viewport restore cannot translate or notify",
+        "edge callback uses host CSS anchor and full stable edge ID",
+        "layout captures cannot restore into another generation with coincident IDs",
+        "same-generation updates/layout restores preserve view; generation/null clears filters and old gestures",
+        "300/301/350/1000 registries and parameter fanout retain last object without caps",
+        "search and focus dim independently without hiding membership or mutating registry",
+        "explicit Arrange touches only visible requested positions and is silent, registry preserving and undoable",
+        "minimap nodes, induced edges and bounds use only rendered IDs; empty stays honest and registry survives",
+        "Center genuinely centers already-visible nodes at pan/zoom and side/below/resized host bounds",
+        "blank/add repositions far-away new members near current view collision-free, preserves other manual positions and Undo",
+        "narrow side canvas prefers a visible vertical neighbor; collisions preserve the manual anchor",
+        "rounded orthogonal routes retain input-to-consumer endpoints after reversal, stacking and self cycles; hit path follows geometry",
+        "rounded orthogonal long links detour around visible intervening cards and simplify when the obstacle is hidden",
+        "reciprocal edges have independent 14px hit corridors in every orientation and after the reported drag",
+        "flow target and inspected branch are independent of selection and never mutate routes or positions",
+        "opening and resizing either inspector dock preserves numeric pan/zoom and every node position",
+        "explicit center is repeatable in the clipped visible canvas frame",
+        "two far-origin visible nodes compact explicitly while Fit and Undo layout preserve every hidden position",
+        "secondary typography resets after tiny overview even when title font stays at its minimum",
+        "PQ calls the actual Tables rounded-path, width and open-chevron methods without relationship state",
+        "Tables stroke extraction preserves the previous formula for every state at overview and detail zoom",
+        " ",
+        ",",
+        "line-seated arrows remain readable at 47/37/30/85/100/200%, point input to consumer in all directions, and preserve state",
+        "detour chevrons clear obstacles at every requested zoom and hover/click stay on each reciprocal path",
+        "each rounded reciprocal route retains an exclusive clickable area at every requested zoom",
+        "rounded detour itself clears the visible obstacle, while parameter dashes keep their screen size",
+        " ",
+        "pointer-captured double click uses two same-card taps; mixed targets, drag and generation reset cannot reroot",
+        "explicit Fit reserves measured legend and a routing disclosure appearing after zoom",
+        "initial projection is applied before any routing work, with the complete registry retained",
+        "Fit clears measured bottom chrome and follows resizing until manual framing"
+      ]
+    },
+    {
+      "file": "tests/power-query-dense-routing.test.cjs",
+      "bytes": 6482,
+      "gate": "canonical-unit",
+      "assertionSites": 28,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "./power-query-ui-harness.cjs",
+        "./fixtures/power-query-dense-routing.json"
+      ],
+      "testTitles": [
+        "captured dense topology retains all 77 distinct, card-clear routes and exact edge interactions",
+        "dense route allocation survives pan, selection, filtering and reversed graph order without moving cards"
+      ]
+    },
+    {
+      "file": "tests/power-query-dependencies.test.cjs",
+      "bytes": 11279,
+      "gate": "canonical-unit",
+      "assertionSites": 76,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:vm",
+        "node:path"
+      ],
+      "testTitles": [
+        "quoted identifiers decode escapes; strings and comments never create edges",
+        "let forward references, nested sibling scopes and quoted shadowing",
+        "exclusive initialization is explicit, inclusive recursive references are local",
+        "typed functions and each do not shadow sibling arguments or branches",
+        "record generalized fields, projection, item access and type names",
+        "dynamic, unresolved, library and malformed inputs remain explicit",
+        "table names resolve rather than partition names; ambiguous identities never resolve",
+        "graph exposes direct edges, cycle components and disconnected nodes without mutation",
+        "depth limits are explicit and do not throw to consumers",
+        "render provides safe clickable code navigation and visible uncertainty in its host",
+        "missing/non-M targets remain navigable and every result retains partial status",
+        "render exposes cycles and replaces the old host contents on navigation",
+        "documented M names do not masquerade as missing queries; unknown model names remain explicit",
+        "source evidence uses exact direct calls with lexical and model precedence and no argument disclosure",
+        "curated M functions retain local and model precedence and unknown diagnostics"
+      ]
+    },
+    {
+      "file": "tests/power-query-graph-model.test.cjs",
+      "bytes": 10760,
+      "gate": "canonical-unit",
+      "assertionSites": 70,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:vm",
+        "node:path"
+      ],
+      "testTitles": [
+        "complete inventory includes disconnected objects, explicit partitions and status-only tables",
+        "merge/append static inputs reverse legacy direction exactly once with all occurrences",
+        "SQL source literals, semantic relationships and partition ownership never create edges",
+        "complete parameter fanout and final disconnected object survive all requested thresholds",
+        "duplicate IDs retain every row with stable collision-safe UI identity and no guessed edges",
+        "duplicate names, multipartition names and same-named expression/table remain ambiguous",
+        "local shadowing, malformed code and placeholders never invent edges; legacy synthetic _ is reported",
+        "missing/non-M referenced metadata keeps valid static name edges, but contributes no outgoing analysis",
+        "stable cycles use only emitted edges and handle long whole-model paths without legacy cycle cap",
+        "unavailable model metadata produces status inventory without retaining earlier model state",
+        "cancellation and model-switch/destroy generation gate suppress progress and result publication",
+        "cancellation from final progress callback still prevents completed graph return",
+        "same-model metadata replacement during progress cancels the old graph"
+      ]
+    },
+    {
+      "file": "tests/power-query-hidden-lock.test.cjs",
+      "bytes": 8761,
+      "gate": "canonical-unit",
+      "assertionSites": 46,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm",
+        "./power-query-ui-harness.cjs"
+      ],
+      "testTitles": [
+        "search and library facets do not falsely describe a visible locked root as hidden",
+        "a membership-excluded locked root offers Show all with its existing unlock contract",
+        "selected-hidden explanation coexists with lock explanation and disappears on reset",
+        "selected locked root gets one lock explanation and reset does not unlock it",
+        "Back and Undo recompute the explanation from restored lock and filters",
+        "a markup-shaped locked label is rendered as text"
+      ]
+    },
+    {
+      "file": "tests/power-query-host-theme.browser.cjs",
+      "bytes": 4735,
+      "gate": "explicit-browser",
+      "assertionSites": 1,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "Power Query source lines keep their reader background under VS Code host themes"
+      ]
+    },
+    {
+      "file": "tests/power-query-inspector.test.cjs",
+      "bytes": 28212,
+      "gate": "canonical-unit",
+      "assertionSites": 166,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "./power-query-ui-harness.cjs"
+      ],
+      "testTitles": [
+        "exact CRLF/quoted/repeated/non-BMP source slices are separate from numbered gutter; Copy original source",
+        "invalid/overlapping/missing-target spans never create guessed links",
+        "opaque uncertainty is neutral disclosure; presentation diagnostics are review; no regex classification",
+        "duplicate graph IDs select exactly supplied rows; status rows have no invented M",
+        "capture/restore contains both scroll axes, wrap and stable occurrence descriptor",
+        "new selection, same-ID select, close, suspend, reset and destroy cancel queued restores",
+        "newer restore/direct focus wins within same generation",
+        "same-generation context and hide/reopen preserve view; generation reset clears hidden source and callbacks",
+        "clipboard completion after close/reopen or reset cannot repaint code/status",
+        "focus controls emit only generation/selected-ID actions; Infinity serializes without changing source/view",
+        "history restores focused controls by descriptor and never keeps old control DOM",
+        "Back retains strict 325px scroll with always-visible options; unrelated disclosures stay closed",
+        "all four optional disclosure combinations restore exact scroll and booleans across source selection",
+        "legacy and partial disclosure state leave absent, invalid and unknown sections untouched",
+        "restored primary focus preserves scroll, and focus-triggered navigation cannot receive old scroll",
+        "stale disclosure restores cannot reopen prior or current source after any lifecycle cancellation",
+        "primary neighborhood controls stay visible, default wrap is true and explicit saved false survives history",
+        "expanded reader moves exact code DOM, copies original CRLF/UTF16 source, Escape closes reader first and returns focus",
+        "expanded history restores source focus/scroll and cannot reopen after stale lifecycle work",
+        "reader keyboard boundary stays inside, and native-dialog autofocus navigation cancels old view restore",
+        "full-query entry precedes all focus controls and source without duplicating or reformatting code",
+        "direct input and consumer buttons emit supplied IDs without requiring or inventing source ranges",
+        "declined restoration ownership preserves newer focus, scroll and disclosures",
+        "focus lock exposes pressed state and selected identity, rejects detached and stale controls",
+        "Analyze full flow is explicit, source-preserving and rejects stale controls",
+        "Flow inspector keeps source reader and Analyze while omitting Canvas controls; stale controls cannot act"
+      ]
+    },
+    {
+      "file": "tests/power-query-lanes.test.cjs",
+      "bytes": 12742,
+      "gate": "canonical-unit",
+      "assertionSites": 50,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "./power-query-ui-harness.cjs"
+      ],
+      "testTitles": [
+        " ",
+        ",",
+        "four-input screenshot-like fan-in has distinct visible ports and no shared trunks at every requested zoom",
+        "fan-out, diamonds, reciprocal cycles, self-loops and multi-degree nodes retain separate routes in all orientations",
+        "reserved obstacle detours do not share approach, departure or middle segments",
+        "edge ordering, panning, hide/show, selection and drag preserve stable identity, state and deterministic allocation",
+        "dense degree and impossible overlaps are explicit and bounded instead of shared-trunk fallbacks",
+        "1000-node ordinary chain retains all 999 distinct routes at 47/85% without warning or global starvation",
+        "250-consumer fan-out retains every possible link with honest crowded-port status, not scan-budget omissions",
+        "an impossible early edge cannot consume another edge\u2019s routing budget"
+      ]
+    },
+    {
+      "file": "tests/power-query-lineage.browser.cjs",
+      "bytes": 9720,
+      "gate": "explicit-browser",
+      "assertionSites": 17,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:http",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "lineage inspector preserves root across keyboard code navigation, partition changes and model resets"
+      ]
+    },
+    {
+      "file": "tests/power-query-lineage.test.cjs",
+      "bytes": 7852,
+      "gate": "canonical-unit",
+      "assertionSites": 46,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm"
+      ],
+      "testTitles": [
+        "progressive expansion and exact code navigation preserve partition root, expansion and scroll",
+        "partition state is isolated and app model/metadata replacement clears expansion",
+        "SCC and self cycles terminate; dynamic/missing references stay visible as uncertainty",
+        "duplicate, missing, wrong-table, non-M and no-root states never open arbitrary code",
+        "optional analyzer unavailable is explicit",
+        "hostile labels are text, keyboard navigation moves focus and edge navigation targets upstream code",
+        "large graph uses complete metadata resolution but caps visible nodes with explicit limits",
+        "large-model duplicate names never become resolved edges",
+        "branch expansion caps nodes and reset restores first page",
+        "model replacement without a valid root still invalidates previous state",
+        "bounded large-model cycle findings include only expanded visible edges"
+      ]
+    },
+    {
+      "file": "tests/power-query-modes.test.cjs",
+      "bytes": 14046,
+      "gate": "canonical-unit",
+      "assertionSites": 104,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm",
+        "./power-query-ui-harness.cjs"
+      ],
+      "testTitles": [
+        "Flow defaults to a root prompt; full input ancestry excludes downstream and sibling consumers",
+        "Flow filters affect library only; inspecting an ancestor retains all merge inputs at full contrast",
+        "mode roundtrip restores exact Canvas and Flow snapshots including filters, reader, layout and scroll",
+        "Canvas library inspection keeps membership and viewport; explicit Analyze returns via Back",
+        "card click and Space inspect; double-click and Enter reroot; library Space inspects and Enter chooses root",
+        "Back restores mode/root and late mode restore yields to a newer root; old library actions are rejected",
+        "dragging a Canvas card records one pre-drag Undo and restores exact layout",
+        "first pointer selection keeps closed reader geometry until double click settles; reroot and newer input cancel",
+        "parameter defaults to complete Used by without merge co-inputs; Inputs stays an honest singleton",
+        "Canvas library double-click and Enter analyze every ancestor and Back restores manual positions",
+        "explicit compact arrange centers the merge and places short co-input next to its consumer without moving hidden cards"
+      ]
+    },
+    {
+      "file": "tests/power-query-reference-ranges.test.cjs",
+      "bytes": 4367,
+      "gate": "canonical-unit",
+      "assertionSites": 28,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:vm",
+        "node:path"
+      ],
+      "testTitles": [
+        "every repeated occurrence retains exact quoted spelling and UTF-16 end-exclusive range",
+        "scope walk excludes locals, parameters, fields, comments and strings while retaining sibling refs",
+        "explicit inclusive global token range excludes the @ punctuation",
+        "ambiguous names, duplicate IDs and multipartition tables do not produce ranges",
+        "malformed and unavailable expressions clear both outputs",
+        "synthetic implicit _ remains legacy-only; real _ still has a source range",
+        "legacy graph edge schema, direction and dedup remain unchanged"
+      ]
+    },
+    {
+      "file": "tests/power-query-snapshot.browser.cjs",
+      "bytes": 14134,
+      "gate": "explicit-browser",
+      "assertionSites": 30,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:http",
+        "node:url",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "downloaded Power Query snapshots retain exact M and interactive flow entirely offline",
+        "\\r\\n"
+      ]
+    },
+    {
+      "file": "tests/power-query-workspace-ui.test.cjs",
+      "bytes": 1340,
+      "gate": "canonical-unit",
+      "assertionSites": 11,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "./power-query-ui-harness.cjs"
+      ],
+      "testTitles": [
+        "shared chrome is source-free text presentation with caller-owned identity and interactions",
+        "custom pale and dark group colours retain readable role badges"
+      ]
+    },
+    {
+      "file": "tests/power-query-workspace.test.cjs",
+      "bytes": 39733,
+      "gate": "canonical-unit",
+      "assertionSites": 317,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:vm",
+        "node:path",
+        "../Models/tools/viewer/scripts/cli/model.cjs",
+        "./power-query-ui-harness.cjs"
+      ],
+      "testTitles": [
+        "positional mapping keeps duplicate rows distinct; no metadata ID overwrite",
+        "connectivity uses complete resolved incident edges, including parameter/status rows without relations",
+        "ranges are authoritative UTF16 slices and invalid/overlapping spans never become links",
+        "identity gates reject model/metadata replacement, revision changes and duplicate reorder",
+        "worker executes canonical build in isolated context, emits atomic graph and job-bound progress",
+        "excluded reference clears filters; Back restores filters/view/scroll without Fit/reveal",
+        "matching library selection retains search; Show all preserves selected object and does not Fit",
+        "late navigation callbacks fail generation and source identity gates",
+        "real scheduler cancellation terminates worker and rejects queued old-generation graph messages",
+        "worker unavailable produces explicit error with no synchronous analysis fallback",
+        "model replaced while runtime assets load cannot launch or publish an old worker",
+        "Back deferred focus cannot override a newer same-generation navigation",
+        "terminal worker error invalidates queued ready publication and retained lookup",
+        "peer tab suspension happens only on transitions and preserves same-model context",
+        "Reset filters restores exact viewport after banner layout, preserving selection inspector and history",
+        "Reset filters does not restore an old viewport after replacement or newer navigation",
+        "inspector resize changes independent orientation dimensions and clamps practical bounds",
+        "membership/category/focus/search stay distinct and traversals bound cycles",
+        "remove and blank affect layout only; Undo and Back restore separate state without source mutation",
+        "layout Undo is bounded and model replacement invalidates either restoration",
+        "table entry uses exact association and never chooses a multipartition default",
+        "Back restores viewport after the final hidden-selection banner layout",
+        "Back finalizes controls before restoring disclosure and scroll state",
+        "group filtering uses exact metadata and persists opaquely through Back and reset",
+        "new membership requests placement once, preserves other members and explicit drop coordinates",
+        "Center selected dispatches genuine center only for a current visible selection",
+        "group-only metadata changes invalidate captured workspace identity",
+        "flow branch follows only directed resolved paths, excludes merge siblings and terminates cycles",
+        "inspecting a reference retains flow root and direction; Back and layout Undo restore root independently",
+        "ordinary first query remains unlocked and new generation clears explicit lock",
+        "Arrange enables Undo immediately even when it was previously disabled",
+        "adding the first object to a blank layout keeps focus unlocked",
+        "silent restoration refreshes displayed zoom from accepted canvas state, for every shell restore path",
+        "late Undo restoration cannot replace a newer navigation zoom or label",
+        "long flow auto framing keeps all membership/positions and centers the selected or supplied terminal node",
+        "automatic framing exposes the title inside actual zoomed viewport without changing canvas coordinates",
+        "pending Back and Undo yield inspector focus and late viewport writes to newer input",
+        "uninterrupted Back retains full restore and exact below-dock scroll; ownership listeners are released",
+        "ordinary inspection preserves pan/zoom and scroll while deliberate follow still reveals; Back restores root",
+        "dock preference persists source-free geometry and survives model invalidation",
+        "explicit lock follows selection on unlock; Back restores root and viewport; stale toggle is rejected",
+        "model status and source provider are independent conservative evidence axes",
+        "Measures-style directed flow excludes sibling consumers and merge co-inputs at every depth",
+        "library analysis compacts only the directed flow; card inspection retains it; Back restores manual layout",
+        "Flow ignores Canvas membership controls; explicit Analyze replaces root and Back restores it",
+        "Hide explicitly compacts visible flow and remains undoable; stale Analyze cannot publish",
+        "Canvas Show all retains custom placement and restores membership with Undo",
+        "opening a full flow retains Fit framing without recentering and cropping ancestors",
+        "model generation resets mode snapshots, root and Canvas Undo to initial Flow",
+        "snapshot presentation roundtrips JSON maps, unlimited depth, both modes and reader state without runtime history",
+        "pending snapshot does not follow a replacement model",
+        "snapshot metadata starts the real worker; legacy missing metadata reports unavailable",
+        "refresh snapshot retains valid flow and viewport while safely dropping removed roots, selection and layout entries",
+        "large-1000 worker completion publishes a searchable inventory without routing invisible edges"
+      ]
+    },
+    {
+      "file": "tests/power-query.test.cjs",
+      "bytes": 7140,
+      "gate": "canonical-unit",
+      "assertionSites": 30,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:vm",
+        "node:path"
+      ],
+      "testTitles": [
+        "BIM preserves exact string / array code, partitions, stable identities, kinds and missing states",
+        "TMDL keeps decoded M indentation, quoted names, multiple partitions and shared expressions",
+        "TMDL fenced code preserves trailing whitespace, blank lines and CRLF",
+        "identities survive file order and no metadata does not invent code",
+        "snapshot export includes exact available M and metadata",
+        "stale hook code navigation cannot close or change a newer model inspector",
+        "explicit BIM query group references resolve declared nested folders without name inference, including snapshots",
+        "TMDL group properties before/after exact fenced expressions and partition sources stay metadata"
+      ]
+    },
+    {
+      "file": "tests/powerbi-external-tool.test.cjs",
+      "bytes": 7739,
+      "gate": "canonical-unit",
+      "assertionSites": 32,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "node:child_process",
+        "../vscode-extension/src/external-tool",
+        "./vscode-mock",
+        "../vscode-extension/src/powerbi",
+        "../vscode-extension/src/features",
+        "../vscode-extension/package.json",
+        "./vscode-mock"
+      ],
+      "testTitles": [
+        "Desktop launch links identify the exact local window and database",
+        "no Desktop model opens an empty viewer: ",
+        "rejects unsafe or ambiguous launch: ",
+        "rejects an unrelated URI route before touching the current viewer",
+        "registration starts the installed Code executable directly",
+        "panel refresh rereads Desktop and an empty launch clears its previous model",
+        "Windows registration adds/removes only its own file",
+        "Power BI Desktop is hidden in stable builds until switched on"
+      ]
+    },
+    {
+      "file": "tests/pq-cycle-routing.browser.js",
+      "bytes": 1754,
+      "gate": "explicit-browser",
+      "assertionSites": 0,
+      "imports": [],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-followup-zoom.browser.cjs",
+      "bytes": 7754,
+      "gate": "explicit-browser",
+      "assertionSites": 12,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-measures-flow.browser.cjs",
+      "bytes": 9299,
+      "gate": "explicit-browser",
+      "assertionSites": 51,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-reader-connectors.browser.cjs",
+      "bytes": 9292,
+      "gate": "explicit-browser",
+      "assertionSites": 24,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-a8fc1b8-cached-transitions.browser.cjs",
+      "bytes": 12528,
+      "gate": "explicit-browser",
+      "assertionSites": 20,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-a8fc1b8-overlay-diagnostic.browser.cjs",
+      "bytes": 11026,
+      "gate": "explicit-browser",
+      "assertionSites": 11,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-a8fc1b8-transitions.browser.cjs",
+      "bytes": 11761,
+      "gate": "explicit-browser",
+      "assertionSites": 17,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-alignment-6b352ca-privacy.browser.cjs",
+      "bytes": 12621,
+      "gate": "explicit-browser",
+      "assertionSites": 44,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-alignment-6b352ca.browser.cjs",
+      "bytes": 5315,
+      "gate": "explicit-browser",
+      "assertionSites": 5,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:child_process",
+        "node:crypto",
+        "node:assert/strict",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": [
+        "\\n",
+        ","
+      ]
+    },
+    {
+      "file": "tests/pq-redesign-independent-alignment-f905-privacy.browser.cjs",
+      "bytes": 12621,
+      "gate": "explicit-browser",
+      "assertionSites": 44,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-alignment-f905-zoom.browser.cjs",
+      "bytes": 12648,
+      "gate": "explicit-browser",
+      "assertionSites": 20,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-alignment-f905.browser.cjs",
+      "bytes": 5217,
+      "gate": "explicit-browser",
+      "assertionSites": 5,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:child_process",
+        "node:crypto",
+        "node:assert/strict",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": [
+        "\\n",
+        ","
+      ]
+    },
+    {
+      "file": "tests/pq-redesign-independent-d3d8360-additional.browser.cjs",
+      "bytes": 6344,
+      "gate": "explicit-browser",
+      "assertionSites": 2,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs",
+        "./pq-redesign-independent-runtime-scenarios.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-d3d8360-zoom-interaction.browser.cjs",
+      "bytes": 10646,
+      "gate": "explicit-browser",
+      "assertionSites": 15,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-d3d8360-zoom.browser.cjs",
+      "bytes": 8994,
+      "gate": "explicit-browser",
+      "assertionSites": 11,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-d3d8360.browser.cjs",
+      "bytes": 12700,
+      "gate": "explicit-browser",
+      "assertionSites": 46,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": [
+        ","
+      ]
+    },
+    {
+      "file": "tests/pq-redesign-independent-e61726d.browser.cjs",
+      "bytes": 12414,
+      "gate": "explicit-browser",
+      "assertionSites": 42,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-filters-v2.browser.oracle.cjs",
+      "bytes": 2796,
+      "gate": "explicit-browser",
+      "assertionSites": 14,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:crypto",
+        "node:assert/strict",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-filters-v2.test.cjs",
+      "bytes": 12917,
+      "gate": "canonical-unit",
+      "assertionSites": 43,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "./pq-redesign-independent-filters-v2.oracle.cjs",
+        "./acceptance-fixtures/pq-redesign/filters-v2/build.cjs",
+        "./pq-redesign-independent-filters-v2.browser.oracle.cjs"
+      ],
+      "testTitles": [
+        "filter addendum artifacts are reproducible and preserve explicit expected incidence sets",
+        "all-disconnected same SQL and semantic relationship is All6 Connected0 Disconnected6",
+        "parameter fanout counts unique incident objects, not arrow count or inbound-only dependencies",
+        "cycles, duplicate rows, unavailable inputs, status objects and unused parameter have deliberate categories",
+        "300/301/350/1000 category totals do not truncate; same-ID replacement changes category membership",
+        "state oracle rejects search-derived graph, category counts after search, stale filter/search and invented independence",
+        "hidden methods and explicit empty category are separate from empty model",
+        "combined hidden-selection, Show all, reference/library navigation, Back and Reset workflows reject violations",
+        "atomic ready oracle accepts pending links without progressive edges, rejects early category finalization",
+        "generation reset invalidates same-ID membership, filter/search/selection/code/history and late messages",
+        "new filter browser validator requires supplied exact candidate and rejects synthetic evidence before execution"
+      ]
+    },
+    {
+      "file": "tests/pq-redesign-independent-fixtures.test.cjs",
+      "bytes": 7009,
+      "gate": "canonical-unit",
+      "assertionSites": 39,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:crypto",
+        "./acceptance-fixtures/pq-redesign/build.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-browser.oracle.cjs"
+      ],
+      "testTitles": [
+        "new corpus is reproducible without any production imports",
+        "every authored dependency has an exact occurrence oracle; no expected edge is inferred by scanning names",
+        "A1 independently has six same-source queries, a semantic relationship and zero expected edges",
+        "A2 five parameter arrows; A3 four result arrows; A6 exact boundary totals and >200 fanout",
+        "A4 literal UTF-16 oracle protects repeated/escaped refs and CRLF bytes",
+        "A7 contains intentional duplicate IDs, ambiguity, cycles, unavailable metadata; A8 reuses identities",
+        "graph oracle rejects invented SQL/relationship edges, reversal, missing inventory and duplicate UI IDs",
+        "A4/A5/A6/A8 evidence oracles fail closed on missing or stale observations",
+        "A9 privacy oracle rejects exports of M, altered raw text, XSS and source requests",
+        "candidate gate rejects absent/short/exact rejected baseline SHA",
+        "browser receipt validator rejects synthetic/absent provenance before any acceptance"
+      ]
+    },
+    {
+      "file": "tests/pq-redesign-independent-flow-0d964fc-arrange-undo-replay.browser.cjs",
+      "bytes": 3314,
+      "gate": "explicit-browser",
+      "assertionSites": 4,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-flow-0d964fc-arrange-undo-zoomed.browser.cjs",
+      "bytes": 3355,
+      "gate": "explicit-browser",
+      "assertionSites": 4,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-flow-0d964fc-arrange-undo.browser.cjs",
+      "bytes": 3320,
+      "gate": "explicit-browser",
+      "assertionSites": 4,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-flow-0d964fc-chain.browser.cjs",
+      "bytes": 4240,
+      "gate": "explicit-browser",
+      "assertionSites": 7,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-flow-0d964fc-offline.browser.cjs",
+      "bytes": 4710,
+      "gate": "explicit-browser",
+      "assertionSites": 12,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-flow-0d964fc-zoom-diagnostic.browser.cjs",
+      "bytes": 16364,
+      "gate": "explicit-browser",
+      "assertionSites": 33,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-flow-0d964fc-zoom-occlusion.browser.cjs",
+      "bytes": 17057,
+      "gate": "explicit-browser",
+      "assertionSites": 33,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-flow-0d964fc-zoom-visible.browser.cjs",
+      "bytes": 16280,
+      "gate": "explicit-browser",
+      "assertionSites": 36,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-flow-0d964fc-zoom.browser.cjs",
+      "bytes": 15348,
+      "gate": "explicit-browser",
+      "assertionSites": 35,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-followup-dbd0e49-offline.browser.cjs",
+      "bytes": 4714,
+      "gate": "explicit-browser",
+      "assertionSites": 12,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-followup-dbd0e49-wrap-diagnostic.browser.cjs",
+      "bytes": 3999,
+      "gate": "explicit-browser",
+      "assertionSites": 6,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-followup-dbd0e49-zoom-reader-proof.browser.cjs",
+      "bytes": 3496,
+      "gate": "explicit-browser",
+      "assertionSites": 4,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-followup-dbd0e49-zoom.browser.cjs",
+      "bytes": 13708,
+      "gate": "explicit-browser",
+      "assertionSites": 26,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-reader-connectors-9c3b836-offline.browser.cjs",
+      "bytes": 4723,
+      "gate": "explicit-browser",
+      "assertionSites": 12,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-reader-connectors-9c3b836-zoom-cache-replay.browser.cjs",
+      "bytes": 14300,
+      "gate": "explicit-browser",
+      "assertionSites": 29,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-reader-connectors-9c3b836-zoom.browser.cjs",
+      "bytes": 14481,
+      "gate": "explicit-browser",
+      "assertionSites": 30,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round10-analysis.test.cjs",
+      "bytes": 2875,
+      "gate": "canonical-unit",
+      "assertionSites": 15,
+      "imports": [
+        "node:assert/strict",
+        "node:test",
+        "node:fs",
+        "node:vm",
+        "node:path"
+      ],
+      "testTitles": [
+        "preserved12 builtin "
+      ]
+    },
+    {
+      "file": "tests/pq-redesign-independent-round10-arrange-undo.browser.cjs",
+      "bytes": 3713,
+      "gate": "explicit-browser",
+      "assertionSites": 4,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round10-auto-framing-strict.browser.cjs",
+      "bytes": 11843,
+      "gate": "explicit-browser",
+      "assertionSites": 9,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round10-input-ownership.browser.cjs",
+      "bytes": 15293,
+      "gate": "explicit-browser",
+      "assertionSites": 23,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round10-offline.browser.cjs",
+      "bytes": 4837,
+      "gate": "explicit-browser",
+      "assertionSites": 13,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round10-zoom-reader.browser.cjs",
+      "bytes": 15901,
+      "gate": "explicit-browser",
+      "assertionSites": 39,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round7-auto-framing-strict.browser.cjs",
+      "bytes": 11729,
+      "gate": "explicit-browser",
+      "assertionSites": 10,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round7-chain-focus-diagnostic.browser.cjs",
+      "bytes": 16750,
+      "gate": "explicit-browser",
+      "assertionSites": 36,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round7-offline.browser.cjs",
+      "bytes": 4695,
+      "gate": "explicit-browser",
+      "assertionSites": 12,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round7-zoom-centered.browser.cjs",
+      "bytes": 16259,
+      "gate": "explicit-browser",
+      "assertionSites": 36,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round7-zoom-chain.browser.cjs",
+      "bytes": 16452,
+      "gate": "explicit-browser",
+      "assertionSites": 36,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round7-zoom-diagnostic.browser.cjs",
+      "bytes": 16860,
+      "gate": "explicit-browser",
+      "assertionSites": 36,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round7-zoom.browser.cjs",
+      "bytes": 16231,
+      "gate": "explicit-browser",
+      "assertionSites": 36,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round8-input-ownership.browser.cjs",
+      "bytes": 14810,
+      "gate": "explicit-browser",
+      "assertionSites": 24,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round8-offline.browser.cjs",
+      "bytes": 4695,
+      "gate": "explicit-browser",
+      "assertionSites": 12,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round8-zoom-reader.browser.cjs",
+      "bytes": 16265,
+      "gate": "explicit-browser",
+      "assertionSites": 36,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round9-analysis.test.cjs",
+      "bytes": 6935,
+      "gate": "canonical-unit",
+      "assertionSites": 48,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm"
+      ],
+      "testTitles": [
+        "exact catalog ",
+        "model collision wins for ",
+        "local and parameter shadow win for ",
+        "uncatalogued exact spelling remains uncertainty ",
+        "quoted repeated CRLF UTF16 references resolve twice, function shadow does not",
+        "duplicate model names, identities and table partitions never fall through to catalog",
+        "one model partition wins over language name",
+        "exclusive initialization and duplicate local bindings remain uncertainty",
+        "mixed standard, dynamic and unknown remain separately classified without guessed edges",
+        "incomplete/non-M/missing never leak successful catalog classification",
+        "graph forwards opaque uncertainty strings, with no text-based classification",
+        "model graph IDs, edges and every exact occurrence equal prior runtime despite informational issue change"
+      ]
+    },
+    {
+      "file": "tests/pq-redesign-independent-round9-offline.browser.cjs",
+      "bytes": 4695,
+      "gate": "explicit-browser",
+      "assertionSites": 12,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-redesign-independent-round9-zoom-reader.browser.cjs",
+      "bytes": 17483,
+      "gate": "explicit-browser",
+      "assertionSites": 42,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "./pq-redesign-independent-oracles.cjs",
+        "./pq-redesign-independent-filters-v2.oracle.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-round7.browser.cjs",
+      "bytes": 7928,
+      "gate": "explicit-browser",
+      "assertionSites": 26,
+      "imports": [
+        "/Users/przemek.harazny/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright",
+        "node:fs",
+        "node:path",
+        "node:assert/strict"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-round8.browser.cjs",
+      "bytes": 16661,
+      "gate": "explicit-browser",
+      "assertionSites": 24,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs",
+        "node:crypto"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-selection-docking-r9.browser.cjs",
+      "bytes": 9485,
+      "gate": "explicit-browser",
+      "assertionSites": 16,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-selection-lock-r10-cycles.browser.cjs",
+      "bytes": 4885,
+      "gate": "explicit-browser",
+      "assertionSites": 5,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-selection-lock-r10.browser.cjs",
+      "bytes": 11082,
+      "gate": "explicit-browser",
+      "assertionSites": 34,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq-tables-alignment.browser.cjs",
+      "bytes": 11602,
+      "gate": "explicit-browser",
+      "assertionSites": 39,
+      "imports": [
+        "node:fs",
+        "node:path",
+        "node:assert/strict",
+        "node:crypto",
+        "node:child_process",
+        "./pq-redesign-independent-runtime-transport.cjs"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/pq38-acceptance.test.cjs",
+      "bytes": 3142,
+      "gate": "canonical-unit",
+      "assertionSites": 18,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm"
+      ],
+      "testTitles": [
+        "independent scope/lexical/dynamic oracle and cycles",
+        "snapshot includes the independently authored Power Query metadata exactly",
+        "replacement metadata contains no previous query identities"
+      ]
+    },
+    {
+      "file": "tests/pq38-snapshot.browser.cjs",
+      "bytes": 7257,
+      "gate": "explicit-browser",
+      "assertionSites": 7,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:http",
+        "node:url",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "actual exported files retain available Power Query metadata when reopened and re-exported offline"
+      ]
+    },
+    {
+      "file": "tests/preview-version.test.cjs",
+      "bytes": 2317,
+      "gate": "canonical-unit",
+      "assertionSites": 9,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "node:child_process"
+      ],
+      "testTitles": []
+    },
+    {
+      "file": "tests/reference.browser.cjs",
+      "bytes": 10675,
+      "gate": "explicit-browser",
+      "assertionSites": 19,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:http",
+        "node:url",
+        "node:child_process",
+        "../Models/tools/viewer/scripts/cli/model.cjs"
+      ],
+      "testTitles": [
+        "reference library navigates real objects, tabs and visual views, then re-exports offline"
+      ]
+    },
+    {
+      "file": "tests/reference.test.cjs",
+      "bytes": 4857,
+      "gate": "canonical-unit",
+      "assertionSites": 25,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:vm",
+        "node:path",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "reference metadata survives JS/Python TMDL imports and allowlisted offline export",
+        "BIM reference fields, scoped identities, and search work for same-name columns",
+        "older models still index without claiming metadata completeness"
+      ]
+    },
+    {
+      "file": "tests/serve.test.cjs",
+      "bytes": 13761,
+      "gate": "canonical-unit",
+      "assertionSites": 47,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:child_process",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "node:crypto",
+        "node:vm",
+        "node:crypto",
+        "node:http",
+        "node:net"
+      ],
+      "testTitles": [
+        "serve.py answers the page: ping, browse, find, model, static files",
+        "serve.py preserves raw fenced TMDL newlines and whitespace through metadata parsing",
+        "serve.py refuses requests from other websites and never writes",
+        "serve.py starts again on the same port right after it stopped",
+        "Fabric bridge requires same-origin JSON and the per-server session nonce"
+      ]
+    },
+    {
+      "file": "tests/sidebar-actions.test.cjs",
+      "bytes": 1817,
+      "gate": "canonical-unit",
+      "assertionSites": 10,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "./power-query-ui-harness.cjs",
+        "node:vm",
+        "node:fs",
+        "node:path"
+      ],
+      "testTitles": [
+        "relationship selection and neighbour navigation are independent keyboard buttons"
+      ]
+    },
+    {
+      "file": "tests/snapshot-app.test.cjs",
+      "bytes": 16457,
+      "gate": "canonical-unit",
+      "assertionSites": 85,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm"
+      ],
+      "testTitles": [
+        "offline startup restores ",
+        "offline startup preserves intentionally empty canvas membership and discards invalid focus",
+        "switching snapshot Domains and Tables retains each viewport and domain expansion positions",
+        "an invalid embedded snapshot reports failure instead of falling back to fetch or repositories",
+        "snapshot export reports progress, prevents duplicate saves and permits retry after failure",
+        "recipient UI keeps four analysis modes and Save snapshot but has no model switcher, import or PNG",
+        "Domains then Measures preserves table focus, expanded display, positions and camera for export",
+        "new table changes after returning from Domains replace the previously cached table view",
+        "Matrix snapshot restores both scroll axes and caches them before leaving the view",
+        "malformed Matrix scroll values are sanitized without affecting table state",
+        "direct measure navigation captures the latest table changes before changing modes",
+        "native Fabric model messages seed the same cache and source provenance as the shared picker",
+        "native Fabric cache failures leave the currently displayed model unchanged"
+      ]
+    },
+    {
+      "file": "tests/snapshot.browser.cjs",
+      "bytes": 20815,
+      "gate": "explicit-browser",
+      "assertionSites": 63,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:http",
+        "node:url",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "downloaded whole-app snapshot works as a standalone offline file",
+        "exports each starting view through the Save snapshot button",
+        "every downloaded starting view restores in a fresh offline document",
+        "a blank starting canvas keeps the entire model available offline",
+        "recipient can explore tables, DAX, Table groups and Matrix without the source",
+        "offline re-export retains recipient changes and can be opened again",
+        "Fabric provenance survives offline export without live identities or credentials",
+        "CLI snapshots open focused, fit the viewport and remain fully explorable offline"
+      ]
+    },
+    {
+      "file": "tests/snapshot.test.cjs",
+      "bytes": 18967,
+      "gate": "canonical-unit",
+      "assertionSites": 86,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm"
+      ],
+      "testTitles": [
+        "model serialization preserves analytical schema and exact DAX while excluding source secrets and unknown fields",
+        "blank workspace exports every table and measure, independent of visible membership and search",
+        "HTML embeds hostile DAX and Unicode losslessly without creating executable data scripts",
+        "dollar replacement sequences remain literal in names, DAX, and the saved template",
+        "HTML is self-contained and denies network requests through its content security policy",
+        "an exported snapshot can package its inline assets again without fetch or local asset paths",
+        "unsupported versions and malformed embedded model data are rejected explicitly",
+        "missing runtime assets abort export rather than creating an incomplete HTML file",
+        "memory storage never touches native storage and replaces all preferences between snapshots",
+        "embedded payload switches to memory before application constructors read preferences",
+        "invalid embedded payload remains isolated instead of falling back to recipient storage",
+        "Power Query payload and re-export preserve exact M, null/missing states and static dependencies",
+        "older payloads without Power Query stay valid and do not gain invented M on re-export",
+        "Fabric snapshots keep acquisition coverage and exclude connection identity",
+        "snapshot retains relationship omission evidence using only documented diagnostic fields"
+      ]
+    },
+    {
+      "file": "tests/star-layout.browser.cjs",
+      "bytes": 17117,
+      "gate": "explicit-browser",
+      "assertionSites": 32,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:http",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "?",
+        "Explore all arranges, fits inside the usable canvas, and stacks nothing",
+        "every arrange algorithm lands with nothing stacked",
+        "Fit preserves positions; manual navigation survives a recipient resize",
+        "Focus turns the overview into a readable neighbourhood and back",
+        "names stay at 11px or better from the LOD threshold down to the floor",
+        "arrowheads are always drawn, cardinality pills only above 50%"
+      ]
+    },
+    {
+      "file": "tests/table-dax.browser.cjs",
+      "bytes": 11577,
+      "gate": "explicit-browser",
+      "assertionSites": 42,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:child_process",
+        "node:url",
+        "../Models/tools/viewer/scripts/cli/capture.cjs",
+        "../Models/tools/viewer/scripts/cli/model.cjs"
+      ],
+      "testTitles": [
+        "calculated objects use the standard Measures graph, DAX, layout and offline state"
+      ]
+    },
+    {
+      "file": "tests/table-dax.test.cjs",
+      "bytes": 13518,
+      "gate": "canonical-unit",
+      "assertionSites": 94,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm",
+        "../Models/tools/viewer/scripts/cli/model.cjs"
+      ],
+      "testTitles": [
+        "field parameter entries retain labels, orders, and typed NAMEOF targets",
+        "field references exclude strings and comments, preserve repeated choices, and disclose missing targets",
+        "calculation items and format expressions have independent references and contextual calls",
+        "measure expansion follows inputs with cycle guards and disclosed graph limits",
+        "calculated tables and missing calculation-item metadata remain inspectable without invented expressions",
+        "calculated-object selection snapshots share Measures preferences and restore typed roots",
+        "table expressions use the exact Measures formatter and syntax-token styles",
+        "Measures adds a field-parameter consumer downstream of a measure, never upstream",
+        "calculation groups require explicit measure references, including separate format references",
+        "source analysis can show calculated-column consumers and remains bounded in every orientation",
+        "calculated-consumer display limits are explicit rather than silently dropping all consumers",
+        "calculated-column readers retain their own typed identity and definition",
+        "selected field parameters use the standard layered graph and preserve model measure identities",
+        "calculated consumers have one named row and lower consumer links leave the measure bottom",
+        "selected calculation items retain contextual functions without invented measure dependencies",
+        "calculated routes detour around unrelated nodes and keep endpoint directions",
+        "measure graph traversal accepts prototype-key identifiers as actual measures"
+      ]
+    },
+    {
+      "file": "tests/theme.test.cjs",
+      "bytes": 3962,
+      "gate": "canonical-unit",
+      "assertionSites": 22,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm"
+      ],
+      "testTitles": [
+        "appearance persists, normalizes unknown values, and restores Classic",
+        "snapshot appearance is isolated from recipient storage and old snapshots default to Classic",
+        "legacy neutral tokens retain original fallback and semantic colors",
+        "Spellbook palette preserves axes and Classic preference without mutating source colors",
+        "VS Code automatic palettes retain distinct hues instead of passing map indices as contrast settings"
+      ]
+    },
+    {
+      "file": "tests/tmdl-parser.test.cjs",
+      "bytes": 15836,
+      "gate": "canonical-unit",
+      "assertionSites": 63,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm",
+        "node:child_process",
+        "node:child_process",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "a bare `database` line (no inline name) does not read its own compatibilityLevel property as the name",
+        "an inline `database <Name>` line still parses correctly (older/common TMDL style)",
+        "the repo fixture (inline database name) still parses to its real name",
+        "names with an escaped apostrophe keep their measures and columns",
+        "calculated columns, calculated tables and calculation items keep their DAX (TMDL)",
+        "calculated columns, calculated tables and calculation items keep their DAX (BIM)",
+        "``` fences around a multi-line measure are not part of its DAX",
+        "unfence drops ``` fences that an older import left in a stored measure",
+        "relationship identities preserve escaped names and distinguish parallel edges",
+        "table-group annotations survive TMDL and BIM without borrowing measure display folders",
+        "source grouping captures SQL database and Fabric navigation identities",
+        "Python and browser parsers agree on table folders and connection grouping metadata",
+        "Direct Lake entity partitions are a Direct Lake source, not a calculated table",
+        "browser and strict ingestion share rejection counts and preserve distinct parallel relationships",
+        "Python and browser retain parallel identities and explain the same rejected relationships"
+      ]
+    },
+    {
+      "file": "tests/ui-audit.browser.cjs",
+      "bytes": 12229,
+      "gate": "explicit-browser",
+      "assertionSites": 20,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:os",
+        "node:http",
+        "node:child_process"
+      ],
+      "testTitles": [
+        "UI audit: refresh context, host contrast, matrix and short-height scrolling",
+        "real metadata rebuild restores selected/analyzed flow and viewport",
+        "colours, legend, map and saved view survive navigation and model reopen",
+        "inspector text contrast in ",
+        "matrix expands across wide view and retains usable columns on narrow view",
+        "335px height retains a scrollable canvas instead of collapsing it"
+      ]
+    },
+    {
+      "file": "tests/view-quality.test.cjs",
+      "bytes": 15060,
+      "gate": "canonical-unit",
+      "assertionSites": 76,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:vm"
+      ],
+      "testTitles": [
+        "matrix updates immediately when table roles change without a model or count change",
+        "a model with no fact tables has a covering empty state and working next actions",
+        "matrix is a semantic table and empty relationships are not focusable controls",
+        "table relationship tooltip escapes all model-supplied names",
+        "aggregated domain relationship tooltip escapes model-supplied names on hover",
+        "switching away from Tables closes the inspector, and coming back reopens it on the same table",
+        "layered date-to-fact connection uses facing row edges and clears the item card",
+        "expanded cards preserve column anchors while horizontal approaches avoid obstacles",
+        "vertical obstacle detours retain endpoints and labels follow the routed segments",
+        "fact ports are distinct and ordered by the other endpoint, regardless of metadata order",
+        "curved row connections leave and enter vertically with the correct label direction",
+        "each endpoint chooses its side independently for a diagonal layout",
+        "one table uses different sides for neighbors above, below, left and right",
+        "a tiny relationship still provides a fallback arrow seat at the zoom floor"
+      ]
+    },
+    {
+      "file": "tests/vsix-platform-workflow.test.cjs",
+      "bytes": 2780,
+      "gate": "canonical-unit",
+      "assertionSites": 6,
+      "imports": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:os",
+        "node:path",
+        "node:child_process",
+        "node:fs"
+      ],
+      "testTitles": [
+        "\\n",
+        "\\n"
+      ]
+    }
+  ]
+}

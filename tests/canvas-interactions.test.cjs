@@ -301,3 +301,67 @@ test('alt+click toggles a table in the marked set and a background click clears 
   assert.equal(canvas.marked.size, 0);
   assert.equal(canvas.cards.B.el.style.outline, '');
 });
+
+test('overlapping hit corridors resolve to nearest visible route at each zoom, independent of paint order', () => {
+  for (const zoom of [.3, 1, 1.25, 2]) {
+    const {canvas} = fixture({zoom});
+    const a = {name:'Sales_Date',inactive:true}, b = {name:'Customer_Segment',both:true};
+    canvas._relationshipHits = [{r:a,i:0,points:[{x:0,y:0},{x:100,y:0}]},{r:b,i:1,points:[{x:0,y:4},{x:100,y:4}]}];
+    canvas.selRel=b;
+    const e={clientX:canvas.view.x+50*zoom,clientY:canvas.view.y+.2*zoom};
+    assert.equal(canvas.relationshipAt(e,false).r,a);
+    assert.equal(canvas.relationshipAt(e,true).r,a,'selected edge never steals a nearer line');
+    assert.equal(canvas.relationshipAt({...e,clientY:canvas.view.y+3.8*zoom},false).r,b);
+  }
+});
+test('exactly coincident paths cycle in model order while hover retains selected identity', () => {
+  const {canvas}=fixture();const a={name:'A'},b={name:'B'};
+  canvas._relationshipHits=[{r:b,i:1,points:[{x:0,y:0},{x:100,y:0}]},{r:a,i:0,points:[{x:0,y:0},{x:100,y:0}]}];
+  const e={clientX:65,clientY:20};
+  assert.equal(canvas.relationshipAt(e,true).r,a);
+  canvas.selRel=a;assert.equal(canvas.relationshipAt(e,true).r,b);
+  canvas.selRel=b;assert.equal(canvas.relationshipAt(e,true).r,a);
+  assert.equal(canvas.relationshipAt(e,false).r,b,'hover describes the selected member of a tie');
+});
+test('tooltip cleanup is safe before build and restores hovered stroke', () => {
+ const {canvas}=fixture();let restored=0;canvas._hoverRelationship={restore(){restored++;}};
+ canvas.hideTip();assert.equal(restored,1);assert.equal(canvas._hoverRelationship,null);
+ canvas.tip={style:{display:'block'}};canvas.hideTip();assert.equal(canvas.tip.style.display,'none');
+});
+
+test('a selected route cannot override a different route even within a fraction of a pixel', () => {
+  const {canvas} = fixture();
+  const a = {}, b = {};
+  canvas._relationshipHits = [{r:a,i:0,points:[{x:0,y:0},{x:100,y:0}]},{r:b,i:1,points:[{x:0,y:.2},{x:100,y:.2}]}];
+  canvas.selRel = b;
+  assert.equal(canvas.relationshipAt({clientX:65,clientY:20}, true).r, a);
+});
+
+test('table names matching Object prototype keys retain independent finite canvas positions', () => {
+  const {win, app, host} = fixture();
+  app.model.tables = ['__proto__', 'constructor', 'toString'].map(name => ({name, relCount:0}));
+  app.model.relationships = [];
+  const canvas = new win.GraphCanvas(app, host);
+  canvas._gapBox = () => ({x:300,y:130});
+  canvas.computeLayout();
+  for (const table of app.model.tables) {
+    assert.ok(Object.hasOwn(canvas.pos, table.name));
+    assert.ok(Number.isFinite(canvas.pos[table.name].x));
+    assert.ok(Number.isFinite(canvas.pos[table.name].y));
+    canvas.cards[table.name] = {table};
+  }
+  assert.equal(Object.keys(canvas.cards).length, 3);
+  assert.equal(Object.getPrototypeOf(canvas.pos), null);
+});
+
+test('relationship keyboard navigation keeps one tab stop and wraps without selecting',()=>{
+ const {canvas}=fixture();let focused;
+ const items=Array.from({length:274},(_,i)=>({r:{name:String(i)},arrow:{attributes:{},setAttribute(k,v){this.attributes[k]=v;},focus(){focused=i;}}}));
+ canvas._relationshipHits=items;
+ canvas.focusRelationship(items[0]);
+ assert.equal(items.filter(i=>i.arrow.attributes.tabindex==='0').length,1);
+ canvas.stepRelationshipFocus(items[0],-1);assert.equal(focused,273);
+ canvas.stepRelationshipFocus(items[273],1);assert.equal(focused,0);
+ assert.equal(items.filter(i=>i.arrow.attributes.tabindex==='0').length,1);
+ assert.equal(canvas.selRel,null,'arrow navigation does not select or alter relationship state');
+});

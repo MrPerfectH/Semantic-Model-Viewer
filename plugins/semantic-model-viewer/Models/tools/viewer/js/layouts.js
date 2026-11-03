@@ -56,7 +56,7 @@
     var scope = model.tables.filter(function (t) { return !names || names.has(t.name); });
     if (!scope.length) return null;
     this._preExpandPos = null;
-    var adj = {}; scope.forEach(function (t) { adj[t.name] = new Set(); });
+    var adj = Object.create(null); scope.forEach(function (t) { adj[t.name] = new Set(); });
     model.relationships.forEach(function (r) {
       if (r.from === r.to || !adj[r.from] || !adj[r.to]) return;
       adj[r.from].add(r.to); adj[r.to].add(r.from);
@@ -72,8 +72,8 @@
     var hubs = conn.filter(function (t) { return self.app.isFact(t); });
     if (!hubs.length) hubs = conn.filter(function (t) { return adj[t.name].size >= 4; });
     if (!hubs.length) hubs = [conn.reduce(function (a, b) { return adj[a.name].size >= adj[b.name].size ? a : b; })];
-    var isHub = {}; hubs.forEach(function (h) { isHub[h.name] = true; });
-    var priv = {}, spine = [], orphan = [];
+    var isHub = Object.create(null); hubs.forEach(function (h) { isHub[h.name] = true; });
+    var priv = Object.create(null), spine = [], orphan = [];
     hubs.forEach(function (h) { priv[h.name] = []; });
     conn.filter(function (t) { return !isHub[t.name]; }).forEach(function (t) {
       var hs = Array.from(adj[t.name]).filter(function (n) { return isHub[n]; });
@@ -81,8 +81,8 @@
       else if (hs.length > 1) spine.push(t.name);
       else orphan.push(t.name);
     });
-    var factsOf = {}; spine.forEach(function (s) { factsOf[s] = Array.from(adj[s]).filter(function (n) { return isHub[n]; }); });
-    var spineOf = {}; hubs.forEach(function (h) { spineOf[h.name] = Array.from(adj[h.name]).filter(function (n) { return spine.indexOf(n) >= 0; }); });
+    var factsOf = Object.create(null); spine.forEach(function (s) { factsOf[s] = Array.from(adj[s]).filter(function (n) { return isHub[n]; }); });
+    var spineOf = Object.create(null); hubs.forEach(function (h) { spineOf[h.name] = Array.from(adj[h.name]).filter(function (n) { return spine.indexOf(n) >= 0; }); });
     return { conn: conn, loose: loose, aside: aside, scope: scope, adj: adj, hubs: hubs, isHub: isHub, priv: priv, spine: spine, orphan: orphan, factsOf: factsOf, spineOf: spineOf };
   };
   P._seatOrphans = function (placed, adj, orphan, fn) {
@@ -99,7 +99,7 @@
     }
   };
   P._deoverlapLanes = function (conn, placed, axis, laneStep, gap) {
-    var lanes = {};
+    var lanes = Object.create(null);
     conn.forEach(function (t) { var p = placed[t.name]; if (!p) return; var k = Math.round((axis === 'x' ? p.y : p.x) / laneStep); (lanes[k] = lanes[k] || []).push(p); });
     Object.keys(lanes).forEach(function (k) {
       var row = lanes[k].sort(function (a, b) { return a[axis] - b[axis]; });
@@ -252,12 +252,12 @@
     var adj = C.adj, hubs = C.hubs, priv = C.priv, spine = C.spine, orphan = C.orphan, factsOf = C.factsOf, spineOf = C.spineOf, conn = C.conn;
     // split the facts into two bands, heaviest first, alternating so both sides stay even
     var byDeg = this._anchorFirst(hubs.map(function (h) { return h.name; }).sort(function (a, b) { return adj[b].size - adj[a].size; }), C.center);
-    var side = {}; byDeg.forEach(function (h, i) { side[h] = i % 2 ? 1 : -1; });
+    var side = Object.create(null); byDeg.forEach(function (h, i) { side[h] = i % 2 ? 1 : -1; });
     var bandOf = { '-1': byDeg.filter(function (h) { return side[h] < 0; }), '1': byDeg.filter(function (h) { return side[h] > 0; }) };
 
     var CW = C.CW, CH = C.CH;
     var FSLOT = CW * 1.1, SSLOT = CW * 0.66;
-    var ord = {};
+    var ord = Object.create(null);
     spine.forEach(function (s, i) { ord[s] = (i - (spine.length - 1) / 2) * SSLOT; });
     var seat = function (list, slot) { list.forEach(function (n, i) { ord[n] = (i - (list.length - 1) / 2) * slot; }); };
     seat(bandOf['-1'], FSLOT); seat(bandOf['1'], FSLOT);
@@ -270,7 +270,7 @@
       spine.forEach(function (s, i) { ord[s] = (i - (spine.length - 1) / 2) * SSLOT; });
     }
 
-    var placed = {};
+    var placed = Object.create(null);
     // spine: two staggered rows so the conformed dims do not stretch the canvas sideways
     spine.forEach(function (s, i) { placed[s] = { x: ord[s], y: (i % 2 ? 1 : -1) * CH * 0.62 }; });
     var FY = CH * 2.35, PY = CH * 4.0, PSTEP = CH * 1.2;
@@ -299,8 +299,8 @@
     var CW = C.CW, CH = C.CH;
     // order the fact column so facts sharing dims sit near each other, selection first
     var facts = this._anchorFirst(hubs.map(function (h) { return h.name; }).sort(function (a, b) { return adj[b].size - adj[a].size; }), C.center);
-    var fi = {}; facts.forEach(function (f, i) { fi[f] = i; });
-    var so = {};
+    var fi = Object.create(null); facts.forEach(function (f, i) { fi[f] = i; });
+    var so = Object.create(null);
     for (var sweep = 0; sweep < 8; sweep++) {
       spine.forEach(function (s) { so[s] = factsOf[s].reduce(function (a, f) { return a + fi[f]; }, 0) / factsOf[s].length; });
       facts.sort(function (a, b) {
@@ -311,7 +311,7 @@
       facts.forEach(function (f, i) { fi[f] = i; });
     }
     // stack facts down the middle; each slot is tall enough for that fact's own dims
-    var placed = {}, rows = {};
+    var placed = Object.create(null), rows = Object.create(null);
     facts.forEach(function (f) { rows[f] = Math.max(1, Math.ceil(priv[f].length / 2)); });
     var y = 0;
     facts.forEach(function (f) { var h = rows[f] * CH; placed[f] = { x: 0, y: y + h / 2 - CH / 2 }; y += h + CH * 0.4; });
@@ -342,7 +342,7 @@
     var CW = C.CW, CH = C.CH;
     // the stair starts at the selected table's fact, otherwise at the busiest one
     var all = this._anchorFirst(hubs.map(function (h) { return h.name; }).sort(function (a, b) { return adj[b].size - adj[a].size; }), C.center);
-    var chain = [], used = {};
+    var chain = [], used = Object.create(null);
     var cur = all[0];
     while (cur) {
       chain.push(cur); used[cur] = true;
@@ -354,7 +354,7 @@
       });
       cur = best;
     }
-    var placed = {}, STEPX = CW * 0.7, STEPY = CH * 1.45;
+    var placed = Object.create(null), STEPX = CW * 0.7, STEPY = CH * 1.45;
     chain.forEach(function (f, i) { placed[f] = { x: i * STEPX, y: i * STEPY }; });
     chain.forEach(function (f) {
       priv[f].slice().sort(function (a, b) { return adj[b].size - adj[a].size; }).forEach(function (d, k) {
@@ -416,7 +416,7 @@
     var CW = C.CW, CH = C.CH, chord = this._minChord();
     var hubNames = C.hubs.map(function (h) { return h.name; });
 
-    var members = {};
+    var members = Object.create(null);
     hubNames.forEach(function (h) {
       members[h] = priv[h].slice().sort(function (a, b) { return adj[b].size - adj[a].size || byName(a, b); });
     });
@@ -438,7 +438,7 @@
        keeps its seat unless another one is at least 8% bigger, so a star that already fits
        looks the way it always has. */
     var build = function (rot) {
-      var radius = {}, outer = 0, seatsOf = {};
+      var radius = Object.create(null), outer = 0, seatsOf = Object.create(null);
       order.forEach(function (h) {
         var n = members[h].length, k;
         seatsOf[h] = [];
@@ -447,7 +447,7 @@
         outer = Math.max(outer, radius[h].rx + (C.orphan.length ? chord : 0));
       });
       var slots = self._latticeSlots(order.length, 2 * outer + CW);
-      var placed = {}, rings = [];
+      var placed = Object.create(null), rings = [];
       order.forEach(function (h, i) { placed[h] = { x: slots[i].x, y: slots[i].y }; });
 
       order.forEach(function (h) {
@@ -455,7 +455,7 @@
         if (!n) { rings.push({ hub: h, rx: R.rx, ry: R.ry, members: [] }); return; }
         var seats = seatsOf[h];                            // seat angles, first one at the top
         // a conformed dim wants the seat pointing at the other hubs it serves
-        var want = [], shared = {};
+        var want = [], shared = Object.create(null);
         list.forEach(function (d) {
           var others = (factsOf[d] || []).filter(function (f) { return f !== h && placed[f]; });
           if (!others.length) return;
@@ -465,7 +465,7 @@
           want.push({ name: d, a: Math.atan2(my / others.length - placed[h].y, mx / others.length - placed[h].x) });
         });
         want.sort(function (a, b) { return a.a - b.a || byName(a.name, b.name); });
-        var taken = {};
+        var taken = Object.create(null);
         want.forEach(function (w) {
           var best = -1, bd = 9;
           seats.forEach(function (a, ix) {
@@ -538,7 +538,7 @@
      between two consecutive facts that use the dimension is the arc it does NOT have to
      span, so minimising the rest is the same as asking facts that share dims to sit together. */
   P._ringArcCost = function (order, factsOfDim) {
-    var n = order.length, seat = {}, total = 0;
+    var n = order.length, seat = Object.create(null), total = 0;
     order.forEach(function (f, i) { seat[f] = i; });
     Object.keys(factsOfDim).forEach(function (d) {
       var ix = factsOfDim[d].map(function (f) { return seat[f]; })
@@ -598,7 +598,7 @@
      the most conformed dimensions with it. Sorted input, so ties always break the same way. */
   P._factChain = function (hubNames, adj, spineOf) {
     var all = hubNames.slice().sort(function (a, b) { return adj[b].size - adj[a].size || byName(a, b); });
-    var chain = [], used = {}, cur = all[0];
+    var chain = [], used = Object.create(null), cur = all[0];
     while (cur) {
       chain.push(cur); used[cur] = true;
       var here = spineOf[cur] || [], best = null, bs = -1;
@@ -635,7 +635,7 @@
     var at = center ? order.indexOf(center) : -1;
     if (at > 0) order = order.slice(at).concat(order.slice(0, at));
     var N = order.length, A0 = -Math.PI / 2;
-    var seatAngle = {};
+    var seatAngle = Object.create(null);
     order.forEach(function (f, k) { seatAngle[f] = A0 + TWO_PI * k / N; });
 
     // centre block: one cell per conformed dim, rows balanced so the block stays square-ish
@@ -675,12 +675,12 @@
     // growing keeps that shape rather than inflating a circle
     for (var grow = 0; grow < 40 && clash(); grow++) { rx *= 1.05; ry = Math.max(ryFloor, rx / RING_ASPECT); }
 
-    var placed = {}, seatOf = {};
+    var placed = Object.create(null), seatOf = Object.create(null);
     order.forEach(function (f, k) { seatOf[f] = k; });
 
     /* Each conformed dim wants the cell that points at the arc of facts it feeds; the dims
        that feed the most facts want the middle of the block, where every arc is close. */
-    var want = {}, load = {}, maxR = 1;
+    var want = Object.create(null), load = Object.create(null), maxR = 1;
     dims.forEach(function (d) {
       var fs = (factsOf[d] || []).filter(function (f) { return seatAngle[f] != null; });
       load[d] = fs.length;
@@ -689,7 +689,7 @@
     cells.forEach(function (cl) { cl.r = len(cl.x, cl.y); cl.a = Math.atan2(cl.y, cl.x); maxR = Math.max(maxR, cl.r); });
     cells.slice().sort(function (p, q) { return p.r - q.r; })
       .forEach(function (cl, k) { cl.rank = n > 1 ? k / (n - 1) : 0; });
-    var cellOf = {}, taken = [];
+    var cellOf = Object.create(null), taken = [];
     dims.slice().sort(function (p, q) { return load[q] - load[p] || byName(p, q); }).forEach(function (d, k) {
       var rank = n > 1 ? k / (n - 1) : 0, best = -1, bc = Infinity;
       cells.forEach(function (cl, ci) {
@@ -732,7 +732,7 @@
        that size the pass is both too slow and too marginal to be worth the wait. */
     var rels = this.app.model.relationships;
     var segs = this._segments(placed, rels);
-    var owns = {};                                 // table -> indices of the edges it touches
+    var owns = Object.create(null);                                 // table -> indices of the edges it touches
     segs.forEach(function (s, i) {
       (owns[s.a] = owns[s.a] || []).push(i);
       (owns[s.b] = owns[s.b] || []).push(i);
@@ -741,7 +741,7 @@
        tables named in it — the scored edge set has to cover everything that moved. */
     var movesWith = function (n) { return [n].concat(priv[n] || []); };
     var idsFor = function (u, v, expand) {
-      var inSet = {}, list = [];
+      var inSet = Object.create(null), list = [];
       (expand ? movesWith(u).concat(movesWith(v)) : [u, v]).forEach(function (n) {
         (owns[n] || []).forEach(function (i) { if (!inSet[i]) { inSet[i] = 1; list.push(i); } });
       });
@@ -804,7 +804,7 @@
     // the anchor hub opens the ring of seeds, so the selection lands where the reader expects
     var hubNames = this._anchorFirst(C.hubs.map(function (h) { return h.name; }).sort(byName), C.center);
     var names = C.conn.map(function (t) { return t.name; }).sort(byName);
-    var node = {}, HR = {}, GRAV = 0.04, GRAVY = 0.04;
+    var node = Object.create(null), HR = Object.create(null), GRAV = 0.04, GRAVY = 0.04;
     hubNames.forEach(function (h) { HR[h] = self._ringRadius((C.priv[h] || []).length + 1, chord); });
     var spread = Math.max(700, hubNames.length * 110);
     hubNames.forEach(function (h, i) {
@@ -866,7 +866,7 @@
        simulation's space is CW by CH apart once y is scaled, which is exactly the gap box —
        so the squash needs no second separation pass to undo it, and the picture keeps the
        wide shape the scale was for. The final pass is the safety net, not the workhorse. */
-    var placed = {};
+    var placed = Object.create(null);
     names.forEach(function (n) { placed[n] = { x: node[n].x, y: node[n].y }; });
     this._separatePlaced(placed, names, CW, CW, 200);
     names.forEach(function (n) { placed[n].y *= ys; });
@@ -915,7 +915,7 @@
     // the anchor seeds the fact row, so the barycentre sweeps settle around the selection
     var facts = this._anchorFirst(C.hubs.map(function (h) { return h.name; })
       .sort(function (a, b) { return adj[b].size - adj[a].size || byName(a, b); }), C.center);
-    var dims = [], hubOf = {};
+    var dims = [], hubOf = Object.create(null);
     facts.forEach(function (f) { priv[f].forEach(function (d) { hubOf[d] = f; dims.push(d); }); });
     C.spine.forEach(function (s) { dims.push(s); });
     dims.sort(byName);
@@ -923,12 +923,12 @@
     var edges = [];
     dims.forEach(function (d) { hubsOfDim(d).forEach(function (f) { edges.push([d, f]); }); });
 
-    var di = {}, fi = {}, reindex = function () {
+    var di = Object.create(null), fi = Object.create(null), reindex = function () {
       dims.forEach(function (d, i) { di[d] = i; });
       facts.forEach(function (f, i) { fi[f] = i; });
     };
     var bary = function (list, own, other, nbrs) {
-      var key = {};
+      var key = Object.create(null);
       list.forEach(function (n) {
         var ns = nbrs(n).filter(function (m) { return other[m] != null; });
         key[n] = ns.length ? ns.reduce(function (s, m) { return s + other[m]; }, 0) / ns.length : own[n];
@@ -953,7 +953,7 @@
     dims = best.d; facts = best.f; reindex();
 
     // dims take evenly spaced seats; each fact sits under the middle of the dims it uses
-    var DSLOT = CW, ROW = CH * 1.15, placed = {};
+    var DSLOT = CW, ROW = CH * 1.15, placed = Object.create(null);
     dims.forEach(function (d, i) { placed[d] = { x: i * DSLOT, y: 0 }; });
     var factY = CH * 2.2;
     facts.forEach(function (f) {
@@ -1014,7 +1014,7 @@
     return map[k] || k;
   };
   P.enterClusters = function () {
-    this.clusterOn = true; this.cpos = {}; this.expandedGroups = new Set();
+    this.clusterOn = true; this.cpos = Object.create(null); this.expandedGroups = new Set();
     this.pinned.clear();
     this.setAllExpanded(false);
     this.app.setState({ allExpanded: false, isolate: false, activeFilter: null });
@@ -1026,7 +1026,7 @@
     if (!this.clusterOn) return;
     this.clusterOn = false;
     this.destroyClusters();
-    this.cpos = {};
+    this.cpos = Object.create(null);
     Object.keys(this.cards).forEach(function (n) { self.layoutCard(n); });
     this.refreshVisibility();
   };
@@ -1039,16 +1039,16 @@
     var self = this, app = this.app, model = this.app.model;
     this.destroyClusters();
     if (!this.world) return;
-    this.expandedGroups = new Set(); this.cpos = {};
-    var byKey = {};
+    this.expandedGroups = new Set(); this.cpos = Object.create(null);
+    var byKey = Object.create(null);
     model.tables.forEach(function (t) { var k = self.groupKeyOf(t); (byKey[k] = byKey[k] || []).push(t); });
-    var internal = {}, external = {};
+    var internal = Object.create(null), external = Object.create(null);
     model.relationships.forEach(function (r) {
       var ga = self.groupKeyOf(model.byName[r.from]), gb = self.groupKeyOf(model.byName[r.to]);
       if (ga === gb) internal[ga] = (internal[ga] || 0) + 1;
       else { external[ga] = (external[ga] || 0) + 1; external[gb] = (external[gb] || 0) + 1; }
     });
-    this.groups = {};
+    this.groups = Object.create(null);
     this.groupOrder = Object.keys(byKey).sort(function (a, b) { return byKey[b].length - byKey[a].length; });
     this.groupOrder.forEach(function (k) {
       var tables = byKey[k];
@@ -1091,7 +1091,7 @@
       handle.addEventListener('mousedown', function (e) {
         e.stopPropagation();
         var sx = e.clientX, sy = e.clientY, x0 = gg.x, y0 = gg.y;
-        var snap = {};
+        var snap = Object.create(null);
         if (movesMembers) gg.tables.forEach(function (t) { if (self.cpos[t.name]) snap[t.name] = { x: self.cpos[t.name].x, y: self.cpos[t.name].y }; });
         var moved = false;
         var mm = function (ev) {
@@ -1189,7 +1189,7 @@
     var gOf = function (n) { return self.groupKeyOf(model.byName[n]); };
     var isExp = function (k) { return self.expandedGroups.has(k); };
     var center = function (k) { var gg = self.groups[k]; return isExp(k) ? { x: gg.x + gg.w / 2, y: gg.y + 18 } : { x: gg.x + gg.w / 2, y: gg.y + gg.h / 2 }; };
-    var agg = {}, t2g = {}, direct = [];
+    var agg = Object.create(null), t2g = Object.create(null), direct = [];
     model.relationships.forEach(function (r) {
       if (!self.cards[r.from] || !self.cards[r.to]) return;
       var ga = gOf(r.from), gb = gOf(r.to);

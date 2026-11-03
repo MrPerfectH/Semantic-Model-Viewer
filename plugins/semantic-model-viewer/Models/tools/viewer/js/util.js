@@ -73,7 +73,7 @@
     useAdapter: function (adapter) { storageAdapter = adapter; memoryStore = null; },
     useMemory: function (seed) { memoryStore = new Map(Object.entries(seed || {})); },
     get: function (k, d) { try { var v = readStored(k); return v == null ? d : v; } catch (e) { return d; } },
-    set: function (k, v) { try { writeStored(k, v); } catch (e) { } },
+    set: function (k, v) { try { writeStored(k, v); return true; } catch (e) { return false; } },
     del: function (k) { try { if(memoryStore) memoryStore.delete(k); else if(storageAdapter) storageAdapter.del(k); else localStorage.removeItem(k); } catch (e) { } },
     getJSON: function (k, d) { try { return JSON.parse(readStored(k)) || d; } catch (e) { return d; } },
     setJSON: function (k, v, onFail) { try { writeStored(k, JSON.stringify(v)); } catch (e) { if (onFail) onFail(e); } }

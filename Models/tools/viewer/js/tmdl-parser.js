@@ -31,10 +31,22 @@
         cur.crossFilteringBehavior=m[1];cur.both=m[1]==='bothDirections';
       }
     });
-    if(options && options.strictRelationships) out.forEach(function(r){
-      if(!r.from||!r.fromCol||!r.to||!r.toCol) throw new Error('Relationship is missing a table or column endpoint.');
+    return out;
+  }
+
+  function validateRelationships(tables, relationships, options){
+    options=options||{};
+    var names=new Set(tables.map(function(t){return t.name;})), accepted=[], issues=[];
+    relationships.forEach(function(r,index){
+      var reason='';
+      if(!r || !r.from || !r.to || (options.checkColumns!==false && (!r.fromCol || !r.toCol))) reason='missing a table or column endpoint';
+      else if(!names.has(r.from)||!names.has(r.to)) reason='missing table: '+r.from+' → '+r.to;
+      if(reason) issues.push({name:r&&r.name||'Relationship '+(index+1),reason:reason});
+      else accepted.push(r);
     });
-    return out.filter(function(r){ return r.from&&r.fromCol&&r.to&&r.toCol; });
+    var diagnostics={total:relationships.length,accepted:accepted.length,rejected:issues.length,issues:issues};
+    if(options.strictRelationships && issues.length) throw new Error('Relationship validation: '+accepted.length+' accepted, '+issues.length+' rejected of '+relationships.length+'. '+issues.map(function(i){return i.name+': '+i.reason;}).join('; ')+'. Model was not loaded.');
+    return {relationships:accepted,diagnostics:diagnostics};
   }
 
   /* TMDL wraps a multi-line expression in ``` fences. They are not DAX, so drop them. */
@@ -46,6 +58,7 @@
   function parseTableText(text){
     var lines=text.split(/\r?\n/);
     var table=null, mode=null, curCol=null, curMeas=null, partKind='', partSrc='', isCG=false, isFP=false;
+    var measureProperty=false;
     var colBuf=null, calcBuf=null, curItem=null, itemBuf=null, itemFmt=null, itemPhase='', inSource=false;
     var flushCol=function(){ if(curCol&&colBuf){ var d=dedent(colBuf); if(d) curCol.dax=d; } colBuf=null; };
     var flushItem=function(){ if(curItem){ var d=dedent(itemBuf||[]); if(d) curItem.dax=d; if(itemFmt){ var f=dedent(itemFmt); if(f) curItem.fmt=f; } } curItem=null; itemBuf=null; itemFmt=null; itemPhase=''; };
@@ -53,6 +66,7 @@
       var raw=lines[i], t=raw.trim();
       var ind=raw.match(/^\t*/)[0].length;
       var m;
+      if(t.indexOf('///')===0 && ind<=2) continue;
       if(!t){
         if(mode==='measure'&&curMeas&&curMeas.dax) curMeas.dax+='\n';
         else if(colBuf) colBuf.push('');
@@ -65,7 +79,7 @@
       if(!table) continue;
       if(ind===1){
         flushCol(); flushItem(); inSource=false;
-        curCol=null; curMeas=null; mode=null;
+        curCol=null; curMeas=null; mode=null; measureProperty=false;
         if((m=t.match(/^column\s+('(?:[^']|'')+'|"[^"]+"|[^\s=]+)(\s*=.*)?$/))){ curCol={name:unq(m[1].replace(/"/g,'')), dataType:'', hidden:false, isCalc:!!m[2], isKey:false, rel:false}; table.columns.push(curCol); mode='column';
           if(m[2]){ var inl=m[2].replace(/^\s*=\s*/,''); colBuf=inl?[inl]:[]; }
           continue; }
@@ -102,7 +116,8 @@
         else if(/^isHidden\s*$/.test(t)) curCol.hidden=true;
         else if(/^isKey\s*$/.test(t)) curCol.isKey=true;
       } else if(mode==='measure'&&curMeas){
-        if(ind>=3){ curMeas.dax += (curMeas.dax?'\n':'') + raw.replace(/^\t{3}/,''); }
+        if(ind===2) measureProperty=true;
+        if(ind>=3 && !measureProperty){ curMeas.dax += (curMeas.dax?'\n':'') + raw.replace(/^\t{3}/,''); }
         else {
           if((m=t.match(/^formatString:\s*(.*)$/))) curMeas.fmt=m[1];
           else if((m=t.match(/^displayFolder:\s*(.*)$/))) curMeas.folder=m[1];
@@ -267,15 +282,9 @@
   }
 
   function finalize(name, tables, rels, ctx, options){
-    var byName={}; tables.forEach(function(t){ byName[t.name]=t; (t.measures||[]).forEach(function(mm){ mm.dax=unfence(mm.dax); }); });
-    var seen={};
-    if(options && options.strictRelationships){
-      // A snapshot must not silently drop dangling or parallel relationships.
-      rels.forEach(function(r){if(!byName[r.from]||!byName[r.to])throw new Error('Relationship refers to a missing table: '+r.from+' → '+r.to);});
-    } else {
-      rels=rels.filter(function(r){ return byName[r.from]&&byName[r.to]; })
-        .filter(function(r){ var k=r.from+'|'+r.fromCol+'|'+r.to+'|'+r.toCol; if(seen[k])return false; seen[k]=1; return true; });
-    }
+    var byName=Object.create(null); tables.forEach(function(t){ byName[t.name]=t; (t.measures||[]).forEach(function(mm){ mm.dax=unfence(mm.dax); }); });
+    // Parallel relationships can have different activity/direction; retain each identity.
+    var validation=validateRelationships(tables,rels,options); rels=validation.relationships;
     var oneSide={}, manySide={}, rc={};
     rels.forEach(function(r){
       rc[r.from]=(rc[r.from]||0)+1; rc[r.to]=(rc[r.to]||0)+1;
@@ -301,7 +310,7 @@
       t.domain = t.tableGroup || domMap[t.role] || (t.source.kind==='manual'?'Manual':t.source.kind==='calculated'?'Calculated':'Ungrouped');
       t.colCount=t.columns.length; t.measureCount=t.measures.length; t.relCount=rc[t.name]||0;
     });
-    return {name:name, groupingVersion:1, tables:tables, relationships:rels};
+    return {name:name, groupingVersion:1, tables:tables, relationships:rels,relationshipDiagnostics:validation.diagnostics};
   }
 
   /* Shared queries (expressions.tmdl) hold the real connector calls and the
@@ -388,6 +397,64 @@
     return {version:1,nodes:nodes,warnings:[]};
   }
 
+  /* Reference metadata is deliberately allowlisted; no credentials, annotations or
+     arbitrary source objects are copied into the portable model. */
+  function referenceTMDL(table, text) {
+    var lines=text.split(/\r?\n/), blocks=[], stack=[];
+    lines.forEach(function(raw,i){
+      var depth=(raw.match(/^\t*/)||[''])[0].length, s=raw.trim();
+      if(!s || s.indexOf('///')===0) return;
+      while(stack.length && depth<=stack[stack.length-1].depth){stack.pop().end=i;}
+      var m=s.match(/^(table|column|measure|calculationGroup|calculationItem|hierarchy|level|partition)\b(?:\s+('(?:[^']|'')*'|[^\s=]+))?/);
+      var parent=stack[stack.length-1];
+      var allowed=m && ((depth===0&&m[1]==='table') || (parent&&depth===parent.depth+1&&
+        ((parent.kind==='table'&&['column','measure','calculationGroup','hierarchy','partition'].includes(m[1])) ||
+         (parent.kind==='calculationGroup'&&m[1]==='calculationItem') || (parent.kind==='hierarchy'&&m[1]==='level'))));
+      if(!allowed) return;
+      var b={kind:m[1],name:unq(m[2]||''),depth:depth,start:i,end:lines.length,parent:parent};blocks.push(b);stack.push(b);
+    });
+    function fields(b){
+      var out={},docs=[];
+      for(var j=b.start-1;j>=0;j--){var prev=lines[j];if(!prev.trim().startsWith('///') || (prev.match(/^\t*/)||[''])[0].length!==b.depth)break;docs.unshift(prev.trim().slice(3).replace(/^ /,''));}
+      if(docs.length)out.description=docs.join('\n');
+      for(var i=b.start+1;i<b.end;i++){
+        var raw=lines[i],depth=(raw.match(/^\t*/)||[''])[0].length,s=raw.trim(),m;
+        if(depth!==b.depth+1)continue;
+        if((m=s.match(/^(description|lineageTag|formatString|displayFolder|sortByColumn|summarizeBy|dataCategory|sourceColumn|mode|ordinal|precedence|column)\s*:\s*(.*)$/))){
+          var val=m[2],key=m[1];
+          if(key==='description'&&!val){var ls=[];for(var k=i+1;k<b.end&&(!lines[k].trim()||lines[k].startsWith('\t'.repeat(depth+1)));k++)ls.push(lines[k]);val=dedent(ls);}
+          out[key]=['ordinal','precedence'].includes(key)?Number(val):unq(val);
+        }
+        if(s==='isHidden'||s==='isHidden: true')out.hidden=true;
+        if((m=s.match(/^formatStringDefinition\s*=\s*(.*)$/))){var buf=m[1]?[m[1]]:[];for(var k=i+1;k<b.end&&(!lines[k].trim()||lines[k].startsWith('\t'.repeat(depth+1)));k++)buf.push(lines[k]);out.formatExpression=dedent(buf);}
+      }
+      return out;
+    }
+    table.hierarchies=[];table.partitions=[];
+    blocks.forEach(function(b){
+      var f=fields(b),target;
+      if(b.kind==='table')target=table;
+      if(b.kind==='column')target=table.columns.find(function(c){return c.name===b.name;});
+      if(b.kind==='measure')target=table.measures.find(function(c){return c.name===b.name;});
+      if(b.kind==='calculationItem')target=(table.calcItems||[]).find(function(c){return c.name===b.name;});
+      if(b.kind==='calculationGroup'){table.calculationGroup=f;return;}
+      if(b.kind==='hierarchy'){target={name:b.name,levels:[]};table.hierarchies.push(target);b.target=target;}
+      if(b.kind==='level'&&b.parent.target){target={name:b.name};b.parent.target.levels.push(target);}
+      if(b.kind==='partition'){target={name:b.name};var type=lines[b.start].match(/=\s*(\w+)\s*$/);if(type)target.type=type[1];table.partitions.push(target);}
+      if(target)Object.assign(target,f);
+    });
+    table.referenceVersion=1;
+  }
+  function referenceBIM(table, source) {
+    function fields(s){var o={};['description','lineageTag','formatString','displayFolder','sortByColumn','summarizeBy','dataCategory','sourceColumn','mode','ordinal','precedence','column'].forEach(function(k){if(['string','number'].includes(typeof s[k]))o[k]=s[k];});if(s.isHidden)o.hidden=true; if(s.formatStringDefinition){var f=s.formatStringDefinition.expression;o.formatExpression=Array.isArray(f)?f.join('\n'):String(f||'');}return o;}
+    Object.assign(table,fields(source));
+    ['columns','measures'].forEach(function(key){(table[key]||[]).forEach(function(o){var s=(source[key]||[]).find(function(x){return x.name===o.name;});if(s)Object.assign(o,fields(s));});});
+    if(source.calculationGroup){table.calculationGroup=fields(source.calculationGroup);(table.calcItems||[]).forEach(function(o){var s=(source.calculationGroup.calculationItems||[]).find(function(x){return x.name===o.name;});if(s)Object.assign(o,fields(s));});}
+    table.hierarchies=(source.hierarchies||[]).map(function(h){return Object.assign({name:h.name,levels:(h.levels||[]).map(function(l){return Object.assign({name:l.name},fields(l));})},fields(h));});
+    table.partitions=(source.partitions||[]).map(function(p){return Object.assign({name:p.name,type:p.source&&p.source.type||'unknown'},fields(p));});
+    table.referenceVersion=1;
+  }
+
   function parseTMDL(files, options){
     var tables=[], rels=[], name='';
     var ctx={exprs:{}, exprNames:[], params:{}};
@@ -403,8 +470,8 @@
          `database` line, so it would greedily swallow the next line's own
          property (e.g. `compatibilityLevel: 1606`) and misread it as the name */
       var m=txt.match(/^database[ \t]+(.+)$/m); if(m) name=unq(m[1]);
-      if(/^relationship\s/m.test(txt) && ((options && options.strictRelationships) || /fromColumn:/.test(txt))) rels=rels.concat(parseRelText(txt, options));
-      if(/^table\s/m.test(txt)){ var t=parseTableText(txt); if(t) tables.push(t); }
+      if(/^relationship\s/m.test(txt)) rels=rels.concat(parseRelText(txt, options));
+      if(/^table\s/m.test(txt)){ var t=parseTableText(txt); if(t){ referenceTMDL(t,txt); tables.push(t); } }
     });
     /* tables are queries too — `Source = MdGeoEntities` points at another table's partition */
     tables.forEach(function(t){ var fl=t._flags||{}; if(fl.partSrc && !ctx.exprs[t.name]) ctx.exprs[t.name]=fl.partSrc; });
@@ -432,6 +499,7 @@
       if(partKind==='calculated'&&partSrc.trim()) out.dax=partSrc.trim();
       if(t.calculationGroup&&Array.isArray(t.calculationGroup.calculationItems)) out.calcItems=t.calculationGroup.calculationItems.map(function(ci){
         var o={name:ci.name, dax:txt(ci.expression).trim(), fmt:''}; var f=ci.formatStringDefinition; if(f) o.fmt=txt(f.expression||f).trim(); return o; });
+      referenceBIM(out,t);
       return out;
     });
     var rels=(mdl.relationships||[]).filter(function(r){return !skip.test(r.fromTable)&&!skip.test(r.toTable);}).map(function(r){
@@ -456,8 +524,12 @@
       if(/\.(bim|json)$/i.test(f.name)){
         try{
           var j=JSON.parse(f.text);
-          if(j && Array.isArray(j.tables) && Array.isArray(j.relationships) && j.tables.length && j.tables[0].columns && j.tables[0].domain!==undefined)
-            return {name:j.name||'', tables:j.tables, relationships:j.relationships};
+          if(j && Array.isArray(j.tables) && Array.isArray(j.relationships) && j.tables.length && j.tables[0].columns && j.tables[0].domain!==undefined){
+            var checked=validateRelationships(j.tables,j.relationships,{checkColumns:false}), previous=j.relationshipDiagnostics;
+            if(previous && Array.isArray(previous.issues)) checked.diagnostics.issues=previous.issues.filter(function(issue){return issue&&typeof issue.name==='string'&&typeof issue.reason==='string';}).map(function(issue){return {name:issue.name,reason:issue.reason};}).concat(checked.diagnostics.issues);
+            checked.diagnostics.rejected=checked.diagnostics.issues.length;checked.diagnostics.total=checked.diagnostics.accepted+checked.diagnostics.rejected;
+            return {name:j.name||'', tables:j.tables, relationships:checked.relationships, relationshipDiagnostics:checked.diagnostics, powerQuery:j.powerQuery, referenceLoadedAt:j.referenceLoadedAt};
+          }
           if(j && j.model && Array.isArray(j.model.tables)) return parseBIM(j);
           if(j && Array.isArray(j.tables) && j.compatibilityLevel!==undefined) return parseBIM(j);
         }catch(e){}
@@ -468,5 +540,5 @@
     return m;
   }
 
-  g.TMDLParser={unfence:unfence, parseAny:parseAny, parseTMDL:parseTMDL, parseBIM:parseBIM, CONNECTORS:CONNECTORS};
+  g.TMDLParser={unfence:unfence, parseAny:parseAny, parseTMDL:parseTMDL, parseBIM:parseBIM, validateRelationships:validateRelationships, CONNECTORS:CONNECTORS};
 })(typeof window!=='undefined'?window:globalThis);

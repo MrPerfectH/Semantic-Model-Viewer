@@ -10,8 +10,9 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/cli-delivery.test.cjs tests/agent-delivery.test.cjs tests/cli.test.cjs tests/open-model.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs tests/interactive-view.test.cjs tests/mcp-viewer.test.cjs tests/claude-plugin.test.cjs tests/browser-defaults.test.cjs tests/full-workflow.test.cjs tests/cli-workspace.test.cjs tests/measure-comparison.test.cjs",
-    "test:browser": "node --test tests/explanations.browser.cjs tests/measure-comparison.browser.cjs tests/diagram-readability.browser.cjs",
+    "test": "node --test tests/cli-delivery.test.cjs tests/agent-delivery.test.cjs tests/cli.test.cjs tests/open-model.test.cjs tests/explanations.test.cjs tests/explanation-session.test.cjs tests/interactive-view.test.cjs tests/mcp-viewer.test.cjs tests/claude-plugin.test.cjs tests/browser-defaults.test.cjs tests/full-workflow.test.cjs tests/cli-workspace.test.cjs tests/measure-comparison.test.cjs tests/table-dax.test.cjs tests/reference.test.cjs",
+    "test:browser": "node --test tests/explanations.browser.cjs tests/measure-comparison.browser.cjs tests/diagram-readability.browser.cjs tests/table-dax.browser.cjs tests/reference.browser.cjs",
+    "test:table-dax": "node --test tests/table-dax.test.cjs tests/table-dax.browser.cjs",
     "build:mcp-app": "node scripts/build-mcp-app.cjs",
     "test:interactive": "node --test tests/interactive-view.browser.cjs",
     "test:marketplace": "node scripts/test-claude-marketplace.cjs",
@@ -19,7 +20,9 @@
     "build:plugin": "node scripts/build-claude-plugin.cjs",
     "build:portable": "node scripts/build-portable.cjs",
     "build:codex-plugin": "node scripts/build-codex-plugin.cjs",
-    "build:vscode-cli": "node scripts/build-vscode-cli.cjs"
+    "build:vscode-cli": "node scripts/build-vscode-cli.cjs",
+    "check:viewer-assets": "node scripts/refresh-viewer-assets.cjs --check",
+    "benchmark:audit": "node scripts/benchmark-audit.cjs"
   },
   "files": [
     ".claude-plugin/",

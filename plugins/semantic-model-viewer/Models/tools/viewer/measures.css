@@ -317,3 +317,19 @@ body[data-smv-interactive] .mv-workspace[data-library-collapsed=false]>.mv-libra
 .mv-direction-switch[hidden],.mv-split-switch[hidden]{display:none}
 .mv-direction-switch button,.mv-split-switch button{display:inline-flex;align-items:center;justify-content:center;height:26px;line-height:1;box-sizing:border-box;padding:0 9px;font-size:12px}
 .mv-analysis:has(.mv-compact) .mv-direction-switch button:not(:first-child){font-size:14px;padding:0 9px;min-width:30px}
+
+/* Narrow readers use one complete pane. Existing Close/Escape and library toggle
+   switch panes without changing the saved preference merely on resize. */
+@media(max-width:799px){
+.mv-workspace:not(.mv-comparison-shell)[data-library-collapsed=false]>.mv-library{width:100%!important;min-width:0;max-width:none;position:relative;inset:auto;flex:1}
+.mv-workspace:not(.mv-comparison-shell)[data-library-collapsed=false]>.mv-main-column{display:none}
+.mv-workspace:not(.mv-comparison-shell)>.mv-resize{display:none}
+.mv-library-heading{flex-direction:row;align-items:center}
+.mv-row-table,.mv-row-count,.mv-library-foot{display:block}
+.mv-analysis-body[data-mode=split]{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(280px,1fr) 12px minmax(320px,1fr);overflow:auto}
+.mv-analysis-body[data-mode=split] .mv-graph-scroll{min-height:240px}
+.mv-analysis-body[data-mode=split]>.mv-split-divider{visibility:hidden;pointer-events:none}
+}
+.mv-row-table,.mv-row-count,.mv-section-head,.mv-library-foot,.mv-panel-heading p,.mv-chip,.mv-overview-note{color:var(--smv-readable-muted,var(--smv-muted,#536278))}
+
+[data-theme] .mv-library-row.is-selected .mv-row-table{color:var(--smv-ink,#334155)}

@@ -46,7 +46,7 @@
 
   /* {name: {many, one}} — which side of its relationships each table sits on */
   function sidesOf(rels) {
-    var s = {};
+    var s = Object.create(null);
     var tick = function (n, card) { s[n] = s[n] || { many: 0, one: 0 }; s[n][card === 'one' ? 'one' : 'many']++; };
     (rels || []).forEach(function (r) { tick(r.from, r.fromCard || 'many'); tick(r.to, r.toCard || 'one'); });
     return s;

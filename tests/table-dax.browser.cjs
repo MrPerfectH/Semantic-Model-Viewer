@@ -1,0 +1,81 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path'),os=require('node:os');
+const {spawn}=require('node:child_process');
+const {pathToFileURL}=require('node:url');
+const {browserPath,waitForEndpoint,stopBrowser}=require('../Models/tools/viewer/scripts/cli/capture.cjs');
+const modelTools=require('../Models/tools/viewer/scripts/cli/model.cjs');
+let chrome;try{chrome=browserPath()}catch{}
+async function browser(dir){
+ const profile=path.join(dir,'profile');const child=spawn(chrome,['--headless=new','--remote-debugging-port=0','--disable-background-networking','--no-first-run','--disable-extensions','--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe'],detached:process.platform!=='win32'});
+ const endpoint=await waitForEndpoint(child,profile);const pages=await(await fetch('http://127.0.0.1:'+new URL(endpoint).port+'/json/list')).json();
+ const socket=new WebSocket(pages.find(p=>p.type==='page').webSocketDebuggerUrl);await new Promise((r,j)=>{socket.addEventListener('open',r,{once:true});socket.addEventListener('error',j,{once:true})});
+ let sequence=0;const pending=new Map(),errors=[];
+ socket.addEventListener('message',e=>{const m=JSON.parse(e.data);if(m.method==='Runtime.exceptionThrown')errors.push(m.params);const p=pending.get(m.id);if(!p)return;pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result)});
+ const send=(method,params={})=>new Promise((resolve,reject)=>{const id=++sequence,timer=setTimeout(()=>{pending.delete(id);reject(Error('CDP timeout: '+method))},15000);pending.set(id,{resolve,reject,timer});socket.send(JSON.stringify({id,method,params}))});
+ const run=async expression=>{const r=await send('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value};
+ const settle=()=>run('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+ const until=async expression=>{for(let n=0;n<150;n++){if(await run(expression))return;await new Promise(r=>setTimeout(r,20))}throw Error('Timed out: '+expression)};
+ return {send,run,settle,until,errors,async close(){try{await send('Browser.close')}catch{}socket.close();await stopBrowser(child)}};
+}
+test('calculated objects use the standard Measures graph, DAX, layout and offline state',{skip:!chrome,timeout:90000},async t=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'smv-calculation-workspace-')),c=modelTools.runtime();const {app,model}=modelTools.readModel(c,path.join(__dirname,'../Models/demo/Contoso Retail.SemanticModel'));
+ model.tables.find(t=>t.name==='Time Intelligence').calcItems.find(i=>i.name==='YTD').formatExpression='IF(SELECTEDMEASURE() > [Total Sales], "0.0", SELECTEDMEASUREFORMATSTRING())';
+ const file=path.join(dir,'snapshot.html');fs.writeFileSync(file,modelTools.snapshot(c,app,{tables:['Metric Selector','Time Intelligence','Date','Product'],measure:null}));
+ const b=await browser(dir);t.after(async()=>{await b.close();fs.rmSync(dir,{recursive:true,force:true,maxRetries:10,retryDelay:100})});
+ await b.send('Runtime.enable');await b.send('Page.enable');await b.send('Emulation.setDeviceMetricsOverride',{width:1586,height:992,deviceScaleFactor:1,mobile:false});await b.send('Page.navigate',{url:pathToFileURL(file).href});await b.until('!!window.app&&app.state.loaded');
+ const click=async(selector,text)=>{await b.run(`(()=>{const e=[...document.querySelectorAll(${JSON.stringify(selector)})].find(e=>e.textContent.trim()===${JSON.stringify(text)});if(!e)throw Error('Missing '+${JSON.stringify(text)});e.click()})()`);await b.settle()};
+ const artifact=process.env.SMV_TABLE_DAX_ARTIFACTS;
+ const shot=async name=>{if(!artifact)return;fs.mkdirSync(artifact,{recursive:true});const s=await b.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(artifact,name+'.png'),Buffer.from(s.data,'base64'))};
+ await b.run("app.focusTable('Metric Selector')");await b.settle();
+ assert.equal(await b.run("app.model.relationships.some(r=>r.from==='Metric Selector'||r.to==='Metric Selector')"),false);
+ assert.equal(await b.run("[...document.querySelectorAll('#drawer button')].some(e=>e.textContent==='Open Power Query')"),false);
+ await click('#drawer button','Show DAX calculation');
+ assert.equal(await b.run('app.state.viewMode'),'measures');assert.equal(await b.run('app.tableDax.objectTable'),'Metric Selector');
+ assert.equal(await b.run("document.querySelector('#table-dax').hidden"),true);
+ assert.equal(await b.run('app.measures.mainEl.hidden'),false);
+ assert.equal(await b.run("document.querySelectorAll('.td-field-list,.td-node').length"),0);
+ assert.equal(await b.run("getComputedStyle(document.querySelector('.mv-dax-card')).backgroundColor"),'rgb(255, 255, 255)');
+ assert.equal(await b.run('app.tableDax.renderer===app.measures'),true);
+ assert.equal(await b.run("app.measures._g.nodes.filter(n=>n.name!==app.measures.graphRoot()).length>=4"),true);
+ assert.equal(await b.run("app.measures._gC.g.geo.filter(e=>e.b===app.measures.graphRoot()).length"),4);
+ const inspect=async()=>{await click('.mv-reference-measure','Total Sales');assert.equal(await b.run('app.tableDax.objectTable'),'Metric Selector');assert.equal(await b.run("document.querySelectorAll('.mv-dax-card').length"),2);await b.run("app.setState({gPin:null,gHover:null})");await b.settle()};
+ await inspect();
+ await b.run("Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:t=>{window.copied=t;return Promise.resolve()}}});document.querySelector('button[aria-label=\"Copy DAX for Metric Selector\"]').click()");await b.settle();assert.match(await b.run('window.copied'),/NAMEOF/);
+ await b.run("app.measures.pickMeasure('Order Count');app.measures.setShowSources(true);app.measures._showCalculated=false;app.measures._gC=null;app.measures._mainKey=null;app.setState({})");await b.settle();
+ assert.equal(await b.run("document.querySelectorAll('.mv-calculated-card').length"),0);
+ await b.run('app.measures.calculatedToggle.click()');await b.settle();
+ assert.equal(await b.run("document.querySelectorAll('.mv-calculated-card .mv-source-column').length"),0);
+ assert.ok(await b.run("app.measures._gC.g.geo.some(e=>e.calculated&&e.a==='Order Count'&&e.label==='Selectable field')"));
+ await b.run("app.measures.setSplitLayout('below');app.measures.setSplitShare(.6,true);app.measures.setGraphOrientation('tb');app.measures._wrapDax=false");await b.settle();
+ const before=await b.run('({mode:app.measures._workspaceMode,split:app.measures._splitLayout,share:app.measures._splitShares.below,orientation:app.measures._graphOrientation,fmt:app.measures._fmt,wrap:app.measures._wrapDax})');
+ await click('.mv-calculated-card .mv-source-header','Metric Selector');
+ assert.equal(await b.run('app.tableDax.isActive()'),true);
+ assert.deepEqual(await b.run('({mode:app.measures._workspaceMode,split:app.measures._splitLayout,share:app.measures._splitShares.below,orientation:app.measures._graphOrientation,fmt:app.measures._fmt,wrap:app.measures._wrapDax})'),before);
+ assert.equal(await b.run("app.measures.analysisBody.getAttribute('data-split')"),'below');
+ assert.equal(await b.run("app.measures.daxGrid.classList.contains('mv-no-wrap')"),true);
+ await b.run("app.tableDax.open('Time Intelligence','YTD')");await b.settle();assert.equal(await b.run('app.tableDax.analysis.refs.measures.length'),0);assert.match(await b.run("document.querySelector('.mv-runtime-context').textContent"),/SELECTEDMEASURE/);
+ assert.equal(await b.run("app.measures._g.nodes.length"),1);
+ await b.run("document.querySelector('select[aria-label=\"Expression scope\"]').value='format';document.querySelector('select[aria-label=\"Expression scope\"]').dispatchEvent(new Event('change'))");await b.settle();assert.deepEqual(await b.run('app.tableDax.analysis.refs.measures'),['Total Sales']);
+ assert.equal(await b.run("app.measures._g.nodes.some(n=>n.name==='Total Sales')"),true);
+ for(const [width,height]of [[1000,800],[720,900],[1586,992]]){await b.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:false});await b.settle();assert.ok(await b.run("document.querySelector('.mv-dax-panel').getBoundingClientRect().width>200"));}
+ await click('.mv-reference-measure','Total Sales');
+ const html=await b.run(`(async()=>{const assets=await Snapshots.loadAssets(document);return Snapshots.buildHTML(assets.template,assets.sources,Snapshots.capture(app))})()`);const exported=path.join(dir,'reexport.html');fs.writeFileSync(exported,html);
+ await b.send('Page.navigate',{url:pathToFileURL(exported).href});await b.until('!!window.app&&app.state.loaded&&app.tableDax.isActive()');await b.settle();assert.equal(await b.run('app.tableDax.objectTable'),'Time Intelligence');assert.equal(await b.run('app.tableDax.analysis.item'),'YTD');assert.equal(await b.run('app.tableDax.scope'),'format');assert.equal(await b.run('app.measures._wrapDax'),false);assert.equal(await b.run('app.measures._splitLayout'),'below');assert.equal(await b.run('app.measures._graphOrientation'),'tb');assert.equal(await b.run('app.state.gPin'),'Total Sales');assert.equal(await b.run("document.querySelectorAll('.mv-dax-card').length"),2);
+ await b.run("app.focusTable('Product')");await b.settle();assert.ok(await b.run("[...document.querySelectorAll('#drawer button')].some(e=>e.textContent==='Open Power Query')"));
+ await b.run("document.querySelector('#drawer button[title=\"Show DAX calculation for Product[Price Band]\"]').click()");await b.settle();assert.equal(await b.run('app.tableDax.analysis.kind'),'calculatedColumn');assert.match(await b.run('app.tableDax.analysis.text'),/SWITCH/);assert.equal(await b.run('app.measures.mainEl.hidden'),false);
+ await b.run('app.loadEmptyModel()');await b.settle();assert.equal(await b.run('app.tableDax.isActive()'),false);assert.deepEqual(b.errors,[]);
+ if(artifact){
+  fs.mkdirSync(artifact,{recursive:true});
+  const previewContext=modelTools.runtime(),fresh=modelTools.readModel(previewContext,path.join(__dirname,'../Models/demo/Contoso Retail.SemanticModel'));
+  let preview=modelTools.snapshot(previewContext,fresh.app,{tables:['Metric Selector','Time Intelligence','Date','Product'],measure:'Order Count'});
+  preview=preview.replace('</body>',`<script>addEventListener('load',function(){app.measures._showSources=true;app.measures._showCalculated=true;app.measures._splitLayout='below';app.measures._mainKey=null;app.measures._gC=null;app.setState({},function(){requestAnimationFrame(function(){app.measures.fitGraph();});});});</script></body>`);
+  const previewFile=path.join(artifact,'preview.html');fs.writeFileSync(previewFile,preview);
+  await b.send('Page.navigate',{url:pathToFileURL(previewFile).href});await b.until('!!window.app&&app.state.loaded&&app.measures._showCalculated');await b.settle();await shot('measure-calculated-consumers');
+  await click('.mv-calculated-card .mv-source-header','Metric Selector');await b.run('app.measures.fitGraph()');await b.settle();await shot('field-parameter-selected');
+  await b.run("app.measures.setSplitLayout('beside');app.measures.fitGraph()");await b.settle();await shot('field-parameter-beside');
+  await click('.mv-reference-measure','Total Sales');await shot('field-parameter-comparison');
+  await b.run("app.tableDax.open('Time Intelligence','YTD');app.measures.fitGraph()");await b.settle();await shot('calculation-group-selected');
+  assert.deepEqual(b.errors,[]);
+ }
+});

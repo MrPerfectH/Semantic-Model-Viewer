@@ -108,9 +108,10 @@ def parse_rel_text(text: str):
             continue
         if re.match(r"^isActive:\s*false", t):
             cur["inactive"] = True
-        elif re.match(r"^crossFilteringBehavior:\s*bothDirections", t):
-            cur["both"] = True
-    return [r for r in out if r.get("from") and r.get("fromCol") and r.get("to") and r.get("toCol")]
+        elif re.match(r"^crossFilteringBehavior:\s*\S+", t):
+            cur["crossFilteringBehavior"] = t.split(":", 1)[1].strip()
+            cur["both"] = cur["crossFilteringBehavior"] == "bothDirections"
+    return out
 
 
 # ---------------------------------------------------------------- tables/*.tmdl
@@ -124,6 +125,7 @@ def parse_table_text(text: str):
     is_cg = is_fp = False
     col_buf = calc_buf = cur_item = item_buf = item_fmt = None
     item_phase, in_source = "", False
+    measure_property = False
 
     def flush_col():
         nonlocal col_buf
@@ -149,6 +151,8 @@ def parse_table_text(text: str):
     for raw in lines:
         t = raw.strip()
         ind = len(re.match(r"^\t*", raw).group(0))
+        if t.startswith("///") and ind <= 2:
+            continue
         if not t:
             if mode == "measure" and cur_meas and cur_meas["dax"]:
                 cur_meas["dax"] += "\n"
@@ -175,6 +179,7 @@ def parse_table_text(text: str):
             in_source = False
             cur_col = cur_meas = None
             mode = None
+            measure_property = False
             m = re.match(r"^column\s+('(?:[^']|'')+'|\"[^\"]+\"|[^\s=]+)(\s*=.*)?$", t)
             if m:
                 cur_col = {"name": unq(m.group(1).replace('"', "")), "dataType": "", "hidden": False,
@@ -252,7 +257,9 @@ def parse_table_text(text: str):
             elif re.match(r"^isKey\s*$", t):
                 cur_col["isKey"] = True
         elif mode == "measure" and cur_meas is not None:
-            if ind >= 3:
+            if ind == 2:
+                measure_property = True
+            if ind >= 3 and not measure_property:
                 cur_meas["dax"] += ("\n" if cur_meas["dax"] else "") + re.sub(r"^\t{3}", "", raw)
             else:
                 m = re.match(r"^formatString:\s*(.*)$", t)
@@ -588,15 +595,18 @@ def load_rules(path: str) -> list:
 
 def finalize(name: str, tables: list, rels: list, ctx: dict = None, rules: list = None) -> dict:
     by_name = {t["name"]: t for t in tables}
-    seen, kept = set(), []
-    for r in rels:
-        if r["from"] not in by_name or r["to"] not in by_name:
-            continue
-        k = (r["from"], r["fromCol"], r["to"], r["toCol"])
-        if k in seen:
-            continue
-        seen.add(k)
-        kept.append(r)
+    kept, issues = [], []
+    total = len(rels)
+    for index, r in enumerate(rels):
+        reason = ""
+        if not all(r.get(k) for k in ("from", "fromCol", "to", "toCol")):
+            reason = "missing a table or column endpoint"
+        elif r["from"] not in by_name or r["to"] not in by_name:
+            reason = "missing table: %s → %s" % (r["from"], r["to"])
+        if reason:
+            issues.append({"name": r.get("name") or "Relationship %d" % (index + 1), "reason": reason})
+        else:
+            kept.append(r)
     rels = kept
 
     one_side, many_side, rc = {}, {}, {}
@@ -642,7 +652,15 @@ def finalize(name: str, tables: list, rels: list, ctx: dict = None, rules: list 
         t["measureCount"] = len(t["measures"])
         t["relCount"] = rc.get(t["name"], 0)
 
-    return {"name": name, "groupingVersion": 1, "tables": tables, "relationships": rels}
+    return {"name": name, "groupingVersion": 1, "tables": tables, "relationships": rels,
+            "relationshipDiagnostics": {"total": total, "accepted": len(rels), "rejected": len(issues), "issues": issues}}
+
+
+# Resolve the sibling module even when this script is imported by file path.
+import importlib.util as _reference_import
+_reference_spec = _reference_import.spec_from_file_location("smv_reference_metadata", os.path.join(os.path.dirname(__file__), "reference_metadata.py"))
+_reference_metadata = _reference_import.module_from_spec(_reference_spec)
+_reference_spec.loader.exec_module(_reference_metadata)
 
 
 def parse_tmdl(files: list, rules: list = None) -> dict:
@@ -660,11 +678,12 @@ def parse_tmdl(files: list, rules: list = None) -> dict:
         m = re.search(r"^database[ \t]+(.+)$", txt, re.M)
         if m:
             name = unq(m.group(1))
-        if re.search(r"^relationship\s", txt, re.M) and "fromColumn:" in txt:
+        if re.search(r"^relationship\s", txt, re.M):
             rels += parse_rel_text(txt)
         if re.search(r"^table\s", txt, re.M):
             t = parse_table_text(txt)
             if t:
+                _reference_metadata.from_tmdl(t, txt)
                 tables.append(t)
     # tables are queries too — `Source = MdGeoEntities` points at another table's partition
     for t in tables:
@@ -732,6 +751,7 @@ def parse_bim(j: dict, rules: list = None) -> dict:
                 f = ci.get("formatStringDefinition")
                 fmt = txt(f.get("expression") if isinstance(f, dict) else f).strip() if f else ""
                 row["calcItems"].append({"name": ci.get("name"), "dax": txt(ci.get("expression")).strip(), "fmt": fmt})
+        _reference_metadata.from_bim(row, t)
         tables.append(row)
     rels = []
     for r in mdl.get("relationships", []):
@@ -743,6 +763,8 @@ def parse_bim(j: dict, rules: list = None) -> dict:
                      "toCard": str(r.get("toCardinality", "one")).lower(),
                      "inactive": r.get("isActive") is False,
                      "both": r.get("crossFilteringBehavior") == "bothDirections"})
+        if "crossFilteringBehavior" in r:
+            rels[-1]["crossFilteringBehavior"] = r["crossFilteringBehavior"]
     ctx = {"exprs": {}, "names": [], "params": {}}
     for e in (mdl.get("expressions") or []):
         if not e.get("name"):
@@ -826,6 +848,12 @@ def main() -> int:
     measures = sum(len(t["measures"]) for t in model["tables"])
     print("%s: %d tables, %d relationships, %d measures (%d hidden) -> %s"
           % (model["name"], len(model["tables"]), len(model["relationships"]), measures, hidden, args.out))
+    diagnostics = model.get("relationshipDiagnostics", {})
+    if diagnostics.get("rejected"):
+        print("Relationship validation: %d accepted, %d rejected of %d." %
+              (diagnostics["accepted"], diagnostics["rejected"], diagnostics["total"]))
+        for issue in diagnostics["issues"]:
+            print("  %s: %s" % (issue["name"], issue["reason"]))
     return 0
 
 

@@ -54,11 +54,11 @@
     var model=result.model || g.TMDLParser.parseAny(result.files || []);
     if(!model || !Array.isArray(model.tables))throw new Error('Fabric returned invalid model metadata.');
     var record={id:key(source),name:result.name || item.name,at:Date.now(),source:source,model:JSON.parse(JSON.stringify(model))};
-    var records=this.app.getStore().filter(function(r){return r.id!==record.id;});records.push(record);
-    if(!this.app.setStore(records))throw new Error('Could not cache this model. Free local storage and try again.');
+    // hostOpenModel owns preparation and persistence together. Never replace a
+    // previously usable cached model before that validation has succeeded.
     this.activate(record);this.visible=false;if(this.overlay)this.overlay.remove();this.overlay=null;
   };
-  FabricConnection.prototype.activate=function(record){this.app.hostOpenModel(JSON.parse(JSON.stringify(record)));U.store.set('smv_current_v1',record.id);this.app.render(true);};
+  FabricConnection.prototype.activate=function(record){this.app.hostOpenModel(JSON.parse(JSON.stringify(record)));this.app.render(true);};
   FabricConnection.prototype.refresh=function(){
     var record=this.current();if(!record || !record.source)return;
     this.transport=record.source.method || 'xmla';this.workspace={id:record.source.workspaceId};this.account={tenantId:record.source.tenantId,accountId:record.source.accountId};

@@ -122,3 +122,228 @@ Both inspected visually; teal Budget and blue Sales references are distinct, rea
 and retain their full table[column] labels. No browser errors observed. Existing
 measure/layout/browser suite: 48 passed, 0 failed, 0 skipped. Runtime hashes refreshed
 and VS Code assets synchronized. No remaining actionable findings for this refinement.
+
+## Target and evidence
+
+Selected target: the first generated mockup, reference library with object tabs.
+Source: `/home/harry/.codex/generated_images/01a16970-5e0c-7f31-be71-72c5235bc489/exec-1393bcac-ba6d-4d80-9997-d06eed61762d.png`.
+Implementation: `/tmp/smv-reference-review/reference.png`, captured by the real
+Chrome offline acceptance test at 1440 × 1024. Source is 1488 × 1058, essentially
+the same aspect ratio; comparison rendered both at equal width in one HTML image.
+Both show Reference / Sales / Overview with Sales in search. The implementation
+uses the full synthetic demo model rather than the smaller invented mockup
+inventory. The screenshot fixture supplies a synthetic Sales description.
+
+## Findings and corrections
+
+- P2: the initial five-column overview crowded the relationship and source
+  summaries below the initial viewport. Changed the preview to three rows and
+  made the heading explicitly report the preview/total count.
+- P2: full relationship endpoint strings crowded the overview comparison. The
+  summary now shows related table, cardinality and active status; the Relationships
+  tab retains full endpoints and filter behavior.
+- P2: documentation table text was smaller than intended. Increased it to 14px,
+  widened the library to 310px and increased the object heading to 32px.
+- P2: indirect consumers obscured direct references in the short summary. Direct
+  references now sort first, with indirect consumers retained in the full list.
+
+The revised implementation was recaptured and compared side by side with the
+source after these corrections. No outstanding P0/P1/P2 layout findings.
+
+## Surface review
+
+- Typography: existing IBM Plex Sans/system fallback, monospace for expressions;
+  14px documentation tables, 32px object heading, lower emphasis for metadata.
+- Layout: persistent library and independently scrolling reading page, contextual
+  tabs, paired relationship/measure summaries, source section, responsive single
+  column below 650px. No horizontal workspace overflow at 1440px or 600px.
+- Colors: existing cobalt accent, muted blue-gray text, white surfaces and pale
+  workspace. New styling uses existing theme tokens. The app's existing brand
+  asset is reused; no new decorative raster assets are required.
+- Content: source-derived names and counts replace invented mockup values;
+  absent descriptions remain explicit. Measure home-table membership is separate
+  from detected references. Capture/opening provenance is distinguished from
+  snapshot creation.
+- Interaction: search/type filter, expression search, tabs, object links, Back,
+  measure dependencies, model reset, offline re-export and restoration verified
+  by `tests/reference.browser.cjs` and `tests/reference.test.cjs`.
+- Safety: model text is rendered as text nodes; hostile description fixture is
+  not interpreted as HTML. Snapshot metadata remains allowlisted.
+
+## Minor follow-ups
+
+- P3: object icons from the concept are omitted in favor of explicit type labels.
+- P3: query search results can be long for large models; results are paginated
+  in batches of 100 rather than virtualized.
+- P3: the full demo has more content than the illustrative target; lower sections
+  require reading-page scrolling. No data is concealed to mimic mockup counts.
+
+This is a visual and feature QA result, not a claim that every existing repository
+regression test passes. The final test-suite result is reported separately.
+
+## Tables DAX dependencies — 2026-10-31
+
+final result: passed
+
+Approved visual sources:
+- `/home/harry/.codex/artifacts/smv-tables-dax-dependencies-20261031/field-parameter-under-tables.png`
+- `/home/harry/.codex/artifacts/smv-tables-dax-dependencies-20261031/calculation-group-under-tables.png`
+
+The user's subsequent instruction supersedes the mockups' dark code background:
+DAX must use the existing light Measures presentation. The implementation shares
+Measures' formatter, syntax renderer, folding, and card styles. Reference is outside
+this change's implementation scope; its existing navigation remains unchanged.
+
+Rendered evidence:
+- `/home/harry/.codex/artifacts/smv-tables-dax-implementation-20261031/field-parameter.png`
+- `/home/harry/.codex/artifacts/smv-tables-dax-implementation-20261031/calculation-group.png`
+- Combined source/implementation comparison: `/home/harry/.codex/artifacts/smv-tables-dax-implementation-20261031/design-comparison.png`
+
+Viewport and density: source and implementation are 1586 × 992 pixels; browser
+captures use 1586 × 992 CSS pixels at device scale 1. Both sides were displayed at
+the same width in the combined comparison. Additional layout checks ran at 1000 ×
+800 and 720 × 900. States: Tables / Metric Selector / DAX dependencies, and Tables /
+Time Intelligence / YTD. The browser fixture adds a format expression to YTD to
+exercise independent expression scopes; the supplied `try-tables-dax.html` demo
+uses the unmodified Contoso model.
+
+Comparison history:
+1. Initial capture revealed overlapping edge captions, unstyled SVG edges, and a
+   selected table outside the library's visible scroll area. These were P2 issues.
+2. Corrected SVG class attributes, widened input spacing, moved captions to each
+   input's row, and scrolled the selected library entry into view. Restored the
+   calculation-group container and added field-reference column labels.
+3. Fresh browser captures and the combined comparison show those issues resolved.
+   No actionable P0/P1/P2 issues remain. Focused region comparison was unnecessary:
+   the full-resolution captures show the graph labels and light DAX cards clearly,
+   and browser assertions check card background, code font, and panel bounds.
+
+Primary interactions checked: relationship/dependency switching; field choices;
+measure expansion and comparison; item selection; independent dynamic-format
+references; original/long/short formatting parity with Measures; wrapping; copying;
+flow orientation; zoom retention when wrapping; narrow layouts; hiding the library;
+offline export/reopen; model reset. Browser runtime exceptions: none.
+
+Verification: new unit/browser checks 8/8 passed; existing Measures/layout/parser
+browser and unit checks passed. Extension assets synchronized and verified.
+The complete repository suite has 767 passes and two pre-existing saved-view
+assertion failures (`explorer.test.js`, lines 409 and 438), reproduced with the
+unmodified HEAD versions of the test and its source dependencies in a temporary
+directory. These failures are unrelated to this feature.
+
+P3 follow-up: visual density follows the shipped application rather than the
+larger typography in generated mockups. Graphs disclose their 80-node/160-edge/
+eight-level display limits; dependency analysis remains static.
+
+## Calculated consumers in Measures — 2026-10-31
+
+final result: passed
+
+The user's revised architecture supersedes the Tables dependency mode reviewed
+above. Tables now displays only model relationships. Calculated objects open a
+reader in Measures, and optional consumer cards point from referenced measures or
+columns toward the calculated object. Field parameter links say Selectable field;
+SELECTEDMEASURE remains contextual and creates no invented fixed links.
+
+Visual baseline: the shipped Measures presentation, captured at
+`/home/harry/.codex/artifacts/smv-dax-dependencies-20261031/current-measures.png`.
+Final evidence is in `/home/harry/.codex/artifacts/smv-calculated-consumers-20261031/`:
+`measure-calculated-consumers.png`, `tables-field-parameter.png`,
+`field-parameter-reader.png`, `calculation-group-reader.png`, and
+`calculated-column-reader.png`. Captures use 1586 × 992 CSS pixels at density 1;
+layout checks also cover 1000 and 720 pixels. The gallery was rendered and inspected.
+The interactive `preview.html` uses the original bundled Contoso model.
+
+The first consumer curve crossed unrelated measure nodes. Routing now reserves a
+band above the measure graph; the final capture shows a clear Order Count to
+Metric Selector connection. Shared Measures cards preserve the light background,
+syntax highlighting, formatting, folding, and wrapping. Imported tables retain
+Power Query; calculated columns have their own DAX action. No actionable P0/P1/P2
+visual findings remain. Browser runtime exceptions: none.
+
+Validation: 13 focused unit/browser checks, 72 root tests, and 15 Measures/Reference
+browser regression checks pass. The complete extension suite reports 774 tests,
+772 passes and the same two baseline saved-view failures described above.
+Snapshot export/reopen, item and format scope selection, copying, responsive
+layouts, graph direction in all orientations, bounded consumer rendering, and
+model reset were checked. Extension asset verification and diff checks pass.
+
+## Unified table cards — 2026-10-31
+
+final result: passed
+
+Per the user's refinement, calculated consumers now use the existing
+`mv-source-card`, `mv-source-header`, and `mv-source-column` styles, including the
+model table colour and 34-pixel rows. Parameter tables display their columns;
+calculated columns/items appear beneath their table header. Removed the separate
+green consumer-card style and retained incoming dependency direction.
+
+Evidence: `/home/harry/.codex/artifacts/smv-unified-table-cards-20261031/measure-calculated-consumers.png`,
+1586 × 992 CSS pixels at density 1. Reviewed the source and consumer cards in the
+same capture and checked the inline rendering. No actionable visual issues remain.
+All 13 focused checks pass, including browser style parity, navigation, snapshot
+round-trip, and bounds for all graph orientations. Asset sync/check and diff check
+pass. The broader suite results above predate this styling refinement.
+
+## Smooth consumer connections — 2026-10-31
+
+final result: passed
+
+Replaced orthogonal consumer links with joined cubic curves, preserving horizontal
+tangents at both cards and routing above intervening measures. Inspected the
+1586 × 992 density-1 capture at
+`/home/harry/.codex/artifacts/smv-smooth-consumer-links-20261031/measure-calculated-consumers.png`
+and the inline preview. The curve clears the other cards and retains the model
+table colour and incoming arrow. All 13 focused checks and asset verification pass.
+
+## Standard dependency curves — 2026-10-31
+
+final result: passed
+
+The previous arch is superseded. Calculated consumers now occupy the next
+dependency column, with collision-free card placement and the same 96-pixel gap
+and single cubic curve formula as table-to-measure connections. No overhead route
+or additional waypoints remain. Reviewed the density-1 browser capture at
+`/home/harry/.codex/artifacts/smv-standard-consumer-links-20261031/measure-calculated-consumers.png`
+and a magnified inline graph crop. All 13 focused checks, asset verification and
+diff checks pass. Broader suite results are unchanged from the earlier run.
+
+## Bottom anchor for lower calculated consumers — 2026-10-31
+
+final result: passed
+
+For lower calculated consumers in the horizontal flow, links now leave the
+measure's bottom centre with a downward tangent and enter the table header from
+the left. Other measure links retain their side anchor. Reviewed the density-1
+1586 × 992 capture and magnified graph preview at
+`/home/harry/.codex/artifacts/smv-bottom-consumer-link-20261031/measure-calculated-consumers.png`.
+Order Count's green link stays below the blue branches without crossing them.
+All 13 focused checks and asset/diff verification pass.
+
+## One Measures workspace for calculated objects — 2026-11-02
+
+final result: passed
+
+The user's attached screenshot and revised instructions supersede the separate
+calculated-object reader. Calculated objects now use Measures' buildSelectedMain,
+layered graph, graph interactions, resizable split, formulaCard, and referenceSection.
+TableDaxView holds selection and metadata; it renders no separate workspace.
+Parameter and calculation-item consumers use one named row, without automatic
+column rows. Selection retains split position, panel shares, orientation, wrapping,
+and formatting. Field choices use the standard measure-reference chips; the
+special selectable-fields grid and its nested scrollbar are removed.
+
+Final evidence: `/home/harry/.codex/artifacts/smv-unified-workspace-20261102/`:
+`measure-calculated-consumers.png`, `field-parameter-selected.png`,
+`field-parameter-beside.png`, `field-parameter-comparison.png`, and
+`calculation-group-selected.png`. Captures use 1586 × 992 CSS pixels at density 1;
+browser checks also cover 1000 and 720 pixels. Inspected both split positions and
+the inline gallery. No actionable visual findings remain. The interactive
+`selected-preview.html` uses the original bundled Contoso model.
+
+Validation: 16 focused unit/browser checks pass; 50 Measures/calculation unit
+checks, 75 root tests, and 15 Measures/Reference browser checks pass. The complete
+extension suite reports 777 tests, 775 passes and the two pre-existing saved-view
+assertion failures described above. Snapshot reopening preserves selected item,
+expression scope, comparison, graph state and shared preferences. Browser runtime
+exceptions: none. Extension asset verification and diff checks pass.

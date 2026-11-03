@@ -2,6 +2,12 @@
 
 ## Next pre-release
 
+- Audit remediation (#203): validate models before replacement, support reserved object names, preserve parallel relationships and disclose ingestion omissions.
+- Select the nearest relationship reliably, add keyboard relationship navigation, and keep import-dialog focus contained.
+- Open large Power Query inventories without routing invisible overviews; bound dense routing, preserve manual framing, and constrain the bottom inspector to available space.
+- Improve narrow Measures navigation, calculated-object labels, contextual help and snapshot-content disclosure; add Reference metadata browsing and calculated-object readers.
+- Bundle PNG export locally, exclude interface overlays, and fingerprint all viewer scripts and styles.
+
 - Make diagrams readable without zooming (#187, #190):
   - Table and measure names render at 11px or larger when a view opens.
   - The new **Focus** button shows a table's direct neighbourhood, arranged, and pressing it again restores the layout. Focus stays on its table while you click around inside it.

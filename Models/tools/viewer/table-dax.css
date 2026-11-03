@@ -1,0 +1,4 @@
+/* Calculated objects share the Measures workspace and card components. */
+.mv-start-tabs{flex-wrap:wrap}.mv-start-tabs button:last-child{flex-basis:100%}
+.mv-source-controls{flex-wrap:wrap;gap:8px 16px}.mv-source-controls label:has(input:disabled){opacity:.6}
+#table-dax{display:none!important}

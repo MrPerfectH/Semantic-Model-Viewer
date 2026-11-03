@@ -57,3 +57,25 @@ for (const vertical of [false, true]) {
     assert.deepEqual(c.labelDims(true), arrow, 'arrow-only geometry retains its readable floor');
   });
 }
+
+test('obstacle refinement honors shared budget without dropping relationship endpoints', () => {
+  const c=canvas();
+  delete c.relationshipPoints;
+  c._routeSearchRemaining=0;
+  // Start enclosed in an obstacle: no simple detour can leave it.
+  const obstacles=[{x0:-10,y0:-10,x1:50,y1:50}];
+  assert.equal(c.obstacleRoute({x:0,y:0},{x:150,y:150},obstacles),null);
+  assert.equal(c._routingLimited,true);
+  const g={ax:0,ay:0,bx:150,by:150,axis:'h',adir:1,bdir:-1};
+  const points=c.relationshipPoints(g,0,obstacles);
+  assert.deepEqual(JSON.parse(JSON.stringify(points[0])),{x:0,y:0});
+  assert.deepEqual(JSON.parse(JSON.stringify(points.at(-1))),{x:150,y:150});
+  assert.ok(points.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)));
+});
+
+test('simple clear channels avoid an obstacle without spending search budget', () => {
+  const c=canvas();c._routeSearchRemaining=0;
+  const obstacles=[{x0:40,y0:-10,x1:60,y1:10}];
+  const points=c.obstacleRoute({x:0,y:0},{x:100,y:0},obstacles);
+  assert.ok(points);assert.equal(c.routeClear(points,obstacles),true);assert.equal(c._routeSearchRemaining,0);
+});

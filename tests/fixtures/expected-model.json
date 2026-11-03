@@ -47,7 +47,7 @@
    "domain": "Dimensions",
    "colCount": 4,
    "measureCount": 0,
-   "relCount": 2
+   "relCount": 3
   },
   {
    "name": "Fact Sales",
@@ -145,7 +145,7 @@
    "domain": "Finance",
    "colCount": 7,
    "measureCount": 4,
-   "relCount": 4
+   "relCount": 5
   },
   {
    "name": "Measures Table",
@@ -314,6 +314,7 @@
  ],
  "relationships": [
   {
+   "name": "1a2b-order-date",
    "fromCard": "many",
    "toCard": "one",
    "inactive": false,
@@ -324,6 +325,7 @@
    "toCol": "Date"
   },
   {
+   "name": "3c4d-ship-date",
    "fromCard": "many",
    "toCard": "one",
    "inactive": true,
@@ -334,16 +336,19 @@
    "toCol": "Date"
   },
   {
+   "name": "5e6f-product",
    "fromCard": "many",
    "toCard": "one",
    "inactive": false,
    "both": true,
+   "crossFilteringBehavior": "bothDirections",
    "from": "Fact Sales",
    "fromCol": "ProductKey",
    "to": "Product",
    "toCol": "ProductKey"
   },
   {
+   "name": "7a8b-region",
    "fromCard": "many",
    "toCard": "many",
    "inactive": false,
@@ -352,6 +357,28 @@
    "fromCol": "Region",
    "to": "Region Bridge",
    "toCol": "Region"
+  },
+  {
+   "name": "9c0d-duplicate-of-order-date",
+   "fromCard": "many",
+   "toCard": "one",
+   "inactive": false,
+   "both": false,
+   "from": "Fact Sales",
+   "fromCol": "Order Date",
+   "to": "Dim Date",
+   "toCol": "Date"
   }
- ]
+ ],
+ "relationshipDiagnostics": {
+  "total": 6,
+  "accepted": 5,
+  "rejected": 1,
+  "issues": [
+   {
+    "name": "1e2f-ghost",
+    "reason": "missing table: Fact Sales → Missing"
+   }
+  ]
+ }
 }
