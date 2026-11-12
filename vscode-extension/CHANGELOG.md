@@ -8,6 +8,12 @@
 - Improve narrow Measures navigation, calculated-object labels, contextual help and snapshot-content disclosure; add Reference metadata browsing and calculated-object readers.
 - Bundle PNG export locally, exclude interface overlays, and fingerprint all viewer scripts and styles.
 
+## 0.6.0 (30 October 2026)
+
+Stable release. It includes everything since 0.4.3, from this list and from the 0.7 and 0.5 pre-releases below. Release notes: `docs/releases/0.6.0.md` in the repository.
+
+- Fix `smv show --new-session` occasionally failing with a JSON error when it read a session file before the file was fully written (#193).
+
 - Make diagrams readable without zooming (#187, #190):
   - Table and measure names render at 11px or larger when a view opens.
   - The new **Focus** button shows a table's direct neighbourhood, arranged, and pressing it again restores the layout. Focus stays on its table while you click around inside it.
