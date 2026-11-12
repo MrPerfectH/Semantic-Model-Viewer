@@ -5,6 +5,7 @@
 Stable patch release. Fixes from testing 0.8.0 on Windows, macOS and at high browser zoom. Release notes: `docs/releases/0.8.1.md` in the repository.
 
 - The Claude Code and Codex plugin, and the bundled `smv` command, now carry the extension's version. They still said 0.7.0 in 0.6.0 and 0.8.0, so Claude Code kept the installed copy and plugin users did not receive those releases.
+- **Open Power Query** on a table now opens that table's flow and M code the first time. The Power Query view opened empty, with nothing selected, until its analysis had run once.
 - Power BI Desktop connection (pre-release only), checked against Power BI Desktop 2.159 from the Microsoft Store:
   - Each open model is listed under its report's name. Every model was listed as "Model".
   - The internal row-number column no longer appears in every table.

@@ -259,3 +259,4 @@ test('large-1000 worker completion publishes a searchable inventory without rout
  assert.equal(w.canvas.captureLayout().size,1005,'routing budget never removes model objects');
  w.canvas.destroy();
 });
+test('table opened before the deferred first analysis starts is selected once the graph is ready',async()=>{const {w,g,workers}=jobHarness();const m=model([row('Sales','1',{kind:'partition',table:'Sales',name:'Sales'})]);w.app.model=m;w.app.setViewMode=()=>{};const chosen=[];w.chooseTable=t=>chosen.push(t);w.fitLayout=()=>{};w.globalDetails.appendChild=()=>{};w.openTable('Sales');w.start();await tick();assert.equal(w.pendingTable,'Sales');const worker=workers[0],graph=g.PowerQueryGraphModel.build(w.app.model,{generation:w.generation});worker.onmessage({data:{type:"ready",jobId:worker.job.jobId,generation:w.generation,graph}});assert.equal(w.phase,"ready",w.message.textContent);assert.deepEqual(chosen,['Sales']);assert.equal(w.pendingTable,null);});
