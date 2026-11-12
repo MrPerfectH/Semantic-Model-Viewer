@@ -10,8 +10,8 @@
       "name": "semantic-model-viewer",
       "source": {
         "source": "archive",
-        "url": "https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/download/v0.6.0/smv-claude-portable.zip",
-        "sha256": "78593f8327ef3316e6d82b119b957928f2f22463eae631e94473dc6bb3648604"
+        "url": "https://github.com/MrPerfectH/Semantic-Model-Viewer/releases/download/v0.8.0/smv-claude-portable.zip",
+        "sha256": "3a8b314bd788cc1f67828c9cb3c38dfc81438d7df65a272eea8c9b6e1c4a9491"
       },
       "description": "Semantic model diagrams with the bundled CLI and private runtime.",
       "category": "data",
