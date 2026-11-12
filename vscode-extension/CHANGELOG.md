@@ -1,6 +1,8 @@
 # Changelog
 
-## Next pre-release
+## 0.8.0 (13 November 2026)
+
+Stable release. It includes everything since 0.6.0. Release notes: `docs/releases/0.8.0.md` in the repository.
 
 - Audit remediation (#203): validate models before replacement, support reserved object names, preserve parallel relationships and disclose ingestion omissions.
 - Select the nearest relationship reliably, add keyboard relationship navigation, and keep import-dialog focus contained.
