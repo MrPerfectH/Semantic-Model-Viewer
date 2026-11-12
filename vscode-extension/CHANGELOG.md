@@ -1,12 +1,20 @@
 # Changelog
 
-## Next pre-release
+## 0.8.0 (13 November 2026)
+
+Stable release. It includes everything since 0.6.0. Release notes: `docs/releases/0.8.0.md` in the repository.
 
 - Audit remediation (#203): validate models before replacement, support reserved object names, preserve parallel relationships and disclose ingestion omissions.
 - Select the nearest relationship reliably, add keyboard relationship navigation, and keep import-dialog focus contained.
 - Open large Power Query inventories without routing invisible overviews; bound dense routing, preserve manual framing, and constrain the bottom inspector to available space.
 - Improve narrow Measures navigation, calculated-object labels, contextual help and snapshot-content disclosure; add Reference metadata browsing and calculated-object readers.
 - Bundle PNG export locally, exclude interface overlays, and fingerprint all viewer scripts and styles.
+
+## 0.6.0 (30 October 2026)
+
+Stable release. It includes everything since 0.4.3, from this list and from the 0.7 and 0.5 pre-releases below. Release notes: `docs/releases/0.6.0.md` in the repository.
+
+- Fix `smv show --new-session` occasionally failing with a JSON error when it read a session file before the file was fully written (#193).
 
 - Make diagrams readable without zooming (#187, #190):
   - Table and measure names render at 11px or larger when a view opens.
