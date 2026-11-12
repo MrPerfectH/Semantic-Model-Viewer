@@ -49,7 +49,7 @@ function harness(embedded) {
     Snapshots: { embedded, error: null }
   };
   context.window = context; vm.createContext(context);
-  for (const file of ['util.js', 'canvas.js', 'topbar.js', 'fabric.js']) vm.runInContext(fs.readFileSync(path.join(jsDir, file), 'utf8'), context);
+  for (const file of ['util.js', 'tmdl-parser.js', 'canvas.js', 'topbar.js', 'fabric.js']) vm.runInContext(fs.readFileSync(path.join(jsDir, file), 'utf8'), context);
   const source = fs.readFileSync(path.join(jsDir, 'app.js'), 'utf8');
   vm.runInContext(source.replace("  window.addEventListener('DOMContentLoaded'", "  g.TestApp = App;\n  window.addEventListener('DOMContentLoaded'"), context);
   const app = Object.create(context.TestApp.prototype);

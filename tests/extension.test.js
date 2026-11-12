@@ -111,7 +111,11 @@ if (!fs.existsSync(path.join(EXT, 'media', 'index.html'))) {
   const parsed = globalThis.TMDLParser.parseAny(init.open.files);
   const expected = JSON.parse(fs.readFileSync(path.join(FIX, 'expected-model.json'), 'utf8'));
   assert.strictEqual(parsed.tables.length, expected.tables.length);
+  // Both parsers preserve each named relationship, including parallel edges.
   assert.strictEqual(parsed.relationships.length, expected.relationships.length);
+  assert.ok(parsed.relationships.some(r => r.name === '1a2b-order-date'));
+  assert.ok(parsed.relationships.some(r => r.name === '9c0d-duplicate-of-order-date'));
+  assert.deepStrictEqual(parsed.relationshipDiagnostics, {total:6,accepted:5,rejected:1,issues:[{name:'1e2f-ghost',reason:'missing table: Fact Sales → Missing'}]});
 
   /* --- request/response: listModels, openModel, storage --- */
   await wv.webview.receive({ type: 'listModels', id: 7 });

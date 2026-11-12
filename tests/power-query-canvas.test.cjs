@@ -281,3 +281,22 @@ test('explicit Fit reserves measured legend and a routing disclosure appearing a
  const v=s.canvas.getViewport(),top=Math.min(...[...s.canvas.captureLayout().values()].map(p=>p.y*v.k+v.y));assert.ok(top>=118,'card bounds clear the wrapped disclosure plus12px');
  const restored={x:90,y:40,k:.9};s.canvas.setViewport(restored);assert.deepEqual(plain(s.canvas.getViewport()),restored,'overlay reservation never rewrites explicitly restored viewports');
 });
+
+test('initial projection is applied before any routing work, with the complete registry retained',()=>{
+ const s=setup();s.canvas.setContext(context(2,1000),{visibleIds:new Set()});
+ assert.equal(s.host.querySelector('.pqc-route-status').dataset.work,'0');
+ assert.equal(s.host.querySelectorAll('.pqc-node').filter(n=>!n.hidden).length,0);
+ assert.equal(s.canvas.captureLayout().size,1000);
+ s.canvas.setVisibleIds(new Set(['id-0','id-1']));
+ assert.equal(s.host.querySelectorAll('.pqc-node').filter(n=>!n.hidden).length,2);
+ assert.ok(s.host.querySelector('.pqc-edge-line').getAttribute('d'));
+});
+
+test('Fit clears measured bottom chrome and follows resizing until manual framing',()=>{
+ const s=setup();const map=s.host.querySelector('.pqc-minimap');
+ map.getBoundingClientRect=()=>({left:600,right:780,top:s.box.height-120,bottom:s.box.height-12,width:180,height:108});
+ s.box.width=800;s.box.height=300;s.canvas.fit();
+ function contained(){const v=s.canvas.getViewport();for(const p of s.canvas.captureLayout().values()){assert.ok(p.y*v.k+v.y>=0);assert.ok((p.y+96)*v.k+v.y<=s.box.height-132 || (p.x+252)*v.k+v.x<=588);}}
+ contained();s.box.width=700;s.box.height=250;s.resize();contained();
+ s.canvas.zoomBy(1.2);const manual=plain(s.canvas.getViewport());s.box.height=400;s.resize();assert.deepEqual(plain(s.canvas.getViewport()),manual);
+});

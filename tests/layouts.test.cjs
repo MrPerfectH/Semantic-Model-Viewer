@@ -726,3 +726,16 @@ test('a press outside closes toolbar popovers but keeps the docked legend open',
   assert.equal(explorer.closeMenus(true), false, 'nothing open, nothing to do');
   assert.equal(updates, 0, 'no redraw when nothing was open');
 });
+
+test('every arrange algorithm accepts table names that match prototype keys', () => {
+  const model = synthetic(), rename = {Sales:'__proto__', Date:'constructor', Product:'toString'};
+  model.tables.forEach(t=>{t.name=rename[t.name] || t.name;});
+  model.relationships.forEach(r=>{r.from=rename[r.from] || r.from;r.to=rename[r.to] || r.to;});
+  model.byName=Object.fromEntries(model.tables.map(t=>[t.name,t]));
+  for(const algo of ['star','constellation','layered','galaxy','columns','waterfall','grid']) {
+    const canvas=canvasFor(runtime(),model,algo);
+    canvas.pos=Object.create(null);canvas.cpos=Object.create(null);canvas.cards=Object.create(null);
+    canvas.untangle();
+    for(const t of model.tables) assert.ok(Object.hasOwn(canvas.pos,t.name) && Number.isFinite(canvas.pos[t.name].x) && Number.isFinite(canvas.pos[t.name].y),algo+': '+t.name);
+  }
+});

@@ -6,6 +6,9 @@ function files(){
   for(const dir of ['Models/tools/viewer','Models/tools/viewer/js','Models/tools/viewer/scripts/cli']){
     for(const entry of fs.readdirSync(path.join(root,dir),{withFileTypes:true}))if(entry.isFile()&&(/\.css$/.test(entry.name)||dir.endsWith('/js')&&entry.name.endsWith('.js')||dir.endsWith('/cli')&&entry.name.endsWith('.cjs')))out.push(dir+'/'+entry.name);
   }
+  const vendor='Models/tools/viewer/js/vendor';
+  function visit(dir){for(const entry of fs.readdirSync(path.join(root,dir),{withFileTypes:true})){const name=dir+'/'+entry.name;if(entry.isDirectory())visit(name);else out.push(name);}}
+  if(fs.existsSync(path.join(root,vendor)))visit(vendor);
   return out.sort();
 }
 function sync(target,check=false){

@@ -216,3 +216,28 @@ test('Direct Lake entity partitions are a Direct Lake source, not a calculated t
   assert.equal(r.status, 0, r.stderr);
   assert.deepEqual(JSON.parse(r.stdout).tables[0].source, JSON.parse(JSON.stringify(bim.tables[0].source)));
 });
+
+test('browser and strict ingestion share rejection counts and preserve distinct parallel relationships',()=>{
+ const p=parser();const files=[{name:'A.tmdl',text:'table A\n\tcolumn Key\n\t\tdataType: int64'},{name:'B.tmdl',text:'table B\n\tcolumn Key\n\t\tdataType: int64'},
+ {name:'relationships.tmdl',text:'relationship live\n\tfromColumn: A.Key\n\ttoColumn: B.Key\nrelationship inactive\n\tfromColumn: A.Key\n\ttoColumn: B.Key\n\tisActive: false\nrelationship dangling\n\tfromColumn: Gone.Key\n\ttoColumn: B.Key\nrelationship incomplete\n\ttoColumn: B.Key'}];
+ const result=p.parseAny(files);assert.equal(result.relationships.length,2);assert.equal(result.relationships[1].inactive,true);
+ assert.equal(result.relationshipDiagnostics.total,4);assert.equal(result.relationshipDiagnostics.accepted,2);assert.equal(result.relationshipDiagnostics.rejected,2);
+ assert.match(result.relationshipDiagnostics.issues[0].reason,/Gone/);assert.match(result.relationshipDiagnostics.issues[1].reason,/endpoint/);
+ assert.throws(()=>p.parseTMDL(files,{strictRelationships:true}),/2 accepted, 2 rejected of 4.*dangling.*Gone.*incomplete.*endpoint/);
+ const bim={model:{tables:[{name:'A',columns:[{name:'Key'}]},{name:'B',columns:[{name:'Key'}]}],relationships:[{name:'bad',fromTable:'Gone',fromColumn:'Key',toTable:'B',toColumn:'Key'}]}};
+ assert.equal(p.parseBIM(bim).relationshipDiagnostics.rejected,1);
+ assert.throws(()=>p.parseBIM(bim,{strictRelationships:true}),/0 accepted, 1 rejected of 1/);
+});
+
+test('Python and browser retain parallel identities and explain the same rejected relationships',()=>{
+ const {spawnSync}=require('node:child_process');
+ const input={model:{tables:[{name:'A',columns:[{name:'Key'}]},{name:'B',columns:[{name:'Key'}]}],relationships:[
+ {name:'live',fromTable:'A',fromColumn:'Key',toTable:'B',toColumn:'Key',crossFilteringBehavior:'bothDirections'},
+ {name:'inactive',fromTable:'A',fromColumn:'Key',toTable:'B',toColumn:'Key',isActive:false},
+ {name:'ghost',fromTable:'Gone',fromColumn:'Key',toTable:'B',toColumn:'Key'},
+ {name:'incomplete',fromTable:'A',toTable:'B',toColumn:'Key'}]}};
+ const script=`import importlib.util,json,sys\ns=importlib.util.spec_from_file_location('parser',sys.argv[1]);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\nprint(json.dumps(m.parse_bim(json.load(sys.stdin))))`;
+ const r=spawnSync('python3',['-c',script,path.join(jsDir,'../scripts/tmdl_to_model_data.py')],{input:JSON.stringify(input),encoding:'utf8'});
+ assert.equal(r.status,0,r.stderr);const py=JSON.parse(r.stdout),browser=JSON.parse(JSON.stringify(parser().parseBIM(input)));
+ assert.deepEqual(py.relationships,browser.relationships);assert.deepEqual(py.relationshipDiagnostics,browser.relationshipDiagnostics);
+});

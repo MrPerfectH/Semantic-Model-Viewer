@@ -10,13 +10,14 @@ Fabric connection, or Python is required for local files.
 The screenshots below use only the synthetic **Contoso Retail** demo. Select an image to
 open it at full size.
 
-## What's new in 0.6
+## What's new in 0.8
 
-- **Readable diagrams without zooming.** Names stay at 11px or larger. Tables open as full cards with every relationship's cardinality badge when the pane has room. **Focus** shows a table's neighbourhood, arranged, in one press. On small screens the canvas keeps the space, and narrow dependency flows run top to bottom with tidy links.
-- **Ask your agent, see the answer.** `smv show` opens the relevant Tables and Measures views side by side, or as tabs on a narrow window, and the agent gives the answer in the conversation. Live sessions follow the agent's next view.
-- **Fabric connection.** Sign in with a work account, browse workspaces and models, open read-only metadata, reopen it offline and refresh it.
-- **Colours by source or table folder**, with a compact legend, and VS Code light, dark and high-contrast themes.
-- **Bundled CLI and Copilot tools.** Extension packages include the `smv` command and native Copilot tools.
+- **Reference.** A searchable page for every table, column, measure, calculation group, hierarchy and Power Query object, with its definition, properties and links to related objects.
+- **DAX for calculated objects.** **Show DAX calculation** opens calculated tables, calculated columns, field parameters and calculation groups in Measures, with the same formula cards and reference chips as measures.
+- **Safer imports.** A model that fails to load no longer replaces the one already open. Object names that clash with built-in names work, parallel relationships are kept, and anything left out during import is listed.
+- **Keyboard and small screens.** Move between relationships with the arrow keys, use the import dialog and Help from the keyboard, and read Measures on a narrow window by switching between the library and the reader.
+- **Large models.** Power Query opens its inventory straight away, and dense diagrams draw in bounded time and say so when some lines could not be routed around cards.
+- **Exports.** PNG export works offline, leaves out tooltips and popovers, and snapshots state what they contain before you share them.
 
 ## CLI and agent tools
 

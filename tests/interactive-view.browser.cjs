@@ -196,11 +196,11 @@ check(v._graphOrientation==='auto','focused graphs follow the pane by default');
 check(control().getBoundingClientRect().width>0,'library toggle visible with hidden footer');
 check(control().getAttribute('aria-expanded')==='false'&&v.pane.inert,'focused library collapsed and untabbable');
 control().click();await frame();check(control().getAttribute('aria-expanded')==='true'&&!v.pane.inert,'library opens');check(document.activeElement===v.qInput,'focus moves to search');
-v.pane.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));await frame();check(v._libraryCollapsed&&document.activeElement===control(),'Escape collapses and returns focus');
+v.pane.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));await frame();check(v.libraryCollapsed()&&document.activeElement===control(),'Escape collapses and returns focus');
 control().click();v.setGraphOrientation('bt');await frame();const saved=smv.inspect().currentView;check(saved.state.measures.library.collapsed===false,'open library captured');
-await smv.apply(saved);await frame();check(!v._libraryCollapsed&&v._graphOrientation==='bt','snapshot restores library and explicit vertical option');
-const snap=Snapshots.capture(app);v.setLibraryCollapsed(true);app.loadSnapshot(snap);await frame();await frame();check(!v._libraryCollapsed,'native snapshot restores visibility');
-v.setLibraryCollapsed(true);await smv.reset();check(v._libraryCollapsed&&v._graphOrientation==='auto','reset returns to focused defaults');
+await smv.apply(saved);await frame();check(!v.libraryCollapsed()&&v._graphOrientation==='bt','snapshot restores library and explicit vertical option');
+const snap=Snapshots.capture(app);v.setLibraryCollapsed(true);app.loadSnapshot(snap);await frame();await frame();check(!v.libraryCollapsed(),'native snapshot restores visibility');
+v.setLibraryCollapsed(true);await smv.reset();check(v.libraryCollapsed()&&v._graphOrientation==='auto','reset returns to focused defaults');
 `));
 
 test('show PNG export confirms static output without polluting JSON',{skip:!browser},t=>{

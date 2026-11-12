@@ -3,6 +3,7 @@
   'use strict';
   var KEY = 'smv_onboarding_v1';
   var tips = {
+    help: ['Read and explore the model', 'Tables: search the library, add a table, then select it to explore filter paths. Solid links are active; dashed links are inactive. Arrow direction shows filter flow, and 1 / * show cardinality. At low zoom some labels are hidden: zoom in or select the relationship for details. Coincident links cycle when clicked repeatedly; relationship controls in the inspector let you choose explicitly. Measures and Power Query show static dependencies, not executed results: unresolved references and absent arrows do not prove independence. Use Tab to reach controls, Enter or Space to activate them, Escape to close details, and the visible Fit button to frame the current diagram.', '[data-onboarding-help]'],
     welcome: ['Welcome to Semantic Model Viewer', 'Start with one question: how do these tables connect, or what feeds this measure? Enable short tips as you explore. You can skip them and restart anytime through Help.', '[data-onboarding-help]'],
     tables: ['Add a table', 'In the Tables library, search for a table and use its + button to add it to your canvas. Select the table to explore its relationships. If the library is hidden, use Show the table library.', '#table-library'],
     relationships: ['Explore a relationship', 'Select a table, then use Explore filter paths in the inspector to choose direction and distance. Add related tables to see their lines; select a line for relationship details. A model without relationships has no paths to follow.', '#drawer'],
@@ -29,6 +30,9 @@
     this.progress.seen = this.seen;
     U.store.setJSON(KEY, this.progress); // store catches denied/quota errors; memory still works
   };
+  Onboarding.prototype.help = function () {
+    this.close(false); this.show('help', true);
+  };
   Onboarding.prototype.restart = function () {
     if (this.app.snapshotMode) return;
     this.close(false);
@@ -48,7 +52,8 @@
     if (this.id === 'tables' && this.app.state.selected) this.close(false);
     if (!this.progress.welcomed) { this.show('welcome', false); return; }
     if (this.app.state.viewMode === 'graph') {
-      this.offer(this.app.state.selected ? 'relationships' : 'tables');
+      if (this.app.state.selected) this.offer('relationships');
+      else if (!this.app.explorer || !this.app.explorer.names || !this.app.explorer.names.size) this.offer('tables');
     } else if (this.app.state.viewMode === 'measures') this.offer('measures');
     this.position();
   };
@@ -71,7 +76,8 @@
       if (id === 'welcome') { self.progress.enabled = false; self.save(); }
       self.close(true);
     }}));
-    if (id !== 'welcome') actions.appendChild(el('button', {cls:'ex-button', text:'Skip remaining tips', onClick:function () {
+    if (id === 'help') actions.appendChild(el('button', {cls:'ex-button', text:'Restart tips', onClick:function () { self.restart(); }}));
+    if (id !== 'welcome' && id !== 'help') actions.appendChild(el('button', {cls:'ex-button', text:'Skip remaining tips', onClick:function () {
       self.progress.enabled = false; self.save(); self.close(true);
     }}));
     card.appendChild(actions);
@@ -101,6 +107,9 @@
     var x = rect ? rect.right + 12 : g.innerWidth - width - 12;
     if (x + width > g.innerWidth - 12) x = rect ? rect.left - width - 12 : x;
     var y = rect ? rect.top : 80;
+    // On narrow screens the library occupies the width. Put automatic advice
+    // below its search/first rows so the instructed action remains reachable.
+    if (g.innerWidth < 800 && this.id !== 'welcome' && this.id !== 'help') y = g.innerHeight - height - 12;
     card.style.left = Math.max(12, Math.min(x, g.innerWidth - width - 12)) + 'px';
     card.style.top = Math.max(12, Math.min(y, g.innerHeight - height - 12)) + 'px';
   };

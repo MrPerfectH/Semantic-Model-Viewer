@@ -15,9 +15,9 @@
   function GraphCanvas(app, host) {
     this.app = app;
     this.host = host;
-    this.pos = {};
-    this.cpos = {};
-    this.cards = {};
+    this.pos = Object.create(null);
+    this.cpos = Object.create(null);
+    this.cards = Object.create(null);
     this.groups = null;
     this.groupOrder = [];
     this.clusterOn = false;
@@ -132,11 +132,11 @@
     },
     computeLayout: function () {
       var self = this, model = this.app.model;
-      var saved = this.loadSaved();
+      var saved = Object.assign(Object.create(null), this.loadSaved());
       var tables = model.tables;
       var connected = tables.filter(function (t) { return t.relCount > 0; });
       var standalone = tables.filter(function (t) { return t.relCount === 0; });
-      var deg = {}; tables.forEach(function (t) { deg[t.name] = 0; });
+      var deg = Object.create(null); tables.forEach(function (t) { deg[t.name] = 0; });
       model.relationships.forEach(function (r) { deg[r.from] = (deg[r.from] || 0) + 1; deg[r.to] = (deg[r.to] || 0) + 1; });
       var GA = Math.PI * (3 - Math.sqrt(5));
       connected.forEach(function (t, i) {
@@ -147,7 +147,7 @@
       });
       if (!this.allSaved(connected, saved)) {
         var nodes = connected.map(function (t) { return { n: t.name, fact: self.app.isFact(t), deg: deg[t.name], p: self.pos[t.name], vx: 0, vy: 0 }; });
-        var idx = {}; nodes.forEach(function (nd) { idx[nd.n] = nd; });
+        var idx = Object.create(null); nodes.forEach(function (nd) { idx[nd.n] = nd; });
         var edges = model.relationships.filter(function (r) { return idx[r.from] && idx[r.to]; }).map(function (r) { return { a: idx[r.from], b: idx[r.to] }; });
         var ITER = 620;
         for (var iter = 0; iter < ITER; iter++) {
@@ -234,6 +234,11 @@
       var self = this, host = this.host; if (!host) return;
       this.releaseLayer();
       U.clear(host);
+      var skipLibrary = el('button', {type:'button',text:'Skip to table library',style:'position:absolute;top:8px;left:12px;z-index:20;transform:translateY(-200%);'});
+      skipLibrary.addEventListener('focus',function(){skipLibrary.style.transform='none';});
+      skipLibrary.addEventListener('blur',function(){skipLibrary.style.transform='translateY(-200%)';});
+      skipLibrary.addEventListener('click',function(){if(self.app.explorer)self.app.explorer.setPanes({libraryHidden:false});var library=document.getElementById('table-library');if(library){var target=library.querySelector('input,button,[tabindex="0"]');if(target)target.focus();}});
+      host.appendChild(skipLibrary);
       this._chip = null;
       this._bandBox = null;            // lane size follows this model's longest table name
       var world = el('div', { style: 'position:absolute;left:0;top:0;transform-origin:0 0;' });
@@ -250,9 +255,9 @@
         this._escBound = true;
         window.addEventListener('keydown', function (e) { if (e.key === 'Escape' && self.selRel && ['graph', 'clusters'].includes(self.app.state.viewMode)) self.selectRel(null); });
       }
-      this.cards = {};
+      this.cards = Object.create(null);
       this.app.model.tables.forEach(function (t) { self.makeCard(world, t); });
-      if (!this._panBound) { this.bindPanZoom(host); this._panBound = true; }
+      if (!this._panBound) { this.bindPanZoom(host); host.addEventListener('mouseleave', function () { self.hideTip(); }); this._panBound = true; }
       this.recolor();
       this.applyVisibility();
       this.renderLines();
@@ -320,7 +325,7 @@
       }
       card.appendChild(meta);
       var body = el('div', { data: { body: '1' }, style: 'display:none;border-top:1px solid #eef0f3;background:#fcfcfd;' });
-      var colRows = {};
+      var colRows = Object.create(null);
       t.columns.forEach(function (c) {
         var row = el('div', {
           data: { col: c.name, smvKind: 'column', smvName: c.name, smvTable: t.name },
@@ -790,7 +795,7 @@
         c.caret.style.transform = on ? 'rotate(180deg)' : ''; self.layoutCard(n);
       });
       if (on) {
-        if (!this._preExpandPos) this._preExpandPos = JSON.parse(JSON.stringify(this.pos));
+        if (!this._preExpandPos) this._preExpandPos = Object.assign(Object.create(null), JSON.parse(JSON.stringify(this.pos)));
         this.spreadForExpanded();
         this.renderLines();
         // no fitView here: fitting the expanded bounds would clamp zoom below the
@@ -1052,7 +1057,7 @@
       return { d: this.orthoPath(pts, 9), spots: spots, points: pts };
     },
     assignRelationshipPorts: function (vis) {
-      var self = this, ports = {};
+      var self = this, ports = Object.create(null);
       vis.forEach(function (item) {
         ['a', 'b'].forEach(function (end) {
           var g0 = item.g0, name = g0[end], direction = g0[end + 'dir'];
@@ -1139,8 +1144,25 @@
         }
         return first;
       };
+      // Most blocked routes can use one existing clear row or column. Avoid a
+      // full visibility-grid search for those common cases.
+      var direct = null, directCost = Infinity;
+      function candidate(pts) {
+        if (!self.routeClear(pts, rects)) return;
+        var cost = 0; for (var i = 1; i < pts.length; i++) cost += Math.abs(pts[i].x-pts[i-1].x)+Math.abs(pts[i].y-pts[i-1].y);
+        if (cost < directCost) { direct = pts; directCost = cost; }
+      }
+      xs.forEach(function (x) { candidate([a,{x:x,y:a.y},{x:x,y:b.y},b]); });
+      ys.forEach(function (y) { candidate([a,{x:a.x,y:y},{x:b.x,y:y},b]); });
+      if (direct) return direct;
       push(start, 0);
+      var visits = 0;
       while (heap.length) {
+        // Deterministic operation bounds across the complete render, not a timer
+        // that makes geometry depend on machine load. Keep the simple route when
+        // a dense overview exhausts this optional obstacle-avoidance refinement.
+        if (++visits > 16384 || this._routeSearchRemaining <= 0) { this._routingLimited = true; return null; }
+        if (Number.isFinite(this._routeSearchRemaining)) this._routeSearchRemaining--;
         var current = pop(), id = current.id;
         if (current.cost !== dist.get(id)) continue;
         if (id === goal) {
@@ -1308,10 +1330,66 @@
       var thin = Math.max(floor, isSel ? 2.6 : (active ? 2.1 : (hop ? 1.8 : floor))) / zoom;
       return Math.max(thin, isSel ? (chip ? 4.4 : 3.4) : (active ? (chip ? 3.4 : 2.6) : (hop ? (chip ? 2.8 : 2) : (chip ? 2.2 : 1.4))));
     },
+    /* Resolve the visible geometry, not the last transparent hit stroke painted.
+       Samples are cached for this render and measured in screen-pixel distance.
+       Coincident routes cycle in model order; their explicit labels always own clicks. */
+    relationshipAt: function (event, cycle) {
+      var rect = this.host.getBoundingClientRect(), k = this.view.k;
+      var x = (event.clientX - rect.left - this.view.x) / k, y = (event.clientY - rect.top - this.view.y) / k;
+      var candidates = [], radius = Math.max(8, (this._chip ? 11 : 8)*k);
+      (this._relationshipHits || []).forEach(function (item) {
+        // Reject distant routes before sampling; hover work stays local to the pointer.
+        if (item.path && typeof item.path.getBBox === 'function') {
+          var box = item.box || (item.box = item.path.getBBox()), margin = radius / k;
+          if (x < box.x-margin || x > box.x+box.width+margin || y < box.y-margin || y > box.y+box.height+margin) return;
+        }
+        if (!item.points) {
+          if (!item.path || typeof item.path.getTotalLength !== 'function') return;
+          var length = item.path.getTotalLength(), count = Math.max(1, Math.min(4096, Math.ceil(length * k / 2)));
+          item.points = [];
+          for (var n = 0; n <= count; n++) item.points.push(item.path.getPointAtLength(length * n / count));
+        }
+        var distance = Infinity;
+        for (var n = 1; n < item.points.length; n++) {
+          var a = item.points[n-1], b = item.points[n], dx = b.x-a.x, dy = b.y-a.y;
+          var t = Math.max(0, Math.min(1, ((x-a.x)*dx+(y-a.y)*dy)/(dx*dx+dy*dy || 1)));
+          distance = Math.min(distance, Math.hypot(x-a.x-t*dx, y-a.y-t*dy)*k);
+        }
+        if (distance <= radius) candidates.push({item:item,distance:distance});
+      }, this);
+      candidates.sort(function(a,b){return a.distance-b.distance || a.item.i-b.item.i;});
+      if (!candidates.length) return null;
+      var nearest=candidates[0].distance;
+      var tied=candidates.filter(function(c){return c.distance-nearest <= 1e-6;}).map(function(c){return c.item;}).sort(function(a,b){return a.i-b.i;});
+      var selected=tied.findIndex(function(item){return item.r===this.selRel;},this);
+      return tied[cycle && tied.length>1 ? (selected+1)%tied.length : Math.max(0,selected)];
+    },
+    focusRelationship: function (item) {
+      if (!item || !item.arrow) return;
+      this._keyboardRelationship = item.r;
+      (this._relationshipHits || []).forEach(function (candidate) { if(candidate.arrow)candidate.arrow.setAttribute('tabindex',candidate.r===item.r?'0':'-1'); });
+      item.arrow.focus();
+    },
+    stepRelationshipFocus: function (item, direction) {
+      var choices=(this._relationshipHits || []).filter(function(candidate){return !!candidate.arrow;});
+      var index=choices.findIndex(function(candidate){return candidate.r===item.r;});
+      if(choices.length)this.focusRelationship(choices[(Math.max(0,index)+direction+choices.length)%choices.length]);
+    },
+    hoverRelationship: function (item, event) {
+      if (this._hoverRelationship !== item) {
+        this.hideTip(); this._hoverRelationship = item;
+        if (item && item.highlight) item.highlight();
+      }
+      if (item) {
+        this.showTip(this.relTip(item.r) + '<br><span style="color:#8b93a2">Click for relationship details</span>', event);
+      }
+    },
     renderLines: function () {
       var self = this;
       if (!this.svg) return;
-      if (this.clusterOn) { this.clusterLines(); return; }
+      this.hideTip(); this._relationshipHits = [];
+      this._routeSearchRemaining = 24000; this._routingLimited = false;
+      if (this.clusterOn) { if(this._routeNotice)this._routeNotice.style.display='none'; this.clusterLines(); return; }
       U.clear(this.svg);
       var roots = this.rootsSet(); var showSA = this.showSA; var isoSet = this._isoSet;
       var model = this.app.model;
@@ -1353,6 +1431,11 @@
         });
       }
       var rects = this.cardRects();
+      // Each search expansion scans the obstacles. Give smaller models more
+      // refinement within a bounded obstacle-work allowance, rather than spending
+      // the same tiny expansion count on both the demo and a dense stress model.
+      this._routeSearchLimit = Math.min(192000, Math.max(24000, Math.floor(7680000 / Math.max(1, rects.length))));
+      this._routeSearchRemaining = this._routeSearchLimit;
       var placed = [];
       vis.forEach(function (item) {
         var r = item.r, kind = item.k;
@@ -1383,22 +1466,25 @@
         self.svg.appendChild(sv('circle', { cx: g0.bx, cy: g0.by, r: dot * 1.18, fill: g.ViewerTheme ? g.ViewerTheme.paint('surface', '#fff') : '#fff', stroke: col, 'stroke-width': Math.max(1.6 / self.view.k, active || isSel ? 2 : 1.6), opacity: op }));
         /* a wide invisible stroke is the click / hover target — the visible line is thin */
         var hit = sv('path', { d: d, fill: 'none', stroke: 'rgba(0,0,0,0)', 'stroke-width': Math.max(chip ? 22 : 16, 16 / self.view.k), 'stroke-linecap': 'round', style: 'pointer-events:stroke;cursor:pointer;' });
-        var hoverOn = function (e) {
+        item.path = path;
+        item.highlight = function () {
           if (!isSel) { path.setAttribute('stroke-width', baseW + 1); path.setAttribute('stroke', active || hop ? col : EDGE.out); path.setAttribute('opacity', 1); }
-          if (self.selRel !== r) self.showTip(self.relTip(r) + '<br><span style="color:#8b93a2">click for details</span>', e);
         };
-        var hoverOff = function () {
-          if (!isSel) { path.setAttribute('stroke-width', baseW); path.setAttribute('stroke', col); path.setAttribute('opacity', baseOp); }
-          self.hideTip();
+        item.restore = function () {
+          path.setAttribute('stroke-width', baseW); path.setAttribute('stroke', col); path.setAttribute('opacity', baseOp);
         };
-        var bind = function (node) {
-          node.addEventListener('mouseenter', hoverOn);
-          node.addEventListener('mousemove', function (e) { self.moveTip(e); });
-          node.addEventListener('mouseleave', hoverOff);
+        var bind = function (node, explicit) {
+          function hover(e) { self.hoverRelationship(explicit ? item : self.relationshipAt(e, false), e); }
+          node.addEventListener('mouseenter', hover);
+          node.addEventListener('mousemove', hover);
+          node.addEventListener('mouseleave', function () { self.hideTip(); });
           node.addEventListener('mousedown', function (e) { e.stopPropagation(); });
-          node.addEventListener('click', function (e) { e.stopPropagation(); self.hideTip(); self.selectRel(self.selRel === r ? null : r); });
+          node.addEventListener('click', function (e) {
+            e.stopPropagation(); var target = explicit ? item : self.relationshipAt(e, true);
+            self.hideTip(); if (target) self.selectRel(self.selRel === target.r ? null : target.r);
+          });
         };
-        bind(hit);
+        bind(hit, false);
         item.hit = hit;
         if (!dim) {
           var ink = kind === 'base' && !isSel ? (hostedDark ? EDGE.base : (g.ViewerTheme ? g.ViewerTheme.paint('muted', '#7d8593') : '#7d8593')) : col;
@@ -1426,12 +1512,34 @@
             ? self.edgeArrow(r, spot, ink, op2, isSel || active ? 1.15 : 1)
             : self.edgeGlyph(r, spot, ink, op2, isSel, active);
           item.arrow.style.pointerEvents = 'auto'; item.arrow.style.cursor = 'pointer';
-          bind(item.arrow);
+          bind(item.arrow, true);
+          item.arrow.setAttribute('tabindex', '-1');
+          item.arrow.setAttribute('role', 'button');
+          item.arrow.setAttribute('aria-label', r.from + '[' + r.fromCol + '] to ' + r.to + '[' + r.toCol + ']' + (r.inactive ? ', inactive' : ', active') + (r.both ? ', bidirectional' : ', single direction'));
+          item.arrow.addEventListener('keydown', function (e) {
+            if (['ArrowLeft','ArrowUp','ArrowRight','ArrowDown'].includes(e.key)) {
+              e.preventDefault();e.stopPropagation();self.stepRelationshipFocus(item,e.key==='ArrowLeft'||e.key==='ArrowUp'?-1:1);return;
+            }
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            e.preventDefault(); e.stopPropagation(); self.hideTip();
+            self.selectRel(self.selRel === r ? null : r);
+            var replacement = (self._relationshipHits || []).find(function (candidate) { return candidate.r === r; });
+            if (replacement) self.focusRelationship(replacement);
+          });
         }
       });
+      this._relationshipHits = vis;
+      var tabStop=vis.find(function(item){return item.arrow&&item.r===(self._keyboardRelationship||self.selRel);})||vis.find(function(item){return !!item.arrow;});
+      if(tabStop)tabStop.arrow.setAttribute('tabindex','0');
       /* hit strokes above the lines, labels on top so a crossing line never cuts one */
       vis.forEach(function (item) { if (item.hit) self.svg.appendChild(item.hit); });
       vis.forEach(function (item) { if (item.arrow) self.svg.appendChild(item.arrow); });
+      if (!this._routeNotice || this._routeNotice.parentNode !== this.host) {
+        this._routeNotice = el('div', {role:'status',style:'position:absolute;bottom:10px;left:12px;max-width:380px;padding:6px 9px;border-radius:6px;background:var(--surface,#fff);color:var(--text,#475569);font-size:11px;pointer-events:none;z-index:4;'});
+        this.host.appendChild(this._routeNotice);
+      }
+      this._routeNotice.textContent = 'Dense overview: some lines may cross tables. Focus a table for clearer paths.';
+      this._routeNotice.style.display = this._routingLimited ? 'block' : 'none';
       this._lineK = this.view.k;
       this.positionRelPopover();
       if (this.app.explorer) this.app.explorer.drawMap();
@@ -1468,7 +1576,11 @@
     },
     showTip: function (html, e) { this.tip.innerHTML = g.ViewerTheme ? g.ViewerTheme.inlineHTML(html) : html; this.tip.style.display = 'block'; this.moveTip(e); },
     moveTip: function (e) { var r = this.host.getBoundingClientRect(); this.tip.style.left = (e.clientX - r.left + 14) + 'px'; this.tip.style.top = (e.clientY - r.top + 14) + 'px'; },
-    hideTip: function () { this.tip.style.display = 'none'; },
+    hideTip: function () {
+      if (this._hoverRelationship && this._hoverRelationship.restore) this._hoverRelationship.restore();
+      this._hoverRelationship = null;
+      if (this.tip) this.tip.style.display = 'none';
+    },
 
     /* ---------- color / selection ---------- */
     /* Facts read as the heavy nodes: solid color header, inverted badge. Dims stay light. */
@@ -1641,7 +1753,7 @@
       var roots = this.rootsSet();
       var dist = roots.size ? this.distMap(Array.from(roots), app.state.focusDepth || 1) : null;
       /* direct neighbours take the colour of the edge that reaches them (out beats in) */
-      var side = {};
+      var side = Object.create(null);
       if (dist) app.model.relationships.forEach(function (r) {
         var k = self.edgeKind(r, dist);
         if (k === 'out' && dist.get(r.to) === 1) side[r.to] = 'out';
@@ -1880,7 +1992,7 @@
       if ((this.detailMode || 'auto') !== 'auto' || store.get('smv-layout', null) != null) return false;
       var self = this, now = this.readability(names);
       if (!now || (now.cards && now.pills === now.lines)) return false;
-      var keep = {}, layoutK = this.layoutK, last = this.lastLayout, view = { x: this.view.x, y: this.view.y, k: this.view.k };
+      var keep = Object.create(null), layoutK = this.layoutK, last = this.lastLayout, view = { x: this.view.x, y: this.view.y, k: this.view.k };
       names.forEach(function (n) { if (self.pos[n]) keep[n] = { x: self.pos[n].x, y: self.pos[n].y }; });
       this.arrangeAtFitZoom(run); this.spreadToFill(names);
       var trial = this.readability(names);
@@ -1957,7 +2069,7 @@
       store.del(this.LSKEY);
       this.clearArranged();
       this.setLayoutK(ZOOM_FLOOR);
-      this._preExpandPos = null; this.pos = {}; this.computeLayout();
+      this._preExpandPos = null; this.pos = Object.create(null); this.computeLayout();
       Object.keys(this.cards).forEach(function (n) { self.layoutCard(n); });
       this.renderLines(); this.fitView();
     },

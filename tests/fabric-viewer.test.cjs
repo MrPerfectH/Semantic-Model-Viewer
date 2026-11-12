@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 const {FabricConnection,sourceOf,key}=require('../Models/tools/viewer/js/fabric.js');
 function harness(){
   let records=[],opened=[];global.U={store:{set(){},del(){}}};
-  const app={snapshotMode:false,server:{},modelKey:'old',getStore:()=>records,setStore(r){records=r;return true;},hostOpenModel(r){opened.push(r);this.modelKey=r.id;},render(){},setState(p){this.message=p;},loadEmptyModel(){this.modelKey=null;}};
+  const app={snapshotMode:false,server:{},modelKey:'old',getStore:()=>records,setStore(r){records=r;return true;},hostOpenModel(r){records=records.filter(x=>x.id!==r.id).concat(r);opened.push(r);this.modelKey=r.id;},render(){},setState(p){this.message=p;},loadEmptyModel(){this.modelKey=null;}};
   const c=new FabricConnection(app);c.draw=()=>{};c.workspace={id:'workspace',name:'Workspace'};c.account={tenantId:'tenant'};
   return {c,app,opened};
 }

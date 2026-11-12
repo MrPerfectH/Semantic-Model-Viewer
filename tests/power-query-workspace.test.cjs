@@ -233,3 +233,29 @@ test('refresh snapshot retains valid flow and viewport while safely dropping rem
   assert.equal(w.depth,Infinity);assert.equal(w.viewMode,'flow');
  }
 });
+
+test('large-1000 worker completion publishes a searchable inventory without routing invisible edges',async()=>{
+ const api=require('../Models/tools/viewer/scripts/cli/model.cjs');
+ const {app}=api.readModel(api.runtime(),path.join(__dirname,'acceptance-fixtures/pq38/large-1000/model.bim'));
+ const h=require('./power-query-ui-harness.cjs').harness('power-query-canvas.js');
+ const {w,g,workers}=jobHarness({U:h.win.U});w.app=new Proxy({model:app.model,state:{},colorBy:'domain',paletteName:'muted'},{get:(o,k)=>k in o?o[k]:(()=> '#888888')});
+ w.canvas=h.win.PowerQueryCanvas.mount(h.host,{});
+ // Exercise the real inventory projection/rendering, supplying only shell DOM.
+ g.U.el=h.win.U.el;
+ for(const name of ['list','banner','search','filter','count','message','popover','globalDetails','backButton','cancelButton','retryButton','inventory','memberCount','segments','note','undoButton','centerButton','openTableButton'])w[name]=h.doc.createElement('div');
+ w.filter.options=['all','connected','disconnected'].map(value=>({value}));
+ w.applyFilters=g.PowerQueryWorkspace.prototype.applyFilters;
+ w.start();await tick();const worker=workers[0],generation=w.generation;
+ const graph=g.PowerQueryGraphModel.build(worker.job.model,{generation});
+ assert.equal(graph.nodes.length,1005);assert.equal(graph.edges.length,3094);
+ worker.onmessage({data:{type:'ready',jobId:worker.job.jobId,generation,graph}});
+ assert.equal(w.phase,'ready',w.message.textContent);assert.equal(w.search.disabled,false);assert.equal(w.filter.disabled,false);
+ assert.equal(w.list.children.length,1005);assert.equal(w.canvas.captureLayout().size,1005);
+ assert.equal(h.host.querySelector('.pqc-route-status').dataset.work,'0');
+ assert.doesNotMatch(w.message.textContent,/pending|Preparing/);
+ const last=graph.nodes.at(-1);w.query=last.label;w.applyFilters();assert.ok(w.list.textContent.includes(last.label));
+ w.canvas.setVisibleIds(null);
+ const status=h.host.querySelector('.pqc-route-status');assert.ok(+status.dataset.work<=550001);assert.ok(+status.dataset.limited>0);
+ assert.equal(w.canvas.captureLayout().size,1005,'routing budget never removes model objects');
+ w.canvas.destroy();
+});

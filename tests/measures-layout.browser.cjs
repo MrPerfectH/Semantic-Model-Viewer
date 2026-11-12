@@ -282,6 +282,16 @@ test('table/column dependency flow works in the complete viewer', { skip: !chrom
       await browser.evaluate(`ViewerTheme.set('${theme}')`);
       for(const [width,height] of [[720,800],[900,720]]) {
         await browser.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:false});await settle();await settle();
+        if(width===720){
+          const desktopPreference=await browser.evaluate('app.measures._libraryCollapsed');
+          assert.equal(await browser.evaluate('app.measures.workspace.dataset.libraryCollapsed'),'true','selected analysis is exposed on entering narrow mode');
+          await browser.evaluate('app.measures.libraryToggle.click()');await settle();
+          assert.equal(await browser.evaluate('app.measures.workspace.dataset.libraryCollapsed'),'false','Library explicitly opens the full narrow pane');
+          await browser.evaluate("app.measures.analyzeSource('Work Order Maintenance (IW_49n)','work_order_id')");await settle();
+          assert.equal(await browser.evaluate('app.measures.workspace.dataset.libraryCollapsed'),'true','reselecting a source returns to readable analysis');
+          assert.equal(await browser.evaluate('app.measures._libraryCollapsed'),desktopPreference,'narrow pane switching preserves desktop preference');
+          await browser.evaluate("app.setState({gPin:'Dependent 0'})");await settle();
+        }
         await browser.evaluate('app.measures.fitGraph()');await settle();
         const r=await browser.evaluate(`(()=>{
           const v=app.measures,b=v.analysisBody,g=v.gScroll;

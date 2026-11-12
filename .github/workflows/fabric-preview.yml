@@ -33,7 +33,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 8.0.x
       - run: bash tools/fabric/xmla/publish.sh
@@ -50,7 +50,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: fabric-helpers-unsigned
           path: tools/fabric/xmla/publish
@@ -75,10 +75,10 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 8.0.x
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: fabric-helpers-preview
           path: tools/fabric/xmla/publish
@@ -96,7 +96,7 @@ jobs:
         if: github.ref == 'refs/heads/develop'
         working-directory: vscode-extension
         run: node scripts/preview-version.cjs
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           pattern: smv-private-node-*
           path: dist/runtime-downloads

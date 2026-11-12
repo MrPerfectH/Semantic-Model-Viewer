@@ -44,8 +44,8 @@ Models/<Model>.SemanticModel/     Reports/<Report>.Report/
               Viewer (static app)
 ```
 
-Both scripts live in `Models/tools/viewer/scripts/` and run standalone with `python3`
-(stdlib only, no dependencies):
+The Python generators use the standard library. Power Query enrichment uses Node
+and the browser parser, with no third-party runtime dependency:
 
 ```bash
 # build step 1 — TMDL -> model-data.json
@@ -53,16 +53,23 @@ python3 Models/tools/viewer/scripts/tmdl_to_model_data.py \
     "Models/demo/Contoso Retail.SemanticModel" \
     -o Models/tools/viewer/model-data.json
 
-# build step 2 — PBIR reports -> report-usage.json (+ report-health.json)
+# build step 2 — preserve Power Query objects and available M definitions
+node Models/tools/viewer/scripts/power_query_to_model_data.js \
+    "Models/demo/Contoso Retail.SemanticModel" \
+    Models/tools/viewer/model-data.json
+
+# build step 3 — PBIR reports -> report-usage.json (+ report-health.json)
 python3 Models/tools/viewer/scripts/scan_report_usage.py Reports \
     --model-data Models/tools/viewer/model-data.json \
     -o Models/tools/viewer/report-usage.json
 ```
 
-`tmdl_to_model_data.py` is a line-by-line port of the browser parser
-(`js/tmdl-parser.js`) — same regexes, same role/domain heuristics, same output — so
-in-repo snapshots and drag-and-drop imports agree. Keep the two in sync when either
-changes.
+`tmdl_to_model_data.py` generates core table, relationship and calculation metadata.
+The enrichment step uses `js/tmdl-parser.js` to add Power Query metadata and available
+M definitions. Do not omit that step when regenerating the demo. Browser imports
+and CLI snapshots use the JavaScript parser directly; compare supported semantic
+fields rather than assuming byte-identical output between these paths. Snapshots
+include definitions, endpoint strings and parameter values; enrichment is not redaction.
 
 ### Wiring into your own repo
 
@@ -250,3 +257,22 @@ node --test tests/star-layout.browser.cjs tests/measures-layout.browser.cjs test
 ```
 
 These use a disposable browser profile and the shipped CSS/JS. The measures checks cover wide-screen formula sizing, split placement, resizing, orientation and preferences; `star-layout.browser.cjs` opens the bundled model at 1440x900, runs Show all and Fit, and asserts against real DOM rects that no two cards are drawn on top of each other and that every table name stays between 11 and 13 CSS pixels.
+
+### Runtime assets and audit checks
+
+After editing viewer JavaScript or CSS, run `node scripts/refresh-viewer-assets.cjs`,
+then `npm run check:viewer-assets`. The hashes in `index.html` now describe actual
+asset bytes. Run `npm run sync-viewer && npm run check-viewer` in `vscode-extension`
+to regenerate and compare host assets. The CLI engine synchronizer also includes
+the pinned PNG library and its license; interactive snapshots disable PNG export
+and embed their own required assets.
+
+The canonical broad gate is `npm test` in `vscode-extension`, after `npm ci` in
+both repository root and extension. Root `npm test` covers a narrower delivery
+subset. Browser acceptance is separate; consult `.github/workflows/ci.yml` and
+feature-specific `tests/*.browser.cjs`. A test-file [inventory](implementation/test-inventory-20261102.json)
+records test titles, assertion sites and imports without deleting historic probes.
+
+For repeated demo/stress timing, use `npm run benchmark:audit` and
+`npm run benchmark:audit -- --stress`; see the [performance policy](implementation/audit-performance.md).
+These measurements do not replace browser responsiveness or geometry validation.

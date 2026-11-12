@@ -43,7 +43,7 @@
     var model=el('div',{cls:'ex-brand'},[el('span',{cls:'ex-logo',html:U.ICON.logo}),identity]);
     if(st.showModelMenu&&!offline)model.appendChild(this.modelMenu());this.host.appendChild(model);
     var nav=el('nav',{cls:'ex-main-nav','aria-label':'Analysis views'});
-    [['graph','Tables'],['measures','Measures'],['power-query','Power Query'],['clusters','Table groups'],['matrix','Matrix']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
+    [['graph','Tables'],['measures','Measures'],['power-query','Power Query'],['clusters','Table groups'],['matrix','Matrix'],['reference','Reference']].forEach(function(p){nav.appendChild(el('button',{text:p[1],disabled:!st.loaded,'aria-current':st.viewMode===p[0]?'page':null,onClick:function(){app.setViewMode(p[0]);}}));});
     this.host.appendChild(nav);
     var actions=el('div',{cls:'ex-header-actions'});
     if(g.ViewerTheme&&!(g.SMVHost&&g.SMVHost.kind==='vscode')){
@@ -70,18 +70,22 @@
       title:metadataText || (offline?'Includes model metadata, DAX and available Power Query definitions. Changes stay in this tab; save a snapshot to keep them.':app.host?'Model parsing and analysis run locally in VS Code.':'Model parsing and analysis run in your browser.'),tabindex:metadataText?'0':null,'aria-label':metadataText || null}));
     actions.appendChild(el('button',{cls:'ex-button ex-snapshot-export',text:st.snapshotSaving?'Saving snapshot…':'Save snapshot',disabled:!st.loaded||!!st.snapshotSaving,
       title:'Download an offline copy of the app, including this model, DAX, available Power Query definitions, and your current views',onClick:function(){app.saveSnapshot();}}));
+    actions.appendChild(el('details',{cls:'ex-snapshot-contents'},[
+      el('summary',{text:'Snapshot contents'}),
+      el('p',{text:'Includes all captured model metadata, DAX, available Power Query (M), connection endpoints and parameter values. Your selected view does not remove other model content. Review the model before sharing.'})
+    ]));
     if(!offline&&app.host){
       actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Choose model',onClick:function(){app.hostSelectModel();}}));
     }
     if(!offline&&!app.host){
       if(app.canRefreshSource())actions.appendChild(el('button',{cls:'ex-button',text:st.refreshing?'Refreshing…':'Refresh',disabled:!!st.refreshing,
         title:'Re-read this model from its source folder. Your layout and saved views are kept.',onClick:function(){app.refreshSource();}}));
-      if(st.viewMode!=='power-query')actions.appendChild(el('button',{cls:'ex-button',text:st.pngLabel,title:'Export current view as PNG',onClick:function(){app.exportPNG();}}));
+      if(st.viewMode!=='power-query'&&st.viewMode!=='reference')actions.appendChild(el('button',{cls:'ex-button',text:st.pngLabel,title:'Export current view as PNG',onClick:function(){app.exportPNG();}}));
       if(!app.server)actions.appendChild(el('a',{cls:'ex-button',text:'Get the app',href:'https://github.com/MrPerfectH/Semantic-Model-Viewer#start-here',target:'_blank',rel:'noopener',
         title:'Download the desktop app: it opens your model folders directly, with no browser permission prompt',style:'text-decoration:none;display:inline-flex;align-items:center;'}));
-      actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Open model',onClick:function(){app.setState({showImport:true,importError:'',importReady:false});}}));
+      actions.appendChild(el('button',{cls:'ex-button ex-primary',text:'Open model','data-open-import':'',onClick:function(){app.setState({showImport:true,importError:'',importReady:false});}}));
     }
-    if(!offline&&g.ViewerOnboarding)actions.appendChild(el('button',{cls:'ex-button',text:'Help', 'data-onboarding-help':'',onClick:function(){if(app.onboarding)app.onboarding.restart();}}));
+    if(!offline&&g.ViewerOnboarding)actions.appendChild(el('button',{cls:'ex-button',text:'Help', 'data-onboarding-help':'',onClick:function(){if(app.onboarding)app.onboarding.help();}}));
     this.host.appendChild(actions);
     /* Domains keeps Fit in its own toolbar row (see TableExplorer.renderClusterToolbar),
        next to Expand all / Collapse all, so both canvases carry the same controls. */
@@ -327,9 +331,65 @@
   function ImportModal(app, host) { this.app = app; this.host = host; }
   ImportModal.prototype.update = function () {
     var self = this, app = this.app, st = app.state;
+    var doc = this.host.ownerDocument, active = doc.activeElement;
+    var mode = st.folderPick ? 'folder' : st.showImport ? 'import' : null;
+    var key = active && active.getAttribute('data-import-focus');
+    var draftPath = key === 'folder-path' && this._folderPath === (st.folderPick && st.folderPick.path) ? active.value : null;
+    this._folderPath = st.folderPick && st.folderPick.path;
+    var selection = active && typeof active.selectionStart === 'number' ? [active.selectionStart, active.selectionEnd] : null;
+    if (!this._mode && mode) this._returnFocus = active;
+    if (this._mode === 'import' && mode === 'folder') this._importFocus = key;
+    (this._inert || []).forEach(function (entry) { entry.node.inert = entry.value; });
+    this._inert = [];
+    if (this._keydown) doc.removeEventListener('keydown', this._keydown, true);
+    if (this._focusin) doc.removeEventListener('focusin', this._focusin, true);
+    var previousMode = this._mode;
+    this._mode = mode;
     U.clear(this.host);
     if (st.showImport) this.renderImport();
     if (st.folderPick) this.host.appendChild(folderChooser(app, st.folderPick));
+    if (!mode) {
+      if (previousMode) {
+        var target = this._returnFocus;
+        if (!target || !target.isConnected) target = doc.querySelector('[data-open-import]') || doc.querySelector('.ex-model-button');
+        if (target) target.focus();
+        this._returnFocus = null;
+      }
+      return;
+    }
+    var panels = this.host.querySelectorAll('[role="dialog"]'), panel = panels[panels.length - 1];
+    // Inert every background branch, including an import dialog below a folder chooser.
+    for (var branch = panel; branch && branch !== doc.body; branch = branch.parentElement) {
+      if (!branch.parentElement) break;
+      Array.from(branch.parentElement.children).forEach(function (sibling) {
+        if (sibling !== branch) { self._inert.push({node:sibling,value:sibling.inert}); sibling.inert = true; }
+      });
+    }
+    var focusable = function () {
+      return Array.from(panel.querySelectorAll('button,input,select,a[href],[tabindex="0"]')).filter(function (node) {
+        return !node.disabled && node.getClientRects().length && node.type !== 'hidden';
+      });
+    };
+    var dismiss = function () { if (self.app.state.folderPick) app.finishFolderPick(null); else app.setState({showImport:false}); };
+    this._keydown = function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); dismiss(); }
+      else if (e.key === 'Tab') {
+        var nodes = focusable(), at = nodes.indexOf(doc.activeElement);
+        if (!nodes.length) { e.preventDefault(); panel.focus(); }
+        else if (at < 0 || (e.shiftKey && at === 0) || (!e.shiftKey && at === nodes.length - 1)) {
+          e.preventDefault(); nodes[e.shiftKey ? nodes.length - 1 : 0].focus();
+        }
+      }
+    };
+    this._focusin = function (e) { if (!panel.contains(e.target)) (focusable()[0] || panel).focus(); };
+    doc.addEventListener('keydown', this._keydown, true);
+    doc.addEventListener('focusin', this._focusin, true);
+    var restoreKey = previousMode === mode ? key : previousMode === 'folder' && mode === 'import' ? this._importFocus : null;
+    var restored = restoreKey && Array.from(panel.querySelectorAll('[data-import-focus]')).find(function (node) { return node.getAttribute('data-import-focus') === restoreKey; });
+    var next = restored || panel.querySelector(mode === 'folder' ? '[data-import-focus="folder-path"]' : '[data-import-focus="choose-folder"]') || focusable()[0] || panel;
+    if (restored && draftPath !== null) restored.value = draftPath;
+    next.focus({preventScroll:true});
+    if (restored && selection && restored.setSelectionRange) restored.setSelectionRange(selection[0], selection[1]);
   };
   ImportModal.prototype.renderImport = function () {
     var self = this, app = this.app, st = app.state;
@@ -345,9 +405,9 @@
       el('div', { style: 'font-size:12.5px;color:#4b5563;font-weight:500;', html: 'Drop a repo folder — every <span style="' + mono + '">*.SemanticModel</span> inside is found —<br>or a TMDL folder / <span style="' + mono + '">model.bim</span> file' }),
       el('div', { style: 'display:flex;gap:8px;justify-content:center;margin-top:13px;' }, [
         app.server
-          ? el('button', { text: 'Browse folder…', onClick: function () { app.importFromFolder(); }, style: "height:29px;padding:0 13px;border:1px solid #2563eb;background:#2563eb;color:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';" })
-          : el('button', { text: 'Choose folder', onClick: function () { app.chooseImportFolder(function () { folderInput.click(); }); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" }),
-        el('button', { text: 'Choose files', onClick: function () { fileInput.click(); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" })
+          ? el('button', { text: 'Browse folder…', 'data-import-focus':'choose-folder', onClick: function () { app.importFromFolder(); }, style: "height:29px;padding:0 13px;border:1px solid #2563eb;background:#2563eb;color:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';" })
+          : el('button', { text: 'Choose folder', 'data-import-focus':'choose-folder', onClick: function () { app.chooseImportFolder(function () { folderInput.click(); }); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" }),
+        el('button', { text: 'Choose files', 'data-import-focus':'choose-files', onClick: function () { fileInput.click(); }, style: "height:29px;padding:0 13px;border:1px solid #dce0e6;background:#fff;border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';color:#2b3140;" })
       ]),
       app.server
         ? el('div', { style: 'font-size:11px;line-height:1.45;color:#6b7280;margin-top:11px;', text: 'Browse folder: the local app reads the folder for you — no browser permission prompt — and Refresh re-reads it later.' })
@@ -356,20 +416,21 @@
     ]);
 
     var panel = el('div', {
+      role:'dialog', 'aria-modal':'true', tabindex:'-1', 'aria-label': 'Import model',
       onClick: function (e) { e.stopPropagation(); },
-      style: 'width:470px;max-width:calc(100vw - 40px);background:#fff;border-radius:14px;box-shadow:0 30px 70px rgba(10,16,30,.35);padding:20px 22px;'
+      style: 'box-sizing:border-box;width:470px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow:auto;background:#fff;border-radius:14px;box-shadow:0 30px 70px rgba(10,16,30,.35);padding:20px 22px;'
     }, [
       el('div', { style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;' }, [
         el('div', { style: 'flex:1;min-width:0;font-size:16px;font-weight:600;letter-spacing:-.2px;white-space:nowrap;', text: 'Import model' }),
-        el('button', { text: '×', onClick: function () { app.setState({ showImport: false }); }, style: 'width:26px;height:26px;border:none;background:#eef0f3;border-radius:7px;cursor:pointer;color:#6b7280;font-size:16px;line-height:1;' })
+        el('button', { text: '×', 'aria-label':'Close import model', 'data-import-focus':'close-import', onClick: function () { app.setState({ showImport: false }); }, style: 'width:26px;height:26px;border:none;background:#eef0f3;border-radius:7px;cursor:pointer;color:#6b7280;font-size:16px;line-height:1;' })
       ]),
       el('div', { style: 'font-size:12px;color:#7a828f;line-height:1.5;margin-bottom:14px;', text: 'Parsed locally in your browser — nothing is uploaded.' }),
       drop
     ]);
-    if (st.importError) panel.appendChild(el('div', { style: 'margin-top:11px;padding:9px 12px;background:#fdecec;border:1px solid #f6c9c9;border-radius:8px;font-size:12px;color:#b91c1c;line-height:1.45;', text: st.importError }));
+    if (st.importError) panel.appendChild(el('div', { role:'alert', style: 'margin-top:11px;padding:9px 12px;background:#fdecec;border:1px solid #f6c9c9;border-radius:8px;font-size:12px;color:#b91c1c;line-height:1.45;', text: st.importError }));
     if (st.importReady) {
       var nameInput = el('input', {
-        value: st.importName, placeholder: 'Model name', spellcheck: 'false',
+        'aria-label':'Model name', 'data-import-focus':'model-name', value: st.importName, placeholder: 'Model name', spellcheck: 'false',
         style: "flex:1;min-width:0;height:31px;padding:0 10px;border:1px solid #cbd5cd;border-radius:7px;font-size:12.5px;font-family:'IBM Plex Sans',sans-serif;outline:none;background:#fff;color:#1f2430;",
         onInput: function (e) { app.state.importName = e.target.value; }
       });
@@ -382,13 +443,19 @@
         note.style.display = hit ? 'block' : 'none';
       };
       nameInput.addEventListener('input', sync);
-      addBtn = el('button', { text: 'Add model', onClick: function () { app.confirmImport(); }, style: "height:31px;padding:0 15px;border:none;background:#16a34a;color:#fff;border-radius:7px;cursor:pointer;font:600 12px/1 'IBM Plex Sans';flex:none;" });
+      addBtn = el('button', { text: 'Add model', 'data-import-focus':'confirm-import', onClick: function () { app.confirmImport(); }, style: "height:31px;padding:0 15px;border:none;background:#16a34a;color:#fff;border-radius:7px;cursor:pointer;font:600 12px/1 'IBM Plex Sans';flex:none;" });
       panel.appendChild(el('div', { style: 'margin-top:11px;padding:12px;background:#f0f7f1;border:1px solid #cde5d2;border-radius:9px;' }, [
         el('div', { style: 'font-size:12px;color:#166534;font-weight:600;margin-bottom:9px;', text: '✓ ' + st.importSummary }),
         el('div', { style: 'display:flex;gap:8px;' }, [nameInput, addBtn]),
         note
       ]));
       sync();
+      var diagnostics=app._importModel && app._importModel.relationshipDiagnostics;
+      if(diagnostics && diagnostics.rejected){
+        var rejected=el('details',{},[el('summary',{text:diagnostics.rejected+' relationships will be omitted — review reasons'})]);
+        diagnostics.issues.forEach(function(issue){rejected.appendChild(el('p',{text:issue.name+': '+issue.reason}));});
+        panel.appendChild(rejected);
+      }
     }
     panel.appendChild(el('div', {
       style: 'margin-top:13px;font-size:10.5px;color:#9aa1ad;line-height:1.55;',
@@ -407,12 +474,12 @@
   function folderChooser(app, fp) {
     var mono = "font-family:'IBM Plex Mono',monospace;";
     var btn = function (text, onClick, primary) {
-      return el('button', { text: text, onClick: onClick, style: "height:29px;padding:0 13px;border:1px solid " + (primary ? '#2563eb;background:#2563eb;color:#fff' : '#dce0e6;background:#fff;color:#2b3140') + ";border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';flex:none;" });
+      return el('button', { text: text, 'data-import-focus':text, onClick: onClick, style: "height:29px;padding:0 13px;border:1px solid " + (primary ? '#2563eb;background:#2563eb;color:#fff' : '#dce0e6;background:#fff;color:#2b3140') + ";border-radius:7px;cursor:pointer;font:600 11.5px/1 'IBM Plex Sans';flex:none;" });
     };
     var cancel = function () { app.finishFolderPick(null); };
     var row = function (label, meta, onClick, strong) {
       return el('div', {
-        role: 'button', tabindex: '0', onClick: onClick,
+        role: 'button', tabindex: '0', 'data-import-focus':'folder-row:'+label, onClick: onClick,
         onKeyDown: function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } },
         style: 'display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;border-bottom:1px solid #eef0f3;font-size:12.5px;color:#1f2430;' + (strong ? 'font-weight:600;background:#f3f7ff;' : '')
       }, [
@@ -422,33 +489,34 @@
       ]);
     };
     var pathInput = el('input', {
-      value: fp.path || '', spellcheck: 'false', placeholder: 'Folder path',
+      'aria-label':'Folder path', 'data-import-focus':'folder-path', value: fp.path || '', spellcheck: 'false', placeholder: 'Folder path',
       style: "flex:1;min-width:0;height:31px;padding:0 10px;border:1px solid #cbd5cd;border-radius:7px;font-size:12px;" + mono + "outline:none;background:#fff;color:#1f2430;",
       onKeyDown: function (e) { if (e.key === 'Enter') { e.preventDefault(); app.browseTo(e.target.value); } }
     });
     var list = el('div', { style: 'margin-top:10px;max-height:320px;overflow:auto;border:1px solid #e6e9ee;border-radius:9px;background:#fff;' });
-    if (fp.loading) list.appendChild(el('div', { style: 'padding:14px;font-size:12px;color:#9aa1ad;', text: 'Loading…' }));
+    if (fp.loading) list.appendChild(el('div', { style: 'padding:14px;font-size:12px;color:#9aa1ad;', role:'status', text: 'Loading…' }));
     else {
       if (fp.parent) list.appendChild(row('..', '', function () { app.browseTo(fp.parent); }));
       (fp.dirs || []).forEach(function (d) { list.appendChild(row(d.name, d.model ? 'Semantic model' : '', function () { app.browseTo(d.path); }, d.model)); });
       if (!(fp.dirs || []).length) list.appendChild(el('div', { style: 'padding:12px 14px;font-size:12px;color:#9aa1ad;', text: 'No subfolders here.' }));
     }
     var roots = el('div', { style: 'display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;' }, (fp.roots || []).map(function (r) {
-      return el('button', { text: r.name, title: r.path, onClick: function () { app.browseTo(r.path); }, style: "height:24px;padding:0 9px;border:1px solid #dce0e6;background:#fff;border-radius:6px;cursor:pointer;font:500 11px/1 'IBM Plex Sans';color:#4b5563;" });
+      return el('button', { text: r.name, title: r.path, 'data-import-focus':'folder-root:'+r.path, onClick: function () { app.browseTo(r.path); }, style: "height:24px;padding:0 9px;border:1px solid #dce0e6;background:#fff;border-radius:6px;cursor:pointer;font:500 11px/1 'IBM Plex Sans';color:#4b5563;" });
     }));
     var panel = el('div', {
+      role:'dialog', 'aria-modal':'true', 'aria-label':fp.title || 'Choose folder', tabindex:'-1',
       onClick: function (e) { e.stopPropagation(); },
-      style: 'width:560px;max-width:calc(100vw - 40px);background:#fff;border-radius:14px;box-shadow:0 30px 70px rgba(10,16,30,.35);padding:20px 22px;'
+      style: 'box-sizing:border-box;width:560px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow:auto;background:#fff;border-radius:14px;box-shadow:0 30px 70px rgba(10,16,30,.35);padding:20px 22px;'
     }, [
       el('div', { style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;' }, [
         el('div', { style: 'flex:1;min-width:0;font-size:16px;font-weight:600;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', text: fp.title }),
-        el('button', { text: '×', onClick: cancel, style: 'width:26px;height:26px;border:none;background:#eef0f3;border-radius:7px;cursor:pointer;color:#6b7280;font-size:16px;line-height:1;' })
+        el('button', { text: '×', 'aria-label':'Close folder chooser', 'data-import-focus':'close-folder', onClick: cancel, style: 'width:26px;height:26px;border:none;background:#eef0f3;border-radius:7px;cursor:pointer;color:#6b7280;font-size:16px;line-height:1;' })
       ]),
       fp.hint ? el('div', { style: 'font-size:12px;color:#7a828f;line-height:1.5;margin-bottom:12px;', text: fp.hint }) : null,
       el('div', { style: 'display:flex;gap:8px;' }, [pathInput, btn('Go', function () { app.browseTo(pathInput.value); })]),
       roots,
       list,
-      fp.error ? el('div', { style: 'margin-top:9px;padding:8px 11px;background:#fdecec;border:1px solid #f6c9c9;border-radius:8px;font-size:12px;color:#b91c1c;line-height:1.45;', text: fp.error }) : null,
+      fp.error ? el('div', { role:'alert', style: 'margin-top:9px;padding:8px 11px;background:#fdecec;border:1px solid #f6c9c9;border-radius:8px;font-size:12px;color:#b91c1c;line-height:1.45;', text: fp.error }) : null,
       el('div', { style: 'display:flex;justify-content:flex-end;gap:8px;margin-top:13px;' }, [
         btn('Cancel', cancel),
         btn(fp.model ? 'Use this model folder' : 'Use this folder', function () { app.finishFolderPick(fp.path); }, true)

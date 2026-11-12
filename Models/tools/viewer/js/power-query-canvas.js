@@ -11,7 +11,7 @@
     var alive = true, context = null, generation, selected = null, matches = null, visible = null, focusIds = null, flowRoot = null, branchIds = new Set();
     var positions = new Map(), nodes = new Map(), elements = new Map(), groups = [], layoutGenerations = new WeakMap();
     var view = { x: 0, y: 0, k: 1 }, size = { w: 0, h: 0 }, roving = null;
-    var suspended = false, pendingFit = false, frame = 0, drag = null, pinch = null;
+    var suspended = false, pendingFit = false, autoFit = false, frame = 0, drag = null, pinch = null;
     var pointers = new Map(), removers = [], edgeElements = [], miniElements = new Map(), titleSize = 0, detailSize = 0, edgeZoom = null;
     // Tables loads before PQ in the viewer and snapshot. Reuse its drawing
     // methods without constructing a Tables canvas or adopting relationship state.
@@ -294,9 +294,14 @@
         }
         return null;
       }
-      var missing = 0, crowded = 0;
+      var missing = 0, crowded = 0, limited = 0;
       visibleEdges.forEach(function (entry) {
         edgeChecks = edgeWork = 0;
+        // Bound the whole synchronous pass as well as each edge. The complete
+        // graph remains available for focused flows and reference inspection.
+        if (work >= 500000 || checks >= 100000) {
+          entry.routeIssue = 'routing-limit'; entry.group.setAttribute('data-route-status', entry.routeIssue); missing++; limited++; return;
+        }
         var a = entry.a.point, b = entry.b.point, sa = entry.a.stub, sb = entry.b.stub, points = null;
         // When a side is crowded, divide its available gutter deterministically.
         // Keep every possible link; report reduced spacing instead of capping edges.
@@ -362,8 +367,8 @@
         entry.group.setAttribute('data-route-status', entry.routeIssue || 'routed');
       });
       routeStatus.hidden = !missing && !crowded;
-      routeStatus.textContent = (missing ? missing + ' connections could not be separated. Move cards apart or show fewer objects. ' : '') + (crowded ? crowded + ' connections have crowded ports or channels. Zoom in or move cards apart for more space.' : '');
-      routeStatus.dataset.unrouted = String(missing); routeStatus.dataset.crowded = String(crowded); routeStatus.dataset.checks = String(checks); routeStatus.dataset.work = String(work); routeStatus.dataset.maxEdgeWork = String(maxEdgeWork);
+      routeStatus.textContent = (limited ? limited + ' connections deferred by the routing work limit. Analyze a focused flow or show fewer objects. ' : '') + (missing > limited ? (missing - limited) + ' connections could not be separated. Move cards apart or show fewer objects. ' : '') + (crowded ? crowded + ' connections have crowded ports or channels. Zoom in or move cards apart for more space.' : '');
+      routeStatus.dataset.limited = String(limited); routeStatus.dataset.unrouted = String(missing); routeStatus.dataset.crowded = String(crowded); routeStatus.dataset.checks = String(checks); routeStatus.dataset.work = String(work); routeStatus.dataset.maxEdgeWork = String(maxEdgeWork);
     }
     function renderRoutes(obstacles) {
       // Selection/search/focus change ink, not routing inputs. Invalidate on any
@@ -461,7 +466,7 @@
     function getViewport() { return { x: view.x, y: view.y, k: view.k }; }
     function validViewport(v) { return v && Number.isFinite(v.x) && Number.isFinite(v.y) && Number.isFinite(v.k) && v.k > 0; }
     function setViewport(v) {
-      if (!alive || !validViewport(v)) return false; pendingFit = false;
+      if (!alive || !validViewport(v)) return false; pendingFit = false; autoFit = false;
       // Back can change docking/host size before the observer's queued callback.
       // Adopt that measurement now so the callback cannot center an old size over
       // the explicitly restored translation. Zero size also suppresses that delta.
@@ -471,8 +476,18 @@
     function fit() {
       if (!alive || !context) return false; size = measure(); var b = bounds(true);
       if (suspended || !size.w || !size.h || !surface.getClientRects().length) { pendingFit = true; return false; }
-      pendingFit = false; if (!b) return false;
-      var pad = 36, top = pad, bottom = size.h > 320 ? 126 : 32, usableW = Math.max(1, size.w - pad * 2);
+      pendingFit = false; autoFit = true; if (!b) return false;
+      var pad = 36, top = pad, bottom = pad, usableW = Math.max(1, size.w - pad * 2);
+      var surfaceRect = surface.getBoundingClientRect(), mapRect = null;
+      // Chrome belongs to the shell as well as the canvas. Only reserve visible,
+      // intersecting bottom overlays; hidden maps must not consume fit space.
+      [map].concat(typeof options.fitOverlays === 'function' ? options.fitOverlays() : []).forEach(function (node) {
+        if (!node || node.hidden || !node.getClientRects().length) return;
+        var r = node.getBoundingClientRect(), y = r.top - surfaceRect.top;
+        if (r.width > 0 && r.height > 0 && y > 0 && y < size.h && r.right > surfaceRect.left && r.left < surfaceRect.right)
+          if (node === map) mapRect = { top: y, left: r.left - surfaceRect.left };
+          else bottom = Math.max(bottom, size.h - y + 12);
+      });
       function headerBottom() {
         return [legend, routeStatus].reduce(function (edge, node) {
           var end=node.offsetTop+node.offsetHeight;
@@ -483,9 +498,15 @@
       // measured height during this explicit Fit, never during pan or restoration.
       top=headerBottom();
       for(var pass=0;pass<3;pass++) {
-        var usableH = Math.max(1, size.h - top - bottom);
-        var k = Math.min(1.25, usableW / (b.w + 28), usableH / (b.h + 40));
-        view = { x: pad + usableW / 2 - (b.x + b.w / 2) * k, y: top + usableH / 2 - (b.y + b.h / 2) * k, k: Math.max(0.00001, k) }; transform(false);
+        var usableH = Math.max(1, size.h - top - bottom), width = usableW;
+        if (mapRect) {
+          var aboveH = Math.max(1, Math.min(size.h - bottom, mapRect.top - 12) - top);
+          var leftW = Math.max(1, Math.min(size.w - pad, mapRect.left - 12) - pad);
+          if (Math.min(leftW / (b.w + 28), usableH / (b.h + 40)) > Math.min(width / (b.w + 28), aboveH / (b.h + 40))) width = leftW;
+          else usableH = aboveH;
+        }
+        var k = Math.min(1.25, width / (b.w + 28), usableH / (b.h + 40));
+        view = { x: pad + width / 2 - (b.x + b.w / 2) * k, y: top + usableH / 2 - (b.y + b.h / 2) * k, k: Math.max(0.00001, k) }; transform(false);
         var required=headerBottom();if(required<=top)break;top=required;
       }
       transform(true); return true;
@@ -494,14 +515,14 @@
       if (!alive || !context || suspended || !(factor > 0) || !Number.isFinite(factor)) return false;
       size = measure(); anchor = anchor || { x: size.w / 2, y: size.h / 2 }; if (!Number.isFinite(anchor.x) || !Number.isFinite(anchor.y)) return false;
       var k = Math.max(0.00001, Math.min(4, view.k * factor)), ratio = k / view.k;
-      view = { x: anchor.x - (anchor.x - view.x) * ratio, y: anchor.y - (anchor.y - view.y) * ratio, k: k }; pendingFit = false; transform(true); return true;
+      view = { x: anchor.x - (anchor.x - view.x) * ratio, y: anchor.y - (anchor.y - view.y) * ratio, k: k }; pendingFit = false; autoFit = false; transform(true); return true;
     }
     function reveal(id, config) {
       if (!alive || !context || suspended || !shown(id)) return false;
       size = measure(); if (!size.w || !size.h) return false; var p = positions.get(id), k = config && config.readable ? Math.max(0.85, view.k) : view.k;
       var x = p.x * k + view.x, y = p.y * k + view.y;
       if (k === view.k && x >= 24 && y >= 24 && x + W * k <= size.w - 24 && y + H * k <= size.h - 24) return true;
-      view = { x: size.w / 2 - (p.x + W / 2) * k, y: size.h / 2 - (p.y + H / 2) * k, k: k }; pendingFit = false; transform(true); return true;
+      view = { x: size.w / 2 - (p.x + W / 2) * k, y: size.h / 2 - (p.y + H / 2) * k, k: k }; pendingFit = false; autoFit = false; transform(true); return true;
     }
     function center(id, config) {
       if (!alive || !context || suspended || !shown(id)) return false;
@@ -509,7 +530,7 @@
       var p = positions.get(id), k = config && config.readable ? Math.max(0.85, view.k) : view.k, frame = config && config.frame;
       var x = size.w / 2, y = size.h / 2;
       if (frame && [frame.x, frame.y, frame.width, frame.height].every(Number.isFinite) && frame.width > 0 && frame.height > 0) { x = frame.x + frame.width / 2; y = frame.y + frame.height / 2; }
-      view = { x: x - (p.x + W / 2) * k, y: y - (p.y + H / 2) * k, k: k }; pendingFit = false; transform(true); return true;
+      view = { x: x - (p.x + W / 2) * k, y: y - (p.y + H / 2) * k, k: k }; pendingFit = false; autoFit = false; transform(true); return true;
     }
     function placeAdded(id, config) {
       if (!alive || !context || suspended || !nodes.has(id)) return false; config = config || {};
@@ -546,13 +567,15 @@
       if (frame) win.cancelAnimationFrame(frame); frame = 0; drag = null; lastTap = null; doubleTapId = null; pinch = null; pointers.clear();
       routeStatus.hidden = true; routeStatus.textContent = ''; cardIndex = null; routeKey = null;
       context = null; generation = undefined; positions.clear(); nodes.clear(); elements.clear(); miniElements.clear(); groups = []; edgeElements = [];
-      selected = roving = matches = visible = focusIds = flowRoot = null; branchIds = new Set(); pendingFit = false; view = { x: 0, y: 0, k: 1 };
+      selected = roving = matches = visible = focusIds = flowRoot = null; branchIds = new Set(); pendingFit = false; autoFit = false; view = { x: 0, y: 0, k: 1 };
       nodeLayer.replaceChildren(); edgeLayer.replaceChildren(); cycleLayer.replaceChildren(); mapNodes.replaceChildren(); mapEdges.replaceChildren(); root.hidden = true; transform(false);
     }
-    function setContext(next) {
+    function setContext(next, config) {
       if (!alive) return; var fresh = !context || !next || next.generation !== generation;
       if (fresh) clear(); if (!next) return;
       context = next; generation = next.generation; root.hidden = suspended; routeKey = null;
+      // Apply membership before geometry: an empty workspace must never route the whole model.
+      if (config && config.visibleIds !== undefined) visible = config.visibleIds === null ? null : new Set(config.visibleIds);
       nodes = new Map(next.graph.nodes.map(function (n) { return [n.id, n]; }));
       positions.forEach(function (_, id) { if (!nodes.has(id)) positions.delete(id); }); layout();
       if (!nodes.has(selected)) selected = null;
@@ -615,11 +638,11 @@
     });
     on(surface, 'pointermove', function (e) {
       if (!pointers.has(e.pointerId) || !context || suspended) return; var p = local(e); pointers.set(e.pointerId, p);
-      if (pinch && pinch.generation === generation && pointers.size >= 2) { var pair = Array.from(pointers.values()), k = Math.max(0.00001, Math.min(4, pinch.k * Math.hypot(pair[0].x - pair[1].x, pair[0].y - pair[1].y) / Math.max(1, pinch.distance))); view = { x: (pair[0].x + pair[1].x) / 2 - pinch.world.x * k, y: (pair[0].y + pair[1].y) / 2 - pinch.world.y * k, k: k }; pendingFit = false; transform(true); return; }
+      if (pinch && pinch.generation === generation && pointers.size >= 2) { var pair = Array.from(pointers.values()), k = Math.max(0.00001, Math.min(4, pinch.k * Math.hypot(pair[0].x - pair[1].x, pair[0].y - pair[1].y) / Math.max(1, pinch.distance))); view = { x: (pair[0].x + pair[1].x) / 2 - pinch.world.x * k, y: (pair[0].y + pair[1].y) / 2 - pinch.world.y * k, k: k }; pendingFit = false; autoFit = false; transform(true); return; }
       if (!drag || drag.pointerId !== e.pointerId || drag.generation !== generation) return;
       var dx = p.x - drag.x, dy = p.y - drag.y; if (!drag.moved && Math.hypot(dx, dy) > 4) { if(drag.id)emit('onLayoutStart',{generation:generation,nodeId:drag.id});drag.moved = true; } if (!drag.moved) return;
       if (drag.id) { positions.set(drag.id, { x: drag.position.x + dx / view.k, y: drag.position.y + dy / view.k }); scheduleGeometry(); }
-      else { view.x = drag.view.x + dx; view.y = drag.view.y + dy; pendingFit = false; transform(true); }
+      else { view.x = drag.view.x + dx; view.y = drag.view.y + dy; pendingFit = false; autoFit = false; transform(true); }
       surface.classList.add('pqc-dragging');
     });
     on(surface, 'pointerup', function (e) {
@@ -644,16 +667,15 @@
       if (id && ['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(key)) { e.preventDefault(); var at = list.indexOf(id), next = key === 'Home' ? 0 : key === 'End' ? list.length - 1 : (at + (key === 'ArrowRight' ? 1 : list.length - 1)) % list.length; focusNode(list[next]); }
       else if (key === 'Enter' && id) { e.preventDefault(); emit('onAnalyze', {generation:generation,nodeId:id}); }
       else if (key === ' ' && id) { e.preventDefault(); select(id, 'keyboard'); }
-      else if (!id && key.startsWith('Arrow')) { e.preventDefault(); view.x += key === 'ArrowLeft' ? 40 : key === 'ArrowRight' ? -40 : 0; view.y += key === 'ArrowUp' ? 40 : key === 'ArrowDown' ? -40 : 0; pendingFit = false; transform(true); }
+      else if (!id && key.startsWith('Arrow')) { e.preventDefault(); view.x += key === 'ArrowLeft' ? 40 : key === 'ArrowRight' ? -40 : 0; view.y += key === 'ArrowUp' ? 40 : key === 'ArrowDown' ? -40 : 0; pendingFit = false; autoFit = false; transform(true); }
       else if (key === '+' || key === '=' || key === '-') { e.preventDefault(); zoomBy(key === '-' ? 1 / 1.2 : 1.2); }
       else if (key.toLowerCase() === 'f') { e.preventDefault(); fit(); }
     });
     function resize() {
       if (!alive || !context || suspended) return; var next = measure(); if (!next.w || !next.h) return;
-      if (pendingFit) { size = next; fit(); return; }
+      if (pendingFit || autoFit && (next.w !== size.w || next.h !== size.h)) { size = next; fit(); return; }
       if (next.w === size.w && next.h === size.h) return;
-      // Inspector docking/resizing must not pan an inspected diagram.
-      // Framing belongs to explicit Center/Fit/reveal actions only.
+      // Keep deliberate manual framing; only an active Fit follows available space.
       size = next; transform(true);
     }
     var observer = typeof win.ResizeObserver === 'function' ? new win.ResizeObserver(resize) : null; if (observer) observer.observe(surface); else on(win, 'resize', resize);
