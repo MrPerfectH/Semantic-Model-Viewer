@@ -96,7 +96,7 @@
   };
   var inks = {
     '#1f2430':'ink', '#273142':'ink', '#334155':'ink', '#3a414d':'ink', '#3a4d67':'ink',
-    '#5b6472':'muted', '#6b7280':'muted', '#65748a':'muted', '#52647d':'muted',
+    '#5b6472':'muted', '#6b7280':'muted', '#5f6d82':'muted', '#52647d':'muted',
     '#7a828f':'muted', '#8b92a0':'muted', '#9aa1ad':'muted', '#a9afba':'muted'
   };
   var lines = /#(?:e3e6ea|e4e7ec|dfe3e9|dfe6ef|dbe3ee|e6e8ec|eef0f3|dce0e6|e2e7ee)\b/gi;

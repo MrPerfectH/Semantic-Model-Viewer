@@ -53,13 +53,23 @@ function Get-ConnectedModels {
     $models = @()
     # Desktop leaves stale workspace directories behind; never connect to those ports.
     $processIds = @(Get-Process msmdsrv -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id)
-    $livePorts = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.OwningProcess -in $processIds } | Select-Object -ExpandProperty LocalPort -Unique)
+    $listeners = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.OwningProcess -in $processIds })
+    $livePorts = @($listeners | Select-Object -ExpandProperty LocalPort -Unique)
     foreach ($portFile in (Get-PowerBiPortFiles)) {
         $bytes = [IO.File]::ReadAllBytes($portFile.FullName)
         $encoding = if ($bytes.Length -ge 2 -and (($bytes[0] -eq 0xFF -and $bytes[1] -eq 0xFE) -or $bytes[1] -eq 0)) { [Text.Encoding]::Unicode } else { [Text.Encoding]::UTF8 }
         $port = $encoding.GetString($bytes).Trim([char]0xFEFF, [char]0, [char]13, [char]10, [char]32)
         if ($port -notmatch '^\d{1,5}$' -or [int]$port -notin $livePorts) { continue }
         $serverName = 'localhost:' + $port
+        # Desktop names every model "Model" and its database with a GUID. The report's
+        # file name is in the title of the Desktop window that owns this engine.
+        $reportName = $null
+        try {
+            $enginePid = ($listeners | Where-Object { $_.LocalPort -eq [int]$port } | Select-Object -First 1).OwningProcess
+            $desktopPid = (Get-CimInstance Win32_Process -Filter "ProcessId=$enginePid" -ErrorAction Stop).ParentProcessId
+            $title = (Get-Process -Id $desktopPid -ErrorAction Stop).MainWindowTitle
+            if ($title) { $reportName = ($title -replace '\s+-\s+Power BI Desktop$', '') }
+        } catch { }
         $serverObject = $null
         try {
             $serverObject = Connect-TabularServer $serverName
@@ -67,7 +77,7 @@ function Get-ConnectedModels {
                 $models += [ordered]@{
                     server = $serverName
                     database = [string]$databaseObject.Name
-                    name = $(if ($databaseObject.Model.Name) { [string]$databaseObject.Model.Name } else { [string]$databaseObject.Name })
+                    name = $(if ($reportName) { $reportName } elseif ($databaseObject.Model.Name -and $databaseObject.Model.Name -ne 'Model') { [string]$databaseObject.Model.Name } else { [string]$databaseObject.Name })
                 }
             }
         } catch { }
@@ -84,6 +94,8 @@ function Convert-DatabaseToBim($databaseObject) {
         $columns = @()
         foreach ($column in $table.Columns) {
             $columnType = [string]$column.Type
+            # Every table has an internal row-number column; it is not part of the model the author sees.
+            if ($columnType -eq 'RowNumber') { continue }
             $columns += [ordered]@{
                 name = $column.Name
                 dataType = ([string]$column.DataType).ToLowerInvariant()
@@ -114,7 +126,14 @@ function Convert-DatabaseToBim($databaseObject) {
                 }
             }
         }
+        $hierarchies = @()
+        foreach ($hierarchy in $table.Hierarchies) {
+            $levels = @()
+            foreach ($level in $hierarchy.Levels) { $levels += [ordered]@{ name = $level.Name; ordinal = [int]$level.Ordinal; column = [string]$level.Column.Name } }
+            $hierarchies += [ordered]@{ name = $hierarchy.Name; isHidden = [bool]$hierarchy.IsHidden; levels = $levels }
+        }
         $outTable = [ordered]@{ name = $table.Name; isHidden = [bool]$table.IsHidden; description = [string]$table.Description; columns = $columns; measures = $measures; partitions = $partitions }
+        if ($hierarchies.Count) { $outTable.hierarchies = $hierarchies }
         if ($table.CalculationGroup) {
             $items = @()
             foreach ($item in $table.CalculationGroup.CalculationItems) {

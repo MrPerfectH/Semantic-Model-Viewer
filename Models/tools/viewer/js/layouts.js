@@ -1066,7 +1066,7 @@
           '<div style="font:700 21px/1 \'IBM Plex Mono\',monospace;color:' + col + ';">' + tables.length + '</div>' +
           '</div>' +
           '<div style="margin-top:7px;font:500 12px/1.6 \'IBM Plex Mono\',monospace;color:var(--smv-ink,#526070);">' + facts + ' fact · ' + dims + ' dim' + (other ? (' · ' + other + ' other') : '') + '<br>' + (internal[k] || 0) + ' internal · ' + (external[k] || 0) + ' external rels</div>' +
-          '<div style="margin-top:8px;font:600 10px/1 \'IBM Plex Sans\',sans-serif;color:' + col + ';">Click to expand ▾</div>' +
+          '<div style="margin-top:8px;font:600 10px/1 \'IBM Plex Sans\',sans-serif;color:var(--smv-muted,#5f6d82);">Click to expand ▾</div>' +
           '</div>'
       });
       elx.addEventListener('mouseenter', function () { elx.style.boxShadow = '0 2px 6px rgba(20,30,50,.1),0 14px 30px rgba(20,30,50,.14)'; });
