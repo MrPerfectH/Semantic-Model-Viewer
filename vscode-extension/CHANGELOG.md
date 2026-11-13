@@ -1,5 +1,21 @@
 # Changelog
 
+## Next pre-release
+
+Fixes from testing 0.8.0 on Windows, macOS and at high browser zoom.
+
+- The Claude Code and Codex plugin, and the bundled `smv` command, now carry the extension's version. They still said 0.7.0 in 0.6.0 and 0.8.0, so Claude Code kept the installed copy and plugin users did not receive those releases.
+- Power BI Desktop connection (pre-release only), checked against Power BI Desktop 2.159 from the Microsoft Store:
+  - Each open model is listed under its report's name. Every model was listed as "Model".
+  - The internal row-number column no longer appears in every table.
+  - Hierarchies are included.
+- Accessibility:
+  - Secondary grey text in Tables, Measures, Power Query, Table groups and Matrix meets the 4.5:1 contrast ratio in the Classic theme.
+  - The Measures library resize handle reports its value to screen readers.
+  - At 400% zoom the Matrix headers scroll with the table instead of covering every cell.
+  - **Fit overview** and **Arrange compact** in Power Query have accessible names that contain their visible labels, and the wrapped navigation bar stays above the status line on narrow panes.
+- A command or artifact folder that is a link to a missing target is refused with a clear message. The checks let such a link through, and the CLI launcher could be written through it.
+
 ## 0.8.0 (13 November 2026)
 
 Stable release. It includes everything since 0.6.0. Release notes: `docs/releases/0.8.0.md` in the repository.
