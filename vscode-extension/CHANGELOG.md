@@ -1,8 +1,8 @@
 # Changelog
 
-## Next pre-release
+## 0.8.1 (13 November 2026)
 
-Fixes from testing 0.8.0 on Windows, macOS and at high browser zoom.
+Stable patch release. Fixes from testing 0.8.0 on Windows, macOS and at high browser zoom. Release notes: `docs/releases/0.8.1.md` in the repository.
 
 - The Claude Code and Codex plugin, and the bundled `smv` command, now carry the extension's version. They still said 0.7.0 in 0.6.0 and 0.8.0, so Claude Code kept the installed copy and plugin users did not receive those releases.
 - Power BI Desktop connection (pre-release only), checked against Power BI Desktop 2.159 from the Microsoft Store:
