@@ -51,13 +51,13 @@
     var inner = el('div', { style: 'padding:24px 24px 32px;box-sizing:border-box;width:100%;' });
     wrap.appendChild(inner); this.host.appendChild(wrap); this.el = wrap;
 
-    inner.appendChild(el('div', { text: 'MODEL STRUCTURE', style: 'font-size:10px;font-weight:700;letter-spacing:1.3px;color:var(--smv-muted,#687991);' }));
+    inner.appendChild(el('div', { text: 'MODEL STRUCTURE', style: 'font-size:10px;font-weight:700;letter-spacing:1.3px;color:var(--smv-muted,#5e6d83);' }));
     inner.appendChild(el('h1', { text: 'Fact relationship matrix', style: 'margin:7px 0 8px;font-size:25px;font-weight:600;letter-spacing:-.7px;color:#182943;' }));
-    inner.appendChild(el('p', { text: 'Fact tables × related tables across the full model. This view is independent of your diagram layout.', style: 'margin:0 0 20px;font-size:13px;line-height:1.6;color:#65748a;max-width:720px;' }));
+    inner.appendChild(el('p', { text: 'Fact tables × related tables across the full model. This view is independent of your diagram layout.', style: 'margin:0 0 20px;font-size:13px;line-height:1.6;color:#5f6d82;max-width:720px;' }));
     if (!mx) {
       inner.appendChild(el('div', { style: 'max-width:620px;padding:26px;border:1px solid var(--smv-line,#dfe6f0);border-radius:14px;background:#fff;' }, [
         el('h2', { text: 'No connected fact tables', style: 'margin:0 0 10px;font-size:17px;color:var(--smv-ink,#263951);' }),
-        el('p', { text: 'This matrix uses tables classified as Fact that have at least one relationship. Explore every table in the table workspace, or review the rules used to classify your model.', style: 'margin:0 0 18px;font-size:13px;line-height:1.7;color:#65748a;' }),
+        el('p', { text: 'This matrix uses tables classified as Fact that have at least one relationship. Explore every table in the table workspace, or review the rules used to classify your model.', style: 'margin:0 0 18px;font-size:13px;line-height:1.7;color:#5f6d82;' }),
         el('div', { style: 'display:flex;flex-wrap:wrap;gap:8px;' }, [
           el('button', { cls: 'ex-button ex-primary', text: 'Explore tables', onClick: function () { app.setViewMode('graph'); } }),
           el('button', { cls: 'ex-button', text: 'Review table roles', onClick: function () { app.setState({ showRules: true }); } })
@@ -74,11 +74,11 @@
       ? mx.hidden + ' relationship' + (mx.hidden === 1 ? '' : 's') + ' between non-fact tables omitted. Explore the Tables view for those connections. '
       : '';
     note += 'Filled = an active relationship · ring = a bidirectional relationship · dashed = all inactive · number = multiple. Select a table or cell to open its table in the diagram.';
-    inner.appendChild(el('p', { style: "margin:7px 0 20px;font:400 11.5px/1.7 'IBM Plex Sans',sans-serif;color:#65748a;max-width:760px;", text: note }));
+    inner.appendChild(el('p', { style: "margin:7px 0 20px;font:400 11.5px/1.7 'IBM Plex Sans',sans-serif;color:#5f6d82;max-width:760px;", text: note }));
 
     var table = el('table', { 'aria-label': 'Fact tables and their related tables', style: 'border-collapse:separate;border-spacing:0;table-layout:fixed;background:#fff;border:1px solid #dfe6ef;border-radius:10px;min-width:' + (240 + mx.facts.length * 60) + 'px;width:100%;' });
     var thead = el('thead', {}), head = el('tr', {});
-    head.appendChild(el('th', { scope: 'col', text: 'Related table', style: 'position:sticky;top:0;left:0;z-index:6;background:#eef2f8;height:158px;width:240px;padding:0 12px 12px;text-align:left;vertical-align:bottom;border-bottom:1px solid #dbe3ee;font-size:13px;font-weight:600;color:#65748a;' }));
+    head.appendChild(el('th', { scope: 'col', text: 'Related table', style: 'position:sticky;top:0;left:0;z-index:6;background:#eef2f8;height:158px;width:240px;padding:0 12px 12px;text-align:left;vertical-align:bottom;border-bottom:1px solid #dbe3ee;font-size:13px;font-weight:600;color:#5f6d82;' }));
     mx.facts.forEach(function (f) {
       head.appendChild(el('th', { scope: 'col', style: 'position:sticky;top:0;z-index:5;background:#eef2f8;border-bottom:1px solid #dbe3ee;padding:0;min-width:60px;' }, el('button', {
         data: {smvKind:'table',smvName:f.name}, title: 'Open ' + f.name + ' in the table diagram', 'aria-label': 'Open fact table ' + f.name + ' in the diagram', onClick: openT(f.name),
@@ -100,7 +100,7 @@
       }, [
         el('span', { style: 'width:9px;height:9px;border-radius:50%;background:' + app.tableColor(t) + ';flex:none;' }),
         el('span', { text: t.name, style: "flex:1;min-width:0;font:500 13px/1 'IBM Plex Sans',sans-serif;color:var(--smv-ink,#2b3140);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" }),
-        el('span', { text: String(Object.keys(rc).length), title: 'Connected fact tables', style: "font:500 10px/1 'IBM Plex Mono',monospace;color:var(--smv-muted,#72829a);flex:none;" })
+        el('span', { text: String(Object.keys(rc).length), title: 'Connected fact tables', style: "font:500 10px/1 'IBM Plex Mono',monospace;color:var(--smv-muted,#606d81);flex:none;" })
       ])));
       mx.facts.forEach(function (f, i) {
         var rels = rc[i];
