@@ -28,8 +28,8 @@ function receipt(source,prepared,output,scope){
   if(prepared.sourceContentHash&&result.source.contentHash!==prepared.sourceContentHash)throw Object.assign(new Error('Model files changed while generating the artifact; retry with stable files'),{code:'SOURCE_CHANGED'});
   return result;
 }
-function saveReceipt(receipt,output,force=false){const file=path.resolve(output)+'.receipt.json';if(fs.existsSync(file)&&(!force||fs.lstatSync(file).isSymbolicLink()))throw new Error('Receipt already exists; use --force for a regular file: '+file);fs.writeFileSync(file,JSON.stringify(receipt,null,2)+'\n',{flag:force?'w':'wx',mode:0o600});return file;}
-function reserveOutput(output,force=false){for(const file of [path.resolve(output),path.resolve(output)+'.receipt.json'])if(fs.existsSync(file)&&(!force||!fs.lstatSync(file).isFile()||fs.lstatSync(file).isSymbolicLink()))throw new Error('Output or receipt exists; use --force for regular files: '+file);}
+function saveReceipt(receipt,output,force=false){const file=path.resolve(output)+'.receipt.json';if(fs.lstatSync(file,{throwIfNoEntry:false})&&(!force||fs.lstatSync(file).isSymbolicLink()))throw new Error('Receipt already exists; use --force for a regular file: '+file);fs.writeFileSync(file,JSON.stringify(receipt,null,2)+'\n',{flag:force?'w':'wx',mode:0o600});return file;}
+function reserveOutput(output,force=false){for(const file of [path.resolve(output),path.resolve(output)+'.receipt.json'])if(fs.lstatSync(file,{throwIfNoEntry:false})&&(!force||!fs.lstatSync(file).isFile()||fs.lstatSync(file).isSymbolicLink()))throw new Error('Output or receipt exists; use --force for regular files: '+file);}
 module.exports={MARKER,sha256,files,contentHash,describe,receipt,saveReceipt,reserveOutput};
 
 // Stage first: a changed source never replaces the previous successful artifact.

@@ -41,6 +41,8 @@
   .hv-f5f7f9:hover{background:#f5f7f9;}
   .hv-eef4ff:hover{background:#eef4ff;}
   .hv-eef2f7:hover{background:#eef2f7;}
+  /* At 400% zoom the sticky matrix headers would cover every cell; let them scroll away. */
+  @media (max-width:520px),(max-height:320px){#matrix th{position:static!important;}}
   .hv-f0f2f5:hover{background:#f0f2f5;}
   .hv-del:hover{background:#fdecec;color:#dc2626;}
   .hv-trace:hover{background:#f1eafc;}
@@ -56,12 +58,12 @@
   .hv-warn:hover{background:#faf1da;}
 </style>
 <link rel="stylesheet" href="./power-query.css?v=21a1ea5d57">
-<link rel="stylesheet" href="./power-query-canvas.css?v=a83ba7554b">
-<link rel="stylesheet" href="./power-query-inspector.css?v=1a2c8fab11">
-<link rel="stylesheet" href="./power-query-workspace.css?v=8daa7ed95d">
+<link rel="stylesheet" href="./power-query-canvas.css?v=6559ae3343">
+<link rel="stylesheet" href="./power-query-inspector.css?v=e28adaa14f">
+<link rel="stylesheet" href="./power-query-workspace.css?v=0f209bf3ea">
 <link rel="stylesheet" href="./power-query-lineage.css?v=830863a623">
-<link rel="stylesheet" href="./explorer.css?v=50e16820a1">
-<link rel="stylesheet" href="./measures.css?v=4f04d93d77">
+<link rel="stylesheet" href="./explorer.css?v=23c66c80df">
+<link rel="stylesheet" href="./measures.css?v=a2ad0ebd73">
 <link rel="stylesheet" href="./spellbook.css?v=5b78be0f2a">
 <link rel="stylesheet" href="./table-dax.css?v=c78c11b803">
 <link rel="stylesheet" href="./reference.css?v=448cf9e00a">
@@ -91,16 +93,16 @@
 </div>
 <script src="./js/util.js?v=2819f96dc3"></script>
 <script src="./js/snapshot.js?v=0bdbb3445b"></script>
-<script src="./js/theme.js?v=a56d309657"></script>
+<script src="./js/theme.js?v=c21cac3f7e"></script>
 <script src="./js/roles.js?v=b16af3c0cb"></script>
 <script src="./js/tmdl-parser.js?v=a4da379114"></script>
 <script src="./js/workspace-ui.js?v=0fc993f209"></script>
 <script src="./js/canvas.js?v=43d8da8173"></script>
-<script src="./js/layouts.js?v=9b0cf2f7fe"></script>
-<script src="./js/matrix.js?v=11def5bdaf"></script>
+<script src="./js/layouts.js?v=bbdfd78345"></script>
+<script src="./js/matrix.js?v=6335559a85"></script>
 <script src="./js/dax-format.js?v=4c9dafb96e"></script>
 <script src="./js/measure-comparison.js?v=975319bdda"></script>
-<script src="./js/measures.js?v=0532bf3a08"></script>
+<script src="./js/measures.js?v=3a2bf51134"></script>
 <script src="./js/measure-comparison-view.js?v=88063d625b"></script>
 <script src="./js/table-dax.js?v=c2b55d2585"></script>
 <script src="./js/reference.js?v=575055a39f"></script>
@@ -110,8 +112,8 @@
 <script src="./js/power-query.js?v=89f493d091"></script>
 <script src="./js/power-query-canvas.js?v=c5d83ae443"></script>
 <script src="./js/power-query-inspector.js?v=19931f0c80"></script>
-<script src="./js/power-query-workspace.js?v=abd0351ee5"></script>
-<script src="./js/sidebar.js?v=7b1b5b3fc7"></script>
+<script src="./js/power-query-workspace.js?v=3499fcd805"></script>
+<script src="./js/sidebar.js?v=2673f7fe13"></script>
 <script src="./js/topbar.js?v=e5d582e4cf"></script>
 <script src="./js/rules.js?v=dc35541371"></script>
 <script src="./js/relationships.js?v=9210e17ec5"></script>

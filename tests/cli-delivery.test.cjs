@@ -39,6 +39,22 @@ test('external installation preserves unrelated commands and rejects a corrupt p
   assert.throws(() => installExternal(root, storage, { binDir }), /checksum mismatch/);
   assert.ok(!fs.existsSync(command));
 });
+test('external installation refuses a command link whose target is missing', { skip: process.platform === 'win32' }, t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'smv cli dangling '));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const root = path.join(dir, 'extension'), storage = path.join(dir, 'storage'), binDir = path.join(dir, 'bin'), outside = path.join(dir, 'outside');
+  fixture(root, 'test'); fs.mkdirSync(binDir);
+  // existsSync reports a dangling link as absent; writing the launcher would then follow it.
+  fs.symlinkSync(outside, path.join(binDir, 'smv'));
+  assert.throws(() => installExternal(root, storage, { binDir }), /unrelated/);
+  assert.ok(!fs.existsSync(outside), 'Nothing may be written through the link');
+});
+test('the plugin and its CLI carry the extension release version', () => {
+  // Claude Code keeps the installed copy while the manifest version is unchanged,
+  // so a release that forgets this bump never reaches plugin users.
+  const read = file => JSON.parse(fs.readFileSync(path.join(__dirname, '..', file), 'utf8')).version;
+  assert.equal(read('.claude-plugin/plugin.json'), read('vscode-extension/package.json'));
+});
 test('Codex marketplace package uses the complete bundled payload and rejects source-only packages', t => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'smv release catalog '));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
