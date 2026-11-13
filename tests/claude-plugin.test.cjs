@@ -148,3 +148,13 @@ test('CLI workspace helper ignores artifacts and refuses symlink destinations', 
   assert.throws(() => prepare(project), /symlink/);
   assert.deepEqual(fs.readdirSync(outside), []);
 });
+test('CLI workspace helper refuses an artifact link whose target is missing', { skip: process.platform === 'win32' }, t => {
+  const { prepare } = require(path.join(root, 'scripts/claude-workspace.cjs'));
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'smv cli dangling '));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  const project = path.join(directory, 'project'), missing = path.join(directory, 'missing');
+  fs.mkdirSync(project);
+  fs.symlinkSync(missing, path.join(project, '.smv-artifacts'));
+  assert.throws(() => prepare(project), /symlink/);
+  assert.ok(!fs.existsSync(missing), 'Nothing may be created through the link');
+});

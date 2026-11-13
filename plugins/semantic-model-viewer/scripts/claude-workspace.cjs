@@ -8,7 +8,9 @@ const crypto = require('node:crypto');
 function prepare(project = process.cwd()) {
   const projectRoot = fs.realpathSync(project);
   const artifactsDir = path.join(projectRoot, '.smv-artifacts');
-  if (fs.existsSync(artifactsDir) && fs.lstatSync(artifactsDir).isSymbolicLink()) {
+  // lstat, not existsSync: a link whose target is missing must be refused as well.
+  const artifactsStat = fs.lstatSync(artifactsDir, { throwIfNoEntry: false });
+  if (artifactsStat && artifactsStat.isSymbolicLink()) {
     throw new Error('The plugin artifact directory must not be a symlink');
   }
   fs.mkdirSync(artifactsDir, { recursive: true, mode: 0o700 });

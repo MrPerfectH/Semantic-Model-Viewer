@@ -13,7 +13,7 @@ function install(options={}){
   fs.mkdirSync(dir,{recursive:true});
   const content=`#!/usr/bin/env node\n// ${MARK}\n'use strict';\n(${runLauncher.toString()})(${JSON.stringify(config)}, ${resolveRuntime.toString()});\n`;
   const files=process.platform==='win32'?[[path.join(dir,'smv.cjs'),content],[path.join(dir,'smv.cmd'),'@rem '+MARK+'\r\n@node "%~dp0smv.cjs" %*\r\n']]:[[path.join(dir,'smv'),content]];
-  for(const [file] of files)if(fs.existsSync(file)&&(fs.lstatSync(file).isSymbolicLink()||!fs.readFileSync(file,'utf8').includes(MARK)))throw new Error('Refusing to overwrite an unrelated command: '+file);
+  for(const [file] of files)if(fs.lstatSync(file,{throwIfNoEntry:false})&&(fs.lstatSync(file).isSymbolicLink()||!fs.readFileSync(file,'utf8').includes(MARK)))throw new Error('Refusing to overwrite an unrelated command: '+file);
   for(const [file,text] of files){fs.writeFileSync(file,text,{mode:0o755});if(process.platform!=='win32')fs.chmodSync(file,0o755);}
   const onPath=(process.env.PATH||'').split(path.delimiter).some(p=>process.platform==='win32'?path.resolve(p).toLowerCase()===dir.toLowerCase():path.resolve(p)===dir);
   return {command:'smv',path:files[0][0],binDir:dir,onPath,registry,fallback,source:config.source,runtime,
