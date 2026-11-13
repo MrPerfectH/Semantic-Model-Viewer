@@ -1070,7 +1070,7 @@
     gBadge: function (lbl, minus) {
       return 'border:1px solid ' + (minus ? 'var(--smv-line,#c9cfd9)' : 'var(--smv-line,#d8dce3)') + ';background:' + (minus ? 'var(--smv-soft,#eef1f5)' : '#fff') +
         ';border-radius:9px;height:18px;padding:0 6px;cursor:pointer;font:600 9px/16px "IBM Plex Mono",monospace;color:' +
-        (minus ? 'var(--smv-ink,#3a414d)' : 'var(--smv-muted,#7a8290)') + ';' + (lbl ? '' : 'visibility:hidden;');
+        (minus ? 'var(--smv-ink,#3a414d)' : 'var(--smv-muted,#666d78)') + ';' + (lbl ? '' : 'visibility:hidden;');
     },
     gShow: function (name) {
       var self = this, app = this.app;
@@ -1492,9 +1492,12 @@
       var resizer = el('div', {
         cls: 'mv-resize', title: 'Resize measure library', role: 'separator', tabindex: '0',
         'aria-label': 'Resize measure library', 'aria-orientation': 'vertical',
+        // A focusable separator is a slider to assistive technology and must report its value.
+        'aria-valuemin': '240', 'aria-valuemax': '480', 'aria-valuenow': String(Math.max(240, Math.min(480, app.state.mvW || 296))),
         onKeyDown: function (e) {
           if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
           e.preventDefault(); var w = Math.max(240, Math.min(480, (app.state.mvW || 296) + (e.key === 'ArrowRight' ? 20 : -20)));
+          resizer.setAttribute('aria-valuenow', String(w));
           app.setState({ mvW: w }); store.set('smv-mvw', String(w));
         },
         onMouseDown: function (e) {
@@ -1503,6 +1506,7 @@
           var mv = function (ev) { w = Math.max(240, Math.min(480, w0 + ev.clientX - sx)); pane.style.width = w + 'px'; };
           var up = function () {
             window.removeEventListener('mousemove', mv); window.removeEventListener('mouseup', up);
+            resizer.setAttribute('aria-valuenow', String(w));
             app.setState({ mvW: w }); store.set('smv-mvw', String(w));
           };
           window.addEventListener('mousemove', mv); window.addEventListener('mouseup', up);

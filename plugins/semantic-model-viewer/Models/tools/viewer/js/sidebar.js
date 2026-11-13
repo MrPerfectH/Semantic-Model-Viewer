@@ -216,7 +216,7 @@
 
     if (app.explorer && app.state.viewMode === 'graph') body.appendChild(app.explorer.relationControls());
 
-    if (roleSettings) body.appendChild(el('details', {open:true,style:'padding:12px 16px;border-bottom:1px solid #e6ebf2;font-size:11px;color:#66758a;'}, [el('summary',{text:'Table role settings',style:'cursor:pointer;'}),roleSettings]));
+    if (roleSettings) body.appendChild(el('details', {open:true,style:'padding:12px 16px;border-bottom:1px solid #e6ebf2;font-size:11px;color:#5f6d81;'}, [el('summary',{text:'Table role settings',style:'cursor:pointer;'}),roleSettings]));
     if (app.tableDax && app.tableDax.supports(app.model.byName[sel.name])) body.appendChild(el('button',{text:'Show DAX calculation',cls:'ex-button',style:'margin:12px 16px;',onClick:function(){app.tableDax.open(sel.name);}}));
     else if (g.PowerQuery) body.appendChild(el('button',{text:'Open Power Query',cls:'ex-button',style:'margin:12px 16px;',onClick:function(){if(app.powerQueryWorkspace)app.powerQueryWorkspace.openTable(sel.name);else app.setViewMode('power-query');}}));
     if (sel.hasRels) {

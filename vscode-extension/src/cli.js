@@ -11,10 +11,14 @@ function installExternal(root, storage, options = {}) {
     ? path.join(process.env.LOCALAPPDATA || os.homedir(), 'SemanticModelViewer', 'bin')
     : path.join(os.homedir(), '.local', 'bin'));
   const command = path.join(bin, platform === 'win32' ? 'smv.cmd' : 'smv');
-  if (fs.existsSync(command) && (fs.lstatSync(command).isSymbolicLink() || !fs.readFileSync(command, 'utf8').includes(MARK))) {
+  // lstat, not existsSync: a link whose target is missing must be refused as well,
+  // or the launcher would be written through it.
+  const commandStat = fs.lstatSync(command, { throwIfNoEntry: false });
+  if (commandStat && (commandStat.isSymbolicLink() || !fs.readFileSync(command, 'utf8').includes(MARK))) {
     throw new Error('An unrelated smv command already exists at ' + command + '. It was left unchanged.');
   }
-  if (fs.existsSync(target) && fs.lstatSync(target).isSymbolicLink()) throw new Error('CLI cache must not be a symbolic link');
+  const targetStat = fs.lstatSync(target, { throwIfNoEntry: false });
+  if (targetStat && targetStat.isSymbolicLink()) throw new Error('CLI cache must not be a symbolic link');
   if (!fs.existsSync(target)) {
     fs.mkdirSync(path.dirname(target), { recursive: true });
     const temporary = fs.mkdtempSync(path.join(path.dirname(target), '.cli-'));
