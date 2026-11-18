@@ -1226,13 +1226,32 @@
       self.svg.appendChild(sv('circle', { cx: x, cy: y, r: 10, fill: '#fff', stroke: 'var(--smv-line,#c3cbd8)', 'stroke-width': '1.2' }));
       self.svg.appendChild(sv('text', { x: x, y: y + 3.5, 'text-anchor': 'middle', style: "font:600 10px 'IBM Plex Mono',monospace;fill:var(--smv-muted,#4b5563);", text: String(n) }));
     };
+    // Group endpoints sit inside their own cards. Route around the other groups.
+    var groupBoxes = Object.keys(this.groups).map(function (key) {
+      var group = self.groups[key];
+      return { key: key, x0: group.x - 6, x1: group.x + group.w + 6,
+        y0: group.y - 6, y1: group.y + group.h + 6 };
+    });
+    this._routeSearchRemaining = 24000;
+    function groupLink(start, end, from, to, width, relationships) {
+      var obstacles = groupBoxes.filter(function (box) { return box.key !== from && box.key !== to; });
+      var points = self.obstacleRoute(start, end, obstacles);
+      var d = points ? points.map(function (point, i) {
+        return (i ? 'L' : 'M') + point.x + ',' + point.y;
+      }).join(' ') : self._edgePath(start.x, start.y, end.x, end.y);
+      var path = mk(d, width, 'var(--smv-gold,#8f9bb3)', 0.55);
+      hover(path, relationships);
+      if (relationships.length > 1) {
+        var mid = path.getPointAtLength ? path.getPointAtLength(path.getTotalLength() / 2)
+          : {x:(start.x + end.x) / 2, y:(start.y + end.y) / 2};
+        badge(mid.x, mid.y, relationships.length);
+      }
+    }
     Object.keys(agg).forEach(function (k) {
       var a = agg[k];
       var A = center(a.a), B = center(a.b);
       var w = 1.6 + Math.min(5, a.rels.length * 0.55);
-      var p = mk(self._edgePath(A.x, A.y, B.x, B.y), w, 'var(--smv-gold,#8f9bb3)', 0.55);
-      hover(p, a.rels);
-      badge((A.x + B.x) / 2, (A.y + B.y) / 2, a.rels.length);
+      groupLink(A, B, a.a, a.b, w, a.rels);
     });
     Object.keys(t2g).forEach(function (k) {
       var m = t2g[k];
@@ -1241,9 +1260,7 @@
       var ax = B.x > p0.x + c.w / 2 ? p0.x + c.w : p0.x;
       var ay = p0.y + (c.headH ? c.headH / 2 : 24);
       var w = 1.5 + Math.min(4, m.rels.length * 0.5);
-      var p = mk(self._edgePath(ax, ay, B.x, B.y), w, 'var(--smv-gold,#8f9bb3)', 0.55);
-      hover(p, m.rels);
-      badge((ax + B.x) / 2, (ay + B.y) / 2, m.rels.length);
+      groupLink({x:ax, y:ay}, B, gOf(m.tbl), m.grp, w, m.rels);
     });
     direct.forEach(function (r) {
       var g0 = self.routeOf(r);
