@@ -609,6 +609,10 @@
     // Below the zoom used to arrange the cards, preserve their reserved lane sizes.
     // This also works for saved positions when Fit runs in a smaller window.
     chipDisplayZoom: function (zoom) {
+      var explorer = this.app && this.app.explorer;
+      // Focused answer views size their labels for reading at the current zoom.
+      if (!explorer || explorer.compact || !this.workspaceNames ||
+          this.workspaceNames.size !== this.app.model.tables.length) return zoom;
       return Math.max(zoom, Math.min(this.layoutK || ZOOM_FLOOR, this.CHIP_BELOW));
     },
     cardWidthAt: function (c, k) {
