@@ -20,6 +20,7 @@ class ModelsTree {
 
   async getChildren(element) {
     if (element && element.kind === 'localRoot') return this.localChildren();
+    if (element && element.kind === 'repo') return element.models;
     if (element && element.kind === 'cachedRoot') return this.fabric ? this.fabric.entries() : [];
     if (element && this.fabricTree) return this.fabricTree.getChildren(element.kind === 'fabricRoot' ? undefined : element);
     if (element) return [];
@@ -32,7 +33,12 @@ class ModelsTree {
     this.models = (await findModels()).concat(this.fabric ? this.fabric.entries() : []);
     vscode.commands.executeCommand('setContext', 'semanticModelViewer.hasModels', this.models.length > 0);
     if (!this.fabricTree) return this.models;
-    const rows = this.models.filter(m => m.kind !== 'fabric');
+    const local = this.models.filter(m => m.kind !== 'fabric');
+    /* With several workspace folders (repos), one sub-folder per repo; a single folder stays flat. */
+    const repos = new Map();
+    for (const m of local) if (m.repoId) { if (!repos.has(m.repoId)) repos.set(m.repoId, { kind: 'repo', id: 'repo:' + m.repoId, name: m.repo, models: [] }); repos.get(m.repoId).models.push(m); }
+    this.grouped = (vscode.workspace.workspaceFolders || []).length > 1 && repos.size > 0;
+    const rows = this.grouped ? Array.from(repos.values()).sort((a, b) => a.name.localeCompare(b.name)) : local;
     if (this.fabric && this.fabric.entries().length) rows.push({ kind: 'cachedRoot', id: 'cachedFabric', name: 'Cached Fabric models' });
     if (!rows.length) rows.push({ kind: 'action', name: 'Open workspace folder…', command: 'vscode.openFolder', icon: 'folder-opened' });
     rows.push({ kind: 'action', name: 'Exclude workspace folders…', command: 'semanticModelViewer.configureExclusions', icon: 'filter' });
@@ -40,10 +46,19 @@ class ModelsTree {
   }
 
   getTreeItem(m) {
+    if (m.kind === 'repo') {
+      const item = new vscode.TreeItem(m.name, vscode.TreeItemCollapsibleState.Expanded);
+      item.id = m.id; item.iconPath = new vscode.ThemeIcon('repo');
+      item.description = m.models.length + (m.models.length === 1 ? ' model' : ' models');
+      item.tooltip = 'Workspace folder: ' + m.name;
+      item.contextValue = 'repoFolder';
+      return item;
+    }
     if (m.kind === 'cachedRoot') {
       const item = new vscode.TreeItem(m.name, vscode.TreeItemCollapsibleState.Collapsed);
       item.id = m.id; item.iconPath = new vscode.ThemeIcon('cloud-download');
-      item.tooltip = 'Previously fetched Fabric metadata, available offline. These are not workspace files.';
+      item.description = 'saved copies';
+      item.tooltip = 'Fabric models you opened before. The extension saved their metadata (tables, columns, measures, relationships, no data) in VS Code storage on this computer, so they open offline. These are not workspace files. Remove one with "Remove Saved Fabric Model…".';
       return item;
     }
     if (m.kind === 'fabricRoot') {
@@ -64,7 +79,7 @@ class ModelsTree {
     if (this.fabricTree && ['workspace', 'workspaces', 'model', 'action', 'message'].includes(m.kind)) return this.fabricTree.getTreeItem(m);
     const item = new vscode.TreeItem(m.name, vscode.TreeItemCollapsibleState.None);
     item.id = m.id;
-    item.description = m.kind === 'fabric' ? 'Cached · ' + m.path : m.path;
+    item.description = m.kind === 'fabric' ? 'Cached · ' + m.path : (this.grouped && m.repoPath ? m.repoPath : m.path);
     item.tooltip = m.kind === 'fabric' ? m.path + '\nLast fetched: ' + m.fetchedAt : m.path;
     item.resourceUri = m.uri;
     item.iconPath = new vscode.ThemeIcon(m.kind === 'fabric' ? 'cloud' : m.kind === 'file' ? 'json' : 'type-hierarchy');

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- In a multi-root workspace, **On this device** lists models in one sub-folder per workspace folder (repo), with the model count and the path inside the repo. A single-folder workspace stays flat.
+- Explain **Cached Fabric models** in its tooltip: saved offline copies of Fabric metadata, not workspace files.
+
 ## 0.8.0 (13 November 2026)
 
 Stable release. It includes everything since 0.6.0. Release notes: `docs/releases/0.8.0.md` in the repository.

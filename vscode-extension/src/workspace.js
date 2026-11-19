@@ -19,13 +19,18 @@ function inHiddenFolder(uri) {
 function relPath(uri) { return vscode.workspace.asRelativePath(uri, true); }
 function idFor(uri) { return 'ws:' + relPath(uri).replace(/\\/g, '/'); }
 
+/* Which workspace folder (repo) holds the model, and its path inside that folder. */
+function repoOf(uri) {
+  const folder = vscode.workspace.getWorkspaceFolder && vscode.workspace.getWorkspaceFolder(uri);
+  return folder ? { repo: folder.name, repoId: folder.uri.toString(), repoPath: vscode.workspace.asRelativePath(uri, false).replace(/\\/g, '/') } : {};
+}
 function entryForFolder(uri) {
-  return { id: idFor(uri), name: path.basename(uri.fsPath).replace(/\.SemanticModel$/i, ''), path: relPath(uri), uri, kind: 'folder' };
+  return Object.assign({ id: idFor(uri), name: path.basename(uri.fsPath).replace(/\.SemanticModel$/i, ''), path: relPath(uri), uri, kind: 'folder' }, repoOf(uri));
 }
 function entryForBim(uri) {
   const dir = vscode.Uri.joinPath(uri, '..');
   if (/\.SemanticModel$/i.test(dir.fsPath)) return entryForFolder(dir);
-  return { id: idFor(uri), name: path.basename(dir.fsPath), path: relPath(uri), uri, kind: 'file' };
+  return Object.assign({ id: idFor(uri), name: path.basename(dir.fsPath), path: relPath(uri), uri, kind: 'file' }, repoOf(uri));
 }
 
 /* Every *.SemanticModel folder (TMDL or model.bim inside) and stand-alone model.bim in the workspace. */
