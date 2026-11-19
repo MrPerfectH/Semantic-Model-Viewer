@@ -96,7 +96,9 @@ const frames = `new Promise(resolve => requestAnimationFrame(() => requestAnimat
 const measure = `(() => {
   const cv = app.canvas, h = cv.host.getBoundingClientRect(), r = cv.viewportRect();
   const boxes = Object.values(cv.cards).filter(c => c.el.style.display !== 'none').map(c => c.el.getBoundingClientRect());
-  return { count: boxes.length, view: {...cv.view},
+  const overlap = boxes.some((a,i) => boxes.slice(i+1).some(b =>
+    Math.min(a.right,b.right)-Math.max(a.left,b.left)>1 && Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>1));
+  return { overlap, count: boxes.length, view: {...cv.view},
     bounds: { left: Math.min(...boxes.map(b => b.left))-h.left, right: Math.max(...boxes.map(b => b.right))-h.left,
       top: Math.min(...boxes.map(b => b.top))-h.top, bottom: Math.max(...boxes.map(b => b.bottom))-h.top }, rect: r };
 })()`;
@@ -134,6 +136,15 @@ test('demo fits the mounted iframe, delayed sizing and reload; user cameras surv
   // Resize after initial nonzero sizing, without a window resize in the parent.
   await browser.evaluate("Object.assign(document.querySelector('iframe').style,{width:'1024px',height:'768px'})");
   await settle(); fitted(await inside(measure));
+  await t.test('Fit keeps all demo cards apart and gives a phone the full canvas', async () => {
+    for (const width of [760,390,1024]) {
+      await browser.evaluate("document.querySelector('iframe').style.width='"+width+"px'");
+      await settle(); await inside('app.canvas.fitView()'); await settle();
+      const result=await inside(measure); fitted(result);
+      assert.equal(result.count,43); assert.equal(result.overlap,false,'card overlap at '+width);
+      if(width===390)assert.equal(await inside('app.canvas.host.clientWidth'),390);
+    }
+  });
   await t.test('reload fits the recipient dimensions again', async () => {
     await inside('location.reload()');
     await new Promise(resolve => setTimeout(resolve,150));

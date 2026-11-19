@@ -333,3 +333,5 @@ body[data-smv-interactive] .mv-workspace[data-library-collapsed=false]>.mv-libra
 .mv-row-table,.mv-row-count,.mv-section-head,.mv-library-foot,.mv-panel-heading p,.mv-chip,.mv-overview-note{color:var(--smv-readable-muted,var(--smv-muted,#536278))}
 
 [data-theme] .mv-library-row.is-selected .mv-row-table{color:var(--smv-ink,#334155)}
+
+.mv-overview>.mv-button{margin-block:8px}

@@ -99,7 +99,10 @@
     /* Hide either rail to give the canvas the full width. The inspector preference keeps the
        selection: the drawer comes straight back for the selected table when shown again. */
     setPanes:function(patch){
-      if(patch.libraryHidden!==undefined)this.libraryHidden=!!patch.libraryHidden;
+      if(patch.libraryHidden!==undefined){
+        if(!this.compact && window.innerWidth < 600)this.phoneLibraryOpen=!patch.libraryHidden;
+        else this.libraryHidden=!!patch.libraryHidden;
+      }
       if(patch.inspectorHidden!==undefined)this.inspectorHidden=!!patch.inspectorHidden;
       this.saveChrome();
       this._key=null;this.app.sidebar._key=null;this.update();this.app.setState({});
@@ -114,13 +117,17 @@
     /* Short of room — a short window, or a canvas squeezed between the rails — the legend
        dock and the overview map stand down so the diagram keeps the space, and the status
        line goes. Their switches show what is on screen; switching one on keeps it on. */
-    tight:function(){var lib=this.libraryHidden?0:window.innerWidth<1050?234:268,drawer=this.app.state.selected&&!this.inspectorHidden?330:0;return window.innerHeight<820||window.innerWidth-lib-drawer<760;},
+    tight:function(){var lib=this.libraryIsHidden()?0:window.innerWidth<1050?234:268,drawer=this.app.state.selected&&!this.inspectorHidden?330:0;return window.innerHeight<820||window.innerWidth-lib-drawer<760;},
     legendShown:function(){return this.legendOpen&&(!this.tight()||!!this.legendForced);},
     mapShown:function(){return !this.mapHidden&&(!this.tight()||!!this.mapForced);},
     toggleLegend:function(){var on=!this.legendShown();this.legendOpen=on;this.legendForced=on&&this.tight();this.saveChrome();this.update();},
     toggleMap:function(){var on=!this.mapShown();this.mapHidden=!on;this.mapForced=on&&this.tight();this.saveChrome();this.update();},
     saveChrome:function(){if(this.compact)return;store.setJSON('smv_panes_v1',{libraryHidden:this.libraryHidden,inspectorHidden:this.inspectorHidden,legendOpen:this.legendOpen,mapHidden:this.mapHidden});},
-    toggleLibrary:function(){this.setPanes({libraryHidden:!this.libraryHidden});},
+    libraryIsHidden:function(){
+      if(!this.compact && window.innerWidth < 600) return !this.phoneLibraryOpen;
+      return this.libraryHidden;
+    },
+    toggleLibrary:function(){this.setPanes({libraryHidden:!this.libraryIsHidden()});},
     toggleInspector:function(){this.setPanes({inspectorHidden:!this.inspectorHidden});},
     snapshot:function(){this.history.push({names:Array.from(this.names),pos:JSON.parse(JSON.stringify(this.app.canvas.pos)),view:Object.assign({},this.app.canvas.view),focus:this.app.canvas.captureFocus(),display:this.app.canvas.captureDisplay()});if(this.history.length>25)this.history.shift();},
     commit:function(message,fit){
@@ -302,13 +309,14 @@
       /* Domains borrows the Tables chrome — the same toolbar row and status line — so the two
          canvases speak one visual language instead of the old floating chip plus legend. */
       var clusters=st.loaded&&st.viewMode==='clusters';
-      var width=this.libraryHidden?0:window.innerWidth<1050?234:268,drawer=graph&&st.selected&&!this.inspectorHidden?330:0;
-      this.library.hidden=!graph||this.libraryHidden;this.empty.hidden=!graph;this.nav.hidden=!graph&&!clusters;this.legendDock.hidden=(!graph&&!clusters)||!this.legendShown();
+      var width=this.libraryIsHidden()?0:window.innerWidth<1050?234:268,drawer=graph&&st.selected&&!this.inspectorHidden?330:0;
+      this.library.hidden=!graph||this.libraryIsHidden();this.empty.hidden=!graph;this.nav.hidden=!graph&&!clusters;this.legendDock.hidden=(!graph&&!clusters)||!this.legendShown();
       var tools=!this.compact||this.toolsOpen,top=tools?62:0,quiet=this.compact||window.innerHeight<820,foot=quiet?0:30;
       this.toolbar.hidden=(!graph&&!clusters)||!tools;this.status.hidden=(!graph&&!clusters)||quiet;
       main.classList.toggle('ex-compact',this.compact);
       this.mapHost.hidden=!graph||!this.names.size||!this.mapShown();
       var start=!!graph&&!app.modelKey&&!app.model.tables.length;
+      if(start)width=0;
       main.classList.toggle('ex-start',start);
       main.classList.toggle('ex-graph',!!graph);
       main.classList.toggle('ex-clusters',!!clusters);
@@ -331,7 +339,7 @@
       if(start){this.library.hidden=true;this.toolbar.hidden=true;this.nav.hidden=true;this.legendDock.hidden=true;this.status.hidden=true;this.empty.hidden=false;this.renderEmpty();return;}
       this.empty.hidden=!!this.names.size;
       this.status.textContent=this.message || 'Drag tables onto the canvas · click a table to explore its relationships · shift+drag to select several';
-      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.compact,this.toolsOpen,this.tight(),this.history.length,st.showPresets,this.optionsOpen,this.legendOpen,st.showStandalone,st.activeFilter,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryHidden,this.inspectorHidden,st.isolate,st.focusDepth].join('|');
+      var key=[app.modelKey,this.query,this.filter,this.domain,this.source,Array.from(this.names).join('\n'),st.selected,this.compact,this.toolsOpen,this.tight(),this.history.length,st.showPresets,this.optionsOpen,this.legendOpen,st.showStandalone,st.activeFilter,cv.detailMode,cv.lineStyle,app.colorBy,app.paletteName,this.mapHidden,this.libraryIsHidden(),this.inspectorHidden,st.isolate,st.focusDepth].join('|');
       if(key!==this._key){this._key=key;this.renderLibrary();this.renderToolbar();this.renderEmpty();}
       this.layoutToolbar();this.renderNavigation();this.drawMap();
     },
@@ -386,7 +394,7 @@
     },
     renderToolbar:function(){
       var self=this,app=this.app,cv=app.canvas;U.clear(this.toolbar);
-      this.toolbar.appendChild(paneToggle('library',!this.libraryHidden,this.libraryHidden?'Show the table library':'Hide the table library',function(){self.toggleLibrary();}));
+      this.toolbar.appendChild(paneToggle('library',!this.libraryIsHidden(),this.libraryIsHidden()?'Show the table library':'Hide the table library',function(){self.toggleLibrary();}));
       this.toolbar.appendChild(el('div',{cls:'ex-workspace-title'},[el('strong',{text:'Model canvas'}),el('span',{text:this.names.size+' / '+app.model.tables.length+' tables'})]));
       var editing=el('div',{cls:'ex-toolbar-group ex-toolbar-editing'});
       this.toolbar.appendChild(editing);

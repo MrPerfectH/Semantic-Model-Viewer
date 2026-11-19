@@ -606,13 +606,22 @@
       var mode = this.detailMode || 'auto';
       return mode === 'names' ? true : (mode === 'cards' ? false : k < this.CHIP_BELOW);
     },
+    // Below the zoom used to arrange the cards, preserve their reserved lane sizes.
+    // This also works for saved positions when Fit runs in a smaller window.
+    chipDisplayZoom: function (zoom) {
+      var explorer = this.app && this.app.explorer;
+      // Focused answer views size their labels for reading at the current zoom.
+      if (!explorer || explorer.compact || !this.workspaceNames ||
+          this.workspaceNames.size !== this.app.model.tables.length) return zoom;
+      return Math.max(zoom, Math.min(this.layoutK || ZOOM_FLOOR, this.CHIP_BELOW));
+    },
     cardWidthAt: function (c, k) {
-      return this.chipOn(k) ? this.chipMetrics(k, c && c.longWord).width : this.CARD_W;
+      return this.chipOn(k) ? this.chipMetrics(this.chipDisplayZoom(k), c && c.longWord).width : this.CARD_W;
     },
     /* The height the same card would have at zoom k. In chip mode that is arithmetic, not a
        measurement — which is what lets Fit ask about a zoom the cards are not drawn at yet. */
     cardHeightAt: function (c, k) {
-      return this.chipOn(k) ? this.chipMetrics(k, c && c.longWord).height : ((c && c.h) || 105);
+      return this.chipOn(k) ? this.chipMetrics(this.chipDisplayZoom(k), c && c.longWord).height : ((c && c.h) || 105);
     },
     /* Re-styles the cards whenever the treatment or the chip's rung changes. The guard is
        the (mode, quantised font) pair, and the font only moves when the ladder rung does, so
@@ -623,14 +632,14 @@
       var self = this;
       if (!this.cards) return;
       var chip = this.chipOn(this.view.k);
-      var font = chip ? this.chipFontAt(Math.max(0.05, Math.min(4, this.view.k))) : 0;
+      var font = chip ? this.chipFontAt(this.chipDisplayZoom(this.view.k)) : 0;
       if (chip === this._chip && font === this._chipFont) { this.syncEdgeScale(); return; }
       this._chip = chip; this._chipFont = font;
       var names = Object.keys(this.cards);
       names.forEach(function (n) {                     // write pass — no layout reads here
         var c = self.cards[n]; if (!c) return;
         if (chip) {
-          var m = self.chipMetrics(self.view.k, c.longWord), s = m.scale;
+          var m = self.chipMetrics(self.chipDisplayZoom(self.view.k), c.longWord), s = m.scale;
           var py = (self.CHIP_PAD_Y * s).toFixed(1), px = (self.CHIP_PAD_X * s).toFixed(1);
           c.head.style.padding = py + 'px ' + px + 'px';
           c.head.style.gap = (7 * s).toFixed(1) + 'px';
